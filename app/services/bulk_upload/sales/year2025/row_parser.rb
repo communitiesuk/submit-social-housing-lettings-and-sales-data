@@ -5,12 +5,12 @@ class BulkUpload::Sales::Year2025::RowParser
   include FormattingHelper
 
   QUESTIONS = {
-    field_1: "Which organisation owned this property before the sale?",
-    field_2: "Which organisation is reporting this sale?",
-    field_3: "Username",
-    field_4: "What is the day of the sale completion date? - DD",
-    field_5: "What is the month of the sale completion date? - MM",
-    field_6: "What is the year of the sale completion date? - YY",
+    field_1: "What is the day of the sale completion date? - DD",
+    field_2: "What is the month of the sale completion date? - MM",
+    field_3: "What is the year of the sale completion date? - YY",
+    field_4: "Which organisation owned this property before the sale?",
+    field_5: "Which organisation is reporting this sale?",
+    field_6: "Username",
     field_7: "What is the purchaser code?",
     field_8: "What is the sale type?",
     field_9: "What is the type of shared ownership sale?",
@@ -144,12 +144,12 @@ class BulkUpload::Sales::Year2025::RowParser
 
   attribute :field_blank
 
-  attribute :field_1, :string
-  attribute :field_2, :string
-  attribute :field_3, :string
-  attribute :field_4, :integer
-  attribute :field_5, :integer
-  attribute :field_6, :integer
+  attribute :field_1, :integer
+  attribute :field_2, :integer
+  attribute :field_3, :integer
+  attribute :field_4, :string
+  attribute :field_5, :string
+  attribute :field_6, :string
   attribute :field_7, :string
   attribute :field_8, :integer
   attribute :field_9, :integer
@@ -196,7 +196,7 @@ class BulkUpload::Sales::Year2025::RowParser
   attribute :field_47, :string
   attribute :field_48, :string
   attribute :field_49, :integer
-  attribute :field_49, :integer
+  attribute :field_50, :integer
   attribute :field_51, :string
   attribute :field_52, :string
   attribute :field_53, :integer
@@ -244,6 +244,8 @@ class BulkUpload::Sales::Year2025::RowParser
   attribute :field_91, :integer
   attribute :field_92, :integer
   attribute :field_93, :decimal
+  attribute :field_94, :decimal
+  attribute :field_95, :decimal
 
   attribute :field_96, :integer
   attribute :field_97, :integer
@@ -273,20 +275,20 @@ class BulkUpload::Sales::Year2025::RowParser
   attribute :field_120, :integer
   attribute :field_121, :integer
 
-  validates :field_4,
+  validates :field_1,
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "sale completion date (day)."),
               category: :setup,
             },
             on: :after_log
 
-  validates :field_5,
+  validates :field_2,
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "sale completion date (month)."),
               category: :setup,
             }, on: :after_log
 
-  validates :field_6,
+  validates :field_3,
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "sale completion date (year)."),
               category: :setup,
@@ -295,7 +297,7 @@ class BulkUpload::Sales::Year2025::RowParser
               with: /\A(\d{2}|\d{4})\z/,
               message: I18n.t("#{ERROR_BASE_KEY}.saledate.year_not_two_or_four_digits"),
               category: :setup,
-              if: proc { field_6.present? },
+              if: proc { field_3.present? },
             }, on: :after_log
 
   validates :field_8,
@@ -387,565 +389,6 @@ class BulkUpload::Sales::Year2025::RowParser
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "more than 2 joint buyers."),
               category: :setup,
               if: :joint_purchase?,
-            },
-            on: :after_log
-
-  validates :field_18,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "type of building."),
-              category: :setup,
-              if: :shared_or_discounted_but_not_staircasing?,
-            },
-            on: :after_log
-
-  validates :field_27,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "meets wheelchair standards."),
-              category: :setup,
-              if: :shared_or_discounted_but_not_staircasing?,
-            },
-            on: :after_log
-
-  validates :field_30,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer 1 ethnicity."),
-              category: :setup,
-              if: :shared_or_discounted_but_not_staircasing?,
-            },
-            on: :after_log
-
-  validates :field_31,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer 1 nationality."),
-              category: :setup,
-              if: :shared_or_discounted_but_not_staircasing?,
-            },
-            on: :after_log
-
-  validates :field_32,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer 1 working situation."),
-              category: :setup,
-              if: :shared_or_discounted_but_not_staircasing?,
-            },
-            on: :after_log
-
-  validates :field_33,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether buyer 1 will live in the property."),
-              category: :setup,
-              if: :shared_or_discounted_but_not_staircasing?,
-            },
-            on: :after_log
-
-  validates :field_37,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer 2 ethnic background."),
-              category: :setup,
-              if: :shared_or_discounted_but_not_staircasing?,
-            },
-            on: :after_log
-
-  validates :field_38,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer 2 nationality."),
-              category: :setup,
-              if: :shared_or_discounted_but_not_staircasing?,
-            },
-            on: :after_log
-
-  validates :field_39,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer 2 working situation."),
-              category: :setup,
-              if: :shared_or_discounted_but_not_staircasing?,
-            },
-            on: :after_log
-
-  validates :field_40,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether buyer 2 will live in the property."),
-              category: :setup,
-              if: :shared_or_discounted_but_not_staircasing?,
-            },
-            on: :after_log
-
-  validates :field_41,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "number of other people living in the property."),
-              category: :setup,
-              unless: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_58,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer 1's previous tenure."),
-              category: :setup,
-              unless: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_59,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer 1's last settled accommodation."),
-              category: :setup,
-              unless: :discounted_ownership || :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_63,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether buyer 2 was living with buyer 1."),
-              category: :setup,
-              if: :shared_or_discounted_but_not_staircasing?,
-            },
-            on: :after_log
-
-  validates :field_64,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer 2's previous tenure."),
-              category: :setup,
-              if: :shared_or_discounted_but_not_staircasing? && :two_buyers_share_address?,
-            },
-            on: :after_log
-
-  validates :field_65,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether a buyer has served in the armed forces."),
-              category: :setup,
-              unless: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_66,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether a buyer is currently in the armed forces."),
-              category: :setup,
-              unless: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_67,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether a buyer's spouse recently died in service."),
-              category: :setup,
-              unless: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_68,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether any buyer has a disability."),
-              category: :setup,
-              unless: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_69,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether any buyer uses a wheelchair."),
-              category: :setup,
-              unless: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_70,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer 1's annual income."),
-              category: :setup,
-              unless: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_72,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer 2's annual income."),
-              category: :setup,
-              if: :joint_purchase,
-              unless: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_74,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether buyers were receiving housing benefits."),
-              category: :setup,
-              unless: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_75,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "the buyers' total savings."),
-              category: :setup,
-              unless: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_76,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether the buyers have previously owned a property."),
-              category: :setup,
-              unless: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_78,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether this is a resale."),
-              category: :setup,
-              if: :shared_or_discounted_but_not_staircasing?,
-            },
-            on: :after_log
-
-  validates :field_79,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "how long the buyer lived there prior to purchase."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase? && :not_resale?,
-            },
-            on: :after_log
-
-  validates :field_80,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "day of practical completion or handover."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase? && :not_resale?,
-            },
-            on: :after_log
-
-  validates :field_81,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "month of practical completion or handover."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase? && :not_resale?,
-            },
-            on: :after_log
-
-  validates :field_82,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "year of practical completion or handover."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase? && :not_resale?,
-            },
-            on: :after_log
-
-  validates :field_83,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "number of bedrooms in previous property."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase? && :buyer_1_previous_tenure_not_1_or_2?,
-            },
-            on: :after_log
-
-  validates :field_84,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "previous property type."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase? && :buyer_1_previous_tenure_not_1_or_2?,
-            },
-            on: :after_log
-
-  validates :field_85,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer's previous tenure."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase? && :buyer_1_previous_tenure_not_1_or_2?,
-            },
-            on: :after_log
-
-  validates :field_86,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "full purchase price."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase?,
-            },
-            on: :after_log
-
-  validates :field_87,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "initial percentage share purchased."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase?,
-            },
-            on: :after_log
-
-  validates :field_88,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether a mortgage was used."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase?,
-            },
-            on: :after_log
-
-  validates :field_88,
-            inclusion: {
-              in: [1, 2],
-              if: proc { field_88.present? },
-              category: :setup,
-              question: QUESTIONS[:field_88].downcase,
-            },
-            on: :before_log
-
-  validates :field_89,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "mortgage amount."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase? && :mortgage_used?,
-            },
-            on: :after_log
-
-  validates :field_90,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "mortgage length."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase? && :mortgage_used?,
-            },
-            on: :after_log
-
-  validates :field_91,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "deposit amount."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase?,
-            },
-            on: :after_log
-
-  validates :field_92,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "deposit amount."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase?,
-              unless: :social_homebuy?,
-            },
-            on: :after_log
-
-  validates :field_93,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "basic monthly rent."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase?,
-            },
-            on: :after_log
-
-  validates :field_94,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "monthly service charges."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase?,
-            },
-            on: :after_log
-
-  validates :field_95,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "monthly estate management fees."),
-              category: :setup,
-              if: :shared_ownership_initial_purchase?,
-            },
-            on: :after_log
-
-  validates :field_96,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "percentage of property bought this transaction."),
-              category: :setup,
-              if: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_97,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "total percentage of property buyers now own."),
-              category: :setup,
-              if: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_98,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether transaction is part of a back to back staircasing transaction."),
-              category: :setup,
-              if: :staircasing? && :buyers_own_all?,
-            },
-            on: :after_log
-
-  validates :field_99,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether it is the first time the buyer has engaged in staircasing."),
-              category: :setup,
-              if: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_99,
-            inclusion: {
-              in: [1, 2],
-              if: proc { field_99.present? },
-              category: :setup,
-              question: QUESTIONS[:field_99].downcase,
-            },
-            on: :before_log
-
-  validates :field_100,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "day of the initial purchase of a share."),
-              category: :setup,
-              if: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_101,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "month of the initial purchase of a share."),
-              category: :setup,
-              if: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_102,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "year of the initial purchase of a share."),
-              category: :setup,
-              if: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_103,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "number of times buyer has engaged in staircasing."),
-              category: :setup,
-              if: :staircasing? && :buyer_staircased_before?,
-            },
-            on: :after_log
-
-  validates :field_103,
-            inclusion: {
-              in: [2, 3, 4, 5, 6, 7, 8, 9, 10],
-              if: proc { field_103.present? },
-              category: :setup,
-              question: QUESTIONS[:field_103].downcase,
-            },
-            on: :before_log
-
-  validates :field_104,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "day of last staircasing transaction."),
-              category: :setup,
-              if: :staircasing? && :buyer_staircased_before?,
-            },
-            on: :after_log
-
-  validates :field_105,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "month of last staircasing transaction."),
-              category: :setup,
-              if: :staircasing? && :buyer_staircased_before?,
-            },
-            on: :after_log
-
-  validates :field_106,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "year of last staircasing transaction."),
-              category: :setup,
-              if: :staircasing? && :buyer_staircased_before?,
-            },
-            on: :after_log
-
-  validates :field_107,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "full purchase price."),
-              category: :setup,
-              if: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_108,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "percentage share purchased initially."),
-              category: :setup,
-              if: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_109,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether a mortgage was used."),
-              category: :setup,
-              if: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_110,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "basic monthly rent before staircasing."),
-              category: :setup,
-              if: :staircasing?,
-            },
-            on: :after_log
-
-  validates :field_111,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "basic monthly rent after staircasing."),
-              category: :setup,
-              if: :staircasing?,
-              unless: :buyers_own_all?,
-            },
-            on: :after_log
-
-  validates :field_112,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "how long buyers lived in property before purchasing."),
-              category: :setup,
-              if: :discounted_ownership?,
-            },
-            on: :after_log
-
-  validates :field_113,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "full purchase price."),
-              category: :setup,
-              if: :discounted_ownership?,
-            },
-            on: :after_log
-
-  validates :field_114,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "amount of loan or subsidy."),
-              category: :setup,
-              if: :discounted_ownership?,
-              unless: :rtb_like_sale_type?,
-            },
-            on: :after_log
-
-  validates :field_115,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "percentage discount."),
-              category: :setup,
-              if: :discounted_ownership? && :rtb_like_sale_type?,
-            },
-            on: :after_log
-
-  validates :field_117,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "mortgage amount."),
-              category: :setup,
-              if: :discounted_ownership? && :mortgage_used?,
-            },
-            on: :after_log
-
-  validates :field_118,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "mortgage duration."),
-              category: :setup,
-              if: :discounted_ownership? && :mortgage_used?,
-            },
-            on: :after_log
-
-  validates :field_119,
-            presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether any extra borrowing is included."),
-              category: :setup,
-              if: :discounted_ownership? && :mortgage_used?,
             },
             on: :after_log
 
@@ -1052,10 +495,10 @@ class BulkUpload::Sales::Year2025::RowParser
 
   def spreadsheet_duplicate_hash
     attributes.slice(
-      "field_1",  # owning org
-      "field_4",  # saledate
-      "field_5",  # saledate
-      "field_6",  # saledate
+      "field_4",  # owning org
+      "field_1",  # saledate
+      "field_2",  # saledate
+      "field_3",  # saledate
       "field_7",  # purchaser_code
       "field_24", # postcode
       "field_25", # postcode
@@ -1202,13 +645,13 @@ private
   end
 
   def rtb_like_sale_type?
-    [9, 14, 27, 29].includes(field_11)
+    [9, 14, 27, 29].include?(field_11)
   end
 
   def field_mapping_for_errors
     {
       purchid: %i[field_7],
-      saledate: %i[field_4 field_5 field_6],
+      saledate: %i[field_1 field_2 field_3],
       noint: %i[field_14],
       age1_known: %i[field_28],
       age1: %i[field_28],
@@ -1292,14 +735,12 @@ private
       mscharge: mscharge_fields,
       grant: %i[field_114],
       discount: %i[field_115],
-      owning_organisation_id: %i[field_1],
-      managing_organisation_id: [:field_2],
-      assigned_to: %i[field_3],
+      owning_organisation_id: %i[field_4],
+      managing_organisation_id: [:field_5],
+      assigned_to: %i[field_6],
       hhregres: %i[field_65],
       hhregresstill: %i[field_66],
       armedforcesspouse: %i[field_67],
-
-      mortgagelenderother: mortgagelenderother_fields,
 
       hb: %i[field_74],
       mortlen: mortlen_fields,
@@ -1484,9 +925,6 @@ private
     attributes["hhregresstill"] = field_66
     attributes["armedforcesspouse"] = field_67
 
-    attributes["mortgagelender"] = mortgagelender
-    attributes["mortgagelenderother"] = mortgagelenderother
-
     attributes["hb"] = field_74
 
     attributes["mortlen"] = mortlen
@@ -1552,8 +990,8 @@ private
   end
 
   def saledate
-    year = field_6.to_s.strip.length.between?(1, 2) ? field_6 + 2000 : field_6
-    Date.new(year, field_5, field_4) if field_6.present? && field_5.present? && field_4.present?
+    year = field_3.to_s.strip.length.between?(1, 2) ? field_3 + 2000 : field_3
+    Date.new(year, field_2, field_1) if field_3.present? && field_2.present? && field_1.present?
   rescue Date::Error
     Date.new
   end
@@ -1777,11 +1215,11 @@ private
   end
 
   def owning_organisation
-    @owning_organisation ||= Organisation.find_by_id_on_multiple_fields(field_1)
+    @owning_organisation ||= Organisation.find_by_id_on_multiple_fields(field_4)
   end
 
   def assigned_to
-    @assigned_to ||= User.where("lower(email) = ?", field_3&.downcase).first
+    @assigned_to ||= User.where("lower(email) = ?", field_6&.downcase).first
   end
 
   def previous_la_known
@@ -1825,11 +1263,11 @@ private
   end
 
   def validate_owning_org_data_given
-    if field_1.blank?
+    if field_4.blank?
       block_log_creation!
 
-      if errors[:field_1].blank?
-        errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "owning organisation."), category: :setup)
+      if errors[:field_4].blank?
+        errors.add(:field_4, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "owning organisation."), category: :setup)
       end
     end
   end
@@ -1838,8 +1276,8 @@ private
     if owning_organisation.nil?
       block_log_creation!
 
-      if field_1.present? && errors[:field_1].blank?
-        errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_found"), category: :setup)
+      if field_4.present? && errors[:field_4].blank?
+        errors.add(:field_4, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_found"), category: :setup)
       end
     end
   end
@@ -1848,8 +1286,8 @@ private
     if owning_organisation && !owning_organisation.holds_own_stock?
       block_log_creation!
 
-      if errors[:field_1].blank?
-        errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_stock_owner"), category: :setup)
+      if errors[:field_4].blank?
+        errors.add(:field_4, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_stock_owner"), category: :setup)
       end
     end
   end
@@ -1860,26 +1298,26 @@ private
 
     block_log_creation!
 
-    return if errors[:field_1].present?
+    return if errors[:field_4].present?
 
     if bulk_upload.user.support?
-      errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_permitted.support", name: bulk_upload_organisation.name), category: :setup)
+      errors.add(:field_4, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_permitted.support", name: bulk_upload_organisation.name), category: :setup)
     else
-      errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_permitted.not_support"), category: :setup)
+      errors.add(:field_4, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_permitted.not_support"), category: :setup)
     end
   end
 
   def validate_assigned_to_exists
-    return if field_3.blank?
+    return if field_6.blank?
 
     unless assigned_to
-      errors.add(:field_3, I18n.t("#{ERROR_BASE_KEY}.assigned_to.not_found"))
+      errors.add(:field_6, I18n.t("#{ERROR_BASE_KEY}.assigned_to.not_found"))
     end
   end
 
   def validate_assigned_to_when_support
-    if field_3.blank? && bulk_upload.user.support?
-      errors.add(:field_3, category: :setup, message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "what is the CORE username of the account this sales log should be assigned to?"))
+    if field_6.blank? && bulk_upload.user.support?
+      errors.add(:field_6, category: :setup, message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "what is the CORE username of the account this sales log should be assigned to?"))
     end
   end
 
@@ -1889,11 +1327,11 @@ private
     return if assigned_to.organisation == owning_organisation&.absorbing_organisation || assigned_to.organisation == managing_organisation&.absorbing_organisation
 
     block_log_creation!
-    errors.add(:field_3, I18n.t("#{ERROR_BASE_KEY}.assigned_to.organisation_not_related"), category: :setup)
+    errors.add(:field_6, I18n.t("#{ERROR_BASE_KEY}.assigned_to.organisation_not_related"), category: :setup)
   end
 
   def managing_organisation
-    Organisation.find_by_id_on_multiple_fields(field_2)
+    Organisation.find_by_id_on_multiple_fields(field_5)
   end
 
   def nationality_group(nationality_value)
@@ -1908,8 +1346,8 @@ private
     if owning_organisation && managing_organisation && !owning_organisation.can_be_managed_by?(organisation: managing_organisation)
       block_log_creation!
 
-      if errors[:field_2].blank?
-        errors.add(:field_2, I18n.t("#{ERROR_BASE_KEY}.assigned_to.managing_organisation_not_related"), category: :setup)
+      if errors[:field_5].blank?
+        errors.add(:field_5, I18n.t("#{ERROR_BASE_KEY}.assigned_to.managing_organisation_not_related"), category: :setup)
       end
     end
   end
@@ -1973,12 +1411,12 @@ private
 
   def validate_relevant_collection_window
     return if saledate.blank? || bulk_upload.form.blank?
-    return if errors.key?(:field_4) || errors.key?(:field_5) || errors.key?(:field_6)
+    return if errors.key?(:field_1) || errors.key?(:field_2) || errors.key?(:field_3)
 
     unless bulk_upload.form.valid_start_date_for_form?(saledate)
-      errors.add(:field_4, I18n.t("#{ERROR_BASE_KEY}.saledate.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
-      errors.add(:field_5, I18n.t("#{ERROR_BASE_KEY}.saledate.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
-      errors.add(:field_6, I18n.t("#{ERROR_BASE_KEY}.saledate.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.saledate.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_2, I18n.t("#{ERROR_BASE_KEY}.saledate.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_3, I18n.t("#{ERROR_BASE_KEY}.saledate.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
     end
   end
 
@@ -1986,10 +1424,10 @@ private
     if log_already_exists?
       error_message = I18n.t("#{ERROR_BASE_KEY}.duplicate")
 
-      errors.add(:field_1, error_message) # Owning org
-      errors.add(:field_4, error_message) # Sale completion date
-      errors.add(:field_5, error_message) # Sale completion date
-      errors.add(:field_6, error_message) # Sale completion date
+      errors.add(:field_4, error_message) # Owning org
+      errors.add(:field_1, error_message) # Sale completion date
+      errors.add(:field_2, error_message) # Sale completion date
+      errors.add(:field_3, error_message) # Sale completion date
       errors.add(:field_24, error_message) # Postcode
       errors.add(:field_25, error_message) # Postcode
       errors.add(:field_28, error_message) # Buyer 1 age
