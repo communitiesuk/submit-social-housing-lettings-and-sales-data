@@ -750,13 +750,18 @@ private
   end
 
   def validate_reasonable_preference_dont_know
+    other_reason_fields = %i[field_107 field_108 field_109 field_110]
     if field_106 == 1
-      selected_reasons = [field_107, field_108, field_109, field_110].count(1)
+      selected_reasons = other_reason_fields.select { |field| send(field) == 1 }
       dont_know_selected = field_111 == 1
 
-      if selected_reasons.positive? && dont_know_selected
+      if selected_reasons.any? && dont_know_selected
         block_log_creation!
-        errors.add(:field_111, I18n.t("#{ERROR_BASE_KEY}.reasonpref.conflict"))
+
+        errors.add(:field_111, I18n.t("#{ERROR_BASE_KEY}.reasonpref.conflict.dont_know"))
+        selected_reasons.each do |field|
+          errors.add(field, I18n.t("#{ERROR_BASE_KEY}.reasonpref.conflict.other"))
+        end
       end
     end
   end
