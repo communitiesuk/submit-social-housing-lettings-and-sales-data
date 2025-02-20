@@ -35,7 +35,7 @@ class BulkUpload::SalesLogToCsv
 
   def default_field_numbers_row(seed: nil)
     year = log.collection_start_year
-    default_field_numbers_row_for_year(year, seed: nil)
+    default_field_numbers_row_for_year(year, seed:)
   end
 
   def default_field_numbers
