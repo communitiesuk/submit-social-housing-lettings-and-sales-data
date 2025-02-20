@@ -14,7 +14,7 @@ class AddressSearchController < ApplicationController
         render json: { error: service.error }, status: :unprocessable_entity
       else
         presenter = UprnDataPresenter.new(service.result)
-        render json: [{ address: presenter.address, uprn: presenter.uprn }]
+        render json: [{ text: presenter.address, value: presenter.uprn }]
       end
     elsif query.match?(/[a-zA-Z]/)
       # Query contains letters, assume it's an address
@@ -26,7 +26,7 @@ class AddressSearchController < ApplicationController
       else
         results = service.result.map do |result|
           presenter = AddressDataPresenter.new(result)
-          { address: presenter.address, uprn: presenter.uprn }
+          { text: presenter.address, value: presenter.uprn }
         end
         render json: results
       end
@@ -45,7 +45,7 @@ class AddressSearchController < ApplicationController
       else
         formatted_results = results.map do |result|
           presenter = AddressDataPresenter.new(result)
-          { address: presenter.address, uprn: presenter.uprn }
+          { text: presenter.address, value: presenter.uprn }
         end
         render json: formatted_results
       end

@@ -13,7 +13,7 @@ const fetchAndPopulateSearchResults = async (query, populateResults, searchUrl, 
   if (/\S/.test(query)) {
     const results = await fetchOptions(query, searchUrl)
     populateOptions(results, selectEl)
-    populateResults(Object.values(results).map((o) => o.address))
+    populateResults(Object.values(results).map((o) => o.text))
   }
 }
 
@@ -22,9 +22,8 @@ const populateOptions = (results, selectEl) => {
 
   results.forEach((result) => {
     const option = document.createElement('option')
-    option.value = result.uprn
-    option.innerHTML = result.address
-    option.setAttribute('address', result.address)
+    option.value = result.value
+    option.innerHTML = result.text
     selectEl.appendChild(option)
     options.push(option)
   })
