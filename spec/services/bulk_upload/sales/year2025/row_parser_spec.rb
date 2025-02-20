@@ -14,12 +14,12 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
   let(:setup_section_params) do
     {
       bulk_upload:,
-      field_1: owning_org.old_visible_id, # organisation
-      field_2: managing_org.old_visible_id, # organisation
-      field_3: user.email, # user
-      field_4: now.day.to_s, # sale day
-      field_5: now.month.to_s, # sale month
-      field_6: now.strftime("%g"), # sale year
+      field_1: now.day.to_s, # sale day
+      field_2: now.month.to_s, # sale month
+      field_3: now.strftime("%g"), # sale year
+      field_4: owning_org.old_visible_id, # organisation
+      field_5: managing_org.old_visible_id, # organisation
+      field_6: user.email, # user
       field_7: "test id", # purchase id
       field_8: "1", # owhershipsch
       field_9: "2", # shared ownership sale type
@@ -32,12 +32,11 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
   let(:valid_attributes) do
     {
       bulk_upload:,
-      field_1: owning_org.old_visible_id,
-      field_2: managing_org.old_visible_id,
-
-      field_4: "12",
-      field_5: "5",
-      field_6: "24",
+      field_1: "12",
+      field_2: "5",
+      field_3: "25",
+      field_4: owning_org.old_visible_id,
+      field_5: managing_org.old_visible_id,
       field_7: "test id",
       field_8: "1",
       field_9: "2",
@@ -93,26 +92,33 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       field_83: "1",
       field_84: "1",
       field_85: "1",
-      field_86: "250000",
-      field_87: "25",
-      field_88: "1",
+      field_107: "250000",
+      field_108: "25",
+      field_109: "1",
       field_89: "5000",
       field_90: "20",
-      field_91: "30",
-      field_92: "3",
-      field_93: "2022",
       field_96: "10",
       field_97: "40",
       field_98: "1",
+      field_99: "2",
       field_94: "200",
-      field_120: "20000",
+      field_91: "20000",
+      field_111: "800",
+      field_100: "05",
+      field_101: "04",
+      field_102: "2020",
+      field_103: "4",
+      field_104: "06",
+      field_105: "07",
+      field_106: "2023",
+      field_110: "900",
     }
   end
 
   around do |example|
     create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org)
 
-    Timecop.freeze(Time.zone.local(2025, 2, 22)) do
+    Timecop.freeze(Time.zone.local(2026, 2, 22)) do
       Singleton.__init__(FormHandler)
       example.run
     end
@@ -127,7 +133,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
     context "when any field is populated" do
       before do
-        parser.field_1 = "1"
+        parser.field_4 = "1"
       end
 
       it "returns false" do
@@ -308,7 +314,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
         end
 
         context "when an invalid value error has been added" do
-          let(:attributes) { setup_section_params.merge({ field_32: "100" }) }
+          let(:attributes) { setup_section_params.merge({ field_10: "2", field_32: "100" }) }
 
           it "does not add an additional error" do
             parser.valid?
@@ -332,7 +338,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_14 field_15 field_2 field_4 field_5 field_6 field_8])
+        expect(errors).to eql(%i[field_1 field_14 field_15 field_2 field_3 field_4 field_5 field_8])
       end
     end
 
@@ -350,7 +356,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_12 field_14 field_15 field_2 field_4 field_5 field_6 field_9])
+        expect(errors).to eql(%i[field_1 field_10 field_12 field_14 field_15 field_2 field_3 field_4 field_5 field_9])
       end
     end
 
@@ -370,7 +376,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_13 field_14 field_15 field_2 field_4 field_5 field_6])
+        expect(errors).to eql(%i[field_1 field_10 field_13 field_14 field_15 field_2 field_3 field_4 field_5])
       end
     end
 
@@ -380,7 +386,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
           bulk_upload:,
           field_7: "test id",
           field_8: "2",
-          field_10: nil,
+          field_11: nil,
         }
       end
 
@@ -389,7 +395,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_10 field_12 field_14 field_15 field_2 field_4 field_5 field_6])
+        expect(errors).to eql(%i[field_1 field_11 field_12 field_14 field_15 field_2 field_3 field_4 field_5])
       end
     end
 
@@ -408,17 +414,17 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_14 field_15 field_2 field_4 field_5 field_6 field_8])
+        expect(errors).to eql(%i[field_1 field_14 field_15 field_2 field_3 field_4 field_5 field_8])
       end
     end
 
-    describe "#field_1" do # owning org
+    describe "#field_4" do # owning org
       context "when no data given" do
-        let(:attributes) { setup_section_params.merge(field_1: nil) }
+        let(:attributes) { setup_section_params.merge(field_4: nil) }
 
         it "is not permitted as setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql([I18n.t("validations.sales.2025.bulk_upload.not_answered", question: "owning organisation.")])
+          expect(parser.errors.where(:field_4, category: :setup).map(&:message)).to eql([I18n.t("validations.sales.2025.bulk_upload.not_answered", question: "owning organisation.")])
         end
 
         it "blocks log creation" do
@@ -428,11 +434,11 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       end
 
       context "when cannot find owning org" do
-        let(:attributes) { { bulk_upload:, field_1: "donotexist" } }
+        let(:attributes) { { bulk_upload:, field_4: "donotexist" } }
 
         it "is not permitted as a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql([I18n.t("validations.sales.2025.bulk_upload.owning_organisation.not_found")])
+          expect(parser.errors.where(:field_4, category: :setup).map(&:message)).to eql([I18n.t("validations.sales.2025.bulk_upload.owning_organisation.not_found")])
         end
 
         it "blocks log creation" do
@@ -444,11 +450,11 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       context "when not affiliated with owning org" do
         let(:unaffiliated_org) { create(:organisation, :with_old_visible_id) }
 
-        let(:attributes) { { bulk_upload:, field_1: unaffiliated_org.old_visible_id } }
+        let(:attributes) { { bulk_upload:, field_4: unaffiliated_org.old_visible_id } }
 
         it "is not permitted as setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql([I18n.t("validations.sales.2025.bulk_upload.owning_organisation.not_permitted.not_support")])
+          expect(parser.errors.where(:field_4, category: :setup).map(&:message)).to eql([I18n.t("validations.sales.2025.bulk_upload.owning_organisation.not_permitted.not_support")])
         end
 
         it "blocks log creation" do
@@ -461,7 +467,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
         let(:merged_org) { create(:organisation, :with_old_visible_id, holds_own_stock: true) }
         let(:merged_org_stock_owner) { create(:organisation, :with_old_visible_id, holds_own_stock: true) }
 
-        let(:attributes) { { bulk_upload:, field_1: merged_org_stock_owner.old_visible_id } }
+        let(:attributes) { { bulk_upload:, field_4: merged_org_stock_owner.old_visible_id } }
 
         before do
           create(:organisation_relationship, parent_organisation: merged_org_stock_owner, child_organisation: merged_org)
@@ -472,14 +478,14 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
         it "is permitted" do
           parser.valid?
-          expect(parser.errors.where(:field_1)).not_to be_present
+          expect(parser.errors.where(:field_4)).not_to be_present
         end
       end
 
       context "when user's org has absorbed owning organisation" do
         let(:merged_org) { create(:organisation, :with_old_visible_id, holds_own_stock: true) }
 
-        let(:attributes) { { bulk_upload:, field_1: merged_org.old_visible_id, field_3: user.email } }
+        let(:attributes) { { bulk_upload:, field_4: merged_org.old_visible_id, field_6: user.email } }
 
         before do
           merged_org.update!(absorbing_organisation: user.organisation, merge_date: Time.zone.today)
@@ -492,15 +498,15 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
           parser = described_class.new(attributes)
 
           parser.valid?
-          expect(parser.errors.where(:field_1)).not_to be_present
-          expect(parser.errors.where(:field_3)).not_to be_present
+          expect(parser.errors.where(:field_4)).not_to be_present
+          expect(parser.errors.where(:field_6)).not_to be_present
         end
       end
 
       context "when user's org has absorbed owning organisation before the startdate" do
         let(:merged_org) { create(:organisation, :with_old_visible_id, holds_own_stock: true) }
 
-        let(:attributes) { setup_section_params.merge({ field_1: merged_org.old_visible_id, field_3: user.email }) }
+        let(:attributes) { setup_section_params.merge({ field_4: merged_org.old_visible_id, field_6: user.email }) }
 
         before do
           merged_org.update!(absorbing_organisation: user.organisation, merge_date: Time.zone.today - 3.years)
@@ -513,17 +519,17 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
           parser = described_class.new(attributes)
 
           parser.valid?
-          expect(parser.errors[:field_1]).to include(/The owning organisation must be active on the sale completion date/)
-          expect(parser.errors[:field_4]).to include(/Enter a date when the owning organisation was active/)
-          expect(parser.errors[:field_5]).to include(/Enter a date when the owning organisation was active/)
-          expect(parser.errors[:field_6]).to include(/Enter a date when the owning organisation was active/)
+          expect(parser.errors[:field_4]).to include(/The owning organisation must be active on the sale completion date/)
+          expect(parser.errors[:field_1]).to include(/Enter a date when the owning organisation was active/)
+          expect(parser.errors[:field_2]).to include(/Enter a date when the owning organisation was active/)
+          expect(parser.errors[:field_3]).to include(/Enter a date when the owning organisation was active/)
         end
       end
 
       context "when user is an unaffiliated non-support user and bulk upload organisation is affiliated with the owning organisation" do
         let(:affiliated_org) { create(:organisation, :with_old_visible_id) }
         let(:unaffiliated_user) { create(:user, organisation: create(:organisation)) }
-        let(:attributes) { { bulk_upload:, field_1: affiliated_org.old_visible_id } }
+        let(:attributes) { { bulk_upload:, field_4: affiliated_org.old_visible_id } }
         let(:organisation_id) { unaffiliated_user.organisation_id }
 
         before do
@@ -531,18 +537,18 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
           bulk_upload.update!(organisation_id:, user: unaffiliated_user)
         end
 
-        it "blocks log creation and adds an error to field_1" do
+        it "blocks log creation and adds an error to field_4" do
           parser = described_class.new(attributes)
           parser.valid?
           expect(parser).to be_block_log_creation
-          expect(parser.errors[:field_1]).to include(I18n.t("validations.sales.2025.bulk_upload.owning_organisation.not_permitted.not_support"))
+          expect(parser.errors[:field_4]).to include(I18n.t("validations.sales.2025.bulk_upload.owning_organisation.not_permitted.not_support"))
         end
       end
 
       context "when user is an unaffiliated support user and bulk upload organisation is affiliated with the owning organisation" do
         let(:affiliated_org) { create(:organisation, :with_old_visible_id) }
         let(:unaffiliated_support_user) { create(:user, :support, organisation: create(:organisation)) }
-        let(:attributes) { { bulk_upload:, field_1: affiliated_org.old_visible_id } }
+        let(:attributes) { { bulk_upload:, field_4: affiliated_org.old_visible_id } }
         let(:organisation_id) { affiliated_org.id }
 
         before do
@@ -550,21 +556,21 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
           bulk_upload.update!(organisation_id:, user: unaffiliated_support_user)
         end
 
-        it "does not block log creation and does not add an error to field_1" do
+        it "does not block log creation and does not add an error to field_4" do
           parser = described_class.new(attributes)
           parser.valid?
-          expect(parser.errors[:field_1]).not_to include(I18n.t("validations.sales.2025.bulk_upload.owning_organisation.not_permitted.not_support"))
+          expect(parser.errors[:field_4]).not_to include(I18n.t("validations.sales.2025.bulk_upload.owning_organisation.not_permitted.not_support"))
         end
       end
     end
 
-    describe "#field_3" do # username for assigned_to
+    describe "#field_6" do # username for assigned_to
       context "when blank" do
-        let(:attributes) { setup_section_params.merge(bulk_upload:, field_3: nil) }
+        let(:attributes) { setup_section_params.merge(bulk_upload:, field_6: nil) }
 
         it "is permitted" do
           parser.valid?
-          expect(parser.errors[:field_3]).to be_blank
+          expect(parser.errors[:field_6]).to be_blank
         end
 
         it "sets assigned to to bulk upload user" do
@@ -581,12 +587,12 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       context "when blank and bulk upload user is support" do
         let(:bulk_upload) { create(:bulk_upload, :sales, user: create(:user, :support), year: 2025) }
 
-        let(:attributes) { setup_section_params.merge(bulk_upload:, field_3: nil) }
+        let(:attributes) { setup_section_params.merge(bulk_upload:, field_6: nil) }
 
         it "is not permitted" do
           parser.valid?
-          expect(parser.errors[:field_3]).to be_present
-          expect(parser.errors[:field_3]).to include(I18n.t("validations.sales.2025.bulk_upload.not_answered", question: "what is the CORE username of the account this sales log should be assigned to?"))
+          expect(parser.errors[:field_6]).to be_present
+          expect(parser.errors[:field_6]).to include(I18n.t("validations.sales.2025.bulk_upload.not_answered", question: "what is the CORE username of the account this sales log should be assigned to?"))
         end
 
         it "blocks log creation" do
@@ -596,22 +602,22 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       end
 
       context "when user could not be found" do
-        let(:attributes) { { bulk_upload:, field_3: "idonotexist@example.com" } }
+        let(:attributes) { { bulk_upload:, field_6: "idonotexist@example.com" } }
 
         it "is not permitted" do
           parser.valid?
-          expect(parser.errors[:field_3]).to be_present
+          expect(parser.errors[:field_6]).to be_present
         end
       end
 
       context "when an unaffiliated user" do
         let(:other_user) { create(:user) }
 
-        let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_3: other_user.email } }
+        let(:attributes) { { bulk_upload:, field_4: owning_org.old_visible_id, field_6: other_user.email } }
 
         it "is not permitted as a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_3, category: :setup)).to be_present
+          expect(parser.errors.where(:field_6, category: :setup)).to be_present
         end
 
         it "blocks log creation" do
@@ -623,11 +629,11 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       context "when a user part of owning org" do
         let(:other_user) { create(:user, organisation: owning_org) }
 
-        let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_3: other_user.email } }
+        let(:attributes) { { bulk_upload:, field_4: owning_org.old_visible_id, field_6: other_user.email } }
 
         it "is permitted" do
           parser.valid?
-          expect(parser.errors[:field_3]).to be_blank
+          expect(parser.errors[:field_6]).to be_blank
         end
 
         it "sets assigned to to the user" do
@@ -644,59 +650,59 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       context "when email matches other than casing" do
         let(:other_user) { create(:user, organisation: owning_org) }
 
-        let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_3: other_user.email.upcase! } }
+        let(:attributes) { { bulk_upload:, field_4: owning_org.old_visible_id, field_6: other_user.email.upcase! } }
 
         it "is permitted" do
           parser.valid?
-          expect(parser.errors[:field_3]).to be_blank
+          expect(parser.errors[:field_6]).to be_blank
         end
       end
     end
 
-    describe "fields 3, 4, 5 => saledate" do
+    describe "fields 1, 2, 3 => saledate" do
       context "when all of these fields are blank" do
-        let(:attributes) { setup_section_params.merge({ field_4: nil, field_5: nil, field_6: nil }) }
+        let(:attributes) { setup_section_params.merge({ field_1: nil, field_2: nil, field_3: nil }) }
 
         it "returns them as setup errors" do
           parser.valid?
-          expect(parser.errors.where(:field_4, category: :setup)).to be_present
-          expect(parser.errors.where(:field_5, category: :setup)).to be_present
-          expect(parser.errors.where(:field_6, category: :setup)).to be_present
+          expect(parser.errors.where(:field_1, category: :setup)).to be_present
+          expect(parser.errors.where(:field_2, category: :setup)).to be_present
+          expect(parser.errors.where(:field_3, category: :setup)).to be_present
         end
       end
 
       context "when one of these fields is blank" do
-        let(:attributes) { setup_section_params.merge({ field_4: "1", field_5: "1", field_6: nil }) }
+        let(:attributes) { setup_section_params.merge({ field_1: "1", field_2: "1", field_3: nil }) }
 
         it "returns an error only on blank field as setup error" do
           parser.valid?
-          expect(parser.errors[:field_4]).to be_blank
-          expect(parser.errors[:field_5]).to be_blank
-          expect(parser.errors.where(:field_6, category: :setup)).to be_present
+          expect(parser.errors[:field_1]).to be_blank
+          expect(parser.errors[:field_2]).to be_blank
+          expect(parser.errors.where(:field_3, category: :setup)).to be_present
         end
       end
 
-      context "when field 6 is 4 digits instead of 2" do
-        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_6: "2025" }) }
+      context "when field 3 is 4 digits instead of 2" do
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_3: "2025" }) }
 
         it "correctly sets the date" do
           parser.valid?
-          expect(parser.errors.where(:field_6, category: :setup)).to be_empty
+          expect(parser.errors.where(:field_3, category: :setup)).to be_empty
           expect(parser.log.saledate).to eq(Time.zone.local(2025, 5, 1))
         end
       end
 
-      context "when field 5 is not 2 or 4 digits" do
-        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_6: "202" }) }
+      context "when field 2 is not 2 or 4 digits" do
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_3: "202" }) }
 
         it "returns a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to include(I18n.t("validations.sales.2025.bulk_upload.saledate.year_not_two_or_four_digits"))
+          expect(parser.errors.where(:field_3, category: :setup).map(&:message)).to include(I18n.t("validations.sales.2025.bulk_upload.saledate.year_not_two_or_four_digits"))
         end
       end
 
       context "when invalid date given" do
-        let(:attributes) { setup_section_params.merge({ field_4: "a", field_5: "12", field_6: "2023" }) }
+        let(:attributes) { setup_section_params.merge({ field_1: "a", field_2: "12", field_3: "2023" }) }
 
         it "does not raise an error" do
           expect { parser.valid? }.not_to raise_error
@@ -710,15 +716,15 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
           end
         end
 
-        let(:attributes) { setup_section_params.merge({ field_4: "1", field_5: "10", field_6: "24" }) }
+        let(:attributes) { setup_section_params.merge({ field_1: "1", field_2: "10", field_3: "25" }) }
 
         let(:bulk_upload) { create(:bulk_upload, :sales, user:, year: 2025) }
 
         it "does not return errors" do
           parser.valid?
-          expect(parser.errors[:field_4]).not_to be_present
-          expect(parser.errors[:field_5]).not_to be_present
-          expect(parser.errors[:field_6]).not_to be_present
+          expect(parser.errors[:field_1]).not_to be_present
+          expect(parser.errors[:field_2]).not_to be_present
+          expect(parser.errors[:field_3]).not_to be_present
         end
       end
 
@@ -729,15 +735,15 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
           end
         end
 
-        let(:attributes) { setup_section_params.merge({ field_4: "1", field_5: "1", field_6: "22" }) }
+        let(:attributes) { setup_section_params.merge({ field_1: "1", field_2: "1", field_3: "22" }) }
 
         let(:bulk_upload) { create(:bulk_upload, :sales, user:, year: 2023) }
 
         it "returns setup errors" do
           parser.valid?
-          expect(parser.errors.where(:field_4, category: :setup)).to be_present
-          expect(parser.errors.where(:field_5, category: :setup)).to be_present
-          expect(parser.errors.where(:field_6, category: :setup)).to be_present
+          expect(parser.errors.where(:field_1, category: :setup)).to be_present
+          expect(parser.errors.where(:field_2, category: :setup)).to be_present
+          expect(parser.errors.where(:field_3, category: :setup)).to be_present
         end
       end
     end
@@ -760,10 +766,10 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
         error_message = I18n.t("validations.sales.2025.bulk_upload.duplicate")
 
         [
-          :field_1, # Owning org
-          :field_4, # Sale completion date
-          :field_5, # Sale completion date
-          :field_6, # Sale completion date
+          :field_4, # Owning org
+          :field_1, # Sale completion date
+          :field_2, # Sale completion date
+          :field_3, # Sale completion date
           :field_24, # Postcode
           :field_25, # Postcode
           :field_28, # Buyer 1 age
@@ -790,10 +796,10 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
         parser.valid?
 
         [
-          :field_1, # Owning org
-          :field_4, # Sale completion date
-          :field_5, # Sale completion date
-          :field_6, # Sale completion date
+          :field_4, # Owning org
+          :field_1, # Sale completion date
+          :field_2, # Sale completion date
+          :field_3, # Sale completion date
           :field_24, # Postcode
           :field_25, # Postcode
           :field_28, # Buyer 1 age
@@ -828,42 +834,42 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       end
     end
 
-    describe "#field_10" do # type for discounted sale
+    describe "#field_11" do # type for discounted sale
       context "when an invalid option" do
-        let(:attributes) { setup_section_params.merge({ field_10: "100" }) }
+        let(:attributes) { setup_section_params.merge({ field_11: "100" }) }
 
         it "returns setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_10, category: :setup)).to be_present
+          expect(parser.errors.where(:field_11, category: :setup)).to be_present
         end
       end
     end
 
-    describe "#field_116" do # percentage discount
+    describe "#field_115" do # percentage discount
       context "when percentage discount over 70" do
-        let(:attributes) { valid_attributes.merge({ field_8: "2", field_116: "71" }) }
+        let(:attributes) { valid_attributes.merge({ field_8: "2", field_10: "2", field_11: "9", field_115: "71" }) }
 
         it "returns correct error" do
           parser.valid?
-          expect(parser.errors.where(:field_116).map(&:message)).to include(I18n.t("validations.sales.2025.bulk_upload.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"))
+          expect(parser.errors.where(:field_115).map(&:message)).to include(I18n.t("validations.sales.2025.bulk_upload.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"))
         end
       end
 
       context "when percentage discount not over 70" do
-        let(:attributes) { valid_attributes.merge({ field_8: "2", field_116: "70" }) }
+        let(:attributes) { valid_attributes.merge({ field_8: "2", field_10: "2", field_115: "70" }) }
 
         it "does not return error" do
           parser.valid?
-          expect(parser.errors.where(:field_116)).not_to be_present
+          expect(parser.errors.where(:field_115)).not_to be_present
         end
       end
 
       context "when percentage less than 0" do
-        let(:attributes) { valid_attributes.merge({ field_8: "2", field_116: "-1" }) }
+        let(:attributes) { valid_attributes.merge({ field_8: "2", field_10: "2", field_115: "-1" }) }
 
         it "returns correct error" do
           parser.valid?
-          expect(parser.errors.where(:field_116).map(&:message)).to include(I18n.t("validations.sales.2025.bulk_upload.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"))
+          expect(parser.errors.where(:field_115).map(&:message)).to include(I18n.t("validations.sales.2025.bulk_upload.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"))
         end
       end
     end
@@ -1199,7 +1205,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
     describe "#field_33" do # will buyer1 live in property?
       context "when not a possible value" do
-        let(:attributes) { valid_attributes.merge({ field_33: "3" }) }
+        let(:attributes) { valid_attributes.merge({ field_10: "2", field_33: "3" }) }
 
         it "is not valid" do
           parser.valid?
@@ -1208,9 +1214,59 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       end
     end
 
+    describe "#field_109" do # staircasing mortgageused
+      context "when invalid value" do
+        let(:attributes) { setup_section_params.merge(field_109: "4") }
+
+        it "returns correct errors" do
+          parser.valid?
+          expect(parser.errors[:field_109]).to include(I18n.t("validations.sales.2025.bulk_upload.invalid_option", question: "was a mortgage used for this staircasing transaction?"))
+
+          parser.log.blank_invalid_non_setup_fields!
+          parser.log.save!
+          expect(parser.log.mortgageused).to be_nil
+        end
+      end
+
+      context "when value is 3 and stairowned is not 100" do
+        let(:attributes) { setup_section_params.merge(field_109: "3", field_10: "1", field_96: "50", field_97: "99", field_120: nil) }
+
+        it "returns correct errors" do
+          parser.valid?
+          expect(parser.errors[:field_109]).to include("The percentage owned has to be 100% if the mortgage used is 'Don’t know'")
+
+          parser.log.blank_invalid_non_setup_fields!
+          parser.log.save!
+          expect(parser.log.mortgageused).to be_nil
+        end
+      end
+
+      context "when value is 3 and stairowned is not answered" do
+        let(:attributes) { setup_section_params.merge(field_109: "3", field_10: "1", field_96: "50", field_97: nil, field_120: nil) }
+
+        it "does not add errors" do
+          parser.valid?
+          expect(parser.errors[:field_109]).to be_empty
+        end
+      end
+
+      context "when value is 3 and stairowned is 100" do
+        let(:attributes) { setup_section_params.merge(field_109: "3", field_10: "1", field_96: "50", field_97: "100", field_120: nil) }
+
+        it "does not add errors and sets mortgage used to 3" do
+          parser.valid?
+          expect(parser.log.mortgageused).to eq(3)
+          expect(parser.log.stairowned).to eq(100)
+          expect(parser.log.deposit).to be_nil
+          expect(parser.errors[:field_109]).to be_empty
+          expect(parser.errors[:field_120]).to be_empty
+        end
+      end
+    end
+
     describe "#field_88" do # shared ownership mortgageused
       context "when invalid value" do
-        let(:attributes) { setup_section_params.merge(field_88: "4") }
+        let(:attributes) { setup_section_params.merge(field_10: "2", field_88: "4") }
 
         it "returns correct errors" do
           parser.valid?
@@ -1222,12 +1278,12 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
         end
       end
 
-      context "when value is 3 and stairowned is not 100" do
-        let(:attributes) { setup_section_params.merge(field_88: "3", field_10: "1", field_96: "50", field_97: "99", field_120: nil) }
+      context "when value is 3 and stairowned is not answered" do
+        let(:attributes) { setup_section_params.merge(field_88: "3", field_10: "2", field_96: "50", field_97: nil, field_120: nil) }
 
         it "returns correct errors" do
           parser.valid?
-          expect(parser.errors[:field_88]).to include("The percentage owned has to be 100% if the mortgage used is 'Don’t know'")
+          expect(parser.errors[:field_88]).to include(I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?"))
 
           parser.log.blank_invalid_non_setup_fields!
           parser.log.save!
@@ -1235,59 +1291,8 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
         end
       end
 
-      context "when value is 3 and stairowned is not answered" do
-        let(:attributes) { setup_section_params.merge(field_88: "3", field_10: "1", field_96: "50", field_97: nil, field_120: nil) }
-
-        it "does not add errors" do
-          parser.valid?
-          expect(parser.errors[:field_88]).to be_empty
-          expect(parser.errors[:field_88]).to be_empty
-        end
-      end
-
-      context "when it is not a staircasing transaction" do
-        context "when value is 3 and stairowned is not answered" do
-          let(:attributes) { setup_section_params.merge(field_88: "3", field_10: "2", field_96: "50", field_97: nil, field_120: nil) }
-
-          it "returns correct errors" do
-            parser.valid?
-            expect(parser.errors[:field_88]).to include(I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?"))
-
-            parser.log.blank_invalid_non_setup_fields!
-            parser.log.save!
-            expect(parser.log.mortgageused).to be_nil
-          end
-        end
-
-        context "when value is 3 and stairowned is 100" do
-          let(:attributes) { setup_section_params.merge(field_88: "3", field_10: "2", field_96: "50", field_97: "100", field_120: nil) }
-
-          it "returns correct errors" do
-            parser.valid?
-            expect(parser.errors[:field_88]).to include(I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?"))
-
-            parser.log.blank_invalid_non_setup_fields!
-            parser.log.save!
-            expect(parser.log.mortgageused).to be_nil
-          end
-        end
-      end
-
-      context "when value is 3 and stairowned is 100" do
-        let(:attributes) { setup_section_params.merge(field_88: "3", field_10: "1", field_96: "50", field_97: "100", field_120: nil) }
-
-        it "does not add errors and sets mortgage used to 3" do
-          parser.valid?
-          expect(parser.log.mortgageused).to eq(3)
-          expect(parser.log.stairowned).to eq(100)
-          expect(parser.log.deposit).to be_nil
-          expect(parser.errors[:field_88]).to be_empty
-          expect(parser.errors[:field_120]).to be_empty
-        end
-      end
-
       context "with non staircasing mortgage error" do
-        let(:attributes) { setup_section_params.merge(field_9: "30", field_88: "1", field_89: "10000", field_120: "5000", field_86: "30000", field_87: "28", field_10: "2") }
+        let(:attributes) { setup_section_params.merge(field_9: "30", field_88: "1", field_89: "10000", field_91: "5000", field_86: "30000", field_87: "28", field_10: "2") }
 
         it "does not add a BU error on type (because it's a setup field and would block log creation)" do
           parser.valid?
@@ -1297,7 +1302,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
         it "includes errors on other related fields" do
           parser.valid?
           expect(parser.errors[:field_89]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
-          expect(parser.errors[:field_120]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
+          expect(parser.errors[:field_91]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
           expect(parser.errors[:field_86]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
           expect(parser.errors[:field_87]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
         end
@@ -1305,23 +1310,22 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
         it "does not add errors to other ownership type fields" do
           parser.valid?
           expect(parser.errors[:field_117]).to be_empty
-          expect(parser.errors[:field_126]).to be_empty
-          expect(parser.errors[:field_118]).to be_empty
-          expect(parser.errors[:field_127]).to be_empty
-          expect(parser.errors[:field_123]).to be_empty
-          expect(parser.errors[:field_130]).to be_empty
-          expect(parser.errors[:field_114]).to be_empty
-          expect(parser.errors[:field_125]).to be_empty
+          expect(parser.errors[:field_120]).to be_empty
+          expect(parser.errors[:field_113]).to be_empty
+          expect(parser.errors[:field_107]).to be_empty
+          expect(parser.errors[:field_108]).to be_empty
+          expect(parser.errors[:field_116]).to be_empty
+          expect(parser.errors[:field_109]).to be_empty
         end
       end
     end
 
-    describe "#field_117" do
-      let(:attributes) { valid_attributes.merge({ field_8: "2", field_10: "9", field_117: "3" }) }
+    describe "#field_116" do
+      let(:attributes) { valid_attributes.merge({ field_8: "2", field_11: "9", field_116: "3" }) }
 
       it "does not allow 3 (don't know) as an option for discounted ownership" do
         parser.valid?
-        expect(parser.errors[:field_117]).to include(I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?"))
+        expect(parser.errors[:field_116]).to include(I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?"))
 
         parser.log.blank_invalid_non_setup_fields!
         parser.log.save!
@@ -1329,7 +1333,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       end
 
       context "when validate_discounted_ownership_value is triggered" do
-        let(:attributes) { setup_section_params.merge(field_114: 100, field_123: 100, field_8: 2, field_10: 9, field_117: 2, field_116: 10) }
+        let(:attributes) { setup_section_params.merge(field_113: 100, field_120: 100, field_8: 2, field_10: 2, field_11: 9, field_116: 2, field_115: 10) }
 
         it "only adds errors to the discounted ownership field" do
           parser.valid?
@@ -1342,7 +1346,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
     describe "soft validations" do
       context "when soft validation is triggered" do
-        let(:attributes) { valid_attributes.merge({ field_28: 22, field_32: 5 }) }
+        let(:attributes) { valid_attributes.merge({ field_10: 2, field_28: 22, field_32: 5 }) }
 
         it "adds an error to the relevant fields" do
           parser.valid?
@@ -1756,7 +1760,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
     end
 
     describe "with living before purchase years for discounted ownership more than 0" do
-      let(:attributes) { setup_section_params.merge({ field_8: "2", field_113: "1" }) }
+      let(:attributes) { setup_section_params.merge({ field_8: "2", field_112: "1" }) }
 
       it "is sets living before purchase asked to yes and sets the correct living before purchase years" do
         expect(parser.log.proplen_asked).to be(0)
@@ -1774,7 +1778,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
     end
 
     describe "with living before purchase 0 years for discounted ownership set to 0" do
-      let(:attributes) { setup_section_params.merge({ field_8: "2", field_113: "0" }) }
+      let(:attributes) { setup_section_params.merge({ field_8: "2", field_112: "0" }) }
 
       it "is sets living before purchase asked to no" do
         expect(parser.log.proplen_asked).to be(1)
@@ -1793,7 +1797,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
     end
 
     context "when mscharge is given, but is set to 0 for discounted ownership" do
-      let(:attributes) { valid_attributes.merge(field_8: "2", field_124: "0") }
+      let(:attributes) { valid_attributes.merge(field_8: "2", field_121: "0") }
 
       it "does not override variables correctly" do
         log = parser.log
@@ -1825,13 +1829,13 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       end
 
       context "when blank" do
-        let(:attributes) { { bulk_upload:, field_2: "", field_6: "not blank" } }
+        let(:attributes) { { bulk_upload:, field_5: "", field_3: "not blank" } }
 
         it "is not permitted as setup error" do
           parser.valid?
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.not_answered", question: "reported by."))
+          expect(setup_errors.find { |e| e.attribute == :field_5 }.message).to eql(I18n.t("validations.not_answered", question: "reported by."))
         end
 
         it "blocks log creation" do
@@ -1841,13 +1845,13 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       end
 
       context "when cannot find managing org" do
-        let(:attributes) { { bulk_upload:, field_2: "donotexist" } }
+        let(:attributes) { { bulk_upload:, field_5: "donotexist" } }
 
         it "is not permitted as setup error" do
           parser.valid?
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.not_answered", question: "reported by."))
+          expect(setup_errors.find { |e| e.attribute == :field_5 }.message).to eql(I18n.t("validations.not_answered", question: "reported by."))
         end
 
         it "blocks log creation" do
@@ -1859,13 +1863,13 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       context "when not affiliated with managing org" do
         let(:unaffiliated_org) { create(:organisation, :with_old_visible_id) }
 
-        let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: unaffiliated_org.old_visible_id } }
+        let(:attributes) { { bulk_upload:, field_4: owning_org.old_visible_id, field_5: unaffiliated_org.old_visible_id } }
 
         it "is not permitted as setup error" do
           parser.valid?
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.sales.2025.bulk_upload.assigned_to.managing_organisation_not_related"))
+          expect(setup_errors.find { |e| e.attribute == :field_5 }.message).to eql(I18n.t("validations.sales.2025.bulk_upload.assigned_to.managing_organisation_not_related"))
         end
 
         it "blocks log creation" do
@@ -1887,7 +1891,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
         parser.valid?
         setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-        expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql(I18n.t("validations.sales.2025.bulk_upload.owning_organisation.not_stock_owner"))
+        expect(setup_errors.find { |e| e.attribute == :field_4 }.message).to eql(I18n.t("validations.sales.2025.bulk_upload.owning_organisation.not_stock_owner"))
       end
 
       it "blocks log creation" do
