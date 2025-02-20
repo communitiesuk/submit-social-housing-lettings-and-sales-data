@@ -24,14 +24,9 @@ module Validations::Sales::PropertyValidations
   def validate_uprn(record)
     return unless record.uprn
 
-    unless record.uprn.match?(/^[0-9]{1,12}$/)
-      record.errors.add :uprn, I18n.t("validations.sales.property_information.uprn.invalid")
-      return
-    end
+    return if record.uprn.match?(/^[0-9]{1,12}$/)
 
-    unless record.la.in?(LocalAuthority.england.pluck(:code))
-      record.errors.add :uprn, I18n.t("validations.sales.property_information.uprn.not_in_england")
-    end
+    record.errors.add :uprn, I18n.t("validations.sales.property_information.uprn.invalid")
   end
 
   def validate_property_postcode(record)
