@@ -1278,8 +1278,12 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
         it "is not permitted" do
           parser.valid?
+          expect(parser.errors[:field_107]).to be_present
+          expect(parser.errors[:field_108]).to be_present
           expect(parser.errors[:field_111]).to be_present
-          expect(parser.errors[:field_111]).to include(I18n.t("validations.lettings.2024.bulk_upload.reasonpref.conflict"))
+          expect(parser.errors[:field_107]).to include(I18n.t("validations.lettings.2024.bulk_upload.reasonpref.conflict.other"))
+          expect(parser.errors[:field_108]).to include(I18n.t("validations.lettings.2024.bulk_upload.reasonpref.conflict.other"))
+          expect(parser.errors[:field_111]).to include(I18n.t("validations.lettings.2024.bulk_upload.reasonpref.conflict.dont_know"))
         end
       end
     end
