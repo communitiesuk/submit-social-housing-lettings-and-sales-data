@@ -227,7 +227,7 @@ RSpec.describe TasklistHelper do
 
       it "returns the deadline text" do
         allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 5, 7))
-        expect(deadline_text(log)).to include("Q1 Deadline: 11 July 2025.")
+        expect(deadline_text(log)).to include("Upcoming Q1 deadline: 11 July 2025.")
       end
     end
 
@@ -236,7 +236,7 @@ RSpec.describe TasklistHelper do
 
       it "returns the overdue text" do
         allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 6, 6))
-        expect(deadline_text(log)).to include("Q4 Deadline: 6 June 2025.")
+        expect(deadline_text(log)).to include("Upcoming Q4 deadline: 6 June 2025.")
       end
     end
 
