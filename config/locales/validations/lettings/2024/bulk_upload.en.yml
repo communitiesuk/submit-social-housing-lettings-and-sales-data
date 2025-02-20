@@ -58,3 +58,5 @@ en:
             invalid: "Select a valid nationality."
           charges:
             missing_charges: "Please enter the %{sentence_fragment}. If there is no %{sentence_fragment}, please enter '0'."
+          reasonpref:
+            conflict: "You cannot select 'Don't know' if any of the other reasonable preference reasons are also selected."
