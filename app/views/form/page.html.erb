@@ -75,12 +75,6 @@
         <%= f.hidden_field :check_errors, value: @check_errors %>
       <% end %>
 
-      <% if @page.id == "address" %>
-        <div class="govuk-button-group">
-          <%= govuk_link_to "Clear address and search instead", address_search_input_path(@log.log_type, @log.id), class: "govuk-button govuk-button--secondary" %>
-        </div>
-      <% end %>
-
       <% if @pages_with_errors_count > 1 %>
         <div class="govuk-button-group">
           <%= f.submit "See all related answers", name: "check_errors", class: "govuk-body govuk-link submit-button-link" %>
