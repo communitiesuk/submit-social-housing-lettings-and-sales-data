@@ -849,6 +849,144 @@ RSpec.describe LettingsLog do
         expect(lettings_log.reload.is_la_inferred).to eq(false)
       end
     end
+
+    context "when the log changes from new build to not new build" do
+      context "and the address is entered" do
+        before do
+          lettings_log.update!(startdate: Time.zone.yesterday,
+                               mrcdate: nil,
+                               rsnvac: 15,
+                               first_time_property_let_as_social_housing: 1,
+                               address_line1: "Address line 1",
+                               address_line2: "Address line 2",
+                               town_or_city: "Town",
+                               postcode_full: "AA1 1AA")
+        end
+
+        it "keeps the manually entered address" do
+          expect(lettings_log.uprn_selection).to eq("uprn_not_listed")
+          expect(lettings_log.address_line1).to eq("Address line 1")
+          expect(lettings_log.address_line2).to eq("Address line 2")
+          expect(lettings_log.town_or_city).to eq("Town")
+          expect(lettings_log.postcode_full).to eq("AA1 1AA")
+
+          lettings_log.update!(rsnvac: 16)
+          expect(lettings_log.address_line1).to eq("Address line 1")
+          expect(lettings_log.address_line2).to eq("Address line 2")
+          expect(lettings_log.town_or_city).to eq("Town")
+          expect(lettings_log.postcode_full).to eq("AA1 1AA")
+        end
+      end
+
+      context "and the address is not entered" do
+        before do
+          lettings_log.update!(startdate: Time.zone.yesterday,
+                               mrcdate: nil,
+                               rsnvac: 15,
+                               first_time_property_let_as_social_housing: 1,
+                               address_line1: nil,
+                               address_line2: nil,
+                               town_or_city: nil,
+                               postcode_full: nil)
+        end
+
+        it "routes to the uprn question" do
+          expect(lettings_log.uprn_selection).to eq("uprn_not_listed")
+          expect(lettings_log.address_line1).to eq(nil)
+          expect(lettings_log.address_line2).to eq(nil)
+          expect(lettings_log.town_or_city).to eq(nil)
+          expect(lettings_log.postcode_full).to eq(nil)
+
+          lettings_log.update!(rsnvac: 16)
+          expect(lettings_log.uprn_selection).to eq(nil)
+          expect(lettings_log.uprn_known).to eq(nil)
+        end
+      end
+    end
+
+    context "when the log changes from not new build to new build" do
+      context "and the uprn is selected" do
+        before do
+          lettings_log.update!(startdate: Time.zone.yesterday,
+                               mrcdate: nil,
+                               rsnvac: 17,
+                               first_time_property_let_as_social_housing: 1,
+                               uprn_selection: "1",
+                               uprn_confirmed: "1",
+                               uprn_known: "1",
+                               uprn: "1")
+        end
+
+        it "clears the uprn" do
+          expect(lettings_log.uprn).to eq("1")
+          expect(lettings_log.address_line1).to eq("1, Test Street")
+          expect(lettings_log.town_or_city).to eq("Test Town")
+          expect(lettings_log.postcode_full).to eq("AA1 1AA")
+
+          lettings_log.update!(rsnvac: 15)
+          expect(lettings_log.address_line1).to eq("1, Test Street")
+          expect(lettings_log.town_or_city).to eq("Test Town")
+          expect(lettings_log.postcode_full).to eq("AA1 1AA")
+          expect(lettings_log.uprn_selection).to eq("uprn_not_listed")
+          expect(lettings_log.uprn).to eq(nil)
+          expect(lettings_log.uprn_known).to eq(0)
+        end
+      end
+
+      context "and the address is manually entered" do
+        before do
+          lettings_log.update!(startdate: Time.zone.yesterday,
+                               mrcdate: nil,
+                               rsnvac: 16,
+                               first_time_property_let_as_social_housing: 1,
+                               uprn_selection: "uprn_not_listed",
+                               address_line1: "Address line 1",
+                               address_line2: "Address line 2",
+                               town_or_city: "Town",
+                               postcode_full: "AA1 1AA")
+        end
+
+        it "keeps the manually entered address" do
+          expect(lettings_log.uprn_selection).to eq("uprn_not_listed")
+          expect(lettings_log.address_line1).to eq("Address line 1")
+          expect(lettings_log.address_line2).to eq("Address line 2")
+          expect(lettings_log.town_or_city).to eq("Town")
+          expect(lettings_log.postcode_full).to eq("AA1 1AA")
+
+          lettings_log.update!(rsnvac: 15)
+          expect(lettings_log.uprn_selection).to eq("uprn_not_listed")
+          expect(lettings_log.address_line1).to eq("Address line 1")
+          expect(lettings_log.address_line2).to eq("Address line 2")
+          expect(lettings_log.town_or_city).to eq("Town")
+          expect(lettings_log.postcode_full).to eq("AA1 1AA")
+        end
+      end
+
+      context "and the address is not entered" do
+        before do
+          lettings_log.update!(startdate: Time.zone.yesterday,
+                               mrcdate: nil,
+                               rsnvac: 17,
+                               first_time_property_let_as_social_housing: 1,
+                               address_line1: nil,
+                               address_line2: nil,
+                               town_or_city: nil,
+                               postcode_full: nil)
+        end
+
+        it "routes to the manual address questions" do
+          expect(lettings_log.uprn_selection).to eq(nil)
+          expect(lettings_log.address_line1).to eq(nil)
+          expect(lettings_log.address_line2).to eq(nil)
+          expect(lettings_log.town_or_city).to eq(nil)
+          expect(lettings_log.postcode_full).to eq(nil)
+
+          lettings_log.update!(rsnvac: 15)
+          expect(lettings_log.uprn_selection).to eq("uprn_not_listed")
+          expect(lettings_log.uprn_known).to eq(nil)
+        end
+      end
+    end
   end
 
   describe "optional fields" do
