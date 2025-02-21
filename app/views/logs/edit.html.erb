@@ -25,6 +25,7 @@
         <% end %>
       </p>
     <% elsif @log.status == "not_started" %>
+      <p class="govuk-body"><%= govuk_link_to "Guidance for submitting social housing lettings and sales data (opens in a new tab)", guidance_path, target: "#" %></p>
       <p class="govuk-body">This log has not been started.</p>
     <% elsif @log.status == "completed" %>
       <p class="govuk-body">
@@ -36,6 +37,7 @@
       </p>
     <% end %>
 
+    <%= deadline_text(@log) %>
     <%= render "tasklist" %>
 
     <%= edit_actions_for_log(@log, bulk_upload_filter_applied) %>
