@@ -740,6 +740,14 @@ class LettingsLog < Log
     "lettings_log"
   end
 
+  def rsnvac_answered?
+    rsnvac.present?
+  end
+
+  def is_new_build?
+    rsnvac == 15
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!

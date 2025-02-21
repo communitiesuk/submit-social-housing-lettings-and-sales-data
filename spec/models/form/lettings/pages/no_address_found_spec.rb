@@ -24,13 +24,16 @@ RSpec.describe Form::Lettings::Pages::NoAddressFound, type: :model do
   it "has correct depends_on" do
     expect(page.depends_on).to eq([{ "address_options_present?" => false,
                                      "is_supported_housing?" => false,
-                                     "uprn_known" => nil },
+                                     "uprn_known" => nil,
+                                     "is_new_build?" => false },
                                    { "address_options_present?" => false,
                                      "is_supported_housing?" => false,
-                                     "uprn_known" => 0 },
+                                     "uprn_known" => 0,
+                                     "is_new_build?" => false },
                                    { "address_options_present?" => false,
                                      "is_supported_housing?" => false,
-                                     "uprn_confirmed" => 0 }])
+                                     "uprn_confirmed" => 0,
+                                     "is_new_build?" => false }])
   end
 
   it "is interruption screen page" do

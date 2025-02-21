@@ -13,9 +13,9 @@ class Form::Lettings::Pages::NoAddressFound < ::Form::Page
       "arguments" => [],
     }
     @depends_on = [
-      { "is_supported_housing?" => false, "uprn_known" => nil, "address_options_present?" => false },
-      { "is_supported_housing?" => false, "uprn_known" => 0, "address_options_present?" => false },
-      { "is_supported_housing?" => false, "uprn_confirmed" => 0, "address_options_present?" => false },
+      { "is_supported_housing?" => false, "uprn_known" => nil, "address_options_present?" => false, "is_new_build?" => false },
+      { "is_supported_housing?" => false, "uprn_known" => 0, "address_options_present?" => false, "is_new_build?" => false },
+      { "is_supported_housing?" => false, "uprn_confirmed" => 0, "address_options_present?" => false, "is_new_build?" => false },
     ]
   end
 
