@@ -406,53 +406,6 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
                 expect(parser.errors[:field_25]).not_to include(error_message)
               end
             end
-
-            context "when a supported housing log with already exists in the db (2)" do
-              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
-              let(:attributes) do
-                valid_attributes.merge({ field_5: "S#{scheme.id}",
-                                         field_4: "2",
-                                         field_11: "2",
-                                         field_6: location.old_visible_id,
-                                         field_1: owning_org.old_visible_id,
-                                         field_122: 0,
-                                         field_36: 4 })
-              end
-
-              before do
-                parser.log.save!
-                parser.instance_variable_set(:@valid, nil)
-              end
-
-              it "is not a valid row" do
-                expect(parser).not_to be_valid
-              end
-
-              it "adds an error to all the fields used to determine duplicates" do
-                parser.valid?
-
-                error_message = I18n.t("validations.lettings.2025.bulk_upload.duplicate")
-
-                [
-                  :field_1, # owning_organisation
-                  :field_8, # startdate
-                  :field_9, # startdate
-                  :field_10, # startdate
-                  :field_13, # tenancycode
-                  :field_6, # location
-                  :field_42, # age1
-                  :field_43, # sex1
-                  :field_46, # ecstat1
-                  :field_122, # household_charge
-                ].each do |field|
-                  expect(parser.errors[field]).to include(error_message)
-                end
-
-                expect(parser.errors[:field_23]).not_to include(error_message)
-                expect(parser.errors[:field_24]).not_to include(error_message)
-                expect(parser.errors[:field_25]).not_to include(error_message)
-              end
-            end
           end
 
           context "with new core scheme and location ids" do
@@ -579,7 +532,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
                 :field_6, # location
                 :field_23, # postcode_full
                 :field_24, # postcode_full
-                :field_25, # postcode_full
+                :field_25, # LA
                 :field_42, # age1
                 :field_43, # sex1
                 :field_46, # ecstat1
