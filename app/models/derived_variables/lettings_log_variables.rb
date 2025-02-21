@@ -142,6 +142,8 @@ module DerivedVariables::LettingsLogVariables
     end
 
     reset_address_fields! if is_supported_housing?
+
+    set_checkbox_values!
   end
 
 private
@@ -361,5 +363,18 @@ private
     return 1 if rent_type == 3
     return 2 if rent_type == 4
     return 3 if rent_type == 5
+  end
+
+  def set_checkbox_values!
+    form.questions.select { |q| q.type == "checkbox" }.each do |question|
+      options = question.answer_keys_without_dividers
+      next unless options.any? { |option| self[option] == 1 }
+
+      options.each do |option|
+        if self[option].nil?
+          self[option] = 0
+        end
+      end
+    end
   end
 end

@@ -155,9 +155,9 @@ private
 
       next unless question_params
 
-      if %w[checkbox validation_override].include?(question.type)
+      if question.type == "checkbox"
         question.answer_keys_without_dividers.each do |option|
-          result[option] = question_params.include?(option) ? 1 : 0
+          result[option] = 1 if question_params.include?(option)
         end
       elsif question.type != "date"
         result[question.id] = question_params
@@ -347,7 +347,7 @@ private
   end
 
   def question_missing_response?(responses_for_page, question)
-    if %w[checkbox validation_override].include?(question.type)
+    if question.type == "checkbox"
       answered = question.answer_keys_without_dividers.map do |option|
         session["fields"][option] = @log[option] = params[@log.log_type][question.id].include?(option) ? 1 : 0
         params[@log.log_type][question.id].exclude?(option)

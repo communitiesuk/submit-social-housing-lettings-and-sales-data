@@ -9,12 +9,14 @@ class Form::Lettings::Questions::Sheltered < ::Form::Question
 
   def answer_options
     if form.start_year_2025_or_later?
-      { "1" => { "value" => "Yes – sheltered housing for tenants with low support needs" },
+      {
+        "7" => { "value" => "Yes – for tenants with low support needs" },
         "2" => { "value" => "Yes – extra care housing" },
-        "7" => { "value" => "Yes - other" },
+        "8" => { "value" => "Yes – other" },
         "3" => { "value" => "No" },
         "divider" => { "value" => true },
-        "4" => { "value" => "Don’t know" } }
+        "4" => { "value" => "Don’t know" },
+      }
     else
       { "1" => { "value" => "Yes – specialist retirement housing" },
         "2" => { "value" => "Yes – extra care housing" },
@@ -26,5 +28,5 @@ class Form::Lettings::Questions::Sheltered < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 29 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 29, 2024 => 29, 2025 => 25 }.freeze
 end

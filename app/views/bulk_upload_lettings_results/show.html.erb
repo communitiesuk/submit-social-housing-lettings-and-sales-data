@@ -7,7 +7,8 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Upload lettings logs in bulk (<%= @bulk_upload.year_combo %>)</span>
-    <h1 class="govuk-heading-l">We found <%= pluralize(@bulk_upload.bulk_upload_errors.count, "error") %> in your file</h1>
+    <% error_word = @bulk_upload.bulk_upload_errors.not_potential.any? ? "error" : "discrepancy" %>
+    <h1 class="govuk-heading-l">We found <%= pluralize(@bulk_upload.bulk_upload_errors.count, error_word) %> in your file</h1>
 
     <div class="govuk-body">
       Here’s a list of everything that you need to fix your spreadsheet. You can download the <%= govuk_link_to "specification", Forms::BulkUploadForm::PrepareYourFile.new(year: @bulk_upload.year, log_type: "lettings").specification_path, target: "_blank" %> to help you fix the cells in your CSV file.
