@@ -158,7 +158,7 @@ RSpec.describe BulkUpload::Sales::Year2023::CsvParser do
       file.write("Can be empty?\r")
       file.write("Type of letting the question applies to\r\n")
       file.write("Duplicate check field?\r")
-      file.write(BulkUpload::SalesLogToCsv.new(log:).default_field_numbers_for_year(2023))
+      file.write(BulkUpload::SalesLogToCsv.new(log:).default_field_numbers_row_for_year(2023))
       file.write(BulkUpload::SalesLogToCsv.new(log:).to_year_csv_row(2023))
       file.rewind
     end
