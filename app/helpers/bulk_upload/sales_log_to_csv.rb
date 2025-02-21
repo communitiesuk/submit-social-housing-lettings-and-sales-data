@@ -399,12 +399,12 @@ class BulkUpload::SalesLogToCsv
 
   def to_2025_row
     [
-      overrides[:organisation_id] || log.owning_organisation&.old_visible_id,
-      overrides[:managing_organisation_id] || log.managing_organisation&.old_visible_id,
-      log.assigned_to&.email,
       log.saledate&.day,
       log.saledate&.month,
       log.saledate&.strftime("%y"),
+      overrides[:organisation_id] || log.owning_organisation&.old_visible_id,
+      overrides[:managing_organisation_id] || log.managing_organisation&.old_visible_id,
+      log.assigned_to&.email,
       log.purchid,
       log.ownershipsch,
       log.ownershipsch == 1 ? log.type : "", # field_9: "What is the type of shared ownership sale?",
