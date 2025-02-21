@@ -7,7 +7,8 @@ RSpec.describe Form::Lettings::Questions::TenancyLengthAffordableRent, type: :mo
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page, id: "affordable_tenancy_length") }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
+  let(:form) { instance_double(Form, start_date:) }
+  let(:start_date) { Time.utc(2023, 4, 1) }
 
   before do
     allow(form).to receive(:start_year_2024_or_later?).and_return(false)
@@ -25,5 +26,29 @@ RSpec.describe Form::Lettings::Questions::TenancyLengthAffordableRent, type: :mo
 
   it "has the correct type" do
     expect(question.type).to eq("numeric")
+  end
+
+  context "with 2024/25 form" do
+    let(:start_date) { Time.utc(2024, 4, 1) }
+
+    before do
+      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
+    end
+
+    it "has the correct question number" do
+      expect(question.question_number).to eq(28)
+    end
+  end
+
+  context "with 2025/26 form" do
+    let(:start_date) { Time.utc(2025, 4, 1) }
+
+    before do
+      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
+    end
+
+    it "has the correct question number" do
+      expect(question.question_number).to eq(29)
+    end
   end
 end

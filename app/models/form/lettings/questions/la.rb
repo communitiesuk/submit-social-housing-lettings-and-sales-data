@@ -13,5 +13,5 @@ class Form::Lettings::Questions::La < ::Form::Question
     { "" => "Select an option" }.merge(LocalAuthority.active(form.start_date).england.map { |la| [la.code, la.name] }.to_h)
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 13, 2024 => 14 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 13, 2024 => 14, 2025 => 18 }.freeze
 end
