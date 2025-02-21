@@ -3,11 +3,6 @@ class Form::Lettings::Pages::AddressMatcher < ::Form::Page
     super
     @id = "address_matcher"
     @copy_key = "lettings.property_information.address_matcher"
-    @depends_on = [
-      { "is_supported_housing?" => false, "uprn_known" => nil },
-      { "is_supported_housing?" => false, "uprn_known" => 0 },
-      { "is_supported_housing?" => false, "uprn_confirmed" => 0 },
-    ]
   end
 
   def questions
@@ -25,5 +20,14 @@ class Form::Lettings::Pages::AddressMatcher < ::Form::Page
     return unless log
 
     "/#{log.log_type.dasherize}s/#{log.id}/property-unit-type"
+  end
+
+  def routed_to?(log, _)
+    return false unless super
+    return false if log.is_supported_housing?
+    return false if log.uprn_known != nil && log.uprn_known != 0 && log.uprn_confirmed != 0
+    return false if log.is_new_build? && log.form.start_year_2025_or_later?
+
+    true
   end
 end

@@ -5,7 +5,8 @@ RSpec.describe Form::Lettings::Pages::AddressFallback, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1))) }
+  let(:form) { Form.new(nil, 2024, [], "lettings") }
+  let(:subsection) { instance_double(Form::Subsection, form:, enabled?: true, depends_on:nil) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -23,14 +24,77 @@ RSpec.describe Form::Lettings::Pages::AddressFallback, type: :model do
     expect(page.description).to be_nil
   end
 
-  it "has correct depends_on" do
-    expect(page.depends_on).to eq([
-      { "is_supported_housing?" => false, "uprn_known" => nil, "uprn_selection" => "uprn_not_listed" },
-      { "is_supported_housing?" => false, "uprn_known" => 0, "uprn_selection" => "uprn_not_listed" },
-      { "is_supported_housing?" => false, "uprn_confirmed" => 0, "uprn_selection" => "uprn_not_listed" },
-      { "is_supported_housing?" => false, "uprn_known" => nil, "address_options_present?" => false },
-      { "is_supported_housing?" => false, "uprn_known" => 0, "address_options_present?" => false },
-      { "is_supported_housing?" => false, "uprn_confirmed" => 0, "address_options_present?" => false },
-    ])
+  describe "routed_to?" do
+    context "when it is supported housing" do
+      let(:log) { build(:lettings_log, :sh) }
+
+      it "does not route to the page" do
+        expect(page).not_to be_routed_to(log, nil)
+      end
+    end
+
+    context "when uprn_known is nil and uprn_selection is uprn_not_listed" do
+      let(:log) { build(:lettings_log, uprn_known: nil, uprn_selection: "uprn_not_listed") }
+
+      it "routes to the page" do
+        expect(page).to be_routed_to(log, nil)
+      end
+    end
+
+    context "when uprn_known is 0 and uprn_selection is uprn_not_listed" do
+      let(:log) { build(:lettings_log, uprn_known: 0, uprn_selection: "uprn_not_listed") }
+
+      it "routes to the page" do
+        expect(page).to be_routed_to(log, nil)
+      end
+    end
+
+    context "when uprn_confirmed is 0 and uprn_selection is uprn_not_listed" do
+      let(:log) { build(:lettings_log, uprn_confirmed: 0, uprn_selection: "uprn_not_listed") }
+
+      it "routes to the page" do
+        expect(page).to be_routed_to(log, nil)
+      end
+    end
+
+    context "when uprn_known is nil and address_options_present? is false" do
+      let(:log) { build(:lettings_log, uprn_known: nil, uprn: "1999") }
+
+      it "routes to the page" do
+        expect(page).to be_routed_to(log, nil)
+      end
+    end
+
+    context "when uprn_known is 0 and address_options_present? is false" do
+      let(:log) { build(:lettings_log, uprn_known: 0, uprn: "1999") }
+
+      it "routes to the page" do
+        expect(page).to be_routed_to(log, nil)
+      end
+    end
+
+    context "when uprn_confirmed is 0 and address_options_present? is false" do
+      let(:log) { build(:lettings_log, uprn_confirmed: 0, uprn: "1999") }
+
+      it "routes to the page" do
+        expect(page).to be_routed_to(log, nil)
+      end
+    end
+
+    context "when address_options_present? is true and uprn_selection is not uprn_not_listed" do
+      let(:log) { build(:lettings_log, uprn_selection: nil, uprn: "1", address_line1_input: "Address", postcode_full_input: "A11AA") }
+
+      it "does not route to the page" do
+        expect(page).not_to be_routed_to(log, nil)
+      end
+    end
+
+    context "when uprn_known is 1 and uprn_confirmed is not 0" do
+      let(:log) { build(:lettings_log, uprn_known: 1, uprn: "1", uprn_confirmed: 1) }
+
+      it "does not route to the page" do
+        expect(page).not_to be_routed_to(log, nil)
+      end
+    end
   end
 end

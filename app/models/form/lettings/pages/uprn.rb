@@ -3,7 +3,7 @@ class Form::Lettings::Pages::Uprn < ::Form::Page
     super
     @id = "uprn"
     @copy_key = "lettings.property_information.uprn"
-    @depends_on = [{ "is_supported_housing?" => false }]
+    @depends_on = [{ "is_supported_housing?" => false, "is_new_build?" => false }]
   end
 
   def questions
