@@ -6,7 +6,7 @@ RSpec.describe Form::Lettings::Pages::AddressMatcher, type: :model do
   let(:page_id) { nil }
   let(:page_definition) { nil }
   let(:form) { Form.new(nil, 2024, [], "lettings") }
-  let(:subsection) { instance_double(Form::Subsection, form:, enabled?: true, depends_on:nil) }
+  let(:subsection) { instance_double(Form::Subsection, form:, enabled?: true, depends_on: nil) }
   let(:log) { build(:lettings_log) }
 
   it "has correct subsection" do

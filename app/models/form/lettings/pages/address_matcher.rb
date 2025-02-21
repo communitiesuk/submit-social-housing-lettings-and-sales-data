@@ -25,7 +25,7 @@ class Form::Lettings::Pages::AddressMatcher < ::Form::Page
   def routed_to?(log, _)
     return false unless super
     return false if log.is_supported_housing?
-    return false if log.uprn_known != nil && log.uprn_known != 0 && log.uprn_confirmed != 0
+    return false if !log.uprn_known.nil? && log.uprn_known != 0 && log.uprn_confirmed != 0
     return false if log.is_new_build? && log.form.start_year_2025_or_later?
 
     true

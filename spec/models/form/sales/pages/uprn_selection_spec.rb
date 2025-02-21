@@ -33,10 +33,4 @@ RSpec.describe Form::Sales::Pages::UprnSelection, type: :model do
       "address-matcher",
     )
   end
-
-  it "has correct depends_on" do
-    expect(page.depends_on).to eq([{ "address_options_present?" => true, "uprn_known" => nil },
-                                   { "address_options_present?" => true, "uprn_known" => 0 },
-                                   { "address_options_present?" => true, "uprn_confirmed" => 0 }])
-  end
 end

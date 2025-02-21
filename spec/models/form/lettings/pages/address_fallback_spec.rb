@@ -6,7 +6,7 @@ RSpec.describe Form::Lettings::Pages::AddressFallback, type: :model do
   let(:page_id) { nil }
   let(:page_definition) { nil }
   let(:form) { Form.new(nil, 2024, [], "lettings") }
-  let(:subsection) { instance_double(Form::Subsection, form:, enabled?: true, depends_on:nil) }
+  let(:subsection) { instance_double(Form::Subsection, form:, enabled?: true, depends_on: nil) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
