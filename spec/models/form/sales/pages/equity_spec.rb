@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Pages::Equity, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1))) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)), id: "shared_ownership") }
 
   before do
     allow(page.subsection.form).to receive(:start_year_2025_or_later?).and_return(false)

@@ -16,7 +16,7 @@ class Form::Sales::Questions::HasLeaseholdCharges < ::Form::Question
       ],
     }
     @ownershipsch = ownershipsch
-    @question_number = question_number
+    @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
   end
 
   ANSWER_OPTIONS = {
@@ -24,14 +24,8 @@ class Form::Sales::Questions::HasLeaseholdCharges < ::Form::Question
     "0" => { "value" => "No" },
   }.freeze
 
-  def question_number
-    case @ownershipsch
-    when 1
-      99
-    when 2
-      110
-    when 3
-      117
-    end
-  end
+  QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+    2024 => { 1 => 99, 2 => 110, 3 => 117 },
+    2025 => { 1 => 88, 2 => 111 },
+  }.freeze
 end

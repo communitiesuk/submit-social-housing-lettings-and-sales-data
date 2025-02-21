@@ -13,5 +13,5 @@ class Form::Sales::Questions::PropertyBuildingType < ::Form::Question
     "2" => { "value" => "Converted from previous residential or non-residential property" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 13, 2024 => 20 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 13, 2024 => 20, 2025 => 18 }.freeze
 end

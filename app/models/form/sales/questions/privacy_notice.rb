@@ -32,5 +32,5 @@ class Form::Sales::Questions::PrivacyNotice < ::Form::Question
     @joint_purchase ? "privacy_notice_buyer_joint_purchase" : "privacy_notice_buyer"
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 19, 2024 => 14 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 19, 2024 => 14, 2025 => 12 }.freeze
 end

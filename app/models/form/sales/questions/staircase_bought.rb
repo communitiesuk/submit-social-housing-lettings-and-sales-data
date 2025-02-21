@@ -13,5 +13,5 @@ class Form::Sales::Questions::StaircaseBought < ::Form::Question
     @top_guidance_partial = "financial_calculations_shared_ownership"
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 77, 2024 => 79 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 77, 2024 => 79, 2025 => 90 }.freeze
 end

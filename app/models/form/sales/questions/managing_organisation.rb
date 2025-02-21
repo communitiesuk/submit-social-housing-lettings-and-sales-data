@@ -72,5 +72,5 @@ private
     true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2024 => 2 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2024 => 2, 2025 => 3 }.freeze
 end
