@@ -352,7 +352,7 @@ class BulkUpload::Sales::Year2025::RowParser
 
   validates :field_11,
             inclusion: {
-              in: [8, 14, 27, 9, 29, 21, 22],
+              in: [8, 9, 14, 21, 22, 27, 29],
               if: proc { field_11.present? },
               category: :setup,
               question: QUESTIONS[:field_11].downcase,
