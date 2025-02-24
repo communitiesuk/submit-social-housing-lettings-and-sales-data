@@ -118,7 +118,6 @@ FactoryBot.define do
       uprn_known { 0 }
       address_line1 { "Address line 1" }
       town_or_city { Faker::Address.city }
-      county { "Somerset" }
       la_known { 1 }
       la { "E09000003" }
       savingsnk { 1 }
