@@ -5,15 +5,29 @@ import 'accessible-autocomplete/dist/accessible-autocomplete.min.css'
 const options = []
 
 const fetchOptions = async (query, searchUrl) => {
-  const response = await fetch(`${searchUrl}?query=${encodeURIComponent(query)}`)
-  return await response.json()
+  try {
+    const response = await fetch(`${searchUrl}?query=${encodeURIComponent(query.trim())}`)
+    return await response.json()
+  } catch (error) {
+    return error
+  }
 }
 
 const fetchAndPopulateSearchResults = async (query, populateResults, searchUrl, populateOptions, selectEl) => {
   if (/\S/.test(query)) {
-    const results = await fetchOptions(query, searchUrl)
-    populateOptions(results, selectEl)
-    populateResults(Object.values(results).map((o) => o.text))
+    try {
+      const results = await fetchOptions(query, searchUrl)
+      if (results.length === 0) {
+        populateOptions([], selectEl)
+        populateResults([])
+      } else {
+        populateOptions(results, selectEl)
+        populateResults(Object.values(results).map((o) => o.text))
+      }
+    } catch (error) {
+      populateOptions([], selectEl)
+      populateResults([])
+    }
   }
 }
 
