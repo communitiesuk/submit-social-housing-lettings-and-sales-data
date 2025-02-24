@@ -15,7 +15,9 @@ class Form::Sales::Questions::AddressSearch < ::Form::Question
     return {} unless ActiveRecord::Base.connected?
     return {} unless log&.address_options&.any?
 
-    { log.address_options.first[:uprn] => { "value" => log.address_options.first[:address] } }
+    log.address_options.each_with_object({}) do |option, hash|
+      hash[option[:uprn]] = { "value" => "#{option[:address]} (#{option[:uprn]})" }
+    end
   end
 
   def get_extra_check_answer_value(log)

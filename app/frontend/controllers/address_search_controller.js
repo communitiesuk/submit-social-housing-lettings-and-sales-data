@@ -22,7 +22,7 @@ const fetchAndPopulateSearchResults = async (query, populateResults, searchUrl, 
         populateResults([])
       } else {
         populateOptions(results, selectEl)
-        populateResults(Object.values(results).map((o) => o.text))
+        populateResults(Object.values(results).map((o) => `${o.text} (${o.value})`))
       }
     } catch (error) {
       populateOptions([], selectEl)
@@ -37,7 +37,7 @@ const populateOptions = (results, selectEl) => {
   results.forEach((result) => {
     const option = document.createElement('option')
     option.value = result.value
-    option.innerHTML = result.text
+    option.innerHTML = `${result.text} (${result.value})`
     selectEl.appendChild(option)
     options.push(option)
   })
