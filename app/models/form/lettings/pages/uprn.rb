@@ -3,7 +3,6 @@ class Form::Lettings::Pages::Uprn < ::Form::Page
     super
     @id = "uprn"
     @copy_key = "lettings.property_information.uprn"
-    @depends_on = [{ "is_supported_housing?" => false, "is_new_build?" => false }]
   end
 
   def questions
@@ -29,5 +28,13 @@ class Form::Lettings::Pages::Uprn < ::Form::Page
     else
       "address"
     end
+  end
+
+  def routed_to?(log, _)
+    return false unless super
+    return false if log.is_supported_housing?
+    return false if log.is_new_build? && log.form.start_year_2025_or_later?
+
+    true
   end
 end

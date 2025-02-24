@@ -29,10 +29,6 @@ RSpec.describe Form::Lettings::Pages::Uprn, type: :model do
     expect(page.description).to be_nil
   end
 
-  it "has correct depends_on" do
-    expect(page.depends_on).to eq([{ "is_supported_housing?" => false, "is_new_build?" => false }])
-  end
-
   describe "has correct skip_href" do
     context "when log is nil" do
       it "is nil" do
