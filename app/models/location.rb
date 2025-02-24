@@ -225,7 +225,7 @@ class Location < ApplicationRecord
   end
 
   def status
-    @status ||= status_at(Time.zone.now)
+    @status ||= status_at(Time.zone.today)
   end
 
   def status_at(date)
