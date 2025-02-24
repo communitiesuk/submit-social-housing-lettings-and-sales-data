@@ -17,12 +17,8 @@ class BulkUpload::LettingsLogToCsv
   def to_csv_row(seed: nil)
     year = log.collection_start_year
     case year
-    when 2022
-      to_2022_csv_row(seed:)
-    when 2023
-      to_2023_csv_row(seed:)
-    when 2024
-      to_2024_csv_row(seed:)
+    when 2022, 2023, 2024, 2025
+      to_year_csv_row(year, seed:)
     else
       raise NotImplementedError "No mapping function implemented for year #{year}"
     end
@@ -30,82 +26,32 @@ class BulkUpload::LettingsLogToCsv
 
   def to_row
     year = log.collection_start_year
-    case year
-    when 2022
-      to_2022_row
-    when 2023
-      to_2023_row
-    when 2024
-      to_2024_row
-    else
-      raise NotImplementedError "No mapping function implemented for year #{year}"
-    end
+    send("to_#{year}_row")
+  rescue NoMethodError
+    raise NotImplementedError "No mapping function implemented for year #{year}"
   end
 
   def default_field_numbers_row(seed: nil)
     year = log.collection_start_year
-    case year
-    when 2022
-      default_2022_field_numbers_row(seed:)
-    when 2023
-      default_2023_field_numbers_row(seed:)
-    when 2024
-      default_2024_field_numbers_row(seed:)
-    else
-      raise NotImplementedError "No mapping function implemented for year #{year}"
-    end
+    default_field_numbers_row_for_year(year, seed:)
+  rescue NoMethodError
+    raise NotImplementedError "No mapping function implemented for year #{year}"
   end
 
   def default_field_numbers
     year = log.collection_start_year
-    case year
-    when 2022
-      default_2022_field_numbers
-    when 2023
-      default_2023_field_numbers
-    when 2024
-      default_2024_field_numbers
-    else
-      raise NotImplementedError "No mapping function implemented for year #{year}"
-    end
+    send("default_#{year}_field_numbers")
+  rescue NoMethodError
+    raise NotImplementedError "No mapping function implemented for year #{year}"
   end
 
-  def to_2022_csv_row(seed: nil)
+  def to_year_csv_row(year, seed: nil)
+    unshuffled_row = send("to_#{year}_row")
     if seed
-      row = to_2022_row.shuffle(random: Random.new(seed))
+      row = unshuffled_row.shuffle(random: Random.new(seed))
       (row_prefix + row).flatten.join(",") + line_ending
     else
-      (row_prefix + to_2022_row).flatten.join(",") + line_ending
-    end
-  end
-
-  def default_2022_field_numbers
-    (1..134).to_a
-  end
-
-  def default_2022_field_numbers_row(seed: nil)
-    if seed
-      ["Field number"] + default_2022_field_numbers.shuffle(random: Random.new(seed))
-    else
-      ["Field number"] + default_2022_field_numbers
-    end.flatten.join(",") + line_ending
-  end
-
-  def to_2023_csv_row(seed: nil)
-    if seed
-      row = to_2023_row.shuffle(random: Random.new(seed))
-      (row_prefix + row).flatten.join(",") + line_ending
-    else
-      (row_prefix + to_2023_row).flatten.join(",") + line_ending
-    end
-  end
-
-  def to_2024_csv_row(seed: nil)
-    if seed
-      row = to_2024_row.shuffle(random: Random.new(seed))
-      (row_prefix + row).flatten.join(",") + line_ending
-    else
-      (row_prefix + to_2024_row).flatten.join(",") + line_ending
+      (row_prefix + unshuffled_row).flatten.join(",") + line_ending
     end
   end
 
@@ -121,20 +67,16 @@ class BulkUpload::LettingsLogToCsv
     ]
   end
 
-  def default_2023_field_numbers_row(seed: nil)
+  def default_field_numbers_row_for_year(year, seed: nil)
     if seed
-      ["Field number"] + default_2023_field_numbers.shuffle(random: Random.new(seed))
+      ["Field number"] + send("default_#{year}_field_numbers").shuffle(random: Random.new(seed))
     else
-      ["Field number"] + default_2023_field_numbers
+      ["Field number"] + send("default_#{year}_field_numbers")
     end.flatten.join(",") + line_ending
   end
 
-  def default_2024_field_numbers_row(seed: nil)
-    if seed
-      ["Field number"] + default_2024_field_numbers.shuffle(random: Random.new(seed))
-    else
-      ["Field number"] + default_2024_field_numbers
-    end.flatten.join(",") + line_ending
+  def default_2022_field_numbers
+    (1..134).to_a
   end
 
   def default_2023_field_numbers
@@ -143,6 +85,156 @@ class BulkUpload::LettingsLogToCsv
 
   def default_2024_field_numbers
     (1..130).to_a
+  end
+
+  def default_2025_field_numbers
+    (1..129).to_a
+  end
+
+  def to_2025_row
+    [
+      overrides[:organisation_id] || log.owning_organisation&.old_visible_id, # 1
+      overrides[:managing_organisation_id] || log.managing_organisation&.old_visible_id,
+      log.assigned_to&.email,
+      log.needstype,
+      log.scheme&.id ? "S#{log.scheme&.id}" : "",
+      log.location&.id,
+      renewal,
+      log.startdate&.day,
+      log.startdate&.month,
+      log.startdate&.strftime("%y"), # 10
+
+      rent_type,
+      log.irproduct_other,
+      log.tenancycode,
+      log.propcode,
+      log.declaration,
+      log.rsnvac,
+      log.unitletas,
+      log.uprn,
+      log.address_line1&.tr(",", " "),
+      log.address_line2&.tr(",", " "), # 20
+
+      log.town_or_city&.tr(",", " "),
+      log.county&.tr(",", " "),
+      ((log.postcode_full || "").split(" ") || [""]).first,
+      ((log.postcode_full || "").split(" ") || [""]).last,
+      log.la,
+      log.unittype_gn,
+      log.builtype,
+      log.wchair,
+      log.beds,
+      log.voiddate&.day, # 30
+
+      log.voiddate&.month,
+      log.voiddate&.strftime("%y"),
+      log.mrcdate&.day,
+      log.mrcdate&.month,
+      log.mrcdate&.strftime("%y"),
+      log.sheltered,
+      log.joint,
+      log.startertenancy,
+      log.tenancy,
+      log.tenancyother, # 40
+
+      log.tenancylength,
+      log.age1 || overrides[:age1],
+      log.sex1,
+      log.ethnic,
+      log.nationality_all_group,
+      log.ecstat1,
+      relat_number(log.relat2),
+      log.age2 || overrides[:age2],
+      log.sex2,
+      log.ecstat2, # 50
+
+      relat_number(log.relat3),
+      log.age3 || overrides[:age3],
+      log.sex3,
+      log.ecstat3,
+      relat_number(log.relat4),
+      log.age4 || overrides[:age4],
+      log.sex4,
+      log.ecstat4,
+      relat_number(log.relat5),
+      log.age5 || overrides[:age5], # 60
+
+      log.sex5,
+      log.ecstat5,
+      relat_number(log.relat6),
+      log.age6 || overrides[:age6],
+      log.sex6,
+      log.ecstat6,
+      relat_number(log.relat7),
+      log.age7 || overrides[:age7],
+      log.sex7,
+      log.ecstat7, # 70
+
+      relat_number(log.relat8),
+      log.age8 || overrides[:age8],
+      log.sex8,
+      log.ecstat8,
+      log.armedforces,
+      log.leftreg,
+      log.reservist,
+      log.preg_occ,
+      log.housingneeds_a,
+      log.housingneeds_b, # 80
+
+      log.housingneeds_c,
+      log.housingneeds_f,
+      log.housingneeds_g,
+      log.housingneeds_h,
+      overrides[:illness] || log.illness,
+      log.illness_type_1,
+      log.illness_type_2,
+      log.illness_type_3,
+      log.illness_type_4,
+      log.illness_type_5, # 90
+
+      log.illness_type_6,
+      log.illness_type_7,
+      log.illness_type_8,
+      log.illness_type_9,
+      log.illness_type_10,
+      log.layear,
+      log.waityear,
+      log.reason,
+      log.reasonother,
+      log.prevten, # 100
+
+      homeless,
+      previous_postcode_known,
+      ((log.ppostcode_full || "").split(" ") || [""]).first,
+      ((log.ppostcode_full || "").split(" ") || [""]).last,
+      log.prevloc,
+      log.reasonpref,
+      log.rp_homeless,
+      log.rp_insan_unsat,
+      log.rp_medwel,
+      log.rp_hardship, # 110
+
+      log.rp_dontknow,
+      cbl,
+      chr,
+      cap,
+      accessible_register,
+      log.referral,
+      net_income_known,
+      log.incfreq,
+      log.earnings,
+      log.hb, # 120
+
+      log.benefits,
+      log.household_charge,
+      log.period,
+      log.brent,
+      log.scharge,
+      log.pscharge,
+      log.supcharg,
+      log.hbrentshortfall,
+      log.tshortfall, # 129
+    ]
   end
 
   def to_2024_row
@@ -549,6 +641,17 @@ private
       log.hhregresstill
     else
       log.hhregres
+    end
+  end
+
+  def relat_number(value)
+    case value
+    when "P"
+      1
+    when "R"
+      3
+    when "C", "X"
+      2
     end
   end
 end
