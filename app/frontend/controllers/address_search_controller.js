@@ -5,6 +5,9 @@ import 'accessible-autocomplete/dist/accessible-autocomplete.min.css'
 const options = []
 
 const fetchOptions = async (query, searchUrl) => {
+  if (query.length < 3) {
+    throw new Error('Query must be at least 3 characters long.')
+  }
   try {
     const response = await fetch(`${searchUrl}?query=${encodeURIComponent(query.trim())}`)
     return await response.json()
@@ -51,7 +54,7 @@ export default class extends Controller {
     accessibleAutocomplete.enhanceSelectElement({
       defaultValue: '',
       selectElement: selectEl,
-      minLength: 3,
+      minLength: 1,
       tNoResults: () => { return 'No address found' },
       source: (query, populateResults) => {
         fetchAndPopulateSearchResults(query, populateResults, searchUrl, populateOptions, selectEl)
