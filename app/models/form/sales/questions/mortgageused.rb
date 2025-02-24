@@ -5,7 +5,7 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @ownershipsch = ownershipsch
-    @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
+    @question_number = question_number_from_year_and_ownership.fetch(form.start_date.year, question_number_from_year_and_ownership.max_by { |k, _v| k }.last)[ownershipsch]
     @top_guidance_partial = top_guidance_partial
   end
 
@@ -29,10 +29,13 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
     ANSWER_OPTIONS.reject { |key, _v| key == "3" }
   end
 
-  QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
-    2023 => { 1 => 90, 2 => 103, 3 => 111 },
-    2024 => { 1 => 91, 2 => 104, 3 => 112 },
-  }.freeze
+  def question_number_from_year_and_ownership
+    {
+      2023 => { 1 => 90, 2 => 103, 3 => 111 },
+      2024 => { 1 => 91, 2 => 104, 3 => 112 },
+      2025 => { 1 => subsection.id == "shared_ownership_staircasing_transaction" ? 99 : 82, 2 => 106 },
+    }
+  end
 
   def top_guidance_partial
     return "financial_calculations_shared_ownership" if @ownershipsch == 1

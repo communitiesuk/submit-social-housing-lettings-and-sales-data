@@ -7,7 +7,7 @@ class Form::Sales::Questions::NationalityAllGroup < ::Form::Question
     @conditional_for = buyer_index == 1 ? { "nationality_all" => [12] } : { "nationality_all_buyer2" => [12] }
     @hidden_in_check_answers = { "depends_on" => [{ id => 12 }] }
     @buyer_index = buyer_index
-    @question_number = question_number
+    @question_number = QUESTION_NUMBER_FROM_YEAR_AND_BUYER_INDEX.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_BUYER_INDEX.max_by { |k, _v| k }.last)[buyer_index]
   end
 
   ANSWER_OPTIONS = {
@@ -16,11 +16,9 @@ class Form::Sales::Questions::NationalityAllGroup < ::Form::Question
     "0" => { "value" => "Buyer prefers not to say" },
   }.freeze
 
-  def question_number
-    if form.start_date.year == 2023
-      @buyer_index == 1 ? 24 : 32
-    else
-      @buyer_index == 1 ? 26 : 34
-    end
-  end
+  QUESTION_NUMBER_FROM_YEAR_AND_BUYER_INDEX = {
+    2023 => { 1 => 24, 2 => 32 },
+    2024 => { 1 => 26, 2 => 34 },
+    2025 => { 1 => 24, 2 => 32 },
+  }.freeze
 end

@@ -19,5 +19,5 @@ class Form::Sales::Questions::Buyer2RelationshipToBuyer1YesNo < ::Form::Question
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2025 => 29 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2025 => 27 }.freeze
 end

@@ -19,5 +19,5 @@ class Form::Sales::Questions::PreviousTenureBuyer2 < ::Form::Question
     "0" => { "value" => "Don't know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 61, 2024 => 63 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 61, 2024 => 63, 2025 => 60 }.freeze
 end

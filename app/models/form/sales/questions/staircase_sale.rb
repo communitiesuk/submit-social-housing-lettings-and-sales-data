@@ -14,5 +14,5 @@ class Form::Sales::Questions::StaircaseSale < ::Form::Question
     "3" => { "value" => "Don't know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 79, 2024 => 81 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 79, 2024 => 81, 2025 => 92 }.freeze
 end

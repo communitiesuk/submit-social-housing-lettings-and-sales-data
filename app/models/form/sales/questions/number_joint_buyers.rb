@@ -13,5 +13,5 @@ class Form::Sales::Questions::NumberJointBuyers < ::Form::Question
     "3" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 10, 2024 => 12 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 10, 2024 => 12, 2025 => 10 }.freeze
 end
