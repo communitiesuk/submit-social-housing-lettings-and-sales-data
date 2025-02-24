@@ -58,7 +58,8 @@ class TestDataController < ApplicationController
       file.write(log_to_csv.default_field_numbers_row)
       file.write(log_to_csv.to_csv_row)
       file.rewind
-      send_file file.path, type: "text/csv",
+      send_file file.path,
+                type: "text/csv",
                 filename: "#{year}_test_sales_log.csv",
                 disposition: "attachment",
                 after_send: lambda {
