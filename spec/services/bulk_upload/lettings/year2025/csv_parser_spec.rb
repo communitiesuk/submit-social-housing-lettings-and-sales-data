@@ -15,8 +15,8 @@ RSpec.describe BulkUpload::Lettings::Year2025::CsvParser do
       file.write("Can be empty?\n")
       file.write("Type of letting the question applies to\n")
       file.write("Duplicate check field?\n")
-      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2025_field_numbers_row)
-      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2025_csv_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_field_numbers_row_for_year(2025))
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_year_csv_row(2025))
       file.rewind
     end
 
@@ -38,8 +38,8 @@ RSpec.describe BulkUpload::Lettings::Year2025::CsvParser do
       file.write("\n")
       file.write("Type of letting the question applies to\n")
       file.write("Duplicate check field?\n")
-      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2025_field_numbers_row)
-      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2025_csv_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_field_numbers_row_for_year(2025))
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_year_csv_row(2025))
       file.rewind
     end
 
@@ -62,8 +62,8 @@ RSpec.describe BulkUpload::Lettings::Year2025::CsvParser do
       file.write("Can be empty?\n")
       file.write("Type of letting the question applies to\n")
       file.write("Duplicate check field?\n")
-      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2025_field_numbers_row)
-      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2025_csv_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_field_numbers_row_for_year(2025))
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_year_csv_row(2025))
       file.write("\n")
       file.rewind
     end
@@ -92,8 +92,8 @@ RSpec.describe BulkUpload::Lettings::Year2025::CsvParser do
       file.write("Can be empty?\n")
       file.write("Type of letting the question applies to\n")
       file.write("Duplicate check field?\n")
-      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2025_field_numbers_row(seed:))
-      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2025_csv_row(seed:))
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_field_numbers_row_for_year(2025, seed:))
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_year_csv_row(2025, seed:))
       file.rewind
     end
 
@@ -136,7 +136,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::CsvParser do
 
   context "when parsing csv without headers" do
     before do
-      file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2025_csv_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_year_csv_row(2025))
       file.rewind
     end
 
@@ -155,7 +155,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::CsvParser do
 
     before do
       file.write(bom)
-      file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2025_csv_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_year_csv_row(2025))
       file.rewind
     end
 
@@ -169,7 +169,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::CsvParser do
 
     before do
       file.write(invalid_sequence)
-      file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2025_csv_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_year_csv_row(2025))
       file.rewind
     end
 
@@ -186,8 +186,8 @@ RSpec.describe BulkUpload::Lettings::Year2025::CsvParser do
       file.write("Can be empty?\r")
       file.write("Type of letting the question applies to\r\n")
       file.write("Duplicate check field?\r")
-      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2025_field_numbers_row)
-      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2025_csv_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_field_numbers_row_for_year(2025))
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_year_csv_row(2025))
       file.rewind
     end
 
@@ -205,8 +205,8 @@ RSpec.describe BulkUpload::Lettings::Year2025::CsvParser do
         file.write("Can be empty?\n")
         file.write("Type of letting the question applies to\n")
         file.write("Duplicate check field?\n")
-        file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2025_field_numbers_row)
-        file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2025_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:).default_field_numbers_row_for_year(2025))
+        file.write(BulkUpload::LettingsLogToCsv.new(log:).to_year_csv_row(2025))
         file.rewind
       end
 
@@ -218,7 +218,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::CsvParser do
 
     context "when without headers using default ordering" do
       before do
-        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2025_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_year_csv_row(2025))
         file.rewind
       end
 
@@ -238,8 +238,8 @@ RSpec.describe BulkUpload::Lettings::Year2025::CsvParser do
         file.write("Can be empty?\n")
         file.write("Type of letting the question applies to\n")
         file.write("Duplicate check field?\n")
-        file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2025_field_numbers_row(seed:))
-        file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2025_csv_row(seed:))
+        file.write(BulkUpload::LettingsLogToCsv.new(log:).default_field_numbers_row_for_year(2025, seed:))
+        file.write(BulkUpload::LettingsLogToCsv.new(log:).to_year_csv_row(2025, seed:))
         file.rewind
       end
 
