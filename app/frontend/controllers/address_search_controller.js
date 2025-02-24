@@ -3,7 +3,6 @@ import accessibleAutocomplete from 'accessible-autocomplete'
 import 'accessible-autocomplete/dist/accessible-autocomplete.min.css'
 
 const options = []
-let currentQuery = ''
 
 const fetchOptions = async (query, searchUrl) => {
   try {
@@ -53,15 +52,8 @@ export default class extends Controller {
       defaultValue: '',
       selectElement: selectEl,
       minLength: 3,
-      tNoResults: () => {
-        if (currentQuery && currentQuery.trim().length > 2) {
-          return 'No address found'
-        } else {
-          return null
-        }
-      },
+      tNoResults: () => { return 'No address found' },
       source: (query, populateResults) => {
-        currentQuery = query
         fetchAndPopulateSearchResults(query, populateResults, searchUrl, populateOptions, selectEl)
       },
       autoselect: true,
