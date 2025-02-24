@@ -24,13 +24,31 @@ RSpec.describe Form::Lettings::Pages::NoAddressFound, type: :model do
   it "has correct depends_on" do
     expect(page.depends_on).to eq([{ "address_options_present?" => false,
                                      "is_supported_housing?" => false,
-                                     "uprn_known" => nil },
+                                     "uprn_known" => nil,
+                                     "is_new_build?" => false,
+                                     "form.start_year_2025_or_later?" => true },
                                    { "address_options_present?" => false,
                                      "is_supported_housing?" => false,
-                                     "uprn_known" => 0 },
+                                     "uprn_known" => 0,
+                                     "is_new_build?" => false,
+                                     "form.start_year_2025_or_later?" => true },
                                    { "address_options_present?" => false,
                                      "is_supported_housing?" => false,
-                                     "uprn_confirmed" => 0 }])
+                                     "uprn_confirmed" => 0,
+                                     "is_new_build?" => false,
+                                     "form.start_year_2025_or_later?" => true },
+                                   { "address_options_present?" => false,
+                                     "is_supported_housing?" => false,
+                                     "uprn_known" => nil,
+                                     "form.start_year_2025_or_later?" => false },
+                                   { "address_options_present?" => false,
+                                     "is_supported_housing?" => false,
+                                     "uprn_known" => 0,
+                                     "form.start_year_2025_or_later?" => false },
+                                   { "address_options_present?" => false,
+                                     "is_supported_housing?" => false,
+                                     "uprn_confirmed" => 0,
+                                     "form.start_year_2025_or_later?" => false }])
   end
 
   it "is interruption screen page" do

@@ -13,9 +13,12 @@ class Form::Lettings::Pages::NoAddressFound < ::Form::Page
       "arguments" => [],
     }
     @depends_on = [
-      { "is_supported_housing?" => false, "uprn_known" => nil, "address_options_present?" => false },
-      { "is_supported_housing?" => false, "uprn_known" => 0, "address_options_present?" => false },
-      { "is_supported_housing?" => false, "uprn_confirmed" => 0, "address_options_present?" => false },
+      { "is_supported_housing?" => false, "uprn_known" => nil, "address_options_present?" => false, "is_new_build?" => false, "form.start_year_2025_or_later?" => true },
+      { "is_supported_housing?" => false, "uprn_known" => 0, "address_options_present?" => false, "is_new_build?" => false, "form.start_year_2025_or_later?" => true },
+      { "is_supported_housing?" => false, "uprn_confirmed" => 0, "address_options_present?" => false, "is_new_build?" => false, "form.start_year_2025_or_later?" => true },
+      { "is_supported_housing?" => false, "uprn_known" => nil, "address_options_present?" => false, "form.start_year_2025_or_later?" => false },
+      { "is_supported_housing?" => false, "uprn_known" => 0, "address_options_present?" => false, "form.start_year_2025_or_later?" => false },
+      { "is_supported_housing?" => false, "uprn_confirmed" => 0, "address_options_present?" => false, "form.start_year_2025_or_later?" => false },
     ]
   end
 
