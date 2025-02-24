@@ -11,7 +11,7 @@ class AddressSearchController < ApplicationController
       service.call
 
       if service.error.present?
-        render json: { error: service.error }, status: :unprocessable_entity
+        render json: { error: service.error }, status: :not_found
       else
         presenter = UprnDataPresenter.new(service.result)
         render json: [{ text: presenter.address, value: presenter.uprn }]
@@ -22,7 +22,7 @@ class AddressSearchController < ApplicationController
       service.call
 
       if service.error.present?
-        render json: { error: service.error }, status: :unprocessable_entity
+        render json: { error: service.error }, status: :not_found
       else
         results = service.result.map do |result|
           presenter = AddressDataPresenter.new(result)
@@ -41,7 +41,7 @@ class AddressSearchController < ApplicationController
       results = (address_service.result || []) + (uprn_service.result || [])
 
       if address_service.error.present? && uprn_service.error.present?
-        render json: { error: "Address and UPRN are not recognised." }, status: :unprocessable_entity
+        render json: { error: "Address and UPRN are not recognised." }, status: :not_found
       else
         formatted_results = results.map do |result|
           presenter = AddressDataPresenter.new(result)
