@@ -52,7 +52,6 @@ class TestDataController < ApplicationController
       return render_not_found unless FeatureToggle.create_test_logs_enabled?
 
       file = Tempfile.new("#{year}_test_sales_log.csv")
-      # saledate { Time.zone.today }
       log = FactoryBot.create(:sales_log, :completed, assigned_to: current_user, value: 180_000, deposit: 150_000, county: "Somerset", saledate: Time.zone.local(year.to_i, rand(4..12), rand(1..28)))
       log_to_csv = BulkUpload::SalesLogToCsv.new(log:, line_ending: "\n", overrides: { organisation_id: "ORG#{log.owning_organisation_id}", managing_organisation_id: "ORG#{log.owning_organisation_id}" })
       file.write(log_to_csv.default_field_numbers_row)
@@ -69,4 +68,3 @@ class TestDataController < ApplicationController
     end
   end
 end
-
