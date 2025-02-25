@@ -99,5 +99,5 @@ class Form::Lettings::Questions::Rsnvac < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 17, 2024 => 18 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 17, 2024 => 18, 2025 => 15 }.freeze
 end

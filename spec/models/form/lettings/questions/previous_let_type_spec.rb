@@ -44,6 +44,8 @@ RSpec.describe Form::Lettings::Questions::PreviousLetType, type: :model do
   end
 
   context "with collection year on or after 2024" do
+    let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+
     before do
       allow(form).to receive(:start_year_2024_or_later?).and_return(true)
     end
@@ -60,9 +62,15 @@ RSpec.describe Form::Lettings::Questions::PreviousLetType, type: :model do
         "3" => { "value" => "Don’t know" },
       })
     end
+
+    it "has the correct question number" do
+      expect(question.question_number).to eq(17)
+    end
   end
 
   context "with collection year on or after 2025" do
+    let(:form) { instance_double(Form, start_date: Time.zone.local(2025, 4, 1)) }
+
     before do
       allow(form).to receive(:start_year_2025_or_later?).and_return(true)
     end
@@ -79,6 +87,10 @@ RSpec.describe Form::Lettings::Questions::PreviousLetType, type: :model do
         "divider" => { "value" => true },
         "3" => { "value" => "Don’t know" },
       })
+    end
+
+    it "has the correct question number" do
+      expect(question.question_number).to eq(14)
     end
   end
 end

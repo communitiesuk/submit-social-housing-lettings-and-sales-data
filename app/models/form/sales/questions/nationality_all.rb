@@ -5,20 +5,18 @@ class Form::Sales::Questions::NationalityAll < ::Form::Question
     @answer_options = GlobalConstants::COUNTRIES_ANSWER_OPTIONS
     @check_answers_card_number = buyer_index
     @buyer_index = buyer_index
-    @question_number = question_number
+    @question_number = QUESTION_NUMBER_FROM_YEAR_AND_BUYER_INDEX.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_BUYER_INDEX.max_by { |k, _v| k }.last)[buyer_index]
   end
 
   def answer_label(log, _current_user = nil)
     answer_options[log.send(id).to_s]["name"]
   end
 
-  def question_number
-    if form.start_date.year == 2023
-      @buyer_index == 1 ? 24 : 32
-    else
-      @buyer_index == 1 ? 26 : 34
-    end
-  end
+  QUESTION_NUMBER_FROM_YEAR_AND_BUYER_INDEX = {
+    2023 => { 1 => 24, 2 => 32 },
+    2024 => { 1 => 26, 2 => 34 },
+    2025 => { 1 => 24, 2 => 32 },
+  }.freeze
 
   def label_from_value(value)
     return unless value

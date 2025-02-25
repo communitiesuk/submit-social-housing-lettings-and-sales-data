@@ -18,5 +18,6 @@ class Form::Sales::Questions::ExtraBorrowing < ::Form::Question
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
     2023 => { 1 => 94, 2 => 107, 3 => 115 },
     2024 => { 1 => 95, 2 => 108, 3 => 115 },
+    2025 => { 2 => 109 },
   }.freeze
 end

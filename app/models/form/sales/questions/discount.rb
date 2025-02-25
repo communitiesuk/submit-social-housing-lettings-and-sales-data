@@ -12,5 +12,5 @@ class Form::Sales::Questions::Discount < ::Form::Question
     @top_guidance_partial = "financial_calculations_discounted_ownership"
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 102, 2024 => 103 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 102, 2024 => 103, 2025 => 105 }.freeze
 end

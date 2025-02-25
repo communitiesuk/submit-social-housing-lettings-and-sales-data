@@ -27,5 +27,5 @@ class Form::Sales::Questions::PreviousPostcodeKnown < ::Form::Question
     "1" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 57, 2024 => 59 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 57, 2024 => 59, 2025 => 57 }.freeze
 end

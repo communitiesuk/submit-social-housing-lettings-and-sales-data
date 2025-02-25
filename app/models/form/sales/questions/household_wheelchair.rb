@@ -13,5 +13,5 @@ class Form::Sales::Questions::HouseholdWheelchair < ::Form::Question
     "3" => { "value" => "Don't know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 66, 2024 => 68 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 66, 2024 => 68, 2025 => 65 }.freeze
 end

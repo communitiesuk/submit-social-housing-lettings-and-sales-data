@@ -23,5 +23,5 @@ class Form::Sales::Questions::DiscountedOwnershipType < ::Form::Question
     "discounted_ownership_type_definitions" if form.start_date.year >= 2023
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 5, 2024 => 7 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 5, 2024 => 7, 2025 => 8 }.freeze
 end
