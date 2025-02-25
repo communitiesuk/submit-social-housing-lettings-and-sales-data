@@ -3,10 +3,11 @@ import accessibleAutocomplete from 'accessible-autocomplete'
 import 'accessible-autocomplete/dist/accessible-autocomplete.min.css'
 
 const options = []
+let showNoResultsMessage = false
 
 const fetchOptions = async (query, searchUrl) => {
-  if (query.length < 3) {
-    throw new Error('Query must be at least 3 characters long.')
+  if (query.length < 2) {
+    throw new Error('Query must be at least 2 characters long.')
   }
   try {
     const response = await fetch(`${searchUrl}?query=${encodeURIComponent(query.trim())}`)
@@ -21,13 +22,16 @@ const fetchAndPopulateSearchResults = async (query, populateResults, searchUrl, 
     try {
       const results = await fetchOptions(query, searchUrl)
       if (results.length === 0) {
+        showNoResultsMessage = true
         populateOptions([], selectEl)
         populateResults([])
       } else {
+        showNoResultsMessage = false
         populateOptions(results, selectEl)
         populateResults(Object.values(results).map((o) => `${o.text} (${o.value})`))
       }
     } catch (error) {
+      showNoResultsMessage = true
       populateOptions([], selectEl)
       populateResults([])
     }
@@ -54,8 +58,14 @@ export default class extends Controller {
     accessibleAutocomplete.enhanceSelectElement({
       defaultValue: '',
       selectElement: selectEl,
-      minLength: 1,
-      tNoResults: () => { return 'No address found' },
+      minLength: 2,
+      tNoResults: () => {
+        if (showNoResultsMessage) {
+          return 'No address found'
+        } else {
+          return null
+        }
+      },
       source: (query, populateResults) => {
         fetchAndPopulateSearchResults(query, populateResults, searchUrl, populateOptions, selectEl)
       },
