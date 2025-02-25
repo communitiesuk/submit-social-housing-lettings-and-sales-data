@@ -18,7 +18,7 @@ class AddressSearchController < ApplicationController
       end
     elsif query.match?(/[a-zA-Z]/)
       # Query contains letters, assume it's an address
-      service = AddressClient.new(query)
+      service = AddressClient.new(query, { minmatch: 0.2 })
       service.call
 
       if service.error.present?
@@ -32,7 +32,7 @@ class AddressSearchController < ApplicationController
       end
     else
       # Query is ambiguous, use both APIs and merge results
-      address_service = AddressClient.new(query)
+      address_service = AddressClient.new(query, { minmatch: 0.2 })
       uprn_service = UprnClient.new(query)
 
       address_service.call
