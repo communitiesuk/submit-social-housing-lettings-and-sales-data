@@ -38,7 +38,7 @@ class AddressSearchController < ApplicationController
       address_service.call
       uprn_service.call
 
-      results = (address_service.result || []) + (uprn_service.result || [])
+      results = ([uprn_service.result] || []) + (address_service.result || [])
 
       if address_service.error.present? && uprn_service.error.present?
         render json: { error: "Address and UPRN are not recognised." }, status: :not_found
