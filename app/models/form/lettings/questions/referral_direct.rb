@@ -16,7 +16,7 @@ class Form::Lettings::Questions::ReferralDirect < ::Form::Question
       "2" => {
         "value" => "Tenant applied directly for an available property",
       },
-      "6" => {
+      "8" => {
         "value" => "Relocated through official housing mobility scheme",
       },
     }.freeze
