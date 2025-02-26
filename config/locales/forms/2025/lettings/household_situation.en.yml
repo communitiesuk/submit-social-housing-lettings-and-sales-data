@@ -112,11 +112,12 @@ en:
             question_text: "How was this letting allocated?"
 
           referral:
-            page_header: ""
-            check_answer_label: "Source of referral type"
-            check_answer_prompt: "Select source of referral"
-            hint_text: ""
-            question_text: "What was the source of referral for this letting?"
+            type:
+              page_header: ""
+              check_answer_label: "Source of referral type"
+              check_answer_prompt: "Select source of referral"
+              hint_text: ""
+              question_text: "What was the source of referral for this letting?"
             direct:
               page_header: ""
               check_answer_label: "Source of referral for letting"
