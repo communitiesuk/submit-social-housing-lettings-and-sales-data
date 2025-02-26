@@ -45,14 +45,14 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       field_13: "2",
       field_14: "1",
       field_15: "1",
-      field_16: "1",
-      field_17: "2",
-      field_18: "1",
-      field_19: "12",
-      field_20: "Address line 1",
-      field_24: "CR0",
-      field_25: "4BB",
-      field_26: "E09000008",
+      field_16: "12",
+      field_17: "Address line 1",
+      field_21: "CR0",
+      field_22: "4BB",
+      field_23: "E09000008",
+      field_24: "1",
+      field_25: "2",
+      field_26: "1",
       field_27: "3",
       field_28: "32",
       field_29: "M",
@@ -144,7 +144,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
     context "when the only populated fields are empty strings or whitespace" do
       before do
         parser.field_6 = " "
-        parser.field_17 = ""
+        parser.field_25 = ""
       end
 
       it "returns true" do
@@ -305,11 +305,11 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
         end
 
         context "when other null error is added" do
-          let(:attributes) { setup_section_params.merge({ field_20: nil }) }
+          let(:attributes) { setup_section_params.merge({ field_17: nil }) }
 
           it "only has one error added to the field" do
             parser.valid?
-            expect(parser.errors[:field_20]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_answered")])
+            expect(parser.errors[:field_17]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_answered")])
           end
         end
 
@@ -770,8 +770,8 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
           :field_1, # Sale completion date
           :field_2, # Sale completion date
           :field_3, # Sale completion date
-          :field_24, # Postcode
-          :field_25, # Postcode
+          :field_21, # Postcode
+          :field_22, # Postcode
           :field_28, # Buyer 1 age
           :field_29, # Buyer 1 gender
           :field_32, # Buyer 1 working situation
@@ -800,8 +800,8 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
           :field_1, # Sale completion date
           :field_2, # Sale completion date
           :field_3, # Sale completion date
-          :field_24, # Postcode
-          :field_25, # Postcode
+          :field_21, # Postcode
+          :field_22, # Postcode
           :field_28, # Buyer 1 age
           :field_29, # Buyer 1 gender
           :field_32, # Buyer 1 working situation
@@ -898,11 +898,11 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
     describe "UPRN and address fields" do
       context "when a valid UPRN is given" do
-        let(:attributes) { setup_section_params.merge({ field_19: "12" }) }
+        let(:attributes) { setup_section_params.merge({ field_16: "12" }) }
 
         it "does not add errors" do
           parser.valid?
-          %i[field_19 field_20 field_21 field_22 field_23 field_24 field_25].each do |field|
+          %i[field_16 field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
             expect(parser.errors[field]).to be_empty
           end
         end
@@ -916,29 +916,29 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
       context "when an invalid UPRN is given" do
         context "and address fields are not given" do
-          let(:attributes) { setup_section_params.merge({ field_19: "1234567890123" }) }
+          let(:attributes) { setup_section_params.merge({ field_16: "1234567890123" }) }
 
           it "adds an appropriate error to the UPRN field" do
             parser.valid?
-            expect(parser.errors[:field_19]).to eql(["UPRN must be 12 digits or less."])
+            expect(parser.errors[:field_16]).to eql(["UPRN must be 12 digits or less."])
           end
 
           it "adds errors to missing key address fields" do
             parser.valid?
-            expect(parser.errors[:field_20]).to eql([I18n.t("validations.sales.2025.bulk_upload.not_answered", question: "address line 1.")])
-            expect(parser.errors[:field_22]).to eql([I18n.t("validations.sales.2025.bulk_upload.not_answered", question: "town or city.")])
-            expect(parser.errors[:field_24]).to eql([I18n.t("validations.sales.2025.bulk_upload.not_answered", question: "part 1 of postcode.")])
-            expect(parser.errors[:field_25]).to eql([I18n.t("validations.sales.2025.bulk_upload.not_answered", question: "part 2 of postcode.")])
+            expect(parser.errors[:field_17]).to eql([I18n.t("validations.sales.2025.bulk_upload.not_answered", question: "address line 1.")])
+            expect(parser.errors[:field_19]).to eql([I18n.t("validations.sales.2025.bulk_upload.not_answered", question: "town or city.")])
+            expect(parser.errors[:field_21]).to eql([I18n.t("validations.sales.2025.bulk_upload.not_answered", question: "part 1 of postcode.")])
+            expect(parser.errors[:field_22]).to eql([I18n.t("validations.sales.2025.bulk_upload.not_answered", question: "part 2 of postcode.")])
           end
         end
 
         context "and address fields are given" do
-          let(:attributes) { setup_section_params.merge({ field_19: "1234567890123", field_20: "address line 1", field_22: "town or city", field_24: "AA1", field_25: "1AA" }) }
+          let(:attributes) { setup_section_params.merge({ field_16: "1234567890123", field_17: "address line 1", field_19: "town or city", field_21: "AA1", field_22: "1AA" }) }
 
           it "adds an error to the UPRN field only" do
             parser.valid?
-            expect(parser.errors[:field_19]).to eql(["UPRN must be 12 digits or less."])
-            %i[field_20 field_22 field_24 field_25].each do |field|
+            expect(parser.errors[:field_16]).to eql(["UPRN must be 12 digits or less."])
+            %i[field_17 field_19 field_21 field_22].each do |field|
               expect(parser.errors[field]).to be_empty
             end
           end
@@ -956,29 +956,29 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
           it "adds appropriate errors to UPRN and key address fields" do
             parser.valid?
+            expect(parser.errors[:field_16]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_answered")])
+            expect(parser.errors[:field_17]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_answered")])
             expect(parser.errors[:field_19]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_answered")])
-            expect(parser.errors[:field_20]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_answered")])
+            expect(parser.errors[:field_21]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_answered")])
             expect(parser.errors[:field_22]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_answered")])
-            expect(parser.errors[:field_24]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_answered")])
-            expect(parser.errors[:field_25]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_answered")])
           end
         end
 
         context "and some key address field is missing" do
-          let(:attributes) { setup_section_params.merge({ field_22: "town or city", field_24: "AA1", field_25: "1AA" }) }
+          let(:attributes) { setup_section_params.merge({ field_19: "town or city", field_21: "AA1", field_22: "1AA" }) }
 
           it "adds errors to UPRN and the missing key address field" do
             parser.valid?
-            expect(parser.errors[:field_19]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_answered")])
-            expect(parser.errors[:field_20]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_answered")])
+            expect(parser.errors[:field_16]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_answered")])
+            expect(parser.errors[:field_17]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_answered")])
+            expect(parser.errors[:field_19]).to be_empty
+            expect(parser.errors[:field_21]).to be_empty
             expect(parser.errors[:field_22]).to be_empty
-            expect(parser.errors[:field_24]).to be_empty
-            expect(parser.errors[:field_25]).to be_empty
           end
         end
 
         context "and all key address fields are present" do
-          let(:attributes) { setup_section_params.merge({ field_19: nil, field_20: "address line 1", field_22: "town or city", field_24: "AA1", field_25: "1AA" }) }
+          let(:attributes) { setup_section_params.merge({ field_16: nil, field_17: "address line 1", field_19: "town or city", field_21: "AA1", field_22: "1AA" }) }
 
           context "and an address can be found with a high enough match rating" do
             before do
@@ -988,7 +988,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
             it "does not add errors" do
               parser.valid?
-              %i[field_19 field_20 field_21 field_22 field_23 field_24 field_25].each do |field|
+              %i[field_16 field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
                 expect(parser.errors[field]).to be_empty
               end
             end
@@ -1002,8 +1002,8 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
             it "adds address not found errors to address fields only" do
               parser.valid?
-              expect(parser.errors[:field_19]).to be_empty
-              %i[field_20 field_21 field_22 field_23 field_24 field_25].each do |field|
+              expect(parser.errors[:field_16]).to be_empty
+              %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
                 expect(parser.errors[field]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_found")])
               end
             end
@@ -1017,8 +1017,8 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
             it "adds address not found errors to address fields only" do
               parser.valid?
-              expect(parser.errors[:field_19]).to be_empty
-              %i[field_20 field_21 field_22 field_23 field_24 field_25].each do |field|
+              expect(parser.errors[:field_16]).to be_empty
+              %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
                 expect(parser.errors[field]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_determined")])
               end
             end
@@ -1395,7 +1395,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
     end
 
     describe "#uprn" do
-      let(:attributes) { setup_section_params.merge({ field_19: "12" }) }
+      let(:attributes) { setup_section_params.merge({ field_16: "12" }) }
 
       it "is correctly set" do
         expect(parser.log.uprn).to eql("12")
@@ -1404,7 +1404,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
     describe "#uprn_known" do
       context "when uprn known" do
-        let(:attributes) { setup_section_params.merge({ field_19: "12" }) }
+        let(:attributes) { setup_section_params.merge({ field_16: "12" }) }
 
         it "is correctly set" do
           expect(parser.log.uprn_known).to be(1)
@@ -1412,7 +1412,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       end
 
       context "when uprn not known" do
-        let(:attributes) { setup_section_params.merge({ field_19: nil }) }
+        let(:attributes) { setup_section_params.merge({ field_16: nil }) }
 
         it "is correctly set" do
           expect(parser.log.uprn_known).to be(0)
@@ -1421,7 +1421,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
     end
 
     describe "#address_line1" do
-      let(:attributes) { setup_section_params.merge({ field_20: "some street" }) }
+      let(:attributes) { setup_section_params.merge({ field_17: "some street" }) }
 
       it "is correctly set" do
         expect(parser.log.address_line1).to eql("some street")
@@ -1429,7 +1429,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
     end
 
     describe "#address_line2" do
-      let(:attributes) { setup_section_params.merge({ field_21: "some other street" }) }
+      let(:attributes) { setup_section_params.merge({ field_18: "some other street" }) }
 
       it "is correctly set" do
         expect(parser.log.address_line2).to eql("some other street")
@@ -1437,7 +1437,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
     end
 
     describe "#town_or_city" do
-      let(:attributes) { setup_section_params.merge({ field_22: "some town" }) }
+      let(:attributes) { setup_section_params.merge({ field_19: "some town" }) }
 
       it "is correctly set" do
         expect(parser.log.town_or_city).to eql("some town")
@@ -1445,7 +1445,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
     end
 
     describe "#county" do
-      let(:attributes) { setup_section_params.merge({ field_23: "some county" }) }
+      let(:attributes) { setup_section_params.merge({ field_20: "some county" }) }
 
       it "is correctly set" do
         expect(parser.log.county).to eql("some county")

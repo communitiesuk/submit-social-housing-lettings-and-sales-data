@@ -21,17 +21,17 @@ class BulkUpload::Sales::Year2025::RowParser
     field_14: "Was the buyer interviewed for any of the answers you will provide on this log?",
     field_15: "Data Protection question",
 
-    field_16: "What type of unit is the property?",
-    field_17: "How many bedrooms does the property have?",
-    field_18: "Which type of building is the property?",
-    field_19: "If known, enter this property's UPRN",
-    field_20: "Address line 1",
-    field_21: "Address line 2",
-    field_22: "Town or city",
-    field_23: "County",
-    field_24: "Part 1 of postcode of property",
-    field_25: "Part 2 of postcode of property",
-    field_26: "What is the local authority of the property?",
+    field_16: "If known, enter this property's UPRN",
+    field_17: "Address line 1",
+    field_18: "Address line 2",
+    field_19: "Town or city",
+    field_20: "County",
+    field_21: "Part 1 of postcode of property",
+    field_22: "Part 2 of postcode of property",
+    field_23: "What is the local authority of the property?",
+    field_24: "What type of unit is the property?",
+    field_25: "How many bedrooms does the property have?",
+    field_26: "Which type of building is the property?",
     field_27: "Is the property built or adapted to wheelchair user standards?",
 
     field_28: "Age of buyer 1",
@@ -160,17 +160,17 @@ class BulkUpload::Sales::Year2025::RowParser
   attribute :field_14, :integer
   attribute :field_15, :integer
 
-  attribute :field_16, :integer
-  attribute :field_17, :integer
-  attribute :field_18, :integer
+  attribute :field_16, :string
+  attribute :field_17, :string
+  attribute :field_18, :string
   attribute :field_19, :string
   attribute :field_20, :string
   attribute :field_21, :string
   attribute :field_22, :string
   attribute :field_23, :string
-  attribute :field_24, :string
-  attribute :field_25, :string
-  attribute :field_26, :string
+  attribute :field_24, :integer
+  attribute :field_25, :integer
+  attribute :field_26, :integer
   attribute :field_27, :integer
 
   attribute :field_28, :string
@@ -500,8 +500,8 @@ class BulkUpload::Sales::Year2025::RowParser
       "field_2",  # saledate
       "field_3",  # saledate
       "field_7",  # purchaser_code
-      "field_24", # postcode
-      "field_25", # postcode
+      "field_21", # postcode
+      "field_22", # postcode
       "field_28", # age1
       "field_29", # sex1
       "field_32", # ecstat1
@@ -543,47 +543,47 @@ private
   end
 
   def validate_uprn_exists_if_any_key_address_fields_are_blank
-    if field_19.blank? && !key_address_fields_provided?
-      %i[field_20 field_22 field_24 field_25].each do |field|
+    if field_16.blank? && !key_address_fields_provided?
+      %i[field_17 field_19 field_21 field_22].each do |field|
         errors.add(field, I18n.t("#{ERROR_BASE_KEY}.address.not_answered")) if send(field).blank?
       end
-      errors.add(:field_19, I18n.t("#{ERROR_BASE_KEY}.address.not_answered", question: "UPRN."))
+      errors.add(:field_16, I18n.t("#{ERROR_BASE_KEY}.address.not_answered", question: "UPRN."))
     end
   end
 
   def validate_address_option_found
-    if log.uprn.nil? && field_19.blank? && key_address_fields_provided?
+    if log.uprn.nil? && field_16.blank? && key_address_fields_provided?
       error_message = if log.address_options_present?
                         I18n.t("#{ERROR_BASE_KEY}.address.not_determined")
                       else
                         I18n.t("#{ERROR_BASE_KEY}.address.not_found")
                       end
-      %i[field_20 field_21 field_22 field_23 field_24 field_25].each do |field|
+      %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
         errors.add(field, error_message) if errors[field].blank?
       end
     end
   end
 
   def key_address_fields_provided?
-    field_20.present? && field_22.present? && postcode_full.present?
+    field_17.present? && field_19.present? && postcode_full.present?
   end
 
   def validate_address_fields
-    if field_19.blank? || log.errors.attribute_names.include?(:uprn)
-      if field_20.blank? && errors[:field_20].blank?
-        errors.add(:field_20, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "address line 1."))
+    if field_16.blank? || log.errors.attribute_names.include?(:uprn)
+      if field_17.blank? && errors[:field_17].blank?
+        errors.add(:field_17, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "address line 1."))
+      end
+
+      if field_19.blank? && errors[:field_19].blank?
+        errors.add(:field_19, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "town or city."))
+      end
+
+      if field_21.blank? && errors[:field_21].blank?
+        errors.add(:field_21, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "part 1 of postcode."))
       end
 
       if field_22.blank? && errors[:field_22].blank?
-        errors.add(:field_22, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "town or city."))
-      end
-
-      if field_24.blank? && errors[:field_24].blank?
-        errors.add(:field_24, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "part 1 of postcode."))
-      end
-
-      if field_25.blank? && errors[:field_25].blank?
-        errors.add(:field_25, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "part 2 of postcode."))
+        errors.add(:field_22, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "part 2 of postcode."))
       end
     end
   end
@@ -706,15 +706,15 @@ private
       disabled: %i[field_68],
 
       wheel: %i[field_69],
-      beds: %i[field_17],
-      proptype: %i[field_16],
-      builtype: %i[field_18],
-      la_known: %i[field_26],
-      la: %i[field_26],
+      beds: %i[field_25],
+      proptype: %i[field_24],
+      builtype: %i[field_26],
+      la_known: %i[field_23],
+      la: %i[field_23],
 
-      is_la_inferred: %i[field_26],
-      pcodenk: %i[field_24 field_25],
-      postcode_full: %i[field_24 field_25],
+      is_la_inferred: %i[field_23],
+      pcodenk: %i[field_21 field_22],
+      postcode_full: %i[field_21 field_22],
       wchair: %i[field_27],
 
       type: %i[field_9 field_11 field_8],
@@ -760,12 +760,12 @@ private
       socprevten: %i[field_85],
       mortgageused: mortgageused_fields,
 
-      uprn: %i[field_19],
-      address_line1: %i[field_20],
-      address_line2: %i[field_21],
-      town_or_city: %i[field_22],
-      county: %i[field_23],
-      uprn_selection: [:field_20],
+      uprn: %i[field_16],
+      address_line1: %i[field_17],
+      address_line2: %i[field_18],
+      town_or_city: %i[field_19],
+      county: %i[field_20],
+      uprn_selection: [:field_17],
 
       ethnic_group2: %i[field_37],
       ethnicbuy2: %i[field_37],
@@ -884,12 +884,12 @@ private
 
     attributes["disabled"] = field_68
     attributes["wheel"] = field_69
-    attributes["beds"] = field_17
-    attributes["proptype"] = field_16
-    attributes["builtype"] = field_18
-    attributes["la_known"] = field_26.present? ? 1 : 0
-    attributes["la"] = field_26
-    attributes["la_as_entered"] = field_26
+    attributes["beds"] = field_25
+    attributes["proptype"] = field_24
+    attributes["builtype"] = field_26
+    attributes["la_known"] = field_23.present? ? 1 : 0
+    attributes["la"] = field_23
+    attributes["la_as_entered"] = field_23
     attributes["is_la_inferred"] = false
     attributes["pcodenk"] = 0 if postcode_full.present?
     attributes["postcode_full"] = postcode_full
@@ -945,21 +945,21 @@ private
     attributes["soctenant"] = infer_soctenant_from_prevten_and_prevtenbuy2
     attributes["mortgageused"] = mortgageused
 
-    attributes["uprn"] = field_19
-    attributes["uprn_known"] = field_19.present? ? 1 : 0
-    attributes["uprn_confirmed"] = 1 if field_19.present?
+    attributes["uprn"] = field_16
+    attributes["uprn_known"] = field_16.present? ? 1 : 0
+    attributes["uprn_confirmed"] = 1 if field_16.present?
     attributes["skip_update_uprn_confirmed"] = true
-    attributes["address_line1"] = field_20
-    attributes["address_line1_as_entered"] = field_20
-    attributes["address_line2"] = field_21
-    attributes["address_line2_as_entered"] = field_21
-    attributes["town_or_city"] = field_22
-    attributes["town_or_city_as_entered"] = field_22
-    attributes["county"] = field_23
-    attributes["county_as_entered"] = field_23
+    attributes["address_line1"] = field_17
+    attributes["address_line1_as_entered"] = field_17
+    attributes["address_line2"] = field_18
+    attributes["address_line2_as_entered"] = field_18
+    attributes["town_or_city"] = field_19
+    attributes["town_or_city_as_entered"] = field_19
+    attributes["county"] = field_20
+    attributes["county_as_entered"] = field_20
     attributes["address_line1_input"] = address_line1_input
     attributes["postcode_full_input"] = postcode_full
-    attributes["select_best_address_match"] = true if field_19.blank?
+    attributes["select_best_address_match"] = true if field_16.blank?
 
     attributes["ethnic_group2"] = infer_buyer2_ethnic_group_from_ethnic
     attributes["ethnicbuy2"] = field_37
@@ -986,7 +986,7 @@ private
   end
 
   def address_line1_input
-    [field_20, field_21, field_22].compact.join(", ")
+    [field_17, field_18, field_19].compact.join(", ")
   end
 
   def saledate
@@ -1080,7 +1080,7 @@ private
   end
 
   def postcode_full
-    [field_24, field_25].compact_blank.join(" ") if field_24 || field_25
+    [field_21, field_22].compact_blank.join(" ") if field_21 || field_22
   end
 
   def ppostcode_full
@@ -1428,8 +1428,8 @@ private
       errors.add(:field_1, error_message) # Sale completion date
       errors.add(:field_2, error_message) # Sale completion date
       errors.add(:field_3, error_message) # Sale completion date
-      errors.add(:field_24, error_message) # Postcode
-      errors.add(:field_25, error_message) # Postcode
+      errors.add(:field_21, error_message) # Postcode
+      errors.add(:field_22, error_message) # Postcode
       errors.add(:field_28, error_message) # Buyer 1 age
       errors.add(:field_29, error_message) # Buyer 1 gender
       errors.add(:field_32, error_message) # Buyer 1 working situation

@@ -415,9 +415,6 @@ class BulkUpload::SalesLogToCsv
       log.noint,
       log.privacynotice,
 
-      log.proptype,
-      log.beds,
-      log.builtype,
       log.uprn,
       log.address_line1&.tr(",", " "), # 20
       log.address_line2&.tr(",", " "),
@@ -426,6 +423,9 @@ class BulkUpload::SalesLogToCsv
       ((log.postcode_full || "").split(" ") || [""]).first,
       ((log.postcode_full || "").split(" ") || [""]).last,
       log.la,
+      log.proptype,
+      log.beds,
+      log.builtype,
       log.wchair,
 
       log.age1,
