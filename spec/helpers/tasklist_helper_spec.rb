@@ -204,4 +204,49 @@ RSpec.describe TasklistHelper do
       end
     end
   end
+
+  describe "deadline text" do
+    context "when log does not have a sale/start date" do
+      let(:log) { build(:sales_log, saledate: nil) }
+
+      it "returns nil" do
+        expect(deadline_text(log)).to be_nil
+      end
+    end
+
+    context "when log is completed" do
+      let(:log) { build(:sales_log, :completed, status: "completed") }
+
+      it "returns nil" do
+        expect(deadline_text(log)).to be_nil
+      end
+    end
+
+    context "when today is before the deadline for log with sale/start date" do
+      let(:log) { build(:sales_log, saledate: Time.zone.local(2025, 6, 1)) }
+
+      it "returns the deadline text" do
+        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 5, 7))
+        expect(deadline_text(log)).to include("Upcoming Q1 deadline: 11 July 2025.")
+      end
+    end
+
+    context "when today is the deadline for log with sale/start date" do
+      let(:log) { build(:sales_log, saledate: Time.zone.local(2025, 2, 1)) }
+
+      it "returns the overdue text" do
+        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 6, 6))
+        expect(deadline_text(log)).to include("Upcoming Q4 deadline: 6 June 2025.")
+      end
+    end
+
+    context "when today is after the deadline for log with sale/start date" do
+      let(:log) { build(:sales_log, saledate: Time.zone.local(2025, 2, 1)) }
+
+      it "returns the overdue text" do
+        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 6, 7))
+        expect(deadline_text(log)).to include("Overdue: Q4 deadline 6 June 2025.")
+      end
+    end
+  end
 end
