@@ -46,6 +46,7 @@ module DerivedVariables::SalesLogVariables
 
     if saledate && form.start_year_2024_or_later?
       self.soctenant = soctenant_from_prevten_values
+      clear_child_ecstat_for_age_changes!
       child_under_16_constraints!
     end
 
@@ -177,6 +178,15 @@ private
     (start_index..6).each do |idx|
       if age_under_16?(idx)
         self["ecstat#{idx}"] = 9
+      end
+    end
+  end
+
+  def clear_child_ecstat_for_age_changes!
+    start_index = joint_purchase? ? 3 : 2
+    (start_index..6).each do |idx|
+      if public_send("age#{idx}_changed?") && self["ecstat#{idx}"] == 9
+        self["ecstat#{idx}"] = nil
       end
     end
   end
