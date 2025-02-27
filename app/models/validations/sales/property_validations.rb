@@ -40,8 +40,7 @@ module Validations::Sales::PropertyValidations
   end
 
   def validate_la_in_england(record)
-    return unless record.form.start_year_2025_or_later?
-    return unless record.la
+    return unless record.form.start_year_2025_or_later? && record.la.present?
     return if record.la.in?(LocalAuthority.england.pluck(:code))
 
     record.errors.add :la, I18n.t("validations.sales.property_information.la.not_in_england")
