@@ -121,6 +121,9 @@ module DerivedVariables::LettingsLogVariables
         self.uprn_confirmed = 1 if uprn.present?
         self.uprn_known = 1 if uprn.present?
         reset_address_fields! if uprn.blank?
+        if uprn_changed?
+          self.uprn_selection = uprn
+        end
       end
     end
 
