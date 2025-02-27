@@ -9,7 +9,7 @@ class Form::Sales::Questions::LivingBeforePurchaseYears < ::Form::Question
     @step = 1
     @width = 5
     @ownershipsch = ownershipsch
-    @question_number = question_number
+    @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
   end
 
   def suffix_label(log)
