@@ -10,10 +10,7 @@ module Forms
       attribute :organisation_id, :integer
 
       def view_path
-        case year
-        when 2024
-          "bulk_upload_#{log_type}_logs/forms/prepare_your_file_2024"
-        end
+        "bulk_upload_#{log_type}_logs/forms/prepare_your_file"
       end
 
       def back_path
@@ -40,6 +37,10 @@ module Forms
 
       def year_combo
         "#{year} to #{year + 1}"
+      end
+
+      def slash_year_combo
+        "#{year}/#{(year + 1) % 100}"
       end
 
       def save!
