@@ -3,7 +3,6 @@ import accessibleAutocomplete from 'accessible-autocomplete'
 import 'accessible-autocomplete/dist/accessible-autocomplete.min.css'
 
 const options = []
-let showNoResultsMessage = false
 
 const fetchOptions = async (query, searchUrl) => {
   if (query.length < 2) {
@@ -22,16 +21,13 @@ const fetchAndPopulateSearchResults = async (query, populateResults, searchUrl, 
     try {
       const results = await fetchOptions(query, searchUrl)
       if (results.length === 0) {
-        showNoResultsMessage = true
         populateOptions([], selectEl)
         populateResults([])
       } else {
-        showNoResultsMessage = false
         populateOptions(results, selectEl)
         populateResults(Object.values(results).map((o) => `${o.text} (${o.value})`))
       }
     } catch (error) {
-      showNoResultsMessage = true
       populateOptions([], selectEl)
       populateResults([])
     }
@@ -59,13 +55,6 @@ export default class extends Controller {
       defaultValue: '',
       selectElement: selectEl,
       minLength: 2,
-      tNoResults: () => {
-        if (showNoResultsMessage) {
-          return 'No address found'
-        } else {
-          return null
-        }
-      },
       source: (query, populateResults) => {
         fetchAndPopulateSearchResults(query, populateResults, searchUrl, populateOptions, selectEl)
       },
