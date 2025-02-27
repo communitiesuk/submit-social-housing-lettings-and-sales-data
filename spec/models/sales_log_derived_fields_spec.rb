@@ -78,6 +78,26 @@ RSpec.describe SalesLog, type: :model do
       expect { log.set_derived_fields! }.to change(log, :mortgage).from(50_000).to(nil)
     end
 
+    describe "#clear_child_ecstat_for_age_changes!" do
+      it "clears the working situation of a person that was previously a child under 16" do
+        log = create(:sales_log, :completed, age3: 13, age4: 16, age5: 45)
+        log.age3 = 17
+        expect { log.set_derived_fields! }.to change(log, :ecstat3).from(9).to(nil)
+      end
+
+      it "does not clear the working situation of a person that had an age change but is still a child under 16" do
+        log = create(:sales_log, :completed, age3: 13, age4: 16, age5: 45)
+        log.age3 = 15
+        expect { log.set_derived_fields! }.to not_change(log, :ecstat3)
+      end
+
+      it "does not clear the working situation of a person that had an age change but is still an adult" do
+        log = create(:sales_log, :completed, age3: 13, age4: 16, age5: 45)
+        log.age5 = 46
+        expect { log.set_derived_fields! }.to not_change(log, :ecstat5)
+      end
+    end
+
     context "with a log that is not outright sales" do
       it "does not derive deposit when mortgage used is no" do
         log = build(:sales_log, :shared_ownership_setup_complete, value: 123_400, deposit: nil, mortgageused: 2)

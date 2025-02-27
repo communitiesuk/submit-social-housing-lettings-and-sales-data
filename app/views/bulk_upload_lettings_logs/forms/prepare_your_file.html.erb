@@ -14,7 +14,7 @@
 
       <h2 class="govuk-heading-s">Download template</h2>
 
-      <p class="govuk-body govuk-!-margin-bottom-2"><%= govuk_link_to "Download the lettings bulk upload template (2024 to 2025)", @form.template_path %></p>
+      <p class="govuk-body govuk-!-margin-bottom-2"><%= govuk_link_to "Download the lettings bulk upload template (#{@form.year_combo})", @form.template_path %></p>
       <p class="govuk-body govuk-!-margin-bottom-2">There are 8 rows of content in the templates. These rows are called the ‘headers’. They contain the CORE form questions and guidance about which questions are required and how to format your answers.</p>
 
       <h2 class="govuk-heading-s">Create your file</h2>
@@ -22,7 +22,7 @@
       <%= govuk_list [
         "Fill in the template with data from your housing management system. Your data should go below the headers, with one row per log. Leave column A blank - the bulk upload fields start in column B.",
         "Make sure each column of your data aligns with the matching headers above. You may need to reorder your data.",
-        "Use the #{govuk_link_to 'Lettings bulk upload Specification (2024 to 2025)', @form.specification_path} to check your data is in the correct format.".html_safe,
+        "Use the #{govuk_link_to "Lettings bulk upload Specification (#{@form.year_combo})", @form.specification_path} to check your data is in the correct format.".html_safe,
         "<strong>Username field:</strong> To assign a log to someone else, enter the email address they use to log into CORE.".html_safe,
         "If you have reordered the headers, keep the headers in the file.",
         ], type: :bullet %>

@@ -375,6 +375,7 @@ class BulkUpload::Sales::Year2024::RowParser
               greater_than_or_equal_to: 0,
               less_than_or_equal_to: 70,
               if: :discounted_ownership?,
+              allow_blank: true,
             },
             on: :before_log
 
