@@ -15,23 +15,27 @@ class TestDataController < ApplicationController
     redirect_to lettings_log_path(log)
   end
 
-  def create_2024_test_lettings_bulk_upload
-    return render_not_found unless FeatureToggle.create_test_logs_enabled?
+  %w[2024 2025].each do |year|
+    define_method("create_#{year}_test_lettings_bulk_upload") do
+      return render_not_found unless FeatureToggle.create_test_logs_enabled?
 
-    file = Tempfile.new("test_lettings_log.csv")
-    log = FactoryBot.create(:lettings_log, :completed, assigned_to: current_user, ppostcode_full: "SW1A 1AA")
-    log_to_csv = BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\n", overrides: { organisation_id: "ORG#{log.owning_organisation_id}", managing_organisation_id: "ORG#{log.owning_organisation_id}" })
-    file.write(log_to_csv.default_field_numbers_row)
-    file.write(log_to_csv.to_csv_row)
-    file.rewind
-    send_file file.path, type: "text/csv",
-                         filename: "test_lettings_log.csv",
-                         disposition: "attachment",
-                         after_send: lambda {
-                                       file.close
-                                       file.unlink
-                                     }
+      file = Tempfile.new("#{year}_test_lettings_log.csv")
+      log = FactoryBot.create(:lettings_log, :completed, assigned_to: current_user, ppostcode_full: "SW1A 1AA", startdate: Time.zone.local(year.to_i, rand(4..12), rand(1..28)))
+      log_to_csv = BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\n", overrides: { organisation_id: "ORG#{log.owning_organisation_id}", managing_organisation_id: "ORG#{log.owning_organisation_id}" })
+      file.write(log_to_csv.default_field_numbers_row)
+      file.write(log_to_csv.to_csv_row)
+      file.rewind
+      send_file file.path, type: "text/csv",
+                           filename: "#{year}_test_lettings_log.csv",
+                           disposition: "attachment",
+                           after_send: lambda {
+                                         file.close
+                                         file.unlink
+                                       }
+    end
   end
+
+  def create_2025_test_sales_bulk_upload; end
 
   def create_test_sales_log
     return render_not_found unless FeatureToggle.create_test_logs_enabled?

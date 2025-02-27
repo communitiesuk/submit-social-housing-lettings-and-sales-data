@@ -1,5 +1,5 @@
 <div class="govuk-button-group app-filter-toggle <%= "govuk-!-margin-bottom-6" if display_actions? %>">
-<% if display_actions? %>
+  <% if display_actions? %>
     <%= govuk_button_to create_button_copy, create_button_href, class: "govuk-!-margin-right-3" %>
     <% unless user.support? %>
     <%= govuk_button_link_to upload_button_copy, upload_button_href, secondary: true %>
@@ -9,9 +9,10 @@
     <% end %>
 
     <% if FeatureToggle.create_test_logs_enabled? %>
-      <%= govuk_link_to "Create test log", create_test_log_href %>
-      <%= govuk_link_to "Create test log (setup only)", create_setup_test_log_href %>
-      <%= govuk_link_to "Get test BU file (2024)", create_2024_test_bulk_upload_href %>
+      <%= govuk_link_to "New test log", create_test_log_href %>
+      <%= govuk_link_to "New test log (setup only)", create_setup_test_log_href %>
+      <%= govuk_link_to "24 BU test file", create_test_bulk_upload_href(2024) %>
+      <%= govuk_link_to "25 BU test file", create_test_bulk_upload_href(2025) %>
     <% end %>
-<% end %>
+  <% end %>
 </div>
