@@ -102,6 +102,7 @@ module DerivedVariables::LettingsLogVariables
       self.uprn = nil
       self.uprn_known = 0
       self.uprn_confirmed = nil
+      self.uprn_selection = nil
       self.address_line1 = nil
       self.address_line2 = nil
       self.town_or_city = nil
@@ -356,6 +357,7 @@ private
     self.uprn = nil
     self.uprn_known = nil
     self.uprn_confirmed = nil
+    self.uprn_selection = nil
     self.address_line1 = nil
     self.address_line2 = nil
     self.town_or_city = nil
