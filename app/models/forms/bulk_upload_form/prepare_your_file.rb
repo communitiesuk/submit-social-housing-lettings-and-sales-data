@@ -40,7 +40,7 @@ module Forms
       end
 
       def slash_year_combo
-        "#{year}/#{(year + 1)%100}"
+        "#{year}/#{(year + 1) % 100}"
       end
 
       def save!
