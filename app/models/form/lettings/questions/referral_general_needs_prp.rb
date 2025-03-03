@@ -1,8 +1,8 @@
-class Form::Lettings::Questions::Referral < ::Form::Question
+class Form::Lettings::Questions::ReferralGeneralNeedsPrp < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "referral"
-    @copy_key = "lettings.household_situation.referral.general_needs.la"
+    @copy_key = "lettings.household_situation.referral.general_needs.prp"
     @type = "radio"
     @check_answers_card_number = 0
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
@@ -17,6 +17,9 @@ class Form::Lettings::Questions::Referral < ::Form::Question
         },
         "2" => {
           "value" => "Tenant applied directly (no referral or nomination)",
+        },
+        "3" => {
+          "value" => "Nominated by a local housing authority",
         },
         "8" => {
           "value" => "Re-located through official housing mobility scheme",
@@ -57,6 +60,12 @@ class Form::Lettings::Questions::Referral < ::Form::Question
         },
         "2" => {
           "value" => "Tenant applied directly (no referral or nomination)",
+        },
+        "3" => {
+          "value" => "Nominated by a local housing authority",
+        },
+        "4" => {
+          "value" => "Referred by local authority housing department",
         },
         "8" => {
           "value" => "Re-located through official housing mobility scheme",

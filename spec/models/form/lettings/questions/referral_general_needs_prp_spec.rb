@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Lettings::Questions::Referral, type: :model do
+RSpec.describe Form::Lettings::Questions::ReferralGeneralNeedsPrp, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -40,6 +40,8 @@ RSpec.describe Form::Lettings::Questions::Referral, type: :model do
       expect(question.answer_options).to eq({
         "1" => { "value" => "Internal transfer", "hint" => "Where the tenant has moved to another social property owned by the same landlord." },
         "2" => { "value" => "Tenant applied directly (no referral or nomination)" },
+        "3" => { "value" => "Nominated by a local housing authority" },
+        "4" => { "value" => "Referred by local authority housing department" },
         "8" => { "value" => "Re-located through official housing mobility scheme" },
         "10" => { "value" => "Other social landlord" },
         "9" => { "value" => "Community learning disability team" },
@@ -69,6 +71,7 @@ RSpec.describe Form::Lettings::Questions::Referral, type: :model do
       expect(question.answer_options).to eq({
         "1" => { "value" => "Internal transfer", "hint" => "Where the tenant has moved to another social property owned by the same landlord." },
         "2" => { "value" => "Tenant applied directly (no referral or nomination)" },
+        "3" => { "value" => "Nominated by a local housing authority" },
         "8" => { "value" => "Re-located through official housing mobility scheme" },
         "10" => { "value" => "Other social landlord" },
         "9" => { "value" => "Community learning disability team" },

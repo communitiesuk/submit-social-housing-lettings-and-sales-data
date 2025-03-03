@@ -38,8 +38,8 @@ class Form::Lettings::Subsections::HouseholdSituation < ::Form::Subsection
       ]
     else
       [
-        Form::Lettings::Pages::Referral.new(nil, nil, self),
         Form::Lettings::Pages::ReferralGeneralNeeds.new(nil, nil, self),
+        Form::Lettings::Pages::ReferralGeneralNeedsPrp.new(nil, nil, self),
         Form::Lettings::Pages::ReferralSupportedHousing.new(nil, nil, self),
         Form::Lettings::Pages::ReferralSupportedHousingPrp.new(nil, nil, self),
       ]
