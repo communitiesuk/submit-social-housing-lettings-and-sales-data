@@ -39,6 +39,10 @@ Rails.application.routes.draw do
   get "/data-sharing-agreement", to: "content#data_sharing_agreement"
   get "/service-moved", to: "maintenance#service_moved"
   get "/service-unavailable", to: "maintenance#service_unavailable"
+  get "/address-search", to: "address_search#index"
+  get "/address-search/current", to: "address_search#current"
+  get "/address-search/manual-input/:log_type/:log_id", to: "address_search#manual_input", as: "address_manual_input"
+  get "/address-search/search-input/:log_type/:log_id", to: "address_search#search_input", as: "address_search_input"
 
   get "collection-resources", to: "collection_resources#index"
   get "/collection-resources/:log_type/:year/:resource_type/download", to: "collection_resources#download_mandatory_collection_resource", as: :download_mandatory_collection_resource
@@ -400,8 +404,10 @@ Rails.application.routes.draw do
     get "create-test-lettings-log", to: "test_data#create_test_lettings_log"
     get "create-setup-test-lettings-log", to: "test_data#create_setup_test_lettings_log"
     get "create-2024-test-lettings-bulk-upload", to: "test_data#create_2024_test_lettings_bulk_upload"
+    get "create-2025-test-lettings-bulk-upload", to: "test_data#create_2025_test_lettings_bulk_upload"
     get "create-test-sales-log", to: "test_data#create_test_sales_log"
     get "create-setup-test-sales-log", to: "test_data#create_setup_test_sales_log"
     get "create-2024-test-sales-bulk-upload", to: "test_data#create_2024_test_sales_bulk_upload"
+    get "create-2025-test-sales-bulk-upload", to: "test_data#create_2025_test_sales_bulk_upload"
   end
 end

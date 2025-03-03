@@ -14,15 +14,15 @@
 
       <h2 class="govuk-heading-s">Download template</h2>
 
-      <p class="govuk-body govuk-!-margin-bottom-2">Use one of these templates to upload logs for 2024/25:</p>
-      <p class="govuk-body govuk-!-margin-bottom-2"><%= govuk_link_to "Download the sales bulk upload template (2024 to 2025)", @form.template_path %>: In this template, the questions are in the same order as the 2024/25 paper form and web form.</p>
+      <p class="govuk-body govuk-!-margin-bottom-2">Use one of these templates to upload logs for <%= @form.slash_year_combo %>:</p>
+      <p class="govuk-body govuk-!-margin-bottom-2"><%= govuk_link_to "Download the sales bulk upload template (#{@form.year_combo})", @form.template_path %>: In this template, the questions are in the same order as the <%= @form.slash_year_combo %> paper form and web form.</p>
       <p class="govuk-body govuk-!-margin-bottom-2">There are 8 rows of content in the templates. These rows are called the ‘headers’. They contain the CORE form questions and guidance about which questions are required and how to format your answers.</p>
 
       <h2 class="govuk-heading-s">Create your file</h2>
       <%= govuk_list [
         "Fill in the template with data from your housing management system. Your data should go below the headers, with one row per log. The bulk upload fields start at column B. Leave column A blank.",
         "Make sure each column of your data aligns with the matching headers above. You may need to reorder your data.",
-        "Use the #{govuk_link_to 'Sales bulk upload Specification (2024 to 2025)', @form.specification_path} to check your data is in the correct format.".html_safe,
+        "Use the #{govuk_link_to "Sales bulk upload Specification (#{@form.year_combo})", @form.specification_path} to check your data is in the correct format.".html_safe,
         "<strong>Username field:</strong> To assign a log to someone else, enter the email address they use to log into CORE.".html_safe,
         "If you have reordered the headers, keep the headers in the file.",
         ], type: :bullet %>

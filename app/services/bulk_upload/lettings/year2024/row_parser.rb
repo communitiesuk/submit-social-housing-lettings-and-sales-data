@@ -444,6 +444,7 @@ class BulkUpload::Lettings::Year2024::RowParser
 
   validate :validate_incomplete_soft_validations, on: :after_log
   validate :validate_nationality, on: :after_log
+  validate :validate_reasonpref_reason_values, on: :after_log
 
   validate :validate_nulls, on: :after_log
 
@@ -674,6 +675,17 @@ private
   def validate_nationality
     if field_45.present? && !valid_nationality_options.include?(field_45.to_s)
       errors.add(:field_45, I18n.t("#{ERROR_BASE_KEY}.nationality.invalid"))
+    end
+  end
+
+  def validate_reasonpref_reason_values
+    valid_reasonpref_reason_options = %w[0 1]
+    %w[field_107 field_108 field_109 field_110 field_111].each do |field|
+      next unless send(field).present? && !valid_reasonpref_reason_options.include?(send(field).to_s)
+
+      question_text = QUESTIONS[field.to_sym]
+      question_text[0] = question_text[0].downcase
+      errors.add(field.to_sym, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: question_text))
     end
   end
 
@@ -1341,6 +1353,7 @@ private
       attributes["address_line1_input"] = address_line1_input
       attributes["postcode_full_input"] = postcode_full
       attributes["select_best_address_match"] = true if field_16.blank?
+      attributes["manual_address_entry_selected"] = field_16.blank?
     end
 
     attributes
