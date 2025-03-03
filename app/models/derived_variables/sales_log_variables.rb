@@ -261,8 +261,6 @@ private
     self.pcode1 = nil
     self.pcode2 = nil
     self.pcodenk = nil
-    self.address_line1_input = nil
-    self.postcode_full_input = nil
     self.postcode_full = nil
     self.is_la_inferred = nil
     self.la = nil

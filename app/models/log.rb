@@ -90,13 +90,27 @@ class Log < ApplicationRecord
       if select_best_address_match
         service = AddressClient.new(address_string)
         service.call
-        return nil if service.result.blank? || service.error.present?
+        if service.result.blank? || service.error.present?
+          self.postcode_full = postcode_full_as_entered
+          self.address_line1 = address_line1_as_entered
+          self.address_line2 = address_line2_as_entered
+          self.county = county_as_entered
+          self.town_or_city = town_or_city_as_entered
+          self.manual_address_entry_selected = true
+          return nil
+        end
 
         presenter = AddressDataPresenter.new(service.result.first)
         os_match_threshold_for_bulk_upload = 0.7
         if presenter.match >= os_match_threshold_for_bulk_upload
           self.uprn_selection = presenter.uprn
         else
+          self.postcode_full = postcode_full_as_entered
+          self.address_line1 = address_line1_as_entered
+          self.address_line2 = address_line2_as_entered
+          self.county = county_as_entered
+          self.town_or_city = town_or_city_as_entered
+          self.manual_address_entry_selected = true
           return nil
         end
       end

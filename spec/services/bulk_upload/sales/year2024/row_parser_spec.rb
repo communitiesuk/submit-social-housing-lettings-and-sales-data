@@ -1077,6 +1077,11 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
                 expect(parser.errors[field]).to be_empty
               end
             end
+
+            it "does not set manual address input" do
+              parser.valid?
+              expect(parser.log.manual_address_entry_selected).to be_falsey
+            end
           end
 
           context "when no address can be found" do
@@ -1085,12 +1090,19 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
                 .to_return(status: 200, body: { results: [] }.to_json, headers: {})
             end
 
-            it "adds address not found errors to address fields only" do
+            it "does not add errors" do
               parser.valid?
-              expect(parser.errors[:field_22]).to be_empty
-              %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
-                expect(parser.errors[field]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_found")])
+              %i[field_22 field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
+                expect(parser.errors[field]).to be_empty
               end
+            end
+
+            it "sets manual address input" do
+              parser.valid?
+              expect(parser.log.manual_address_entry_selected).to be_truthy
+              expect(parser.log.address_line1).to eq("address line 1")
+              expect(parser.log.town_or_city).to eq("town or city")
+              expect(parser.log.postcode_full).to eq("AA1 1AA")
             end
           end
 
@@ -1100,12 +1112,19 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
                 .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.6, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "AA1 1AA", UPRN: "1" } }] }.to_json, headers: {})
             end
 
-            it "adds address not found errors to address fields only" do
+            it "does not add errors" do
               parser.valid?
-              expect(parser.errors[:field_22]).to be_empty
-              %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
-                expect(parser.errors[field]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_determined.one")])
+              %i[field_22 field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
+                expect(parser.errors[field]).to be_empty
               end
+            end
+
+            it "sets manual address input" do
+              parser.valid?
+              expect(parser.log.manual_address_entry_selected).to be_truthy
+              expect(parser.log.address_line1).to eq("address line 1")
+              expect(parser.log.town_or_city).to eq("town or city")
+              expect(parser.log.postcode_full).to eq("AA1 1AA")
             end
           end
 
@@ -1124,12 +1143,19 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
                 )
             end
 
-            it "adds address not found errors to address fields only" do
+            it "does not add errors" do
               parser.valid?
-              expect(parser.errors[:field_22]).to be_empty
-              %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
-                expect(parser.errors[field]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_determined.multiple")])
+              %i[field_22 field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
+                expect(parser.errors[field]).to be_empty
               end
+            end
+
+            it "sets manual address input" do
+              parser.valid?
+              expect(parser.log.manual_address_entry_selected).to be_truthy
+              expect(parser.log.address_line1).to eq("address line 1")
+              expect(parser.log.town_or_city).to eq("town or city")
+              expect(parser.log.postcode_full).to eq("AA1 1AA")
             end
           end
         end
