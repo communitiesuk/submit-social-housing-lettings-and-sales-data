@@ -394,7 +394,6 @@ class BulkUpload::Sales::Year2025::RowParser
             on: :after_log
 
   validate :validate_buyer1_economic_status, on: :before_log
-  validate :validate_address_option_found, on: :after_log
   validate :validate_buyer2_economic_status, on: :before_log
   validate :validate_valid_radio_option, on: :before_log
 
@@ -549,19 +548,6 @@ private
         errors.add(field, I18n.t("#{ERROR_BASE_KEY}.address.not_answered")) if send(field).blank?
       end
       errors.add(:field_16, I18n.t("#{ERROR_BASE_KEY}.address.not_answered", question: "UPRN."))
-    end
-  end
-
-  def validate_address_option_found
-    if log.uprn.nil? && field_16.blank? && key_address_fields_provided?
-      error_message = if log.address_options_present?
-                        I18n.t("#{ERROR_BASE_KEY}.address.not_determined")
-                      else
-                        I18n.t("#{ERROR_BASE_KEY}.address.not_found")
-                      end
-      %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
-        errors.add(field, error_message) if errors[field].blank?
-      end
     end
   end
 
@@ -961,7 +947,6 @@ private
     attributes["address_line1_input"] = address_line1_input
     attributes["postcode_full_input"] = postcode_full
     attributes["select_best_address_match"] = true if field_16.blank?
-    attributes["manual_address_entry_selected"] = field_16.blank?
 
     attributes["ethnic_group2"] = infer_buyer2_ethnic_group_from_ethnic
     attributes["ethnicbuy2"] = field_37
