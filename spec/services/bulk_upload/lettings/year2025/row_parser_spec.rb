@@ -1084,6 +1084,19 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
         end
       end
 
+      context "when some reasonable preference options are set as invalid values" do
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_106: "2", field_107: "2", field_108: "3", field_109: "2", field_110: "3", field_111: "-4" }) }
+
+        it "adds errors" do
+          parser.valid?
+          expect(parser.errors[:field_107]).to be_present
+          expect(parser.errors[:field_108]).to be_present
+          expect(parser.errors[:field_109]).to be_present
+          expect(parser.errors[:field_110]).to be_present
+          expect(parser.errors[:field_111]).to be_present
+        end
+      end
+
       context "when some reasonable preference options are selected" do
         let(:attributes) { setup_section_params.merge({ bulk_upload:, field_106: "1", field_107: "1", field_108: nil, field_109: "1", field_110: nil, field_111: nil }) }
 
