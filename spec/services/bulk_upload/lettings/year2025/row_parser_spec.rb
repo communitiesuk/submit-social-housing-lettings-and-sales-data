@@ -1083,6 +1083,19 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
           expect(parser.errors[:field_111]).to be_present
         end
       end
+
+      context "when some reasonable preference options are selected" do
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_106: "1", field_107: "1", field_108: nil, field_109: "1", field_110: nil, field_111: nil }) }
+
+        it "sets the rest of the options to 0" do
+          parser.valid?
+          expect(parser.log.rp_homeless).to eq(1)
+          expect(parser.log.rp_insan_unsat).to eq(0)
+          expect(parser.log.rp_medwel).to eq(1)
+          expect(parser.log.rp_hardship).to eq(0)
+          expect(parser.log.rp_dontknow).to eq(0)
+        end
+      end
     end
 
     describe "#field_116" do # referral
