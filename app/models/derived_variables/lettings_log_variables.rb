@@ -211,9 +211,6 @@ private
     if form.start_year_2024_or_later? && (unittype_gn_changed? && unittype_gn_was == 2)
       self.beds = nil
     end
-    if referral_type_changed?
-      self.referral = nil
-    end
   end
 
   def get_totelder
