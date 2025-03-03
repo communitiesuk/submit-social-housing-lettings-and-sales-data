@@ -866,6 +866,7 @@ RSpec.describe SalesLogsController, type: :request do
     context "when viewing a sales log" do
       let(:headers) { { "Accept" => "text/html" } }
       let(:completed_sales_log) { FactoryBot.create(:sales_log, :completed, owning_organisation: user.organisation, assigned_to: user) }
+      let(:not_started_sales_log) { FactoryBot.create(:sales_log, owning_organisation: user.organisation, assigned_to: user) }
 
       before do
         sign_in user
@@ -955,6 +956,16 @@ RSpec.describe SalesLogsController, type: :request do
           follow_redirect!
           expect(page).to have_content("This log is from the 2021 to 2022 collection window, which is now closed.")
         end
+      end
+
+      it "does not show guidance link" do
+        get "/sales-logs/#{completed_sales_log.id}", headers:, params: {}
+        expect(page).not_to have_content("Guidance for submitting social housing lettings and sales data (opens in a new tab)")
+      end
+
+      it "shows guidance link for not_started log" do
+        get "/sales-logs/#{not_started_sales_log.id}", headers:, params: {}
+        expect(page).to have_content("Guidance for submitting social housing lettings and sales data (opens in a new tab)")
       end
     end
 
