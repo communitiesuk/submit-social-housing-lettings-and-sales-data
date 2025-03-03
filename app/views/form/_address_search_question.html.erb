@@ -1,0 +1,24 @@
+<% selected = @log.public_send(question.id) || "" %>
+<% answers = question.displayed_answer_options(@log, current_user).map { |key, value| OpenStruct.new(id: key, name: select_option_name(value), resource: value) } %>
+<%= render partial: "form/guidance/#{question.top_guidance_partial}" if question.top_guidance? %>
+
+<%= f.govuk_select(question.id.to_sym,
+       label: legend(question, page_header, conditional),
+       "data-controller": "address-search",
+       "data-info": { search_url: address_search_url }.to_json,
+       caption: caption(caption_text, page_header, conditional),
+       hint: { text: question.hint_text&.html_safe }) do %>
+  <% if answers.any? %>
+    <% answers.each do |answer| %>
+      <option value="<%= answer.id %>"
+              data-synonyms="<%= answer_option_synonyms(answer.resource) %>"
+              data-append="<%= answer_option_append(answer.resource) %>"
+              data-hint="<%= answer_option_hint(answer.resource) %>"
+              <%= question.answer_selected?(@log, answer) ? "selected" : "" %>><%= answer.name || answer.resource %></option>
+    <% end %>
+  <% else %>
+    <option value="" disabled>Javascript is disabled. Please enter the address manually.</option>
+  <% end %>
+<% end %>
+
+<%= render partial: "form/guidance/#{question.bottom_guidance_partial}" if question.bottom_guidance? %>

@@ -2,6 +2,7 @@ module TasklistHelper
   include GovukLinkHelper
   include GovukVisuallyHiddenHelper
   include CollectionTimeHelper
+  include CollectionDeadlineHelper
 
   def breadcrumb_logs_title(log, current_user)
     log_type = log.lettings? ? "Lettings" : "Sales"
@@ -68,6 +69,22 @@ module TasklistHelper
 
   def tasklist_link_class(status)
     status == :cannot_start_yet ? "" : "govuk-task-list__item--with-link"
+  end
+
+  def deadline_text(log)
+    return if log.completed?
+    return if log.startdate.nil?
+
+    log_quarter = quarter_for_date(date: log.startdate)
+    return if log_quarter.nil?
+
+    deadline_for_log = log_quarter.cutoff_date
+
+    if deadline_for_log.beginning_of_day >= Time.zone.today.beginning_of_day
+      "<p class=\"govuk-body\">Upcoming #{log_quarter.quarter} deadline: #{log_quarter.cutoff_date.strftime('%-d %B %Y')}.<p>".html_safe
+    else
+      "<p class=\"govuk-body app-red-text\"><strong>Overdue: #{log_quarter.quarter} deadline #{log_quarter.cutoff_date.strftime('%-d %B %Y')}.</strong></p>".html_safe
+    end
   end
 
 private
