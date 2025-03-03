@@ -2,7 +2,7 @@ class Form::Lettings::Pages::ReferralPrp < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "referral_prp"
-    @depends_on = [{ "referral_type" => 103 }]
+    @depends_on = [{ "referral_type" => 3 }]
   end
 
   def questions

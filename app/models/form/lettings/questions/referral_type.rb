@@ -10,25 +10,25 @@ class Form::Lettings::Questions::ReferralType < ::Form::Question
 
   def answer_options
     {
-      "101" => {
+      "1" => {
         "value" => "Direct",
       },
-      "102" => {
+      "2" => {
         "value" => "From a local authority housing register or waiting list",
       },
-      "103" => {
+      "3" => {
         "value" => "From a PRP-only housing register or waiting list (no local authority involvement)",
       },
-      "104" => {
+      "4" => {
         "value" => "Health and social care services",
       },
-      "105" => {
+      "5" => {
         "value" => "Police, probation, prison or youth offending team",
       },
-      "7" => {
+      "6" => {
         "value" => "Voluntary agency",
       },
-      "16" => {
+      "7" => {
         "value" => "Other",
       },
     }.freeze

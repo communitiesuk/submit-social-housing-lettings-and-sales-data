@@ -2,7 +2,7 @@ class Form::Lettings::Pages::ReferralJustice < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "referral_justice"
-    @depends_on = [{ "referral_type" => 105 }]
+    @depends_on = [{ "referral_type" => 5 }]
   end
 
   def questions

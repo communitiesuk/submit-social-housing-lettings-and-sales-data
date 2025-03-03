@@ -129,7 +129,7 @@ RSpec.describe Validations::HouseholdValidations do
     context "when referral is not internal transfer" do
       it "cannot be permanently decanted from another property owned by this landlord" do
         record.reason = 1
-        record.referral_type = 101
+        record.referral_type = 1
         record.referral = 2
         household_validator.validate_reason_for_leaving_last_settled_home(record)
         expect(record.errors["reason"])
@@ -144,7 +144,7 @@ RSpec.describe Validations::HouseholdValidations do
     context "when referral is internal transfer" do
       it "can be permanently decanted from another property owned by this landlord" do
         record.reason = 1
-        record.referral_type = 103
+        record.referral_type = 3
         record.referral = 1
         household_validator.validate_reason_for_leaving_last_settled_home(record)
         expect(record.errors["reason"])
@@ -158,7 +158,7 @@ RSpec.describe Validations::HouseholdValidations do
       it "cannot have a PRP as landlord and Housing situation before this letting cannot be LA general needs" do
         record.owning_organisation.provider_type = "PRP"
         record.prevten = 30
-        record.referral_type = 103
+        record.referral_type = 3
         record.referral = 1
         household_validator.validate_referral(record)
         expect(record.errors["referral"])
@@ -614,7 +614,7 @@ RSpec.describe Validations::HouseholdValidations do
     context "when homelessness is assessed" do
       it "can be internal transfer" do
         record.homeless = 11
-        record.referral_type = 103
+        record.referral_type = 3
         record.referral = 1
         household_validator.validate_referral(record)
         expect(record.errors["referral"]).to be_empty
@@ -625,7 +625,7 @@ RSpec.describe Validations::HouseholdValidations do
       it "can be non internal transfer" do
         record.owning_organisation.provider_type = "PRP"
         record.homeless = 0
-        record.referral_type = 102
+        record.referral_type = 2
         record.referral = 3
         household_validator.validate_referral(record)
         expect(record.errors["referral"]).to be_empty
@@ -636,7 +636,7 @@ RSpec.describe Validations::HouseholdValidations do
 
     context "when homelessness is other" do
       it "cannot be internal transfer" do
-        record.referral_type = 103
+        record.referral_type = 3
         record.referral = 1
         record.homeless = 7
         household_validator.validate_referral(record)
@@ -647,7 +647,7 @@ RSpec.describe Validations::HouseholdValidations do
 
       it "can be non internal transfer" do
         record.owning_organisation.provider_type = "PRP"
-        record.referral_type = 102
+        record.referral_type = 2
         record.referral = 3
         record.homeless = 1
         household_validator.validate_referral(record)
@@ -734,7 +734,7 @@ RSpec.describe Validations::HouseholdValidations do
 
     context "when the referral is internal transfer" do
       it "prevten can be 9" do
-        record.referral_type = 103
+        record.referral_type = 3
         record.referral = 1
         record.prevten = 9
         household_validator.validate_previous_housing_situation(record)
@@ -762,7 +762,7 @@ RSpec.describe Validations::HouseholdValidations do
         { code: 29, label: "Prison or approved probation hostel" },
       ].each do |prevten|
         it "prevten cannot be #{prevten[:code]}" do
-          record.referral_type = 103
+          record.referral_type = 3
           record.referral = 1
           record.prevten = prevten[:code]
           household_validator.validate_previous_housing_situation(record)
