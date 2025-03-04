@@ -566,7 +566,6 @@ RSpec.describe SalesLog, type: :model do
           ppostcode_full: nil,
           prevloc: nil,
           saledate: Time.zone.local(2024, 5, 2),
-          manual_address_entry_selected: true,
         })
       end
 
@@ -618,7 +617,7 @@ RSpec.describe SalesLog, type: :model do
         end
 
         let(:address_sales_log_25_26) do
-          create(:sales_log, :shared_ownership_setup_complete, postcode_full: "CA10 1AA", saledate: Time.zone.local(2025, 5, 2), manual_address_entry_selected: true)
+          create(:sales_log, :shared_ownership_setup_complete, postcode_full: "CA10 1AA", saledate: Time.zone.local(2025, 5, 2))
         end
 
         before do
@@ -673,11 +672,11 @@ RSpec.describe SalesLog, type: :model do
     context "when saving address with LAs that have changed E-codes" do
       context "when address inferred from uprn - we still get LA from postcode" do
         let(:address_sales_log_24_25) do
-          create(:sales_log, :shared_ownership_setup_complete, manual_address_entry_selected: false, uprn_known: 1, uprn: 1, saledate: Time.zone.local(2024, 5, 2))
+          create(:sales_log, :shared_ownership_setup_complete, uprn_known: 1, uprn: 1, saledate: Time.zone.local(2024, 5, 2))
         end
 
         let(:address_sales_log_25_26) do
-          create(:sales_log, :shared_ownership_setup_complete, manual_address_entry_selected: false, uprn_known: 1, uprn: 1, saledate: Time.zone.local(2025, 5, 2))
+          create(:sales_log, :shared_ownership_setup_complete, uprn_known: 1, uprn: 1, saledate: Time.zone.local(2025, 5, 2))
         end
 
         before do
