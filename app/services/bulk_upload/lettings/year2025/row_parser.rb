@@ -1094,6 +1094,7 @@ private
       accessible_register: %i[field_115],
       letting_allocation: %i[field_112 field_113 field_114 field_115],
 
+      referral_type: %i[field_116],
       referral: %i[field_116],
 
       net_income_known: %i[field_117],
@@ -1279,6 +1280,7 @@ private
     attributes["accessible_register"] = accessible_register
     attributes["letting_allocation_unknown"] = letting_allocation_unknown
 
+    attributes["referral_type"] = referral_type
     attributes["referral"] = field_116
 
     attributes["net_income_known"] = net_income_known
@@ -1662,5 +1664,23 @@ private
     when 3
       "R" # refused
     end
+  end
+
+  def referral_type
+    mapping = {
+      1 => [20, 2, 8],
+      2 => [21, 3, 4, 22],
+      3 => [1, 10, 23],
+      4 => [15, 9, 14, 24, 17],
+      5 => [18, 19],
+      6 => [7],
+      7 => [16],
+    }
+
+    mapping.each do |key, values|
+      return key if values.include?(field_116)
+    end
+
+    0
   end
 end
