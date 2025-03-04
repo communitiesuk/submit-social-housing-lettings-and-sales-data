@@ -15,10 +15,6 @@ RSpec.describe Form::Lettings::Questions::Voiddate, type: :model do
     expect(question.id).to eq("voiddate")
   end
 
-  it "has the correct check_answers_card_number" do
-    expect(question.check_answers_card_number).to eq(0)
-  end
-
   it "has the correct question_number" do
     expect(question.question_number).to eq(23)
   end

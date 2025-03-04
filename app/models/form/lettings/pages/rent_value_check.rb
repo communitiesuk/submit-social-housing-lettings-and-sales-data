@@ -1,5 +1,5 @@
 class Form::Lettings::Pages::RentValueCheck < ::Form::Page
-  def initialize(id, hsh, subsection, check_answers_card_number: nil)
+  def initialize(id, hsh, subsection)
     super(id, hsh, subsection)
     @depends_on = [{ "rent_soft_validation_triggered?" => true }]
     @copy_key = "lettings.soft_validations.rent_value_check"
@@ -23,11 +23,10 @@ class Form::Lettings::Pages::RentValueCheck < ::Form::Page
         },
       ],
     }
-    @check_answers_card_number = check_answers_card_number
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::RentValueCheck.new(nil, nil, self, check_answers_card_number: @check_answers_card_number)]
+    @questions ||= [Form::Lettings::Questions::RentValueCheck.new(nil, nil, self)]
   end
 
   def interruption_screen_question_ids
