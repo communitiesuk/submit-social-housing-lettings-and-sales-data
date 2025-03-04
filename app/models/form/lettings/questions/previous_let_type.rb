@@ -3,7 +3,6 @@ class Form::Lettings::Questions::PreviousLetType < ::Form::Question
     super
     @id = "unitletas"
     @type = "radio"
-    @check_answers_card_number = 0
     @answer_options = answer_options
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
