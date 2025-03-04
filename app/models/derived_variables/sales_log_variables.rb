@@ -55,29 +55,27 @@ module DerivedVariables::SalesLogVariables
     if uprn_known&.zero?
       self.uprn = nil
       if uprn_known_was == 1
-        reset_address_fields!
+        self.address_line1 = nil
+        self.address_line2 = nil
+        self.town_or_city = nil
+        self.county = nil
+        self.pcodenk = nil
+        self.postcode_full = nil
+        self.la = nil
       end
     end
 
     if uprn_known == 1 && uprn_confirmed&.zero?
-      reset_address_fields!
+      self.uprn = nil
       self.uprn_known = 0
       self.uprn_confirmed = nil
-    end
-
-    if form.start_year_2024_or_later?
-      if manual_address_entry_selected
-        self.uprn_known = 0
-        self.uprn_selection = nil
-        self.uprn_confirmed = nil
-      else
-        self.uprn_confirmed = 1 if uprn.present?
-        self.uprn_known = 1 if uprn.present?
-        reset_address_fields! if uprn.blank?
-        if uprn_changed?
-          self.uprn_selection = uprn
-        end
-      end
+      self.address_line1 = nil
+      self.address_line2 = nil
+      self.town_or_city = nil
+      self.county = nil
+      self.pcodenk = nil
+      self.postcode_full = nil
+      self.la = nil
     end
 
     if form.start_year_2025_or_later? && is_bedsit?
@@ -249,22 +247,5 @@ private
 
   def prevten_was_social_housing?
     [1, 2].include?(prevten) || [1, 2].include?(prevtenbuy2)
-  end
-
-  def reset_address_fields!
-    self.uprn = nil
-    self.uprn_known = nil
-    self.address_line1 = nil
-    self.address_line2 = nil
-    self.town_or_city = nil
-    self.county = nil
-    self.pcode1 = nil
-    self.pcode2 = nil
-    self.pcodenk = nil
-    self.address_line1_input = nil
-    self.postcode_full_input = nil
-    self.postcode_full = nil
-    self.is_la_inferred = nil
-    self.la = nil
   end
 end
