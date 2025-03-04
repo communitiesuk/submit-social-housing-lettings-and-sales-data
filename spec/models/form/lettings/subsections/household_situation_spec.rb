@@ -101,7 +101,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdSituation, type: :model do
           reasonable_preference
           reasonable_preference_reason
           allocation_system
-          referral
+          referral_type
           referral_direct
           referral_la
           referral_prp
