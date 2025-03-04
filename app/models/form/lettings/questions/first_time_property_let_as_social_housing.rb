@@ -3,7 +3,6 @@ class Form::Lettings::Questions::FirstTimePropertyLetAsSocialHousing < ::Form::Q
     super
     @id = "first_time_property_let_as_social_housing"
     @type = "radio"
-    @check_answers_card_number = 0
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 

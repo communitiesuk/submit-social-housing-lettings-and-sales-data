@@ -4,7 +4,6 @@ class Form::Lettings::Questions::VoidDateValueCheck < ::Form::Question
     @id = "void_date_value_check"
     @copy_key = "lettings.soft_validations.void_date_value_check"
     @type = "interruption_screen"
-    @check_answers_card_number = 0
     @answer_options = ANSWER_OPTIONS
     @hidden_in_check_answers = { "depends_on" => [{ "void_date_value_check" => 0 }, { "void_date_value_check" => 1 }] }
   end
