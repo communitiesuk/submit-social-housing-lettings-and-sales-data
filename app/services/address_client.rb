@@ -7,9 +7,8 @@ class AddressClient
   ADDRESS = "api.os.uk".freeze
   PATH = "/search/places/v1/find".freeze
 
-  def initialize(address, options = {})
+  def initialize(address)
     @address = address
-    @options = options
   end
 
   def call
@@ -44,8 +43,8 @@ private
     params = {
       query: address,
       key: ENV["OS_DATA_KEY"],
-      maxresults: @options[:maxresults] || 10,
-      minmatch: @options[:minmatch] || 0.4,
+      maxresults: 10,
+      minmatch: 0.4,
     }
     uri.query = URI.encode_www_form(params)
     uri.to_s

@@ -771,7 +771,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_25_180643) do
     t.decimal "mrentprestaircasing", precision: 10, scale: 2
     t.datetime "lasttransaction"
     t.datetime "initialpurchase"
-    t.boolean "manual_address_entry_selected", default: false
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
