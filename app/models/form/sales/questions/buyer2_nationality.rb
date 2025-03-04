@@ -22,5 +22,5 @@ class Form::Sales::Questions::Buyer2Nationality < ::Form::Question
     "13" => { "value" => "Buyer prefers not to say" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 32, 2024 => 34 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 32, 2024 => 34, 2025 => 32 }.freeze
 end

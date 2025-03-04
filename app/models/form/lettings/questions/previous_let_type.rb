@@ -42,7 +42,7 @@ class Form::Lettings::Questions::PreviousLetType < ::Form::Question
     "3" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 16, 2024 => 17 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 16, 2024 => 17, 2025 => 14 }.freeze
 
   def answer_options
     return ANSWER_OPTIONS_AFTER_2025 if form.start_year_2025_or_later?

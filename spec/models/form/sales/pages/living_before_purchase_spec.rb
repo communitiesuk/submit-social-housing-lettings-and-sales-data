@@ -95,7 +95,7 @@ RSpec.describe Form::Sales::Pages::LivingBeforePurchase, type: :model do
       end
 
       it "does not route to the page when resale is not 2" do
-        log = build(:sales_log, jointpur: 1, resale: nil)
+        log = build(:sales_log, jointpur: 1, resale: nil, ownershipsch: 1)
         expect(page.routed_to?(log, nil)).to eq(false)
       end
     end

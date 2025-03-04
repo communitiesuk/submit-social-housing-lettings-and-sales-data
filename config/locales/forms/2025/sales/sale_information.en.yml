@@ -148,7 +148,7 @@ en:
             value_shared_ownership:
               check_answer_label: "Full purchase price"
               check_answer_prompt: ""
-              hint_text: "Enter the full purchase price of the property before any discounts are applied. For shared ownership, enter the full purchase price paid for 100% equity (this is equal to the value of the share owned by the PRP plus the value bought by the purchaser)."
+              hint_text: "Enter the full purchase price of the property before any discounts are applied. This is the full purchase price paid for 100% equity (this is equal to the value of the share owned by the PRP plus the value bought by the purchaser)."
               question_text: "What was the full purchase price?"
             value_shared_ownership_staircase:
               check_answer_label: "Full purchase price"

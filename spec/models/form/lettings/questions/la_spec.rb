@@ -310,4 +310,28 @@ RSpec.describe Form::Lettings::Questions::La, type: :model do
       "E06000065" => "North Yorkshire",
     })
   end
+
+  context "with 2024/25 form" do
+    let(:start_date) { Time.utc(2024, 4, 1) }
+
+    before do
+      allow(subsection.form).to receive(:start_year_2024_or_later?).and_return(true)
+    end
+
+    it "has the correct question number" do
+      expect(question.question_number).to eq(14)
+    end
+  end
+
+  context "with 2025/26 form" do
+    let(:start_date) { Time.utc(2025, 4, 1) }
+
+    before do
+      allow(subsection.form).to receive(:start_year_2024_or_later?).and_return(true)
+    end
+
+    it "has the correct question number" do
+      expect(question.question_number).to eq(18)
+    end
+  end
 end

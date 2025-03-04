@@ -6,6 +6,7 @@ class BulkUploadError < ApplicationRecord
   scope :order_by_col, -> { order(Arel.sql("LPAD(col, 10, '0')")) }
   scope :important, -> { where(category: "setup") }
   scope :potential, -> { where(category: "soft_validation") }
+  scope :not_potential, -> { where.not(category: "soft_validation").or(where(category: nil)) }
   scope :critical, -> { where(category: nil).or(where.not(category: %w[setup soft_validation])) }
   scope :critical_or_important, -> { critical.or(important) }
 end

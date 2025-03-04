@@ -27,5 +27,5 @@ class Form::Sales::Questions::Buyer2AgeKnown < ::Form::Question
     "1" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 28, 2024 => 30 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 28, 2024 => 30, 2025 => 28 }.freeze
 end

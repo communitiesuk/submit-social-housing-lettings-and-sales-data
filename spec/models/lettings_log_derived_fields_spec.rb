@@ -1206,4 +1206,24 @@ RSpec.describe LettingsLog, type: :model do
       end
     end
   end
+
+  describe "#clear_child_ecstat_for_age_changes!" do
+    it "clears the working situation of a person that was previously a child under 16" do
+      log = create(:lettings_log, :completed, age2: 13)
+      log.age2 = 17
+      expect { log.set_derived_fields! }.to change(log, :ecstat2).from(9).to(nil)
+    end
+
+    it "does not clear the working situation of a person that had an age change but is still a child under 16" do
+      log = create(:lettings_log, :completed, age2: 13)
+      log.age2 = 15
+      expect { log.set_derived_fields! }.to not_change(log, :ecstat2)
+    end
+
+    it "does not clear the working situation of a person that had an age change but is still an adult" do
+      log = create(:lettings_log, :completed, age2: 45)
+      log.age2 = 46
+      expect { log.set_derived_fields! }.to not_change(log, :ecstat2)
+    end
+  end
 end

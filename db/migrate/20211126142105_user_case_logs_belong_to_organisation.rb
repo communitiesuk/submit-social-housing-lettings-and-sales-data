@@ -5,8 +5,8 @@ class UserCaseLogsBelongToOrganisation < ActiveRecord::Migration[6.1]
       t.belongs_to :organisation
     end
     change_table :case_logs, bulk: true do |t|
-      t.belongs_to :owning_organisation, class_name: "Organisation"
-      t.belongs_to :managing_organisation, class_name: "Organisation"
+      t.belongs_to :owning_organisation
+      t.belongs_to :managing_organisation
     end
   end
 

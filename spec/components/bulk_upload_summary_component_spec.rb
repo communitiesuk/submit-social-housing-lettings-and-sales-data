@@ -64,8 +64,8 @@ RSpec.describe BulkUploadSummaryComponent, type: :component do
 
     it "shows the potential errors status and error count" do
       result = render_inline(described_class.new(bulk_upload:))
-      expect(result).to have_content("Potential errors in CSV")
-      expect(result).to have_content("2 potential errors")
+      expect(result).to have_content("Confirmation needed in CSV")
+      expect(result).to have_content("2 confirmations needed")
       expect(result).to have_content("16 total logs")
       expect(result).to have_no_content("errors on important")
       expect(result).to have_no_content("critical")

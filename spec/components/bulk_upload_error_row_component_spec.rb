@@ -148,7 +148,7 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
 
     it "renders the potential errors section" do
       result = render_inline(described_class.new(bulk_upload_errors:))
-      expect(result).to have_content("Potential errors")
+      expect(result).to have_content("Confirmation needed")
     end
 
     it "renders the potential error message" do

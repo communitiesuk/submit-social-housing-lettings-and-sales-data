@@ -65,5 +65,5 @@ class Form::Lettings::Questions::StarterTenancyType < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 27 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 27, 2024 => 27, 2025 => 28 }.freeze
 end

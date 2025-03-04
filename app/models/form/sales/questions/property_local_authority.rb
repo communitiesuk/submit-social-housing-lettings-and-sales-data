@@ -15,5 +15,5 @@ class Form::Sales::Questions::PropertyLocalAuthority < ::Form::Question
     log.saledate && log.saledate.year >= 2023 && log.is_la_inferred?
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 16, 2024 => 17 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 16, 2024 => 17, 2025 => 15 }.freeze
 end

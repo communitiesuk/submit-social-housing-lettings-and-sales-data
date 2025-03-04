@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_10_150609) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_19_122817) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -245,14 +245,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_10_150609) do
     t.integer "hb"
     t.integer "hbrentshortfall"
     t.integer "property_relet"
-    t.datetime "mrcdate"
+    t.datetime "mrcdate", precision: nil
     t.integer "incref"
-    t.datetime "startdate"
+    t.datetime "startdate", precision: nil
     t.integer "armedforces"
     t.integer "first_time_property_let_as_social_housing"
     t.integer "unitletas"
     t.integer "builtype"
-    t.datetime "voiddate"
+    t.datetime "voiddate", precision: nil
     t.bigint "owning_organisation_id"
     t.bigint "managing_organisation_id"
     t.integer "renttype"
@@ -373,6 +373,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_10_150609) do
     t.integer "partner_under_16_value_check"
     t.integer "multiple_partners_value_check"
     t.bigint "created_by_id"
+    t.boolean "manual_address_entry_selected", default: false
     t.index ["assigned_to_id"], name: "index_lettings_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
@@ -769,6 +770,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_10_150609) do
     t.decimal "mrentprestaircasing", precision: 10, scale: 2
     t.datetime "lasttransaction"
     t.datetime "initialpurchase"
+    t.boolean "manual_address_entry_selected", default: false
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
@@ -822,8 +824,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_10_150609) do
     t.string "name"
     t.bigint "organisation_id"
     t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.integer "role"

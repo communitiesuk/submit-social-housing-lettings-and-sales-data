@@ -15,6 +15,7 @@ class Form::Sales::Questions::MortgageAmount < ::Form::Question
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
     2023 => { 1 => 91, 2 => 104, 3 => 112 },
     2024 => { 1 => 92, 2 => 105, 3 => 113 },
+    2025 => { 1 => 83, 2 => 107 },
   }.freeze
 
   def derived?(log)

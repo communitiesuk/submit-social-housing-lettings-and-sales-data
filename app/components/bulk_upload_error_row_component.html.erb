@@ -37,14 +37,14 @@
     <% end %>
 
     <% if potential_errors.any? %>
-      <h2 class="govuk-heading-m">Potential errors</h2>
-      <p class="govuk-body">The following groups of cells might have conflicting data. Check the answers and fix any incorrect data.<br><br>If the answers are correct, fix the critical errors and upload the file again. You'll need to confirm that the following data is correct when the file only contains potential errors.</p>
+      <h2 class="govuk-heading-m">Confirmation needed</h2>
+      <p class="govuk-body">Potential data discrepancies exist in the following cells.<br><br>Please resolve all critical errors and review the cells with data discrepancies before re-uploading the file. Bulk confirmation of potential discrepancies is accessible only after all critical errors have been resolved.</p>
         <%= govuk_table(html_attributes: { class: "no-bottom-border" })  do |table| %>
           <%= table.with_head do |head| %>
             <% head.with_row do |row| %>
               <% row.with_cell(header: true, text: "Cell") %>
               <% row.with_cell(header: true, text: "Question") %>
-              <% row.with_cell(header: true, text: "Potential error") %>
+              <% row.with_cell(header: true, text: "Confirmation needed") %>
               <% row.with_cell(header: true, text: "Specification") %>
             <% end %>
           <% end %>

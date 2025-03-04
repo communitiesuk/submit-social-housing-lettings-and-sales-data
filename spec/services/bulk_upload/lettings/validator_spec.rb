@@ -103,7 +103,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       before do
         values = log_to_csv.to_2024_row
         values[7] = nil
-        file.write(log_to_csv.default_2024_field_numbers_row)
+        file.write(log_to_csv.default_field_numbers_row_for_year(2024))
         file.write(log_to_csv.to_custom_csv_row(seed: nil, field_values: values))
         file.rewind
       end
@@ -146,7 +146,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       before do
         log.needstype = nil
         values = log_to_csv.to_2024_row
-        file.write(log_to_csv.default_2024_field_numbers_row(seed:))
+        file.write(log_to_csv.default_field_numbers_row_for_year(2024, seed:))
         file.write(log_to_csv.to_custom_csv_row(seed:, field_values: values))
         file.close
       end
