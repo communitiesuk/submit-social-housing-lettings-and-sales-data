@@ -146,6 +146,9 @@ Also ensure you have firefox installed
    ```bash
    bundle exec rake db:seed
    ```
+5. For Ordinance Survey related functionality, such as using the UPRN, you will need to set OS_DATA_KEY in your .env file. This key is shared across the team and can be found in AWS Secrets Manager.
+6. For email functionality, you will need a GOV.UK Notify API key, which is individual to you. Ask an existing team member to invite you to the "CORE Helpdesk" Notify service. Once invited, sign in and go to "API integration" to generate an API key, and set this as `GOVUK_NOTIFY_API_KEY` in your .env file.
+
 
 ## Running Locally
 
@@ -183,18 +186,35 @@ Development mode will target the latest versions of Chrome, Firefox and Safari f
 
 The Rails server will start on <http://localhost:3000>.
 
+To sign in locally, you can use any username and password from your local database. The seed task creates users in various roles all with the password `REVIEW_APP_USER_PASSWORD` from your .env file (which has default value `password`).
+You can also create a user in the database manually with the details of your choice, but you will need to generate a correctly encrypted password. You can find the value to use for encrypted password which corresponds to the password `YOURPASSWORDHERE` using `User.new(:password => [YOURPASSWORDHERE]).encrypted_password`.
+
+
+
+
 ### Tests
 
 ```bash
 bundle exec rspec
 ```
 
-Or to run individual tests / files use your IDE
+To run a specific folder use
+```bash
+bundle exec rspec ./spec/folder
+```
+
+To run individual files use
+```bash
+bundle exec rspec ./spec/path/to/file.rb
+```
+
+or run individual files/tests from your IDE
 
 ### Formatting
 
 - `yarn prettier . --write` for scss, yml, md, and json files
 - `yarn standard --fix` for js files
+- `bundle exec rubocop -A` to autocorrect safe rubocop offenses in ruby files
 
 ### Linting
 
