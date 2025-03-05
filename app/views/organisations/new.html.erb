@@ -56,6 +56,37 @@
         :name,
         legend: { text: "Does the organisation hold its own stock?", size: "m" } %>
 
+      <%= f.govuk_collection_radio_buttons :group_member,
+                                           [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")],
+                                           :id,
+                                           :name,
+                                           legend: { text: "Is this organisation part of a housing provider group structure?", size: "m" },
+                                           "data-action": "change->group-member#toggleGroupSelect" %>
+
+      <% group_organisation_options = Organisation.visible.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
+
+      <div data-group-member-target="groupSelect">
+        <%= f.govuk_collection_select :group,
+                                      group_organisation_options,
+                                      :id,
+                                      :name,
+                                      label: { text: "Search for an organisation that is part of the same group as this organisation", size: "m" },
+                                      "data-controller": %w[accessible-autocomplete conditional-filter organisations] %>
+      </div>
+
+      <% profit_options = [
+        OpenStruct.new(id: 1, name: "Non-profit"),
+        OpenStruct.new(id: 2, name: "Profit"),
+        OpenStruct.new(id: 3, name: "Local authority")
+      ] %>
+
+      <%= f.govuk_collection_select :profit_status,
+                                    profit_options,
+                                    :id,
+                                    :name,
+                                    label: { text: "Is the organisation for-profit?", size: "m" },
+                                    options: { disabled: [""], selected: @organisation.profit_status || "" } %>
+
       <%= f.govuk_check_boxes_fieldset :rent_periods,
         legend: { text: "What are the rent periods for the organisation?" } do %>
         <% @rent_periods.map do |key, period| %>

@@ -53,7 +53,16 @@ class Organisation < ApplicationRecord
     PRP: 2,
   }.freeze
 
+  PROFIT_STATUS = {
+    non_profit: 1,
+    profit: 2,
+    local_authority: 3,
+  }.freeze
+
   enum :provider_type, PROVIDER_TYPE
+  enum :profit_status, PROFIT_STATUS
+
+  attribute :group_member, :boolean
 
   alias_method :la?, :LA?
 
