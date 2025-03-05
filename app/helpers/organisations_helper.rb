@@ -77,4 +77,8 @@ module OrganisationsHelper
 
     "Enter #{text}"
   end
+
+  def group_organisation_options
+    [OpenStruct.new(id: "", name: "")] + Organisation.visible.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+  end
 end

@@ -56,38 +56,30 @@
         :name,
         legend: { text: "Does the organisation hold its own stock?", size: "m" } %>
 
-      <% group_organisation_options = [OpenStruct.new(id: "", name: "")] + Organisation.visible.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
-
       <%= f.govuk_radio_buttons_fieldset :group_member,
                                          legend: { text: "Is this organisation part of a housing provider group structure?", size: "m" } do %>
         <%= f.govuk_radio_button :group_member, true,
-                                 label: { text: "Yes" },
-                                 "data-controller": "conditional-question",
-                                 "data-action": "click->conditional-question#displayConditional",
-                                 "data-info": { conditional_questions: { group: [true] }, type: "organisation" }.to_json do %>
+             label: { text: "Yes" },
+             "data-controller": "conditional-question",
+             "data-action": "click->conditional-question#displayConditional",
+             "data-info": { conditional_questions: { group: [true] }, type: "organisation" }.to_json do %>
             <%= f.govuk_collection_select :group,
-                                          group_organisation_options,
-                                          :id,
-                                          :name,
-                                          label: { text: "Search for an organisation that is part of the same group as this organisation", size: "m" },
-                                          options: { disabled: [""], selected: @organisation.group || "" },
-                                          "data-controller": %w[accessible-autocomplete conditional-filter] %>
+                group_organisation_options,
+                :id,
+                :name,
+                label: { text: "Search for an organisation that is part of the same group as this organisation", size: "m" },
+                options: { disabled: [""], selected: @organisation.group || "" },
+                "data-controller": %w[accessible-autocomplete conditional-filter] %>
         <% end %>
         <%= f.govuk_radio_button :group_member, false, label: { text: "No" } %>
       <% end %>
 
-      <% profit_options = [
-        OpenStruct.new(id: 1, name: "Non-profit"),
-        OpenStruct.new(id: 2, name: "Profit"),
-        OpenStruct.new(id: 3, name: "Local authority")
-      ] %>
-
       <%= f.govuk_collection_select :profit_status,
-                                    profit_options,
-                                    :id,
-                                    :name,
-                                    label: { text: "Is the organisation for-profit?", size: "m" },
-                                    options: { disabled: [""], selected: @organisation.profit_status || "" } %>
+          Organisation::PROFIT_STATUS.map { |key, value| OpenStruct.new(id: value, name: key.to_s.humanize) },
+          :id,
+          :name,
+          label: { text: "Is the organisation for-profit?", size: "m" },
+          options: { disabled: [""], selected: @organisation.profit_status || "" } %>
 
       <%= f.govuk_check_boxes_fieldset :rent_periods,
         legend: { text: "What are the rent periods for the organisation?" } do %>
