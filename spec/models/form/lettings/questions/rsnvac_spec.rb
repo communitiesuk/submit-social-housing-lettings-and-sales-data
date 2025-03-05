@@ -76,10 +76,6 @@ RSpec.describe Form::Lettings::Questions::Rsnvac, type: :model do
     end
   end
 
-  it "has the correct check_answers_card_number" do
-    expect(question.check_answers_card_number).to eq(0)
-  end
-
   context "with 2024/25 form" do
     let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
 

@@ -4,7 +4,6 @@ class Form::Lettings::Questions::Majorrepairs < ::Form::Question
     @id = "majorrepairs"
     @copy_key = "lettings.property_information.property_major_repairs.majorrepairs"
     @type = "radio"
-    @check_answers_card_number = 0
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "mrcdate" => [1] }
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]

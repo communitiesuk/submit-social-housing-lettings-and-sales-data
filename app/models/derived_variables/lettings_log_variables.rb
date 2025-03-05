@@ -142,6 +142,9 @@ module DerivedVariables::LettingsLogVariables
       self.is_la_inferred = false
     end
 
+    self.referral = 7 if referral_type == 6
+    self.referral = 16 if referral_type == 7
+
     reset_address_fields! if is_supported_housing?
 
     set_checkbox_values!

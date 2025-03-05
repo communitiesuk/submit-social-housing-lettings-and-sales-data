@@ -1684,4 +1684,22 @@ private
     end
     false
   end
+
+  def referral_type
+    mapping = {
+      1 => [20, 2, 8],
+      2 => [21, 3, 4, 22],
+      3 => [1, 10, 23],
+      4 => [15, 9, 14, 24, 17],
+      5 => [18, 19],
+      6 => [7],
+      7 => [16],
+    }
+
+    mapping.each do |key, values|
+      return key if values.include?(field_116)
+    end
+
+    0
+  end
 end

@@ -4,7 +4,6 @@ class Form::Lettings::Questions::Beds < ::Form::Question
     @id = "beds"
     @type = "numeric"
     @width = 2
-    @check_answers_card_number = 0
     @max = 12
     @min = 1
     @step = 1
