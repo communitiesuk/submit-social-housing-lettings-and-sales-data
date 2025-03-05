@@ -48,6 +48,8 @@
         :id,
         :name,
         label: { text: "Organisation type", size: "m" },
+        "data-controller": "organisations",
+        "data-action": "change->organisations#updateProfitStatusOptions",
         options: { disabled: [""], selected: @organisation.provider_type || "" } %>
 
       <%= f.govuk_collection_radio_buttons :holds_own_stock,
@@ -75,7 +77,7 @@
       <% end %>
 
       <%= f.govuk_collection_select :profit_status,
-          Organisation::PROFIT_STATUS.map { |key, value| OpenStruct.new(id: value, name: key.to_s.humanize) },
+          profit_status_options,
           :id,
           :name,
           label: { text: "Is the organisation for-profit?", size: "m" },

@@ -79,6 +79,12 @@ module OrganisationsHelper
   end
 
   def group_organisation_options
-    [OpenStruct.new(id: "", name: "")] + Organisation.visible.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+    null_option = [OpenStruct.new(id: "", name: "Select an option")]
+    organisations = Organisation.visible.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+    null_option + organisations
+  end
+
+  def profit_status_options
+    Organisation::PROFIT_STATUS.map { |key, value| OpenStruct.new(id: value, name: key.to_s.humanize) }
   end
 end
