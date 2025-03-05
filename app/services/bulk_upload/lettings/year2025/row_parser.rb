@@ -751,20 +751,20 @@ private
     end
   end
 
-  def validate_reasonable_preference_homeless
-    reason_fields = %i[field_107 field_108 field_109 field_110 field_111]
-    if field_106 == 1 && reason_fields.all? { |field| attributes[field.to_s].blank? }
-      reason_fields.each do |field|
-        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "reason for reasonable preference."))
-      end
-    end
-  end
-
   def validate_reasonable_preference_dont_know
     if rp_dontknow_conflict?
       errors.add(:field_111, I18n.t("#{ERROR_BASE_KEY}.reasonpref.conflict.dont_know"))
       %i[field_107 field_108 field_109 field_110].each do |field|
         errors.add(field, I18n.t("#{ERROR_BASE_KEY}.reasonpref.conflict.other")) if send(field) == 1
+      end
+    end
+  end
+
+  def validate_reasonable_preference_homeless
+    reason_fields = %i[field_107 field_108 field_109 field_110 field_111]
+    if field_106 == 1 && reason_fields.all? { |field| attributes[field.to_s].blank? }
+      reason_fields.each do |field|
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "reason for reasonable preference."))
       end
     end
   end
