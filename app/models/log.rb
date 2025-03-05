@@ -91,12 +91,7 @@ class Log < ApplicationRecord
         service = AddressClient.new(address_string)
         service.call
         if service.result.blank? || service.error.present?
-          self.postcode_full = postcode_full_as_entered
-          self.address_line1 = address_line1_as_entered
-          self.address_line2 = address_line2_as_entered
-          self.county = county_as_entered
-          self.town_or_city = town_or_city_as_entered
-          self.manual_address_entry_selected = true
+          select_manual_address_entry!
           return nil
         end
 
@@ -105,12 +100,7 @@ class Log < ApplicationRecord
         if presenter.match >= os_match_threshold_for_bulk_upload
           self.uprn_selection = presenter.uprn
         else
-          self.postcode_full = postcode_full_as_entered
-          self.address_line1 = address_line1_as_entered
-          self.address_line2 = address_line2_as_entered
-          self.county = county_as_entered
-          self.town_or_city = town_or_city_as_entered
-          self.manual_address_entry_selected = true
+          select_manual_address_entry!
           return nil
         end
       end
@@ -417,5 +407,14 @@ private
     end
     self[is_inferred_key] = false
     self[postcode_key] = nil
+  end
+
+  def select_manual_address_entry!
+    self.postcode_full = postcode_full_as_entered
+    self.address_line1 = address_line1_as_entered
+    self.address_line2 = address_line2_as_entered
+    self.county = county_as_entered
+    self.town_or_city = town_or_city_as_entered
+    self.manual_address_entry_selected = true
   end
 end
