@@ -56,7 +56,7 @@
         :name,
         legend: { text: "Does the organisation hold its own stock?", size: "m" } %>
 
-      <% group_organisation_options = Organisation.visible.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
+      <% group_organisation_options = [OpenStruct.new(id: "", name: "")] + Organisation.visible.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
 
       <%= f.govuk_radio_buttons_fieldset :group_member,
                                          legend: { text: "Is this organisation part of a housing provider group structure?", size: "m" } do %>
