@@ -144,6 +144,12 @@ class Organisation < ApplicationRecord
     DISPLAY_PROVIDER_TYPE[provider_type.to_sym]
   end
 
+  DISPLAY_PROFIT_STATUS = { "non_profit": "Non-profit", "profit": "Profit", "local_authority": "Local Authority" }.freeze
+
+  def display_profit_status
+    DISPLAY_PROFIT_STATUS.fetch(profit_status&.to_sym, "")
+  end
+
   def has_managing_agents?
     managing_agents.count.positive?
   end

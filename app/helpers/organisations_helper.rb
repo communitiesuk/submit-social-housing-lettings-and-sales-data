@@ -24,7 +24,7 @@ module OrganisationsHelper
       attributes << { name: "Group number", value: organisation.group, editable: current_user.support? }
     end
 
-    attributes << { name: "For profit", value: organisation.profit_status, editable: current_user.support? }
+    attributes << { name: "For profit", value: organisation.display_profit_status, editable: current_user.support? }
     attributes << { name: "Rent periods", value: organisation.rent_period_labels, editable: true, format: :bullet }
     attributes << { name: "Data Sharing Agreement" }
     attributes << { name: "Status", value: status_tag(organisation.status) + delete_organisation_text(organisation), editable: false }
@@ -79,12 +79,24 @@ module OrganisationsHelper
   end
 
   def group_organisation_options
-    null_option = [OpenStruct.new(id: "", name: "Select an option")]
-    organisations = Organisation.visible.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+    null_option = [OpenStruct.new(id: "", name: "Select an option", group: nil)]
+    organisations = Organisation.visible.map { |org| OpenStruct.new(id: org.id, name: org.name, group: org.group) }
     null_option + organisations
   end
 
-  def profit_status_options
-    Organisation::PROFIT_STATUS.map { |key, value| OpenStruct.new(id: value, name: key.to_s.humanize) }
+  def profit_status_options(provider_type = nil)
+    null_option = [OpenStruct.new(id: "", name: "Select an option")]
+    profit_statuses = Organisation::PROFIT_STATUS.map do |key, _value|
+      OpenStruct.new(id: key, name: Organisation::DISPLAY_PROFIT_STATUS[key])
+    end
+
+    case provider_type
+    when "LA"
+      profit_statuses.select! { |option| option.id == :local_authority }
+    when "PRP"
+      profit_statuses.reject! { |option| option.id == :local_authority }
+    end
+
+    null_option + profit_statuses
   end
 end
