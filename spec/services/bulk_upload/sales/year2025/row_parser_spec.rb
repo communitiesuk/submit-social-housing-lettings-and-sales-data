@@ -60,7 +60,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       field_31: "28",
       field_32: "1",
       field_33: "1",
-      field_34: "R",
+      field_34: "3",
       field_35: "32",
       field_36: "F",
       field_37: "17",
