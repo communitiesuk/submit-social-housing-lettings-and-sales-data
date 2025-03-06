@@ -146,9 +146,9 @@ Also ensure you have firefox installed
    ```bash
    bundle exec rake db:seed
    ```
+
 5. For Ordinance Survey related functionality, such as using the UPRN, you will need to set OS_DATA_KEY in your .env file. This key is shared across the team and can be found in AWS Secrets Manager.
 6. For email functionality, you will need a GOV.UK Notify API key, which is individual to you. Ask an existing team member to invite you to the "CORE Helpdesk" Notify service. Once invited, sign in and go to "API integration" to generate an API key, and set this as `GOVUK_NOTIFY_API_KEY` in your .env file.
-
 
 ## Running Locally
 
@@ -189,8 +189,19 @@ The Rails server will start on <http://localhost:3000>.
 To sign in locally, you can use any username and password from your local database. The seed task creates users in various roles all with the password `REVIEW_APP_USER_PASSWORD` from your .env file (which has default value `password`).
 You can also create a user in the database manually with the details of your choice, but you will need to generate a correctly encrypted password. You can find the value to use for encrypted password which corresponds to the password `YOURPASSWORDHERE` using `User.new(:password => [YOURPASSWORDHERE]).encrypted_password`.
 
+### Debugging
 
+You can use `binding.pry` to pause the execution of the code at that line and open an interactive console.
+More details on Pry are available at https://pry.github.io/ .
 
+RubyMine also offers built-in debugger functionality.
+Add a Rails run configuration for the project to RubyMine (the default setup should just work) and you can choose between running the project using the play icon to run it normally or using the bug icon to run with the debugger attached.
+You can also run tests with the debugger attached from the spec files.
+When running any code in RubyMine with the debugger attached, click the line numbers to place a breakpoint.
+Right click a breakpoint for advanced options like setting conditions for the breakpoint to trigger.
+When the breakpoint is hit, code execution pauses and you can evaluate expressions, step through the code, and see the values of variables in the current scope.
+You can "watch" important expressions to see their values change as you step through the code.
+More details on debugging in RubyMine can be found at https://www.jetbrains.com/help/ruby/debugging-code.html .
 
 ### Tests
 
@@ -199,16 +210,22 @@ bundle exec rspec
 ```
 
 To run a specific folder use
+
 ```bash
 bundle exec rspec ./spec/folder
 ```
 
 To run individual files use
+
 ```bash
 bundle exec rspec ./spec/path/to/file.rb
 ```
 
 or run individual files/tests from your IDE
+
+### Feature toggles
+
+Feature toggles can be found in `app/services/feature_toggle.rb`
 
 ### Formatting
 
