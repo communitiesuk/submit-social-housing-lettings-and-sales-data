@@ -50,7 +50,7 @@
                 </dd>
                 <dd class="govuk-summary-list__actions">
                   <% if !question.displayed_as_answered?(@log) || question.subsection.id == "setup" %>
-                    <%= govuk_link_to check_errors_answer_text(question, @log), check_errors_answer_link(@log, question, @page, applicable_questions) %>
+                    <%= govuk_link_to check_errors_answer_text(question, @log), check_errors_answer_link(@log, question, @page, applicable_questions) unless question.unanswered?(@log)%>
                   <% else %>
                     <input type="submit" value="Clear" class="govuk-body govuk-link submit-button-link" name="<%= question.id %>">
                   <% end %>
