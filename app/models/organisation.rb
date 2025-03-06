@@ -63,6 +63,7 @@ class Organisation < ApplicationRecord
   enum :profit_status, PROFIT_STATUS
 
   attribute :group_member, :boolean
+  before_save :clear_group_member_fields_if_not_group_member
 
   alias_method :la?, :LA?
 
@@ -238,6 +239,13 @@ private
 
     if provider_type == "PRP" && profit_status == "local_authority"
       errors.add(:profit_status, I18n.t("validations.organisation.profit_status.must_not_be_LA"))
+    end
+  end
+
+  def clear_group_member_fields_if_not_group_member
+    unless group_member
+      self.group_member_id = nil
+      self.group = nil
     end
   end
 end
