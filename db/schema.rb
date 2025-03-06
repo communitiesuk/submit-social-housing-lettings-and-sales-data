@@ -373,8 +373,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_27_085622) do
     t.integer "partner_under_16_value_check"
     t.integer "multiple_partners_value_check"
     t.bigint "created_by_id"
-    t.boolean "manual_address_entry_selected", default: false
     t.integer "referral_type"
+    t.boolean "manual_address_entry_selected", default: false
     t.index ["assigned_to_id"], name: "index_lettings_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
