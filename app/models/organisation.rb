@@ -230,6 +230,8 @@ class Organisation < ApplicationRecord
 private
 
   def validate_profit_status
+    return if profit_status.nil?
+
     if provider_type == "LA" && profit_status != "local_authority"
       errors.add(:profit_status, I18n.t("validations.organisation.profit_status.must_be_LA"))
     end

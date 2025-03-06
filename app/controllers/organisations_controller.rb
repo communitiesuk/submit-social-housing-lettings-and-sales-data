@@ -128,7 +128,9 @@ class OrganisationsController < ApplicationController
 
   def update
     if (current_user.data_coordinator? && org_params[:active].nil?) || current_user.support?
-      @organisation.group = org_params[:group_member] ? helpers.assign_group_number(@organisation.id, org_params[:group_member_id]) : nil
+      if org_params[:group_member] && org_params[:group_member_id]
+        @organisation.group = helpers.assign_group_number(@organisation.id, org_params[:group_member_id])
+      end
       if @organisation.update(org_params)
         case org_params[:active]
         when "false"
