@@ -1104,6 +1104,7 @@ private
       accessible_register: %i[field_115],
       letting_allocation: %i[field_112 field_113 field_114 field_115],
 
+      referral_type: %i[field_116],
       referral: %i[field_116],
 
       net_income_known: %i[field_117],
@@ -1289,6 +1290,7 @@ private
     attributes["accessible_register"] = accessible_register
     attributes["letting_allocation_unknown"] = letting_allocation_unknown
 
+    attributes["referral_type"] = referral_type
     attributes["referral"] = field_116
 
     attributes["net_income_known"] = net_income_known
