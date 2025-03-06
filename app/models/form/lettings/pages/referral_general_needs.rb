@@ -1,4 +1,4 @@
-class Form::Lettings::Pages::Referral < ::Form::Page
+class Form::Lettings::Pages::ReferralGeneralNeeds < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "referral"
@@ -7,6 +7,6 @@ class Form::Lettings::Pages::Referral < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Referral.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::ReferralGeneralNeeds.new(nil, nil, self)]
   end
 end
