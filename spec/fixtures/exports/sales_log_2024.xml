@@ -66,7 +66,7 @@
     <prevloc>E09000033</prevloc>
     <hhregres>7</hhregres>
     <hhregresstill/>
-    <proplen>10</proplen>
+    <proplen/>
     <mscharge>100.0</mscharge>
     <prevten>1</prevten>
     <mortgageused>1</mortgageused>
@@ -89,6 +89,7 @@
     <address_search_value_check/>
     <firststair/>
     <numstair/>
+    <mrentprestaircasing/>
     <day>3</day>
     <month>4</month>
     <year>2024</year>

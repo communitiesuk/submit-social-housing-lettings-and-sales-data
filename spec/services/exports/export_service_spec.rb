@@ -26,6 +26,8 @@ RSpec.describe Exports::ExportService do
   end
 
   context "when exporting daily XMLs before 2025" do
+    let(:start_time) { Time.zone.local(2022, 5, 1) }
+
     context "and no lettings archives get created in lettings logs export" do
       let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: {}) }
 
@@ -394,7 +396,6 @@ RSpec.describe Exports::ExportService do
   context "with date after 2025-04-01" do
     let(:start_time) { Time.zone.local(2025, 5, 1) }
     let(:expected_master_manifest_filename) { "Manifest_2025_05_01_0001.csv" }
-    let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: {}) }
 
     context "when exporting daily XMLs" do
       context "and no sales archives get created in sales logs export" do

@@ -57,6 +57,7 @@ module Exports::SalesLogExportConstants
                       "stairbought",
                       "stairowned",
                       "mrent",
+                      "mrentprestaircasing",
                       "resale",
                       "deposit",
                       "cashdis",
