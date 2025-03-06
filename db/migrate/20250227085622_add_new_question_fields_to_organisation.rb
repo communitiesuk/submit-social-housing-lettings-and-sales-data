@@ -1,8 +1,10 @@
 class AddNewQuestionFieldsToOrganisation < ActiveRecord::Migration[7.2]
   def change
-    add_column :organisations, :profit_status, :integer
-    add_column :organisations, :group_member, :boolean
-    add_column :organisations, :group_member_id, :integer
-    add_column :organisations, :group, :integer
+    change_table :organisations, bulk: true do |t|
+      t.integer :profit_status
+      t.boolean :group_member
+      t.integer :group_member_id
+      t.integer :group
+    end
   end
 end
