@@ -30,7 +30,7 @@ module Exports
         users_archives_for_manifest = get_user_archives(start_time, full_update)
         organisations_archives_for_manifest = get_organisation_archives(start_time, full_update)
         lettings_archives_for_manifest = get_lettings_archives(start_time, full_update, year)
-        sales_archives_for_manifest = get_sales_archives(start_time, full_update, year) if Time.zone.now >= Time.zone.local(2025, 4, 1)
+        sales_archives_for_manifest = get_sales_archives(start_time, full_update, year) if FeatureToggle.sales_export_enabled?
       end
 
       write_master_manifest(daily_run_number, lettings_archives_for_manifest.merge(sales_archives_for_manifest).merge(users_archives_for_manifest).merge(organisations_archives_for_manifest))
