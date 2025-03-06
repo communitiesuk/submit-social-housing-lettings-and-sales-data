@@ -72,6 +72,7 @@ module DerivedVariables::LettingsLogVariables
       self.beds = 1
     end
 
+    clear_child_ecstat_for_age_changes!
     child_under_16_constraints!
 
     self.hhtype = household_type
@@ -140,6 +141,9 @@ module DerivedVariables::LettingsLogVariables
       self.la = nil
       self.is_la_inferred = false
     end
+
+    self.referral = 7 if referral_type == 6
+    self.referral = 16 if referral_type == 7
 
     reset_address_fields! if is_supported_housing?
 
@@ -239,6 +243,14 @@ private
     (2..8).each do |idx|
       if age_under_16?(idx)
         self["ecstat#{idx}"] = 9
+      end
+    end
+  end
+
+  def clear_child_ecstat_for_age_changes!
+    (2..8).each do |idx|
+      if public_send("age#{idx}_changed?") && self["ecstat#{idx}"] == 9
+        self["ecstat#{idx}"] = nil
       end
     end
   end

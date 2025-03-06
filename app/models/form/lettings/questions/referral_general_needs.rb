@@ -1,4 +1,4 @@
-class Form::Lettings::Questions::Referral < ::Form::Question
+class Form::Lettings::Questions::ReferralGeneralNeeds < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "referral"
