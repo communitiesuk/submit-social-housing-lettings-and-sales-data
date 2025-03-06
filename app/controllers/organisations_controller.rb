@@ -90,6 +90,7 @@ class OrganisationsController < ApplicationController
   def create
     selected_rent_periods = rent_period_params[:rent_periods].compact_blank
     @organisation = Organisation.new(org_params)
+    @organisation.group = org_params[:group_member] ? helpers.assign_group_number(@organisation.id, org_params[:group_member_id]) : nil
     if @organisation.save
       OrganisationRentPeriod.transaction do
         selected_rent_periods.each { |period| OrganisationRentPeriod.create!(organisation: @organisation, rent_period: period) }
@@ -127,6 +128,7 @@ class OrganisationsController < ApplicationController
 
   def update
     if (current_user.data_coordinator? && org_params[:active].nil?) || current_user.support?
+      @organisation.group = org_params[:group_member] ? helpers.assign_group_number(@organisation.id, org_params[:group_member_id]) : nil
       if @organisation.update(org_params)
         case org_params[:active]
         when "false"
@@ -341,7 +343,7 @@ private
   end
 
   def org_params
-    params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone, :holds_own_stock, :provider_type, :housing_registration_no, :active, :profit_status, :group_member, :group)
+    params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone, :holds_own_stock, :provider_type, :housing_registration_no, :active, :profit_status, :group_member, :group_member_id)
   end
 
   def rent_period_params
@@ -384,5 +386,9 @@ private
         @duplicate_locations << { scheme: scheme, locations: duplicate_set.map { |id| scheme.locations.find(id) } }
       end
     end
+  end
+
+  def next_available_group_number
+    Organisation.maximum(:group).to_i + 1
   end
 end

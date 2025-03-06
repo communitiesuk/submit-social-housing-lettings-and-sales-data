@@ -69,6 +69,9 @@ class Organisation < ApplicationRecord
   validates :name, presence: { message: I18n.t("validations.organisation.name_missing") }
   validates :name, uniqueness: { case_sensitive: false, message: I18n.t("validations.organisation.name_not_unique") }
   validates :provider_type, presence: { message: I18n.t("validations.organisation.provider_type_missing") }
+  validates :group_member_id, presence: { message: I18n.t("validations.organisation.group_missing") }, if: :group_member?
+
+  validate :validate_profit_status
 
   def self.find_by_id_on_multiple_fields(id)
     return if id.nil?
@@ -144,7 +147,7 @@ class Organisation < ApplicationRecord
     DISPLAY_PROVIDER_TYPE[provider_type.to_sym]
   end
 
-  DISPLAY_PROFIT_STATUS = { "non_profit": "Non-profit", "profit": "Profit", "local_authority": "Local Authority" }.freeze
+  DISPLAY_PROFIT_STATUS = { "non_profit": "Non-profit", "profit": "Profit", "local_authority": "Local authority" }.freeze
 
   def display_profit_status
     DISPLAY_PROFIT_STATUS.fetch(profit_status&.to_sym, "")
@@ -216,5 +219,23 @@ class Organisation < ApplicationRecord
 
   def has_visible_schemes?
     owned_schemes.visible.count.positive?
+  end
+
+  def oldest_group_member
+    return nil if group.blank?
+
+    Organisation.visible.where(group:).order(:created_at).first
+  end
+
+private
+
+  def validate_profit_status
+    if provider_type == "LA" && profit_status != "local_authority"
+      errors.add(:profit_status, I18n.t("validations.organisation.profit_status.must_be_LA"))
+    end
+
+    if provider_type == "PRP" && profit_status == "local_authority"
+      errors.add(:profit_status, I18n.t("validations.organisation.profit_status.must_not_be_LA"))
+    end
   end
 end

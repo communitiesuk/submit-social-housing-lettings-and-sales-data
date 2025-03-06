@@ -21,7 +21,7 @@ module OrganisationsHelper
     ]
 
     if organisation.group_member
-      attributes << { name: "Group number", value: organisation.group, editable: current_user.support? }
+      attributes << { name: "Group number", value: "GROUP#{organisation.group}", editable: current_user.support? }
     end
 
     attributes << { name: "For profit", value: organisation.display_profit_status, editable: current_user.support? }
@@ -80,8 +80,22 @@ module OrganisationsHelper
 
   def group_organisation_options
     null_option = [OpenStruct.new(id: "", name: "Select an option", group: nil)]
-    organisations = Organisation.visible.map { |org| OpenStruct.new(id: org.id, name: org.name, group: org.group) }
+    organisations = Organisation.visible.map { |org| OpenStruct.new(id: org.id, name: group_organisation_options_name(org)) }
     null_option + organisations
+  end
+
+  def group_organisation_options_name(org)
+    "#{org.name}#{group_organisation_options_group_text(org)}"
+  end
+
+  def group_organisation_options_group_text(org)
+    return "" unless org.oldest_group_member
+
+    " (GROUP#{org.oldest_group_member&.group})"
+  end
+
+  def group_organisation_options_group(org)
+    org.oldest_group_member&.group || next_available_group_number
   end
 
   def profit_status_options(provider_type = nil)
@@ -98,5 +112,20 @@ module OrganisationsHelper
     end
 
     null_option + profit_statuses
+  end
+
+  def assign_group_number(current_org_id, selected_org_id)
+    selected_org = Organisation.find_by(id: selected_org_id)
+    if selected_org&.group.present?
+      selected_org.group
+    else
+      next_group_number = next_available_group_number
+      selected_org.update!(group_member: true, group_member_id: current_org_id, group: next_group_number) if selected_org
+      next_group_number
+    end
+  end
+
+  def next_available_group_number
+    Organisation.maximum(:group).to_i + 1
   end
 end

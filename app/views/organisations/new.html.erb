@@ -65,12 +65,12 @@
              "data-controller": "conditional-question",
              "data-action": "click->conditional-question#displayConditional",
              "data-info": { conditional_questions: { group: [true] }, type: "organisation" }.to_json do %>
-            <%= f.govuk_collection_select :group,
+            <%= f.govuk_collection_select :group_member_id,
                 group_organisation_options,
                 :id,
                 :name,
                 label: { text: "Search for an organisation that is part of the same group as this organisation", size: "m" },
-                options: { disabled: [""], selected: @organisation.group || "" },
+                options: { disabled: [""], selected: @organisation.oldest_group_member&.id || "" },
                 "data-controller": %w[accessible-autocomplete conditional-filter] %>
         <% end %>
         <%= f.govuk_radio_button :group_member, false, label: { text: "No" } %>
