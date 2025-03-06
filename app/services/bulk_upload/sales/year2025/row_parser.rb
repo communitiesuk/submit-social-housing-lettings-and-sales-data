@@ -815,31 +815,11 @@ private
     attributes["sex5"] = field_52
     attributes["sex6"] = field_56
 
-    attributes["relat2"] = if field_34 == 1
-                             "P"
-                           else
-                             (field_34 == 2 ? "X" : "R")
-                           end
-    attributes["relat3"] = if field_42 == 1
-                             "P"
-                           else
-                             (field_42 == 2 ? "X" : "R")
-                           end
-    attributes["relat4"] = if field_46 == 1
-                             "P"
-                           else
-                             (field_46 == 2 ? "X" : "R")
-                           end
-    attributes["relat5"] = if field_50 == 1
-                             "P"
-                           else
-                             (field_50 == 2 ? "X" : "R")
-                           end
-    attributes["relat6"] = if field_54 == 1
-                             "P"
-                           else
-                             (field_54 == 2 ? "X" : "R")
-                           end
+    attributes["relat2"] = relationship_from_is_partner(field_34)
+    attributes["relat3"] = relationship_from_is_partner(field_42)
+    attributes["relat4"] = relationship_from_is_partner(field_46)
+    attributes["relat5"] = relationship_from_is_partner(field_50)
+    attributes["relat6"] = relationship_from_is_partner(field_54)
 
     attributes["ecstat1"] = field_32
     attributes["ecstat2"] = field_39
@@ -1050,6 +1030,17 @@ private
 
   def person_6_present?
     field_55.present? || field_56.present? || field_54.present?
+  end
+
+  def relationship_from_is_partner(is_partner)
+    case is_partner
+    when 1
+      "P"
+    when 2
+      "X"
+    when 3
+      "R"
+    end
   end
 
   def details_known?(person_n)
