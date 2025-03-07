@@ -121,8 +121,8 @@ module Exports::SalesLogExportConstants
                       "bulkla",
                       "createdby",
                       "createdbyid",
-                      "has_estate_fee",
-                      "estate_fee",
+                      "hasestatefee",
+                      "estatefee",
                       "firststair",
                       "numstair",
                       "stairlastday",
@@ -130,7 +130,9 @@ module Exports::SalesLogExportConstants
                       "stairlastyear",
                       "stairinitialyear",
                       "stairinitialmonth",
-                      "stairinitialday"]
+                      "stairinitialday",
+                      "hasservicecharges",
+                      "servicecharges",]
 
   (1..6).each do |index|
     EXPORT_FIELDS << "age#{index}"

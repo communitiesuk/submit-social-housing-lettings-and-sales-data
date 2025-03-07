@@ -114,6 +114,8 @@
     <ethnicgroup2>17</ethnicgroup2>
     <previouslaknown>1</previouslaknown>
     <hasmscharge>1</hasmscharge>
+    <hasservicecharges/>
+    <servicecharges/>
     <inc1nk>0</inc1nk>
     <inc2nk>0</inc2nk>
     <postcode>AA1 1AA</postcode>
@@ -139,8 +141,8 @@
     <prevlocname>Westminster</prevlocname>
     <liveinbuyer1>1</liveinbuyer1>
     <liveinbuyer2>1</liveinbuyer2>
-    <has_estate_fee/>
-    <estate_fee/>
+    <hasestatefee/>
+    <estatefee/>
     <stairlastday/>
     <stairlastmonth/>
     <stairlastyear/>
@@ -148,7 +150,5 @@
     <stairinitialmonth/>
     <stairinitialyear/>
     <mscharge_value_check/>
-    <hasservicecharges>1</hasservicecharges><!-- #?? -->
-    <servicecharges>100.0</servicecharges><!-- #?? -->
   </form>
 </forms>

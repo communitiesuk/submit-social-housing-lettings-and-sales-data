@@ -69,7 +69,10 @@ module Exports
       attribute_hash["ethnicgroup1"] = sales_log.ethnic_group
       attribute_hash["ethnicgroup2"] = sales_log.ethnic_group2
       attribute_hash["previouslaknown"] = sales_log.previous_la_known
-      attribute_hash["hasmscharge"] = sales_log.has_mscharge
+      attribute_hash["hasmscharge"] = sales_log.discounted_ownership_sale? ? sales_log.has_mscharge : nil
+      attribute_hash["mscharge"] = sales_log.discounted_ownership_sale? ? sales_log.mscharge : nil
+      attribute_hash["hasservicecharges"] = sales_log.shared_ownership_scheme? ? sales_log.has_mscharge : nil
+      attribute_hash["servicecharges"] = sales_log.shared_ownership_scheme? ? sales_log.mscharge : nil
 
       attribute_hash["hoday"] = sales_log.hodate&.day
       attribute_hash["homonth"] = sales_log.hodate&.month
@@ -103,8 +106,8 @@ module Exports
       attribute_hash["liveinbuyer1"] = sales_log.buy1livein
       attribute_hash["liveinbuyer2"] = sales_log.buy2livein
 
-      attribute_hash["has_estate_fee"] = sales_log.has_management_fee
-      attribute_hash["estate_fee"] = sales_log.management_fee
+      attribute_hash["hasestatefee"] = sales_log.has_management_fee
+      attribute_hash["estatefee"] = sales_log.management_fee
 
       attribute_hash["stairlastday"] = sales_log.lasttransaction&.day
       attribute_hash["stairlastmonth"] = sales_log.lasttransaction&.month

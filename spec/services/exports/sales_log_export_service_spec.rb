@@ -362,5 +362,64 @@ RSpec.describe Exports::SalesLogExportService do
         end
       end
     end
+
+    context "when exporting various fees, correctly maps the values" do
+      context "with discounted ownership and mscharge" do
+        let!(:sales_log) { FactoryBot.create(:sales_log, :export, mscharge: 123) }
+
+        def replace_mscharge_value(export_file)
+          export_file.sub!("<mscharge>100.0</mscharge>", "<mscharge>123.0</mscharge>")
+        end
+
+        it "exports mscharge fields as hasmscharge and mscharge" do
+          expected_content = replace_entity_ids(sales_log, xml_export_file.read)
+          expected_content = replace_mscharge_value(expected_content)
+          expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+            entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
+            expect(entry).not_to be_nil
+            expect(entry.get_input_stream.read).to eq(expected_content)
+          end
+
+          export_service.export_xml_sales_logs
+        end
+      end
+
+      context "with shared ownership and mscharge" do
+        let!(:sales_log) { FactoryBot.create(:sales_log, :export, ownershipsch: 1, staircase: 2, type: 30, mscharge: 321, has_management_fee: 1, management_fee: 222) }
+
+        def replace_mscharge_and_shared_ownership_values(export_file)
+          export_file.sub!("<hasservicecharges/>", "<hasservicecharges>1</hasservicecharges>")
+          export_file.sub!("<servicecharges/>", "<servicecharges>321.0</servicecharges>")
+          export_file.sub!("<hasestatefee/>", "<hasestatefee>1</hasestatefee>")
+          export_file.sub!("<estatefee/>", "<estatefee>222.0</estatefee>")
+          export_file.sub!("<mscharge>100.0</mscharge>", "<mscharge/>")
+          export_file.sub!("<hasmscharge>1</hasmscharge>", "<hasmscharge/>")
+
+          export_file.sub!("<type>8</type>", "<type>30</type>")
+          export_file.sub!("<staircase/>", "<staircase>2</staircase>")
+          export_file.sub!("<grant>10000.0</grant>", "<grant/>")
+          export_file.sub!("<ppcodenk>0</ppcodenk>", "<ppcodenk>1</ppcodenk>")
+          export_file.sub!("<ppostc1>SW1A</ppostc1>", "<ppostc1/>")
+          export_file.sub!("<ppostc2>1AA</ppostc2>", "<ppostc2/>")
+          export_file.sub!("<prevloc>E09000033</prevloc>", "<prevloc/>")
+          export_file.sub!("<extrabor>1</extrabor>", "<extrabor/>")
+          export_file.sub!("<ownership>2</ownership>", "<ownership>1</ownership>")
+          export_file.sub!("<previouslaknown>1</previouslaknown>", "<previouslaknown>0</previouslaknown>")
+          export_file.sub!("<prevlocname>Westminster</prevlocname>", "<prevlocname/>")
+        end
+
+        it "exports mscharge fields as hasmscharge and mscharge" do
+          expected_content = replace_entity_ids(sales_log, xml_export_file.read)
+          expected_content = replace_mscharge_and_shared_ownership_values(expected_content)
+          expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+            entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
+            expect(entry).not_to be_nil
+            expect(entry.get_input_stream.read).to eq(expected_content)
+          end
+
+          export_service.export_xml_sales_logs
+        end
+      end
+    end
   end
 end
