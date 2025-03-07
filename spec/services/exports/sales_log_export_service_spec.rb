@@ -315,7 +315,7 @@ RSpec.describe Exports::SalesLogExportService do
       let!(:sales_log) { FactoryBot.create(:sales_log, :export, duplicate_set_id: 123) }
 
       def replace_duplicate_set_id(export_file)
-        export_file.sub!("<DUPLICATE_SET_ID/>", "<DUPLICATE_SET_ID>123</DUPLICATE_SET_ID>")
+        export_file.sub!("<DUPLICATESET/>", "<DUPLICATESET>123</DUPLICATESET>")
       end
 
       it "generates an XML export file with the expected content within the ZIP file" do
