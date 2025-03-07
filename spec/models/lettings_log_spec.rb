@@ -849,6 +849,192 @@ RSpec.describe LettingsLog do
         expect(lettings_log.reload.is_la_inferred).to eq(false)
       end
     end
+
+    context "when the log changes from new build to not new build" do
+      before do
+        allow(FormHandler.instance).to receive(:current_lettings_form).and_call_original
+        Timecop.freeze(2025, 5, 1)
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      context "and the address is entered" do
+        let(:address_lettings_log) do
+          create(:lettings_log,
+                 :setup_completed,
+                 startdate: Time.zone.yesterday,
+                 mrcdate: nil,
+                 rsnvac: 15,
+                 manual_address_entry_selected: true,
+                 first_time_property_let_as_social_housing: 1,
+                 address_line1: "Address line 1",
+                 address_line2: "Address line 2",
+                 town_or_city: "Town",
+                 postcode_full: "AA1 1AA")
+        end
+
+        it "keeps the manually entered address" do
+          expect(address_lettings_log.manual_address_entry_selected).to eq(true)
+          expect(address_lettings_log.uprn_selection).to eq(nil)
+          expect(address_lettings_log.uprn_known).to eq(0)
+          expect(address_lettings_log.uprn).to eq(nil)
+          expect(address_lettings_log.address_line1).to eq("Address line 1")
+          expect(address_lettings_log.address_line2).to eq("Address line 2")
+          expect(address_lettings_log.town_or_city).to eq("Town")
+          expect(address_lettings_log.postcode_full).to eq("AA1 1AA")
+
+          address_lettings_log.update!(rsnvac: 16)
+          expect(address_lettings_log.manual_address_entry_selected).to eq(true)
+          expect(address_lettings_log.address_line1).to eq("Address line 1")
+          expect(address_lettings_log.address_line2).to eq("Address line 2")
+          expect(address_lettings_log.town_or_city).to eq("Town")
+          expect(address_lettings_log.postcode_full).to eq("AA1 1AA")
+        end
+      end
+
+      context "and the address is not entered" do
+        let(:address_lettings_log) do
+          create(:lettings_log,
+                 :setup_completed,
+                 startdate: Time.zone.yesterday,
+                 mrcdate: nil,
+                 rsnvac: 15,
+                 manual_address_entry_selected: true,
+                 first_time_property_let_as_social_housing: 1,
+                 address_line1: nil,
+                 address_line2: nil,
+                 town_or_city: nil,
+                 postcode_full: nil)
+        end
+
+        it "routes to the uprn question" do
+          expect(address_lettings_log.manual_address_entry_selected).to eq(true)
+          expect(address_lettings_log.uprn_selection).to eq(nil)
+          expect(address_lettings_log.uprn_known).to eq(0)
+          expect(address_lettings_log.uprn).to eq(nil)
+          expect(address_lettings_log.address_line1).to eq(nil)
+          expect(address_lettings_log.address_line2).to eq(nil)
+          expect(address_lettings_log.town_or_city).to eq(nil)
+          expect(address_lettings_log.postcode_full).to eq(nil)
+
+          address_lettings_log.update!(rsnvac: 16)
+          expect(address_lettings_log.manual_address_entry_selected).to eq(false)
+          expect(address_lettings_log.uprn_selection).to eq(nil)
+          expect(address_lettings_log.uprn_known).to eq(nil)
+        end
+      end
+    end
+
+    context "when the log changes from not new build to new build" do
+      before do
+        allow(FormHandler.instance).to receive(:current_lettings_form).and_call_original
+        Timecop.freeze(2025, 5, 1)
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      context "and the uprn is selected" do
+        let(:address_lettings_log) do
+          create(:lettings_log,
+                 :setup_completed,
+                 startdate: Time.zone.yesterday,
+                 mrcdate: nil,
+                 rsnvac: 17,
+                 manual_address_entry_selected: false,
+                 first_time_property_let_as_social_housing: 1,
+                 uprn_selection: "1",
+                 uprn_confirmed: "1",
+                 uprn_known: "1",
+                 uprn: "1")
+        end
+
+        it "clears the uprn and keeps the address fields" do
+          expect(address_lettings_log.manual_address_entry_selected).to eq(false)
+          expect(address_lettings_log.uprn).to eq("1")
+          expect(address_lettings_log.address_line1).to eq("1, Test Street")
+          expect(address_lettings_log.town_or_city).to eq("Test Town")
+          expect(address_lettings_log.postcode_full).to eq("AA1 1AA")
+
+          address_lettings_log.update!(rsnvac: 15)
+          expect(address_lettings_log.manual_address_entry_selected).to eq(true)
+          expect(address_lettings_log.address_line1).to eq("1, Test Street")
+          expect(address_lettings_log.town_or_city).to eq("Test Town")
+          expect(address_lettings_log.postcode_full).to eq("AA1 1AA")
+          expect(address_lettings_log.uprn_selection).to eq(nil)
+          expect(address_lettings_log.uprn).to eq(nil)
+          expect(address_lettings_log.uprn_known).to eq(0)
+        end
+      end
+
+      context "and the address is manually entered" do
+        let(:address_lettings_log) do
+          create(:lettings_log,
+                 :setup_completed,
+                 startdate: Time.zone.yesterday,
+                 mrcdate: nil,
+                 rsnvac: 16,
+                 manual_address_entry_selected: true,
+                 first_time_property_let_as_social_housing: 1,
+                 uprn_selection: "uprn_not_listed",
+                 address_line1: "Address line 1",
+                 address_line2: "Address line 2",
+                 town_or_city: "Town",
+                 postcode_full: "AA1 1AA")
+        end
+
+        it "keeps the manually entered address" do
+          expect(address_lettings_log.manual_address_entry_selected).to eq(true)
+          expect(address_lettings_log.address_line1).to eq("Address line 1")
+          expect(address_lettings_log.address_line2).to eq("Address line 2")
+          expect(address_lettings_log.town_or_city).to eq("Town")
+          expect(address_lettings_log.postcode_full).to eq("AA1 1AA")
+
+          address_lettings_log.update!(rsnvac: 15)
+          expect(address_lettings_log.manual_address_entry_selected).to eq(true)
+          expect(address_lettings_log.address_line1).to eq("Address line 1")
+          expect(address_lettings_log.address_line2).to eq("Address line 2")
+          expect(address_lettings_log.town_or_city).to eq("Town")
+          expect(address_lettings_log.postcode_full).to eq("AA1 1AA")
+        end
+      end
+
+      context "and the address is not entered" do
+        let(:address_lettings_log) do
+          create(:lettings_log,
+                 :setup_completed,
+                 startdate: Time.zone.yesterday,
+                 mrcdate: nil,
+                 rsnvac: 17,
+                 manual_address_entry_selected: false,
+                 first_time_property_let_as_social_housing: 1,
+                 address_line1: nil,
+                 address_line2: nil,
+                 town_or_city: nil,
+                 postcode_full: nil)
+        end
+
+        it "routes to the manual address questions" do
+          expect(address_lettings_log.manual_address_entry_selected).to eq(false)
+          expect(address_lettings_log.uprn_selection).to eq(nil)
+          expect(address_lettings_log.address_line1).to eq(nil)
+          expect(address_lettings_log.address_line2).to eq(nil)
+          expect(address_lettings_log.town_or_city).to eq(nil)
+          expect(address_lettings_log.postcode_full).to eq(nil)
+
+          address_lettings_log.update!(rsnvac: 15)
+          expect(address_lettings_log.manual_address_entry_selected).to eq(true)
+          expect(address_lettings_log.uprn_selection).to eq(nil)
+          expect(address_lettings_log.uprn).to eq(nil)
+          expect(address_lettings_log.uprn_known).to eq(0)
+        end
+      end
+    end
   end
 
   describe "optional fields" do

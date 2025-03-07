@@ -740,6 +740,14 @@ class LettingsLog < Log
     "lettings_log"
   end
 
+  def changed_to_newbuild?
+    rsnvac == 15 && rsnvac_was != 15
+  end
+
+  def changed_from_newbuild?
+    rsnvac != 15 && rsnvac_was == 15
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!
