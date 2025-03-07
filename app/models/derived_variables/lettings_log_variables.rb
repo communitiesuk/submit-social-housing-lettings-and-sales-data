@@ -83,12 +83,26 @@ module DerivedVariables::LettingsLogVariables
     end
 
     set_housingneeds_fields if housingneeds?
+    if form.start_year_2025_or_later? && is_general_needs?
+      if changed_to_newbuild?
+        self.uprn = nil
+        self.manual_address_entry_selected = true
+      end
+
+      if changed_from_newbuild?
+        self.manual_address_entry_selected = if address_answered_without_uprn?
+                                               true
+                                             else
+                                               false
+                                             end
+      end
+    end
 
     self.uprn_known = 0 if address_answered_without_uprn?
 
     if uprn_known&.zero?
       self.uprn = nil
-      if uprn_known_was == 1
+      if uprn_known_was == 1 && (rsnvac != 15 || !form.start_year_2025_or_later?)
         self.address_line1 = nil
         self.address_line2 = nil
         self.town_or_city = nil
