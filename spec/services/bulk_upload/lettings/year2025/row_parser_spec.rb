@@ -237,7 +237,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
             field_128: "1",
             field_129: "34.56",
 
-            field_16: "15",
+            field_16: "17",
             field_30: now.day.to_s,
             field_31: now.month.to_s,
             field_32: now.strftime("%g"),
