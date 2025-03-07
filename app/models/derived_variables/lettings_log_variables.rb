@@ -89,13 +89,7 @@ module DerivedVariables::LettingsLogVariables
         self.manual_address_entry_selected = true
       end
 
-      if changed_from_newbuild?
-        self.manual_address_entry_selected = if address_answered_without_uprn?
-                                               true
-                                             else
-                                               false
-                                             end
-      end
+      self.manual_address_entry_selected = address_answered_without_uprn? if changed_from_newbuild?
     end
 
     self.uprn_known = 0 if address_answered_without_uprn?
