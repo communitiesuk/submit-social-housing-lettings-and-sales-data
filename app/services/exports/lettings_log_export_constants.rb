@@ -193,5 +193,10 @@ module Exports::LettingsLogExportConstants
   PRE_2024_EXPORT_FIELDS = Set[
     "national",
     "offered"
+]
+
+  PRE_2025_EXPORT_FIELDS = Set[
+    "carehome_charges_value_check",
+    "chcharge"
   ]
 end
