@@ -315,7 +315,7 @@ RSpec.describe Exports::SalesLogExportService do
       let!(:sales_log) { FactoryBot.create(:sales_log, :export, duplicate_set_id: 123) }
 
       def replace_duplicate_set_id(export_file)
-        export_file.sub!("<duplicate_set_id/>", "<duplicate_set_id>123</duplicate_set_id>")
+        export_file.sub!("<DUPLICATE_SET_ID/>", "<DUPLICATE_SET_ID>123</DUPLICATE_SET_ID>")
       end
 
       it "generates an XML export file with the expected content within the ZIP file" do
@@ -368,7 +368,7 @@ RSpec.describe Exports::SalesLogExportService do
         let!(:sales_log) { FactoryBot.create(:sales_log, :export, mscharge: 123) }
 
         def replace_mscharge_value(export_file)
-          export_file.sub!("<mscharge>100.0</mscharge>", "<mscharge>123.0</mscharge>")
+          export_file.sub!("<MSCHARGE>100.0</MSCHARGE>", "<MSCHARGE>123.0</MSCHARGE>")
         end
 
         it "exports mscharge fields as hasmscharge and mscharge" do
@@ -388,24 +388,24 @@ RSpec.describe Exports::SalesLogExportService do
         let!(:sales_log) { FactoryBot.create(:sales_log, :export, ownershipsch: 1, staircase: 2, type: 30, mscharge: 321, has_management_fee: 1, management_fee: 222) }
 
         def replace_mscharge_and_shared_ownership_values(export_file)
-          export_file.sub!("<hasservicecharges/>", "<hasservicecharges>1</hasservicecharges>")
-          export_file.sub!("<servicecharges/>", "<servicecharges>321.0</servicecharges>")
-          export_file.sub!("<hasestatefee/>", "<hasestatefee>1</hasestatefee>")
-          export_file.sub!("<estatefee/>", "<estatefee>222.0</estatefee>")
-          export_file.sub!("<mscharge>100.0</mscharge>", "<mscharge/>")
-          export_file.sub!("<hasmscharge>1</hasmscharge>", "<hasmscharge/>")
+          export_file.sub!("<HASSERVICECHARGES/>", "<HASSERVICECHARGES>1</HASSERVICECHARGES>")
+          export_file.sub!("<SERVICECHARGES/>", "<SERVICECHARGES>321.0</SERVICECHARGES>")
+          export_file.sub!("<HASESTATEFEE/>", "<HASESTATEFEE>1</HASESTATEFEE>")
+          export_file.sub!("<ESTATEFEE/>", "<ESTATEFEE>222.0</ESTATEFEE>")
+          export_file.sub!("<MSCHARGE>100.0</MSCHARGE>", "<MSCHARGE/>")
+          export_file.sub!("<HASMSCHARGE>1</HASMSCHARGE>", "<HASMSCHARGE/>")
 
-          export_file.sub!("<type>8</type>", "<type>30</type>")
-          export_file.sub!("<staircase/>", "<staircase>2</staircase>")
-          export_file.sub!("<grant>10000.0</grant>", "<grant/>")
-          export_file.sub!("<ppcodenk>0</ppcodenk>", "<ppcodenk>1</ppcodenk>")
-          export_file.sub!("<ppostc1>SW1A</ppostc1>", "<ppostc1/>")
-          export_file.sub!("<ppostc2>1AA</ppostc2>", "<ppostc2/>")
-          export_file.sub!("<prevloc>E09000033</prevloc>", "<prevloc/>")
-          export_file.sub!("<extrabor>1</extrabor>", "<extrabor/>")
-          export_file.sub!("<ownership>2</ownership>", "<ownership>1</ownership>")
-          export_file.sub!("<previouslaknown>1</previouslaknown>", "<previouslaknown>0</previouslaknown>")
-          export_file.sub!("<prevlocname>Westminster</prevlocname>", "<prevlocname/>")
+          export_file.sub!("<TYPE>8</TYPE>", "<TYPE>30</TYPE>")
+          export_file.sub!("<STAIRCASE/>", "<STAIRCASE>2</STAIRCASE>")
+          export_file.sub!("<GRANT>10000.0</GRANT>", "<GRANT/>")
+          export_file.sub!("<PPCODENK>0</PPCODENK>", "<PPCODENK>1</PPCODENK>")
+          export_file.sub!("<PPOSTC1>SW1A</PPOSTC1>", "<PPOSTC1/>")
+          export_file.sub!("<PPOSTC2>1AA</PPOSTC2>", "<PPOSTC2/>")
+          export_file.sub!("<PREVLOC>E09000033</PREVLOC>", "<PREVLOC/>")
+          export_file.sub!("<EXTRABOR>1</EXTRABOR>", "<EXTRABOR/>")
+          export_file.sub!("<OWNERSHIP>2</OWNERSHIP>", "<OWNERSHIP>1</OWNERSHIP>")
+          export_file.sub!("<PREVIOUSLAKNOWN>1</PREVIOUSLAKNOWN>", "<PREVIOUSLAKNOWN>0</PREVIOUSLAKNOWN>")
+          export_file.sub!("<PREVLOCNAME>Westminster</PREVLOCNAME>", "<PREVLOCNAME/>")
         end
 
         it "exports mscharge fields as hasmscharge and mscharge" do

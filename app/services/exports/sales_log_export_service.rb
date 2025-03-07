@@ -117,6 +117,8 @@ module Exports
       attribute_hash["stairinitialmonth"] = sales_log.initialpurchase&.month
       attribute_hash["stairinitialyear"] = sales_log.initialpurchase&.year
       attribute_hash["mscharge_value_check"] = sales_log.monthly_charges_value_check
+
+      attribute_hash.transform_keys!(&:upcase)
       attribute_hash
     end
 
