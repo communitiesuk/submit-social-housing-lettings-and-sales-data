@@ -14,8 +14,7 @@ class Form::Lettings::Questions::AddressSearch < ::Form::Question
     return {} unless ActiveRecord::Base.connected?
     return {} unless log&.address_search_options&.any?
 
-    option = log.address_search_options.first
-    { option[:uprn] => { "value" => "#{option[:address]} (#{option[:uprn]})" } }
+    { log.address_search_options.first[:uprn] => { "value" => "#{log.address_search_options.first[:address]} (#{log.address_search_options.first[:uprn]})" } }
   end
 
   def get_extra_check_answer_value(log)
