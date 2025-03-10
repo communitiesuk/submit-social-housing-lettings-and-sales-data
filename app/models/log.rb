@@ -415,6 +415,7 @@ private
     self.address_line2 = address_line2_as_entered
     self.county = county_as_entered
     self.town_or_city = town_or_city_as_entered
+    self.la = la_as_entered
     self.manual_address_entry_selected = true
   end
 end
