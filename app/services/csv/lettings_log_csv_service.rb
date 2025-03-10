@@ -177,6 +177,10 @@ module Csv
       10 => "Intermediate rent supported housing private registered provider",
       11 => "Intermediate rent general needs local authority",
       12 => "Intermediate rent supported housing local authority",
+      13 => "Specified accommodation general needs private registered provider",
+      14 => "Specified accommodation supported housing private registered provider",
+      15 => "Specified accommodation general needs local authority",
+      16 => "Specified accommodation supported housing local authority",
     }.freeze
 
     IRPRODUCT_LABELS = {
@@ -206,6 +210,7 @@ module Csv
       1 => "Social Rent",
       2 => "Affordable Rent",
       3 => "Intermediate Rent",
+      4 => "Specified accommodation",
     }.freeze
 
     UPRN_KNOWN_LABELS = {
