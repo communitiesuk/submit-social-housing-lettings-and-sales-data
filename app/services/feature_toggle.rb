@@ -30,4 +30,8 @@ class FeatureToggle
   def self.create_test_logs_enabled?
     Rails.env.development? || Rails.env.review?
   end
+
+  def self.sales_export_enabled?
+    Time.zone.now >= Time.zone.local(2025, 4, 1) || (Rails.env.review? || Rails.env.staging?)
+  end
 end
