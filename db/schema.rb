@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_25_180643) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_27_085622) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -548,6 +548,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_25_180643) do
     t.datetime "available_from"
     t.datetime "discarded_at"
     t.datetime "schemes_deduplicated_at"
+    t.integer "profit_status"
+    t.boolean "group_member"
+    t.integer "group_member_id"
+    t.integer "group"
     t.index ["absorbing_organisation_id"], name: "index_organisations_on_absorbing_organisation_id"
     t.index ["name"], name: "index_organisations_on_name", unique: true
     t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
