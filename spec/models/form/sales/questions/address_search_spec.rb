@@ -32,6 +32,57 @@ RSpec.describe Form::Sales::Questions::AddressSearch, type: :model do
     end
   end
 
+  describe "#answer_options" do
+    before do
+      body = {
+        results: [
+          {
+            DPA: {
+              "POSTCODE": "AA1 1AA",
+              "POST_TOWN": "Test Town",
+              "ORGANISATION_NAME": "1, Test Road",
+              "ADDRESS": "1 Test Street, Test City, AA1 1AA",
+              "UPRN": "123",
+            },
+          },
+        ],
+      }.to_json
+
+      WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=123")
+             .to_return(status: 200, body:, headers: {})
+    end
+
+    let(:log_with_uprn) do
+      build(
+        :sales_log,
+        :completed,
+        uprn: 123,
+        manual_address_entry_selected: false,
+        address_line1_input: "1, Test Road",
+        postcode_full_input: "Test Town",
+      )
+    end
+
+    let(:log_without_uprn) do
+      build(
+        :sales_log,
+        :completed,
+        uprn: nil,
+        manual_address_entry_selected: false,
+        address_line1_input: "1, Test Road",
+        postcode_full_input: "Test Town",
+        )
+    end
+
+    it "returns an answer option when uprn is present" do
+      expect(question.answer_options(log_with_uprn)).to eq({ "123" => { "value" => "1 Test Street, Test City, AA1 1AA (123)" } })
+    end
+
+    it "does not return an answer option when uprn is not present" do
+      expect(question.answer_options(log_without_uprn)).to eq({nil => {"value" => " ()"}})
+    end
+  end
+
   describe "get_extra_check_answer_value" do
     context "when address is not present" do
       let(:log) { build(:sales_log, manual_address_entry_selected: false) }
