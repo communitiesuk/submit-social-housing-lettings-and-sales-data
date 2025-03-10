@@ -75,8 +75,7 @@ class Log < ApplicationRecord
       presenter = UprnDataPresenter.new(service.result)
 
       self.uprn_known = 1
-      self.uprn_confirmed = nil unless skip_update_uprn_confirmed
-      self.uprn_selection = nil
+      self.uprn_selection = uprn
       self.address_line1 = presenter.address_line1
       self.address_line2 = presenter.address_line2
       self.town_or_city = presenter.town_or_city
@@ -91,13 +90,17 @@ class Log < ApplicationRecord
       if select_best_address_match
         service = AddressClient.new(address_string)
         service.call
-        return nil if service.result.blank? || service.error.present?
+        if service.result.blank? || service.error.present?
+          select_manual_address_entry!
+          return nil
+        end
 
         presenter = AddressDataPresenter.new(service.result.first)
         os_match_threshold_for_bulk_upload = 0.7
         if presenter.match >= os_match_threshold_for_bulk_upload
           self.uprn_selection = presenter.uprn
         else
+          select_manual_address_entry!
           return nil
         end
       end
@@ -125,27 +128,40 @@ class Log < ApplicationRecord
     "#{address_line1_input}, #{postcode_full_input}"
   end
 
+  def address_search_options
+    return if uprn.blank?
+
+    service = UprnClient.new(uprn)
+    service.call
+    if service.result.blank? || service.error.present?
+      @address_options = []
+      return @address_options
+    end
+
+    presenter = UprnDataPresenter.new(service.result)
+    @address_options = [{ address: presenter.address, uprn: presenter.uprn }]
+  end
+
   def address_options
     return @address_options if @address_options && @last_searched_address_string == address_string
+    return if address_string.blank?
 
-    if [address_line1_input, postcode_full_input].all?(&:present?)
-      @last_searched_address_string = address_string
+    @last_searched_address_string = address_string
 
-      service = AddressClient.new(address_string)
-      service.call
-      if service.result.blank? || service.error.present?
-        @address_options = []
-        return @answer_options
-      end
-
-      address_opts = []
-      service.result.first(10).each do |result|
-        presenter = AddressDataPresenter.new(result)
-        address_opts.append({ address: presenter.address, uprn: presenter.uprn })
-      end
-
-      @address_options = address_opts
+    service = AddressClient.new(address_string)
+    service.call
+    if service.result.blank? || service.error.present?
+      @address_options = []
+      return @address_options
     end
+
+    address_opts = []
+    service.result.first(10).each do |result|
+      presenter = AddressDataPresenter.new(result)
+      address_opts.append({ address: presenter.address, uprn: presenter.uprn })
+    end
+
+    @address_options = address_opts
   end
 
   def collection_start_year
@@ -393,5 +409,15 @@ private
     end
     self[is_inferred_key] = false
     self[postcode_key] = nil
+  end
+
+  def select_manual_address_entry!
+    self.postcode_full = postcode_full_as_entered
+    self.address_line1 = address_line1_as_entered
+    self.address_line2 = address_line2_as_entered
+    self.county = county_as_entered
+    self.town_or_city = town_or_city_as_entered
+    self.la = la_as_entered
+    self.manual_address_entry_selected = true
   end
 end

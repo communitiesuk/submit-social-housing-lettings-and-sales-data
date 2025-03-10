@@ -418,6 +418,7 @@ class BulkUpload::Lettings::Year2024::RowParser
   validate :validate_no_and_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_housing_needs_questions_answered, on: :after_log
   validate :validate_reasonable_preference_homeless, on: :after_log
+  validate :validate_reasonable_preference_dont_know, on: :after_log
   validate :validate_condition_effects, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
@@ -438,7 +439,6 @@ class BulkUpload::Lettings::Year2024::RowParser
   validate :validate_assigned_to_when_support, on: :after_log
   validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
 
-  validate :validate_address_option_found, on: :after_log, unless: -> { supported_housing? }
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log, unless: -> { supported_housing? }
   validate :validate_address_fields, on: :after_log, unless: -> { supported_housing? }
 
@@ -615,21 +615,6 @@ private
     end
   end
 
-  def validate_address_option_found
-    if log.uprn.nil? && field_16.blank? && key_address_fields_provided?
-      error_message = if log.address_options_present? && log.address_options.size > 1
-                        I18n.t("#{ERROR_BASE_KEY}.address.not_determined.multiple")
-                      elsif log.address_options_present?
-                        I18n.t("#{ERROR_BASE_KEY}.address.not_determined.one")
-                      else
-                        I18n.t("#{ERROR_BASE_KEY}.address.not_found")
-                      end
-      %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
-        errors.add(field, error_message) if errors[field].blank?
-      end
-    end
-  end
-
   def key_address_fields_provided?
     field_17.present? && field_19.present? && postcode_full.present?
   end
@@ -747,6 +732,15 @@ private
       errors.add(:field_82, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "other access needs."))
       %i[field_79 field_80 field_81].each do |field|
         errors.add(field, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "disabled access needs type."))
+      end
+    end
+  end
+
+  def validate_reasonable_preference_dont_know
+    if rp_dontknow_conflict?
+      errors.add(:field_111, I18n.t("#{ERROR_BASE_KEY}.reasonpref.conflict.dont_know"))
+      %i[field_107 field_108 field_109 field_110].each do |field|
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.reasonpref.conflict.other")) if send(field) == 1
       end
     end
   end
@@ -1270,11 +1264,11 @@ private
     attributes["ppostcode_full"] = ppostcode_full
 
     attributes["reasonpref"] = field_106
-    attributes["rp_homeless"] = field_107
-    attributes["rp_insan_unsat"] = field_108
-    attributes["rp_medwel"] = field_109
-    attributes["rp_hardship"] = field_110
-    attributes["rp_dontknow"] = field_111
+    attributes["rp_homeless"] = field_107 unless rp_dontknow_conflict?
+    attributes["rp_insan_unsat"] = field_108 unless rp_dontknow_conflict?
+    attributes["rp_medwel"] = field_109 unless rp_dontknow_conflict?
+    attributes["rp_hardship"] = field_110 unless rp_dontknow_conflict?
+    attributes["rp_dontknow"] = field_111 unless rp_dontknow_conflict?
 
     attributes["cbl"] = cbl
     attributes["chr"] = chr
@@ -1660,5 +1654,16 @@ private
 
   def bulk_upload_organisation
     Organisation.find(bulk_upload.organisation_id)
+  end
+
+  def rp_dontknow_conflict?
+    other_reason_fields = %i[field_107 field_108 field_109 field_110]
+    if field_106 == 1
+      selected_reasons = other_reason_fields.select { |field| send(field) == 1 }
+      dont_know_selected = field_111 == 1
+
+      return true if selected_reasons.any? && dont_know_selected
+    end
+    false
   end
 end

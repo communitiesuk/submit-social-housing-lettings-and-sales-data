@@ -394,7 +394,6 @@ class BulkUpload::Sales::Year2025::RowParser
             on: :after_log
 
   validate :validate_buyer1_economic_status, on: :before_log
-  validate :validate_address_option_found, on: :after_log
   validate :validate_buyer2_economic_status, on: :before_log
   validate :validate_valid_radio_option, on: :before_log
 
@@ -552,19 +551,6 @@ private
     end
   end
 
-  def validate_address_option_found
-    if log.uprn.nil? && field_16.blank? && key_address_fields_provided?
-      error_message = if log.address_options_present?
-                        I18n.t("#{ERROR_BASE_KEY}.address.not_determined")
-                      else
-                        I18n.t("#{ERROR_BASE_KEY}.address.not_found")
-                      end
-      %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
-        errors.add(field, error_message) if errors[field].blank?
-      end
-    end
-  end
-
   def key_address_fields_provided?
     field_17.present? && field_19.present? && postcode_full.present?
   end
@@ -676,7 +662,7 @@ private
       relat2: %i[field_34],
       relat3: %i[field_42],
       relat4: %i[field_46],
-      relat5: %i[field_49],
+      relat5: %i[field_50],
       relat6: %i[field_54],
 
       ecstat1: %i[field_32],
@@ -835,10 +821,10 @@ private
                            else
                              (field_46 == 2 ? "X" : "R")
                            end
-    attributes["relat5"] = if field_49 == 1
+    attributes["relat5"] = if field_50 == 1
                              "P"
                            else
-                             (field_49 == 2 ? "X" : "R")
+                             (field_50 == 2 ? "X" : "R")
                            end
     attributes["relat6"] = if field_54 == 1
                              "P"
@@ -1050,7 +1036,7 @@ private
   end
 
   def person_5_present?
-    field_51.present? || field_52.present? || field_49.present?
+    field_51.present? || field_52.present? || field_50.present?
   end
 
   def person_6_present?

@@ -978,7 +978,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
         end
 
         context "and all key address fields are present" do
-          let(:attributes) { setup_section_params.merge({ field_16: nil, field_17: "address line 1", field_19: "town or city", field_21: "AA1", field_22: "1AA" }) }
+          let(:attributes) { setup_section_params.merge({ field_16: nil, field_17: "address line 1", field_19: "town or city", field_21: "AA1", field_22: "1AA", field_23: "E06000023" }) }
 
           context "and an address can be found with a high enough match rating" do
             before do
@@ -988,9 +988,14 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
             it "does not add errors" do
               parser.valid?
-              %i[field_16 field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
+              %i[field_16 field_17 field_18 field_19 field_20 field_21 field_22 field_23].each do |field|
                 expect(parser.errors[field]).to be_empty
               end
+            end
+
+            it "does not set manual address input" do
+              parser.valid?
+              expect(parser.log.manual_address_entry_selected).to be_falsey
             end
           end
 
@@ -1000,12 +1005,20 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
                 .to_return(status: 200, body: { results: [] }.to_json, headers: {})
             end
 
-            it "adds address not found errors to address fields only" do
+            it "does not add errors" do
               parser.valid?
-              expect(parser.errors[:field_16]).to be_empty
-              %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
-                expect(parser.errors[field]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_found")])
+              %i[field_16 field_17 field_18 field_19 field_20 field_21 field_22 field_23].each do |field|
+                expect(parser.errors[field]).to be_empty
               end
+            end
+
+            it "sets manual address input" do
+              parser.valid?
+              expect(parser.log.manual_address_entry_selected).to be_truthy
+              expect(parser.log.address_line1).to eq("address line 1")
+              expect(parser.log.town_or_city).to eq("town or city")
+              expect(parser.log.postcode_full).to eq("AA1 1AA")
+              expect(parser.log.la).to eq("E06000023")
             end
           end
 
@@ -1015,12 +1028,19 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
                 .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.6, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "AA1 1AA", UPRN: "1" } }] }.to_json, headers: {})
             end
 
-            it "adds address not found errors to address fields only" do
+            it "does not add errors" do
               parser.valid?
-              expect(parser.errors[:field_16]).to be_empty
-              %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
-                expect(parser.errors[field]).to eql([I18n.t("validations.sales.2025.bulk_upload.address.not_determined")])
+              %i[field_16 field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
+                expect(parser.errors[field]).to be_empty
               end
+            end
+
+            it "sets manual address input" do
+              parser.valid?
+              expect(parser.log.manual_address_entry_selected).to be_truthy
+              expect(parser.log.address_line1).to eq("address line 1")
+              expect(parser.log.town_or_city).to eq("town or city")
+              expect(parser.log.postcode_full).to eq("AA1 1AA")
             end
           end
         end
