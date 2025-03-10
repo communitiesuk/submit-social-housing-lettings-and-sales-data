@@ -19,6 +19,8 @@ import FilterLayoutController from './filter_layout_controller.js'
 
 import TabsController from './tabs_controller.js'
 
+import AddressSearchController from './address_search_controller.js'
+
 import OrganisationsController from './organisations_controller.js'
 
 application.register('accessible-autocomplete', AccessibleAutocompleteController)
@@ -29,4 +31,5 @@ application.register('numeric-question', NumericQuestionController)
 application.register('filter-layout', FilterLayoutController)
 application.register('search', SearchController)
 application.register('tabs', TabsController)
+application.register('address-search', AddressSearchController)
 application.register('organisations', OrganisationsController)
