@@ -662,7 +662,7 @@ private
       relat2: %i[field_34],
       relat3: %i[field_42],
       relat4: %i[field_46],
-      relat5: %i[field_49],
+      relat5: %i[field_50],
       relat6: %i[field_54],
 
       ecstat1: %i[field_32],
@@ -809,7 +809,7 @@ private
     attributes["relat2"] = relationship_from_is_partner(field_34)
     attributes["relat3"] = relationship_from_is_partner(field_42)
     attributes["relat4"] = relationship_from_is_partner(field_46)
-    attributes["relat5"] = relationship_from_is_partner(field_49)
+    attributes["relat5"] = relationship_from_is_partner(field_50)
     attributes["relat6"] = relationship_from_is_partner(field_54)
 
     attributes["ecstat1"] = field_32
@@ -1016,7 +1016,7 @@ private
   end
 
   def person_5_present?
-    field_51.present? || field_52.present? || field_49.present?
+    field_51.present? || field_52.present? || field_50.present?
   end
 
   def person_6_present?

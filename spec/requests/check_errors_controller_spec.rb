@@ -295,7 +295,7 @@ RSpec.describe CheckErrorsController, type: :request do
         it "displays correct clear links" do
           expect(page).to have_content("Make sure these answers are correct")
           expect(page).to have_link(lettings_log.form.get_question("hhmemb", lettings_log).check_answer_prompt, href: "/lettings-logs/#{lettings_log.id}/household-members?referrer=check_answers_new_answer", class: "govuk-link govuk-link--no-visited-state")
-          expect(page).to have_link("Answer")
+          expect(page).to have_link("Enter total number of household members")
           expect(lettings_log.reload.earnings).to eq(nil)
         end
       end
@@ -350,7 +350,7 @@ RSpec.describe CheckErrorsController, type: :request do
         it "displays correct clear links" do
           expect(page).to have_content("Make sure these answers are correct")
           expect(page).to have_link(sales_log.form.get_question("income1", sales_log).check_answer_prompt, href: "/sales-logs/#{sales_log.id}/buyer-1-income?referrer=check_answers_new_answer", class: "govuk-link govuk-link--no-visited-state")
-          expect(page).to have_link("Answer")
+          expect(page).to have_link("Enter buyer 1’s gross annual income")
           expect(sales_log.reload.income1).to eq(nil)
         end
       end
