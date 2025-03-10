@@ -375,6 +375,7 @@ private
     self.address_line2 = nil
     self.town_or_city = nil
     self.county = nil
+    self.postcode_full = nil
   end
 
   def address_answered_without_uprn?
