@@ -1150,7 +1150,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
         %w[field_34 relat2 2],
         %w[field_42 relat3 3],
         %w[field_46 relat4 4],
-        %w[field_49 relat5 5],
+        %w[field_50 relat5 5],
         %w[field_54 relat6 6],
       ].each do |input_field, relationship_attribute, person_num|
         describe input_field.to_s do
