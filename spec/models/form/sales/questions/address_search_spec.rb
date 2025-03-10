@@ -52,27 +52,9 @@ RSpec.describe Form::Sales::Questions::AddressSearch, type: :model do
              .to_return(status: 200, body:, headers: {})
     end
 
-    let(:log_with_uprn) do
-      build(
-        :sales_log,
-        :completed,
-        uprn: 123,
-        manual_address_entry_selected: false,
-        address_line1_input: "1, Test Road",
-        postcode_full_input: "Test Town",
-      )
-    end
+    let(:log_with_uprn) { build(:sales_log, :completed, uprn: 123, manual_address_entry_selected: false, address_line1_input: "1, Test Road", postcode_full_input: "Test Town") }
 
-    let(:log_without_uprn) do
-      build(
-        :sales_log,
-        :completed,
-        uprn: nil,
-        manual_address_entry_selected: false,
-        address_line1_input: "1, Test Road",
-        postcode_full_input: "Test Town",
-        )
-    end
+    let(:log_without_uprn) { build(:sales_log, :completed, uprn: nil, manual_address_entry_selected: false, address_line1_input: "1, Test Road", postcode_full_input: "Test Town") }
 
     it "returns an answer option when uprn is present" do
       expect(question.answer_options(log_with_uprn)).to eq({ "123" => { "value" => "1 Test Street, Test City, AA1 1AA (123)" } })
