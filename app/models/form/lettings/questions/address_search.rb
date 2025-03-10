@@ -12,11 +12,10 @@ class Form::Lettings::Questions::AddressSearch < ::Form::Question
 
   def answer_options(log = nil, _user = nil)
     return {} unless ActiveRecord::Base.connected?
-    return {} unless log&.address_options&.any?
+    return {} unless log&.address_search_options&.any?
 
-    log.address_options.each_with_object({}) do |option, hash|
-      hash[option[:uprn]] = { "value" => "#{option[:address]} (#{option[:uprn]})" }
-    end
+    option = log.address_search_options.first
+    { option[:uprn] => { "value" => "#{option[:address]} (#{option[:uprn]})" } }
   end
 
   def get_extra_check_answer_value(log)
