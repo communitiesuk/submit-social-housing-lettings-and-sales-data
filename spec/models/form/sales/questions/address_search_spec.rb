@@ -79,7 +79,7 @@ RSpec.describe Form::Sales::Questions::AddressSearch, type: :model do
     end
 
     it "does not return an answer option when uprn is not present" do
-      expect(question.answer_options(log_without_uprn)).to eq({nil => {"value" => " ()"}})
+      expect(question.answer_options(log_without_uprn)).to eq({ nil => { "value" => " ()" } })
     end
   end
 
