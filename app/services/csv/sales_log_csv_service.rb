@@ -184,7 +184,7 @@ module Csv
         exact_match = options.find { |definition| definition.year == @year }
         next exact_match if exact_match
 
-        options.max_by(&:year)
+        options.select { |opt| opt.year < @year }.max_by(&:year)
       end
     end
 
