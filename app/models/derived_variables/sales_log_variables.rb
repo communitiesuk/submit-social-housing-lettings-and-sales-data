@@ -258,10 +258,10 @@ private
     self.address_line2 = nil
     self.town_or_city = nil
     self.county = nil
+    self.postcode_full = nil
     self.pcode1 = nil
     self.pcode2 = nil
     self.pcodenk = nil
-    self.postcode_full = nil
     self.is_la_inferred = nil
     self.la = nil
   end
