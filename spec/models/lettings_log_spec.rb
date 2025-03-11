@@ -954,7 +954,7 @@ RSpec.describe LettingsLog do
                  uprn: "1")
         end
 
-        it "clears the uprn and keeps the address fields" do
+        it "keeps the uprn" do
           expect(address_lettings_log.manual_address_entry_selected).to eq(false)
           expect(address_lettings_log.uprn).to eq("1")
           expect(address_lettings_log.address_line1).to eq("1, Test Street")
@@ -962,13 +962,13 @@ RSpec.describe LettingsLog do
           expect(address_lettings_log.postcode_full).to eq("AA1 1AA")
 
           address_lettings_log.update!(rsnvac: 15)
-          expect(address_lettings_log.manual_address_entry_selected).to eq(true)
+          expect(address_lettings_log.manual_address_entry_selected).to eq(false)
           expect(address_lettings_log.address_line1).to eq("1, Test Street")
           expect(address_lettings_log.town_or_city).to eq("Test Town")
           expect(address_lettings_log.postcode_full).to eq("AA1 1AA")
-          expect(address_lettings_log.uprn_selection).to eq(nil)
-          expect(address_lettings_log.uprn).to eq(nil)
-          expect(address_lettings_log.uprn_known).to eq(0)
+          expect(address_lettings_log.uprn_selection).to eq("1")
+          expect(address_lettings_log.uprn).to eq("1")
+          expect(address_lettings_log.uprn_known).to eq(1)
         end
       end
 
