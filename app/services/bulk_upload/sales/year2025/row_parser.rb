@@ -273,7 +273,7 @@ class BulkUpload::Sales::Year2025::RowParser
   attribute :field_118, :integer
   attribute :field_119, :integer
   attribute :field_120, :decimal
-  attribute :field_121, :integer
+  attribute :field_121, :decimal
 
   validates :field_1,
             presence: {
