@@ -2,7 +2,7 @@ module CheckErrorsHelper
   include GovukLinkHelper
 
   def check_errors_answer_text(question, log)
-    question.displayed_as_answered?(log) ? "Change" : "Answer"
+    question.displayed_as_answered?(log) ? "Change" : ""
   end
 
   def check_errors_answer_link(log, question, page, applicable_questions)

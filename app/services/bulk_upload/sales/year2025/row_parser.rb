@@ -662,7 +662,7 @@ private
       relat2: %i[field_34],
       relat3: %i[field_42],
       relat4: %i[field_46],
-      relat5: %i[field_49],
+      relat5: %i[field_50],
       relat6: %i[field_54],
 
       ecstat1: %i[field_32],
@@ -821,10 +821,10 @@ private
                            else
                              (field_46 == 2 ? "X" : "R")
                            end
-    attributes["relat5"] = if field_49 == 1
+    attributes["relat5"] = if field_50 == 1
                              "P"
                            else
-                             (field_49 == 2 ? "X" : "R")
+                             (field_50 == 2 ? "X" : "R")
                            end
     attributes["relat6"] = if field_54 == 1
                              "P"
@@ -1036,7 +1036,7 @@ private
   end
 
   def person_5_present?
-    field_51.present? || field_52.present? || field_49.present?
+    field_51.present? || field_52.present? || field_50.present?
   end
 
   def person_6_present?
