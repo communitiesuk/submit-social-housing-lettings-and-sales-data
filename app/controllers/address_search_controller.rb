@@ -5,7 +5,9 @@ class AddressSearchController < ApplicationController
   def index
     query = params[:query]
 
-    if query.match?(/\A\d+\z/) && query.length > 5
+    if query.nil?
+      render json: { error: "Query cannot be blank." }, status: :bad_request
+    elsif query.match?(/\A\d+\z/) && query.length > 5
       # Query is all numbers and greater than 5 digits, assume it's a UPRN
       service = UprnClient.new(query)
       service.call
@@ -38,7 +40,7 @@ class AddressSearchController < ApplicationController
       address_service.call
       uprn_service.call
 
-      results = ([uprn_service.result] || []) + (address_service.result || [])
+      results = [uprn_service.result, *address_service.result].compact
 
       if address_service.error.present? && uprn_service.error.present?
         render json: { error: "Address and UPRN are not recognised." }, status: :not_found
