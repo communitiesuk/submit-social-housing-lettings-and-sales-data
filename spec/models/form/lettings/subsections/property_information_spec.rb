@@ -84,6 +84,14 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
           ],
         )
       end
+
+      context "when it is supported housing and a renewal" do
+        let(:log) { FactoryBot.build(:lettings_log, needstype: 2, renewal: 1) }
+
+        it "is not displayed in tasklist" do
+          expect(property_information.displayed_in_tasklist?(log)).to eq(false)
+        end
+      end
     end
 
     context "when 2025" do
@@ -117,6 +125,14 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
             sheltered_accommodation
           ],
         )
+      end
+
+      context "when it is supported housing and a renewal" do
+        let(:log) { FactoryBot.build(:lettings_log, needstype: 2, renewal: 1) }
+
+        it "is displayed in tasklist" do
+          expect(property_information.displayed_in_tasklist?(log)).to eq(true)
+        end
       end
     end
   end

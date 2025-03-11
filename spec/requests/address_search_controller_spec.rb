@@ -144,5 +144,45 @@ RSpec.describe AddressSearchController, type: :request do
         expect(sales_log.la).to eq(nil)
       end
     end
+
+    context "when searching by address and UPRN" do
+      let(:sales_log) { create(:sales_log, :completed, manual_address_entry_selected: false, assigned_to: user) }
+
+      context "and theres no uprn returned" do
+        before do
+          body = { results: [{ DPA: { "ADDRESS": "1, Test Street", "UPRN": "123" } }] }.to_json
+          uprn_body = { results: [{ DPA: nil }] }.to_json
+          WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?key=OS_DATA_KEY&maxresults=10&minmatch=0.2&query=100")
+                 .to_return(status: 200, body:, headers: {})
+          WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=100")
+                 .to_return(status: 200, body: uprn_body, headers: {})
+        end
+
+        it "returns the address results" do
+          get "/address-search?query=100"
+
+          expect(response).to have_http_status(:ok)
+          expect(response.body).to eq([{ text: "1, Test Street", value: "123" }].to_json)
+        end
+      end
+
+      context "and theres no address returned" do
+        before do
+          body = { results: [{ DPA: nil }] }.to_json
+          uprn_body = { results: [{ DPA: { "ADDRESS": "2, Test Street", UPRN: "321" } }] }.to_json
+          WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?key=OS_DATA_KEY&maxresults=10&minmatch=0.2&query=100")
+                 .to_return(status: 200, body:, headers: {})
+          WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=100")
+                 .to_return(status: 200, body: uprn_body, headers: {})
+        end
+
+        it "returns the address results" do
+          get "/address-search?query=100"
+
+          expect(response).to have_http_status(:ok)
+          expect(response.body).to eq([{ text: "2, Test Street", value: "321" }].to_json)
+        end
+      end
+    end
   end
 end

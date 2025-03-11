@@ -56,6 +56,8 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
   end
 
   def displayed_in_tasklist?(log)
+    return true if form.start_year_2025_or_later?
+
     !(log.is_supported_housing? && log.is_renewal?)
   end
 end
