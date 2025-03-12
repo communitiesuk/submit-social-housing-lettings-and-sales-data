@@ -284,13 +284,12 @@ module Csv
     end
 
     def lettings_log_definitions
-      CsvVariableDefinition.lettings.group_by { |record| [record.variable, record.definition] }
-                           .map do |_, options|
+      CsvVariableDefinition.lettings.group_by(&:variable).map { |_, options|
         exact_match = options.find { |definition| definition.year == @year }
         next exact_match if exact_match
 
-        options.max_by(&:year)
-      end
+        options.select { |opt| opt.year < @year }.max_by(&:year)
+      }.compact
     end
 
     def insert_derived_and_related_attributes(ordered_questions)
