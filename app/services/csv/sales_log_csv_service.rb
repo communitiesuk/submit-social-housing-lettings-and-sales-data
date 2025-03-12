@@ -179,8 +179,7 @@ module Csv
     end
 
     def sales_log_definitions
-      CsvVariableDefinition.sales.group_by { |record| [record.variable, record.definition] }
-                           .map { |_, options|
+      CsvVariableDefinition.sales.group_by(&:variable).map { |_, options|
         exact_match = options.find { |definition| definition.year == @year }
         next exact_match if exact_match
 

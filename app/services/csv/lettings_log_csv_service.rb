@@ -284,8 +284,7 @@ module Csv
     end
 
     def lettings_log_definitions
-      CsvVariableDefinition.lettings.group_by { |record| [record.variable, record.definition] }
-                           .map { |_, options|
+      CsvVariableDefinition.lettings.group_by(&:variable).map { |_, options|
         exact_match = options.find { |definition| definition.year == @year }
         next exact_match if exact_match
 
