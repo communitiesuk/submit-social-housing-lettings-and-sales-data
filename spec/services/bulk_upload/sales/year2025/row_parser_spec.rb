@@ -275,7 +275,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
         end
       end
 
-      fcontext "when valid row" do
+      context "when valid row" do
         let(:attributes) { valid_attributes }
 
         it "returns true" do
