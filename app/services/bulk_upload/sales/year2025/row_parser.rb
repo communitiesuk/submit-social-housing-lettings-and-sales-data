@@ -1482,6 +1482,17 @@ private
     %w[0] + GlobalConstants::COUNTRIES_ANSWER_OPTIONS.keys # 0 is "Prefers not to say"
   end
 
+  def validate_relat_fields
+    %i[field_34 field_42 field_46 field_50 field_54].each do |field|
+      value = send(field)
+      next if value.blank?
+
+      unless (1..3).cover?(value)
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: format_ending(QUESTIONS[field])))
+      end
+    end
+  end
+
   def bulk_upload_organisation
     Organisation.find(bulk_upload.organisation_id)
   end
