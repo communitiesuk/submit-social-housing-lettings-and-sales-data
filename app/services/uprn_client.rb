@@ -20,13 +20,13 @@ class UprnClient
   end
 
   def result
-    @result ||= begin
-      parsed_response = JSON.parse(response.body)
-      parsed_response.dig("results", 0, "DPA") || parsed_response.dig("results", 0, "LPI")
-    rescue JSON::ParserError => e
-      Rails.logger.error("Failed to parse JSON response: #{e.message}")
-      nil
-    end
+    @result ||= if response.code == 200
+                  parsed_response = JSON.parse(response.body)
+                  parsed_response.dig("results", 0, "DPA") || parsed_response.dig("results", 0, "LPI")
+                else
+                  Rails.logger.error("Unexpected response code: #{response.code}")
+                  nil
+                end
   end
 
 private
