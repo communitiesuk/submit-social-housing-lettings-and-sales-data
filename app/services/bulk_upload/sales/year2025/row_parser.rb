@@ -396,6 +396,7 @@ class BulkUpload::Sales::Year2025::RowParser
   validate :validate_buyer1_economic_status, on: :before_log
   validate :validate_buyer2_economic_status, on: :before_log
   validate :validate_valid_radio_option, on: :before_log
+  validate :validate_relat_fields, on: :before_log
 
   validate :validate_owning_org_data_given, on: :after_log
   validate :validate_owning_org_exists, on: :after_log
@@ -1312,6 +1313,17 @@ private
   def relat(field_value)
     values = { 1 => "P", 2 => "X", 3 => "R" }
     values[field_value]
+  end
+
+  def validate_relat_fields
+    %i[field_34 field_42 field_46 field_50 field_54].each do |field|
+      value = send(field)
+      next if value.blank?
+
+      unless (1..3).cover?(value)
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: format_ending(QUESTIONS[field])))
+      end
+    end
   end
 
   def validate_managing_org_related
