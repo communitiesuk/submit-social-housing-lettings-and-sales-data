@@ -626,7 +626,7 @@ class LettingsLog < Log
   end
 
   def rent_and_charges_paid_weekly?
-    [1, 5, 6, 7, 8, 9, 10].include? period
+    [1, 5, 6, 7, 8, 9, 10, 11].include? period
   end
 
   def rent_and_charges_paid_every_4_weeks?
