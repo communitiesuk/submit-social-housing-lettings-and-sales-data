@@ -806,31 +806,11 @@ private
     attributes["sex5"] = field_52
     attributes["sex6"] = field_56
 
-    attributes["relat2"] = if field_34 == 1
-                             "P"
-                           else
-                             (field_34 == 2 ? "X" : "R")
-                           end
-    attributes["relat3"] = if field_42 == 1
-                             "P"
-                           else
-                             (field_42 == 2 ? "X" : "R")
-                           end
-    attributes["relat4"] = if field_46 == 1
-                             "P"
-                           else
-                             (field_46 == 2 ? "X" : "R")
-                           end
-    attributes["relat5"] = if field_50 == 1
-                             "P"
-                           else
-                             (field_50 == 2 ? "X" : "R")
-                           end
-    attributes["relat6"] = if field_54 == 1
-                             "P"
-                           else
-                             (field_54 == 2 ? "X" : "R")
-                           end
+    attributes["relat2"] = relat(field_34)
+    attributes["relat3"] = relat(field_42)
+    attributes["relat4"] = relat(field_46)
+    attributes["relat5"] = relat(field_50)
+    attributes["relat6"] = relat(field_54)
 
     attributes["ecstat1"] = field_32
     attributes["ecstat2"] = field_39
@@ -1327,6 +1307,11 @@ private
     return 826 if nationality_value == 826
 
     12
+  end
+
+  def relat(field_value)
+    values = { 1 => "P", 2 => "X", 3 => "R" }
+    values[field_value]
   end
 
   def validate_managing_org_related
