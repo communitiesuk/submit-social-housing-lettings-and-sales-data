@@ -20,11 +20,12 @@ class UprnClient
   end
 
   def result
-    @result ||= if response.code == 200
+    @result ||= if response.is_a?(Net::HTTPSuccess)
                   parsed_response = JSON.parse(response.body)
                   parsed_response.dig("results", 0, "DPA") || parsed_response.dig("results", 0, "LPI")
                 else
-                  Rails.logger.error("Unexpected response code: #{response.code}")
+                  Rails.logger.error("Response code: #{response.code}")
+                  Rails.logger.error("Response body: #{response.body}")
                   nil
                 end
   end
