@@ -20,7 +20,13 @@ class UprnClient
   end
 
   def result
-    @result ||= JSON.parse(response.body).dig("results", 0, "DPA") || JSON.parse(response.body).dig("results", 0, "LPI")
+    @result ||= begin
+      parsed_response = JSON.parse(response.body)
+      parsed_response.dig("results", 0, "DPA") || parsed_response.dig("results", 0, "LPI")
+    rescue JSON::ParserError => e
+      Rails.logger.error("Failed to parse JSON response: #{e.message}")
+      nil
+    end
   end
 
 private
