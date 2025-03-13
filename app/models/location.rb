@@ -235,7 +235,7 @@ class Location < ApplicationRecord
       open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date || scheme.status_at(date) == :deactivated
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date || scheme.status_at(date) == :deactivating_soon
     return :activating_soon if startdate.present? && date < startdate
-    return :reactivating_soon if last_deactivation_before(date)&.reactivation_date.present? && date < last_deactivation_before(date).reactivation_date || scheme.status_at(date) == :reactivating_soon
+    return :reactivating_soon if location_deactivation_periods.deactivations_with_reactivation.any? { |p| p.includes_date?(date) } || scheme.status_at(date) == :reactivating_soon
 
     :active
   end

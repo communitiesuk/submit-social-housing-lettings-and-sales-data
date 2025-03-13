@@ -333,7 +333,7 @@ class Scheme < ApplicationRecord
       (open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date)
     return :incomplete unless confirmed && locations.confirmed.any?
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
-    return :reactivating_soon if last_deactivation_before(date)&.reactivation_date.present? && date < last_deactivation_before(date).reactivation_date
+    return :reactivating_soon if scheme_deactivation_periods.deactivations_with_reactivation.any? { |p| p.includes_date?(date) }
     return :activating_soon if startdate.present? && date < startdate
 
     :active

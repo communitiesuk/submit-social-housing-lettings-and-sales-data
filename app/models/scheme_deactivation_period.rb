@@ -49,4 +49,8 @@ class SchemeDeactivationPeriod < ApplicationRecord
 
   scope :deactivations_without_reactivation, -> { where(reactivation_date: nil) }
   scope :deactivations_with_reactivation, -> { where.not(reactivation_date: nil) }
+
+  def includes_date?(date)
+    deactivation_date <= date && (reactivation_date.nil? or reactivation_date > date)
+  end
 end
