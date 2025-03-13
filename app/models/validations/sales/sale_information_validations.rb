@@ -136,7 +136,7 @@ module Validations::Sales::SaleInformationValidations
 
     if max_stairbought && record.stairbought > max_stairbought
       record.errors.add :stairbought, I18n.t("validations.sales.sale_information.stairbought.stairbought_over_max", max_stairbought:, type: record.form.get_question("type", record).answer_label(record))
-      record.errors.add :type, I18n.t("validations.sales.sale_information.type.stairbought_over_max", max_stairbought:, type: record.form.get_question("type", record).answer_label(record))
+      record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sales.sale_information.type.stairbought_over_max", max_stairbought:, type: record.form.get_question("type", record).answer_label(record))
     end
   end
 
