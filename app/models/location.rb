@@ -220,8 +220,8 @@ class Location < ApplicationRecord
     location_deactivation_periods.deactivations_without_reactivation.first
   end
 
-  def last_deactivation_before(date)
-    location_deactivation_periods.where("deactivation_date <= ?", date).order("created_at").last
+  def soonest_reactivation(date)
+    location_deactivation_periods.deactivations_with_reactivation.where(date < reactivation_date).order(reactivation_date).first
   end
 
   def status
