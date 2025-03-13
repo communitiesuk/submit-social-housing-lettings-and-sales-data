@@ -75,7 +75,7 @@ module Validations::Sales::FinancialValidations
     if threshold && record.stairbought < threshold
       shared_ownership_type = record.form.get_question("type", record).label_from_value(record.type).downcase
       record.errors.add :stairbought, I18n.t("validations.sales.financial.stairbought.percentage_bought_must_be_at_least_threshold", threshold:, shared_ownership_type:)
-      record.errors.add :type, I18n.t("validations.sales.financial.type.percentage_bought_must_be_at_least_threshold", threshold:, shared_ownership_type:)
+      record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sales.financial.type.percentage_bought_must_be_at_least_threshold", threshold:, shared_ownership_type:)
     end
   end
 
@@ -96,10 +96,10 @@ module Validations::Sales::FinancialValidations
     return unless (range = ranges[record.type])
 
     if record.equity < range.min
-      record.errors.add :type, I18n.t("validations.sales.financial.type.equity_under_min", min_equity: range.min)
+      record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sales.financial.type.equity_under_min", min_equity: range.min)
       record.errors.add :equity, :under_min, message: I18n.t("validations.sales.financial.equity.equity_under_min", min_equity: range.min)
     elsif !record.is_resale? && record.equity > range.max
-      record.errors.add :type, I18n.t("validations.sales.financial.type.equity_over_max", max_equity: range.max)
+      record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sales.financial.type.equity_over_max", max_equity: range.max)
       record.errors.add :equity, :over_max, message: I18n.t("validations.sales.financial.equity.equity_over_max", max_equity: range.max)
       record.errors.add :resale, I18n.t("validations.sales.financial.resale.equity_over_max", max_equity: range.max)
     end
