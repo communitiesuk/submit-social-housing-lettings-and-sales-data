@@ -108,7 +108,7 @@ module Validations::Sales::SaleInformationValidations
 
     if record.shared_ownership_scheme? && !record.old_persons_shared_ownership? && record.mrent > 9999
       record.errors.add :mrent, I18n.t("validations.sales.sale_information.mrent.monthly_rent_higher_than_expected")
-      record.errors.add :type, I18n.t("validations.sales.sale_information.type.monthly_rent_higher_than_expected")
+      record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sales.sale_information.type.monthly_rent_higher_than_expected")
     end
   end
 
