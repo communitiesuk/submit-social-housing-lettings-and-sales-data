@@ -86,7 +86,7 @@ module Validations::SharedValidations
            when :deactivated then open_deactivation.deactivation_date
            end
 
-    { scope: status, date: date&.to_formatted_s(:govuk_date), deactivation_date: closest_reactivation&.deactivation_date&.to_formatted_s(:govuk_date) }
+    { scope: status, date: date&.to_formatted_s(:govuk_date) }
   end
 
   def date_valid?(question, record)
