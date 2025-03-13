@@ -252,8 +252,8 @@ class BulkUpload::Sales::Year2024::RowParser
   attribute :field_84, :integer
   attribute :field_85, :integer
   attribute :field_86, :integer
-  attribute :field_87, :integer
-  attribute :field_88, :integer
+  attribute :field_87, :decimal
+  attribute :field_88, :decimal
   attribute :field_89, :integer
 
   attribute :field_90, :integer
@@ -268,40 +268,40 @@ class BulkUpload::Sales::Year2024::RowParser
 
   attribute :field_99, :integer
   attribute :field_100, :integer
-  attribute :field_101, :integer
-  attribute :field_102, :integer
+  attribute :field_101, :decimal
+  attribute :field_102, :decimal
   attribute :field_103, :integer
-  attribute :field_104, :integer
+  attribute :field_104, :decimal
   attribute :field_105, :integer
   attribute :field_106, :string
   attribute :field_107, :integer
   attribute :field_108, :integer
 
-  attribute :field_109, :integer
-  attribute :field_110, :integer
+  attribute :field_109, :decimal
+  attribute :field_110, :decimal
   attribute :field_111, :decimal
   attribute :field_112, :decimal
   attribute :field_113, :integer
-  attribute :field_114, :integer
+  attribute :field_114, :decimal
   attribute :field_115, :integer
-  attribute :field_116, :integer
+  attribute :field_116, :decimal
   attribute :field_117, :integer
-  attribute :field_118, :integer
+  attribute :field_118, :decimal
 
   attribute :field_119, :integer
   attribute :field_120, :string
   attribute :field_121, :integer
   attribute :field_122, :integer
-  attribute :field_123, :integer
-  attribute :field_124, :integer
-  attribute :field_125, :integer
+  attribute :field_123, :decimal
+  attribute :field_124, :decimal
+  attribute :field_125, :decimal
   attribute :field_126, :integer
-  attribute :field_127, :integer
+  attribute :field_127, :decimal
 
   attribute :field_128, :integer
   attribute :field_129, :integer
-  attribute :field_130, :integer
-  attribute :field_131, :integer
+  attribute :field_130, :decimal
+  attribute :field_131, :decimal
 
   validates :field_4,
             presence: {
