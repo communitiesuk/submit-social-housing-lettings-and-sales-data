@@ -393,6 +393,15 @@ class BulkUpload::Sales::Year2025::RowParser
             },
             on: :after_log
 
+  validates :field_103,
+            numericality: {
+              greater_than_or_equal_to: 2,
+              less_than_or_equal_to: 10,
+              message: I18n.t("#{ERROR_BASE_KEY}.numeric.within_range", field: "Number of staircasing transactions", min: "2", max: "10"),
+              allow_blank: true,
+            },
+            on: :before_log
+
   validate :validate_buyer1_economic_status, on: :before_log
   validate :validate_buyer2_economic_status, on: :before_log
   validate :validate_valid_radio_option, on: :before_log
