@@ -3,9 +3,9 @@ class LocationDeactivationPeriodValidator < ActiveModel::Validator
 
   def validate(record)
     location = record.location
-    recent_deactivation = location.location_deactivation_periods.deactivations_without_reactivation.first
-    if recent_deactivation.present? && recent_deactivation.deactivation_date <= 6.months.from_now
-      validate_reactivation(record, recent_deactivation, location)
+    open_deactivation = location.location_deactivation_periods.deactivations_without_reactivation.first
+    if open_deactivation.present? && open_deactivation.deactivation_date <= 6.months.from_now
+      validate_reactivation(record, open_deactivation, location)
     else
       validate_deactivation(record, location)
     end
