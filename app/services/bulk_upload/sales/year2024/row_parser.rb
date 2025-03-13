@@ -269,7 +269,7 @@ class BulkUpload::Sales::Year2024::RowParser
   attribute :field_99, :integer
   attribute :field_100, :integer
   attribute :field_101, :decimal
-  attribute :field_102, :integer
+  attribute :field_102, :decimal
   attribute :field_103, :integer
   attribute :field_104, :decimal
   attribute :field_105, :integer
