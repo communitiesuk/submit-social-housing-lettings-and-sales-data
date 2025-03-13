@@ -271,7 +271,7 @@ class BulkUpload::Sales::Year2024::RowParser
   attribute :field_101, :decimal
   attribute :field_102, :integer
   attribute :field_103, :integer
-  attribute :field_104, :integer
+  attribute :field_104, :decimal
   attribute :field_105, :integer
   attribute :field_106, :string
   attribute :field_107, :integer
@@ -286,7 +286,7 @@ class BulkUpload::Sales::Year2024::RowParser
   attribute :field_115, :integer
   attribute :field_116, :integer
   attribute :field_117, :integer
-  attribute :field_118, :integer
+  attribute :field_118, :decimal
 
   attribute :field_119, :integer
   attribute :field_120, :string
@@ -296,7 +296,7 @@ class BulkUpload::Sales::Year2024::RowParser
   attribute :field_124, :integer
   attribute :field_125, :decimal
   attribute :field_126, :integer
-  attribute :field_127, :integer
+  attribute :field_127, :decimal
 
   attribute :field_128, :integer
   attribute :field_129, :integer
