@@ -3,9 +3,9 @@ class SchemeDeactivationPeriodValidator < ActiveModel::Validator
 
   def validate(record)
     scheme = record.scheme
-    recent_deactivation = scheme.scheme_deactivation_periods.deactivations_without_reactivation.first
-    if recent_deactivation.present? && recent_deactivation.deactivation_date <= 6.months.from_now
-      validate_reactivation(record, recent_deactivation, scheme)
+    open_deactivation = scheme.scheme_deactivation_periods.deactivations_without_reactivation.first
+    if open_deactivation.present? && open_deactivation.deactivation_date <= 6.months.from_now
+      validate_reactivation(record, open_deactivation, scheme)
     else
       validate_deactivation(record, scheme)
     end
@@ -49,4 +49,8 @@ class SchemeDeactivationPeriod < ApplicationRecord
 
   scope :deactivations_without_reactivation, -> { where(reactivation_date: nil) }
   scope :deactivations_with_reactivation, -> { where.not(reactivation_date: nil) }
+
+  def includes_date?(date)
+    deactivation_date <= date && (reactivation_date.nil? or reactivation_date > date)
+  end
 end

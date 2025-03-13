@@ -88,13 +88,22 @@ class SchemesController < ApplicationController
   end
 
   def new_reactivation
-    @scheme_deactivation_period = @scheme.scheme_deactivation_periods.deactivations_without_reactivation.first
+    open_deactivations = @scheme.scheme_deactivation_periods&.deactivations_without_reactivation
+    if open_deactivations.blank?
+      render_not_found and return
+    end
+
+    @scheme_deactivation_period = open_deactivations.first
     render "toggle_active", locals: { action: "reactivate" }
   end
 
   def reactivate
-    @scheme_deactivation_period = @scheme.scheme_deactivation_periods.deactivations_without_reactivation.first
+    open_deactivations = @scheme.scheme_deactivation_periods&.deactivations_without_reactivation
+    if open_deactivations.blank?
+      render_not_found and return
+    end
 
+    @scheme_deactivation_period = open_deactivations.first
     @scheme_deactivation_period.reactivation_date = toggle_date("reactivation_date")
     @scheme_deactivation_period.reactivation_date_type = params[:scheme_deactivation_period][:reactivation_date_type]
 

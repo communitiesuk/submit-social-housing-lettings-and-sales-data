@@ -2169,6 +2169,29 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_content(I18n.t("validations.location.reactivation.before_deactivation", date: "10 October 2022"))
         end
       end
+
+      context "when there is no open deactivation period" do
+        let(:params) { { location_deactivation_period: { reactivation_date_type: "other", "reactivation_date": "8/9/2022" } } }
+
+        before do
+          location.location_deactivation_periods.clear
+          create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 1), reactivation_date: Time.zone.local(2022, 7, 5), updated_at: Time.zone.local(2000, 1, 1), location:)
+          create(:location_deactivation_period, deactivation_date: Time.zone.local(2023, 1, 1), reactivation_date: Time.zone.local(2023, 4, 5), updated_at: Time.zone.local(2000, 1, 1), location:)
+          location.save!
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/reactivate", params:
+        end
+
+        it "renders not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+
+        it "does not update deactivation periods" do
+          location.reload
+          expect(location.location_deactivation_periods.count).to eq(2)
+          expect(location.location_deactivation_periods[0].updated_at).to eq(Time.zone.local(2000, 1, 1))
+          expect(location.location_deactivation_periods[1].updated_at).to eq(Time.zone.local(2000, 1, 1))
+        end
+      end
     end
   end
 
