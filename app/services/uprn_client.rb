@@ -26,6 +26,7 @@ class UprnClient
                 else
                   @error = "UPRN client failed to return a valid result, try again later."
                   Sentry.capture_message("UPRN client failed to return a valid result with error code: #{response.code}.")
+                  Rails.logger.error("UPRN client failed to return a valid result with error code: #{response.code}.")
                   Rails.logger.error("Response body: #{response.body}")
                   nil
                 end
