@@ -56,8 +56,9 @@ class BulkUpload::Sales::Validator
       row_parser.log.blank_invalid_non_setup_fields!
     end
 
-    if any_logs_invalid?
+    if invalid_row_numbers.any?
       Sentry.capture_message("Bulk upload log creation blocked due to invalid logs after blanking non setup fields: #{bulk_upload.id}.")
+      Rails.logger.error("Sales bulk upload #{bulk_upload.id} blocked due to invalid logs after blanking on rows #{invalid_row_numbers}")
       "logs_invalid"
     end
   end
@@ -98,8 +99,8 @@ private
     end
   end
 
-  def any_logs_invalid?
-    row_parsers.any? { |row_parser| row_parser.log.invalid? }
+  def invalid_row_numbers
+    row_parsers.each_with_index.map { |row_parser, index| index + row_offset + 1 if row_parser.log.invalid? }.compact
   end
 
   def csv_parser
