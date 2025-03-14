@@ -265,6 +265,24 @@ RSpec.describe Validations::SoftValidations do
         expect(record.major_repairs_date_in_soft_range?).to be false
       end
     end
+
+    context "with 2025 logs" do
+      context "when the void date is within 20 years of the tenancy start date" do
+        it "shows the interruption screen" do
+          record.startdate = Time.zone.local(2026, 2, 1)
+          record.mrcdate = Time.zone.local(2007, 2, 1)
+          expect(record.major_repairs_date_in_soft_range?).to be true
+        end
+      end
+
+      context "when the void date is less than 2 years before the tenancy start date" do
+        it "does not show the interruption screen" do
+          record.startdate = Time.zone.local(2026, 2, 1)
+          record.mrcdate = Time.zone.local(2025, 2, 1)
+          expect(record.major_repairs_date_in_soft_range?).to be false
+        end
+      end
+    end
   end
 
   describe "void date soft validations" do
@@ -281,6 +299,24 @@ RSpec.describe Validations::SoftValidations do
         record.startdate = Time.zone.local(2022, 2, 1)
         record.voiddate = Time.zone.local(2021, 2, 1)
         expect(record.voiddate_in_soft_range?).to be false
+      end
+    end
+
+    context "with 2025 logs" do
+      context "when the void date is within 20 years of the tenancy start date" do
+        it "shows the interruption screen" do
+          record.startdate = Time.zone.local(2026, 2, 1)
+          record.voiddate = Time.zone.local(2007, 2, 1)
+          expect(record.voiddate_in_soft_range?).to be true
+        end
+      end
+
+      context "when the void date is less than 2 years before the tenancy start date" do
+        it "does not show the interruption screen" do
+          record.startdate = Time.zone.local(2026, 2, 1)
+          record.voiddate = Time.zone.local(2025, 2, 1)
+          expect(record.voiddate_in_soft_range?).to be false
+        end
       end
     end
   end

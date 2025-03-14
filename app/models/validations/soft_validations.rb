@@ -103,13 +103,16 @@ module Validations::SoftValidations
 
   TWO_YEARS_IN_DAYS = 730
   TEN_YEARS_IN_DAYS = 3650
+  TWENTY_YEARS_IN_DAYS = 7300
 
   def major_repairs_date_in_soft_range?
-    mrcdate.present? && startdate.present? && mrcdate.between?(startdate.to_date - TEN_YEARS_IN_DAYS, startdate.to_date - TWO_YEARS_IN_DAYS)
+    upper_limit = form.start_year_2025_or_later? ? TWENTY_YEARS_IN_DAYS : TEN_YEARS_IN_DAYS
+    mrcdate.present? && startdate.present? && mrcdate.between?(startdate.to_date - upper_limit, startdate.to_date - TWO_YEARS_IN_DAYS)
   end
 
   def voiddate_in_soft_range?
-    voiddate.present? && startdate.present? && voiddate.between?(startdate.to_date - TEN_YEARS_IN_DAYS, startdate.to_date - TWO_YEARS_IN_DAYS)
+    upper_limit = form.start_year_2025_or_later? ? TWENTY_YEARS_IN_DAYS : TEN_YEARS_IN_DAYS
+    voiddate.present? && startdate.present? && voiddate.between?(startdate.to_date - upper_limit, startdate.to_date - TWO_YEARS_IN_DAYS)
   end
 
   def net_income_higher_or_lower_text
