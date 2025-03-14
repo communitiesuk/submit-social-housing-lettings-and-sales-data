@@ -186,7 +186,7 @@ Development mode will target the latest versions of Chrome, Firefox and Safari f
 
 The Rails server will start on <http://localhost:3000>.
 
-To sign in locally, you can use any username and password from your local database. The seed task in `seeds.rb` creates users in various roles all with the password `REVIEW_APP_USER_PASSWORD` from your .env file (which has default value `password`). 
+To sign in locally, you can use any username and password from your local database. The seed task in `seeds.rb` creates users in various roles all with the password `REVIEW_APP_USER_PASSWORD` from your .env file (which has default value `password`).
 To create any other users, you can edit the seed commands, or run similar commands in the rails console.
 You can also insert a new user row using SQL, but you will need to generate a correctly encrypted password. You can find the value to use for encrypted password which corresponds to the password `YOURPASSWORDHERE` using `User.new(:password => [YOURPASSWORDHERE]).encrypted_password`.
 
