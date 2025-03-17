@@ -138,7 +138,7 @@ RSpec.describe BulkUploadLettingsResultsController, type: :request do
         get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary"
 
         expect(response.body).to include("This error report is out of date.")
-        expect(response.body).to include("Some logs in this upload are assigned to #{other_user.name}, who has moved to a different organisation since this file was uploaded. Upload the file again to get an accurate error report.")
+        expect(CGI.unescapeHTML(response.body)).to include("Some logs in this upload are assigned to #{other_user.name}, who has moved to a different organisation since this file was uploaded. Upload the file again to get an accurate error report.")
       end
     end
 

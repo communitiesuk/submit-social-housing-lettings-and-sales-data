@@ -16,7 +16,7 @@ RSpec.describe TabNavHelper do
   describe "#org_cell" do
     it "returns the users org name and role separated by a newline character" do
       expected_html = "#{organisation.name}\n<span class=\"app-!-colour-muted\">Data provider</span>"
-      expect(org_cell(current_user)).to match(expected_html)
+      expect(CGI.unescapeHTML(org_cell(current_user))).to match(expected_html)
     end
   end
 
@@ -30,7 +30,7 @@ RSpec.describe TabNavHelper do
   describe "#scheme_cell" do
     it "returns the scheme link service name and primary user group separated by a newline character" do
       expected_html = "<a class=\"govuk-link\" href=\"/schemes/#{scheme.id}\">#{scheme.service_name}</a>\n<span class=\"govuk-visually-hidden\">Scheme</span>"
-      expect(scheme_cell(scheme)).to match(expected_html)
+      expect(CGI.unescapeHTML(scheme_cell(scheme))).to match(expected_html)
     end
   end
 end
