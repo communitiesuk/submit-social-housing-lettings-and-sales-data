@@ -1194,6 +1194,10 @@ RSpec.describe LettingsLog, type: :model do
           Timecop.freeze(Time.zone.local(2025, 5, 5))
         end
 
+        after do
+          Timecop.return
+        end
+
         it "derives the most recent let type as London Living Rent basis if it is a renewal" do
           log.assign_attributes(renewal: 1, rent_type:)
 
