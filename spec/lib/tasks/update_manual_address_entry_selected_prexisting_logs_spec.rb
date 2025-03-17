@@ -86,7 +86,6 @@ RSpec.describe "bulk_update:update_manual_address_entry_selected", type: :task d
   end
 
   context "when running the task" do
-
     context "when logs do not meet the criteria" do
       it "does not update logs with a UPRN entered" do
         task.invoke
