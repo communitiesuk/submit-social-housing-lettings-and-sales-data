@@ -229,12 +229,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       it "adds error" do
         sale_information_validator.validate_staircasing_initial_purchase_date(record)
 
-        expect(record.errors[:initialpurchase]).to eq(
-                                            [I18n.t("validations.sales.sale_information.initialpurchase.must_be_before_saledate")],
-                                            )
-        expect(record.errors[:saledate]).to eq(
-                                              [I18n.t("validations.sales.sale_information.saledate.must_be_after_initial_purchase_date")],
-                                              )
+        expect(record.errors[:initialpurchase]).to eq([I18n.t("validations.sales.sale_information.initialpurchase.must_be_before_saledate")])
+        expect(record.errors[:saledate]).to eq([I18n.t("validations.sales.sale_information.saledate.must_be_after_initial_purchase_date")])
       end
     end
 
@@ -296,12 +292,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       it "adds error" do
         sale_information_validator.validate_staircasing_last_transaction_date(record)
 
-        expect(record.errors[:lasttransaction]).to eq(
-                                                     [I18n.t("validations.sales.sale_information.lasttransaction.must_be_before_saledate")],
-                                                     )
-        expect(record.errors[:saledate]).to eq(
-                                              [I18n.t("validations.sales.sale_information.saledate.must_be_after_last_transaction_date")],
-                                              )
+        expect(record.errors[:lasttransaction]).to eq([I18n.t("validations.sales.sale_information.lasttransaction.must_be_before_saledate")])
+        expect(record.errors[:saledate]).to eq([I18n.t("validations.sales.sale_information.saledate.must_be_after_last_transaction_date")])
       end
     end
 
@@ -331,12 +323,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       it "adds error" do
         sale_information_validator.validate_staircasing_last_transaction_date(record)
 
-        expect(record.errors[:lasttransaction]).to eq(
-                                                     [I18n.t("validations.sales.sale_information.lasttransaction.must_be_after_initial_purchase")],
-                                                     )
-        expect(record.errors[:initialpurchase]).to eq(
-                                              [I18n.t("validations.sales.sale_information.initialpurchase.must_be_before_last_transaction")],
-                                              )
+        expect(record.errors[:lasttransaction]).to eq([I18n.t("validations.sales.sale_information.lasttransaction.must_be_after_initial_purchase")])
+        expect(record.errors[:initialpurchase]).to eq([I18n.t("validations.sales.sale_information.initialpurchase.must_be_before_last_transaction")])
       end
     end
 
