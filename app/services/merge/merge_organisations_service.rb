@@ -62,7 +62,7 @@ private
   def merge_users(merging_organisation)
     users_to_merge = users_to_merge(merging_organisation)
     @merged_users[merging_organisation.name] = users_to_merge.map { |user| { name: user.name, email: user.email } }
-    users_to_merge.update_all(organisation_id: @absorbing_organisation.id)
+    users_to_merge.update_all(organisation_id: @absorbing_organisation.id, values_updated_at: Time.zone.now)
   end
 
   def merge_schemes_and_locations(merging_organisation)

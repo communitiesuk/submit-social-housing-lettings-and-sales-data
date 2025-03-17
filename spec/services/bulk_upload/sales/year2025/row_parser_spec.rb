@@ -60,7 +60,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       field_31: "28",
       field_32: "1",
       field_33: "1",
-      field_34: "R",
+      field_34: "3",
       field_35: "32",
       field_36: "F",
       field_37: "17",
@@ -1140,6 +1140,52 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
           it "sets ##{age} to nil" do
             expect(parser.log.public_send(age)).to be_nil
+          end
+        end
+      end
+    end
+
+    describe "relationship field mappings" do
+      [
+        %w[field_34 relat2 2],
+        %w[field_42 relat3 3],
+        %w[field_46 relat4 4],
+        %w[field_50 relat5 5],
+        %w[field_54 relat6 6],
+      ].each do |input_field, relationship_attribute, person_num|
+        describe input_field.to_s do
+          context "when #{input_field} is 1" do
+            let(:attributes) { setup_section_params.merge({ input_field.to_sym => "1", field_41: "5" }) }
+
+            it "sets relationship to P" do
+              expect(parser.log.public_send(relationship_attribute)).to eq("P")
+            end
+          end
+
+          context "when #{input_field} is 2" do
+            let(:attributes) { setup_section_params.merge({ input_field.to_sym => "2", field_41: "5" }) }
+
+            it "sets relationship to X" do
+              expect(parser.log.public_send(relationship_attribute)).to eq("X")
+            end
+          end
+
+          context "when #{input_field} is 3" do
+            let(:attributes) { setup_section_params.merge({ input_field.to_sym => "3", field_41: "5" }) }
+
+            it "sets relationship to R" do
+              expect(parser.log.public_send(relationship_attribute)).to eq("R")
+            end
+          end
+
+          context "when #{input_field} is 4" do
+            let(:attributes) { setup_section_params.merge({ input_field.to_sym => "4", field_41: "5" }) }
+
+            it "gives a validation error" do
+              parser.valid?
+              validation_message = "You must answer person #{person_num} is the partner of buyer 1."
+              expect(parser.errors[input_field]).to include validation_message
+            end
           end
         end
       end
