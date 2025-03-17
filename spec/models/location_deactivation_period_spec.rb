@@ -88,7 +88,10 @@ RSpec.describe LocationDeactivationPeriod do
 
     context "when there is an open deactivation period less than six months in the future" do # validate_reactivation
       let!(:location) { FactoryBot.build(:location, created_at: previous_collection_start_date - 2.years) }
-      let!(:existing_period) { FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.now + 5.months, location:) }
+
+      before do
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.now + 5.months, location:)
+      end
 
       context "when reactivation date is nil" do
         let(:record) { FactoryBot.build(:location_deactivation_period, deactivation_date: Time.zone.now, location:) }
@@ -124,9 +127,12 @@ RSpec.describe LocationDeactivationPeriod do
 
     context "when there is not an open deactivation period within six months" do # validate_deactivation
       let!(:location) { FactoryBot.create(:location, created_at: previous_collection_start_date - 2.years) }
-      let!(:existing_period_1) { FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.now + 7.months, reactivation_date: Time.zone.now + 8.months, location:) }
-      let!(:existing_period_2) { FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.now + 1.month, reactivation_date: Time.zone.now + 2.months, location:) }
-      let!(:existing_period_3) { FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.now + 9.months, location:) }
+
+      before do
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.now + 7.months, reactivation_date: Time.zone.now + 8.months, location:)
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.now + 1.month, reactivation_date: Time.zone.now + 2.months, location:)
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.now + 9.months, location:)
+      end
 
       context "when reactivation date is nil" do
         let(:record) { FactoryBot.build(:location_deactivation_period, deactivation_date: Time.zone.now, location:) }

@@ -76,7 +76,10 @@ RSpec.describe SchemeDeactivationPeriod do
 
     context "when there is an open deactivation period less than six months in the future" do # validate_reactivation
       let!(:scheme) { FactoryBot.build(:scheme, created_at: previous_collection_start_date - 2.years) }
-      let!(:existing_period) { FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.now + 5.months, scheme:) }
+
+      before do
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.now + 5.months, scheme:)
+      end
 
       context "when reactivation date is nil" do
         let(:record) { FactoryBot.build(:scheme_deactivation_period, deactivation_date: Time.zone.now, scheme:) }
@@ -112,9 +115,12 @@ RSpec.describe SchemeDeactivationPeriod do
 
     context "when there is not an open deactivation period within six months" do # validate_deactivation
       let!(:scheme) { FactoryBot.create(:scheme, created_at: previous_collection_start_date - 2.years) }
-      let!(:existing_period_1) { FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.now + 7.months, reactivation_date: Time.zone.now + 8.months, scheme:) }
-      let!(:existing_period_2) { FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.now + 1.month, reactivation_date: Time.zone.now + 2.months, scheme:) }
-      let!(:existing_period_3) { FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.now + 9.months, scheme:) }
+
+      before do
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.now + 7.months, reactivation_date: Time.zone.now + 8.months, scheme:)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.now + 1.month, reactivation_date: Time.zone.now + 2.months, scheme:)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.now + 9.months, scheme:)
+      end
 
       context "when reactivation date is nil" do
         let(:record) { FactoryBot.build(:scheme_deactivation_period, deactivation_date: Time.zone.now, scheme:) }
