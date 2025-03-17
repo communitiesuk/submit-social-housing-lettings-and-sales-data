@@ -12,66 +12,66 @@ RSpec.describe SchemeDeactivationPeriod do
     end
 
     context "when not in a crossover period" do
-        let(:scheme) { FactoryBot.create(:scheme, created_at: previous_collection_start_date - 2.years) }
-        let(:record) { FactoryBot.create(:scheme_deactivation_period, deactivation_date: current_collection_start_date, scheme:) }
+      let(:scheme) { FactoryBot.create(:scheme, created_at: previous_collection_start_date - 2.years) }
+      let(:record) { FactoryBot.create(:scheme_deactivation_period, deactivation_date: current_collection_start_date, scheme:) }
 
-        before do
-          allow(FormHandler.instance).to receive(:in_edit_crossover_period?).and_return(false)
-        end
+      before do
+        allow(FormHandler.instance).to receive(:in_edit_crossover_period?).and_return(false)
+      end
 
-        context "with a deactivation date before the current collection period" do
-          it "adds an error" do
-            record.deactivation_date = current_collection_start_date - 1.year
-            scheme.scheme_deactivation_periods.clear
-            validator.validate(record)
-            expect(record.errors[:deactivation_date]).to include("The date must be on or after the 1 April 2023.")
-          end
+      context "with a deactivation date before the current collection period" do
+        it "adds an error" do
+          record.deactivation_date = current_collection_start_date - 1.year
+          scheme.scheme_deactivation_periods.clear
+          validator.validate(record)
+          expect(record.errors[:deactivation_date]).to include("The date must be on or after the 1 April 2023.")
         end
+      end
 
-        context "with a deactivation date in the current collection period" do
-          it "does not add an error" do
-            record.deactivation_date = current_collection_start_date + 1.day
-            scheme.scheme_deactivation_periods.clear
-            validator.validate(record)
-            expect(record.errors[:deactivation_date]).to be_empty
-          end
+      context "with a deactivation date in the current collection period" do
+        it "does not add an error" do
+          record.deactivation_date = current_collection_start_date + 1.day
+          scheme.scheme_deactivation_periods.clear
+          validator.validate(record)
+          expect(record.errors[:deactivation_date]).to be_empty
         end
+      end
     end
 
     context "when in a crossover period" do
-        let(:scheme) { FactoryBot.create(:scheme, created_at: previous_collection_start_date - 2.years) }
-        let(:record) { FactoryBot.create(:scheme_deactivation_period, deactivation_date: current_collection_start_date, scheme:) }
+      let(:scheme) { FactoryBot.create(:scheme, created_at: previous_collection_start_date - 2.years) }
+      let(:record) { FactoryBot.create(:scheme_deactivation_period, deactivation_date: current_collection_start_date, scheme:) }
 
-        before do
-          allow(FormHandler.instance).to receive(:in_edit_crossover_period?).and_return(true)
-        end
+      before do
+        allow(FormHandler.instance).to receive(:in_edit_crossover_period?).and_return(true)
+      end
 
-        context "with a deactivation date before the previous collection period" do
-          it "does not add an error" do
-            record.deactivation_date = previous_collection_start_date - 2.years
-            scheme.scheme_deactivation_periods.clear
-            validator.validate(record)
-            expect(record.errors[:deactivation_date]).to include("The date must be on or after the 1 April 2022.")
-          end
+      context "with a deactivation date before the previous collection period" do
+        it "does not add an error" do
+          record.deactivation_date = previous_collection_start_date - 2.years
+          scheme.scheme_deactivation_periods.clear
+          validator.validate(record)
+          expect(record.errors[:deactivation_date]).to include("The date must be on or after the 1 April 2022.")
         end
+      end
 
-        context "with a deactivation date in the previous collection period" do
-          it "does not add an error" do
-            record.deactivation_date = previous_collection_start_date + 1.year
-            scheme.scheme_deactivation_periods.clear
-            validator.validate(record)
-            expect(record.errors[:deactivation_date]).to be_empty
-          end
+      context "with a deactivation date in the previous collection period" do
+        it "does not add an error" do
+          record.deactivation_date = previous_collection_start_date + 1.year
+          scheme.scheme_deactivation_periods.clear
+          validator.validate(record)
+          expect(record.errors[:deactivation_date]).to be_empty
         end
+      end
 
-        context "with a deactivation date in the current collection period" do
-          it "does not add an error" do
-            record.deactivation_date = current_collection_start_date + 1.day
-            scheme.scheme_deactivation_periods.clear
-            validator.validate(record)
-            expect(record.errors[:deactivation_date]).to be_empty
-          end
+      context "with a deactivation date in the current collection period" do
+        it "does not add an error" do
+          record.deactivation_date = current_collection_start_date + 1.day
+          scheme.scheme_deactivation_periods.clear
+          validator.validate(record)
+          expect(record.errors[:deactivation_date]).to be_empty
         end
+      end
     end
 
     context "when there is an open deactivation period less than six months in the future" do # validate_reactivation
@@ -115,7 +115,6 @@ RSpec.describe SchemeDeactivationPeriod do
 
     context "when there is not an open deactivation period within six months" do # validate_deactivation
       let!(:scheme) { FactoryBot.create(:scheme, created_at: previous_collection_start_date - 2.years) }
-
       before do
         FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.now + 7.months, reactivation_date: Time.zone.now + 8.months, scheme:)
         FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.now + 1.month, reactivation_date: Time.zone.now + 2.months, scheme:)
