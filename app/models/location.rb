@@ -221,7 +221,7 @@ class Location < ApplicationRecord
   end
 
   def soonest_reactivation(date)
-    location_deactivation_periods.deactivations_with_reactivation.where(date < reactivation_date).order(reactivation_date).first
+    location_deactivation_periods.deactivations_with_reactivation.where("reactivation_date > ?", date).order(reactivation_date: :asc).first
   end
 
   def status
