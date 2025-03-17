@@ -315,8 +315,10 @@ class Scheme < ApplicationRecord
     scheme_deactivation_periods.deactivations_without_reactivation.first
   end
 
-  def soonest_reactivation(date)
-    scheme_deactivation_periods.deactivations_with_reactivation.where("reactivation_date > ?", date).order(reactivation_date: :asc).first
+  def reactivation_date_after(date)
+    return nil if scheme_deactivation_periods.deactivations_without_reactivation.any?
+    periods_ending_in_future = scheme_deactivation_periods.deactivations_with_reactivation.where("reactivation_date > ?", date).all
+    periods_ending_in_future.select {|period| %i[active deactivating_soon].include?(status_at(period.reactivation_date)) }.map(&:reactivation_date).min
   end
 
   def last_deactivation_date
