@@ -172,7 +172,7 @@ FactoryBot.define do
         if log.startdate >= Time.zone.local(2024, 4, 1)
           log.nationality_all_group = 826
           log.uprn = evaluator.uprn || "10033558653"
-          log.uprn_selection = evaluator.uprn_selection || "10033558653"
+          log.uprn_selection = evaluator.uprn_selection || evaluator.uprn || "10033558653"
         end
       end
     end
