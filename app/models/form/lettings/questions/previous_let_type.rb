@@ -36,7 +36,7 @@ class Form::Lettings::Questions::PreviousLetType < ::Form::Question
     "6" => { "value" => "Rent to Buy basis" },
     "7" => { "value" => "London Living Rent basis" },
     "8" => { "value" => "Another Intermediate Rent basis" },
-    "9" => { "value" => "Specified accommodation - exempt accommodation, manged properties, refuges and local authority hostels" },
+    "9" => { "value" => "Specified accommodation - exempt accommodation, managed properties, refuges and local authority hostels" },
     "divider" => { "value" => true },
     "3" => { "value" => "Don’t know" },
   }.freeze

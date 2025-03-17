@@ -393,6 +393,15 @@ class BulkUpload::Sales::Year2025::RowParser
             },
             on: :after_log
 
+  validates :field_103,
+            numericality: {
+              greater_than_or_equal_to: 2,
+              less_than_or_equal_to: 10,
+              message: I18n.t("#{ERROR_BASE_KEY}.numeric.within_range", field: "Number of staircasing transactions", min: "2", max: "10"),
+              allow_blank: true,
+            },
+            on: :before_log
+
   validate :validate_buyer1_economic_status, on: :before_log
   validate :validate_buyer2_economic_status, on: :before_log
   validate :validate_valid_radio_option, on: :before_log
@@ -806,31 +815,11 @@ private
     attributes["sex5"] = field_52
     attributes["sex6"] = field_56
 
-    attributes["relat2"] = if field_34 == 1
-                             "P"
-                           else
-                             (field_34 == 2 ? "X" : "R")
-                           end
-    attributes["relat3"] = if field_42 == 1
-                             "P"
-                           else
-                             (field_42 == 2 ? "X" : "R")
-                           end
-    attributes["relat4"] = if field_46 == 1
-                             "P"
-                           else
-                             (field_46 == 2 ? "X" : "R")
-                           end
-    attributes["relat5"] = if field_50 == 1
-                             "P"
-                           else
-                             (field_50 == 2 ? "X" : "R")
-                           end
-    attributes["relat6"] = if field_54 == 1
-                             "P"
-                           else
-                             (field_54 == 2 ? "X" : "R")
-                           end
+    attributes["relat2"] = relationship_from_is_partner(field_34)
+    attributes["relat3"] = relationship_from_is_partner(field_42)
+    attributes["relat4"] = relationship_from_is_partner(field_46)
+    attributes["relat5"] = relationship_from_is_partner(field_50)
+    attributes["relat6"] = relationship_from_is_partner(field_54)
 
     attributes["ecstat1"] = field_32
     attributes["ecstat2"] = field_39
@@ -1041,6 +1030,17 @@ private
 
   def person_6_present?
     field_55.present? || field_56.present? || field_54.present?
+  end
+
+  def relationship_from_is_partner(is_partner)
+    case is_partner
+    when 1
+      "P"
+    when 2
+      "X"
+    when 3
+      "R"
+    end
   end
 
   def details_known?(person_n)
@@ -1480,6 +1480,17 @@ private
 
   def valid_nationality_options
     %w[0] + GlobalConstants::COUNTRIES_ANSWER_OPTIONS.keys # 0 is "Prefers not to say"
+  end
+
+  def validate_relat_fields
+    %i[field_34 field_42 field_46 field_50 field_54].each do |field|
+      value = send(field)
+      next if value.blank?
+
+      unless (1..3).cover?(value)
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: format_ending(QUESTIONS[field])))
+      end
+    end
   end
 
   def bulk_upload_organisation

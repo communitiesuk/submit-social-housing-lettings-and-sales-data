@@ -31,10 +31,12 @@ RSpec.describe Merge::MergeOrganisationsService do
         expect(Rails.logger).to receive(:info).with("\t#{merging_organisation.data_protection_officers.first.name} (#{merging_organisation.data_protection_officers.first.email})")
         expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
         expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
+        expect(merging_organisation_user.values_updated_at).to be_nil
         merge_organisations_service.call
 
         merging_organisation_user.reload
         expect(merging_organisation_user.organisation).to eq(absorbing_organisation)
+        expect(merging_organisation_user.values_updated_at).not_to be_nil
       end
 
       it "sets merge date on merged organisation" do

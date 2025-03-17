@@ -179,13 +179,12 @@ module Csv
     end
 
     def sales_log_definitions
-      CsvVariableDefinition.sales.group_by { |record| [record.variable, record.definition] }
-                           .map do |_, options|
+      CsvVariableDefinition.sales.group_by(&:variable).map { |_, options|
         exact_match = options.find { |definition| definition.year == @year }
         next exact_match if exact_match
 
-        options.max_by(&:year)
-      end
+        options.select { |opt| opt.year < @year }.max_by(&:year)
+      }.compact
     end
 
     def insert_derived_and_related_attributes(ordered_questions)
