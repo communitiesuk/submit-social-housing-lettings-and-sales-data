@@ -1016,13 +1016,11 @@ RSpec.describe LettingsLog, type: :model do
       postcode = "SW1A 1AA"
       log.assign_attributes(postcode_known: 1, postcode_full: postcode, renewal: 1)
 
-      expect { log.send :process_postcode_changes! }
-        .to change(log, :la).to(expected_la)
-        .and change(log, :ppostcode_full).to(postcode)
-        .and change(log, :ppcodenk).to(0)
-
+      expect { log.send :process_postcode_changes! }.to change(log, :la).to(expected_la)
       expect { log.set_derived_fields! }
-        .to change(log, :prevloc).to(expected_la)
+        .to change(log, :ppostcode_full).to(postcode)
+        .and change(log, :ppcodenk).to(0)
+        .and change(log, :prevloc).to(expected_la)
     end
 
     it "clears values for previous location and related fields when log is a renewal and current values are cleared" do
