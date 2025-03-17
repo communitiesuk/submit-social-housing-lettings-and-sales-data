@@ -316,7 +316,7 @@ class Scheme < ApplicationRecord
   end
 
   def soonest_reactivation(date)
-    scheme_deactivation_periods.deactivations_with_reactivation.where(date < reactivation_date).order(reactivation_date).first
+    scheme_deactivation_periods.deactivations_with_reactivation.where("reactivation_date > ?", date).order(reactivation_date: :asc).first
   end
 
   def last_deactivation_date
