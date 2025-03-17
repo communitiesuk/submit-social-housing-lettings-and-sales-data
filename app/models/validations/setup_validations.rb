@@ -103,9 +103,9 @@ module Validations::SetupValidations
 
     if location_inactive_status.present?
       date, scope = location_inactive_status.values_at(:date, :scope)
-      record.errors.add :startdate, :not_active, message: I18n.t("validations.lettings.setup.startdate.location.#{scope}.startdate", postcode: record.location.postcode, date:, deactivation_date:)
-      record.errors.add :location_id, :not_active, message: I18n.t("validations.lettings.setup.startdate.location.#{scope}.location_id", postcode: record.location.postcode, date:, deactivation_date:)
-      record.errors.add :scheme_id, :not_active, message: I18n.t("validations.lettings.setup.startdate.location.#{scope}.location_id", postcode: record.location.postcode, date:, deactivation_date:)
+      record.errors.add :startdate, :not_active, message: I18n.t("validations.lettings.setup.startdate.location.#{scope}.startdate", postcode: record.location.postcode, date:)
+      record.errors.add :location_id, :not_active, message: I18n.t("validations.lettings.setup.startdate.location.#{scope}.location_id", postcode: record.location.postcode, date:)
+      record.errors.add :scheme_id, :not_active, message: I18n.t("validations.lettings.setup.startdate.location.#{scope}.location_id", postcode: record.location.postcode, date:)
     end
   end
 
@@ -116,8 +116,8 @@ module Validations::SetupValidations
 
     if scheme_inactive_status.present?
       date, scope = scheme_inactive_status.values_at(:date, :scope)
-      record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.scheme.#{scope}.startdate", name: record.scheme.service_name, date:, deactivation_date:)
-      record.errors.add :scheme_id, I18n.t("validations.lettings.setup.startdate.scheme.#{scope}.scheme_id", name: record.scheme.service_name, date:, deactivation_date:)
+      record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.scheme.#{scope}.startdate", name: record.scheme.service_name, date:)
+      record.errors.add :scheme_id, I18n.t("validations.lettings.setup.startdate.scheme.#{scope}.scheme_id", name: record.scheme.service_name, date:)
     end
   end
 
