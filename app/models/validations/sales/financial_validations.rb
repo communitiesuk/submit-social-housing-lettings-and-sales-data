@@ -121,11 +121,14 @@ module Validations::Sales::FinancialValidations
   def validate_staircase_difference_enough_for_numstair(record)
     return unless record.equity && record.stairbought && record.stairowned && record.numstair
 
+    percentage_left = record.stairowned - record.stairbought - record.equity
+    return if percentage_left.negative? # In this case we show the validate_equity_less_than_staircase_difference validation
+
+    previous_staircasing_transactions = record.numstair - 1
+
     # We must use the lowest possible percentage for a staircasing transaction of any saletype, any year since 1980
     minimum_percentage_per_staircasing_transaction = 1
 
-    percentage_left = record.stairowned - record.stairbought - record.equity
-    previous_staircasing_transactions = record.numstair - 1
     if percentage_left < previous_staircasing_transactions * minimum_percentage_per_staircasing_transaction
         equity_sum = record.stairowned - percentage_left + previous_staircasing_transactions * minimum_percentage_per_staircasing_transaction
         record.errors.add :equity, I18n.t("validations.sales.financial.equity.more_than_stairowned_minus_stairbought_minus_prev_staircasing", equity: record.equity, bought: record.stairbought, numprevstair: previous_staircasing_transactions, equity_sum:, stair_total: record.stairowned)
