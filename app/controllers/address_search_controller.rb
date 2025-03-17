@@ -18,8 +18,8 @@ class AddressSearchController < ApplicationController
         presenter = UprnDataPresenter.new(service.result)
         render json: [{ text: presenter.address, value: presenter.uprn }]
       end
-    elsif query.match?(/[a-zA-Z]/)
-      # Query contains letters, assume it's an address
+    elsif query.match?(/\D/)
+      # Query contains any non-digit characters, assume it's an address
       service = AddressClient.new(query, { minmatch: 0.2 })
       service.call
 
