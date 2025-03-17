@@ -42,7 +42,7 @@ module Validations::Sales::SaleInformationValidations
       record.errors.add :initialpurchase, I18n.t("validations.sales.sale_information.initialpurchase.must_be_after_1980")
     end
 
-    if record.initialpurchase > record.saledate
+    if record.saledate.present? && record.initialpurchase > record.saledate
       record.errors.add :initialpurchase, I18n.t("validations.sales.sale_information.initialpurchase.must_be_before_saledate")
       record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.must_be_after_initial_purchase_date")
     end
@@ -55,7 +55,7 @@ module Validations::Sales::SaleInformationValidations
       record.errors.add :lasttransaction, I18n.t("validations.sales.sale_information.lasttransaction.must_be_after_1980")
     end
 
-    if record.lasttransaction > record.saledate
+    if record.saledate.present? && record.lasttransaction > record.saledate
       record.errors.add :lasttransaction, I18n.t("validations.sales.sale_information.lasttransaction.must_be_before_saledate")
       record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.must_be_after_last_transaction_date")
     end
