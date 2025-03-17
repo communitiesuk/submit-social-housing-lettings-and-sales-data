@@ -115,6 +115,7 @@ RSpec.describe SchemeDeactivationPeriod do
 
     context "when there is not an open deactivation period within six months" do # validate_deactivation
       let!(:scheme) { FactoryBot.create(:scheme, created_at: previous_collection_start_date - 2.years) }
+
       before do
         FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.now + 7.months, reactivation_date: Time.zone.now + 8.months, scheme:)
         FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.now + 1.month, reactivation_date: Time.zone.now + 2.months, scheme:)
