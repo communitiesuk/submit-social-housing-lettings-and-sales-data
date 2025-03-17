@@ -63,6 +63,7 @@ en:
           equity_over_stairowned_minus_stairbought:
             joint_purchase: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyers own minus the percentage bought."
             not_joint_purchase: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyer owns minus the percentage bought."
+          more_than_stairowned_minus_stairbought_minus_prev_staircasing: "The initial equity stake is %{equity}%, the percentage bought is %{bought}%, and there have been %{numprevstair}% previous staircasing transactions, totalling at least %{equity_sum}%, which is more than the total percentage owned by the buyers (%{stair_total}%). In a staircasing transaction, the total percentage owned must be at least the initial equity stake plus the percentage bought plus a minimum of 1% for each previous staircasing transaction."
 
         stairowned:
           equity_over_stairowned_minus_stairbought:
@@ -72,6 +73,7 @@ en:
             joint_purchase: "Total percentage buyers now own must be more than percentage bought in this transaction."
             not_joint_purchase: "Total percentage buyer now owns must be more than percentage bought in this transaction."
           percentage_bought_equal_percentage_owned: "The percentage bought is %{stairbought}% and the percentage owned in total is %{stairowned}%. These figures cannot be the same."
+          less_than_stairbought_plus_equity_plus_prev_staircasing: "The initial equity stake is %{equity}%, the percentage bought is %{bought}%, and there have been %{numprevstair}% previous staircasing transactions, totalling at least %{equity_sum}%, which is more than the total percentage owned by the buyers (%{stair_total}%). In a staircasing transaction, the total percentage owned must be at least the initial equity stake plus the percentage bought plus a minimum of 1% for each previous staircasing transaction."
 
         stairbought:
           equity_over_stairowned_minus_stairbought:
@@ -79,7 +81,11 @@ en:
             not_joint_purchase: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyer owns minus the percentage bought."
           percentage_bought_must_be_at_least_threshold: "The minimum percentage share that can be bought in a staircasing transaction for %{shared_ownership_type} is %{threshold}%. Please change your answer or check that you have selected the correct shared ownership type."
           percentage_bought_equal_percentage_owned: "The percentage bought is %{stairbought}% and the percentage owned in total is %{stairowned}%. These figures cannot be the same."
-        
+          more_than_stairowned_minus_equity_minus_prev_staircasing: "The initial equity stake is %{equity}%, the percentage bought is %{bought}%, and there have been %{numprevstair}% previous staircasing transactions, totalling at least %{equity_sum}%, which is more than the total percentage owned by the buyers (%{stair_total}%). In a staircasing transaction, the total percentage owned must be at least the initial equity stake plus the percentage bought plus a minimum of 1% for each previous staircasing transaction."
+
+        numstair:
+          too_high_for_stairowned_minus_stairbought_minus_equity: "The initial equity stake is %{equity}%, the percentage bought is %{bought}%, and there have been %{numprevstair}% previous staircasing transactions, totalling at least %{equity_sum}%, which is more than the total percentage owned by the buyers (%{stair_total}%). In a staircasing transaction, the total percentage owned must be at least the initial equity stake plus the percentage bought plus a minimum of 1% for each previous staircasing transaction."
+
         uprn_selection:
           outside_london_income_range: "Income must be between £0 and £90,000 for properties within a London local authority."
           outside_non_london_income_range: "Income must be between £0 and £80,000 for properties in a non-London local authority."
