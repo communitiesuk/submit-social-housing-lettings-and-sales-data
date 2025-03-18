@@ -210,7 +210,7 @@ class LocationsController < ApplicationController
   end
 
   def new_reactivation
-    open_deactivations = @location.location_deactivation_periods.deactivations_without_reactivation
+    open_deactivations = @location.location_deactivation_periods&.deactivations_without_reactivation
     if open_deactivations.blank?
       render_not_found and return
     end
@@ -220,7 +220,7 @@ class LocationsController < ApplicationController
   end
 
   def reactivate
-    open_deactivations = @location.location_deactivation_periods.deactivations_without_reactivation
+    open_deactivations = @location.location_deactivation_periods&.deactivations_without_reactivation
     if open_deactivations.blank?
       render_not_found and return
     end

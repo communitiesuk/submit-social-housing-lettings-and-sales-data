@@ -224,7 +224,7 @@ class Location < ApplicationRecord
     return nil if location_deactivation_periods.deactivations_without_reactivation.any?
 
     periods_ending_in_future = location_deactivation_periods.deactivations_with_reactivation.where("reactivation_date > ?", date).all
-    periods_ending_in_future.select {|period| %i[active deactivating_soon].include?(status_at(period.reactivation_date)) }.map(&:reactivation_date).min
+    periods_ending_in_future.select { |period| %i[active deactivating_soon].include?(status_at(period.reactivation_date)) }.map(&:reactivation_date).min
   end
 
   def status

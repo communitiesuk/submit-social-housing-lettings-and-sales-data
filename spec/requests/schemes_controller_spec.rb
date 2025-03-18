@@ -2992,7 +2992,6 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when there is a later open deactivation" do
-        # let(:deactivation_date) { Time.zone.local(2022, 10, 10) }
         let(:params) { { scheme_deactivation_period: { deactivation_date_type: "other", "deactivation_date": "8/9/2022" } } }
         let(:add_deactivations) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 5), reactivation_date: nil, scheme:) }
 
@@ -3037,9 +3036,7 @@ RSpec.describe SchemesController, type: :request do
       let(:add_deactivations) {}
 
       before do
-        allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
         Timecop.freeze(Time.utc(2023, 10, 10))
-        # Singleton.__init__(FormHandler)
         sign_in user
         add_deactivations
         scheme.save!
@@ -3048,7 +3045,6 @@ RSpec.describe SchemesController, type: :request do
 
       after do
         Timecop.unfreeze
-        # Singleton.__init__(FormHandler)
       end
 
       context "when there is no open deactivation period" do
