@@ -235,5 +235,21 @@ FactoryBot.define do
         instance.save!(validate: false)
       end
     end
+    trait :completed_without_uprn do
+      completed
+      manual_address_entry_selected { false }
+      after(:build) do |log|
+        log.uprn = nil
+        log.uprn_selection = nil
+        log.uprn_known = 0
+      end
+
+      after(:build) do |log|
+        log.address_line1 = "1 Test Street"
+        log.address_line2 = "Testville"
+        log.town_or_city = "Testford"
+        log.postcode_full = "SW1 1AA"
+      end
+    end
   end
 end
