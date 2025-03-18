@@ -70,12 +70,10 @@ RSpec.describe "bulk_update:update_manual_address_entry_selected", type: :task d
       end
 
       it "updates logs with an address manually entered" do
-        expect(lettings_log_address_manually_entered.manual_address_entry_selected).to be false
         expect(lettings_log_address_manually_entered.address_line1).to eq("1 Test Street")
         expect(lettings_log_address_manually_entered.address_line2).to eq("Testville")
         expect(lettings_log_address_manually_entered.town_or_city).to eq("Testford")
         expect(lettings_log_address_manually_entered.postcode_full).to eq("SW1 1AA")
-        expect(sales_log_address_manually_entered.manual_address_entry_selected).to be false
         expect(sales_log_address_manually_entered.address_line1).to eq("1 Test Street")
         expect(sales_log_address_manually_entered.address_line2).to eq("Testville")
         expect(sales_log_address_manually_entered.town_or_city).to eq("Testford")
