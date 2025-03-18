@@ -18,7 +18,7 @@ module DerivedVariables::LettingsLogVariables
     3 => 6, # "Rent to Buy"  => "Rent to Buy basis"
     4 => 7, # "London Living Rent"  => "London Living Rent basis"
     5 => 8, # "Other intermediate rent product"  => "Another Intermediate Rent basis"
-    6 => 9, # "Specified accommodation - exempt accommodation, managed properties, refuges and local authority hostels"  => "Specified accommodation - exempt accommodation, manged properties, refuges and local authority hostels"
+    6 => 9, # "Specified accommodation - exempt accommodation, managed properties, refuges and local authority hostels"  => "Specified accommodation - exempt accommodation, managed properties, refuges and local authority hostels"
   }.freeze
 
   RENTTYPE_DETAIL_MAPPING = {
