@@ -40,7 +40,6 @@ Rails.application.routes.draw do
   get "/service-moved", to: "maintenance#service_moved"
   get "/service-unavailable", to: "maintenance#service_unavailable"
   get "/address-search", to: "address_search#index"
-  get "/address-search/current", to: "address_search#current"
   get "/address-search/manual-input/:log_type/:log_id", to: "address_search#manual_input", as: "address_manual_input"
   get "/address-search/search-input/:log_type/:log_id", to: "address_search#search_input", as: "address_search_input"
 
