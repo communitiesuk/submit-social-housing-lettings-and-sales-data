@@ -6,7 +6,10 @@ namespace :bulk_update do
                                .where(needstype: 1, manual_address_entry_selected: false, uprn: nil)
 
     lettings_logs.find_each do |log|
-      log.update(manual_address_entry_selected: true)
+      log.manual_address_entry_selected = true
+      unless log.save
+        Rails.logger.info "Could not save changes to lettings log #{log.id}"
+      end
     end
 
     puts "#{lettings_logs.count} lettings logs updated."
@@ -16,7 +19,10 @@ namespace :bulk_update do
                          .where(manual_address_entry_selected: false, uprn: nil)
 
     sales_logs.find_each do |log|
-      log.update(manual_address_entry_selected: true)
+      log.manual_address_entry_selected = true
+      unless log.save
+        Rails.logger.info "Could not save changes to sales log #{log.id}"
+      end
     end
 
     puts "#{sales_logs.count} sales logs updated."
