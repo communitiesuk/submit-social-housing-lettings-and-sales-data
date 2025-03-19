@@ -236,19 +236,19 @@ class BulkUpload::Sales::Year2025::RowParser
   attribute :field_83, :integer
   attribute :field_84, :integer
   attribute :field_85, :integer
-  attribute :field_86, :integer
-  attribute :field_87, :integer
+  attribute :field_86, :decimal
+  attribute :field_87, :decimal
   attribute :field_88, :integer
-  attribute :field_89, :integer
+  attribute :field_89, :decimal
   attribute :field_90, :integer
-  attribute :field_91, :integer
-  attribute :field_92, :integer
+  attribute :field_91, :decimal
+  attribute :field_92, :decimal
   attribute :field_93, :decimal
   attribute :field_94, :decimal
   attribute :field_95, :decimal
 
-  attribute :field_96, :integer
-  attribute :field_97, :integer
+  attribute :field_96, :decimal
+  attribute :field_97, :decimal
   attribute :field_98, :integer
   attribute :field_99, :integer
   attribute :field_100, :integer
@@ -258,22 +258,22 @@ class BulkUpload::Sales::Year2025::RowParser
   attribute :field_104, :integer
   attribute :field_105, :integer
   attribute :field_106, :integer
-  attribute :field_107, :integer
-  attribute :field_108, :integer
+  attribute :field_107, :decimal
+  attribute :field_108, :decimal
   attribute :field_109, :integer
-  attribute :field_110, :integer
+  attribute :field_110, :decimal
   attribute :field_111, :decimal
 
   attribute :field_112, :integer
-  attribute :field_113, :integer
+  attribute :field_113, :decimal
   attribute :field_114, :integer
-  attribute :field_115, :integer
+  attribute :field_115, :decimal
   attribute :field_116, :integer
-  attribute :field_117, :integer
+  attribute :field_117, :decimal
   attribute :field_118, :integer
   attribute :field_119, :integer
-  attribute :field_120, :integer
-  attribute :field_121, :integer
+  attribute :field_120, :decimal
+  attribute :field_121, :decimal
 
   validates :field_1,
             presence: {
