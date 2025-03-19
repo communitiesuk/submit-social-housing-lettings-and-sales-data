@@ -6,9 +6,14 @@ namespace :bulk_update do
                                .where(needstype: 1, manual_address_entry_selected: false, uprn: nil)
 
     lettings_logs.find_each do |log|
+      status_pre_change = log.status
       log.manual_address_entry_selected = true
       unless log.save
         Rails.logger.info "Could not save changes to lettings log #{log.id}"
+      end
+      status_post_change = log.status
+      unless status_pre_change == status_post_change
+        Rails.logger.info "Status changed from #{status_pre_change} to #{status_post_change} for lettings log #{log.id}"
       end
     end
 
@@ -19,9 +24,14 @@ namespace :bulk_update do
                          .where(manual_address_entry_selected: false, uprn: nil)
 
     sales_logs.find_each do |log|
+      status_pre_change = log.status
       log.manual_address_entry_selected = true
       unless log.save
         Rails.logger.info "Could not save changes to sales log #{log.id}"
+      end
+      status_post_change = log.status
+      unless status_pre_change == status_post_change
+        Rails.logger.info "Status changed from #{status_pre_change} to #{status_post_change} for sales log #{log.id}"
       end
     end
 
