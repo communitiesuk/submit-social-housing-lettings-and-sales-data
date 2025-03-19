@@ -8,7 +8,6 @@ namespace :bulk_update do
                                .where(needstype: 1, manual_address_entry_selected: false, uprn: nil)
                                .where("(address_line1 IS NOT NULL AND address_line1 != '') OR (address_line2 IS NOT NULL AND address_line2 != '') OR (town_or_city IS NOT NULL AND town_or_city != '') OR (county IS NOT NULL AND county != '') OR (postcode_full IS NOT NULL AND postcode_full != '')")
 
-
     lettings_logs.find_each do |log|
       status_pre_change = log.status
       log.manual_address_entry_selected = true
