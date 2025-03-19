@@ -62,7 +62,7 @@ RSpec.describe SchemesHelper do
       expect(scheme_active_periods(scheme).third).to have_attributes(from: Time.zone.local(2022, 8, 5), to: nil)
     end
 
-    it "returns correct active periods when reactivation happends during a deactivated period" do
+    it "returns correct active periods when reactivation happens during a deactivated period" do
       FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 11, 11), scheme:)
       FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 6), reactivation_date: Time.zone.local(2022, 7, 7), scheme:)
       scheme.reload

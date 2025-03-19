@@ -115,7 +115,7 @@ RSpec.describe LocationsHelper do
       expect(location_active_periods(location).third).to have_attributes(from: over_a_year_ago + 3.months, to: nil)
     end
 
-    it "returns correct active periods when reactivation happends during a deactivated period" do
+    it "returns correct active periods when reactivation happens during a deactivated period" do
       FactoryBot.create(:location_deactivation_period, deactivation_date: over_a_year_ago, reactivation_date: one_year_ago, location:)
       FactoryBot.create(:location_deactivation_period, deactivation_date: beginning_of_collection + 2.days, reactivation_date: over_a_year_ago + 1.month, location:)
       location.reload
