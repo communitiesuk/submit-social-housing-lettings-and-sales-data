@@ -12,6 +12,10 @@ RSpec.describe "bulk_update:update_manual_address_entry_selected", type: :task d
     build(:lettings_log, :completed, startdate: Time.zone.local(2024, 9, 1), needstype: 1, manual_address_entry_selected: false, address_line1_input: "1 Test Street", postcode_full_input: "SW1 1AA")
   end
 
+  let(:lettings_log_address_fields_not_entered) do
+    build(:lettings_log, :completed_without_address_fields, startdate: Time.zone.local(2024, 9, 1), needstype: 1)
+  end
+
   let(:lettings_log_address_manually_entered) do
     build(:lettings_log, :completed_without_uprn, startdate: Time.zone.local(2024, 12, 1), needstype: 1)
   end
@@ -22,6 +26,10 @@ RSpec.describe "bulk_update:update_manual_address_entry_selected", type: :task d
 
   let(:sales_log_uprn_found) do
     build(:sales_log, :completed, saledate: Time.zone.local(2024, 7, 1), manual_address_entry_selected: false, address_line1_input: "1 Test Street", postcode_full_input: "SW1 1AA")
+  end
+
+  let(:sales_log_address_fields_not_entered) do
+    build(:sales_log, :completed_without_address_fields, saledate: Time.zone.local(2024, 12, 30))
   end
 
   let(:sales_log_address_manually_entered) do
@@ -38,8 +46,10 @@ RSpec.describe "bulk_update:update_manual_address_entry_selected", type: :task d
       before do
         lettings_log_uprn_found.save!(validate: false)
         lettings_log_uprn_entered.save!(validate: false)
+        lettings_log_address_fields_not_entered.save!(validate: false)
         sales_log_uprn_found.save!(validate: false)
         sales_log_uprn_entered.save!(validate: false)
+        sales_log_address_fields_not_entered.save!(validate: false)
       end
 
       it "does not update logs with a UPRN entered" do
@@ -60,6 +70,14 @@ RSpec.describe "bulk_update:update_manual_address_entry_selected", type: :task d
         expect(lettings_log_uprn_found.uprn).to eq("10033558653")
         expect(sales_log_uprn_found.manual_address_entry_selected).to be false
         expect(sales_log_uprn_found.uprn).to eq("10033558653")
+      end
+
+      it "does not update logs with no UPRN or address fields entered" do
+        task.invoke
+        lettings_log_address_fields_not_entered.reload
+        sales_log_address_fields_not_entered.reload
+        expect(lettings_log_address_fields_not_entered.manual_address_entry_selected).to be false
+        expect(sales_log_address_fields_not_entered.manual_address_entry_selected).to be false
       end
     end
 
