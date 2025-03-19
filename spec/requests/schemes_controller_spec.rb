@@ -3038,7 +3038,6 @@ RSpec.describe SchemesController, type: :request do
       before do
         allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
         Timecop.freeze(Time.utc(2023, 10, 10))
-        Singleton.__init__(FormHandler)
         sign_in user
         add_deactivations
         scheme.save!
@@ -3047,7 +3046,6 @@ RSpec.describe SchemesController, type: :request do
 
       after do
         Timecop.unfreeze
-        Singleton.__init__(FormHandler)
       end
 
       context "when there is no open deactivation period" do
