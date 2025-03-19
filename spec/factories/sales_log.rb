@@ -173,7 +173,7 @@ FactoryBot.define do
           log.nationality_all_group = 826
           log.nationality_all_buyer2_group = 826
           log.uprn = evaluator.uprn || "10033558653"
-          log.uprn_selection = evaluator.uprn_selection || "10033558653"
+          log.uprn_selection = evaluator.uprn_selection || evaluator.uprn || "10033558653"
         end
         if log.saledate >= Time.zone.local(2025, 4, 1)
           log.relat2 = "X" if log.relat2 == "C"
@@ -233,6 +233,39 @@ FactoryBot.define do
         instance.valid?
         instance.errors.clear
         instance.save!(validate: false)
+      end
+    end
+    trait :completed_without_uprn do
+      completed
+      manual_address_entry_selected { false }
+      after(:build) do |log|
+        log.uprn = nil
+        log.uprn_selection = nil
+        log.uprn_known = 0
+      end
+
+      after(:build) do |log|
+        log.address_line1 = "1 Test Street"
+        log.address_line2 = "Testville"
+        log.county = "Testshire"
+        log.town_or_city = "Testford"
+        log.postcode_full = "SW1 1AA"
+      end
+    end
+    trait :inprogress_without_address_fields do
+      completed
+      manual_address_entry_selected { false }
+      after(:build) do |log|
+        log.uprn = nil
+        log.uprn_selection = nil
+        log.uprn_known = 0
+        log.address_line1 = nil
+        log.address_line2 = nil
+        log.county = nil
+        log.town_or_city = nil
+        log.postcode_full = nil
+        log.address_line1_input = nil
+        log.postcode_full_input = nil
       end
     end
     trait :export do
