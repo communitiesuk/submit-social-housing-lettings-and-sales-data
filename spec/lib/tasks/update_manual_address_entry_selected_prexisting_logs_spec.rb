@@ -13,7 +13,7 @@ RSpec.describe "bulk_update:update_manual_address_entry_selected", type: :task d
   end
 
   let(:lettings_log_address_manually_entered) do
-    build(:lettings_log, :completed_without_uprn, startdate: Time.zone.local(2024, 12, 1), needstype: 1, manual_address_entry_selected: false)
+    build(:lettings_log, :completed_without_uprn, startdate: Time.zone.local(2024, 12, 1), needstype: 1)
   end
 
   let(:sales_log_uprn_entered) do
@@ -25,7 +25,7 @@ RSpec.describe "bulk_update:update_manual_address_entry_selected", type: :task d
   end
 
   let(:sales_log_address_manually_entered) do
-    build(:sales_log, :completed_without_uprn, saledate: Time.zone.local(2024, 12, 30), manual_address_entry_selected: false)
+    build(:sales_log, :completed_without_uprn, saledate: Time.zone.local(2024, 12, 30))
   end
 
   before do
@@ -65,7 +65,9 @@ RSpec.describe "bulk_update:update_manual_address_entry_selected", type: :task d
 
     context "when logs do meet the criteria" do
       before do
+        lettings_log_address_manually_entered.manual_address_entry_selected = false
         lettings_log_address_manually_entered.save!(validate: false)
+        sales_log_address_manually_entered.manual_address_entry_selected = false
         sales_log_address_manually_entered.save!(validate: false)
       end
 
