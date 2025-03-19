@@ -13,7 +13,7 @@ RSpec.describe "bulk_update:update_manual_address_entry_selected", type: :task d
   end
 
   let(:lettings_log_address_fields_not_entered) do
-    build(:lettings_log, :completed_without_address_fields, startdate: Time.zone.local(2024, 9, 1), needstype: 1)
+    build(:lettings_log, :inprogress_without_address_fields, startdate: Time.zone.local(2024, 9, 1), needstype: 1)
   end
 
   let(:lettings_log_address_manually_entered) do
@@ -29,7 +29,7 @@ RSpec.describe "bulk_update:update_manual_address_entry_selected", type: :task d
   end
 
   let(:sales_log_address_fields_not_entered) do
-    build(:sales_log, :completed_without_address_fields, saledate: Time.zone.local(2024, 12, 30))
+    build(:sales_log, :inprogress_without_address_fields, saledate: Time.zone.local(2024, 12, 30))
   end
 
   let(:sales_log_address_manually_entered) do

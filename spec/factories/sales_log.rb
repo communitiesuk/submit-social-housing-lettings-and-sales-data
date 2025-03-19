@@ -252,7 +252,7 @@ FactoryBot.define do
         log.postcode_full = "SW1 1AA"
       end
     end
-    trait :completed_without_address_fields do
+    trait :inprogress_without_address_fields do
       completed
       manual_address_entry_selected { false }
       after(:build) do |log|
