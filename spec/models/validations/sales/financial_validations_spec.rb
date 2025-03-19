@@ -427,7 +427,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
     end
   end
 
-  describe "#validate_equity_less_than_staircase_difference" do
+  describe "#validate_staircase_difference" do
     let(:record) { FactoryBot.build(:sales_log, saledate:) }
 
     context "with a log in the 23/24 collection year" do
@@ -437,7 +437,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.stairbought = 2
         record.stairowned = 3
         record.equity = 2
-        financial_validator.validate_equity_less_than_staircase_difference(record)
+        financial_validator.validate_staircase_difference(record)
         expect(record.errors).to be_empty
       end
     end
@@ -450,7 +450,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.stairowned = 3
         record.equity = 2
         record.jointpur = 1
-        financial_validator.validate_equity_less_than_staircase_difference(record)
+        financial_validator.validate_staircase_difference(record)
         expect(record.errors["equity"]).to include(I18n.t("validations.sales.financial.equity.equity_over_stairowned_minus_stairbought.joint_purchase", equity: 2, staircase_difference: 0.5))
         expect(record.errors["stairowned"]).to include(I18n.t("validations.sales.financial.stairowned.equity_over_stairowned_minus_stairbought.joint_purchase", equity: 2, staircase_difference: 0.5))
         expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.financial.stairbought.equity_over_stairowned_minus_stairbought.joint_purchase", equity: 2, staircase_difference: 0.5))
@@ -461,25 +461,25 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.stairowned = 3
         record.equity = 2.5
         record.jointpur = 2
-        financial_validator.validate_equity_less_than_staircase_difference(record)
+        financial_validator.validate_staircase_difference(record)
         expect(record.errors["equity"]).to include(I18n.t("validations.sales.financial.equity.equity_over_stairowned_minus_stairbought.not_joint_purchase", equity: 2.5, staircase_difference: 1.0))
         expect(record.errors["stairowned"]).to include(I18n.t("validations.sales.financial.stairowned.equity_over_stairowned_minus_stairbought.not_joint_purchase", equity: 2.5, staircase_difference: 1.0))
         expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.financial.stairbought.equity_over_stairowned_minus_stairbought.not_joint_purchase", equity: 2.5, staircase_difference: 1.0))
       end
 
-      it "does not add errors if equity is less than stairowned - stairbought" do
+      it "does not add errors if equity is less than stairowned - stairbought and stairnum is nil" do
         record.stairbought = 2
         record.stairowned = 10
         record.equity = 2
-        financial_validator.validate_equity_less_than_staircase_difference(record)
+        financial_validator.validate_staircase_difference(record)
         expect(record.errors).to be_empty
       end
 
-      it "does not add errors if equity is equal stairowned - stairbought" do
+      it "does not add errors if equity is equal stairowned - stairbought and stairnum is nil" do
         record.stairbought = 2
         record.stairowned = 10
         record.equity = 8
-        financial_validator.validate_equity_less_than_staircase_difference(record)
+        financial_validator.validate_staircase_difference(record)
         expect(record.errors).to be_empty
       end
 
@@ -487,7 +487,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.stairbought = nil
         record.stairowned = 10
         record.equity = 2
-        financial_validator.validate_equity_less_than_staircase_difference(record)
+        financial_validator.validate_staircase_difference(record)
         expect(record.errors).to be_empty
       end
 
@@ -495,7 +495,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.stairbought = 2
         record.stairowned = nil
         record.equity = 2
-        financial_validator.validate_equity_less_than_staircase_difference(record)
+        financial_validator.validate_staircase_difference(record)
         expect(record.errors).to be_empty
       end
 
@@ -503,86 +503,37 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.stairbought = 2
         record.stairowned = 10
         record.equity = 0
-        financial_validator.validate_equity_less_than_staircase_difference(record)
+        financial_validator.validate_staircase_difference(record)
         expect(record.errors).to be_empty
       end
-    end
 
-    describe "#validate_staircase_difference_enough_for_numstair" do
-      let(:record) { FactoryBot.build(:sales_log) }
-
-      it "adds errors if stairowned is not enough more than stairbought + equity" do
+      it "adds errors if stairnum is present and stairowned is not enough more than stairbought + equity" do
         record.stairowned = 20
         record.stairbought = 10
         record.equity = 9
         record.numstair = 3
-        financial_validator.validate_staircase_difference_enough_for_numstair(record)
+        financial_validator.validate_staircase_difference(record)
         expect(record.errors["equity"]).to include(I18n.t("validations.sales.financial.equity.more_than_stairowned_minus_stairbought_minus_prev_staircasing", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
         expect(record.errors["stairowned"]).to include(I18n.t("validations.sales.financial.equity.more_than_stairowned_minus_stairbought_minus_prev_staircasing", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
         expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.financial.equity.more_than_stairowned_minus_stairbought_minus_prev_staircasing", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
         expect(record.errors["numstair"]).to include(I18n.t("validations.sales.financial.equity.more_than_stairowned_minus_stairbought_minus_prev_staircasing", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
       end
 
-      it "does not add errors if stairowned is enough more than stairbought + equity" do
+      it "does not add errors if stairnum is present and stairowned is enough more than stairbought + equity" do
         record.stairowned = 25
         record.stairbought = 10
         record.equity = 9
         record.numstair = 3
-        financial_validator.validate_staircase_difference_enough_for_numstair(record)
+        financial_validator.validate_staircase_difference(record)
         expect(record.errors).to be_empty
       end
 
-      it "does not add errors if stairowned exactly equals minimum" do
+      it "does not add errors if stairnum is present and stairowned exactly equals minimum" do
         record.stairowned = 20
         record.stairbought = 10
         record.equity = 9
         record.numstair = 2
-        financial_validator.validate_staircase_difference_enough_for_numstair(record)
-        expect(record.errors).to be_empty
-      end
-
-      it "does not add errors if equity + stairbought is more than stairowned" do
-        record.stairbought = 2
-        record.stairowned = 3
-        record.equity = 2.5
-        record.jointpur = 2
-        financial_validator.validate_staircase_difference_enough_for_numstair(record)
-        expect(record.errors).to be_empty
-      end
-
-      it "does not add errors if stairowned is not given" do
-        record.stairbought = 20
-        record.stairowned = nil
-        record.equity = 15
-        record.numstair = 4
-        financial_validator.validate_staircase_difference_enough_for_numstair(record)
-        expect(record.errors).to be_empty
-      end
-
-      it "does not add errors if stairbought is not given" do
-        record.stairbought = nil
-        record.stairowned = 10
-        record.equity = 20
-        record.numstair = 4
-        financial_validator.validate_staircase_difference_enough_for_numstair(record)
-        expect(record.errors).to be_empty
-      end
-
-      it "does not add errors if equity is not given" do
-        record.stairbought = 25
-        record.stairowned = 10
-        record.equity = nil
-        record.numstair = 4
-        financial_validator.validate_staircase_difference_enough_for_numstair(record)
-        expect(record.errors).to be_empty
-      end
-
-      it "does not add errors if numstair is not given" do
-        record.stairbought = 10
-        record.stairowned = 40
-        record.equity = 25
-        record.numstair = nil
-        financial_validator.validate_staircase_difference_enough_for_numstair(record)
+        financial_validator.validate_staircase_difference(record)
         expect(record.errors).to be_empty
       end
     end
