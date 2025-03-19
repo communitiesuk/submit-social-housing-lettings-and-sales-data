@@ -81,9 +81,7 @@ namespace :bulk_update do
     not_updated_ids = []
     updated_but_not_fixed_ids = []
 
-    logs_to_fix = LettingsLog.filter_by_year(2024)
-                             .where(manual_address_entry_selected: true, uprn: nil, status: "in_progress", postcode_full: nil)
-                             .where(updated_at: Time.zone.parse("2025-03-19 16:00:00")..Time.zone.parse("2025-03-19 17:00:00"))
+    logs_to_fix = LettingsLog.filter_by_year(2024).where(manual_address_entry_selected: true, uprn: nil, status: "in_progress", postcode_full: nil, updated_at: Time.zone.parse("2025-03-19 16:00:00")..Time.zone.parse("2025-03-19 17:00:00"))
 
     logs_to_fix.find_each do |log|
       previous_version = log.versions[-2]
