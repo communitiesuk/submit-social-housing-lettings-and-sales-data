@@ -4,6 +4,12 @@ class LocationDeactivationPeriodValidator < ActiveModel::Validator
   def validate(record)
     location = record.location
     open_deactivation = location.location_deactivation_periods.deactivations_without_reactivation.first
+
+    # The LocationsController validates deactivation periods in three places:
+    # 1. new_deactivation builds a temporary location_deactivation_period object using the open deactivation if it starts in over six months, or otherwise builds a new period, and validates this (want validate_deactivation)
+    # 2. `deactivate` takes the open deactivation if present (any start date) and update!s it with the deactivation date, or else create!s a new deactivation with the deactivation date (want validate_deactivation)
+    # 3. `reactivate` takes the open deactivation (any start date) and update!s it with the reactivation date (want validate_reactivation)
+    # In toggle_location_link in the LocationsHelper, we display a link to one or neither of new_deactivation and new_reactivation depending on status now, status in six months, and scheme status.
     if open_deactivation.present? && open_deactivation.deactivation_date <= 6.months.from_now
       validate_reactivation(record, open_deactivation, location)
     else
