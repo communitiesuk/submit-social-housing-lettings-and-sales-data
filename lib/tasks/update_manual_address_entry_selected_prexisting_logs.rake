@@ -6,10 +6,10 @@ namespace :bulk_update do
     lettings_logs = LettingsLog.filter_by_year(2024)
                                .where(status: %w[in_progress completed])
                                .where(needstype: 1, manual_address_entry_selected: false, uprn: nil)
+                               .where("(address_line1 IS NOT NULL AND address_line1 != '') OR (address_line2 IS NOT NULL AND address_line2 != '') OR (town_or_city IS NOT NULL AND town_or_city != '') OR (county IS NOT NULL AND county != '') OR (postcode_full IS NOT NULL AND postcode_full != '')")
+
 
     lettings_logs.find_each do |log|
-      next unless log.address_line1 || log.address_line2 || log.county || log.town_or_city || log.postcode_full
-
       status_pre_change = log.status
       log.manual_address_entry_selected = true
       if log.save
@@ -28,10 +28,9 @@ namespace :bulk_update do
     sales_logs = SalesLog.filter_by_year(2024)
                          .where(status: %w[in_progress completed])
                          .where(manual_address_entry_selected: false, uprn: nil)
+                         .where("(address_line1 IS NOT NULL AND address_line1 != '') OR (address_line2 IS NOT NULL AND address_line2 != '') OR (town_or_city IS NOT NULL AND town_or_city != '') OR (county IS NOT NULL AND county != '') OR (postcode_full IS NOT NULL AND postcode_full != '')")
 
     sales_logs.find_each do |log|
-      next unless log.address_line1 || log.address_line2 || log.county || log.town_or_city || log.postcode_full
-
       status_pre_change = log.status
       log.manual_address_entry_selected = true
       if log.save
