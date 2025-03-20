@@ -18,7 +18,7 @@ module DerivedVariables::LettingsLogVariables
     3 => 6, # "Rent to Buy"  => "Rent to Buy basis"
     4 => 7, # "London Living Rent"  => "London Living Rent basis"
     5 => 8, # "Other intermediate rent product"  => "Another Intermediate Rent basis"
-    6 => 9, # "Specified accommodation - exempt accommodation, managed properties, refuges and local authority hostels"  => "Specified accommodation - exempt accommodation, manged properties, refuges and local authority hostels"
+    6 => 9, # "Specified accommodation - exempt accommodation, managed properties, refuges and local authority hostels"  => "Specified accommodation - exempt accommodation, managed properties, refuges and local authority hostels"
   }.freeze
 
   RENTTYPE_DETAIL_MAPPING = {
@@ -83,12 +83,19 @@ module DerivedVariables::LettingsLogVariables
     end
 
     set_housingneeds_fields if housingneeds?
+    if form.start_year_2025_or_later? && is_general_needs?
+      if changed_to_newbuild? && uprn.nil?
+        self.manual_address_entry_selected = true
+      end
+
+      self.manual_address_entry_selected = address_answered_without_uprn? if changed_from_newbuild?
+    end
 
     self.uprn_known = 0 if address_answered_without_uprn?
 
     if uprn_known&.zero?
       self.uprn = nil
-      if uprn_known_was == 1
+      if uprn_known_was == 1 && (rsnvac != 15 || !form.start_year_2025_or_later?)
         self.address_line1 = nil
         self.address_line2 = nil
         self.town_or_city = nil
