@@ -16,6 +16,13 @@ class Form
     },
     2024 => {
       submission_deadline: Time.zone.local(2025, 6, 6),
+      new_logs_end_date: Time.zone.local(2025, 7, 4),
+      edit_end_date: Time.zone.local(2025, 8, 1),
+    },
+    2025 => {
+      submission_deadline: Time.zone.local(2026, 6, 5),
+      new_logs_end_date: Time.zone.local(2026, 7, 3),
+      edit_end_date: Time.zone.local(2026, 8, 1),
     },
     :default => {
       submission_deadline: ->(start_year) { Time.zone.local(start_year + 1, 6, 1) },
