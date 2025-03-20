@@ -129,13 +129,13 @@ namespace :bulk_update do
     puts "IDs of lettings logs with postcode fix and status changed: [#{lettings_postcode_fixed_status_changed_ids.join(', ')}]"
     puts "IDs of lettings logs without postcode fix and status changed: [#{lettings_postcode_not_fixed_status_changed_ids.join(', ')}]"
 
-    lettings_fixed_org_counts = LettingsLog.where(id: lettings_postcode_fixed_status_changed_ids).group(:owning_organisation_id).count
-    lettings_fixed_org_counts.each do |org_id, count|
+    lettings_postcode_fixed_org_counts = LettingsLog.where(id: lettings_postcode_fixed_status_changed_ids).group(:owning_organisation_id).count
+    lettings_postcode_fixed_org_counts.each do |org_id, count|
       puts "Org #{org_id}: #{count} logs with postcode fix and status changed."
     end
 
-    lettings_not_fixed_org_counts = LettingsLog.where(id: lettings_postcode_not_fixed_status_changed_ids).group(:owning_organisation_id).count
-    lettings_not_fixed_org_counts.each do |org_id, count|
+    lettings_postcode_not_fixed_org_counts = LettingsLog.where(id: lettings_postcode_not_fixed_status_changed_ids).group(:owning_organisation_id).count
+    lettings_postcode_not_fixed_org_counts.each do |org_id, count|
       puts "Org #{org_id}: #{count} logs without postcode fix and status changed."
     end
 
@@ -147,13 +147,13 @@ namespace :bulk_update do
     puts "IDs of sales logs with postcode fix and status changed: [#{sales_postcode_fixed_status_changed_ids.join(', ')}]"
     puts "IDs of sales logs without postcode fix and status changed: [#{sales_postcode_not_fixed_status_changed_ids.join(', ')}]"
 
-    sales_fixed_org_counts = SalesLog.where(id: sales_postcode_fixed_status_changed_ids).group(:owning_organisation_id).count
-    sales_fixed_org_counts.each do |org_id, count|
+    sales_postcode_fixed_org_counts = SalesLog.where(id: sales_postcode_fixed_status_changed_ids).group(:owning_organisation_id).count
+    sales_postcode_fixed_org_counts.each do |org_id, count|
       puts "Org #{org_id}: #{count} logs with postcode fix and status changed."
     end
 
-    sales_not_fixed_org_counts = SalesLog.where(id: sales_postcode_not_fixed_status_changed_ids).group(:owning_organisation_id).count
-    sales_not_fixed_org_counts.each do |org_id, count|
+    sales_postcode_not_fixed_org_counts = SalesLog.where(id: sales_postcode_not_fixed_status_changed_ids).group(:owning_organisation_id).count
+    sales_postcode_not_fixed_org_counts.each do |org_id, count|
       puts "Org #{org_id}: #{count} logs without postcode fix and status changed."
     end
   end
