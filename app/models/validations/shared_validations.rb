@@ -73,7 +73,6 @@ module Validations::SharedValidations
     status = resource.status_at(date)
     return unless %i[reactivating_soon activating_soon deactivated].include?(status)
 
-    closest_reactivation = resource.last_deactivation_before(date)
     open_deactivation = if resource.is_a?(Location)
                           resource.open_deactivation || resource.scheme.open_deactivation
                         else
@@ -81,12 +80,12 @@ module Validations::SharedValidations
                         end
 
     date = case status
-           when :reactivating_soon then closest_reactivation.reactivation_date
+           when :reactivating_soon then resource.reactivation_date_after(date)
            when :activating_soon then resource&.available_from
            when :deactivated then open_deactivation.deactivation_date
            end
 
-    { scope: status, date: date&.to_formatted_s(:govuk_date), deactivation_date: closest_reactivation&.deactivation_date&.to_formatted_s(:govuk_date) }
+    { scope: status, date: date&.to_formatted_s(:govuk_date) }
   end
 
   def date_valid?(question, record)

@@ -2850,15 +2850,13 @@ RSpec.describe SchemesController, type: :request do
           end
         end
 
-        context "and there already is a deactivation period" do
-          let(:add_deactivations) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 5), reactivation_date: nil, scheme:) }
-
+        context "and there already is an open deactivation period" do
           before do
             create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 5), reactivation_date: nil, scheme:)
             patch "/schemes/#{scheme.id}/deactivate", params:
           end
 
-          it "updates existing scheme with valid deactivation date and renders scheme page" do
+          it "updates existing period with valid deactivation date and renders scheme page" do
             follow_redirect!
             follow_redirect!
             expect(response).to have_http_status(:ok)
@@ -2868,10 +2866,37 @@ RSpec.describe SchemesController, type: :request do
             expect(scheme.scheme_deactivation_periods.first.deactivation_date).to eq(deactivation_date)
           end
 
-          it "clears the scheme and scheme answers" do
+          it "clears the scheme answer" do
             expect(lettings_log.scheme).to eq(scheme)
             lettings_log.reload
             expect(lettings_log.scheme).to eq(nil)
+          end
+
+          it "marks log as needing attention" do
+            expect(lettings_log.unresolved).to eq(nil)
+            lettings_log.reload
+            expect(lettings_log.unresolved).to eq(true)
+          end
+        end
+
+        context "and there already is a closed deactivation period" do
+          before do
+            create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 5), reactivation_date: Time.zone.local(2023, 5, 5), scheme:)
+            patch "/schemes/#{scheme.id}/deactivate", params:
+          end
+
+          it "creates new deactivation period with valid deactivation date and renders scheme page" do
+            follow_redirect!
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            scheme.reload
+            expect(scheme.scheme_deactivation_periods.count).to eq(2)
+            expect(scheme.scheme_deactivation_periods.map(&:deactivation_date)).to include(deactivation_date)
+          end
+
+          it "clears the scheme answer" do
+            expect(lettings_log.scheme).to eq(scheme)
+            lettings_log.reload
             expect(lettings_log.scheme).to eq(nil)
           end
 
@@ -2967,7 +2992,6 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when there is a later open deactivation" do
-        let(:deactivation_date) { Time.zone.local(2022, 10, 10) }
         let(:params) { { scheme_deactivation_period: { deactivation_date_type: "other", "deactivation_date": "8/9/2022" } } }
         let(:add_deactivations) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 5), reactivation_date: nil, scheme:) }
 
@@ -2975,6 +2999,214 @@ RSpec.describe SchemesController, type: :request do
           follow_redirect!
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("This change will affect 1 log and 1 location.")
+        end
+      end
+    end
+  end
+
+  describe "#reactivate" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        patch "/schemes/1/reactivate"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { create(:user) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+
+      before do
+        sign_in user
+        patch "/schemes/#{scheme.id}/reactivate"
+      end
+
+      it "returns 401 unauthorized" do
+        expect(response).to be_unauthorized
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { create(:user, :data_coordinator) }
+      let!(:scheme) { create(:scheme, owning_organisation: user.organisation, created_at: Time.zone.local(2023, 10, 11)) }
+      let(:deactivation_date) { Time.utc(2022, 10, 10) }
+      let(:startdate) { Time.utc(2022, 10, 11) }
+      let(:params) { { scheme_deactivation_period: { reactivation_date: "5/8/2023", reactivation_date_type: "other" } } }
+
+      let(:add_deactivations) {}
+
+      before do
+        allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
+        Timecop.freeze(Time.utc(2023, 10, 10))
+        sign_in user
+        add_deactivations
+        scheme.save!
+        get "/schemes/#{scheme.id}/new-reactivation"
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      context "when there is no open deactivation period" do
+        let(:add_deactivations) do
+          create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 4, 1), reactivation_date: Time.zone.local(2023, 5, 5), updated_at: Time.zone.local(2000, 1, 1), scheme:)
+          create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2024, 1, 1), reactivation_date: Time.zone.local(2026, 4, 5), updated_at: Time.zone.local(2000, 1, 1), scheme:)
+        end
+
+        it "renders not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+
+        it "does not update deactivation periods" do
+          scheme.reload
+          expect(scheme.scheme_deactivation_periods.count).to eq(2)
+          expect(scheme.scheme_deactivation_periods[0].updated_at).to eq(Time.zone.local(2000, 1, 1))
+          expect(scheme.scheme_deactivation_periods[1].updated_at).to eq(Time.zone.local(2000, 1, 1))
+        end
+      end
+
+      context "when there is an open deactivation period starting after reactivation date" do
+        let(:add_deactivations) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 9, 15), reactivation_date: nil, updated_at: Time.zone.local(2000, 1, 1), scheme:) }
+
+        before do
+          patch "/schemes/#{scheme.id}/reactivate", params:
+        end
+
+        it "shows an unprocessable content error" do
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(page).to have_content(I18n.t("validations.scheme.reactivation.before_deactivation", date: "15 September 2023"))
+        end
+
+        it "does not update the deactivation period" do
+          scheme.reload
+          expect(scheme.scheme_deactivation_periods.count).to eq(1)
+          expect(scheme.scheme_deactivation_periods[0].updated_at).to eq(Time.zone.local(2000, 1, 1))
+        end
+      end
+
+      context "when there is an open deactivation period starting before reactivation date" do
+        let(:add_deactivations) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 7, 15), reactivation_date: nil, scheme:) }
+
+        before do
+          patch "/schemes/#{scheme.id}/reactivate", params:
+        end
+
+        it "redirects to scheme page" do
+          follow_redirect!
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(path).to match("/schemes/#{scheme.id}")
+        end
+
+        it "ends the existing deactivation period" do
+          scheme.reload
+          expect(scheme.scheme_deactivation_periods.count).to eq(1)
+          expect(scheme.scheme_deactivation_periods.first.deactivation_date).to eq(Time.zone.local(2023, 7, 15))
+          expect(scheme.scheme_deactivation_periods.first.reactivation_date).to eq(Time.zone.local(2023, 8, 5))
+        end
+
+        context "with default date" do
+          let(:add_deactivations) {}
+          let(:params) { { scheme_deactivation_period: { reactivation_date_type: "default" } } }
+
+          before do
+            allow(FormHandler.instance).to receive(:current_collection_start_year).and_return(2023)
+            create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 9, 15), reactivation_date: nil, scheme:)
+            allow(FormHandler.instance).to receive(:current_collection_start_year).and_return(2024)
+            patch "/schemes/#{scheme.id}/reactivate", params:
+          end
+
+          it "redirects to the scheme details page" do
+            expect(response).to redirect_to("/schemes/#{scheme.id}/details")
+            follow_redirect!
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+          end
+
+          it "updates existing scheme deactivations with valid reactivation date" do
+            follow_redirect!
+            scheme.reload
+            expect(scheme.scheme_deactivation_periods.count).to eq(1)
+            expect(scheme.scheme_deactivation_periods.first.reactivation_date).to eq(Time.zone.local(2024, 4, 1))
+          end
+        end
+
+        context "with other date" do
+          let(:params) { { scheme_deactivation_period: { reactivation_date_type: "other", "reactivation_date": "10/9/2023" } } }
+
+          it "redirects to the scheme details page" do
+            expect(response).to redirect_to("/schemes/#{scheme.id}/details")
+          end
+
+          it "updates existing scheme deactivations with valid reactivation date" do
+            follow_redirect!
+            scheme.reload
+            expect(scheme.scheme_deactivation_periods.count).to eq(1)
+            expect(scheme.scheme_deactivation_periods.first.reactivation_date).to eq(Time.zone.local(2023, 9, 10))
+          end
+        end
+
+        context "with other future date" do
+          let(:params) { { scheme_deactivation_period: { reactivation_date_type: "other", "reactivation_date": "14/12/2099" } } }
+
+          it "redirects to the scheme details page" do
+            expect(response).to redirect_to("/schemes/#{scheme.id}/details")
+          end
+        end
+
+        context "when the date is not selected" do
+          let(:params) { { scheme_deactivation_period: { "reactivation_date": "" } } }
+
+          it "displays the new page with an error message" do
+            expect(response).to have_http_status(:unprocessable_content)
+            expect(page).to have_content(I18n.t("validations.scheme.toggle_date.not_selected"))
+          end
+        end
+
+        context "when invalid date is entered" do
+          let(:params) { { scheme_deactivation_period: { reactivation_date_type: "other", "reactivation_date": "10/44/2022" } } }
+
+          it "displays the new page with an error message" do
+            expect(response).to have_http_status(:unprocessable_content)
+            expect(page).to have_content(I18n.t("validations.scheme.toggle_date.invalid"))
+          end
+        end
+
+        context "when the date is entered is before the beginning of current collection window" do
+          let(:params) { { scheme_deactivation_period: { reactivation_date_type: "other", "reactivation_date": "10/4/2020" } } }
+
+          it "displays the new page with an error message" do
+            expect(response).to have_http_status(:unprocessable_content)
+            expect(page).to have_content(I18n.t("validations.scheme.toggle_date.out_of_range", date: "1 April 2022"))
+          end
+        end
+
+        context "when the day is not entered" do
+          let(:params) { { scheme_deactivation_period: { reactivation_date_type: "other", "reactivation_date": "/2/2022" } } }
+
+          it "displays page with an error message" do
+            expect(response).to have_http_status(:unprocessable_content)
+            expect(page).to have_content(I18n.t("validations.scheme.toggle_date.invalid"))
+          end
+        end
+
+        context "when the month is not entered" do
+          let(:params) { { scheme_deactivation_period: { reactivation_date_type: "other", "reactivation_date": "2//2022" } } }
+
+          it "displays page with an error message" do
+            expect(response).to have_http_status(:unprocessable_content)
+            expect(page).to have_content(I18n.t("validations.scheme.toggle_date.invalid"))
+          end
+        end
+
+        context "when the year is not entered" do
+          let(:params) { { scheme_deactivation_period: { reactivation_date_type: "other", "reactivation_date": "2/2/" } } }
+
+          it "displays page with an error message" do
+            expect(response).to have_http_status(:unprocessable_content)
+            expect(page).to have_content(I18n.t("validations.scheme.toggle_date.invalid"))
+          end
         end
       end
     end

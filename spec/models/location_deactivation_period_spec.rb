@@ -85,5 +85,83 @@ RSpec.describe LocationDeactivationPeriod do
         end
       end
     end
+
+    context "when there is an open deactivation period less than six months in the future" do # validate_reactivation
+      let!(:location) { FactoryBot.build(:location, created_at: previous_collection_start_date - 2.years) }
+
+      before do
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.now + 5.months, location:)
+      end
+
+      context "when reactivation date is nil" do
+        let(:record) { FactoryBot.build(:location_deactivation_period, deactivation_date: Time.zone.now, location:) }
+
+        it "adds an error" do
+          validator.validate(record)
+          expect(record.errors.count).to eq(1)
+          expect(record.errors[:reactivation_date_type]).to include("Select one of the options.")
+        end
+      end
+
+      context "when reactivation date is present" do
+        context "when reactivation date is before the existing period's start" do
+          let(:record) { FactoryBot.build(:location_deactivation_period, deactivation_date: Time.zone.now + 3.months, reactivation_date: Time.zone.now + 4.months, location:) }
+
+          it "adds an error" do
+            validator.validate(record)
+            expect(record.errors[:reactivation_date].count).to eq(1)
+            expect(record.errors[:reactivation_date][0]).to match("The reactivation date must be on or after deactivation date.")
+          end
+        end
+
+        context "when reactivation date is after the existing period's start" do
+          let(:record) { FactoryBot.build(:location_deactivation_period, deactivation_date: Time.zone.now + 3.months, reactivation_date: Time.zone.now + 6.months, location:) }
+
+          it "does not add an error" do
+            validator.validate(record)
+            expect(record.errors).to be_empty
+          end
+        end
+      end
+    end
+
+    context "when there is not an open deactivation period within six months" do # validate_deactivation
+      let!(:location) { FactoryBot.create(:location, created_at: previous_collection_start_date - 2.years) }
+
+      before do
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.now + 7.months, reactivation_date: Time.zone.now + 8.months, location:)
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.now + 1.month, reactivation_date: Time.zone.now + 2.months, location:)
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.now + 9.months, location:)
+      end
+
+      context "when reactivation date is nil" do
+        let(:record) { FactoryBot.build(:location_deactivation_period, deactivation_date: Time.zone.now, location:) }
+
+        it "does not add an error" do
+          validator.validate(record)
+          expect(record.errors).to be_empty
+        end
+      end
+
+      context "when reactivation date is present" do
+        context "when deactivation date is less than six months in the future" do
+          let(:record) { FactoryBot.build(:location_deactivation_period, deactivation_date: Time.zone.now + 3.months, reactivation_date: Time.zone.now + 4.months, location:) }
+
+          it "does not add an error" do
+            validator.validate(record)
+            expect(record.errors).to be_empty
+          end
+        end
+
+        context "when deactivation date is more than six months in the future" do
+          let(:record) { FactoryBot.build(:location_deactivation_period, deactivation_date: Time.zone.now + 9.months, reactivation_date: Time.zone.now + 10.months, location:) }
+
+          it "does not add an error" do
+            validator.validate(record)
+            expect(record.errors).to be_empty
+          end
+        end
+      end
+    end
   end
 end

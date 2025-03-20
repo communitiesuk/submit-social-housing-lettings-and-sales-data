@@ -3,9 +3,15 @@ class SchemeDeactivationPeriodValidator < ActiveModel::Validator
 
   def validate(record)
     scheme = record.scheme
-    recent_deactivation = scheme.scheme_deactivation_periods.deactivations_without_reactivation.first
-    if recent_deactivation.present? && recent_deactivation.deactivation_date <= 6.months.from_now
-      validate_reactivation(record, recent_deactivation, scheme)
+    open_deactivation = scheme.scheme_deactivation_periods.deactivations_without_reactivation.first
+
+    # The SchemesController validates deactivation periods in three places:
+    # 1. new_deactivation builds a temporary scheme_deactivation_period object using the open deactivation if it starts in over six months, or otherwise builds a new period, and validates this (want validate_deactivation)
+    # 2. `deactivate` takes the open deactivation if present (any start date) and update!s it with the deactivation date, or else create!s a new deactivation with the deactivation date (want validate_deactivation)
+    # 3. `reactivate` takes the open deactivation (any start date) and update!s it with the reactivation date (want validate_reactivation)
+    # In toggle_scheme_link in SchemesHelper, we display a link to one or neither of new_deactivation and new_reactivation depending on status now and status in six months.
+    if open_deactivation.present? && open_deactivation.deactivation_date <= 6.months.from_now
+      validate_reactivation(record, open_deactivation, scheme)
     else
       validate_deactivation(record, scheme)
     end
@@ -49,4 +55,8 @@ class SchemeDeactivationPeriod < ApplicationRecord
 
   scope :deactivations_without_reactivation, -> { where(reactivation_date: nil) }
   scope :deactivations_with_reactivation, -> { where.not(reactivation_date: nil) }
+
+  def includes_date?(date)
+    deactivation_date <= date && (reactivation_date.nil? or reactivation_date > date)
+  end
 end

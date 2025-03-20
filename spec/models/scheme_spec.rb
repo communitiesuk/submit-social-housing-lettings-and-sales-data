@@ -470,6 +470,16 @@ RSpec.describe Scheme, type: :model do
       it "returns active if the scheme has no relevant deactivation records" do
         expect(scheme.status_at(Time.zone.today - 1.month)).to eq(:active)
       end
+
+      context "when the most recently created deactivation is not the current one" do
+        before do
+          FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.today - 300.days, reactivation_date: Time.zone.today - 200.days, scheme:)
+        end
+
+        it "returns reactivating_soon" do
+          expect(scheme.status_at(Time.zone.today - 3.days)).to eq(:reactivating_soon)
+        end
+      end
     end
   end
 

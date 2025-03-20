@@ -512,6 +512,47 @@ RSpec.describe Validations::SetupValidations do
       end
     end
 
+    context "with a scheme whose chronologically latest deactivation period is not most recently created" do
+      let(:scheme) { create(:scheme) }
+
+      before do
+        create(:location, scheme:)
+        scheme_deactivation_period = build(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), scheme:)
+        scheme_deactivation_period_2 = build(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 2, 4), reactivation_date: Time.zone.local(2022, 3, 4), scheme:)
+        scheme_deactivation_period.save!(validate: false)
+        scheme_deactivation_period_2.save!(validate: false)
+        scheme.reload
+      end
+
+      it "produces error when tenancy start date is during later deactivated scheme period" do
+        record.startdate = Time.zone.local(2022, 7, 5)
+        record.scheme = scheme
+        setup_validator.validate_scheme(record)
+        expect(record.errors["startdate"])
+          .to include(match I18n.t("validations.lettings.setup.startdate.scheme.reactivating_soon.startdate", name: scheme.service_name, date: "3 August 2022"))
+        expect(record.errors["scheme_id"])
+          .to include(match I18n.t("validations.lettings.setup.startdate.scheme.reactivating_soon.scheme_id", name: scheme.service_name, date: "3 August 2022"))
+      end
+
+      it "produces error when tenancy start date is during earlier deactivated scheme period" do
+        record.startdate = Time.zone.local(2022, 2, 5)
+        record.scheme = scheme
+        setup_validator.validate_scheme(record)
+        expect(record.errors["startdate"])
+          .to include(match I18n.t("validations.lettings.setup.startdate.scheme.reactivating_soon.startdate", name: scheme.service_name, date: "4 March 2022"))
+        expect(record.errors["scheme_id"])
+          .to include(match I18n.t("validations.lettings.setup.startdate.scheme.reactivating_soon.scheme_id", name: scheme.service_name, date: "4 March 2022"))
+      end
+
+      it "produces no error when tenancy start date is during an active scheme period" do
+        record.startdate = Time.zone.local(2022, 10, 1)
+        record.scheme = scheme
+        setup_validator.validate_scheme(record)
+        expect(record.errors["startdate"]).to be_empty
+        expect(record.errors["scheme_id"]).to be_empty
+      end
+    end
+
     context "with a scheme with no locations active on the start date & no location set" do
       let(:scheme) { create(:scheme) }
       let(:location) { create(:location, scheme:) }
