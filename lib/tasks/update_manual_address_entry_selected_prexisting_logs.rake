@@ -27,23 +27,32 @@ namespace :bulk_update do
       log.manual_address_entry_selected = true
       if log.save
         updated_lettings_logs_count += 1
+        Rails.logger.info "manual_address_entry_selected updated for lettings log #{log.id}"
       else
-        Rails.logger.info "Could not save changes to lettings log #{log.id}"
+        Rails.logger.info "Could not save manual_address_entry_selected changes to lettings log #{log.id} : #{log.errors.full_messages.join(', ')}"
       end
 
       postcode_fixed = false
       if log.postcode_full.nil? && log.address_line1 == log.address_line1_input
         log.postcode_full = log.postcode_full_input
-        lettings_postcode_fixed_count += 1
-        postcode_fixed = true
-        log.save!
+        if log.save
+          lettings_postcode_fixed_count += 1
+          Rails.logger.info "postcode_full updated by address_line1_input for lettings log #{log.id}"
+          postcode_fixed = true
+        else
+          Rails.logger.info "Could not save postcode_full changes to lettings log #{log.id} : #{log.errors.full_messages.join(', ')}"
+        end
       end
 
       if log.postcode_full.nil? && log.creation_method == "bulk upload" && log.address_line1 == log.address_line1_as_entered
         log.postcode_full = log.postcode_full_as_entered
-        lettings_postcode_fixed_count += 1
-        postcode_fixed = true
-        log.save!
+        if log.save
+          lettings_postcode_fixed_count += 1
+          Rails.logger.info "postcode_full updated by address_line1_as_entered for lettings log #{log.id}"
+          postcode_fixed = true
+        else
+          Rails.logger.info "Could not save postcode_full changes to lettings log #{log.id} : #{log.errors.full_messages.join(', ')}"
+        end
       end
 
       status_post_change = log.status
@@ -70,23 +79,32 @@ namespace :bulk_update do
       log.manual_address_entry_selected = true
       if log.save
         updated_sales_logs_count += 1
+        Rails.logger.info "manual_address_entry_selected updated for sales log #{log.id}"
       else
-        Rails.logger.info "Could not save changes to sales log #{log.id}"
+        Rails.logger.info "Could not save manual_address_entry_selected changes to sales log #{log.id} : #{log.errors.full_messages.join(', ')}"
       end
 
       postcode_fixed = false
       if log.postcode_full.nil? && log.address_line1 == log.address_line1_input
         log.postcode_full = log.postcode_full_input
-        sales_postcode_fixed_count += 1
-        postcode_fixed = true
-        log.save!
+        if log.save
+          sales_postcode_fixed_count += 1
+          Rails.logger.info "postcode_full updated by address_line1_input for sales log #{log.id}"
+          postcode_fixed = true
+        else
+          Rails.logger.info "Could not save postcode_full changes to sales log #{log.id} : #{log.errors.full_messages.join(', ')}"
+        end
       end
 
       if log.postcode_full.nil? && log.creation_method == "bulk upload" && log.address_line1 == log.address_line1_as_entered
         log.postcode_full = log.postcode_full_as_entered
-        sales_postcode_fixed_count += 1
-        postcode_fixed = true
-        log.save!
+        if log.save
+          sales_postcode_fixed_count += 1
+          Rails.logger.info "postcode_full updated by address_line1_as_entered for sales log #{log.id}"
+          postcode_fixed = true
+        else
+          Rails.logger.info "Could not save postcode_full changes to sales log #{log.id} : #{log.errors.full_messages.join(', ')}"
+        end
       end
 
       status_post_change = log.status
@@ -150,7 +168,7 @@ namespace :bulk_update do
             updated_but_not_fixed_ids << log.id
           end
         else
-          Rails.logger.info "Could not save changes to lettings log #{log.id}"
+          Rails.logger.info "Could not save changes to lettings log #{log.id}: #{log.errors.full_messages.join(', ')}"
           not_updated_count += 1
           not_updated_ids << log.id
         end
