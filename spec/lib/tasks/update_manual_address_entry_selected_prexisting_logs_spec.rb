@@ -5,6 +5,7 @@ RSpec.describe "update_manual_address_entry_selected_preexisting_logs_spec", typ
   before do
     Rake.application.rake_require("tasks/update_manual_address_entry_selected_prexisting_logs")
     Rake::Task.define_task(:environment)
+    task.reenable
   end
 
   describe "bulk_update:update_manual_address_entry_selected" do
