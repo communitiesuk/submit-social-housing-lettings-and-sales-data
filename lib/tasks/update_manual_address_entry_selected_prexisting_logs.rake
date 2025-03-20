@@ -2,11 +2,20 @@ namespace :bulk_update do
   desc "Update logs with specific criteria and set manual_address_entry_selected to true"
   task update_manual_address_entry_selected: :environment do
     updated_lettings_logs_count = 0
-    lettings_status_changed_log_ids = []
     lettings_postcode_fixed_count = 0
+    lettings_postcode_fixed_status_changed_count = 0
+    lettings_postcode_not_fixed_status_changed_count = 0
+    lettings_postcode_fixed_status_changed_ids = []
+    lettings_postcode_not_fixed_status_changed_ids = []
+    lettings_updated_without_issue = 0
+
     updated_sales_logs_count = 0
-    sales_status_changed_log_ids = []
     sales_postcode_fixed_count = 0
+    sales_postcode_fixed_status_changed_count = 0
+    sales_postcode_not_fixed_status_changed_count = 0
+    sales_postcode_fixed_status_changed_ids = []
+    sales_postcode_not_fixed_status_changed_ids = []
+    sales_updated_without_issue = 0
 
     lettings_logs = LettingsLog.filter_by_year(2024)
                                .where(status: %w[in_progress completed])
@@ -21,24 +30,35 @@ namespace :bulk_update do
       else
         Rails.logger.info "Could not save changes to lettings log #{log.id}"
       end
+
+      postcode_fixed = false
+      if log.postcode_full.nil? && log.address_line1 == log.address_line1_input
+        log.postcode_full = log.postcode_full_input
+        lettings_postcode_fixed_count += 1
+        postcode_fixed = true
+        log.save!
+      end
+
+      if log.postcode_full.nil? && log.creation_method == "bulk upload" && log.address_line1 == log.address_line1_as_entered
+        log.postcode_full = log.postcode_full_as_entered
+        lettings_postcode_fixed_count += 1
+        postcode_fixed = true
+        log.save!
+      end
+
       status_post_change = log.status
       if status_pre_change != status_post_change
-        if log.postcode_full.nil? && log.address_line1 == log.address_line1_input
-          log.postcode_full = log.postcode_full_input
-          log.save!
-        end
-        if log.status == status_pre_change
-          lettings_postcode_fixed_count += 1
+        if postcode_fixed
+          lettings_postcode_fixed_status_changed_count += 1
+          lettings_postcode_fixed_status_changed_ids << log.id
         else
-          Rails.logger.info "Status changed from #{status_pre_change} to #{status_post_change} for lettings log #{log.id}"
-          lettings_status_changed_log_ids << log.id
+          lettings_postcode_not_fixed_status_changed_count += 1
+          lettings_postcode_not_fixed_status_changed_ids << log.id
         end
+      else
+        lettings_updated_without_issue += 1
       end
     end
-
-    puts "#{updated_lettings_logs_count} lettings logs updated."
-    puts "Lettings logs with status changes: [#{lettings_status_changed_log_ids.join(', ')}]"
-    puts "Lettings logs where postcode fix maintained status: #{lettings_postcode_fixed_count}"
 
     sales_logs = SalesLog.filter_by_year(2024)
                          .where(status: %w[in_progress completed])
@@ -53,24 +73,51 @@ namespace :bulk_update do
       else
         Rails.logger.info "Could not save changes to sales log #{log.id}"
       end
+
+      postcode_fixed = false
+      if log.postcode_full.nil? && log.address_line1 == log.address_line1_input
+        log.postcode_full = log.postcode_full_input
+        sales_postcode_fixed_count += 1
+        postcode_fixed = true
+        log.save!
+      end
+
+      if log.postcode_full.nil? && log.creation_method == "bulk upload" && log.address_line1 == log.address_line1_as_entered
+        log.postcode_full = log.postcode_full_as_entered
+        sales_postcode_fixed_count += 1
+        postcode_fixed = true
+        log.save!
+      end
+
       status_post_change = log.status
       if status_pre_change != status_post_change
-        if log.postcode_full.nil? && log.address_line1 == log.address_line1_input
-          log.postcode_full = log.postcode_full_input
-          log.save!
-        end
-        if log.status == status_pre_change
-          sales_postcode_fixed_count += 1
+        if postcode_fixed
+          sales_postcode_fixed_status_changed_count += 1
+          sales_postcode_fixed_status_changed_ids << log.id
         else
-          Rails.logger.info "Status changed from #{status_pre_change} to #{status_post_change} for sales log #{log.id}"
-          sales_status_changed_log_ids << log.id
+          sales_postcode_not_fixed_status_changed_count += 1
+          sales_postcode_not_fixed_status_changed_ids << log.id
         end
+      else
+        sales_updated_without_issue += 1
       end
     end
 
-    puts "#{updated_sales_logs_count} sales logs updated."
-    puts "Sales logs with status changes: [#{sales_status_changed_log_ids.join(', ')}]"
-    puts "Sales logs where postcode fix maintained status: #{sales_postcode_fixed_count}"
+    puts "#{updated_lettings_logs_count} lettings logs were updated."
+    puts "#{lettings_updated_without_issue} lettings logs were updated without issue."
+    puts "#{lettings_postcode_fixed_count} lettings logs where postcode fix was applied."
+    puts "#{lettings_postcode_fixed_status_changed_count} lettings logs with postcode fix and status changed."
+    puts "#{lettings_postcode_not_fixed_status_changed_count} lettings logs without postcode fix and status changed."
+    puts "IDs of lettings logs with postcode fix and status changed: [#{lettings_postcode_fixed_status_changed_ids.join(', ')}]"
+    puts "IDs of lettings logs without postcode fix and status changed: [#{lettings_postcode_not_fixed_status_changed_ids.join(', ')}]"
+
+    puts "#{updated_sales_logs_count} sales logs were updated."
+    puts "#{sales_updated_without_issue} sales logs were updated without issue."
+    puts "#{sales_postcode_fixed_count} sales logs where postcode fix was applied."
+    puts "#{sales_postcode_fixed_status_changed_count} sales logs with postcode fix and status changed."
+    puts "#{sales_postcode_not_fixed_status_changed_count} sales logs without postcode fix and status changed."
+    puts "IDs of sales logs with postcode fix and status changed: [#{sales_postcode_fixed_status_changed_ids.join(', ')}]"
+    puts "IDs of sales logs without postcode fix and status changed: [#{sales_postcode_not_fixed_status_changed_ids.join(', ')}]"
   end
 
   desc "Find logs to fix and update postcode_full if conditions are met"
@@ -89,6 +136,11 @@ namespace :bulk_update do
 
       if log.address_line1 == log.address_line1_input
         log.postcode_full = log.postcode_full_input
+      elsif log.creation_method == "bulk upload" && log.address_line1 == log.address_line1_as_entered
+        log.postcode_full = log.postcode_full_as_entered
+      end
+
+      if log.postcode_full.present?
         if log.save
           Rails.logger.info "Updated postcode_full for lettings log #{log.id}"
           updated_count += 1
