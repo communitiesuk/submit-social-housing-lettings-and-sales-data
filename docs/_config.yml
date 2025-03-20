@@ -10,3 +10,6 @@ aux_links:
     - https://core-design-history.herokuapp.com
   "GitHub":
     - https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data
+gems: ["jekyll-plantuml"]
+plugins:
+  - jekyll-diagrams
