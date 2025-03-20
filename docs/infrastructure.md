@@ -118,3 +118,6 @@ Things to watch out for when destroying/creating infra:
   - After destroying the db, you’ll need to make sure the ad hoc ECS task which seeds the database gets run in order to set up the database correctly.
 - SNS
   - When creating an email subscription in an environment, Terraform will look up the email to use as the subscription endpoint from Secrets Manager. If you haven’t already created this (e.g. by running terraform apply -target="module.monitoring" -var="create_secrets_first=true") then this will lead to the subscription creation erroring, because it can’t retrieve the value of the secret (because it doesn’t exist yet). If this happens, remember you’ll need to go to Secrets Manager in the console and enter the desired email (as plaintext, no quotation marks or anything else required) as the value of the secret (which is most likely called MONITORING_EMAIL). Then run another apply with Terraform and this time it should succeed.
+
+![Architecture Diagram](https://raw.githubusercontent.com/communitiesuk/submit-social-housing-lettings-and-sales-data/main/docs/images/architecture_diagram.png)
+![Context Diagram](https://raw.githubusercontent.com/communitiesuk/submit-social-housing-lettings-and-sales-data/main/docs/images/context_diagram.png)
