@@ -67,7 +67,7 @@ RSpec.describe "generate_lettings_documentation" do
   describe ":describe_lettings_validations", type: :task do
     subject(:task) { Rake::Task["generate_lettings_documentation:describe_lettings_validations"] }
 
-    let(:documentation_generator) { instance_double(DocumentationGenerator, describe_bu_validations: nil) }
+    let(:documentation_generator) { instance_double(DocumentationGenerator, describe_bu_validations: nil, get_all_lettings_methods: []) }
     let(:client) { instance_double(OpenAI::Client) }
 
     before do
@@ -179,7 +179,7 @@ RSpec.describe "generate_lettings_documentation" do
   describe ":describe_soft_lettings_validations", type: :task do
     subject(:task) { Rake::Task["generate_lettings_documentation:describe_soft_lettings_validations"] }
 
-    let(:documentation_generator) { instance_double(DocumentationGenerator, describe_bu_validations: nil) }
+    let(:documentation_generator) { instance_double(DocumentationGenerator, describe_bu_validations: nil, get_soft_lettings_methods: []) }
     let(:client) { instance_double(OpenAI::Client) }
 
     before do

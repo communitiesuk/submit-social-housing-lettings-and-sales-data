@@ -94,6 +94,64 @@ class DocumentationGenerator
     end
   end
 
+  def get_all_sales_methods
+    include Validations::Sales::SetupValidations
+    include Validations::Sales::HouseholdValidations
+    include Validations::Sales::PropertyValidations
+    include Validations::Sales::FinancialValidations
+    include Validations::Sales::SaleInformationValidations
+    include Validations::SharedValidations
+    include Validations::LocalAuthorityValidations
+    all_validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
+    all_methods = [Validations::Sales::SetupValidations,
+                   Validations::Sales::HouseholdValidations,
+                   Validations::Sales::PropertyValidations,
+                   Validations::Sales::FinancialValidations,
+                   Validations::Sales::SaleInformationValidations,
+                   Validations::SharedValidations,
+                   Validations::LocalAuthorityValidations].map { |x| x.instance_methods + x.private_instance_methods }.flatten
+
+    all_helper_methods = all_methods - all_validation_methods
+    [all_validation_methods, all_helper_methods]
+  end
+
+  def get_soft_sales_methods
+    include Validations::SoftValidations
+    include Validations::Sales::SoftValidations
+
+    all_helper_methods = Validations::SoftValidations.private_instance_methods + Validations::Sales::SoftValidations.private_instance_methods
+    all_validation_methods = Validations::SoftValidations.instance_methods + Validations::Sales::SoftValidations.instance_methods
+    [all_helper_methods, all_validation_methods]
+  end
+
+  def get_all_lettings_methods
+    include Validations::SetupValidations
+    include Validations::HouseholdValidations
+    include Validations::PropertyValidations
+    include Validations::FinancialValidations
+    include Validations::TenancyValidations
+    include Validations::DateValidations
+    include Validations::LocalAuthorityValidations
+    all_validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
+    all_methods = [Validations::SetupValidations,
+                   Validations::HouseholdValidations,
+                   Validations::PropertyValidations,
+                   Validations::FinancialValidations,
+                   Validations::TenancyValidations,
+                   Validations::DateValidations,
+                   Validations::LocalAuthorityValidations].map { |x| x.instance_methods + x.private_instance_methods }.flatten
+    all_helper_methods = all_methods - all_validation_methods
+    [all_validation_methods, all_helper_methods]
+  end
+
+  def get_soft_lettings_methods
+    include Validations::SoftValidations
+
+    all_helper_methods = Validations::SoftValidations.private_instance_methods
+    all_validation_methods = Validations::SoftValidations.instance_methods
+    [all_helper_methods, all_validation_methods]
+  end
+
 private
 
   def describe_hard_validation(client, meth, validation_source, helper_methods_source, form, file_path)
