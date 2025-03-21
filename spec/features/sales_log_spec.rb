@@ -228,28 +228,39 @@ RSpec.describe "Sales Log Features" do
           expect(page).to have_current_path("/sales-logs/csv-download?codes_only=false&search=1")
         end
       end
+    end
+  end
 
-      context "when displaying the question number in the page header" do
-        let(:sales_log) { FactoryBot.create(:sales_log, :shared_ownership_setup_complete, jointpur: 2, owning_organisation: user.organisation, assigned_to: user) }
+  context "when I am signed in" do
+    let(:user) { create(:user, last_sign_in_at: Time.zone.now) }
 
-        context "when visiting the address page" do
-          before do
-            visit("/sales-logs/#{sales_log.id}/address")
-          end
+    before do
+      create(:sales_log, :in_progress, owning_organisation: user.organisation, assigned_to: user)
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+      visit("/sales-logs?search=1")
+    end
 
-          it "displays the question number in the page header" do
-            expect(page).to have_content("Q16")
-          end
+    context "when viewing pages within a log" do
+      let(:sales_log) { FactoryBot.create(:sales_log, :shared_ownership_setup_complete, jointpur: 2, owning_organisation: user.organisation, assigned_to: user, saledate: Time.zone.local(2024, 12, 3)) }
+
+      context "when visiting the address page" do
+        before do
+          visit("/sales-logs/#{sales_log.id}/address")
         end
 
-        context "when visiting the about staircasing page" do
-          before do
-            visit("/sales-logs/#{sales_log.id}/about-staircasing-not-joint-purchase")
-          end
+        it "displays the question number in the page header" do
+          expect(page).to have_content("Q16")
+        end
+      end
 
-          it "displays the question number in the page header" do
-            expect(page).to have_content(/Shared ownership scheme\s*About the staircasing transaction/)
-          end
+      context "when visiting the about staircasing page" do
+        before do
+          visit("/sales-logs/#{sales_log.id}/about-staircasing-not-joint-purchase")
+        end
+
+        it "has the expected content" do
+          expect(page).to have_content(/Shared ownership scheme\s*About the staircasing transaction/)
         end
       end
     end

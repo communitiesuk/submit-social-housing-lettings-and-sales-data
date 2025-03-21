@@ -6,7 +6,7 @@ RSpec.describe "form/guidance/_financial_calculations_outright_sale.html.erb" do
   let(:fragment) { Capybara::Node::Simple.new(rendered) }
 
   context "when mortgage used is not answered" do
-    let(:log) { create(:sales_log, :outright_sale_setup_complete, ownershipsch: 3, type: 10, mortgageused: nil, discount: 30) }
+    let(:log) { create(:sales_log, :outright_sale_setup_complete, ownershipsch: 3, type: 10, mortgageused: nil, discount: 30, saledate: Time.zone.local(2024, 11, 1)) }
 
     it "renders correct content" do
       render partial: "form/guidance/financial_calculations_outright_sale", locals: { log:, current_user: log.assigned_to }
@@ -18,7 +18,7 @@ RSpec.describe "form/guidance/_financial_calculations_outright_sale.html.erb" do
   end
 
   context "when mortgage used is no" do
-    let(:log) { create(:sales_log, :outright_sale_setup_complete, ownershipsch: 3, type: 10, mortgageused: 2, discount: nil) }
+    let(:log) { create(:sales_log, :outright_sale_setup_complete, ownershipsch: 3, type: 10, mortgageused: 2, discount: nil, saledate: Time.zone.local(2024, 11, 1)) }
 
     it "renders correct content" do
       render partial: "form/guidance/financial_calculations_outright_sale", locals: { log:, current_user: log.assigned_to }
@@ -32,7 +32,7 @@ RSpec.describe "form/guidance/_financial_calculations_outright_sale.html.erb" do
   end
 
   context "when mortgage used is yes" do
-    let(:log) { create(:sales_log, :outright_sale_setup_complete, ownershipsch: 3, type: 10, mortgageused: 1, mortgage: nil, discount: 30) }
+    let(:log) { create(:sales_log, :outright_sale_setup_complete, ownershipsch: 3, type: 10, mortgageused: 1, mortgage: nil, discount: 30, saledate: Time.zone.local(2024, 11, 1)) }
 
     it "renders correct content" do
       render partial: "form/guidance/financial_calculations_outright_sale", locals: { log:, current_user: log.assigned_to }

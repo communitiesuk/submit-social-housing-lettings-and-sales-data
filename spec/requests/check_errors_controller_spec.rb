@@ -4,7 +4,7 @@ RSpec.describe CheckErrorsController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { create(:user, :data_coordinator) }
   let(:lettings_log) { create(:lettings_log, :setup_completed, assigned_to: user) }
-  let(:sales_log) { create(:sales_log, :shared_ownership_setup_complete, assigned_to: user) }
+  let(:sales_log) { create(:sales_log, :shared_ownership_setup_complete, staircase: 2, assigned_to: user) }
 
   describe "check errors page" do
     context "when user is not signed in" do

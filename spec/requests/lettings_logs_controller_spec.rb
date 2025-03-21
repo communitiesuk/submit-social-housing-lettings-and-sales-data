@@ -1218,13 +1218,37 @@ RSpec.describe LettingsLogsController, type: :request do
             end
           end
 
-          context "when a lettings log is for a renewal of supported housing" do
-            let(:lettings_log) { create(:lettings_log, :startdate_today, assigned_to: user, renewal: 1, needstype: 2, rent_type: 3, postcode_known: 0) }
+          context "when a lettings log is for a renewal of supported housing in 2024" do
+            let(:lettings_log) { create(:lettings_log, :startdate_today, assigned_to: user, renewal: 1, needstype: 2, rent_type: 3, postcode_known: 0, startdate: Time.zone.local(2024, 10, 20)) }
 
             it "does not show property information" do
               get lettings_log_path(lettings_log)
               expect(page).to have_content "Tenancy information"
               expect(page).not_to have_content "Property information"
+            end
+
+            it "does not crash the app if postcode_known is not nil" do
+              expect { get lettings_log_path(lettings_log) }.not_to raise_error
+            end
+          end
+
+          context "when a lettings log is for a renewal of supported housing in 2025" do
+            let(:lettings_log) { create(:lettings_log, assigned_to: user, renewal: 1, needstype: 2, rent_type: 3, postcode_known: 0) }
+
+            before do
+              Timecop.freeze(2025, 10, 15)
+              lettings_log.startdate = Time.zone.local(2025, 10, 20)
+              lettings_log.save!
+            end
+
+            after do
+              Timecop.return
+            end
+
+            it "shows property information" do
+              get lettings_log_path(lettings_log)
+              expect(page).to have_content "Tenancy information"
+              expect(page).to have_content "Property information"
             end
 
             it "does not crash the app if postcode_known is not nil" do
