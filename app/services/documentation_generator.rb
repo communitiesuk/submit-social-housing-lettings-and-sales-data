@@ -9,9 +9,7 @@ class DocumentationGenerator
   include Validations::SoftValidations
   include Validations::Sales::SoftValidations
 
-  def describe_hard_validations(client, all_validation_methods, all_helper_methods, log_type)
-    form = FormHandler.instance.forms["current_#{log_type}"]
-
+  def describe_hard_validations(client, form, all_validation_methods, all_helper_methods, log_type)
     all_validation_methods.each do |meth|
       if LogValidation.where(validation_name: meth.to_s, bulk_upload_specific: false, log_type:, collection_year: "#{form.start_date.year}/#{form.start_date.year + 1}").exists?
         Rails.logger.info("Validation #{meth} already exists for #{form.start_date.year}")
@@ -69,7 +67,7 @@ class DocumentationGenerator
     end
   end
 
-  def describe_soft_validations(client, all_validation_methods, all_helper_methods, log_type)
+  def describe_soft_validations(client, form, all_validation_methods, all_helper_methods, log_type)
     validation_descriptions = {}
     all_validation_methods[0..5].each do |meth|
       validation_source = method(meth).source
@@ -87,18 +85,71 @@ class DocumentationGenerator
       validation_descriptions[meth.to_s] = result
     end
 
-    current_form = FormHandler.instance.forms["current_#{log_type}"]
-    previous_form = FormHandler.instance.forms["previous_#{log_type}"]
-
-    [current_form, previous_form].each do |form|
-      interruption_screen_pages = form.pages.select { |page| page.questions.first.type == "interruption_screen" }
-      interruption_screen_pages_grouped_by_question = interruption_screen_pages.group_by { |page| page.questions.first.id }
-      interruption_screen_pages_grouped_by_question.each do |_question_id, pages|
-        pages.map do |page|
-          save_soft_validation(form, page, validation_descriptions, log_type)
-        end
+    interruption_screen_pages = form.pages.select { |page| page.questions.first.type == "interruption_screen" }
+    interruption_screen_pages_grouped_by_question = interruption_screen_pages.group_by { |page| page.questions.first.id }
+    interruption_screen_pages_grouped_by_question.each do |_question_id, pages|
+      pages.map do |page|
+        save_soft_validation(form, page, validation_descriptions, log_type)
       end
     end
+  end
+
+  def get_all_sales_methods
+    include Validations::Sales::SetupValidations
+    include Validations::Sales::HouseholdValidations
+    include Validations::Sales::PropertyValidations
+    include Validations::Sales::FinancialValidations
+    include Validations::Sales::SaleInformationValidations
+    include Validations::SharedValidations
+    include Validations::LocalAuthorityValidations
+    all_validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
+    all_methods = [Validations::Sales::SetupValidations,
+                   Validations::Sales::HouseholdValidations,
+                   Validations::Sales::PropertyValidations,
+                   Validations::Sales::FinancialValidations,
+                   Validations::Sales::SaleInformationValidations,
+                   Validations::SharedValidations,
+                   Validations::LocalAuthorityValidations].map { |x| x.instance_methods + x.private_instance_methods }.flatten
+
+    all_helper_methods = all_methods - all_validation_methods
+    [all_validation_methods, all_helper_methods]
+  end
+
+  def get_soft_sales_methods
+    include Validations::SoftValidations
+    include Validations::Sales::SoftValidations
+
+    all_helper_methods = Validations::SoftValidations.private_instance_methods + Validations::Sales::SoftValidations.private_instance_methods
+    all_validation_methods = Validations::SoftValidations.instance_methods + Validations::Sales::SoftValidations.instance_methods
+    [all_helper_methods, all_validation_methods]
+  end
+
+  def get_all_lettings_methods
+    include Validations::SetupValidations
+    include Validations::HouseholdValidations
+    include Validations::PropertyValidations
+    include Validations::FinancialValidations
+    include Validations::TenancyValidations
+    include Validations::DateValidations
+    include Validations::LocalAuthorityValidations
+    all_validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
+    all_methods = [Validations::SetupValidations,
+                   Validations::HouseholdValidations,
+                   Validations::PropertyValidations,
+                   Validations::FinancialValidations,
+                   Validations::TenancyValidations,
+                   Validations::DateValidations,
+                   Validations::LocalAuthorityValidations].map { |x| x.instance_methods + x.private_instance_methods }.flatten
+    all_helper_methods = all_methods - all_validation_methods
+    [all_validation_methods, all_helper_methods]
+  end
+
+  def get_soft_lettings_methods
+    include Validations::SoftValidations
+
+    all_helper_methods = Validations::SoftValidations.private_instance_methods
+    all_validation_methods = Validations::SoftValidations.instance_methods
+    [all_helper_methods, all_validation_methods]
   end
 
 private
