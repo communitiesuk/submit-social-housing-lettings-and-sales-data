@@ -16,8 +16,8 @@ RSpec.describe "update_created_by_values" do
 
       context "with bulk upload id" do
         let(:bulk_upload) { create(:bulk_upload) }
-        let(:lettings_log) { create(:lettings_log, :completed, assigned_to: user, bulk_upload_id: bulk_upload.id, updated_at: Time.zone.yesterday) }
-        let(:sales_log) { create(:sales_log, :completed, assigned_to: user, bulk_upload_id: bulk_upload.id, updated_at: Time.zone.yesterday) }
+        let(:lettings_log) { create(:lettings_log, :completed, assigned_to: user, bulk_upload_id: bulk_upload.id, updated_at: Time.zone.yesterday, startdate: Time.zone.local(2024, 9, 9)) }
+        let(:sales_log) { create(:sales_log, :completed, assigned_to: user, bulk_upload_id: bulk_upload.id, updated_at: Time.zone.yesterday, saledate: Time.zone.local(2024, 9, 9)) }
 
         it "updates created_by to bulk upload user id for lettings log" do
           initial_updated_at = lettings_log.updated_at
@@ -44,8 +44,8 @@ RSpec.describe "update_created_by_values" do
 
       context "without bulk upload id" do
         context "and version whodunnit exists for create" do
-          let(:lettings_log) { create(:lettings_log, :completed, assigned_to: user, created_by_id: nil, updated_at: Time.zone.yesterday) }
-          let(:sales_log) { create(:sales_log, :completed, assigned_to: user, created_by_id: nil, updated_at: Time.zone.yesterday) }
+          let(:lettings_log) { create(:lettings_log, :completed, assigned_to: user, created_by_id: nil, updated_at: Time.zone.yesterday, startdate: Time.zone.local(2024, 9, 9)) }
+          let(:sales_log) { create(:sales_log, :completed, assigned_to: user, created_by_id: nil, updated_at: Time.zone.yesterday, saledate: Time.zone.local(2024, 9, 9)) }
           let(:other_user) { create(:user, organisation: user.organisation) }
 
           before do
@@ -77,8 +77,8 @@ RSpec.describe "update_created_by_values" do
         end
 
         context "and version whodunnit does not exist for create" do
-          let(:lettings_log) { create(:lettings_log, :completed, assigned_to: user, created_by_id: nil, updated_at: Time.zone.yesterday) }
-          let(:sales_log) { create(:sales_log, :completed, assigned_to: user, created_by_id: nil, updated_at: Time.zone.yesterday) }
+          let(:lettings_log) { create(:lettings_log, :completed, assigned_to: user, created_by_id: nil, updated_at: Time.zone.yesterday, startdate: Time.zone.local(2024, 9, 9)) }
+          let(:sales_log) { create(:sales_log, :completed, assigned_to: user, created_by_id: nil, updated_at: Time.zone.yesterday, saledate: Time.zone.local(2024, 9, 9)) }
 
           before do
             PaperTrail::Version.find_by(item_id: lettings_log.id, event: "create").update!(whodunnit: nil)
@@ -109,8 +109,8 @@ RSpec.describe "update_created_by_values" do
         end
 
         context "and version whodunnit is not a User for create" do
-          let(:lettings_log) { create(:lettings_log, :completed, assigned_to: user, created_by_id: nil, updated_at: Time.zone.yesterday) }
-          let(:sales_log) { create(:sales_log, :completed, assigned_to: user, created_by_id: nil, updated_at: Time.zone.yesterday) }
+          let(:lettings_log) { create(:lettings_log, :completed, assigned_to: user, created_by_id: nil, updated_at: Time.zone.yesterday, startdate: Time.zone.local(2024, 9, 9)) }
+          let(:sales_log) { create(:sales_log, :completed, assigned_to: user, created_by_id: nil, updated_at: Time.zone.yesterday, saledate: Time.zone.local(2024, 9, 9)) }
           let(:other_user) { create(:user, organisation: user.organisation) }
 
           before do

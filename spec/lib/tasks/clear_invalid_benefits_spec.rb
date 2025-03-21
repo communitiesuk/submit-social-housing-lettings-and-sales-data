@@ -13,7 +13,7 @@ RSpec.describe "clear_invalid_benefits" do
 
     context "when the rake task is run" do
       context "and there is a completed lettings log that trips the validation" do
-        let(:log) { build(:lettings_log, :completed, ecstat1: 1, benefits: 1, assigned_to: create(:user), period: nil) }
+        let(:log) { build(:lettings_log, :completed, ecstat1: 1, benefits: 1, assigned_to: create(:user), period: nil, startdate: Time.zone.local(2024, 5, 6)) }
 
         before do
           log.status = "completed"
@@ -31,7 +31,7 @@ RSpec.describe "clear_invalid_benefits" do
       end
 
       context "and there is a lettings log that trips the validation for person 2" do
-        let(:log) { build(:lettings_log, :completed, ecstat2: 2, benefits: 1, relat2: "P", assigned_to: create(:user), period: nil) }
+        let(:log) { build(:lettings_log, :completed, ecstat2: 2, benefits: 1, relat2: "P", assigned_to: create(:user), period: nil, startdate: Time.zone.local(2024, 8, 11)) }
 
         before do
           log.status = "completed"
@@ -49,7 +49,7 @@ RSpec.describe "clear_invalid_benefits" do
       end
 
       context "and there is a lettings log that trips the validation for person 8" do
-        let(:log) { build(:lettings_log, :completed, ecstat8: 1, benefits: 1, relat8: "P", assigned_to: create(:user), period: nil) }
+        let(:log) { build(:lettings_log, :completed, ecstat8: 1, benefits: 1, relat8: "P", assigned_to: create(:user), period: nil, startdate: Time.zone.local(2024, 7, 8)) }
 
         before do
           log.status = "completed"
@@ -67,7 +67,7 @@ RSpec.describe "clear_invalid_benefits" do
       end
 
       context "and there is a pending lettings log that trips the validation" do
-        let(:log) { build(:lettings_log, :completed, ecstat1: 1, benefits: 1, assigned_to: create(:user), period: nil) }
+        let(:log) { build(:lettings_log, :completed, ecstat1: 1, benefits: 1, assigned_to: create(:user), period: nil, startdate: Time.zone.local(2024, 9, 7)) }
 
         before do
           log.status = "pending"
