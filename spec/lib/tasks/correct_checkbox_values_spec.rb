@@ -9,6 +9,7 @@ RSpec.describe "correct_checkbox_values" do
     let(:user) { create(:user, organisation:) }
 
     before do
+      Timecop.return
       Rake.application.rake_require("tasks/correct_checkbox_values")
       Rake::Task.define_task(:environment)
       task.reenable
