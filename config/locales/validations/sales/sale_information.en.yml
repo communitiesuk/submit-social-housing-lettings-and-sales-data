@@ -16,11 +16,20 @@ en:
           must_be_after_exdate: "Sale completion date must be after contract exchange date."
           must_be_less_than_1_year_from_exdate: "Sale completion date must be less than 1 year after contract exchange date."
           mortgage_used_year: "You must answer either ‘yes’ or ‘no’ to the question ‘was a mortgage used’ for the selected year."
+          must_be_after_initial_purchase_date: "Sale completion date for a staircasing transaction must be after the date of the initial purchase of a share."
+          must_be_after_last_transaction_date: "Sale completion date must be after the date of the last staircasing transaction."
+
         exdate:
           must_be_before_saledate: "Contract exchange date must be before sale completion date."
           must_be_less_than_1_year_from_saledate: "Contract exchange date must be less than 1 year before sale completion date."
         initialpurchase:
           must_be_after_1980: "The initial purchase date must be after January 1, 1980."
+          must_be_before_last_transaction: "The initial purchase date must be before the last staircasing transaction date."
+          must_be_before_saledate: "The initial purchase date must be before the date of this sale."
+        lasttransaction:
+          must_be_after_1980: "The last staircasing transaction date must be after January 1, 1980."
+          must_be_after_initial_purchase: "The last staircasing transaction date must be after the initial purchase date."
+          must_be_before_saledate: "The last staircasing transaction date must be before the date of this sale."
         fromprop:
           previous_property_type_bedsit: "A bedsit cannot have more than 1 bedroom."
         frombeds:

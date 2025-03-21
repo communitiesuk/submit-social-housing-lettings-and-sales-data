@@ -105,16 +105,36 @@ module Validations::Sales::FinancialValidations
     end
   end
 
-  def validate_equity_less_than_staircase_difference(record)
+  def validate_staircase_difference(record)
     return unless record.equity && record.stairbought && record.stairowned
     return unless record.saledate && record.form.start_year_2024_or_later?
 
-    if record.equity > record.stairowned - record.stairbought
+    percentage_left = record.stairowned - record.stairbought - record.equity
+
+    if percentage_left.negative?
       formatted_equity = sprintf("%g", record.equity)
       joint_purchase_id = record.joint_purchase? ? "joint_purchase" : "not_joint_purchase"
+
       record.errors.add :equity, I18n.t("validations.sales.financial.equity.equity_over_stairowned_minus_stairbought.#{joint_purchase_id}", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought)
       record.errors.add :stairowned, I18n.t("validations.sales.financial.stairowned.equity_over_stairowned_minus_stairbought.#{joint_purchase_id}", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought)
       record.errors.add :stairbought, I18n.t("validations.sales.financial.stairbought.equity_over_stairowned_minus_stairbought.#{joint_purchase_id}", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought)
+
+    elsif record.numstair
+      # We must use the lowest possible percentage for a staircasing transaction of any saletype, any year since 1980
+      minimum_percentage_per_staircasing_transaction = 1
+      previous_staircasing_transactions = record.numstair - 1
+
+      if percentage_left < previous_staircasing_transactions * minimum_percentage_per_staircasing_transaction
+        equity_sum = sprintf("%g", record.stairowned - percentage_left + previous_staircasing_transactions * minimum_percentage_per_staircasing_transaction)
+        formatted_equity = sprintf("%g", record.equity)
+        formatted_stairbought = sprintf("%g", record.stairbought)
+        formatted_stairowned = sprintf("%g", record.stairowned)
+
+        record.errors.add :equity, I18n.t("validations.sales.financial.equity.more_than_stairowned_minus_stairbought_minus_prev_staircasing", equity: formatted_equity, bought: formatted_stairbought, numprevstair: previous_staircasing_transactions, equity_sum:, stair_total: formatted_stairowned)
+        record.errors.add :stairowned, I18n.t("validations.sales.financial.stairowned.less_than_stairbought_plus_equity_plus_prev_staircasing", equity: formatted_equity, bought: formatted_stairbought, numprevstair: previous_staircasing_transactions, equity_sum:, stair_total: formatted_stairowned)
+        record.errors.add :stairbought, I18n.t("validations.sales.financial.stairbought.more_than_stairowned_minus_equity_minus_prev_staircasing", equity: formatted_equity, bought: formatted_stairbought, numprevstair: previous_staircasing_transactions, equity_sum:, stair_total: formatted_stairowned)
+        record.errors.add :numstair, I18n.t("validations.sales.financial.numstair.too_high_for_stairowned_minus_stairbought_minus_equity", equity: formatted_equity, bought: formatted_stairbought, numprevstair: previous_staircasing_transactions, equity_sum:, stair_total: formatted_stairowned)
+      end
     end
   end
 
