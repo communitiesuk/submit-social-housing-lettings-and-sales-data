@@ -1640,7 +1640,6 @@ RSpec.describe FormController, type: :request do
       end
 
       context "when coming from check answers page" do
-        let(:sales_log) { create(:sales_log, ownershipsch: 3, assigned_to: user, saledate: Time.zone.local(2024, 7, 5)) }
         let(:lettings_log_referrer) { "/lettings-logs/#{lettings_log.id}/needs-type?referrer=check_answers" }
         let(:sales_log_referrer) { "/sales-logs/#{sales_log.id}/ownership-scheme?referrer=check_answers" }
 
@@ -1681,7 +1680,7 @@ RSpec.describe FormController, type: :request do
 
           it "queues up additional follow-up questions if needed" do
             post "/sales-logs/#{sales_log.id}/shared-ownership-type", params: sales_log_form_ownership_params, headers: headers.merge({ "HTTP_REFERER" => sales_log_referrer })
-            expect(response).to redirect_to("/sales-logs/#{sales_log.id}/shared-ownership-type?referrer=check_answers&unanswered_pages=joint_purchase")
+            expect(response).to redirect_to("/sales-logs/#{sales_log.id}/shared-ownership-type?referrer=check_answers&unanswered_pages=staircasing%2Cjoint_purchase")
           end
 
           it "moves to a queued up follow-up questions if one was provided" do
@@ -1702,10 +1701,9 @@ RSpec.describe FormController, type: :request do
             }
           end
           let(:referrer) { "/lettings-logs/#{completed_lettings_log.id}/net-income-value-check?referrer=check_answers" }
-          let(:sales_log) { create(:sales_log, ownershipsch: 3, assigned_to: user, saledate: Time.zone.local(2022, 7, 5)) }
 
           around do |example|
-            Timecop.freeze(Time.zone.local(2022, 7, 1)) do
+            Timecop.freeze(Time.zone.local(2022, 1, 1)) do
               Singleton.__init__(FormHandler)
               example.run
             end
