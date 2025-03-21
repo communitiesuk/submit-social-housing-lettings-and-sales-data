@@ -17,10 +17,11 @@ describe DocumentationGenerator do
   describe ":describe_hard_validations" do
     context "when the service is run with lettings type" do
       let(:log_type) { "lettings" }
+      let(:form) { FormHandler.instance.forms["current_lettings"] }
 
       it "creates new validation documentation records" do
         expect(Rails.logger).to receive(:info).with(/described/).at_least(:once)
-        expect { described_class.new.describe_hard_validations(client, all_validation_methods, all_helper_methods, log_type) }.to change(LogValidation, :count)
+        expect { described_class.new.describe_hard_validations(client, form, all_validation_methods, all_helper_methods, log_type) }.to change(LogValidation, :count)
         expect(LogValidation.where(validation_name: "validate_numeric_min_max").count).to eq(1)
         any_validation = LogValidation.first
         expect(any_validation.description).to eq("Validates the format.")
@@ -37,12 +38,12 @@ describe DocumentationGenerator do
 
       it "calls the client" do
         expect(client).to receive(:chat)
-        described_class.new.describe_hard_validations(client, all_validation_methods, all_helper_methods, log_type)
+        described_class.new.describe_hard_validations(client, form, all_validation_methods, all_helper_methods, log_type)
       end
 
       it "skips if the validation already exists in the database" do
-        described_class.new.describe_hard_validations(client, all_validation_methods, all_helper_methods, log_type)
-        expect { described_class.new.describe_hard_validations(client, all_validation_methods, all_helper_methods, log_type) }.not_to change(LogValidation, :count)
+        described_class.new.describe_hard_validations(client, form, all_validation_methods, all_helper_methods, log_type)
+        expect { described_class.new.describe_hard_validations(client, form, all_validation_methods, all_helper_methods, log_type) }.not_to change(LogValidation, :count)
       end
 
       context "when the response is not a JSON" do
@@ -51,7 +52,7 @@ describe DocumentationGenerator do
         it "raises an error" do
           expect(Rails.logger).to receive(:error).with(/Failed to save/).at_least(:once)
           expect(Rails.logger).to receive(:error).with(/Error/).at_least(:once)
-          described_class.new.describe_hard_validations(client, all_validation_methods, all_helper_methods, log_type)
+          described_class.new.describe_hard_validations(client, form, all_validation_methods, all_helper_methods, log_type)
         end
       end
 
@@ -61,17 +62,18 @@ describe DocumentationGenerator do
         it "raises an error" do
           expect(Rails.logger).to receive(:error).with(/Failed to save/).at_least(:once)
           expect(Rails.logger).to receive(:error).with(/Error/).at_least(:once)
-          described_class.new.describe_hard_validations(client, all_validation_methods, all_helper_methods, log_type)
+          described_class.new.describe_hard_validations(client, form, all_validation_methods, all_helper_methods, log_type)
         end
       end
     end
 
     context "when the service is run with sales type" do
       let(:log_type) { "sales" }
+      let(:form) { FormHandler.instance.forms["current_sales"] }
 
       it "creates new validation documentation records" do
         expect(Rails.logger).to receive(:info).with(/described/).at_least(:once)
-        expect { described_class.new.describe_hard_validations(client, all_validation_methods, all_helper_methods, log_type) }.to change(LogValidation, :count)
+        expect { described_class.new.describe_hard_validations(client, form, all_validation_methods, all_helper_methods, log_type) }.to change(LogValidation, :count)
         expect(LogValidation.where(validation_name: "validate_numeric_min_max").count).to eq(1)
         any_validation = LogValidation.first
         expect(any_validation.description).to eq("Validates the format.")
@@ -97,9 +99,10 @@ describe DocumentationGenerator do
 
     context "when the service is run for lettings" do
       let(:log_type) { "lettings" }
+      let(:form) { FormHandler.instance.forms["current_lettings"] }
 
       it "creates new validation documentation records" do
-        expect { described_class.new.describe_soft_validations(client, all_validation_methods, all_helper_methods, log_type) }.to change(LogValidation, :count)
+        expect { described_class.new.describe_soft_validations(client, form, all_validation_methods, all_helper_methods, log_type) }.to change(LogValidation, :count)
         expect(LogValidation.where(validation_name: "rent_soft_validation_triggered?").count).to be_positive
         any_validation = LogValidation.first
         expect(any_validation.description).to eq("Validates the format.")
@@ -115,21 +118,22 @@ describe DocumentationGenerator do
 
       it "calls the client" do
         expect(client).to receive(:chat)
-        described_class.new.describe_soft_validations(client, all_validation_methods, all_helper_methods, log_type)
+        described_class.new.describe_soft_validations(client, form, all_validation_methods, all_helper_methods, log_type)
       end
 
       it "skips if the validation already exists in the database" do
-        described_class.new.describe_soft_validations(client, all_validation_methods, all_helper_methods, log_type)
-        expect { described_class.new.describe_soft_validations(client, all_validation_methods, all_helper_methods, log_type) }.not_to change(LogValidation, :count)
+        described_class.new.describe_soft_validations(client, form, all_validation_methods, all_helper_methods, log_type)
+        expect { described_class.new.describe_soft_validations(client, form, all_validation_methods, all_helper_methods, log_type) }.not_to change(LogValidation, :count)
       end
     end
 
     context "when the service is run for sales" do
       let(:log_type) { "sales" }
+      let(:form) { FormHandler.instance.forms["current_sales"] }
       let(:all_validation_methods) { ["income2_outside_soft_range_for_ecstat?"] }
 
       it "creates new validation documentation records" do
-        expect { described_class.new.describe_soft_validations(client, all_validation_methods, all_helper_methods, log_type) }.to change(LogValidation, :count)
+        expect { described_class.new.describe_soft_validations(client, form, all_validation_methods, all_helper_methods, log_type) }.to change(LogValidation, :count)
         expect(LogValidation.where(validation_name: "income2_outside_soft_range_for_ecstat?").count).to be_positive
         any_validation = LogValidation.first
         expect(any_validation.description).to eq("Validates the format.")

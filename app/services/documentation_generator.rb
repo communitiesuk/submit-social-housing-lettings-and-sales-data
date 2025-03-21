@@ -9,9 +9,7 @@ class DocumentationGenerator
   include Validations::SoftValidations
   include Validations::Sales::SoftValidations
 
-  def describe_hard_validations(client, all_validation_methods, all_helper_methods, log_type)
-    form = FormHandler.instance.forms["current_#{log_type}"]
-
+  def describe_hard_validations(client, form, all_validation_methods, all_helper_methods, log_type)
     all_validation_methods.each do |meth|
       if LogValidation.where(validation_name: meth.to_s, bulk_upload_specific: false, log_type:, collection_year: "#{form.start_date.year}/#{form.start_date.year + 1}").exists?
         Rails.logger.info("Validation #{meth} already exists for #{form.start_date.year}")
@@ -69,7 +67,7 @@ class DocumentationGenerator
     end
   end
 
-  def describe_soft_validations(client, all_validation_methods, all_helper_methods, log_type)
+  def describe_soft_validations(client, form, all_validation_methods, all_helper_methods, log_type)
     validation_descriptions = {}
     all_validation_methods[0..5].each do |meth|
       validation_source = method(meth).source
@@ -87,16 +85,11 @@ class DocumentationGenerator
       validation_descriptions[meth.to_s] = result
     end
 
-    current_form = FormHandler.instance.forms["current_#{log_type}"]
-    previous_form = FormHandler.instance.forms["previous_#{log_type}"]
-
-    [current_form, previous_form].each do |form|
-      interruption_screen_pages = form.pages.select { |page| page.questions.first.type == "interruption_screen" }
-      interruption_screen_pages_grouped_by_question = interruption_screen_pages.group_by { |page| page.questions.first.id }
-      interruption_screen_pages_grouped_by_question.each do |_question_id, pages|
-        pages.map do |page|
-          save_soft_validation(form, page, validation_descriptions, log_type)
-        end
+    interruption_screen_pages = form.pages.select { |page| page.questions.first.type == "interruption_screen" }
+    interruption_screen_pages_grouped_by_question = interruption_screen_pages.group_by { |page| page.questions.first.id }
+    interruption_screen_pages_grouped_by_question.each do |_question_id, pages|
+      pages.map do |page|
+        save_soft_validation(form, page, validation_descriptions, log_type)
       end
     end
   end
