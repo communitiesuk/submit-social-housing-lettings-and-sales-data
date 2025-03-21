@@ -1,6 +1,12 @@
 namespace :generate_sales_documentation do
   desc "Generate documentation for hard sales validations"
-  task describe_sales_validations: :environment do
+  task :describe_sales_validations, %i[year] => :environment do |_task, args|
+    form_year = args[:year]&.to_i
+    raise "Usage: rake generate_sales_documentation:describe_sales_validations['year']" if form_year.blank?
+
+    form = FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(form_year, "sales")]
+    raise "No form found for given year" if form.blank?
+
     client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
     include Validations::Sales::SetupValidations
     include Validations::Sales::HouseholdValidations
@@ -20,37 +26,50 @@ namespace :generate_sales_documentation do
 
     all_helper_methods = all_methods - all_validation_methods
 
-    DocumentationGenerator.new.describe_hard_validations(client, all_validation_methods, all_helper_methods, "sales")
+    DocumentationGenerator.new.describe_hard_validations(client, form, all_validation_methods, all_helper_methods, "sales")
   end
 
   desc "Generate documentation for soft sales validations"
-  task describe_soft_sales_validations: :environment do
+  task :describe_soft_sales_validations, %i[year] => :environment do |_task, args|
     include Validations::SoftValidations
     include Validations::Sales::SoftValidations
+    form_year = args[:year]&.to_i
+    raise "Usage: rake generate_sales_documentation:describe_soft_sales_validations['year']" if form_year.blank?
+
+    form = FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(form_year, "sales")]
+    raise "No form found for given year" if form.blank?
 
     client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
     all_helper_methods = Validations::SoftValidations.private_instance_methods + Validations::Sales::SoftValidations.private_instance_methods
     all_validation_methods = Validations::SoftValidations.instance_methods + Validations::Sales::SoftValidations.instance_methods
 
-    DocumentationGenerator.new.describe_soft_validations(client, all_validation_methods, all_helper_methods, "sales")
+    DocumentationGenerator.new.describe_soft_validations(client, form, all_validation_methods, all_helper_methods, "sales")
   end
 
   desc "Generate documentation for hard bu sales validations"
-  task describe_bu_sales_validations: :environment do
-    client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
-    [[FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(2023, "sales")], BulkUpload::Sales::Year2023::RowParser],
-     [FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(2024, "sales")], BulkUpload::Sales::Year2024::RowParser]].each do |form, row_parser_class|
-      all_validation_methods = row_parser_class.private_instance_methods.select { |method| method.starts_with?("validate_") }
-      all_helper_methods = row_parser_class.private_instance_methods(false) +  row_parser_class.instance_methods(false) - all_validation_methods
-      field_mapping_for_errors = row_parser_class.new.send("field_mapping_for_errors")
+  task :describe_bu_sales_validations, %i[year] => :environment do |_task, args|
+    form_year = args[:year]&.to_i
+    raise "Usage: rake generate_sales_documentation:describe_bu_sales_validations['year']" if form_year.blank?
 
-      DocumentationGenerator.new.describe_bu_validations(client, form, row_parser_class, all_validation_methods, all_helper_methods, field_mapping_for_errors, "sales")
-    end
+    form = FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(form_year, "sales")]
+    raise "No form found for given year" if form.blank?
+
+    row_parser_class = "BulkUpload::Sales::Year#{form_year}::RowParser".constantize
+    client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
+    all_validation_methods = row_parser_class.private_instance_methods.select { |method| method.starts_with?("validate_") }
+    all_helper_methods = row_parser_class.private_instance_methods(false) +  row_parser_class.instance_methods(false) - all_validation_methods
+    field_mapping_for_errors = row_parser_class.new.send("field_mapping_for_errors")
+
+    DocumentationGenerator.new.describe_bu_validations(client, form, row_parser_class, all_validation_methods, all_helper_methods, field_mapping_for_errors, "sales")
   end
 
   desc "Generate documentation for sales numeric validations"
-  task add_numeric_sales_validations: :environment do
-    form = FormHandler.instance.forms["current_sales"]
+  task :add_numeric_sales_validations, %i[year] => :environment do |_task, args|
+    form_year = args[:year]&.to_i
+    raise "Usage: rake generate_sales_documentation:add_numeric_sales_validations['year']" if form_year.blank?
+
+    form = FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(form_year, "sales")]
+    raise "No form found for given year" if form.blank?
 
     form.numeric_questions.each do |question|
       next unless question.min || question.max
