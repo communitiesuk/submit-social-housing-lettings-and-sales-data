@@ -119,14 +119,6 @@ RSpec.configure do |config|
     Rails.application.load_seed
   end
 
-  config.around do |example|
-    Timecop.travel(Time.zone.local(2025, 4, 1))
-    Singleton.__init__(FormHandler)
-    example.run
-    Timecop.travel(Time.zone.local(2025, 4, 1))
-    Singleton.__init__(FormHandler)
-  end
-
   config.after do
     RequestHelper.real_http_requests
     Singleton.__init__(FormHandler)
