@@ -1221,6 +1221,18 @@ RSpec.describe LettingsLogsController, type: :request do
           context "when a lettings log is for a renewal of supported housing in 2024" do
             let(:lettings_log) { create(:lettings_log, :startdate_today, assigned_to: user, renewal: 1, needstype: 2, rent_type: 3, postcode_known: 0, startdate: Time.zone.local(2024, 10, 20)) }
 
+            before do
+              Timecop.freeze(2024, 10, 15)
+              Singleton.__init__(FormHandler)
+              lettings_log.startdate = Time.zone.local(2024, 10, 20)
+              lettings_log.save!
+            end
+
+            after do
+              Timecop.return
+              Singleton.__init__(FormHandler)
+            end
+
             it "does not show property information" do
               get lettings_log_path(lettings_log)
               expect(page).to have_content "Tenancy information"
@@ -1233,16 +1245,18 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           context "when a lettings log is for a renewal of supported housing in 2025" do
-            let(:lettings_log) { create(:lettings_log, assigned_to: user, renewal: 1, needstype: 2, rent_type: 3, postcode_known: 0) }
+            let(:lettings_log) { create(:lettings_log, :startdate_today, assigned_to: user, renewal: 1, needstype: 2, rent_type: 3, postcode_known: 0) }
 
             before do
               Timecop.freeze(2025, 10, 15)
+              Singleton.__init__(FormHandler)
               lettings_log.startdate = Time.zone.local(2025, 10, 20)
               lettings_log.save!
             end
 
             after do
               Timecop.return
+              Singleton.__init__(FormHandler)
             end
 
             it "shows property information" do
