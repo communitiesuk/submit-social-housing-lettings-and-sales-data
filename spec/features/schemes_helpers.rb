@@ -1,4 +1,6 @@
 module SchemesHelpers
+  include CollectionTimeHelper
+
   def fill_in_number_question(lettings_log_id, question, value, path)
     visit("/lettings-logs/#{lettings_log_id}/#{path}")
     fill_in("lettings-log-#{question.to_s.dasherize}-field", with: value)
@@ -74,7 +76,7 @@ module SchemesHelpers
     click_button "Save and continue"
     choose "location-mobility-type-none-field"
     click_button "Save and continue"
-    fill_in "location_startdate", with: "2/5/2023"
+    fill_in "location_startdate", with: "2/3/#{current_collection_start_year}"
     click_button "Save and continue"
   end
 
@@ -93,7 +95,7 @@ module SchemesHelpers
     click_button "Save and continue"
     choose "location-mobility-type-none-field"
     click_button "Save and continue"
-    fill_in "location_startdate", with: "2/5/2023"
+    fill_in "location_startdate", with: "2/3/#{current_collection_start_year}"
     click_button "Save and continue"
   end
 

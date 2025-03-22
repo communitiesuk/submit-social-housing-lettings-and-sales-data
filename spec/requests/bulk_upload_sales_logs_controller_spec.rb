@@ -68,7 +68,7 @@ RSpec.describe BulkUploadSalesLogsController, type: :request do
       end
 
       it "shows guidance page with correct title" do
-        get "/sales-logs/bulk-upload-logs/guidance?form%5Byear%5D=2023", params: {}
+        get "/sales-logs/bulk-upload-logs/guidance?form%5Byear%5D=#{previous_collection_start_year}", params: {}
 
         expect(response.body).to include("How to upload logs in bulk")
       end

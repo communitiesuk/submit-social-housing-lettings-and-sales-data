@@ -38,7 +38,7 @@ class FormController < ApplicationController
         end
         error_attributes = @log.errors.map(&:attribute)
         Rails.logger.info "User triggered validation(s) on: #{error_attributes.join(', ')}"
-        @subsection = form.subsection_for_page(@page)
+        @subsection = @page.subsection
         flash[:errors] = @log.errors.each_with_object({}) do |error, result|
           if @page.questions.map(&:id).include?(error.attribute.to_s)
             result[error.attribute.to_s] = error.message
@@ -87,7 +87,7 @@ class FormController < ApplicationController
     if @log
       page_id = request.path.split("/")[-1].underscore
       @page = form.get_page(page_id)
-      @subsection = form.subsection_for_page(@page)
+      @subsection = @page.subsection
       @pages_with_errors_count = 0
       if @page.routed_to?(@log, current_user) || is_referrer_type?("interruption_screen") || adding_answer_from_check_errors_page?
         if updated_answer_from_check_errors_page?
@@ -274,7 +274,7 @@ private
       elsif pages_to_check.any?
         return redirect_path_to_question(pages_to_check[0], pages_to_check)
       else
-        return send("#{@log.log_type}_#{form.subsection_for_page(@page).id}_check_answers_path", @log)
+        return send("#{@log.log_type}_#{@page.subsection.id}_check_answers_path", @log)
       end
     end
     if previous_interruption_screen_page_id.present?

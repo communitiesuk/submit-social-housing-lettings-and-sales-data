@@ -138,6 +138,7 @@ RSpec.describe BulkUpload::Sales::Validator do
     context "with an invalid 2024 csv" do
       before do
         log.owning_organisation = nil
+        log.saledate = Time.zone.local(2024, 10, 10)
         file.write(log_to_csv.default_field_numbers_row)
         file.write(log_to_csv.to_csv_row)
         file.rewind

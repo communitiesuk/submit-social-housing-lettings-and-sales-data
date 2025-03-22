@@ -118,9 +118,20 @@ RSpec.describe CollectionResourcesController, type: :request do
           expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_specification"))
         end
 
-        it "displays next year banner" do
-          expect(page).to have_content("The 2025 to 2026 collection resources are not yet available to users.")
-          expect(page).to have_link("Release the 2025 to 2026 collection resources to users", href: confirm_mandatory_collection_resources_release_path(year: 2025))
+        context "when the collection year has not started yet" do
+          before do
+            Timecop.freeze(Time.zone.local(2025, 3, 1))
+            get collection_resources_path
+          end
+
+          after do
+            Timecop.return
+          end
+
+          it "displays next year banner" do
+            expect(page).to have_content("The 2025 to 2026 collection resources are not yet available to users.")
+            expect(page).to have_link("Release the 2025 to 2026 collection resources to users", href: confirm_mandatory_collection_resources_release_path(year: 2025))
+          end
         end
 
         context "when there are additional resources" do
@@ -161,9 +172,20 @@ RSpec.describe CollectionResourcesController, type: :request do
           expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_specification"))
         end
 
-        it "displays next year banner" do
-          expect(page).to have_content("The 2025 to 2026 collection resources are not yet available to users.")
-          expect(page).to have_content("Once you have uploaded all the required 2025 to 2026 collection resources, you will be able to release them to users.")
+        context "when the collection year has not started yet" do
+          before do
+            Timecop.freeze(Time.zone.local(2025, 3, 1))
+            get collection_resources_path
+          end
+
+          after do
+            Timecop.return
+          end
+
+          it "displays next year banner" do
+            expect(page).to have_content("The 2025 to 2026 collection resources are not yet available to users.")
+            expect(page).to have_content("Once you have uploaded all the required 2025 to 2026 collection resources, you will be able to release them to users.")
+          end
         end
       end
 

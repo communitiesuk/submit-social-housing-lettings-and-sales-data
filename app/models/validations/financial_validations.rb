@@ -159,9 +159,11 @@ module Validations::FinancialValidations
   end
 
   def validate_care_home_charges(record)
+    return unless record.period && record.chcharge
+
     if record.is_carehome?
       period = record.form.get_question("period", record).label_from_value(record.period).downcase
-      if record.chcharge.present? && !weekly_value_in_range(record, "chcharge", 10, 5000)
+      unless weekly_value_in_range(record, "chcharge", 10, 5000)
         max_chcharge = record.weekly_to_value_per_period(5000)
         min_chcharge = record.weekly_to_value_per_period(10)
 
