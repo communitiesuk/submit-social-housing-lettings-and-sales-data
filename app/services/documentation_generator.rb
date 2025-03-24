@@ -8,6 +8,12 @@ class DocumentationGenerator
   include Validations::LocalAuthorityValidations
   include Validations::SoftValidations
   include Validations::Sales::SoftValidations
+  include Validations::SetupValidations
+  include Validations::HouseholdValidations
+  include Validations::PropertyValidations
+  include Validations::FinancialValidations
+  include Validations::TenancyValidations
+  include Validations::DateValidations
 
   def describe_hard_validations(client, form, all_validation_methods, all_helper_methods, log_type)
     all_validation_methods.each do |meth|
