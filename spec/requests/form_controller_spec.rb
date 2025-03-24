@@ -1673,6 +1673,14 @@ RSpec.describe FormController, type: :request do
         end
 
         context "and changing an answer" do
+          before do
+            Timecop.freeze(2024, 5, 6)
+          end
+
+          after do
+            Timecop.return
+          end
+
           it "navigates to follow-up questions when required" do
             post "/lettings-logs/#{lettings_log.id}/needs-type", params: lettings_log_form_needs_type_params, headers: headers.merge({ "HTTP_REFERER" => lettings_log_referrer })
             expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/scheme?referrer=check_answers")
@@ -1680,7 +1688,7 @@ RSpec.describe FormController, type: :request do
 
           it "queues up additional follow-up questions if needed" do
             post "/sales-logs/#{sales_log.id}/shared-ownership-type", params: sales_log_form_ownership_params, headers: headers.merge({ "HTTP_REFERER" => sales_log_referrer })
-            expect(response).to redirect_to("/sales-logs/#{sales_log.id}/shared-ownership-type?referrer=check_answers&unanswered_pages=staircasing%2Cjoint_purchase")
+            expect(response).to redirect_to("/sales-logs/#{sales_log.id}/shared-ownership-type?referrer=check_answers&unanswered_pages=joint_purchase")
           end
 
           it "moves to a queued up follow-up questions if one was provided" do
