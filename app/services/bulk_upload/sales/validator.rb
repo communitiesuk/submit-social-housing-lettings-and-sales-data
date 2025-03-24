@@ -57,7 +57,7 @@ class BulkUpload::Sales::Validator
     end
 
     if invalid_row_numbers.any?
-      Sentry.capture_message("Bulk upload log creation blocked due to invalid logs after blanking non setup fields: #{bulk_upload.id}.")
+      Sentry.capture_message("Bulk upload #{bulk_upload.id} had log creation blocked due to invalid logs after blanking non setup fields. First invalid row number: #{invalid_row_numbers.first}.")
       Rails.logger.error("Sales bulk upload #{bulk_upload.id} blocked due to invalid logs after blanking on rows #{invalid_row_numbers}")
       "logs_invalid"
     end
