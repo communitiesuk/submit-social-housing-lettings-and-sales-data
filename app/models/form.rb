@@ -16,6 +16,13 @@ class Form
     },
     2024 => {
       submission_deadline: Time.zone.local(2025, 6, 6),
+      new_logs_end_date: Time.zone.local(2025, 7, 4),
+      edit_end_date: Time.zone.local(2025, 8, 1),
+    },
+    2025 => {
+      submission_deadline: Time.zone.local(2026, 6, 5),
+      new_logs_end_date: Time.zone.local(2026, 7, 3),
+      edit_end_date: Time.zone.local(2026, 8, 1),
     },
     :default => {
       submission_deadline: ->(start_year) { Time.zone.local(start_year + 1, 6, 1) },
@@ -78,14 +85,10 @@ class Form
     routed_question || all_questions[0]
   end
 
-  def subsection_for_page(page)
-    subsections.find { |s| s.pages.find { |p| p.id == page.id } }
-  end
-
   def next_page_id(page, log, current_user, ignore_answered: false)
     return page.next_unresolved_page_id || :check_answers if log.unresolved
 
-    page_ids = subsection_for_page(page).pages.map(&:id)
+    page_ids = page.subsection.pages.map(&:id)
     page_index = page_ids.index(page.id)
     page_id = if page.interruption_screen? && log[page.questions[0].id] == 1 && page.routed_to?(log, current_user)
                 previous_page_id(page, log, current_user)
@@ -104,14 +107,14 @@ class Form
   def next_page_redirect_path(page, log, current_user, ignore_answered: false)
     next_page_id = next_page_id(page, log, current_user, ignore_answered:)
     if next_page_id == :check_answers
-      "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
+      "#{type}_log_#{page.subsection.id}_check_answers_path"
     else
       "#{type}_log_#{next_page_id}_path"
     end
   end
 
   def previous_page_id(page, log, current_user)
-    page_ids = subsection_for_page(page).pages.map(&:id)
+    page_ids = page.subsection.pages.map(&:id)
     page_index = page_ids.index(page.id)
     return :tasklist if page_index.zero?
 
@@ -126,7 +129,7 @@ class Form
   def previous_page_redirect_path(page, log, current_user, referrer)
     previous_page_id = previous_page_id(page, log, current_user)
     if referrer == "check_answers"
-      "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
+      "#{type}_log_#{page.subsection.id}_check_answers_path"
     elsif previous_page_id == :tasklist
       "#{type}_log_path"
     else
