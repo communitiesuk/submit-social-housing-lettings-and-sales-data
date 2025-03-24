@@ -134,7 +134,7 @@ jobs:
 
       - name: Run tests
         run: |
-          bundle exec rspec spec/features --fail-fast --exclude-pattern "spec/features/accessibility_spec.rb"
+          bundle exec rspec spec/features --exclude-pattern "spec/features/accessibility_spec.rb"
 
   model_test:
     name: Model tests
@@ -192,7 +192,7 @@ jobs:
 
       - name: Run tests
         run: |
-          bundle exec rspec spec/models --fail-fast
+          bundle exec rspec spec/models
 
   requests_test:
     name: Requests tests
@@ -377,7 +377,7 @@ jobs:
 
       - name: Run tests
         run: |
-          bundle exec rspec spec/features/accessibility_spec.rb --fail-fast
+          bundle exec rspec spec/features/accessibility_spec.rb
 
   lint:
     name: Lint
