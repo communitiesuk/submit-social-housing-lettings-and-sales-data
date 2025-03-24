@@ -150,7 +150,7 @@ private
     begin
       client.chat(
         parameters: {
-          model: "gpt-3.5-turbo",
+          model: "gpt-4o-mini",
           messages: [
             {
               role: "system",
@@ -242,7 +242,7 @@ private
   def soft_validation_description(client, meth, validation_source, helper_methods_source)
     client.chat(
       parameters: {
-        model: "gpt-3.5-turbo",
+        model: "gpt-4o-mini",
         messages: [
           {
             role: "system",
