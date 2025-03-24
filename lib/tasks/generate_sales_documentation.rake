@@ -8,31 +8,14 @@ namespace :generate_sales_documentation do
     raise "No form found for given year" if form.blank?
 
     client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
-    include Validations::Sales::SetupValidations
-    include Validations::Sales::HouseholdValidations
-    include Validations::Sales::PropertyValidations
-    include Validations::Sales::FinancialValidations
-    include Validations::Sales::SaleInformationValidations
-    include Validations::SharedValidations
-    include Validations::LocalAuthorityValidations
-    all_validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
-    all_methods = [Validations::Sales::SetupValidations,
-                   Validations::Sales::HouseholdValidations,
-                   Validations::Sales::PropertyValidations,
-                   Validations::Sales::FinancialValidations,
-                   Validations::Sales::SaleInformationValidations,
-                   Validations::SharedValidations,
-                   Validations::LocalAuthorityValidations].map { |x| x.instance_methods + x.private_instance_methods }.flatten
 
-    all_helper_methods = all_methods - all_validation_methods
-
-    DocumentationGenerator.new.describe_hard_validations(client, form, all_validation_methods, all_helper_methods, "sales")
+    documentation_generator = DocumentationGenerator.new
+    all_validation_methods, all_helper_methods = documentation_generator.get_all_sales_methods
+    documentation_generator.describe_hard_validations(client, form, all_validation_methods, all_helper_methods, "sales")
   end
 
   desc "Generate documentation for soft sales validations"
   task :describe_soft_sales_validations, %i[year] => :environment do |_task, args|
-    include Validations::SoftValidations
-    include Validations::Sales::SoftValidations
     form_year = args[:year]&.to_i
     raise "Usage: rake generate_sales_documentation:describe_soft_sales_validations['year']" if form_year.blank?
 
@@ -40,10 +23,10 @@ namespace :generate_sales_documentation do
     raise "No form found for given year" if form.blank?
 
     client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
-    all_helper_methods = Validations::SoftValidations.private_instance_methods + Validations::Sales::SoftValidations.private_instance_methods
-    all_validation_methods = Validations::SoftValidations.instance_methods + Validations::Sales::SoftValidations.instance_methods
+    documentation_generator = DocumentationGenerator.new
+    all_helper_methods, all_validation_methods = documentation_generator.get_soft_sales_methods
 
-    DocumentationGenerator.new.describe_soft_validations(client, form, all_validation_methods, all_helper_methods, "sales")
+    documentation_generator.describe_soft_validations(client, form, all_validation_methods, all_helper_methods, "sales")
   end
 
   desc "Generate documentation for hard bu sales validations"

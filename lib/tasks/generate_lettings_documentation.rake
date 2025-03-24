@@ -8,29 +8,15 @@ namespace :generate_lettings_documentation do
     raise "No form found for given year" if form.blank?
 
     client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
-    include Validations::SetupValidations
-    include Validations::HouseholdValidations
-    include Validations::PropertyValidations
-    include Validations::FinancialValidations
-    include Validations::TenancyValidations
-    include Validations::DateValidations
-    include Validations::LocalAuthorityValidations
-    all_validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
-    all_methods = [Validations::SetupValidations,
-                   Validations::HouseholdValidations,
-                   Validations::PropertyValidations,
-                   Validations::FinancialValidations,
-                   Validations::TenancyValidations,
-                   Validations::DateValidations,
-                   Validations::LocalAuthorityValidations].map { |x| x.instance_methods + x.private_instance_methods }.flatten
-    all_helper_methods = all_methods - all_validation_methods
 
-    DocumentationGenerator.new.describe_hard_validations(client, form, all_validation_methods, all_helper_methods, "lettings")
+    documentation_generator = DocumentationGenerator.new
+    all_validation_methods, all_helper_methods = documentation_generator.get_all_lettings_methods
+
+    documentation_generator.describe_hard_validations(client, form, all_validation_methods, all_helper_methods, "lettings")
   end
 
   desc "Generate documentation for soft lettings validations"
   task :describe_soft_lettings_validations, %i[year] => :environment do |_task, args|
-    include Validations::SoftValidations
     form_year = args[:year]&.to_i
     raise "Usage: rake generate_lettings_documentation:describe_soft_lettings_validations['year']" if form_year.blank?
 
@@ -38,11 +24,10 @@ namespace :generate_lettings_documentation do
     raise "No form found for given year" if form.blank?
 
     client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
+    documentation_generator = DocumentationGenerator.new
+    all_helper_methods, all_validation_methods = documentation_generator.get_soft_lettings_methods
 
-    all_helper_methods = Validations::SoftValidations.private_instance_methods
-    all_validation_methods = Validations::SoftValidations.instance_methods
-
-    DocumentationGenerator.new.describe_soft_validations(client, form, all_validation_methods, all_helper_methods, "lettings")
+    documentation_generator.describe_soft_validations(client, form, all_validation_methods, all_helper_methods, "lettings")
   end
 
   desc "Generate documentation for hard bu lettings validations"
