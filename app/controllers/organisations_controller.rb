@@ -91,7 +91,7 @@ class OrganisationsController < ApplicationController
     selected_rent_periods = rent_period_params[:rent_periods].compact_blank
     @organisation = Organisation.new(org_params)
     if @organisation.save
-      @organisation.update(group: helpers.assign_group_number(@organisation.id, org_params[:group_member_id])) if org_params[:group_member]
+      @organisation.update(group: assign_group_number(@organisation.id, org_params[:group_member_id])) if org_params[:group_member]
       OrganisationRentPeriod.transaction do
         selected_rent_periods.each { |period| OrganisationRentPeriod.create!(organisation: @organisation, rent_period: period) }
       end
@@ -129,7 +129,7 @@ class OrganisationsController < ApplicationController
   def update
     if (current_user.data_coordinator? && org_params[:active].nil?) || current_user.support?
       if org_params[:group_member] && org_params[:group_member_id]
-        @organisation.group = helpers.assign_group_number(@organisation.id, org_params[:group_member_id])
+        @organisation.group = assign_group_number(@organisation.id, org_params[:group_member_id])
       end
       if @organisation.update(org_params)
         case org_params[:active]
@@ -387,6 +387,17 @@ private
       duplicate_location_sets.each do |duplicate_set|
         @duplicate_locations << { scheme: scheme, locations: duplicate_set.map { |id| scheme.locations.find(id) } }
       end
+    end
+  end
+
+  def assign_group_number(current_org_id, selected_org_id)
+    selected_org = Organisation.find_by(id: selected_org_id)
+    if selected_org&.group.present?
+      selected_org.group
+    else
+      next_group_number = next_available_group_number
+      selected_org.update!(group_member: true, group_member_id: current_org_id, group: next_group_number) if selected_org
+      next_group_number
     end
   end
 

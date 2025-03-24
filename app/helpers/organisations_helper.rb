@@ -94,10 +94,6 @@ module OrganisationsHelper
     " (GROUP#{org.oldest_group_member&.group})"
   end
 
-  def group_organisation_options_group(org)
-    org.oldest_group_member&.group || next_available_group_number
-  end
-
   def profit_status_options(provider_type = nil)
     null_option = [OpenStruct.new(id: "", name: "Select an option")]
     profit_statuses = Organisation::PROFIT_STATUS.map do |key, _value|
@@ -112,20 +108,5 @@ module OrganisationsHelper
     end
 
     null_option + profit_statuses
-  end
-
-  def assign_group_number(current_org_id, selected_org_id)
-    selected_org = Organisation.find_by(id: selected_org_id)
-    if selected_org&.group.present?
-      selected_org.group
-    else
-      next_group_number = next_available_group_number
-      selected_org.update!(group_member: true, group_member_id: current_org_id, group: next_group_number) if selected_org
-      next_group_number
-    end
-  end
-
-  def next_available_group_number
-    Organisation.maximum(:group).to_i + 1
   end
 end
