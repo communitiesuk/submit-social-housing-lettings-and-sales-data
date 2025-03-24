@@ -75,7 +75,7 @@ class DocumentationGenerator
 
   def describe_soft_validations(client, form, all_validation_methods, all_helper_methods, log_type)
     validation_descriptions = {}
-    all_validation_methods[0..5].each do |meth|
+    all_validation_methods.each do |meth|
       validation_source = method(meth).source
       helper_methods_source = all_helper_methods.map { |helper_method|
         if validation_source.include?(helper_method.to_s)
@@ -342,7 +342,7 @@ Look at these helper methods where needed to understand what is being checked in
   end
 
   def save_soft_validation(form, page, validation_descriptions, log_type)
-    subsection_pages = form.subsection_for_page(page).pages
+    subsection_pages = page.subsection.pages
     page_index = subsection_pages.index(page)
     page_the_validation_applied_to = subsection_pages[page_index - 1]
 
