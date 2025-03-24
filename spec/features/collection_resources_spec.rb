@@ -7,6 +7,7 @@ RSpec.describe "Collection resources" do
   before do
     # rubocop:disable RSpec/AnyInstance
     allow_any_instance_of(CollectionResourcesHelper).to receive(:editable_collection_resource_years).and_return([2024, 2025])
+    allow_any_instance_of(CollectionResourcesHelper).to receive(:displayed_collection_resource_years).and_return([2024])
     # rubocop:enable RSpec/AnyInstance
     allow(CollectionResourcesService).to receive(:new).and_return(collection_resources_service)
     allow(collection_resources_service).to receive(:upload_collection_resource)

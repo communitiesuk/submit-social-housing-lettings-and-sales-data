@@ -301,7 +301,7 @@ Look at these helper methods where needed to understand what is being checked in
   end
 
   def save_soft_validation(form, page, validation_descriptions, log_type)
-    subsection_pages = form.subsection_for_page(page).pages
+    subsection_pages = page.subsection.pages
     page_index = subsection_pages.index(page)
     page_the_validation_applied_to = subsection_pages[page_index - 1]
 

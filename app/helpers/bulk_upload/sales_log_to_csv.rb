@@ -434,7 +434,7 @@ class BulkUpload::SalesLogToCsv
       log.nationality_all_group,
       log.ecstat1,
       log.buy1livein,
-      log.relat2,
+      { "P" => 1, "X" => 2, "R" => 3 }[log.relat2],
       log.age2,
       log.sex2,
       log.ethnic_group2,
@@ -443,19 +443,19 @@ class BulkUpload::SalesLogToCsv
       log.buy2livein, # 40
       log.hholdcount,
 
-      log.relat3,
+      { "P" => 1, "X" => 2, "R" => 3 }[log.relat3],
       log.age3,
       log.sex3,
       log.ecstat3,
-      log.relat4,
+      { "P" => 1, "X" => 2, "R" => 3 }[log.relat4],
       log.age4,
       log.sex4,
       log.ecstat4,
-      log.relat5, # 50
+      { "P" => 1, "X" => 2, "R" => 3 }[log.relat5], # 50
       log.age5,
       log.sex5,
       log.ecstat5,
-      log.relat6,
+      { "P" => 1, "X" => 2, "R" => 3 }[log.relat6],
       log.age6,
       log.sex6,
       log.ecstat6,
