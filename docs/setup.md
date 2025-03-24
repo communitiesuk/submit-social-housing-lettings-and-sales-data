@@ -197,6 +197,7 @@ More details on Pry are available at <https://pry.github.io/> .
 
 RubyMine also offers built-in debugging functionality, with the ability to manage breakpoints in the IDE.
 To use this:
+
 - To run the app with debugger: select the "core" Rails run configuration for the project in the top right, then click the bug icon to run with the debugger attached
 - To run tests with debugger: use the arrows in the margin of spec files beside a section or an individual test
 - To run anything else with debugger: go to `Run > Edit Configurations` and add the task you want to debug - options include Rails, Rake, Rspec, Ruby
@@ -204,6 +205,7 @@ To use this:
 Click a line number to place a breakpoint. Right click a breakpoint for advanced options on when to trigger and what to log. You can view all breakpoints, toggle them and configure them from the `View Breakpoints...` menu.
 
 When the running code reaches a breakpoint, the debugger pauses execution and the debug panel can be used to:
+
 - View the call stack and the values of variables in the current scope
 - Evaluate and watch expressions
 - Step through the code line by line
