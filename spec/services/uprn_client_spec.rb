@@ -86,5 +86,33 @@ describe UprnClient do
         expect(client.error).to be_nil
       end
     end
+
+    describe "result" do
+      context "when response is successful" do
+        before do
+          stub_api_request(body: valid_response)
+
+          client.call
+        end
+
+        it "returns parsed result" do
+          expect(client.result).to eq({ "postcode" => "12345" })
+          expect(client.send(:response).code.to_i).to eq(200)
+        end
+      end
+
+      context "when response is not successful" do
+        before do
+          stub_api_request(body: valid_response, status: 500)
+
+          client.call
+        end
+
+        it "returns nil" do
+          expect(client.result).to be_nil
+          expect(client.error).to eq("UPRN client failed to return a valid result, try again later.")
+        end
+      end
+    end
   end
 end

@@ -20,7 +20,16 @@ class UprnClient
   end
 
   def result
-    @result ||= JSON.parse(response.body).dig("results", 0, "DPA") || JSON.parse(response.body).dig("results", 0, "LPI")
+    @result ||= if response.is_a?(Net::HTTPSuccess)
+                  parsed_response = JSON.parse(response.body)
+                  parsed_response.dig("results", 0, "DPA") || parsed_response.dig("results", 0, "LPI")
+                else
+                  @error = "UPRN client failed to return a valid result, try again later."
+                  Sentry.capture_message("UPRN client failed to return a valid result with error code: #{response.code}.")
+                  Rails.logger.error("UPRN client failed to return a valid result with error code: #{response.code}.")
+                  Rails.logger.error("Response body: #{response.body}")
+                  nil
+                end
   end
 
 private

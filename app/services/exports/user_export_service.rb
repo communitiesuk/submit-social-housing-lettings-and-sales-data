@@ -28,7 +28,7 @@ module Exports
     def retrieve_resources(recent_export, full_update, _year)
       if !full_update && recent_export
         params = { from: recent_export.started_at, to: @start_time }
-        User.where("(updated_at >= :from AND updated_at <= :to)", params)
+        User.where("(updated_at >= :from AND updated_at <= :to) OR (values_updated_at IS NOT NULL AND values_updated_at >= :from AND values_updated_at <= :to)", params)
       else
         params = { to: @start_time }
         User.where("updated_at <= :to", params)

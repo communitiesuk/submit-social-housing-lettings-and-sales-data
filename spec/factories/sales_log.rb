@@ -173,7 +173,7 @@ FactoryBot.define do
           log.nationality_all_group = 826
           log.nationality_all_buyer2_group = 826
           log.uprn = evaluator.uprn || "10033558653"
-          log.uprn_selection = evaluator.uprn_selection || "10033558653"
+          log.uprn_selection = evaluator.uprn_selection || evaluator.uprn || "10033558653"
         end
         if log.saledate >= Time.zone.local(2025, 4, 1)
           log.relat2 = "X" if log.relat2 == "C"
@@ -183,6 +183,39 @@ FactoryBot.define do
           log.relat6 = "X" if log.relat6 == "C"
         end
       end
+    end
+    trait :discounted_2025_completed do
+      completed
+      discount { 20 }
+    end
+    trait :shared_2025_completed do
+      completed
+      shared_ownership
+      staircase { 2 }
+      resale { 2 }
+      frombeds { 2 }
+      fromprop { 1 }
+      socprevten { 3 }
+      mrent { 900 }
+      equity { 30 }
+      ppostcode_full { "SW1A 1AA" }
+      hodate { Time.zone.today }
+    end
+    trait :staircasing_2025_completed do
+      completed
+      shared_ownership
+      staircase { 1 }
+      stairbought { 10 }
+      stairowned { 60 }
+      staircasesale { 2 }
+      firststair { 2 }
+      initialpurchase { Time.zone.today - 2.years }
+      numstair { 2 }
+      lasttransaction { Time.zone.today - 1.year }
+      mrentprestaircasing { 1000 }
+      mrent { 900 }
+      equity { 30 }
+      ppostcode_full { "SW1A 1AA" }
     end
     trait :with_uprn do
       uprn { rand(999_999_999_999).to_s }
@@ -201,6 +234,138 @@ FactoryBot.define do
         instance.errors.clear
         instance.save!(validate: false)
       end
+    end
+    trait :completed_without_uprn do
+      completed
+      manual_address_entry_selected { false }
+      after(:build) do |log|
+        log.uprn = nil
+        log.uprn_selection = nil
+        log.uprn_known = 0
+      end
+
+      after(:build) do |log|
+        log.address_line1 = "1 Test Street"
+        log.address_line2 = "Testville"
+        log.county = "Testshire"
+        log.town_or_city = "Testford"
+        log.postcode_full = "SW1 1AA"
+      end
+    end
+    trait :inprogress_without_address_fields do
+      completed
+      manual_address_entry_selected { false }
+      after(:build) do |log|
+        log.uprn = nil
+        log.uprn_selection = nil
+        log.uprn_known = 0
+        log.address_line1 = nil
+        log.address_line2 = nil
+        log.county = nil
+        log.town_or_city = nil
+        log.postcode_full = nil
+        log.address_line1_input = nil
+        log.postcode_full_input = nil
+      end
+    end
+    trait :export do
+      purchid { "123" }
+      ownershipsch { 2 }
+      type { 8 }
+      saledate_today
+      jointpur { 1 }
+      beds { 2 }
+      jointmore { 1 }
+      noint { 2 }
+      privacynotice { 1 }
+      age1_known { 0 }
+      age1 { 27 }
+      sex1 { "F" }
+      national { 18 }
+      buy1livein { 1 }
+      relat2 { "P" }
+      proptype { 1 }
+      age2_known { 0 }
+      age2 { 33 }
+      builtype { 1 }
+      ethnic { 3 }
+      ethnic_group { 17 }
+      sex2 { "X" }
+      buy2livein { "1" }
+      ecstat1 { "1" }
+      ecstat2 { "1" }
+      hholdcount { "4" }
+      wheel { 1 }
+      details_known_3 { 1 }
+      age3_known { 0 }
+      age3 { 14 }
+      details_known_4 { 1 }
+      age4_known { 0 }
+      age4 { 18 }
+      details_known_5 { 1 }
+      age5_known { 0 }
+      age5 { 40 }
+      details_known_6 { 1 }
+      age6_known { 0 }
+      age6 { 40 }
+      income1nk { 0 }
+      income1 { 10_000 }
+      inc1mort { 1 }
+      income2nk { 0 }
+      income2 { 10_000 }
+      inc2mort { 1 }
+      uprn_known { 0 }
+      address_line1 { "Address line 1" }
+      town_or_city { "City" }
+      la_known { 1 }
+      la { "E09000003" }
+      savingsnk { 1 }
+      prevown { 1 }
+      prevshared { 2 }
+      sex3 { "F" }
+      sex4 { "X" }
+      sex5 { "M" }
+      sex6 { "X" }
+      mortgage { 20_000 }
+      ecstat3 { 9 }
+      ecstat4 { 3 }
+      ecstat5 { 2 }
+      ecstat6 { 1 }
+      disabled { 1 }
+      deposit { 80_000 }
+      value { 110_000 }
+      value_value_check { 0 }
+      grant { 10_000 }
+      hhregres { 7 }
+      ppcodenk { 1 }
+      prevten { 1 }
+      previous_la_known { 0 }
+      relat3 { "X" }
+      relat4 { "X" }
+      relat5 { "R" }
+      relat6 { "R" }
+      hb { 4 }
+      mortgageused { 1 }
+      wchair { 1 }
+      armedforcesspouse { 5 }
+      has_mscharge { 1 }
+      mscharge { 100 }
+      mortlen { 10 }
+      pcodenk { 0 }
+      postcode_full { "SW1A 1AA" }
+      is_la_inferred { false }
+      mortgagelender { 5 }
+      extrabor { 1 }
+      ethnic_group2 { 17 }
+      nationalbuy2 { 13 }
+      buy2living { 3 }
+      proplen_asked { 1 }
+      address_line1_input { "Address line 1" }
+      postcode_full_input { "SW1A 1AA" }
+      nationality_all_group { 826 }
+      nationality_all_buyer2_group { 826 }
+      uprn { "10033558653" }
+      uprn_selection { 1 }
     end
   end
 end

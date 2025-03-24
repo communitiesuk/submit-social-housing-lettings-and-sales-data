@@ -202,7 +202,26 @@ RSpec.describe Exports::UserExportService do
       before do
         create(:user, updated_at: Time.zone.local(2022, 4, 27), organisation:)
         create(:user, updated_at: Time.zone.local(2022, 4, 27), organisation:)
-        Export.create!(started_at: Time.zone.local(2022, 4, 26), base_number: 1, increment_number: 1)
+        Export.create!(started_at: Time.zone.local(2022, 4, 26), base_number: 1, increment_number: 1, empty_export: true, collection: "users")
+      end
+
+      it "generates an XML manifest file with the expected content within the ZIP file" do
+        expected_content = replace_record_number(local_manifest_file.read, 2)
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+          entry = Zip::File.open_buffer(content).find_entry(expected_manifest_filename)
+          expect(entry).not_to be_nil
+          expect(entry.get_input_stream.read).to eq(expected_content)
+        end
+
+        expect(export_service.export_xml_users).to eq({ expected_zip_filename.gsub(".zip", "") => start_time })
+      end
+    end
+
+    context "and a user has been manually updated since the previous partial export" do
+      before do
+        create(:user, updated_at: Time.zone.local(2022, 4, 25), values_updated_at: Time.zone.local(2022, 4, 27), organisation:)
+        create(:user, updated_at: Time.zone.local(2022, 4, 25), values_updated_at: Time.zone.local(2022, 4, 27), organisation:)
+        Export.create!(started_at: Time.zone.local(2022, 4, 26), base_number: 1, increment_number: 1, empty_export: true, collection: "users")
       end
 
       it "generates an XML manifest file with the expected content within the ZIP file" do
