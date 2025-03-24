@@ -90,8 +90,8 @@ class OrganisationsController < ApplicationController
   def create
     selected_rent_periods = rent_period_params[:rent_periods].compact_blank
     @organisation = Organisation.new(org_params)
-    @organisation.group = org_params[:group_member] ? helpers.assign_group_number(@organisation.id, org_params[:group_member_id]) : nil
     if @organisation.save
+      @organisation.update(group: helpers.assign_group_number(@organisation.id, org_params[:group_member_id])) if org_params[:group_member]
       OrganisationRentPeriod.transaction do
         selected_rent_periods.each { |period| OrganisationRentPeriod.create!(organisation: @organisation, rent_period: period) }
       end
