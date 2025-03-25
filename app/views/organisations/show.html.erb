@@ -15,7 +15,7 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= govuk_summary_list do |summary_list| %>
       <%= organisation_name_row(user: current_user, organisation: @organisation, summary_list:) %>
-      <% display_organisation_attributes(@organisation).each do |attr| %>
+      <% display_organisation_attributes(current_user, @organisation).each do |attr| %>
         <% if attr[:name] == "Data Sharing Agreement" %>
           <%= data_sharing_agreement_row(organisation: @organisation, user: current_user, summary_list:) %>
         <% else %>

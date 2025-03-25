@@ -9,7 +9,7 @@ module OrganisationsHelper
     end
   end
 
-  def display_organisation_attributes(organisation)
+  def display_organisation_attributes(user, organisation)
     attributes = [
       { name: "Organisation ID", value: "ORG#{organisation.id}", editable: false },
       { name: "Address", value: organisation.address_string, editable: true },
@@ -17,14 +17,14 @@ module OrganisationsHelper
       { name: "Registration number", value: organisation.housing_registration_no || "", editable: false },
       { name: "Type of provider", value: organisation.display_provider_type, editable: false },
       { name: "Owns housing stock", value: organisation.holds_own_stock ? "Yes" : "No", editable: false },
-      { name: "Part of group", value: organisation.group_member ? "Yes" : "No", editable: current_user.support? },
+      { name: "Part of group", value: organisation.group_member ? "Yes" : "No", editable: user.support? },
     ]
 
     if organisation.group_member
-      attributes << { name: "Group number", value: "GROUP#{organisation.group}", editable: current_user.support? }
+      attributes << { name: "Group number", value: "GROUP#{organisation.group}", editable: user.support? }
     end
 
-    attributes << { name: "For profit", value: organisation.display_profit_status, editable: current_user.support? }
+    attributes << { name: "For profit", value: organisation.display_profit_status, editable: user.support? }
     attributes << { name: "Rent periods", value: organisation.rent_period_labels, editable: true, format: :bullet }
     attributes << { name: "Data Sharing Agreement" }
     attributes << { name: "Status", value: status_tag(organisation.status) + delete_organisation_text(organisation), editable: false }

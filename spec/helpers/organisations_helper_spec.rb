@@ -3,10 +3,12 @@ require "rails_helper"
 RSpec.describe OrganisationsHelper do
   include TagHelper
   describe "display_organisation_attributes" do
-    let(:organisation) { create(:organisation, :la, :holds_own_stock, address_line1: "2 Marsham Street", address_line2: "London", postcode: "SW1P 4DF", housing_registration_no: 1234, organisation_rent_periods: []) }
+    let(:support_user) { create(:user, :support) }
+    let(:coordinator_user) { create(:user, :data_coordinator) }
+    let(:organisation) { create(:organisation, :la, :holds_own_stock, address_line1: "2 Marsham Street", address_line2: "London", postcode: "SW1P 4DF", housing_registration_no: 1234, organisation_rent_periods: [], group_member: true, group_member_id: 99, group: 1) }
 
-    it "has the correct values" do
-      expect(display_organisation_attributes(organisation)).to eq(
+    it "has the correct values and editable status for support users" do
+      expect(display_organisation_attributes(support_user, organisation)).to eq(
         [{ editable: false, name: "Organisation ID", value: "ORG#{organisation.id}" },
          { editable: true,
            name: "Address",
@@ -15,10 +17,32 @@ RSpec.describe OrganisationsHelper do
          { editable: false, name: "Registration number", value: "1234" },
          { editable: false, name: "Type of provider", value: "Local authority" },
          { editable: false, name: "Owns housing stock", value: "Yes" },
+         { editable: true, name: "Part of group", value: "Yes"},
+         { editable: true, name: "Group number", value: "GROUP1"},
+         { editable: true, name: "For profit", value: ""},
          { editable: true, format: :bullet, name: "Rent periods", value: [] },
          { name: "Data Sharing Agreement" },
          { editable: false, name: "Status", value: status_tag(organisation.status) }],
       )
+    end
+
+    it "has the correct values and editable status for non-support users" do
+      expect(display_organisation_attributes(coordinator_user, organisation)).to eq(
+         [{ editable: false, name: "Organisation ID", value: "ORG#{organisation.id}" },
+          { editable: true,
+            name: "Address",
+            value: "2 Marsham Street\nLondon\nSW1P 4DF" },
+          { editable: true, name: "Telephone number", value: nil },
+          { editable: false, name: "Registration number", value: "1234" },
+          { editable: false, name: "Type of provider", value: "Local authority" },
+          { editable: false, name: "Owns housing stock", value: "Yes" },
+          { editable: false, name: "Part of group", value: "Yes"},
+          { editable: false, name: "Group number", value: "GROUP1"},
+          { editable: false, name: "For profit", value: ""},
+          { editable: true, format: :bullet, name: "Rent periods", value: [] },
+          { name: "Data Sharing Agreement" },
+          { editable: false, name: "Status", value: status_tag(organisation.status) }],
+         )
     end
   end
 
