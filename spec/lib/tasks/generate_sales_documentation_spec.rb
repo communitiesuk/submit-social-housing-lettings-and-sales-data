@@ -67,7 +67,7 @@ RSpec.describe "generate_sales_documentation" do
   describe ":describe_sales_validations", type: :task do
     subject(:task) { Rake::Task["generate_sales_documentation:describe_sales_validations"] }
 
-    let(:documentation_generator) { instance_double(DocumentationGenerator, describe_bu_validations: nil, get_all_sales_methods: []) }
+    let(:documentation_generator) { instance_double(DocumentationGenerator, describe_bu_validations: nil, validation_and_helper_methods: []) }
     let(:client) { instance_double(OpenAI::Client) }
 
     before do

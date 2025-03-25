@@ -10,7 +10,14 @@ namespace :generate_lettings_documentation do
     client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
 
     documentation_generator = DocumentationGenerator.new
-    all_validation_methods, all_helper_methods = documentation_generator.get_all_lettings_methods
+    validation_classes = [Validations::SetupValidations,
+                          Validations::HouseholdValidations,
+                          Validations::PropertyValidations,
+                          Validations::FinancialValidations,
+                          Validations::TenancyValidations,
+                          Validations::DateValidations,
+                          Validations::LocalAuthorityValidations]
+    all_validation_methods, all_helper_methods = documentation_generator.validation_and_helper_methods(validation_classes)
 
     documentation_generator.describe_hard_validations(client, form, all_validation_methods, all_helper_methods, "lettings")
   end
