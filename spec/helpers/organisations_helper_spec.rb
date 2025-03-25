@@ -80,4 +80,36 @@ RSpec.describe OrganisationsHelper do
       end
     end
   end
+
+  describe "#group_organisation_options_name" do
+    let(:older_org) { create(:organisation, group_member: true, group_member_id: 123, group: 9) }
+    let(:org) { create(:organisation, name: "Org1", group_member: true, group_member_id: older_org.id) }
+
+    it "returns the organisation name with group text" do
+      allow(org).to receive(:oldest_group_member).and_return(older_org)
+      name = helper.group_organisation_options_name(org)
+      expect(name).to eq("Org1 (GROUP9)")
+    end
+  end
+
+  describe "#profit_status_options" do
+    it "returns a list of profit statuses with a null option" do
+      options = helper.profit_status_options
+      expect(options.map(&:name)).to include("Select an option")
+    end
+
+    context "when provider type is LA" do
+      it "returns only the local authority option" do
+        options = helper.profit_status_options("LA")
+        expect(options.map(&:id)).to eq(["", :local_authority])
+      end
+    end
+
+    context "when provider type is PRP" do
+      it "excludes the local authority option" do
+        options = helper.profit_status_options("PRP")
+        expect(options.map(&:id)).not_to include(:local_authority)
+      end
+    end
+  end
 end
