@@ -213,6 +213,26 @@ RSpec.describe Csv::SalesLogCsvService do
       end
     end
 
+    context "when the requested form is 2025" do
+      let(:now) { Time.zone.local(2025, 5, 1) }
+      let(:year) { 2025 }
+      let(:fixed_time) { Time.zone.local(2025, 5, 1) }
+
+      before do
+        log.update!(nationality_all: 36, manual_address_entry_selected: false, uprn: "1", uprn_known: 1)
+      end
+
+      it "exports the CSV with the 2025 ordering and all values correct" do
+        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_25.csv")
+        values_to_delete = %w[ID OWNINGORGID MANINGORGID CREATEDBYID USERNAMEID AMENDEDBYID]
+        values_to_delete.each do |attribute|
+          index = attribute_line.index(attribute)
+          content_line[index] = nil
+        end
+        expect(csv[1..]).to eq expected_content[1..]
+      end
+    end
+
     context "when the requested form is 2023" do
       let(:now) { Time.zone.local(2024, 1, 1) }
       let(:year) { 2023 }
