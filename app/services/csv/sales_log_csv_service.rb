@@ -277,29 +277,6 @@ module Csv
       end
     end
 
-    # def insert_derived_and_related_attributes(ordered_questions)
-    #   ordered_questions.flat_map do |question|
-    #     if question.type == "checkbox"
-    #       question.answer_options.keys
-    #     elsif attribute_mappings.key? question.id
-    #       attribute_mappings[question.id]
-    #     else
-    #       question.id
-    #     end
-    #   end
-    # end
-
-    # def attribute_mappings
-    #   mappings = ATTRIBUTE_MAPPINGS
-    #   unless @user.support? && @year >= 2024
-    #     mappings = mappings.merge({"postcode_full" => %w[pcode1 pcode2]})
-    #   end
-    #   if @year >= 2024
-    #     mappings = mappings.merge(ATTRIBUTE_MAPPINGS_2024)
-    #   end
-    #   mappings
-    # end
-
     def attribute_mappings
       mappings = case @year
                  when 2024
