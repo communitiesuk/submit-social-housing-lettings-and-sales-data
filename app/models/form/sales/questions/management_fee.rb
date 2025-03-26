@@ -2,7 +2,7 @@ class Form::Sales::Questions::ManagementFee < ::Form::Question
   def initialize(id, hsh, subsection)
     super
     @id = "management_fee"
-    @copy_key = "sales.sale_information.management_fee.management_fee"
+    @copy_key = "sales.sale_information.monthly_charges.shared_ownership.management_fee.management_fee"
     @type = "numeric"
     @min = 1
     @step = 0.01

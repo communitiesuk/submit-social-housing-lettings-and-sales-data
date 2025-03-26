@@ -1,7 +1,7 @@
 class Form::Sales::Pages::EstateManagementFee < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @copy_key = "sales.sale_information.management_fee"
+    @copy_key = "sales.sale_information.monthly_charges.shared_ownership.management_fee"
   end
 
   def questions

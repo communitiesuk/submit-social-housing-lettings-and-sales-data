@@ -245,31 +245,45 @@ en:
               hint_text: "Amount paid before any charges"
               question_text: "What is the basic monthly rent after staircasing?"
 
-          leaseholdcharges:
+          monthly_charges:
             shared_ownership:
-              page_header: ""
-              has_mscharge:
-                check_answer_label: "Property service charges"
-                check_answer_prompt: "Enter service charges if any"
-                hint_text: "This includes any charges for day-to-day maintenance and repairs, building insurance, and any contributions to a sinking or reserved fund. It does not include estate management fees."
-                question_text: "Does the property have any service charges?"
-              mscharge:
-                check_answer_label:  "Monthly leasehold charges"
-                check_answer_prompt: ""
-                hint_text: ""
-                question_text: "Enter the total monthly charge"
+              service_charges:
+                page_header: ""
+                has_mscharge:
+                  check_answer_label: "Property service charges"
+                  check_answer_prompt: "Enter service charges if any"
+                  hint_text: "This includes any charges for day-to-day maintenance and repairs, building insurance, and any contributions to a sinking or reserved fund. It does not include estate management fees."
+                  question_text: "Does the property have any service charges?"
+                mscharge:
+                  check_answer_label:  "Monthly leasehold charges"
+                  check_answer_prompt: ""
+                  hint_text: ""
+                  question_text: "Enter the total monthly charge"
+              management_fee:
+                page_header: ""
+                has_management_fee:
+                  check_answer_label: "Monthly estate management fee"
+                  check_answer_prompt: "Tell us if the property has an estate management fee"
+                  hint_text: "Estate management fees are typically used for the maintenance of communal gardens, payments, private roads, car parks and/or play areas within new build estates."
+                  question_text: "Does the property have an estate management fee?"
+                management_fee:
+                  check_answer_label: "Monthly estate management fee"
+                  check_answer_prompt: ""
+                  hint_text: ""
+                  question_text: "Enter the total monthly management fee"
             discounted_ownership:
-              page_header: ""
-              has_mscharge:
-                check_answer_label: "Property leasehold charges"
-                check_answer_prompt: "Enter leasehold charges if any"
-                hint_text: "For example, service and management charges"
-                question_text: "Does the property have any monthly leasehold charges?"
-              mscharge:
-                check_answer_label:  "Monthly leasehold charges"
-                check_answer_prompt: ""
-                hint_text: ""
-                question_text: "Enter the total monthly charge"
+              leasehold_charges:
+                page_header: ""
+                has_mscharge:
+                  check_answer_label: "Property leasehold charges"
+                  check_answer_prompt: "Enter leasehold charges if any"
+                  hint_text: "For example, service and management charges"
+                  question_text: "Does the property have any monthly leasehold charges?"
+                mscharge:
+                  check_answer_label:  "Monthly leasehold charges"
+                  check_answer_prompt: ""
+                  hint_text: ""
+                  question_text: "Enter the total monthly charge"
 
           purchase_price:
             discounted_ownership:
@@ -298,16 +312,3 @@ en:
             check_answer_prompt: ""
             hint_text: "For all schemes except Right to Buy (RTB), Preserved Right to Buy (PRTB), Voluntary Right to Buy (VRTB) and Rent to Buy"
             question_text: "What was the amount of any loan, grant, discount or subsidy given?"
-
-          management_fee:
-            page_header: ""
-            has_management_fee:
-              check_answer_label: "Monthly estate management fee"
-              check_answer_prompt: "Tell us if the property has an estate management fee"
-              hint_text: "Estate management fees are typically used for the maintenance of communal gardens, payments, private roads, car parks and/or play areas within new build estates."
-              question_text: "Does the property have an estate management fee?"
-            management_fee:
-              check_answer_label:  "Monthly estate management fee"
-              check_answer_prompt: ""
-              hint_text: ""
-              question_text: "Enter the total monthly management fee"
