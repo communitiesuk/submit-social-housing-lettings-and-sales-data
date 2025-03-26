@@ -2,7 +2,19 @@ class Form::Sales::Pages::LeaseholdCharges < ::Form::Page
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @ownershipsch = ownershipsch
-    @copy_key = "sales.sale_information.leaseholdcharges"
+  end
+
+  def copy_key
+    if form.start_year_2025_or_later?
+      case @ownershipsch
+      when 1
+        "sales.sale_information.leaseholdcharges.shared_ownership"
+      when 2
+        "sales.sale_information.leaseholdcharges.discounted_ownership"
+      end
+    else
+      "sales.sale_information.leaseholdcharges"
+    end
   end
 
   def questions

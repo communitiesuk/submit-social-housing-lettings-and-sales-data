@@ -246,17 +246,30 @@ en:
               question_text: "What is the basic monthly rent after staircasing?"
 
           leaseholdcharges:
-            page_header: ""
-            has_mscharge:
-              check_answer_label: "Property service charges"
-              check_answer_prompt: "Enter service charges if any"
-              hint_text: "For example, service and management charges"
-              question_text: "Does the property have any service charges?"
-            mscharge:
-              check_answer_label:  "Monthly leasehold charges"
-              check_answer_prompt: ""
-              hint_text: ""
-              question_text: "Enter the total monthly charge"
+            shared_ownership:
+              page_header: ""
+              has_mscharge:
+                check_answer_label: "Property service charges"
+                check_answer_prompt: "Enter service charges if any"
+                hint_text: "This includes any charges for day-to-day maintenance and repairs, building insurance, and any contributions to a sinking or reserved fund. It does not include estate management fees."
+                question_text: "Does the property have any service charges?"
+              mscharge:
+                check_answer_label:  "Monthly leasehold charges"
+                check_answer_prompt: ""
+                hint_text: ""
+                question_text: "Enter the total monthly charge"
+            discounted_ownership:
+              page_header: ""
+              has_mscharge:
+                check_answer_label: "Property leasehold charges"
+                check_answer_prompt: "Enter leasehold charges if any"
+                hint_text: "For example, service and management charges"
+                question_text: "Does the property have any monthly leasehold charges?"
+              mscharge:
+                check_answer_label:  "Monthly leasehold charges"
+                check_answer_prompt: ""
+                hint_text: ""
+                question_text: "Enter the total monthly charge"
 
           purchase_price:
             discounted_ownership:

@@ -2,7 +2,6 @@ class Form::Sales::Questions::HasLeaseholdCharges < ::Form::Question
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @id = "has_mscharge"
-    @copy_key = "sales.sale_information.leaseholdcharges.has_mscharge"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {
@@ -17,6 +16,19 @@ class Form::Sales::Questions::HasLeaseholdCharges < ::Form::Question
     }
     @ownershipsch = ownershipsch
     @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
+  end
+
+  def copy_key
+    if form.start_year_2025_or_later?
+      case @ownershipsch
+      when 1
+        "sales.sale_information.leaseholdcharges.shared_ownership.has_mscharge"
+      when 2
+        "sales.sale_information.leaseholdcharges.discounted_ownership.has_mscharge"
+      end
+    else
+      "sales.sale_information.leaseholdcharges.has_mscharge"
+    end
   end
 
   ANSWER_OPTIONS = {
