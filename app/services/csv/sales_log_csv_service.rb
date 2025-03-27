@@ -92,11 +92,11 @@ module Csv
         labels: %i[initialpurchase year],
         codes: %i[initialpurchase year],
       },
-      has_servicecharges: { # WILL REPLACE WITH NEW FIELD
-        labels: %i[has_servicecharge_label], # returns as the number not label
+      has_servicecharges: {
+        labels: %i[has_servicecharge_label],
         codes: %i[has_servicecharge],
       },
-      servicecharges: { # WILL REPLACE WITH NEW FIELD
+      servicecharges: {
         labels: %i[servicecharge],
         codes: %i[servicecharge],
       },
