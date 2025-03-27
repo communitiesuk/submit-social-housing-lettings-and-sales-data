@@ -37,7 +37,7 @@ class Form::Sales::Subsections::SharedOwnershipInitialPurchase < ::Form::Subsect
       Form::Sales::Pages::DepositDiscount.new("deposit_discount_optional", nil, self, optional: true),
       Form::Sales::Pages::SharedOwnershipDepositValueCheck.new("shared_ownership_deposit_value_check", nil, self),
       Form::Sales::Pages::MonthlyRent.new(nil, nil, self),
-      Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_shared_ownership", nil, self, ownershipsch: 1),
+      Form::Sales::Pages::ServiceCharge.new("service_charge", nil, self),
       Form::Sales::Pages::MonthlyChargesValueCheck.new("monthly_charges_shared_ownership_value_check", nil, self),
       Form::Sales::Pages::EstateManagementFee.new("estate_management_fee", nil, self),
     ].compact
