@@ -68,6 +68,46 @@ module Csv
         labels: %i[monthly_charges_value_check],
         codes: %i[monthly_charges_value_check],
       },
+      stairlastday: {
+        labels: %i[lasttransaction day],
+        codes: %i[lasttransaction day],
+      },
+      stairlastmonth: {
+        labels: %i[lasttransaction month],
+        codes: %i[lasttransaction month],
+      },
+      stairlastyear: {
+        labels: %i[lasttransaction year],
+        codes: %i[lasttransaction year],
+      },
+      stairinitialday: {
+        labels: %i[initialpurchase day],
+        codes: %i[initialpurchase day],
+      },
+      stairinitialmonth: {
+        labels: %i[initialpurchase month],
+        codes: %i[initialpurchase month],
+      },
+      stairinitialyear: {
+        labels: %i[initialpurchase year],
+        codes: %i[initialpurchase year],
+      },
+      has_servicecharges: {
+        labels: %i[has_servicecharge_label],
+        codes: %i[has_servicecharge],
+      },
+      servicecharges: {
+        labels: %i[servicecharge],
+        codes: %i[servicecharge],
+      },
+      has_mscharge: {
+        labels: %i[has_mscharge_label],
+        codes: %i[has_mscharge_value],
+      },
+      mscharge: {
+        labels: %i[mscharge_value],
+        codes: %i[mscharge_value],
+      },
     }.freeze
 
     PERSON_DETAILS = {}.tap { |hash|
@@ -97,7 +137,7 @@ module Csv
 
     ORDERED_ADDRESS_FIELDS = %w[uprn address_line1 address_line2 town_or_city county postcode_full is_la_inferred la_label la uprn_selection address_search_value_check address_line1_input postcode_full_input address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered].freeze
 
-    SUPPORT_ONLY_ATTRIBUTES = %w[address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by value_value_check mscharge_value_check].freeze
+    SUPPORT_ONLY_ATTRIBUTES = %w[address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by created_by_id value_value_check mscharge_value_check].freeze
 
     SUPPORT_ATTRIBUTE_NAME_MAPPINGS = {
       "duplicate_set_id" => "DUPLICATESET",
@@ -152,6 +192,19 @@ module Csv
       "uprn_confirmed" => "UPRNCONFIRMED",
     }.freeze
 
+    SUPPORT_ATTRIBUTE_NAME_MAPPINGS_2025 = {
+      "hholdcount" => "HHOLDCOUNT",
+      "created_by_id" => "CREATEDBYID",
+      "owning_organisation_id" => "OWNINGORGID",
+      "managing_organisation_id" => "MANINGORGID",
+      "assigned_to_id" => "USERNAMEID",
+      "updated_by" => "AMENDEDBY",
+      "updated_by_id" => "AMENDEDBYID",
+      "has_management_fee" => "HASESTATEFEE",
+      "management_fee" => "ESTATEFEE",
+      "has_servicecharges" => "HASSERVICECHARGES",
+    }.freeze
+
     UPRN_CONFIRMED_LABELS = {
       0 => "No",
       1 => "Yes",
@@ -161,20 +214,54 @@ module Csv
       "uprn_confirmed" => UPRN_CONFIRMED_LABELS,
     }.freeze
 
+    ATTRIBUTE_MAPPINGS = {
+      "saledate" => %w[day month year],
+      "exdate" => %w[exday exmonth exyear],
+      "hodate" => %w[hoday homonth hoyear],
+      "ppostcode_full" => %w[ppostc1 ppostc2],
+      "la" => %w[la la_label],
+      "prevloc" => %w[prevloc prevloc_label],
+      "assigned_to_id" => %w[created_by assigned_to],
+      "owning_organisation_id" => %w[owning_organisation_name],
+      "managing_organisation_id" => %w[managing_organisation_name],
+      "value" => %w[value value_value_check],
+      "mscharge" => %w[mscharge mscharge_value_check],
+    }.freeze
+
+    ATTRIBUTE_MAPPINGS_2024 = {
+      "uprn" => %w[uprn uprn_confirmed address_line1_input postcode_full_input uprn_selection],
+    }.freeze
+
+    ATTRIBUTE_MAPPINGS_2025 = {
+      "duplicate_set_id" => %w[duplicate_set_id owning_organisation_name owning_organisation_id managing_organisation_name managing_organisation_id],
+      "created_by_id" => %w[created_by created_by_id assigned_to assigned_to_id],
+      "updated_by_id" => %w[updated_by updated_by_id],
+      "bulk_upload_id" => %w[bulk_upload_id collection_start_year],
+      "prevten" => %w[hhtype prevten],
+      "mrent" => %w[mrent has_servicecharges servicecharges has_management_fee management_fee],
+      "lasttransaction" => %w[stairlastday stairlastmonth stairlastyear],
+      "initialpurchase" => %w[stairinitialday stairinitialmonth stairinitialyear],
+      "mrentprestaircasing" => %w[mrentprestaircasing grant discount extrabor has_mscharge mscharge mscharge_value_check],
+    }.freeze
+
     def formatted_attribute_headers
       return @attributes unless @user.support?
 
+      mappings = SUPPORT_ATTRIBUTE_NAME_MAPPINGS
+      mappings = mappings.merge(SUPPORT_ATTRIBUTE_NAME_MAPPINGS_2025) if @year == 2025
+
       @attributes.map do |attribute|
-        SUPPORT_ATTRIBUTE_NAME_MAPPINGS[attribute] || attribute.upcase
+        mappings[attribute] || attribute.upcase
       end
     end
 
     def sales_log_attributes
       ordered_questions = FormHandler.instance.ordered_questions_for_year(@year, "sales")
       ordered_questions.reject! { |q| q.id.match?(/((?<!la)_known)|(_check)|(_asked)|nationality_all_group|nationality_all_buyer2_group/) }
-      attributes = insert_derived_and_related_attributes(ordered_questions)
-      order_address_fields_for_support(attributes)
-      final_attributes = non_question_fields + attributes
+      ordered_questions.reject! { |q| q.id.match?(/organisation_id|created_by|assigned_to|soctenant|has_management_fee|management_fee|grant|discount|has_mscharge|mscharge|extrabor/) } if @year >= 2025
+      attributes = insert_checkbox_options(ordered_questions)
+      final_attributes = insert_derived_and_related_attributes(non_question_fields + attributes)
+      order_address_fields_for_support(final_attributes)
       @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES
     end
 
@@ -187,38 +274,40 @@ module Csv
       }.compact
     end
 
-    def insert_derived_and_related_attributes(ordered_questions)
+    def insert_checkbox_options(ordered_questions)
       ordered_questions.flat_map do |question|
         if question.type == "checkbox"
           question.answer_options.keys
-        elsif attribute_mappings.key? question.id
-          attribute_mappings[question.id]
         else
           question.id
         end
       end
     end
 
+    def insert_derived_and_related_attributes(attributes)
+      attributes.flat_map do |attribute|
+        if attribute_mappings.key? attribute
+          attribute_mappings[attribute]
+        else
+          attribute
+        end
+      end
+    end
+
     def attribute_mappings
-      mappings = {
-        "saledate" => %w[day month year],
-        "exdate" => %w[exday exmonth exyear],
-        "hodate" => %w[hoday homonth hoyear],
-        "ppostcode_full" => %w[ppostc1 ppostc2],
-        "la" => %w[la la_label],
-        "prevloc" => %w[prevloc prevloc_label],
-        "assigned_to_id" => %w[created_by assigned_to],
-        "owning_organisation_id" => %w[owning_organisation_name],
-        "managing_organisation_id" => %w[managing_organisation_name],
-        "value" => %w[value value_value_check],
-        "mscharge" => %w[mscharge mscharge_value_check],
-      }
+      mappings = case @year
+                 when 2024
+                   ATTRIBUTE_MAPPINGS.merge(ATTRIBUTE_MAPPINGS_2024)
+                 when 2025
+                   ATTRIBUTE_MAPPINGS.merge(ATTRIBUTE_MAPPINGS_2024).merge(ATTRIBUTE_MAPPINGS_2025)
+                 else
+                   ATTRIBUTE_MAPPINGS
+                 end
+
       unless @user.support? && @year >= 2024
-        mappings["postcode_full"] = %w[pcode1 pcode2]
+        mappings = mappings.merge({ "postcode_full" => %w[pcode1 pcode2] })
       end
-      if @year >= 2024
-        mappings["uprn"] = %w[uprn uprn_confirmed address_line1_input postcode_full_input uprn_selection]
-      end
+
       mappings
     end
 
@@ -240,6 +329,8 @@ module Csv
         %w[id status duplicate_set_id created_at updated_at old_form_id collection_start_year creation_method is_dpo]
       when 2024
         %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo]
+      when 2025
+        %w[id status duplicate_set_id created_at created_by_id updated_at updated_by_id creation_method bulk_upload_id]
       else
         %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo]
       end
