@@ -499,7 +499,7 @@ class BulkUpload::SalesLogToCsv
       log.deposit,
       log.cashdis,
       log.mrent,
-      log.servicecharge,
+      log.mscharge,
       log.management_fee,
 
       log.stairbought,

@@ -148,7 +148,6 @@ module Csv
       "soctenant" => "SOCTEN",
       "mortlen" => "MORTLEN1",
       "has_mscharge" => "HASMSCHARGE",
-      "has_servicecharge" => "HASSERVICECHARGES",
       "nationalbuy2" => "NATIONAL2",
       "uprn_confirmed" => "UPRNCONFIRMED",
     }.freeze
@@ -213,7 +212,6 @@ module Csv
         "managing_organisation_id" => %w[managing_organisation_name],
         "value" => %w[value value_value_check],
         "mscharge" => %w[mscharge mscharge_value_check],
-        "servicecharge" => %w[servicecharge mscharge_value_check],
       }
       unless @user.support? && @year >= 2024
         mappings["postcode_full"] = %w[pcode1 pcode2]

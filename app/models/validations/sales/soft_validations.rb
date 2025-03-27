@@ -149,27 +149,11 @@ module Validations::Sales::SoftValidations
     !grant.between?(9_000, 16_000)
   end
 
-  def service_charges_over_soft_max?
-    return unless type && servicecharge && proptype
+  def monthly_charges_over_soft_max?
+    return unless type && mscharge && proptype
 
     soft_max = old_persons_shared_ownership? ? 550 : 300
-    servicecharge > soft_max
-  end
-
-  def monthly_charges_over_soft_max?
-    return unless type && proptype && ownershipsch
-
-    if discounted_ownership_sale?
-      return unless mscharge
-
-      soft_max = old_persons_shared_ownership? ? 550 : 300
-      mscharge > soft_max
-    elsif shared_ownership_scheme?
-      return unless servicecharge
-
-      soft_max = old_persons_shared_ownership? ? 550 : 300
-      servicecharge > soft_max
-    end
+    mscharge > soft_max
   end
 
   (2..6).each do |person_num|

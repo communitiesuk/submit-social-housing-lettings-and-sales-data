@@ -40,10 +40,6 @@ module Validations::Sales::FinancialValidations
     record.errors.add :mortgage, :cannot_be_0, message: I18n.t("validations.sales.financial.mortgage.mortgage_zero") if record.mortgage_used? && record.mortgage&.zero?
   end
 
-  def validate_monthly_service_charges(record)
-    record.errors.add :servicecharge, I18n.t("validations.sales.financial.servicecharge.monthly_service_charges.not_zero") if record.servicecharge&.zero?
-  end
-
   def validate_monthly_leasehold_charges(record)
     record.errors.add :mscharge, I18n.t("validations.sales.financial.mscharge.monthly_leasehold_charges.not_zero") if record.mscharge&.zero?
   end

@@ -391,10 +391,6 @@ class SalesLog < Log
     has_mscharge&.zero?
   end
 
-  def no_monthly_service_charges?
-    has_servicecharge&.zero?
-  end
-
   def no_buyer_organisation?
     pregyrha&.zero? &&
       pregla&.zero? &&

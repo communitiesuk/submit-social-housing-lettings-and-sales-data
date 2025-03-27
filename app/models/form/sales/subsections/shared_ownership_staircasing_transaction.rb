@@ -25,7 +25,7 @@ class Form::Sales::Subsections::SharedOwnershipStaircasingTransaction < ::Form::
       Form::Sales::Pages::Mortgageused.new("staircase_mortgage_used_shared_ownership", nil, self, ownershipsch: 1),
       Form::Sales::Pages::MonthlyRentStaircasingOwned.new(nil, nil, self),
       Form::Sales::Pages::MonthlyRentStaircasing.new(nil, nil, self),
-      Form::Sales::Pages::MonthlyChargesValueCheck.new("monthly_charges_shared_ownership_value_check", nil, self, ownershipsch: 1),
+      Form::Sales::Pages::MonthlyChargesValueCheck.new("monthly_charges_shared_ownership_value_check", nil, self),
     ].compact
   end
 

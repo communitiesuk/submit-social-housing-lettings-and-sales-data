@@ -23,7 +23,7 @@ class Form::Sales::Subsections::OutrightSale < ::Form::Subsection
       Form::Sales::Pages::DepositValueCheck.new("outright_sale_deposit_joint_purchase_value_check", nil, self, joint_purchase: true),
       Form::Sales::Pages::DepositValueCheck.new("outright_sale_deposit_value_check", nil, self, joint_purchase: false),
       leasehold_charge_pages,
-      Form::Sales::Pages::MonthlyChargesValueCheck.new("monthly_charges_outright_sale_value_check", nil, self, ownershipsch: 3),
+      Form::Sales::Pages::MonthlyChargesValueCheck.new("monthly_charges_outright_sale_value_check", nil, self),
     ].flatten.compact
   end
 

@@ -198,8 +198,6 @@ FactoryBot.define do
       socprevten { 3 }
       mrent { 900 }
       equity { 30 }
-      has_servicecharge { 1 }
-      servicecharge { 100 }
       ppostcode_full { "SW1A 1AA" }
       hodate { Time.zone.today }
     end
