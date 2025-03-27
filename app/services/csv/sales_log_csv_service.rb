@@ -99,7 +99,7 @@ module Csv
       servicecharges: { # WILL REPLACE WITH NEW FIELD
         labels: %i[mscharge],
         codes: %i[mscharge],
-      }
+      },
     }.freeze
 
     PERSON_DETAILS = {}.tap { |hash|
