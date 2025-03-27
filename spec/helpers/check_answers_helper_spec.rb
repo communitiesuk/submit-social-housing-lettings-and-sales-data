@@ -41,7 +41,7 @@ RSpec.describe CheckAnswersHelper do
 
   describe "#get_answer_label" do
     context "when unanswered and bulk upload" do
-      let(:question) { log.form.questions.sample }
+      let(:question) { log.form.questions.reject { |q| log.optional_fields.include?(q.id) }.sample }
       let(:bulk_upload) { create(:bulk_upload) }
       let(:log) { create(:sales_log, creation_method: "bulk upload", bulk_upload:) }
 

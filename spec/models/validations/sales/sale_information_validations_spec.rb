@@ -182,6 +182,163 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
   end
 
+  describe "#validate_staircasing_initial_purchase_date" do
+    context "when initial purchase date blank" do
+      let(:record) { build(:sales_log, initialpurchase: nil) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_staircasing_initial_purchase_date(record)
+
+        expect(record.errors[:initialpurchase]).not_to be_present
+      end
+    end
+
+    context "when initial purchase date in 1979" do
+      let(:record) { build(:sales_log, initialpurchase: Date.new(1979, 12, 31)) }
+
+      it "adds an error" do
+        sale_information_validator.validate_staircasing_initial_purchase_date(record)
+
+        expect(record.errors[:initialpurchase]).to be_present
+      end
+    end
+
+    context "when initial purchase date in 1980" do
+      let(:record) { build(:sales_log, initialpurchase: Date.new(1980, 1, 1)) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_staircasing_initial_purchase_date(record)
+
+        expect(record.errors[:initialpurchase]).not_to be_present
+      end
+    end
+
+    context "when initial purchase date before saledate" do
+      let(:record) { build(:sales_log, initialpurchase: 2.months.ago, saledate: 1.month.ago) }
+
+      it "does not add the error" do
+        sale_information_validator.validate_staircasing_initial_purchase_date(record)
+
+        expect(record.errors[:initialpurchase]).not_to be_present
+      end
+    end
+
+    context "when initial purchase date after saledate" do
+      let(:record) { build(:sales_log, initialpurchase: 1.month.ago, saledate: 2.months.ago) }
+
+      it "adds error" do
+        sale_information_validator.validate_staircasing_initial_purchase_date(record)
+
+        expect(record.errors[:initialpurchase]).to eq([I18n.t("validations.sales.sale_information.initialpurchase.must_be_before_saledate")])
+        expect(record.errors[:saledate]).to eq([I18n.t("validations.sales.sale_information.saledate.must_be_after_initial_purchase_date")])
+      end
+    end
+
+    context "when initial purchase date == saledate" do
+      let(:record) { build(:sales_log, initialpurchase: Time.zone.parse("2023-07-01"), saledate: Time.zone.parse("2023-07-01")) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_staircasing_initial_purchase_date(record)
+
+        expect(record.errors[:initialpurchase]).not_to be_present
+      end
+    end
+  end
+
+  describe "#validate_staircasing_last_transaction_date" do
+    context "when last transaction date blank" do
+      let(:record) { build(:sales_log, lasttransaction: nil) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_staircasing_last_transaction_date(record)
+
+        expect(record.errors[:lasttransaction]).not_to be_present
+      end
+    end
+
+    context "when last transaction date in 1979" do
+      let(:record) { build(:sales_log, lasttransaction: Date.new(1979, 12, 31)) }
+
+      it "adds an error" do
+        sale_information_validator.validate_staircasing_last_transaction_date(record)
+
+        expect(record.errors[:lasttransaction]).to be_present
+      end
+    end
+
+    context "when last transaction date in 1980" do
+      let(:record) { build(:sales_log, lasttransaction: Date.new(1980, 1, 1)) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_staircasing_last_transaction_date(record)
+
+        expect(record.errors[:lasttransaction]).not_to be_present
+      end
+    end
+
+    context "when last transaction date before saledate" do
+      let(:record) { build(:sales_log, lasttransaction: 2.months.ago, saledate: 1.month.ago) }
+
+      it "does not add the error" do
+        sale_information_validator.validate_staircasing_last_transaction_date(record)
+
+        expect(record.errors[:lasttransaction]).not_to be_present
+      end
+    end
+
+    context "when last transaction date after saledate" do
+      let(:record) { build(:sales_log, lasttransaction: 1.month.ago, saledate: 2.months.ago) }
+
+      it "adds error" do
+        sale_information_validator.validate_staircasing_last_transaction_date(record)
+
+        expect(record.errors[:lasttransaction]).to eq([I18n.t("validations.sales.sale_information.lasttransaction.must_be_before_saledate")])
+        expect(record.errors[:saledate]).to eq([I18n.t("validations.sales.sale_information.saledate.must_be_after_last_transaction_date")])
+      end
+    end
+
+    context "when last transaction date == saledate" do
+      let(:record) { build(:sales_log, lasttransaction: Time.zone.parse("2023-07-01"), saledate: Time.zone.parse("2023-07-01")) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_staircasing_last_transaction_date(record)
+
+        expect(record.errors[:lasttransaction]).not_to be_present
+      end
+    end
+
+    context "when last transaction date after initial purchase date" do
+      let(:record) { build(:sales_log, initialpurchase: 2.months.ago, lasttransaction: 1.month.ago) }
+
+      it "does not add the error" do
+        sale_information_validator.validate_staircasing_last_transaction_date(record)
+
+        expect(record.errors[:lasttransaction]).not_to be_present
+      end
+    end
+
+    context "when last transaction date before initial purchase date" do
+      let(:record) { build(:sales_log, initialpurchase: 1.month.ago, lasttransaction: 2.months.ago) }
+
+      it "adds error" do
+        sale_information_validator.validate_staircasing_last_transaction_date(record)
+
+        expect(record.errors[:lasttransaction]).to eq([I18n.t("validations.sales.sale_information.lasttransaction.must_be_after_initial_purchase")])
+        expect(record.errors[:initialpurchase]).to eq([I18n.t("validations.sales.sale_information.initialpurchase.must_be_before_last_transaction")])
+      end
+    end
+
+    context "when last transaction date == initial purchase date" do
+      let(:record) { build(:sales_log, lasttransaction: Time.zone.parse("2023-07-01"), initialpurchase: Time.zone.parse("2023-07-01")) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_staircasing_last_transaction_date(record)
+
+        expect(record.errors[:lasttransaction]).not_to be_present
+      end
+    end
+  end
+
   describe "#validate_previous_property_unit_type" do
     context "when number of bedrooms is <= 1" do
       let(:record) { FactoryBot.build(:sales_log, frombeds: 1, fromprop: 2) }
