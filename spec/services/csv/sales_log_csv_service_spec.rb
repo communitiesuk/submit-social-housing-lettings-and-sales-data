@@ -229,7 +229,7 @@ RSpec.describe Csv::SalesLogCsvService do
           index = attribute_line.index(attribute)
           content_line[index] = nil
         end
-        expect(csv[1..]).to eq expected_content[1..]
+        expect(csv[1..]).to eq expected_content[1..] # Skip the first line as it contains the definitions
       end
     end
 
@@ -299,6 +299,26 @@ RSpec.describe Csv::SalesLogCsvService do
       la_label_column_index = attribute_line.index("LANAME")
       la_label_value = content_line[la_label_column_index]
       expect(la_label_value).to eq "Westminster"
+    end
+
+    context "when the requested form is 2025" do
+      let(:now) { Time.zone.local(2025, 5, 1) }
+      let(:fixed_time) { Time.zone.local(2025, 5, 1) }
+      let(:year) { 2025 }
+
+      before do
+        log.update!(manual_address_entry_selected: false, uprn: "1", uprn_known: 1)
+      end
+
+      it "exports the CSV with all values correct" do
+        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_codes_25.csv")
+        values_to_delete = %w[ID OWNINGORGID MANINGORGID CREATEDBYID USERNAMEID AMENDEDBYID]
+        values_to_delete.each do |attribute|
+          index = attribute_line.index(attribute)
+          content_line[index] = nil
+        end
+        expect(csv[1..]).to eq expected_content[1..] # Skip the first line as it contains the definitions
+      end
     end
 
     context "when the requested form is 2024" do
@@ -376,6 +396,30 @@ RSpec.describe Csv::SalesLogCsvService do
             content_line[index] = nil
           end
           expect(csv).to eq expected_content
+        end
+      end
+    end
+
+    context "and the requested form is 2025" do
+      let(:year) { 2025 }
+      let(:now) { Time.zone.local(2025, 5, 1) }
+      let(:fixed_time) { Time.zone.local(2025, 5, 1) }
+
+      before do
+        log.update!(nationality_all: 36, manual_address_entry_selected: false, uprn: "1", uprn_known: 1)
+      end
+
+      context "and exporting with labels" do
+        let(:export_type) { "labels" }
+
+        it "exports the CSV with all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_non_support_labels_25.csv")
+          values_to_delete = %w[id owning_organisation_id managing_organisation_id assigned_to_id updated_by_id]
+          values_to_delete.each do |attribute|
+            index = attribute_line.index(attribute)
+            content_line[index] = nil
+          end
+          expect(csv[1..]).to eq expected_content[1..] # Skip the first line as it contains the definitions
         end
       end
     end
