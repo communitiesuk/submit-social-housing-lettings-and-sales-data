@@ -22,9 +22,9 @@ class Form::Sales::Questions::HasLeaseholdCharges < ::Form::Question
     if form.start_year_2025_or_later?
       case @ownershipsch
       when 1
-        "sales.sale_information.monthly_charges.shared_ownership.service_charges.has_mscharge"
+        "sales.sale_information.leaseholdcharges.shared_ownership.has_mscharge"
       when 2
-        "sales.sale_information.monthly_charges.discounted_ownership.leasehold_charges.has_mscharge"
+        "sales.sale_information.leaseholdcharges.discounted_ownership.has_mscharge"
       end
     else
       "sales.sale_information.leaseholdcharges.has_mscharge"
