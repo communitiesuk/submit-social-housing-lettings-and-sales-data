@@ -727,8 +727,10 @@ private
       cashdis: %i[field_92],
       mrent: mrent_fields,
 
-      has_mscharge: mscharge_fields,
-      mscharge: mscharge_fields,
+      has_servicecharge: %i[field_94],
+      servicecharge: %i[field_94],
+      has_mscharge: %i[field_121],
+      mscharge: %i[field_121],
       grant: %i[field_114],
       discount: %i[field_115],
       owning_organisation_id: %i[field_4],
@@ -888,7 +890,9 @@ private
 
     attributes["cashdis"] = field_92
     attributes["mrent"] = mrent
-    attributes["mscharge"] = mscharge if mscharge&.positive?
+    attributes["servicecharge"] = field_94 if field_94&.positive?
+    attributes["has_servicecharge"] = attributes["servicecharge"].present? ? 1 : 0
+    attributes["mscharge"] = field_121 if field_121&.positive?
     attributes["has_mscharge"] = attributes["mscharge"].present? ? 1 : 0
     attributes["grant"] = field_114
     attributes["discount"] = field_115
@@ -1170,13 +1174,6 @@ private
     return [:field_111] if staircasing?
 
     %i[field_93 field_111]
-  end
-
-  def mscharge_fields
-    return [:field_94] if shared_ownership?
-    return [:field_121] if discounted_ownership?
-
-    %i[field_94 field_121]
   end
 
   def mortlen_fields

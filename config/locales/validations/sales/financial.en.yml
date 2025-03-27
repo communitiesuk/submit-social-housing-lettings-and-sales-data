@@ -49,6 +49,10 @@ en:
           monthly_leasehold_charges:
             not_zero: "Monthly leasehold charges cannot be £0 if the property has monthly charges."
 
+        servicecharge:
+          monthly_service_charges:
+            not_zero: "Monthly service charges cannot be £0 if the property has monthly charges."
+
         resale:
           equity_over_max: "The maximum initial equity stake is %{max_equity}%."
 

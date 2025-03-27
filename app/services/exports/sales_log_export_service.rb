@@ -71,8 +71,8 @@ module Exports
       attribute_hash["previouslaknown"] = sales_log.previous_la_known
       attribute_hash["hasmscharge"] = sales_log.discounted_ownership_sale? ? sales_log.has_mscharge : nil
       attribute_hash["mscharge"] = sales_log.discounted_ownership_sale? ? sales_log.mscharge : nil
-      attribute_hash["hasservicecharges"] = sales_log.shared_ownership_scheme? ? sales_log.has_mscharge : nil
-      attribute_hash["servicecharges"] = sales_log.shared_ownership_scheme? ? sales_log.mscharge : nil
+      attribute_hash["hasservicecharges"] = sales_log.shared_ownership_scheme? ? sales_log.has_servicecharge : nil
+      attribute_hash["servicecharges"] = sales_log.shared_ownership_scheme? ? sales_log.servicecharge : nil
 
       attribute_hash["hoday"] = sales_log.hodate&.day
       attribute_hash["homonth"] = sales_log.hodate&.month

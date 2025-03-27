@@ -7,6 +7,7 @@ module DerivedVariables::SalesLogVariables
     self.pregblank = 1 if no_buyer_organisation?
     self.ethnic = 17 if ethnic_refused?
     self.mscharge = nil if no_monthly_leasehold_charges?
+    self.servicecharge = nil if no_monthly_service_charges?
     if exdate.present?
       self.exday = exdate.day
       self.exmonth = exdate.month
