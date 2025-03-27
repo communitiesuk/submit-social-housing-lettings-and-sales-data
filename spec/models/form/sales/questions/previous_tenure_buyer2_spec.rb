@@ -31,7 +31,8 @@ RSpec.describe Form::Sales::Questions::PreviousTenureBuyer2, type: :model do
       "6" => { "value" => "Living with family or friends" },
       "7" => { "value" => "Temporary accommodation" },
       "9" => { "value" => "Other" },
-      "0" => { "value" => "Don't know" },
+      "divider" => { "value" => true },
+      "0" => { "value" => "Don’t know" },
     })
   end
 end

@@ -10,7 +10,8 @@ class Form::Sales::Questions::HouseholdWheelchair < ::Form::Question
   ANSWER_OPTIONS = {
     "1" => { "value" => "Yes" },
     "2" => { "value" => "No" },
-    "3" => { "value" => "Don't know" },
+    "divider" => { "value" => true },
+    "3" => { "value" => "Don’t know" },
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 66, 2024 => 68, 2025 => 65 }.freeze

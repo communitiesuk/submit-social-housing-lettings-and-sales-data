@@ -49,7 +49,8 @@ RSpec.describe Form::Lettings::Questions::HousingneedsOther, type: :model do
       expect(question.answer_options).to eq({
         "1" => { "value" => "Yes" },
         "0" => { "value" => "No" },
-        "2" => { "value" => "Don't know" },
+        "divider" => { "value" => true },
+        "2" => { "value" => "Don’t know" },
       })
     end
   end

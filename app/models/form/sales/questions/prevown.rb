@@ -11,6 +11,7 @@ class Form::Sales::Questions::Prevown < ::Form::Question
   ANSWER_OPTIONS = {
     "1" => { "value" => "Yes" },
     "2" => { "value" => "No" },
+    "divider" => { "value" => true },
     "3" => { "value" => "Don’t know" },
   }.freeze
 

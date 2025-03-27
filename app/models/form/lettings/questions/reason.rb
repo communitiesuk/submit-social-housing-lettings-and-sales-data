@@ -83,9 +83,9 @@ class Form::Lettings::Questions::Reason < ::Form::Question
         "18" => { "value" => "To move to accommodation with support" },
         "19" => { "value" => "To move to independent accommodation" },
         "20" => { "value" => "Other" },
-        "28" => { "value" => "Don’t know" },
-        "divider" => { "value" => true },
         "47" => { "value" => "Tenant prefers not to say" },
+        "divider" => { "value" => true },
+        "28" => { "value" => "Don’t know" },
       }.freeze
     end
 

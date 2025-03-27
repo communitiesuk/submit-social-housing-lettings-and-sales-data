@@ -22,11 +22,12 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
   ANSWER_OPTIONS = {
     "1" => { "value" => "Yes" },
     "2" => { "value" => "No" },
+    "divider" => { "value" => true },
     "3" => { "value" => "Don’t know" },
   }.freeze
 
   def answer_options_without_dont_know
-    ANSWER_OPTIONS.reject { |key, _v| key == "3" }
+    ANSWER_OPTIONS.reject { |key, _v| %w[3 divider].include?(key) }
   end
 
   def question_number_from_year_and_ownership

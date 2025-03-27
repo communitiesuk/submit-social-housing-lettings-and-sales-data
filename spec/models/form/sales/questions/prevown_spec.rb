@@ -28,6 +28,7 @@ RSpec.describe Form::Sales::Questions::Prevown, type: :model do
     expect(question.answer_options).to eq({
       "1" => { "value" => "Yes" },
       "2" => { "value" => "No" },
+      "divider" => { "value" => true },
       "3" => { "value" => "Don’t know" },
     })
   end

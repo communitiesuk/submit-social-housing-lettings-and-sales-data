@@ -17,6 +17,7 @@ class Form::Sales::Questions::Buyer1PreviousTenure < ::Form::Question
       "6" => { "value" => "Living with family or friends" },
       "7" => { "value" => "Temporary accommodation" },
       "9" => { "value" => "Other" },
+      "divider" => { "value" => true },
       "0" => { "value" => "Don’t know" },
     }
   end

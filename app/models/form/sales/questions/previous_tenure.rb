@@ -13,6 +13,7 @@ class Form::Sales::Questions::PreviousTenure < ::Form::Question
     "2" => { "value" => "Affordable Rent" },
     "3" => { "value" => "London Affordable Rent" },
     "9" => { "value" => "Other" },
+    "divider" => { "value" => true },
     "10" => { "value" => "Don’t know" },
   }.freeze
 
