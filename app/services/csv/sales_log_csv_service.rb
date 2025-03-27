@@ -129,7 +129,7 @@ module Csv
 
     ORDERED_ADDRESS_FIELDS = %w[uprn address_line1 address_line2 town_or_city county postcode_full is_la_inferred la_label la uprn_selection address_search_value_check address_line1_input postcode_full_input address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered].freeze
 
-    SUPPORT_ONLY_ATTRIBUTES = %w[address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by value_value_check mscharge_value_check].freeze
+    SUPPORT_ONLY_ATTRIBUTES = %w[address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by created_by_id value_value_check mscharge_value_check].freeze
 
     SUPPORT_ATTRIBUTE_NAME_MAPPINGS = {
       "duplicate_set_id" => "DUPLICATESET",
