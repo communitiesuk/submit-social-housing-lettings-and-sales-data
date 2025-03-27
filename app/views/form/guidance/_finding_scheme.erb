@@ -2,6 +2,8 @@
   <%= govuk_details(summary_text: I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.finding_scheme.title")) do %>
     <%= I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.finding_scheme.content").html_safe %>
     <p><%= govuk_link_to(I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.finding_scheme.view_schemes_link_text"), clear_filters_url(filter_type: "schemes")) %></p>
-    <p><%= govuk_link_to(I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.finding_scheme.scheme_changes_link_text"), scheme_changes_path) %></p>
+    <% if I18n.exists?("forms.#{@log.form.start_date.year}.lettings.guidance.finding_scheme.scheme_changes_link_text") %>
+      <p><%= govuk_link_to(I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.finding_scheme.scheme_changes_link_text"), scheme_changes_path) %></p>
+    <% end %>
   <% end %>
 </div>
