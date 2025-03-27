@@ -542,4 +542,28 @@ class SalesLog < Log
   def log_type
     "sales_log"
   end
+
+  def has_servicecharge
+    has_mscharge if shared_ownership_scheme?
+  end
+
+  def has_servicecharge_label
+    form.get_question(:has_mscharge, self)&.label_from_value(has_mscharge) if shared_ownership_scheme?
+  end
+
+  def servicecharge
+    mscharge if shared_ownership_scheme?
+  end
+
+  def has_mscharge_value
+    has_mscharge if discounted_ownership_sale? || !form.start_year_2025_or_later?
+  end
+
+  def has_mscharge_label
+    form.get_question(:has_mscharge, self)&.label_from_value(has_mscharge) if discounted_ownership_sale? || !form.start_year_2025_or_later?
+  end
+
+  def mscharge_value
+    mscharge if discounted_ownership_sale? || !form.start_year_2025_or_later?
+  end
 end

@@ -92,13 +92,21 @@ module Csv
         labels: %i[initialpurchase year],
         codes: %i[initialpurchase year],
       },
-      hasservicecharges: { # WILL REPLACE WITH NEW FIELD
-        labels: %i[has_mscharge], # returns as the number not label
-        codes: %i[has_mscharge],
+      has_servicecharges: { # WILL REPLACE WITH NEW FIELD
+        labels: %i[has_servicecharge_label], # returns as the number not label
+        codes: %i[has_servicecharge],
       },
       servicecharges: { # WILL REPLACE WITH NEW FIELD
-        labels: %i[mscharge],
-        codes: %i[mscharge],
+        labels: %i[servicecharge],
+        codes: %i[servicecharge],
+      },
+      has_mscharge: {
+        labels: %i[has_mscharge_label],
+        codes: %i[has_mscharge_value],
+      },
+      mscharge: {
+        labels: %i[mscharge_value],
+        codes: %i[mscharge_value],
       },
     }.freeze
 
@@ -194,6 +202,7 @@ module Csv
       "updated_by_id" => "AMENDEDBYID",
       "has_management_fee" => "HASESTATEFEE",
       "management_fee" => "ESTATEFEE",
+      "has_servicecharges" => "HASSERVICECHARGES",
     }.freeze
 
     UPRN_CONFIRMED_LABELS = {
@@ -229,7 +238,7 @@ module Csv
       "updated_by_id" => %w[updated_by updated_by_id],
       "bulk_upload_id" => %w[bulk_upload_id collection_start_year],
       "prevten" => %w[hhtype prevten],
-      "mrent" => %w[mrent hasservicecharges servicecharges has_management_fee management_fee],
+      "mrent" => %w[mrent has_servicecharges servicecharges has_management_fee management_fee],
       "lasttransaction" => %w[stairlastday stairlastmonth stairlastyear],
       "initialpurchase" => %w[stairinitialday stairinitialmonth stairinitialyear],
       "mrentprestaircasing" => %w[mrentprestaircasing grant discount extrabor has_mscharge mscharge mscharge_value_check],
