@@ -12,9 +12,9 @@ class Form::Lettings::Questions::Hb < ::Form::Question
     "1" => { "value" => "Housing benefit" },
     "6" => { "value" => "Universal Credit housing element" },
     "9" => { "value" => "Neither" },
-    "3" => { "value" => "Don’t know" },
-    "divider" => { "value" => true },
     "10" => { "value" => "Tenant prefers not to say" },
+    "divider" => { "value" => true },
+    "3" => { "value" => "Don’t know" },
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 89, 2024 => 88 }.freeze
