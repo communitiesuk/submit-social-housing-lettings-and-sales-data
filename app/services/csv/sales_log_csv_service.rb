@@ -296,7 +296,7 @@ module Csv
                  end
 
       unless @user.support? && @year >= 2024
-        mappings = mappings.merge({"postcode_full" => %w[pcode1 pcode2]})
+        mappings = mappings.merge({ "postcode_full" => %w[pcode1 pcode2] })
       end
 
       mappings
