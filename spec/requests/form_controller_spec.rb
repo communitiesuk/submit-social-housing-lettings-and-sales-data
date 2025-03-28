@@ -1675,10 +1675,12 @@ RSpec.describe FormController, type: :request do
         context "and changing an answer" do
           before do
             Timecop.freeze(2024, 5, 6)
+            Singleton.__init__(FormHandler)
           end
 
           after do
             Timecop.return
+            Singleton.__init__(FormHandler)
           end
 
           it "navigates to follow-up questions when required" do
