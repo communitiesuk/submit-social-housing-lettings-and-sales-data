@@ -13,7 +13,8 @@ class Form::Lettings::Questions::HousingneedsOther < ::Form::Question
       {
         "1" => { "value" => "Yes" },
         "0" => { "value" => "No" },
-        "2" => { "value" => "Don't know" },
+        "divider" => { "value" => true },
+        "2" => { "value" => "Don’t know" },
       }.freeze
     else
       {

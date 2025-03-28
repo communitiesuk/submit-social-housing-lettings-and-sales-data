@@ -16,7 +16,8 @@ class Form::Sales::Questions::PreviousTenureBuyer2 < ::Form::Question
     "6" => { "value" => "Living with family or friends" },
     "7" => { "value" => "Temporary accommodation" },
     "9" => { "value" => "Other" },
-    "0" => { "value" => "Don't know" },
+    "divider" => { "value" => true },
+    "0" => { "value" => "Don’t know" },
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 61, 2024 => 63, 2025 => 60 }.freeze

@@ -17,6 +17,7 @@ class Form::Sales::Questions::Staircase < ::Form::Question
       {
         "1" => { "value" => "Yes" },
         "2" => { "value" => "No" },
+        "divider" => { "value" => true },
         "3" => { "value" => "Don’t know" },
       }.freeze
     end

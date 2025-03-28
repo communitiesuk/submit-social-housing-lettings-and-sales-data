@@ -11,7 +11,8 @@ class Form::Sales::Questions::PropertyWheelchairAccessible < ::Form::Question
   ANSWER_OPTIONS = {
     "1" => { "value" => "Yes" },
     "2" => { "value" => "No" },
-    "3" => { "value" => "Don't know" },
+    "divider" => { "value" => true },
+    "3" => { "value" => "Don’t know" },
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 17, 2024 => 21, 2025 => 19 }.freeze

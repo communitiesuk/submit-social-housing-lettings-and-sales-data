@@ -11,7 +11,8 @@ class Form::Sales::Questions::BuyerStillServing < ::Form::Question
     "4" => { "value" => "Yes" },
     "5" => { "value" => "No" },
     "6" => { "value" => "Buyer prefers not to say" },
-    "7" => { "value" => "Don't know" },
+    "divider" => { "value" => true },
+    "7" => { "value" => "Don’t know" },
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 63, 2024 => 65, 2025 => 62 }.freeze

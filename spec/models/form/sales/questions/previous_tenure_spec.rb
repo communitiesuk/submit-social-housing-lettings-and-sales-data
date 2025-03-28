@@ -29,6 +29,7 @@ RSpec.describe Form::Sales::Questions::PreviousTenure, type: :model do
       "2" => { "value" => "Affordable Rent" },
       "3" => { "value" => "London Affordable Rent" },
       "9" => { "value" => "Other" },
+      "divider" => { "value" => true },
       "10" => { "value" => "Don’t know" },
     })
   end

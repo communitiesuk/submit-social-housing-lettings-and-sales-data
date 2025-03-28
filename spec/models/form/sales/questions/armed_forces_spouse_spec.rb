@@ -28,7 +28,8 @@ RSpec.describe Form::Sales::Questions::ArmedForcesSpouse, type: :model do
       "4" => { "value" => "Yes" },
       "5" => { "value" => "No" },
       "6" => { "value" => "Buyer prefers not to say" },
-      "7" => { "value" => "Don't know" },
+      "divider" => { "value" => true },
+      "7" => { "value" => "Don’t know" },
     })
   end
 end
