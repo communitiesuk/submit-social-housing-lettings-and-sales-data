@@ -111,6 +111,14 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
 
+  config.around do |example|
+    Timecop.travel(Time.zone.local(2025, 4, 2))
+    Singleton.__init__(FormHandler)
+    example.run
+    Timecop.travel(Time.zone.local(2025, 4, 2))
+    Singleton.__init__(FormHandler)
+  end
+
   config.before do
     RequestHelper.stub_http_requests
   end
