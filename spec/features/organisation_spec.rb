@@ -43,6 +43,11 @@ RSpec.describe "User Features" do
         expect(page).to have_current_path("/organisations/#{org_id}/details")
       end
 
+      it "does not allow coordinator users to edit their organisation's group and profit status" do
+        expect(page).to have_no_link("Change part of group")
+        expect(page).to have_no_link("Select profit status")
+      end
+
       context "and the organisation does not hold housing stock" do
         before do
           organisation.update(holds_own_stock: false)
@@ -363,6 +368,39 @@ RSpec.describe "User Features" do
       it "does not show schemes in the primary or secondary navigation bar on the organisations page" do
         visit("/organisations")
         expect(page).not_to have_link("Schemes", href: "/schemes", count: 2)
+      end
+    end
+
+    context "and is creating a new organisation" do
+      before do
+        visit("/organisations")
+        click_link("Create a new organisation")
+      end
+
+      it "displays the new organisation form" do
+        expect(page).to have_content("Create a new organisation")
+        expect(page).to have_field("organisation[name]", type: "text")
+        expect(page).to have_field("organisation[address_line1]", type: "text")
+        expect(page).to have_field("organisation[address_line2]", type: "text")
+        expect(page).to have_field("organisation[postcode]", type: "text")
+        expect(page).to have_field("organisation[phone]")
+        expect(page).to have_field("organisation[housing_registration_no]", type: "text")
+        expect(page).to have_select("organisation[provider_type]")
+        expect(page).to have_field("organisation[holds_own_stock]", type: "radio")
+        expect(page).to have_field("organisation[group_member]", type: "radio")
+        expect(page).to have_select("organisation[profit_status]")
+        expect(page).to have_button("Create organisation")
+      end
+    end
+
+    context "when viewing a specific organisation's details page" do
+      before do
+        visit("/organisations/#{org_id}/details")
+      end
+
+      it "allows the support user to edit the organisation's group and profit status" do
+        expect(page).to have_link("Change part of group")
+        expect(page).to have_link("Select profit status")
       end
     end
   end
