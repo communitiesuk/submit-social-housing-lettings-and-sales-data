@@ -53,4 +53,10 @@ module CollectionTimeHelper
   def archived_collection_start_year
     current_collection_start_year - 2
   end
+
+  def generate_different_date_within_collection_year(date, start_date_override = nil, end_date_override = nil)
+    start_date = start_date_override || collection_start_date(date).to_date
+    end_date = end_date_override || collection_end_date(date).to_date
+    ((start_date..end_date).to_a - [date.to_date]).sample
+  end
 end
