@@ -416,7 +416,7 @@ RSpec.describe MergeRequestsController, type: :request do
         context "when merge date set to a date more than 1 year in the future" do
           let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
           let(:params) do
-            { merge_request: { page: "merge_date", "merge_date": [(Time.zone.now.day + 1).to_s, Time.zone.now.month.to_s, (Time.zone.now.year + 1).to_s].join("/") } }
+            { merge_request: { page: "merge_date", "merge_date": (Time.zone.now + 1.year + 1.day).strftime("%d/%m/%Y") } }
           end
 
           let(:request) do
