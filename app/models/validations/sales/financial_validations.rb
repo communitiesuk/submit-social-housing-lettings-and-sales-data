@@ -122,7 +122,7 @@ module Validations::Sales::FinancialValidations
     elsif record.numstair
       # We must use the lowest possible percentage for a staircasing transaction of any saletype, any year since 1980
       minimum_percentage_per_staircasing_transaction = 1
-      previous_staircasing_transactions = record.numstair - 2
+      previous_staircasing_transactions = record.numstair - 1
 
       if percentage_left < previous_staircasing_transactions * minimum_percentage_per_staircasing_transaction
         equity_sum = sprintf("%g", record.stairowned - percentage_left + previous_staircasing_transactions * minimum_percentage_per_staircasing_transaction)
@@ -134,6 +134,7 @@ module Validations::Sales::FinancialValidations
         record.errors.add :stairowned, I18n.t("validations.sales.financial.stairowned.less_than_stairbought_plus_equity_plus_prev_staircasing", equity: formatted_equity, bought: formatted_stairbought, numprevstair: previous_staircasing_transactions, equity_sum:, stair_total: formatted_stairowned)
         record.errors.add :stairbought, I18n.t("validations.sales.financial.stairbought.more_than_stairowned_minus_equity_minus_prev_staircasing", equity: formatted_equity, bought: formatted_stairbought, numprevstair: previous_staircasing_transactions, equity_sum:, stair_total: formatted_stairowned)
         record.errors.add :numstair, I18n.t("validations.sales.financial.numstair.too_high_for_stairowned_minus_stairbought_minus_equity", equity: formatted_equity, bought: formatted_stairbought, numprevstair: previous_staircasing_transactions, equity_sum:, stair_total: formatted_stairowned)
+        record.errors.add :firststair, I18n.t("validations.sales.financial.firststair.invalid_for_stairowned_minus_stairbought_minus_equity", equity: formatted_equity, bought: formatted_stairbought, numprevstair: previous_staircasing_transactions, equity_sum:, stair_total: formatted_stairowned)
       end
     end
   end
