@@ -1087,18 +1087,18 @@ RSpec.describe SalesLog, type: :model do
 
   context "when form year changes and LA is no longer active" do
     let!(:sales_log) { create(:sales_log) }
-    let(:date) { generate_different_date_within_collection_year(Time.zone.now, end_date_override: Time.zone.now + 14.days) }
-    let(:date_after) { generate_different_date_within_collection_year(date, start_date_override: Time.zone.now, end_date_override: Time.zone.now + 14.days) }
+    let(:end_date) { generate_different_date_within_collection_year(Time.zone.now, end_date_override: Time.zone.now + 14.days) }
+    let(:date_after_end_date) { generate_different_date_within_collection_year(end_date, start_date_override: Time.zone.now, end_date_override: Time.zone.now + 14.days) }
 
     before do
-      LocalAuthority.find_by(code: "E08000003").update!(end_date: date)
+      LocalAuthority.find_by(code: "E08000003").update!(end_date:)
     end
 
     it "removes the LA" do
-      sales_log.update!(saledate: date, la: "E08000003")
+      sales_log.update!(saledate: end_date, la: "E08000003")
       expect(sales_log.reload.la).to eq("E08000003")
 
-      sales_log.update!(saledate: date_after)
+      sales_log.update!(saledate: date_after_end_date)
       expect(sales_log.reload.la).to eq(nil)
       expect(sales_log.reload.is_la_inferred).to eq(false)
     end
