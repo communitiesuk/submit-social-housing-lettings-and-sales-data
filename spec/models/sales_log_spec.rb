@@ -378,7 +378,7 @@ RSpec.describe SalesLog, type: :model do
 
     context "when there is a log with a different sale date" do
       before do
-        create(:sales_log, :duplicate, saledate: Time.zone.yesterday)
+        create(:sales_log, :duplicate, saledate: generate_different_date_within_collection_year(Time.zone.now, end_date_override: Time.zone.now + 14.days))
       end
 
       it "does not return a log with a different sale date as a duplicate" do
