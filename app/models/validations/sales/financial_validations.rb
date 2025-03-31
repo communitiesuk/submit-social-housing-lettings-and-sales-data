@@ -122,7 +122,7 @@ module Validations::Sales::FinancialValidations
     elsif record.numstair
       # We must use the lowest possible percentage for a staircasing transaction of any saletype, any year since 1980
       minimum_percentage_per_staircasing_transaction = 1
-      previous_staircasing_transactions = record.numstair - 1
+      previous_staircasing_transactions = record.numstair - 2
 
       if percentage_left < previous_staircasing_transactions * minimum_percentage_per_staircasing_transaction
         equity_sum = sprintf("%g", record.stairowned - percentage_left + previous_staircasing_transactions * minimum_percentage_per_staircasing_transaction)
