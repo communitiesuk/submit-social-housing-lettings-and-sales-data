@@ -518,7 +518,6 @@ RSpec.describe Validations::Sales::FinancialValidations do
         expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.financial.stairbought.more_than_stairowned_minus_equity_minus_prev_staircasing", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
         expect(record.errors["numstair"]).to include(I18n.t("validations.sales.financial.numstair.too_high_for_stairowned_minus_stairbought_minus_equity", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
         expect(record.errors["firststair"]).to include(I18n.t("validations.sales.financial.firststair.invalid_for_stairowned_minus_stairbought_minus_equity", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
-
       end
 
       it "does not add errors if stairnum is present and stairowned is enough more than stairbought + equity" do
