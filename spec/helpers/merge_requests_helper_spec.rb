@@ -200,10 +200,10 @@ RSpec.describe MergeRequestsHelper do
     context "when merging organisations have logs" do
       before do
         create(:lettings_log, owning_organisation: organisation)
-        create(:lettings_log, owning_organisation: merging_organisation, startdate: generate_different_date_within_collection_year(Time.zone.yesterday, Time.zone.today - 2.days))
+        create(:lettings_log, owning_organisation: merging_organisation, startdate: generate_different_date_within_collection_year(Time.zone.yesterday, start_date_override: Time.zone.today - 2.days))
         create(:lettings_log, owning_organisation: merging_organisation, startdate: Time.zone.yesterday)
         create(:sales_log, owning_organisation: organisation)
-        create(:sales_log, owning_organisation: merging_organisation, saledate: generate_different_date_within_collection_year(Time.zone.yesterday, Time.zone.today - 2.days))
+        create(:sales_log, owning_organisation: merging_organisation, saledate: generate_different_date_within_collection_year(Time.zone.yesterday, start_date_override: Time.zone.today - 2.days))
         create(:sales_log, owning_organisation: merging_organisation, saledate: Time.zone.yesterday)
       end
 
@@ -237,8 +237,8 @@ RSpec.describe MergeRequestsHelper do
         before do
           create(:organisation_relationship, parent_organisation: merging_organisation_2, child_organisation: merging_organisation)
           create(:merge_request_organisation, merge_request:, merging_organisation: merging_organisation_2)
-          create(:lettings_log, assigned_to: merging_organisation_2.users.first, owning_organisation: merging_organisation_2, managing_organisation: merging_organisation, startdate: generate_different_date_within_collection_year(Time.zone.yesterday, Time.zone.today - 2.days))
-          create(:sales_log, assigned_to: merging_organisation_2.users.first, owning_organisation: merging_organisation_2, managing_organisation: merging_organisation, saledate: generate_different_date_within_collection_year(Time.zone.yesterday, Time.zone.today - 2.days))
+          create(:lettings_log, assigned_to: merging_organisation_2.users.first, owning_organisation: merging_organisation_2, managing_organisation: merging_organisation, startdate: generate_different_date_within_collection_year(Time.zone.yesterday, start_date_override: Time.zone.today - 2.days))
+          create(:sales_log, assigned_to: merging_organisation_2.users.first, owning_organisation: merging_organisation_2, managing_organisation: merging_organisation, saledate: generate_different_date_within_collection_year(Time.zone.yesterday, start_date_override: Time.zone.today - 2.days))
         end
 
         it "returns the correct merging_organisations_lettings_logs_outcomes_text text" do

@@ -252,7 +252,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     context "when there is a log with a different sale date" do
-      let!(:different_sale_date_log) { create(:sales_log, :duplicate, saledate: generate_different_date_within_collection_year(Time.zone.now, nil, Time.zone.now + 14.days), owning_organisation: organisation) }
+      let!(:different_sale_date_log) { create(:sales_log, :duplicate, saledate: generate_different_date_within_collection_year(Time.zone.now, end_date_override: Time.zone.now + 14.days), owning_organisation: organisation) }
 
       it "does not return a log with a different sale date as a duplicate" do
         expect(described_class.duplicate_logs(log)).not_to include(different_sale_date_log)
@@ -1087,8 +1087,8 @@ RSpec.describe SalesLog, type: :model do
 
   context "when form year changes and LA is no longer active" do
     let!(:sales_log) { create(:sales_log) }
-    let(:date) { generate_different_date_within_collection_year(Time.zone.now, nil, Time.zone.now + 14.days) }
-    let(:date_after) { generate_different_date_within_collection_year(date, Time.zone.now, Time.zone.now + 14.days) }
+    let(:date) { generate_different_date_within_collection_year(Time.zone.now, end_date_override: Time.zone.now + 14.days) }
+    let(:date_after) { generate_different_date_within_collection_year(date, start_date_override: Time.zone.now, end_date_override: Time.zone.now + 14.days) }
 
     before do
       LocalAuthority.find_by(code: "E08000003").update!(end_date: date)
