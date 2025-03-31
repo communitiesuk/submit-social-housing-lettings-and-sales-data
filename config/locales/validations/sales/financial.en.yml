@@ -83,6 +83,9 @@ en:
           percentage_bought_equal_percentage_owned: "The percentage bought is %{stairbought}% and the percentage owned in total is %{stairowned}%. These figures cannot be the same."
           more_than_stairowned_minus_equity_minus_prev_staircasing: "The initial equity stake is %{equity}%, the percentage bought is %{bought}%, and there have been %{numprevstair} previous staircasing transactions, totalling at least %{equity_sum}%, which is more than the total percentage owned by the buyers (%{stair_total}%). In a staircasing transaction, the total percentage owned must be at least the initial equity stake plus the percentage bought plus a minimum of 1% for each previous staircasing transaction."
 
+        firststair:
+          invalid_for_stairowned_minus_stairbought_minus_equity: "The initial equity stake is %{equity}%, the percentage bought is %{bought}%, and there have been %{numprevstair} previous staircasing transactions, totalling at least %{equity_sum}%, which is more than the total percentage owned by the buyers (%{stair_total}%). In a staircasing transaction, the total percentage owned must be at least the initial equity stake plus the percentage bought plus a minimum of 1% for each previous staircasing transaction."
+
         numstair:
           too_high_for_stairowned_minus_stairbought_minus_equity: "The initial equity stake is %{equity}%, the percentage bought is %{bought}%, and there have been %{numprevstair} previous staircasing transactions, totalling at least %{equity_sum}%, which is more than the total percentage owned by the buyers (%{stair_total}%). In a staircasing transaction, the total percentage owned must be at least the initial equity stake plus the percentage bought plus a minimum of 1% for each previous staircasing transaction."
 

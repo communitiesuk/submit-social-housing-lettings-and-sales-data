@@ -3,6 +3,8 @@ require "shared/shared_log_examples"
 
 # rubocop:disable RSpec/MessageChain
 RSpec.describe SalesLog, type: :model do
+  include CollectionTimeHelper
+
   let(:owning_organisation) { create(:organisation) }
   let(:assigned_to_user) { create(:user) }
 
@@ -250,7 +252,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     context "when there is a log with a different sale date" do
-      let!(:different_sale_date_log) { create(:sales_log, :duplicate, saledate: Time.zone.tomorrow, owning_organisation: organisation) }
+      let!(:different_sale_date_log) { create(:sales_log, :duplicate, saledate: generate_different_date_within_collection_year(Time.zone.now, end_date_override: Time.zone.now + 14.days), owning_organisation: organisation) }
 
       it "does not return a log with a different sale date as a duplicate" do
         expect(described_class.duplicate_logs(log)).not_to include(different_sale_date_log)
@@ -376,7 +378,7 @@ RSpec.describe SalesLog, type: :model do
 
     context "when there is a log with a different sale date" do
       before do
-        create(:sales_log, :duplicate, saledate: Time.zone.tomorrow)
+        create(:sales_log, :duplicate, saledate: generate_different_date_within_collection_year(Time.zone.now, end_date_override: Time.zone.now + 14.days))
       end
 
       it "does not return a log with a different sale date as a duplicate" do
@@ -1085,16 +1087,18 @@ RSpec.describe SalesLog, type: :model do
 
   context "when form year changes and LA is no longer active" do
     let!(:sales_log) { create(:sales_log) }
+    let(:end_date) { Time.zone.local(2025, 3, 30) }
+    let(:date_after_end_date) { Time.zone.local(2025, 3, 31) }
 
     before do
-      LocalAuthority.find_by(code: "E08000003").update!(end_date: Time.zone.today)
+      LocalAuthority.find_by(code: "E08000003").update!(end_date:)
     end
 
     it "removes the LA" do
-      sales_log.update!(saledate: Time.zone.yesterday, la: "E08000003")
+      sales_log.update!(saledate: end_date, la: "E08000003")
       expect(sales_log.reload.la).to eq("E08000003")
 
-      sales_log.update!(saledate: Time.zone.tomorrow)
+      sales_log.update!(saledate: date_after_end_date)
       expect(sales_log.reload.la).to eq(nil)
       expect(sales_log.reload.is_la_inferred).to eq(false)
     end
