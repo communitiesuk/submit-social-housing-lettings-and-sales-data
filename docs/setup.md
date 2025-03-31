@@ -241,7 +241,8 @@ Feature toggles can be found in `app/services/feature_toggle.rb`
 
 - `yarn prettier . --write` for scss, yml, md, and json files
 - `yarn standard --fix` for js files
-- `bundle exec rubocop -A` to autocorrect safe rubocop offenses in ruby files
+- `bundle exec rubocop -a` to autocorrect safe autocorrectable rubocop offenses in ruby files
+- `bundle exec rubocop -A` to autocorrect all autocorrectable rubocop offenses in ruby files - both safe and unsafe
 
 ### Linting
 
