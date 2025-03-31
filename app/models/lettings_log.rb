@@ -649,6 +649,7 @@ class LettingsLog < Log
     super
 
     self.postcode_known = nil if errors.attribute_names.include? :postcode_full
+    self.ppcodenk = nil if errors.attribute_names.include? :ppostcode_full
 
     if errors.of_kind?(:earnings, :under_hard_min)
       self.incfreq = nil
