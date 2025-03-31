@@ -252,7 +252,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     context "when there is a log with a different sale date" do
-      let!(:different_sale_date_log) { create(:sales_log, :duplicate, saledate: generate_different_date_within_collection_year(Time.zone.now), owning_organisation: organisation) }
+      let!(:different_sale_date_log) { create(:sales_log, :duplicate, saledate: generate_different_date_within_collection_year(Time.zone.now, nil, Time.zone.now + 14.days), owning_organisation: organisation) }
 
       it "does not return a log with a different sale date as a duplicate" do
         expect(described_class.duplicate_logs(log)).not_to include(different_sale_date_log)
