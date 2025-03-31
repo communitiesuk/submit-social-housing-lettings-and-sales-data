@@ -102,6 +102,7 @@ RSpec.describe SalesLog, type: :model do
 
     after do
       Timecop.return
+      Singleton.__init__(FormHandler)
     end
 
     it "has returns the correct form based on the start date" do
