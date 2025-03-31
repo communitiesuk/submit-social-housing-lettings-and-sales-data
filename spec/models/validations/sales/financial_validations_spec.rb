@@ -502,7 +502,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
       it "does not add errors if equity is not given" do
         record.stairbought = 2
         record.stairowned = 10
-        record.equity = 0
+        record.equity = nil
         financial_validator.validate_staircase_difference(record)
         expect(record.errors).to be_empty
       end
@@ -511,7 +511,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.stairowned = 20
         record.stairbought = 10
         record.equity = 9
-        record.numstair = 3
+        record.numstair = 4
         financial_validator.validate_staircase_difference(record)
         expect(record.errors["equity"]).to include(I18n.t("validations.sales.financial.equity.more_than_stairowned_minus_stairbought_minus_prev_staircasing", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
         expect(record.errors["stairowned"]).to include(I18n.t("validations.sales.financial.equity.more_than_stairowned_minus_stairbought_minus_prev_staircasing", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
