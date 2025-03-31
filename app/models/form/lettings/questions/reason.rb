@@ -45,8 +45,8 @@ class Form::Lettings::Questions::Reason < ::Form::Question
         "30" => { "value" => "Under occupation (no incentive)" },
         "18" => { "value" => "To move to accommodation with support" },
         "19" => { "value" => "To move to independent accommodation" },
-        "20" => { "value" => "Other" },
         "47" => { "value" => "Tenant prefers not to say" },
+        "20" => { "value" => "Other" },
         "divider" => { "value" => true },
         "28" => { "value" => "Don’t know" },
       }.freeze
