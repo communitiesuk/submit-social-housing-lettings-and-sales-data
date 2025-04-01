@@ -59,7 +59,7 @@ Taking the relationships from the above diagram, and looking at which logs each 
 ## Logs
 
 There are two types of logs: sales logs and lettings logs.
-Sales and lettings logs have some validations and fields in comon, but many more are specific to either sales or to lettings.
+Sales and lettings logs have some validations and fields in common, but many more are specific to either sales or to lettings.
 
 ### Sales logs
 
@@ -79,6 +79,9 @@ There are two types of lettings logs: general needs and supported housing.
 
 - **General needs** refers to a letting that is not part of a supported housing scheme.
 - **Supported housing** lettings are those belonging to a **scheme**, as described in the following section.
+
+The user-facing `guidance` page at <https://submit-social-housing-data.communities.gov.uk/guidance> contains detail about logs which may also be useful to developers.
+In particular, it lists a lot of lettings situations for which CORE does or does not collect logs.
 
 ### Supported housing schemes
 
