@@ -58,7 +58,7 @@ module CollectionTimeHelper
     start_date = [start_date_override, collection_start_date(date).to_date].compact.max.to_date
     end_date = [end_date_override, collection_end_date(date).to_date].compact.min.to_date
 
-    return nil if start_date > end_date
+    return nil if start_date > end_date || start_date == end_date
 
     available_dates = (start_date..end_date).to_a - [date.to_date]
     available_dates.empty? ? nil : available_dates.sample
