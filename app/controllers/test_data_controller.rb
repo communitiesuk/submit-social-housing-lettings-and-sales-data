@@ -22,7 +22,7 @@ class TestDataController < ApplicationController
       return render_not_found unless FeatureToggle.create_test_logs_enabled?
 
       file = Tempfile.new("#{year}_test_lettings_log.csv")
-      start_date = Time.zone.local(year.to_i, 1, 1)
+      start_date = Time.zone.local(year.to_i, 4, 1)
       log = FactoryBot.create(:lettings_log, :completed, assigned_to: current_user, ppostcode_full: "SW1A 1AA", startdate: generate_different_date_within_collection_year(start_date, end_date_override: start_date + 14.days))
       log_to_csv = BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\n", overrides: { organisation_id: "ORG#{log.owning_organisation_id}", managing_organisation_id: "ORG#{log.owning_organisation_id}" })
       file.write(log_to_csv.default_field_numbers_row)
@@ -54,12 +54,13 @@ class TestDataController < ApplicationController
     redirect_to sales_log_path(log)
   end
 
-  [2024, 2025].each do |year|
+  %w[2024 2025].each do |year|
     define_method("create_#{year}_test_sales_bulk_upload") do
       return render_not_found unless FeatureToggle.create_test_logs_enabled?
 
       file = Tempfile.new("#{year}_test_sales_log.csv")
-      log = FactoryBot.create(:sales_log, :completed, assigned_to: current_user, value: 180_000, deposit: 150_000, county: "Somerset", saledate: generate_different_date_within_collection_year(Time.zone.now, end_date_override: Time.zone.now + 14.days))
+      start_date = Time.zone.local(year.to_i, 4, 1)
+      log = FactoryBot.create(:sales_log, :completed, assigned_to: current_user, value: 180_000, deposit: 150_000, county: "Somerset", saledate: generate_different_date_within_collection_year(start_date, end_date_override: Time.zone.now + 14.days))
       log_to_csv = BulkUpload::SalesLogToCsv.new(log:, line_ending: "\n", overrides: { organisation_id: "ORG#{log.owning_organisation_id}", managing_organisation_id: "ORG#{log.owning_organisation_id}" })
       file.write(log_to_csv.default_field_numbers_row)
       file.write(log_to_csv.to_csv_row)
