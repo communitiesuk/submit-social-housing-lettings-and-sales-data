@@ -147,6 +147,9 @@ Also ensure you have firefox installed
    bundle exec rake db:seed
    ```
 
+5. For Ordinance Survey related functionality, such as using the UPRN, you will need to set `OS_DATA_KEY` in your .env file. This key is shared across the team and can be found in AWS Secrets Manager.
+6. For email functionality, you will need a GOV.UK Notify API key, which is individual to you. Ask an existing team member to invite you to the "CORE Helpdesk" Notify service. Once invited, sign in and go to "API integration" to generate an API key, and set this as `GOVUK_NOTIFY_API_KEY` in your .env file.
+
 ## Running Locally
 
 ### Application
@@ -183,18 +186,63 @@ Development mode will target the latest versions of Chrome, Firefox and Safari f
 
 The Rails server will start on <http://localhost:3000>.
 
+To sign in locally, you can use any username and password from your local database. The seed task in `seeds.rb` creates users in various roles all with the password `REVIEW_APP_USER_PASSWORD` from your .env file (which has default value `password`).
+To create any other users, you can edit the seed commands, or run similar commands in the rails console.
+You can also insert a new user row using SQL, but you will need to generate a correctly encrypted password. You can find the value to use for encrypted password which corresponds to the password `YOURPASSWORDHERE` using `User.new(:password => [YOURPASSWORDHERE]).encrypted_password`.
+
+### Debugging
+
+Add the line `binding.pry` to the code to pause the execution of the code at that line and open a powerful interactive console for debugging.
+More details on Pry are available at <https://pry.github.io/> .
+
+RubyMine also offers built-in debugging functionality, with the ability to manage breakpoints in the IDE.
+To use this:
+
+- To run the app with debugger: select the "core" Rails run configuration for the project in the top right, then click the bug icon to run with the debugger attached
+- To run tests with debugger: use the arrows in the margin of spec files beside a section or an individual test
+- To run anything else with debugger: go to `Run > Edit Configurations` and add the task you want to debug - options include Rails, Rake, Rspec, Ruby
+
+Click a line number to place a breakpoint. Right click a breakpoint for advanced options on when to trigger and what to log. You can view all breakpoints, toggle them and configure them from the `View Breakpoints...` menu.
+
+When the running code reaches a breakpoint, the debugger pauses execution and the debug panel can be used to:
+
+- View the call stack and the values of variables in the current scope
+- Evaluate and watch expressions
+- Step through the code line by line
+- Mute all breakpoints, resume, restart, etc
+
+More details on debugging in RubyMine can be found at <https://www.jetbrains.com/help/ruby/debugging-code.html> .
+
 ### Tests
 
 ```bash
 bundle exec rspec
 ```
 
-Or to run individual tests / files use your IDE
+To run a specific folder use
+
+```bash
+bundle exec rspec ./spec/folder
+```
+
+To run individual files use
+
+```bash
+bundle exec rspec ./spec/path/to/file.rb
+```
+
+or run individual files/tests from your IDE
+
+### Feature toggles
+
+Feature toggles can be found in `app/services/feature_toggle.rb`
 
 ### Formatting
 
 - `yarn prettier . --write` for scss, yml, md, and json files
 - `yarn standard --fix` for js files
+- `bundle exec rubocop -a` to autocorrect safe autocorrectable rubocop offenses in ruby files
+- `bundle exec rubocop -A` to autocorrect all autocorrectable rubocop offenses in ruby files - both safe and unsafe
 
 ### Linting
 
