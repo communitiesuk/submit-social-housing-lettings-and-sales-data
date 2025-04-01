@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::HouseholdDisability, type: :model do
+RSpec.describe Form::Sales::Questions::ServiceCharge, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -12,27 +12,26 @@ RSpec.describe Form::Sales::Questions::HouseholdDisability, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("disabled")
+    expect(question.id).to eq("mscharge")
   end
 
   it "has the correct type" do
-    expect(question.type).to eq("radio")
+    expect(question.type).to eq("numeric")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
   end
 
-  it "has the correct answer_options" do
-    expect(question.answer_options).to eq({
-      "1" => { "value" => "Yes" },
-      "2" => { "value" => "No" },
-      "divider" => { "value" => true },
-      "3" => { "value" => "Don’t know" },
-    })
+  it "has the correct width" do
+    expect(question.width).to be 5
   end
 
-  it "has correct conditional for" do
-    expect(question.conditional_for).to be_nil
+  it "has the correct min" do
+    expect(question.min).to be 1
+  end
+
+  it "has the correct prefix" do
+    expect(question.prefix).to eq("£")
   end
 end

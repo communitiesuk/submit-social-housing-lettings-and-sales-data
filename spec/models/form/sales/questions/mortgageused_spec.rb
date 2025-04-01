@@ -25,6 +25,7 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
       expect(question.answer_options).to eq({
         "1" => { "value" => "Yes" },
         "2" => { "value" => "No" },
+        "divider" => { "value" => true },
         "3" => { "value" => "Don’t know" },
       })
     end
@@ -156,6 +157,7 @@ private
     expect(question.displayed_answer_options(log)).to eq({
       "1" => { "value" => "Yes" },
       "2" => { "value" => "No" },
+      "divider" => { "value" => true },
       "3" => { "value" => "Don’t know" },
     })
   end

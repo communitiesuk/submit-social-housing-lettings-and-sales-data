@@ -41,7 +41,7 @@ en:
             page_header: ""
             check_answer_label: "Does the household pay rent or charges"
             check_answer_prompt: "Tell us if the household pay rent or charges"
-            hint_text: "If rent is charged on the property then answer Yes to this question, even if the tenants do not pay it themselves."
+            hint_text: "If rent is charged on the property then answer ‘Yes’ to this question, even if the tenants do not pay it themselves."
             question_text: "Does the household pay rent or other charges for the accommodation?"
 
           period:
@@ -124,5 +124,5 @@ en:
             tshortfall:
               check_answer_label: "Estimated outstanding amount"
               check_answer_prompt: ""
-              hint_text: "Also known as the ‘outstanding amount’."
+              hint_text: ""
               question_text: "Estimated outstanding amount"

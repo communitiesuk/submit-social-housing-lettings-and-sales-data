@@ -10,7 +10,8 @@ class Form::Sales::Questions::HouseholdDisability < ::Form::Question
   ANSWER_OPTIONS = {
     "1" => { "value" => "Yes" },
     "2" => { "value" => "No" },
-    "3" => { "value" => "Don't know" },
+    "divider" => { "value" => true },
+    "3" => { "value" => "Don’t know" },
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 65, 2024 => 67, 2025 => 64 }.freeze

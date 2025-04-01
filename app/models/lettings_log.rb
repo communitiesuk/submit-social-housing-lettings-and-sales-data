@@ -649,6 +649,7 @@ class LettingsLog < Log
     super
 
     self.postcode_known = nil if errors.attribute_names.include? :postcode_full
+    self.ppcodenk = nil if errors.attribute_names.include? :ppostcode_full
 
     if errors.of_kind?(:earnings, :under_hard_min)
       self.incfreq = nil
@@ -714,9 +715,17 @@ class LettingsLog < Log
 
   def process_postcode_changes!
     self.postcode_full = upcase_and_remove_whitespace(postcode_full)
+
+    if is_renewal?
+      self.ppostcode_full = upcase_and_remove_whitespace(postcode_full)
+    end
+
     return if postcode_full.blank?
 
     self.postcode_known = 1
+    if is_renewal?
+      self.ppcodenk = 0
+    end
     inferred_la = get_inferred_la(postcode_full)
     self.is_la_inferred = inferred_la.present?
     self.la = inferred_la if inferred_la.present?

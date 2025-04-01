@@ -134,6 +134,7 @@ module Validations::Sales::FinancialValidations
         record.errors.add :stairowned, I18n.t("validations.sales.financial.stairowned.less_than_stairbought_plus_equity_plus_prev_staircasing", equity: formatted_equity, bought: formatted_stairbought, numprevstair: previous_staircasing_transactions, equity_sum:, stair_total: formatted_stairowned)
         record.errors.add :stairbought, I18n.t("validations.sales.financial.stairbought.more_than_stairowned_minus_equity_minus_prev_staircasing", equity: formatted_equity, bought: formatted_stairbought, numprevstair: previous_staircasing_transactions, equity_sum:, stair_total: formatted_stairowned)
         record.errors.add :numstair, I18n.t("validations.sales.financial.numstair.too_high_for_stairowned_minus_stairbought_minus_equity", equity: formatted_equity, bought: formatted_stairbought, numprevstair: previous_staircasing_transactions, equity_sum:, stair_total: formatted_stairowned)
+        record.errors.add :firststair, I18n.t("validations.sales.financial.firststair.invalid_for_stairowned_minus_stairbought_minus_equity", equity: formatted_equity, bought: formatted_stairbought, numprevstair: previous_staircasing_transactions, equity_sum:, stair_total: formatted_stairowned)
       end
     end
   end

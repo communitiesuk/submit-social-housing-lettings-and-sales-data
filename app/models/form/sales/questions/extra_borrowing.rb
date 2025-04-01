@@ -12,7 +12,8 @@ class Form::Sales::Questions::ExtraBorrowing < ::Form::Question
   ANSWER_OPTIONS = {
     "1" => { "value" => "Yes" },
     "2" => { "value" => "No" },
-    "3" => { "value" => "Don't know" },
+    "divider" => { "value" => true },
+    "3" => { "value" => "Don’t know" },
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {

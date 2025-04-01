@@ -215,7 +215,7 @@ en:
             page_header: "About the deposit"
             check_answer_label: "Deposit amount"
             check_answer_prompt: ""
-            hint_text: "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan. As this is a fully staircased sale this question is optional. If you do not have the information available click save and continue"
+            hint_text: "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan."
             question_text: "How much cash deposit was paid on the property?"
 
           cashdis:
@@ -248,12 +248,25 @@ en:
           leaseholdcharges:
             page_header: ""
             has_mscharge:
-              check_answer_label: "Property service charges"
-              check_answer_prompt: "Enter service charges if any"
+              check_answer_label: "Property leasehold charges"
+              check_answer_prompt: "Enter leasehold charges if any"
               hint_text: "For example, service and management charges"
-              question_text: "Does the property have any service charges?"
+              question_text: "Does the property have any monthly leasehold charges?"
             mscharge:
               check_answer_label:  "Monthly leasehold charges"
+              check_answer_prompt: ""
+              hint_text: ""
+              question_text: "Enter the total monthly charge"
+
+          servicecharges:
+            page_header: ""
+            has_servicecharge:
+              check_answer_label: "Property service charges"
+              check_answer_prompt: "Enter service charges if any"
+              hint_text: "This includes any charges for day-to-day maintenance and repairs, building insurance, and any contributions to a sinking or reserved fund. It does not include estate management fees."
+              question_text: "Does the property have any service charges?"
+            servicecharge:
+              check_answer_label:  "Monthly service charges"
               check_answer_prompt: ""
               hint_text: ""
               question_text: "Enter the total monthly charge"

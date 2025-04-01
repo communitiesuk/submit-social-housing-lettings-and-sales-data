@@ -11,8 +11,8 @@ class Form::Sales::Questions::HousingBenefits < ::Form::Question
   ANSWER_OPTIONS = {
     "2" => { "value" => "Housing benefit" },
     "3" => { "value" => "Universal Credit housing element" },
-    "divider" => { "value" => true },
     "1" => { "value" => "Neither housing benefit or Universal Credit housing element" },
+    "divider" => { "value" => true },
     "4" => { "value" => "Don’t know " },
   }.freeze
 

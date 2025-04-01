@@ -11,7 +11,8 @@ class Form::Sales::Questions::StaircaseSale < ::Form::Question
   ANSWER_OPTIONS = {
     "1" => { "value" => "Yes" },
     "2" => { "value" => "No" },
-    "3" => { "value" => "Don't know" },
+    "divider" => { "value" => true },
+    "3" => { "value" => "Don’t know" },
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 79, 2024 => 81, 2025 => 92 }.freeze

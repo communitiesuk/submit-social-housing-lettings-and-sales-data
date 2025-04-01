@@ -46,7 +46,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
         deposit_discount_optional
         shared_ownership_deposit_value_check
         monthly_rent
-        leasehold_charges_shared_ownership
+        service_charge
         monthly_charges_shared_ownership_value_check
         estate_management_fee
       ],

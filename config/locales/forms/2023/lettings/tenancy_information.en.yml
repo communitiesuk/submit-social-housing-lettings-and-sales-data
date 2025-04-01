@@ -54,13 +54,13 @@ en:
               page_header: ""
               check_answer_label: "Length of fixed-term tenancy"
               check_answer_prompt: ""
-              hint_text: "Do not include the starter or introductory period.</br>The minimum period is 2 years for social or affordable rent general needs logs and you do not need a log for shorter tenancies."
+              hint_text: "Do not include the starter or introductory period.</br></br>The minimum period is 2 years for social or affordable rent general needs logs and you do not need a log for shorter tenancies."
               question_text: "What is the length of the fixed-term tenancy to the nearest year?"
             tenancy_length_intermediate_rent:
               page_header: ""
               check_answer_label: "Length of fixed-term tenancy"
               check_answer_prompt: ""
-              hint_text: "Do not include the starter or introductory period.</br>The minimum period is 1 year for intermediate rent general needs logs and you do not need a log for shorter tenancies."
+              hint_text: "Do not include the starter or introductory period.</br></br>The minimum period is 1 year for intermediate rent general needs logs and you do not need a log for shorter tenancies."
               question_text: "What is the length of the fixed-term tenancy to the nearest year?"
             tenancy_length_periodic:
               page_header: ""

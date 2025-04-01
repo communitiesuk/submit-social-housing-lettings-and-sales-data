@@ -10,7 +10,8 @@ class Form::Sales::Questions::Buyer2LivingIn < ::Form::Question
   ANSWER_OPTIONS = {
     "1" => { "value" => "Yes" },
     "2" => { "value" => "No" },
-    "3" => { "value" => "Don't know" },
+    "divider" => { "value" => true },
+    "3" => { "value" => "Don’t know" },
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 60, 2024 => 62, 2025 => 59 }.freeze
