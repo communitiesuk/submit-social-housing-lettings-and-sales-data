@@ -1310,7 +1310,7 @@ private
     attributes["illness_type_9"] = field_92
     attributes["illness_type_10"] = field_95
 
-    attributes["irproduct_other"] = field_12
+    attributes["irproduct_other"] = field_12 if RENT_TYPE_BU_MAPPING[field_11] == 5
 
     attributes["propcode"] = field_14
 
