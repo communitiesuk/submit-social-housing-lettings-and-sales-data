@@ -2376,7 +2376,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#irproduct_other" do
-      let(:attributes) { { bulk_upload:, field_12: "some other product" } }
+      let(:attributes) { { bulk_upload:, field_11: 6, field_12: "some other product" } }
 
       it "sets value to given free text string" do
         expect(parser.log.irproduct_other).to eql("some other product")
