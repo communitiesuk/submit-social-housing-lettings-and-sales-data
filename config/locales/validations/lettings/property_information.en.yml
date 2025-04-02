@@ -18,7 +18,7 @@ en:
           one_three_bedroom_single_tenant_shared: "A shared house with fewer than two tenants must have 1 to 3 bedrooms."
           one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms."
         hhmemb:
-          one_three_bedroom_single_tenant_shared: "A shared house with fewer than two tenants must have 1 to 3 bedrooms."
+          one_three_bedroom_single_tenant_shared: "A shared house with more than 3 bedrooms cannot have fewer than two tenants."
         uprn:
           invalid: "UPRN must be 12 digits or less."
           not_in_england: "It looks like you have entered an address outside of England. Only create logs for lettings in England."
