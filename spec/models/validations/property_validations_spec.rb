@@ -85,6 +85,7 @@ RSpec.describe Validations::PropertyValidations do
         property_validator.validate_shared_housing_rooms(log)
         expect(log.errors["unittype_gn"]).to include(match(expected_error))
         expect(log.errors["beds"]).to include(I18n.t("validations.lettings.property.unittype_gn.one_three_bedroom_single_tenant_shared"))
+        expect(log.errors["hhmemb"]).to include(I18n.t("validations.lettings.property.hhmemb.one_three_bedroom_single_tenant_shared"))
       end
     end
   end
