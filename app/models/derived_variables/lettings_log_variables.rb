@@ -181,6 +181,7 @@ private
       },
       derived_values: {
         referral: 1,
+        referral_type: 3,
         waityear: 2,
         offered: 0,
         rsnvac: 14,
