@@ -8,10 +8,14 @@ class DocumentationGenerator
   include Validations::LocalAuthorityValidations
   include Validations::SoftValidations
   include Validations::Sales::SoftValidations
+  include Validations::SetupValidations
+  include Validations::HouseholdValidations
+  include Validations::PropertyValidations
+  include Validations::FinancialValidations
+  include Validations::TenancyValidations
+  include Validations::DateValidations
 
-  def describe_hard_validations(client, all_validation_methods, all_helper_methods, log_type)
-    form = FormHandler.instance.forms["current_#{log_type}"]
-
+  def describe_hard_validations(client, form, all_validation_methods, all_helper_methods, log_type)
     all_validation_methods.each do |meth|
       if LogValidation.where(validation_name: meth.to_s, bulk_upload_specific: false, log_type:, collection_year: "#{form.start_date.year}/#{form.start_date.year + 1}").exists?
         Rails.logger.info("Validation #{meth} already exists for #{form.start_date.year}")
@@ -69,9 +73,9 @@ class DocumentationGenerator
     end
   end
 
-  def describe_soft_validations(client, all_validation_methods, all_helper_methods, log_type)
+  def describe_soft_validations(client, form, all_validation_methods, all_helper_methods, log_type)
     validation_descriptions = {}
-    all_validation_methods[0..5].each do |meth|
+    all_validation_methods.each do |meth|
       validation_source = method(meth).source
       helper_methods_source = all_helper_methods.map { |helper_method|
         if validation_source.include?(helper_method.to_s)
@@ -87,18 +91,32 @@ class DocumentationGenerator
       validation_descriptions[meth.to_s] = result
     end
 
-    current_form = FormHandler.instance.forms["current_#{log_type}"]
-    previous_form = FormHandler.instance.forms["previous_#{log_type}"]
-
-    [current_form, previous_form].each do |form|
-      interruption_screen_pages = form.pages.select { |page| page.questions.first.type == "interruption_screen" }
-      interruption_screen_pages_grouped_by_question = interruption_screen_pages.group_by { |page| page.questions.first.id }
-      interruption_screen_pages_grouped_by_question.each do |_question_id, pages|
-        pages.map do |page|
-          save_soft_validation(form, page, validation_descriptions, log_type)
-        end
+    interruption_screen_pages = form.pages.select { |page| page.questions.first.type == "interruption_screen" }
+    interruption_screen_pages_grouped_by_question = interruption_screen_pages.group_by { |page| page.questions.first.id }
+    interruption_screen_pages_grouped_by_question.each do |_question_id, pages|
+      pages.map do |page|
+        save_soft_validation(form, page, validation_descriptions, log_type)
       end
     end
+  end
+
+  def validation_and_helper_methods(validation_classes)
+    all_validation_methods = validation_classes.map(&:instance_methods).flatten.select { |method| method.starts_with?("validate_") }.uniq
+    all_methods = validation_classes.map { |x| x.instance_methods + x.private_instance_methods }.flatten.uniq
+    all_helper_methods = all_methods - all_validation_methods
+    [all_validation_methods, all_helper_methods]
+  end
+
+  def get_soft_sales_methods
+    all_helper_methods = Validations::SoftValidations.private_instance_methods + Validations::Sales::SoftValidations.private_instance_methods
+    all_validation_methods = Validations::SoftValidations.instance_methods + Validations::Sales::SoftValidations.instance_methods
+    [all_helper_methods, all_validation_methods]
+  end
+
+  def get_soft_lettings_methods
+    all_helper_methods = Validations::SoftValidations.private_instance_methods
+    all_validation_methods = Validations::SoftValidations.instance_methods
+    [all_helper_methods, all_validation_methods]
   end
 
 private
@@ -109,7 +127,7 @@ private
     begin
       client.chat(
         parameters: {
-          model: "gpt-3.5-turbo",
+          model: "gpt-4o-mini",
           messages: [
             {
               role: "system",
@@ -201,7 +219,7 @@ private
   def soft_validation_description(client, meth, validation_source, helper_methods_source)
     client.chat(
       parameters: {
-        model: "gpt-3.5-turbo",
+        model: "gpt-4o-mini",
         messages: [
           {
             role: "system",
