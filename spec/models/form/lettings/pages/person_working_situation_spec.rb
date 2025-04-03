@@ -7,6 +7,10 @@ RSpec.describe Form::Lettings::Pages::PersonWorkingSituation, type: :model do
   let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1))) }
   let(:person_index) { 2 }
 
+  before do
+    allow(subsection.form).to receive(:start_year_2025_or_later?).and_return(false)
+  end
+
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
   end
