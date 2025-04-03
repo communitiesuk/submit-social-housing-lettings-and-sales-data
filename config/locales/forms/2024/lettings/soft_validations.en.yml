@@ -42,7 +42,7 @@ en:
           partner_under_16_value_check:
             page_header: ""
             check_answer_label: "Partner under 16 confirmation"
-            check_answer_prompt: "Confirm partner's age"
+            check_answer_prompt: "Confirm partner’s age"
             hint_text: ""
             question_text: "Are you sure this is correct?"
             title_text: "You told us this person is aged %{age} years and has 'Partner' relationship to the lead tenant."
