@@ -4,8 +4,12 @@ RSpec.describe Form::Lettings::Questions::PersonWorkingSituation, type: :model d
   subject(:question) { described_class.new(nil, question_definition, page, person_index:) }
 
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 4)))) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2025, 4, 4)))) }
   let(:person_index) { 2 }
+
+  before do
+    allow(page.subsection.form).to receive(:start_year_2025_or_later?).and_return(true)
+  end
 
   it "has correct page" do
     expect(question.page).to eq(page)
