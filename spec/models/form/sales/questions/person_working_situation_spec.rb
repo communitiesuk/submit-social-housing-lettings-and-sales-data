@@ -23,8 +23,8 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
-      "1" => { "value" => "Full-time - 30 hours or more" },
-      "2" => { "value" => "Part-time - Less than 30 hours" },
+      "1" => { "value" => "Full-time – 30 hours or more per week" },
+      "2" => { "value" => "Part-time – Less than 30 hours per week" },
       "3" => { "value" => "In government training into work" },
       "4" => { "value" => "Jobseeker" },
       "6" => { "value" => "Not seeking work" },

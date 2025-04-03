@@ -10,8 +10,8 @@ class Form::Lettings::Questions::PersonWorkingSituation < ::Form::Question
   end
 
   def answer_options
-    { "1" => { "value" => "Full-time – 30 hours or more" },
-      "2" => { "value" => "Part-time – Less than 30 hours" },
+    { "1" => { "value" => "Full-time – 30 hours or more per week" },
+      "2" => { "value" => "Part-time – Less than 30 hours per week" },
       "7" => { "value" => "Full-time student" },
       "3" => { "value" => "In government training into work" },
       "4" => { "value" => "Jobseeker" },

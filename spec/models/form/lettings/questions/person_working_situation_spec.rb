@@ -21,9 +21,9 @@ RSpec.describe Form::Lettings::Questions::PersonWorkingSituation, type: :model d
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq("0" => { "value" => "Other" },
-                                          "1" => { "value" => "Full-time – 30 hours or more" },
+                                          "1" => { "value" => "Full-time – 30 hours or more per week" },
                                           "10" => { "value" => "Person prefers not to say" },
-                                          "2" => { "value" => "Part-time – Less than 30 hours" },
+                                          "2" => { "value" => "Part-time – Less than 30 hours per week" },
                                           "3" => { "value" => "In government training into work" },
                                           "4" => { "value" => "Jobseeker" },
                                           "5" => { "value" => "Retired" },
