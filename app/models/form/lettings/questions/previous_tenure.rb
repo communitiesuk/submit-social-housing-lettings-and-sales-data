@@ -50,7 +50,7 @@ class Form::Lettings::Questions::PreviousTenure < ::Form::Question
     "27" => { "value" => "Owner occupation (low-cost home ownership)" },
     "26" => { "value" => "Owner occupation (private)" },
     "28" => { "value" => "Living with friends or family (long-term)" },
-    "39" => { "value" => "Sofa surfing (moving regularly between family and friends, no permanent bed)" },
+    "39" => { "value" => "Sofa surfing (moving regularly between family or friends, no permanent bed)" },
     "14" => { "value" => "Bed and breakfast" },
     "7" => { "value" => "Direct access hostel" },
     "10" => { "value" => "Hospital" },
