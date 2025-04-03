@@ -25,7 +25,7 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
         "5" => { "value" => "Retired" },
         "6" => { "value" => "Not seeking work" },
         "7" => { "value" => "Full-time student" },
-        "8" => { "value" => "Unable to work due to long term sick or disability" },
+        "8" => { "value" => "Unable to work because of long-term sickness or disability" },
         "9" => {
           "value" => "Child under 16",
           "depends_on" => [
@@ -45,7 +45,7 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
         "3" => { "value" => "In government training into work" },
         "4" => { "value" => "Jobseeker" },
         "6" => { "value" => "Not seeking work" },
-        "8" => { "value" => "Unable to work due to long term sick or disability" },
+        "8" => { "value" => "Unable to work because of long-term sickness or disability" },
         "5" => { "value" => "Retired" },
         "0" => { "value" => "Other" },
         "10" => { "value" => "Person prefers not to say" },

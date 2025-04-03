@@ -31,7 +31,7 @@ RSpec.describe Form::Sales::Questions::Buyer1WorkingSituation, type: :model do
       "3" => { "value" => "In government training into work" },
       "4" => { "value" => "Jobseeker" },
       "6" => { "value" => "Not seeking work" },
-      "8" => { "value" => "Unable to work due to long term sick or disability" },
+      "8" => { "value" => "Unable to work because of long-term sickness or disability" },
       "5" => { "value" => "Retired" },
       "0" => { "value" => "Other" },
       "10" => { "value" => "Buyer prefers not to say" },

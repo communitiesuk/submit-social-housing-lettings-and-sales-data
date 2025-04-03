@@ -15,7 +15,7 @@ class Form::Lettings::Questions::WorkingSituation1 < ::Form::Question
     "3" => { "value" => "In government training into work" },
     "4" => { "value" => "Jobseeker" },
     "6" => { "value" => "Not seeking work" },
-    "8" => { "value" => "Unable to work because of long term sick or disability" },
+    "8" => { "value" => "Unable to work because of long-term sickness or disability" },
     "5" => { "value" => "Retired" },
     "0" => { "value" => "Other" },
     "divider" => { "value" => true },

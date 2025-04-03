@@ -29,7 +29,7 @@ RSpec.describe Form::Lettings::Questions::PersonWorkingSituation, type: :model d
                                           "5" => { "value" => "Retired" },
                                           "6" => { "value" => "Not seeking work" },
                                           "7" => { "value" => "Full-time student" },
-                                          "8" => { "value" => "Unable to work because of long term sick or disability" },
+                                          "8" => { "value" => "Unable to work because of long-term sickness or disability" },
                                           "9" => {
                                             "depends_on" => [
                                               { "age2_known" => 1 },
