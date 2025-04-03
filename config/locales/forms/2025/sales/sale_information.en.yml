@@ -212,11 +212,24 @@ en:
             question_text: "Does this include any extra borrowing?"
 
           deposit:
-            page_header: "About the deposit"
-            check_answer_label: "Deposit amount"
-            check_answer_prompt: ""
-            hint_text: "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan."
-            question_text: "How much cash deposit was paid on the property?"
+            discounted_ownership:
+              page_header: "About the deposit"
+              check_answer_label: "Deposit amount"
+              check_answer_prompt: ""
+              hint_text: "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan."
+              question_text: "How much cash deposit was paid on the property?"
+            shared_ownership:
+              page_header: "About the deposit"
+              check_answer_label: "Deposit amount"
+              check_answer_prompt: ""
+              hint_text: "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage."
+              question_text: "How much cash deposit was paid on the property?"
+            outright_sale:
+              page_header: "About the deposit"
+              check_answer_label: "Deposit amount"
+              check_answer_prompt: ""
+              hint_text: "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage."
+              question_text: "How much cash deposit was paid on the property?"
 
           cashdis:
             page_header: "About the deposit"
