@@ -26,32 +26,32 @@ RSpec.describe Form::Sales::Questions::Buyer2WorkingSituation, type: :model do
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
-                                            "1" => { "value" => "Full-time - 30 hours or more" },
-                                            "2" => { "value" => "Part-time - Less than 30 hours" },
-                                            "3" => { "value" => "In government training into work" },
-                                            "4" => { "value" => "Jobseeker" },
-                                            "6" => { "value" => "Not seeking work" },
-                                            "8" => { "value" => "Unable to work due to long term sick or disability" },
-                                            "5" => { "value" => "Retired" },
-                                            "0" => { "value" => "Other" },
-                                            "10" => { "value" => "Buyer prefers not to say" },
-                                            "7" => { "value" => "Full-time student" },
-                                            "9" => { "value" => "Child under 16" },
+      "1" => { "value" => "Full-time - 30 hours or more" },
+      "2" => { "value" => "Part-time - Less than 30 hours" },
+      "3" => { "value" => "In government training into work" },
+      "4" => { "value" => "Jobseeker" },
+      "6" => { "value" => "Not seeking work" },
+      "8" => { "value" => "Unable to work due to long term sick or disability" },
+      "5" => { "value" => "Retired" },
+      "0" => { "value" => "Other" },
+      "10" => { "value" => "Buyer prefers not to say" },
+      "7" => { "value" => "Full-time student" },
+      "9" => { "value" => "Child under 16" },
     })
   end
 
   it "has the correct displayed_answer_options" do
     expect(question.displayed_answer_options(nil)).to eq({
-                                                           "1" => { "value" => "Full-time - 30 hours or more" },
-                                                           "2" => { "value" => "Part-time - Less than 30 hours" },
-                                                           "3" => { "value" => "In government training into work" },
-                                                           "4" => { "value" => "Jobseeker" },
-                                                           "6" => { "value" => "Not seeking work" },
-                                                           "8" => { "value" => "Unable to work due to long term sick or disability" },
-                                                           "5" => { "value" => "Retired" },
-                                                           "0" => { "value" => "Other" },
-                                                           "10" => { "value" => "Buyer prefers not to say" },
-                                                           "7" => { "value" => "Full-time student" },
+      "1" => { "value" => "Full-time - 30 hours or more" },
+      "2" => { "value" => "Part-time - Less than 30 hours" },
+      "3" => { "value" => "In government training into work" },
+      "4" => { "value" => "Jobseeker" },
+      "6" => { "value" => "Not seeking work" },
+      "8" => { "value" => "Unable to work due to long term sick or disability" },
+      "5" => { "value" => "Retired" },
+      "0" => { "value" => "Other" },
+      "10" => { "value" => "Buyer prefers not to say" },
+      "7" => { "value" => "Full-time student" },
     })
   end
 
@@ -80,33 +80,33 @@ RSpec.describe Form::Sales::Questions::Buyer2WorkingSituation, type: :model do
 
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
-                                              "1" => { "value" => "Full-time – 30 hours or more per week" },
-                                              "2" => { "value" => "Part-time – Less than 30 hours per week" },
-                                              "3" => { "value" => "In government training into work" },
-                                              "4" => { "value" => "Jobseeker" },
-                                              "6" => { "value" => "Not seeking work" },
-                                              "8" => { "value" => "Unable to work because of long-term sickness or disability" },
-                                              "5" => { "value" => "Retired" },
-                                              "0" => { "value" => "Other" },
-                                              "10" => { "value" => "Buyer prefers not to say" },
-                                              "7" => { "value" => "Full-time student" },
-                                              "9" => { "value" => "Child under 16" },
-                                            })
+        "1" => { "value" => "Full-time – 30 hours or more per week" },
+        "2" => { "value" => "Part-time – Less than 30 hours per week" },
+        "3" => { "value" => "In government training into work" },
+        "4" => { "value" => "Jobseeker" },
+        "6" => { "value" => "Not seeking work" },
+        "8" => { "value" => "Unable to work because of long-term sickness or disability" },
+        "5" => { "value" => "Retired" },
+        "0" => { "value" => "Other" },
+        "10" => { "value" => "Buyer prefers not to say" },
+        "7" => { "value" => "Full-time student" },
+        "9" => { "value" => "Child under 16" },
+      })
     end
 
     it "has the correct displayed_answer_options" do
       expect(question.displayed_answer_options(nil)).to eq({
-                                                             "1" => { "value" => "Full-time – 30 hours or more per week" },
-                                                             "2" => { "value" => "Part-time – Less than 30 hours per week" },
-                                                             "3" => { "value" => "In government training into work" },
-                                                             "4" => { "value" => "Jobseeker" },
-                                                             "6" => { "value" => "Not seeking work" },
-                                                             "8" => { "value" => "Unable to work because of long-term sickness or disability" },
-                                                             "5" => { "value" => "Retired" },
-                                                             "0" => { "value" => "Other" },
-                                                             "10" => { "value" => "Buyer prefers not to say" },
-                                                             "7" => { "value" => "Full-time student" },
-                                                           })
+        "1" => { "value" => "Full-time – 30 hours or more per week" },
+        "2" => { "value" => "Part-time – Less than 30 hours per week" },
+        "3" => { "value" => "In government training into work" },
+        "4" => { "value" => "Jobseeker" },
+        "6" => { "value" => "Not seeking work" },
+        "8" => { "value" => "Unable to work because of long-term sickness or disability" },
+        "5" => { "value" => "Retired" },
+        "0" => { "value" => "Other" },
+        "10" => { "value" => "Buyer prefers not to say" },
+        "7" => { "value" => "Full-time student" },
+      })
     end
   end
 
