@@ -18,6 +18,6 @@ RSpec.describe Form::Lettings::Questions::NationalityAll, type: :model do
   end
 
   it "has the correct answer_options" do
-    expect(question.answer_options.count).to eq(203)
+    expect(question.answer_options.count).to eq(202)
   end
 end
