@@ -20,7 +20,11 @@ RSpec.describe Form::Sales::Questions::NationalityAll, type: :model do
   end
 
   it "has the correct answer_options" do
-    expect(question.answer_options.count).to eq(202)
+    expect(question.answer_options.count).to eq(203)
+  end
+
+  it "has the correct displayed_answer_options" do
+    expect(question.displayed_answer_options(nil, nil).count).to eq(202)
   end
 
   it "has correct conditional for" do

@@ -2,7 +2,7 @@ class Form::Sales::Questions::NationalityAll < ::Form::Question
   def initialize(id, hsh, page, buyer_index)
     super(id, hsh, page)
     @type = "select"
-    @answer_options = answer_options
+    @answer_options = GlobalConstants::COUNTRIES_ANSWER_OPTIONS
     @check_answers_card_number = buyer_index
     @buyer_index = buyer_index
     @question_number = QUESTION_NUMBER_FROM_YEAR_AND_BUYER_INDEX.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_BUYER_INDEX.max_by { |k, _v| k }.last)[buyer_index]
@@ -12,8 +12,8 @@ class Form::Sales::Questions::NationalityAll < ::Form::Question
     answer_options[log.send(id).to_s]["name"]
   end
 
-  def answer_options
-    GlobalConstants::COUNTRIES_ANSWER_OPTIONS.except("826")
+  def displayed_answer_options(_log, _current_user = nil)
+    @answer_options.reject { |key, _| key == "826" }
   end
 
   QUESTION_NUMBER_FROM_YEAR_AND_BUYER_INDEX = {
