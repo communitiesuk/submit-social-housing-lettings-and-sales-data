@@ -38,7 +38,7 @@ en:
           condition_effects:
             no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more."
           reason:
-            renewal_reason_needed: "You said this letting is a renewal to the same tenant in the same property in the set up section. This means the tenant's main reason for the household leaving their last settled home must be \"End of social or private sector tenancy - no fault\", \"End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)\", \"End of social or private sector tenancy - evicted due to rent arrears\" or \"End of social or private sector tenancy - evicted for any other reason\"."
+            renewal_reason_needed: "You said this letting is a renewal to the same tenant in the same property in the set up section. This means the tenant’s main reason for the household leaving their last settled home must be \"End of social or private sector tenancy - no fault\", \"End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)\", \"End of social or private sector tenancy - evicted due to rent arrears\" or \"End of social or private sector tenancy - evicted for any other reason\"."
           referral:
             general_needs_prp_referred_by_la: "The source of the referral cannot be referred by local authority housing department for a general needs log."
             nominated_by_local_ha_but_la: "The source of the referral cannot be Nominated by local housing authority as your organisation is a local authority."

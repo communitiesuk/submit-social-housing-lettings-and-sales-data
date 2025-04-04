@@ -6,14 +6,14 @@ en:
           joint:
             page_header: ""
             check_answer_label: "Joint tenancy"
-            check_answer_prompt: "Tell us if it's a joint tenancy"
+            check_answer_prompt: "Tell us if it’s a joint tenancy"
             hint_text: ""
             question_text: "Is this a joint tenancy?"
 
           startertenancy:
             page_header: ""
             check_answer_label: "Starter or introductory tenancy"
-            check_answer_prompt: "Tell us if it's a starter or introductory tenancy"
+            check_answer_prompt: "Tell us if it’s a starter or introductory tenancy"
             hint_text: "This is also known as an ‘introductory period’."
             question_text: "Is this a starter tenancy?"
 

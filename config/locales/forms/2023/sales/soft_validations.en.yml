@@ -7,9 +7,9 @@ en:
             max:
               page_header: ""
               check_answer_label: "Retirement confirmation"
-              check_answer_prompt: "Confirm person isn't retired"
+              check_answer_prompt: "Confirm person isn’t retired"
               hint_text: ""
-              question_text: "Are you sure this person isn't retired?"
+              question_text: "Are you sure this person isn’t retired?"
               title_text: "You told us this person is over 66 and not retired."
               informative_text: "The minimum expected retirement age in England is 66."
             min:
@@ -146,7 +146,7 @@ en:
               check_answer_label: "Deposit confirmation"
               check_answer_prompt: "Confirm deposit amount"
               hint_text: ""
-              question_text: "Are you sure that the deposit is this much higher than the buyer's savings?"
+              question_text: "Are you sure that the deposit is this much higher than the buyer’s savings?"
               title_text: "You told us the buyers’ deposit was %{deposit} and their savings were %{savings}."
               informative_text: "The deposit amount is higher than we would expect for the amount of savings they have."
             not_joint_purchase:
@@ -154,7 +154,7 @@ en:
               check_answer_label: "Deposit confirmation"
               check_answer_prompt: "Confirm deposit amount"
               hint_text: ""
-              question_text: "Are you sure that the deposit is this much higher than the buyer's savings?"
+              question_text: "Are you sure that the deposit is this much higher than the buyer’s savings?"
               title_text: "You told us the buyer’s deposit was %{deposit} and their savings were %{savings}."
               informative_text: "The deposit amount is higher than we would expect for the amount of savings they have."
 
@@ -196,7 +196,7 @@ en:
           partner_under_16_value_check:
             page_header: ""
             check_answer_label: "Partner under 16 confirmation"
-            check_answer_prompt: "Confirm partner's age"
+            check_answer_prompt: "Confirm partner’s age"
             hint_text: ""
             question_text: "Are you sure this is correct?"
             title_text: "You told us this person is aged %{age} years and has 'Partner' relationship to buyer 1."

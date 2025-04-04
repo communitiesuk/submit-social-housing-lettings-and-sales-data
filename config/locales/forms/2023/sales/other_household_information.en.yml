@@ -28,7 +28,7 @@ en:
             page_header: ""
             check_answer_label: "Household member has a disability"
             check_answer_prompt: "Tell us if someone has a disability"
-            hint_text: "This includes any long-term health condition that has an impact on the person's day-to-day life"
+            hint_text: "This includes any long-term health condition that has an impact on the person’s day-to-day life"
             question_text: "Does anyone in the household consider themselves to have a disability?"
 
           wheel:

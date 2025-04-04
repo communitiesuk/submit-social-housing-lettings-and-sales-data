@@ -9,12 +9,12 @@ en:
               check_answer_label: "UPRN known"
               check_answer_prompt: "Enter UPRN if known"
               hint_text: "The Unique Property Reference Number (UPRN) is a unique number system created by Ordnance Survey and used by housing providers and various industries across the UK. An example UPRN is 10010457355.<br><br>The UPRN may not be the same as the property reference assigned by your organisation.<br><br>If you don’t know the UPRN you can enter the address of the property instead on the next screen."
-              question_text: "Do you know the property's UPRN?"
+              question_text: "Do you know the property’s UPRN?"
             uprn:
               check_answer_label: "UPRN"
               check_answer_prompt: ""
               hint_text: ""
-              question_text: "What is the property's UPRN?"
+              question_text: "What is the property’s UPRN?"
 
           uprn_confirmed:
             page_header: "We found an address that might be this property"
@@ -24,7 +24,7 @@ en:
             question_text: "Is this the property address?"
 
           address:
-            page_header: "Q15 - What is the property's address?"
+            page_header: "Q15 - What is the property’s address?"
             address_line1:
               check_answer_label: "Address lines 1 and 2"
               check_answer_prompt: "Enter address lines 1 and 2"
