@@ -17,7 +17,7 @@ class BulkUpload::Sales::Year2024::RowParser
     field_10: "What is the type of discounted ownership sale?",
     field_11: "What is the type of outright sale?",
 
-    field_12: "If 'other', what is the 'other' type?",
+    field_12: "If 'Other', what is the 'Other' type?",
     field_13: "Is the buyer a company?",
     field_14: "Will the buyers live in the property?",
     field_15: "Is this a joint purchase?",
@@ -120,7 +120,7 @@ class BulkUpload::Sales::Year2024::RowParser
     field_103: "Was a mortgage used for the purchase of this property? - Shared ownership",
     field_104: "What is the mortgage amount?",
     field_105: "What is the name of the mortgage lender? - Shared ownership",
-    field_106: "If 'other', what is the name of the mortgage lender?",
+    field_106: "If 'Other', what is the name of the mortgage lender?",
     field_107: "What is the length of the mortgage in years? - Shared ownership",
     field_108: "Does this include any extra borrowing?",
 
@@ -136,7 +136,7 @@ class BulkUpload::Sales::Year2024::RowParser
     field_118: "What is the mortgage amount?",
 
     field_119: "What is the name of the mortgage lender? - Discounted ownership",
-    field_120: "If 'other', what is the name of the mortgage lender?",
+    field_120: "If 'Other', what is the name of the mortgage lender?",
     field_121: "What is the length of the mortgage in years? - Discounted ownership",
     field_122: "Does this include any extra borrowing?",
     field_123: "How much was the cash deposit paid on the property?",

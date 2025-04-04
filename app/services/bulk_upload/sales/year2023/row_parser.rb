@@ -16,7 +16,7 @@ class BulkUpload::Sales::Year2023::RowParser
     field_9: "What is the type of discounted ownership sale?",
     field_10: "What is the type of outright sale?",
 
-    field_11: "If 'other', what is the 'other' type?",
+    field_11: "If 'Other', what is the 'Other' type?",
     field_12: "Is the buyer a company?",
     field_13: "Will the buyers live in the property?",
     field_14: "Is this a joint purchase?",
@@ -122,7 +122,7 @@ class BulkUpload::Sales::Year2023::RowParser
     field_105: "Was a mortgage used for the purchase of this property? - Shared ownership",
     field_106: "What is the mortgage amount?",
     field_107: "What is the name of the mortgage lender? - Shared ownership",
-    field_108: "If 'other', what is the name of the mortgage lender?",
+    field_108: "If 'Other', what is the name of the mortgage lender?",
     field_109: "What is the length of the mortgage in years? - Shared ownership",
     field_110: "Does this include any extra borrowing?",
 
@@ -138,7 +138,7 @@ class BulkUpload::Sales::Year2023::RowParser
     field_120: "What is the mortgage amount?",
 
     field_121: "What is the name of the mortgage lender? - Discounted ownership",
-    field_122: "If 'other', what is the name of the mortgage lender?",
+    field_122: "If 'Other', what is the name of the mortgage lender?",
     field_123: "What is the length of the mortgage in years? - Discounted ownership",
     field_124: "Does this include any extra borrowing?",
     field_125: "How much was the cash deposit paid on the property?",
@@ -148,7 +148,7 @@ class BulkUpload::Sales::Year2023::RowParser
     field_129: "What is the mortgage amount?",
     field_130: "What is the name of the mortgage lender? - Outright sale",
 
-    field_131: "If 'other', what is the name of the mortgage lender?",
+    field_131: "If 'Other', what is the name of the mortgage lender?",
     field_132: "What is the length of the mortgage in years? - Outright sale",
     field_133: "Does this include any extra borrowing?",
     field_134: "How much was the cash deposit paid on the property?",
