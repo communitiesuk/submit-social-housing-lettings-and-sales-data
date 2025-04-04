@@ -13,6 +13,10 @@ class Form::Lettings::Questions::NationalityAll < ::Form::Question
     answer_options[log.nationality_all.to_s]["name"]
   end
 
+  def displayed_answer_options(_log, _current_user = nil)
+    @answer_options.reject { |key, _| key == "826" }
+  end
+
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 36, 2024 => 35 }.freeze
 
   def label_from_value(value)
