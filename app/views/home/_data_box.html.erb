@@ -1,6 +1,5 @@
 <div class="app-data-box__upper">
-  <div class="app-data-box__count">
-    <%= govuk_link_to data_box[:count], data_box[:path], class: "govuk-link--no-visited-state govuk-link--no-underline" %>
-  </div>
-  <%= govuk_link_to data_box[:text], data_box[:path], class: "govuk-link--no-visited-state" %>
+  <%= govuk_link_to data_box[:path], class: "govuk-link--no-visited-state govuk-link--no-underline" do %>
+    <span class="app-data-box__count"><%= data_box[:count] %></span><br/><%= data_box[:text] %>
+  <% end %>
 </div>
