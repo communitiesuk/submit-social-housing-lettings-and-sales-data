@@ -766,7 +766,7 @@ RSpec.describe Validations::HouseholdValidations do
           record.referral = 1
           record.prevten = prevten[:code]
           household_validator.validate_previous_housing_situation(record)
-          label = record.form.start_year_2025_or_later? && prevten[:code] == 28 ? "Living with friends and family (long-term)" : prevten[:label]
+          label = record.form.start_year_2025_or_later? && prevten[:code] == 28 ? "Living with friends or family (long-term)" : prevten[:label]
           expect(record.errors["prevten"])
             .to include(match I18n.t("validations.lettings.household.prevten.internal_transfer", prevten: label))
           expect(record.errors["referral"])
