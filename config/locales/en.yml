@@ -423,7 +423,7 @@ en:
 
   warnings:
     organisation:
-      deactivate: "All schemes and users at this organisation will be deactivated. All the organisation's relationships will be removed. It will no longer be possible to create logs for this organisation."
+      deactivate: "All schemes and users at this organisation will be deactivated. All the organisation’s relationships will be removed. It will no longer be possible to create logs for this organisation."
       reactivate: "All schemes, users, and relationships that were active when this organisation was deactivated will be reactivated."
     location:
       deactivate:
