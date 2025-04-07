@@ -14,7 +14,7 @@ en:
               <p>If your organisation’s schemes were migrated from old CORE, they may have new names and codes. Search by postcode to find your scheme.</p>"
             scheme_changes_link_text: "Read more about how schemes have changed"
             view_schemes_link_text: "View your organisation’s schemes"
-            
+
           privacy_notice_tenant:
             content: "Make sure the tenant has seen %{privacy_notice_link} before completing this log."
             privacy_notice_link_text: "the Ministry of Housing, Communities and Local Government (MHCLG) privacy notice"
@@ -39,7 +39,7 @@ en:
             title: "What is a void date?"
             content: "<p>Date the property was (legally or contractually) available to let, or for:</p>
               <ul class=\"govuk-list govuk-list--bullet\">
-                <li>re-lets: the day after the previous tenant's contract ended</li>
+                <li>re-lets: the day after the previous tenant’s contract ended</li>
                 <li>new builds: the day the landlord legally first owned the property (‘completion date’)</li>
                 <li>new conversions or acquisitions: completion date, or the day after rehabilitation work ended</li>
                 <li>new leases: the day the landlord got contractual property rights and could let it out to tenants</li>

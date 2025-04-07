@@ -20,7 +20,7 @@ en:
           buyer_cannot_be_child: "Buyer 2 cannot have a working situation of child under 16."
         age:
           child_12_years_younger: "A child must be at least 12 years younger than their parent."
-          child_under_16: "Answer cannot be under 16 as person %{person_num}'s relationship to buyer 1 is ‘partner’."
+          child_under_16: "Answer cannot be under 16 as person %{person_num}’s relationship to buyer 1 is ‘partner’."
           child_under_16_ecstat: "Answer cannot be under 16 as person %{person_num}’s working situation is not ‘child under 16’, ‘other’ or ‘prefers not to say’."
           child_over_16: "Answer cannot be over 16 as person’s %{person_num} working situation is ‘child under 16‘."
           child_over_20: "Answer cannot be 20 or over as the relationship is ‘child’."
@@ -31,8 +31,8 @@ en:
         relat:
           one_partner: "Number of partners cannot be greater than 1."
           child_12_years_younger: "A child must be at least 12 years younger than their parent."
-          child_under_16: "Answer cannot be ‘partner’ as you told us person %{person_num}'s age is under 16."
-          child_over_20: "Answer cannot be ‘child’ if the person's age is 20 or over."
+          child_under_16: "Answer cannot be ‘partner’ as you told us person %{person_num}’s age is under 16."
+          child_over_20: "Answer cannot be ‘child’ if the person’s age is 20 or over."
           student_16_19:
             cannot_be_child:
               student_not_16_19: "Answer cannot be ‘child’ if the person is a student but not aged 16-19."
@@ -44,4 +44,4 @@ en:
             must_be_student: "Person must be a student if they are aged 16-19 and have relationship ‘child’."
             cannot_be_student:
               child_not_16_19: "Person cannot be a student if they are not aged 16-19 but have relationship ‘child’."
-          buyer_cannot_be_over_16_and_child: "Buyer %{buyer_index}'s age cannot be 16 or over if their working situation is child under 16."
+          buyer_cannot_be_over_16_and_child: "Buyer %{buyer_index}’s age cannot be 16 or over if their working situation is child under 16."
