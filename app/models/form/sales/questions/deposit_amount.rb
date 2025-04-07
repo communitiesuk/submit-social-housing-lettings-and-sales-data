@@ -12,6 +12,7 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
     @optional = optional
     @top_guidance_partial = top_guidance_partial
+    @copy_key = copy_key
   end
 
   def derived?(log)
@@ -28,5 +29,11 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     return "financial_calculations_shared_ownership" if @ownershipsch == 1
     return "financial_calculations_discounted_ownership" if @ownershipsch == 2
     return "financial_calculations_outright_sale" if @ownershipsch == 3
+  end
+
+  def copy_key
+    return "sales.sale_information.deposit.shared_ownership" if @ownershipsch == 1
+    return "sales.sale_information.deposit.discounted_ownership" if @ownershipsch == 2
+    return "sales.sale_information.deposit.outright_sale" if @ownershipsch == 3
   end
 end
