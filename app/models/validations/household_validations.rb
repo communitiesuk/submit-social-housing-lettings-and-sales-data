@@ -177,7 +177,6 @@ module Validations::HouseholdValidations
       label = record.form.get_question("prevten", record).present? ? record.form.get_question("prevten", record).label_from_value(record.prevten) : ""
       record.errors.add :prevten, :internal_transfer_non_social_housing, message: I18n.t("validations.lettings.household.prevten.internal_transfer", prevten: label)
       record.errors.add :referral, :internal_transfer_non_social_housing, message: I18n.t("validations.lettings.household.referral.prevten_invalid", prevten: label)
-      record.errors.add :referral_type, :internal_transfer_non_social_housing, message: I18n.t("validations.lettings.household.referral.prevten_invalid", prevten: label)
     end
   end
 
@@ -187,7 +186,6 @@ module Validations::HouseholdValidations
     if record.is_internal_transfer? && record.owning_organisation.provider_type == "PRP" && record.is_prevten_la_general_needs?
       record.errors.add :prevten, :internal_transfer_fixed_or_lifetime, message: I18n.t("validations.lettings.household.prevten.la_general_needs.internal_transfer")
       record.errors.add :referral, :internal_transfer_fixed_or_lifetime, message: I18n.t("validations.lettings.household.referral.la_general_needs.internal_transfer")
-      record.errors.add :referral_type, :internal_transfer_fixed_or_lifetime, message: I18n.t("validations.lettings.household.referral.la_general_needs.internal_transfer")
     end
   end
 
