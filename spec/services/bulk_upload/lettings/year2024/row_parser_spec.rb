@@ -2635,7 +2635,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
     end
 
     describe "#reasonother" do
-      context "when reason is 'other'" do
+      context "when reason is 'Other'" do
         let(:attributes) { { bulk_upload:, field_98: "20", field_99: "some other reason" } }
 
         it "is set to given free text string" do
@@ -2643,7 +2643,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         end
       end
 
-      context "when reason is not 'other'" do
+      context "when reason is not 'Other'" do
         let(:attributes) { { bulk_upload:, field_98: "50", field_99: "some other reason" } }
 
         it "is set to nil" do

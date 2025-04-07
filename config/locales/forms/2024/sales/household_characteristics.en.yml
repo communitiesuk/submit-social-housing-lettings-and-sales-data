@@ -7,12 +7,12 @@ en:
             page_header: ""
             age1_known:
               check_answer_label: "Buyer 1’s age"
-              check_answer_prompt: "Enter buyer 1's age if known"
+              check_answer_prompt: "Enter buyer 1’s age if known"
               hint_text: "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
               question_text: "Do you know buyer 1’s age?"
             age1:
               check_answer_label: "Buyer 1’s age"
-              check_answer_prompt: "Enter buyer 1's age"
+              check_answer_prompt: "Enter buyer 1’s age"
               hint_text: ""
               question_text: "Age"
 
@@ -78,10 +78,10 @@ en:
 
           ecstat1:
             page_header: ""
-            check_answer_label: "Buyer 1's working situation"
+            check_answer_label: "Buyer 1’s working situation"
             check_answer_prompt: ""
             hint_text: ""
-            question_text: "Which of these best describes buyer 1's working situation?"
+            question_text: "Which of these best describes buyer 1’s working situation?"
 
           buy1livein:
             page_header: ""
@@ -93,10 +93,10 @@ en:
           relat2:
             buyer:
               page_header: ""
-              check_answer_label: "Buyer 2's relationship to buyer 1"
+              check_answer_label: "Buyer 2’s relationship to buyer 1"
               check_answer_prompt: ""
               hint_text: ""
-              question_text: "What is buyer 2's relationship to buyer 1?"
+              question_text: "What is buyer 2’s relationship to buyer 1?"
             person:
               page_header: ""
               check_answer_label: "Person 2’s relationship to buyer 1"
@@ -109,24 +109,24 @@ en:
               page_header: ""
               age2_known:
                 check_answer_label: "Buyer 2’s age"
-                check_answer_prompt: "Enter buyer 2's age if known"
+                check_answer_prompt: "Enter buyer 2’s age if known"
                 hint_text: ""
                 question_text: "Do you know buyer 2’s age?"
               age2:
                 check_answer_label: "Buyer 2’s age"
-                check_answer_prompt: "Enter buyer 2's age"
+                check_answer_prompt: "Enter buyer 2’s age"
                 hint_text: ""
                 question_text: "Age"
             person:
               page_header: ""
               age2_known:
                 check_answer_label: "Person 2’s age"
-                check_answer_prompt: "Enter person 2's age if known"
+                check_answer_prompt: "Enter person 2’s age if known"
                 hint_text: ""
                 question_text: "Do you know person 2’s age?"
               age2:
                 check_answer_label: "Person 2’s age"
-                check_answer_prompt: "Enter person 2's age"
+                check_answer_prompt: "Enter person 2’s age"
                 hint_text: ""
                 question_text: "Age"
 
@@ -200,10 +200,10 @@ en:
           ecstat2:
             buyer:
               page_header: ""
-              check_answer_label: "Buyer 2's working situation"
+              check_answer_label: "Buyer 2’s working situation"
               check_answer_prompt: ""
               hint_text: ""
-              question_text: "Which of these best describes buyer 2's working situation?"
+              question_text: "Which of these best describes buyer 2’s working situation?"
             person:
               page_header: ""
               check_answer_label: "Person 2’s working situation"
@@ -235,14 +235,14 @@ en:
           details_known_2:
             page_header: ""
             check_answer_label: "Details known for person 2?"
-            check_answer_prompt: "Tell us if you know person 2's details"
+            check_answer_prompt: "Tell us if you know person 2’s details"
             hint_text: ""
             question_text: "Do you know the details for person 2?"
 
           details_known_3:
             page_header: ""
             check_answer_label: "Details known for person 3?"
-            check_answer_prompt: "Tell us if you know person 3's details"
+            check_answer_prompt: "Tell us if you know person 3’s details"
             hint_text: ""
             question_text: "Do you know the details for person 3?"
 
@@ -257,12 +257,12 @@ en:
             page_header: ""
             age3_known:
               check_answer_label: "Person 3’s age"
-              check_answer_prompt: "Enter person 3's age if known"
+              check_answer_prompt: "Enter person 3’s age if known"
               hint_text: ""
               question_text: "Do you know person 3’s age?"
             age3:
               check_answer_label: "Person 3’s age"
-              check_answer_prompt: "Enter person 3's age"
+              check_answer_prompt: "Enter person 3’s age"
               hint_text: ""
               question_text: "Age"
 
@@ -283,7 +283,7 @@ en:
           details_known_4:
             page_header: ""
             check_answer_label: "Details known for person 4?"
-            check_answer_prompt: "Tell us if you know person 4's details"
+            check_answer_prompt: "Tell us if you know person 4’s details"
             hint_text: ""
             question_text: "Do you know the details for person 4?"
 
@@ -298,12 +298,12 @@ en:
             page_header: ""
             age4_known:
               check_answer_label: "Person 4’s age"
-              check_answer_prompt: "Enter person 4's age if known"
+              check_answer_prompt: "Enter person 4’s age if known"
               hint_text: ""
               question_text: "Do you know person 4’s age?"
             age4:
               check_answer_label: "Person 4’s age"
-              check_answer_prompt: "Enter person 4's age"
+              check_answer_prompt: "Enter person 4’s age"
               hint_text: ""
               question_text: "Age"
 
@@ -324,7 +324,7 @@ en:
           details_known_5:
             page_header: ""
             check_answer_label: "Details known for person 5?"
-            check_answer_prompt: "Tell us if you know person 5's details"
+            check_answer_prompt: "Tell us if you know person 5’s details"
             hint_text: ""
             question_text: "Do you know the details for person 5?"
 
@@ -339,12 +339,12 @@ en:
             page_header: ""
             age5_known:
               check_answer_label: "Person 5’s age"
-              check_answer_prompt: "Enter person 5's age if known"
+              check_answer_prompt: "Enter person 5’s age if known"
               hint_text: ""
               question_text: "Do you know person 5’s age?"
             age5:
               check_answer_label: "Person 5’s age"
-              check_answer_prompt: "Enter person 5's age"
+              check_answer_prompt: "Enter person 5’s age"
               hint_text: ""
               question_text: "Age"
 
@@ -365,7 +365,7 @@ en:
           details_known_6:
             page_header: ""
             check_answer_label: "Details known for person 6?"
-            check_answer_prompt: "Tell us if you know person 6's details"
+            check_answer_prompt: "Tell us if you know person 6’s details"
             hint_text: ""
             question_text: "Do you know the details for person 6?"
 
@@ -380,12 +380,12 @@ en:
             page_header: ""
             age6_known:
               check_answer_label: "Person 6’s age"
-              check_answer_prompt: "Enter person 6's age if known"
+              check_answer_prompt: "Enter person 6’s age if known"
               hint_text: ""
               question_text: "Do you know person 6’s age?"
             age6:
               check_answer_label: "Person 6’s age"
-              check_answer_prompt: "Enter person 6's age"
+              check_answer_prompt: "Enter person 6’s age"
               hint_text: ""
               question_text: "Age"
 
