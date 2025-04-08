@@ -1,4 +1,4 @@
-<section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
+<section class="app-table-group" aria-labelledby="<%= title.dasherize %>">
   <%= govuk_table do |table| %>
     <%= table.with_caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
      <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "user", filters_count: applied_filters_count(@filter_type))) %>
