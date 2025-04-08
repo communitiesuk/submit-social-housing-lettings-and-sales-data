@@ -1230,7 +1230,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
       context "when log is a renewal and field 100 is a valid value" do
         let(:attributes) { { bulk_upload:, field_7: 1, field_100: 32 } }
 
-        it "is does not add an error" do
+        it "does not add an error" do
           parser.valid?
           expect(parser.errors[:field_100]).to be_blank
         end
