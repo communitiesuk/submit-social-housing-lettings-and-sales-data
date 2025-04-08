@@ -381,6 +381,10 @@ class LettingsLog < Log
     referral == 1
   end
 
+  def is_from_prp_only_housing_register_or_waiting_list?
+    referral_type == 3
+  end
+
   def is_relet_to_temp_tenant?
     # 9: Re-let to tenant who occupied same property as temporary accommodation
     rsnvac == 9
