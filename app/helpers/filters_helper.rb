@@ -167,7 +167,7 @@ module FiltersHelper
 
   def reset_filters_link(filter_type, filter_path_params = {})
     if applied_filters_count(filter_type).positive?
-      govuk_link_to "Clear", clear_filters_path(filter_type:, filter_path_params:)
+      govuk_link_to "Clear", clear_filters_path(filter_type:, filter_path_params:), aria: { label: "Clear filters" }
     end
   end
 
