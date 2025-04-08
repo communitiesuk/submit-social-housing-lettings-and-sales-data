@@ -1,0 +1,20 @@
+.app-testing-tools {
+  border-left-color: #f47738;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.app-testing-tools-link {
+  @include govuk-link-common;
+  @include govuk-link-style-no-visited-state;
+}
+
+.app-testing-tools__tag {
+  @include govuk-font(14);
+  background-color: #fcd6c3;
+  margin-top: 0;
+  margin-bottom: 10px;
+  margin-right: 15px;
+}

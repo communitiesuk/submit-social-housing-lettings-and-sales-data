@@ -9,10 +9,16 @@
     <% end %>
 
     <% if FeatureToggle.create_test_logs_enabled? %>
-      <%= govuk_link_to "New test log", create_test_log_href %>
-      <%= govuk_link_to "New test log (setup only)", create_setup_test_log_href %>
-      <%= govuk_link_to "24 BU test file", create_test_bulk_upload_href(2024) %>
-      <%= govuk_link_to "25 BU test file", create_test_bulk_upload_href(2025) %>
+      <div class="govuk-inset-text app-testing-tools">
+        <span class="govuk-tag app-testing-tools__tag">Testing tools</span>
+        <span class="govuk-body govuk-body-s">These links can only be seen and be used in testing environments.</span>
+        <div>
+          <%= govuk_link_to "New test log", create_test_log_href, class: "app-testing-tools-link" %>
+          <%= govuk_link_to "New test log (setup only)", create_setup_test_log_href, class: "app-testing-tools-link" %>
+          <%= govuk_link_to "24 BU test file", create_test_bulk_upload_href(2024), class: "app-testing-tools-link" %>
+          <%= govuk_link_to "25 BU test file", create_test_bulk_upload_href(2025), class: "app-testing-tools-link" %>
+        </div>
+      </div>
     <% end %>
   <% end %>
 </div>
