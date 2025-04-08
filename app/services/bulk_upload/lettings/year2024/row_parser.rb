@@ -445,6 +445,7 @@ class BulkUpload::Lettings::Year2024::RowParser
   validate :validate_incomplete_soft_validations, on: :after_log
   validate :validate_nationality, on: :after_log
   validate :validate_reasonpref_reason_values, on: :after_log
+  validate :validate_prevten_value_when_renewal, on: :after_log
 
   validate :validate_nulls, on: :after_log
 
@@ -672,6 +673,13 @@ private
       question_text[0] = question_text[0].downcase
       errors.add(field.to_sym, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: question_text))
     end
+  end
+
+  def validate_prevten_value_when_renewal
+    return unless field_7 == 1
+    return if field_100.blank? || [6, 30, 31, 32, 33, 34, 35, 36].include?(field_100)
+
+    errors.add(:field_100, I18n.t("#{ERROR_BASE_KEY}.prevten.invalid"))
   end
 
   def duplicate_check_fields

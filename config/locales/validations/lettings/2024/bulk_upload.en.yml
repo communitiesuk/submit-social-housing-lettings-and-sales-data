@@ -62,3 +62,5 @@ en:
             conflict:
               dont_know: "You cannot select 'Don't know' if any of the other reasonable preference reasons are also selected."
               other: "You cannot select this reasonable preference reason as you've also selected 'Don't know' as a reason."
+          prevten:
+            invalid: "You said this letting is a renewal to the same tenant in the same property in the set up section. This means where the household was immediately before this letting must be \"Fixed-term local authority general needs tenancy\", \"Fixed-term private registered provider (PRP) general needs tenancy\", \"Lifetime local authority general needs tenancy\", \"Lifetime private registered provider (PRP) general needs tenancy\", \"Extra care housing\", \"Specialist retirement housing\", \"Sheltered housing for adults under 55 years\" or \"Other supported housing.\""
