@@ -11,7 +11,7 @@
     <% if FeatureToggle.create_test_logs_enabled? %>
       <div class="govuk-inset-text app-testing-tools">
         <span class="govuk-tag app-testing-tools__tag">Testing tools</span>
-        <span class="govuk-body govuk-body-s">These links can only be seen and used in testing environments.</span>
+        <span class="govuk-body govuk-body-s">These options can only be seen and used in testing environments.</span>
         <div>
           <%= govuk_button_link_to create_test_log_href, class: "govuk-button" do %>
             New test log
