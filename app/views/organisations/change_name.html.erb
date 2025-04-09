@@ -1,0 +1,19 @@
+<% content_for :title, "Change #{@organisation.name}’s name" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(href: :back) %>
+<% end %>
+
+<%= form_for(@organisation, as: :organisation, html: { method: :patch }) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">
+        <%= content_for(:title) %>
+      </h1>
+
+      <%= f.govuk_text_field :name, autocomplete: "name", label: { size: "m" } %>
+
+      <%= f.govuk_submit "Save changes" %>
+    </div>
+  </div>
+<% end %>
