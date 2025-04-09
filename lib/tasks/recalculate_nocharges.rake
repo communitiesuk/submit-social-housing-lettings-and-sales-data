@@ -12,7 +12,7 @@ namespace :bulk_update do
       status_pre_change = log.status
 
       log.nocharge = log.household_charge
-      if log.save
+      if log.save(validate: false)
         updated_logs_count += 1
         Rails.logger.info "Updated nocharge for log #{log.id}"
       else
