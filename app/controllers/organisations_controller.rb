@@ -113,14 +113,6 @@ class OrganisationsController < ApplicationController
     end
   end
 
-  def change_name
-    if current_user.support?
-      render "change_name", layout: "application"
-    else
-      head :unauthorized
-    end
-  end
-
   def deactivate
     authorize @organisation
 
