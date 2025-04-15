@@ -74,7 +74,7 @@ private
     return if change_date.blank?
 
     if organisation.organisation_name_changes.visible.select(&:persisted?).any? { |record| record.change_date == change_date }
-      errors.add(:change_date, "Start date cannot be the same as an existing name change.")
+      errors.add(:change_date, "Start date cannot be the same as another name change.")
     end
   end
 
