@@ -6,8 +6,9 @@ class OrganisationNameChangesController < ApplicationController
     @organisation_name_change = @organisation.organisation_name_changes.new(organisation_name_change_params)
     @organisation_name_change.change_type = :user_change
 
+    Rails.logger.debug "Params: #{params[:organisation_name_change]}"
     if @organisation_name_change.save
-      notice_message = @organisation_name_change.immediate_change ? "Name change saved successfully." : "Name change scheduled for #{@organisation_name_change.formatted_change_date}."
+      notice_message = @organisation_name_change.immediate_change ? "Name change saved successfully." : "Name change scheduled for #{@organisation_name_change.formatted_startdate}."
       redirect_to organisation_path(@organisation), notice: notice_message
     else
       render :new, status: :unprocessable_entity
@@ -30,6 +31,6 @@ private
   end
 
   def organisation_name_change_params
-    params.require(:organisation_name_change).permit(:name, :change_date, :immediate_change)
+    params.require(:organisation_name_change).permit(:name, :startdate, :immediate_change)
   end
 end

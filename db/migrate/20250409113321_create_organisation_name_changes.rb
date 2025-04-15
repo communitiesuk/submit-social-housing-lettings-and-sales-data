@@ -4,12 +4,12 @@ class CreateOrganisationNameChanges < ActiveRecord::Migration[7.2]
       t.references :organisation, null: false, foreign_key: true
       t.string :name, null: false
       t.integer :change_type, null: false
-      t.date :change_date, null: false
+      t.date :startdate, null: false
       t.datetime :discarded_at
 
       t.timestamps
     end
 
-    add_index :organisation_name_changes, %i[organisation_id change_date], unique: true, name: "index_org_name_changes_on_org_id_and_change_date"
+    add_index :organisation_name_changes, %i[organisation_id startdate], unique: true, name: "index_org_name_changes_on_org_id_and_startdate"
   end
 end

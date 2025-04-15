@@ -48,7 +48,7 @@
                                  "data-info": { conditional_questions: { scheduled_date: [false] } }.to_json do %>
           <%= render partial: "components/date_picker", locals: {
             resource: @organisation_name_change,
-            question_id: :change_date,
+            question_id: :startdate,
             legend: { text: "Set start date", size: "m" },
             resource_type: "organisation_name_change",
             hint: "For example, 13/9/2025",

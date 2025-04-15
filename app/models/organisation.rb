@@ -105,12 +105,12 @@ class Organisation < ApplicationRecord
   end
 
   def fetch_name_changes_with_dates
-    organisation_name_changes.visible.order(:change_date).map.with_index do |change, index|
-      next_change = organisation_name_changes.visible.order(:change_date)[index + 1]
+    organisation_name_changes.visible.order(:startdate).map.with_index do |change, index|
+      next_change = organisation_name_changes.visible.order(:startdate)[index + 1]
       {
         name: change.name,
-        start_date: change.change_date,
-        end_date: next_change&.change_date&.yesterday,
+        start_date: change.startdate,
+        end_date: next_change&.startdate&.yesterday,
       }
     end
   end

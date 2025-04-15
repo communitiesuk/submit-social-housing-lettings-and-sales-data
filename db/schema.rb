@@ -501,11 +501,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_05_092900) do
     t.bigint "organisation_id", null: false
     t.string "name", null: false
     t.integer "change_type", null: false
-    t.date "change_date", null: false
+    t.date "startdate", null: false
     t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["organisation_id", "change_date"], name: "index_org_name_changes_on_org_id_and_change_date", unique: true
+    t.index ["organisation_id", "startdate"], name: "index_org_name_changes_on_org_id_and_startdate", unique: true
     t.index ["organisation_id"], name: "index_organisation_name_changes_on_organisation_id"
   end
 
