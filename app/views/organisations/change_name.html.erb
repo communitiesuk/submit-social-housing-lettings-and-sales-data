@@ -1,19 +1,66 @@
 <% content_for :title, "Change #{@organisation.name}’s name" %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(href: :back) %>
+  <%= govuk_back_link(href: details_organisation_path(@organisation)) %>
 <% end %>
 
-<%= form_for(@organisation, as: :organisation, html: { method: :patch }) do |f| %>
+<%= form_for(@organisation_name_change, url: change_name_organisation_path(@organisation), html: { method: :post }) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
       <h1 class="govuk-heading-l">
         <%= content_for(:title) %>
       </h1>
 
-      <%= f.govuk_text_field :name, autocomplete: "name", label: { size: "m" } %>
+      <%= f.govuk_text_field :name, autocomplete: "name", label: { text: "Enter new name", size: "m" }, value: @organisation.name %>
 
-      <%= f.govuk_submit "Save changes" %>
+      <%= govuk_details(summary_text: "View name history") do %>
+        <%= govuk_table do |table| %>
+          <%= table.with_head do |head| %>
+            <% head.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Name") %>
+              <% row.with_cell(header: true, text: "Start Date") %>
+              <% row.with_cell(header: true, text: "End Date") %>
+              <% row.with_cell(header: true, text: "Status") %>
+            <% end %>
+          <% end %>
+          <% @previous_name_changes.each do |change| %>
+            <%= table.with_body do |body| %>
+              <% body.with_row do |row| %>
+                <% row.with_cell(text: change[:name]) %>
+                <% row.with_cell(text: change[:start_date]&.to_formatted_s(:govuk_date)) %>
+                <% row.with_cell(text: change[:end_date]&.to_formatted_s(:govuk_date) || "None") %>
+                <% row.with_cell text: status_tag(change[:status].to_sym) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= f.govuk_radio_buttons_fieldset :immediate_change,
+                                         legend: { text: "Does this change take effect starting today?", size: "m" } do %>
+        <%= f.govuk_radio_button :immediate_change, "true", label: { text: "Yes" } %>
+        <%= f.govuk_radio_button :immediate_change, "false",
+                                 label: { text: "No" },
+                                 "data-controller": "conditional-question",
+                                 "data-action": "click->conditional-question#displayConditional",
+                                 "data-info": { conditional_questions: { scheduled_date: [false] } }.to_json do %>
+          <%= render partial: "components/date_picker", locals: {
+            resource: @organisation_name_change,
+            question_id: :change_date,
+            legend: { text: "Set start date", size: "m" },
+            resource_type: "organisation_name_change",
+            hint: "For example, 13/9/2025",
+            f: f
+          } %>
+        <% end %>
+      <% end %>
+
+      <div class="govuk-button-group">
+        <%= f.govuk_submit "Save changes" %>
+        <%= govuk_button_link_to "Cancel", details_organisation_path(@organisation), secondary: true %>
+      </div>
     </div>
   </div>
 <% end %>

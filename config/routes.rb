@@ -156,7 +156,8 @@ Rails.application.routes.draw do
       get "details", to: "organisations#details"
       get "data-sharing-agreement", to: "organisations#data_sharing_agreement"
       post "data-sharing-agreement", to: "organisations#confirm_data_sharing_agreement"
-      get "change-name", to: "organisations#change_name", as: "change_name"
+      get "change-name", to: "organisation_name_changes#change_name", as: "change_name"
+      post "change-name", to: "organisation_name_changes#create"
 
       get "users", to: "organisations#users"
       get "lettings-logs", to: "organisations#lettings_logs"

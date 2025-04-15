@@ -8,6 +8,7 @@ class Organisation < ApplicationRecord
   has_many :parent_organisations, through: :parent_organisation_relationships
   has_many :child_organisation_relationships, foreign_key: :parent_organisation_id, class_name: "OrganisationRelationship"
   has_many :child_organisations, through: :child_organisation_relationships
+  has_many :organisation_name_changes, dependent: :destroy
 
   has_many :stock_owner_relationships, foreign_key: :child_organisation_id, class_name: "OrganisationRelationship"
   has_many :stock_owners, through: :stock_owner_relationships, source: :parent_organisation
@@ -68,6 +69,49 @@ class Organisation < ApplicationRecord
       where(id: id[3..]).first
     else
       where(old_visible_id: id).first
+    end
+  end
+
+  def name(date: Time.zone.now)
+    name_change = organisation_name_changes.find { |change| change.includes_date?(date) }
+    name_change&.name || read_attribute(:name)
+  end
+
+  def name_changes_with_dates
+    changes = fetch_name_changes_with_dates
+
+    if changes.any?
+      changes.unshift({
+                        name: self[:name],
+                        start_date: created_at,
+                        end_date: changes.first[:start_date]&.yesterday,
+                        status: Time.zone.now.to_date < changes.first[:start_date].to_date ? "scheduled" : "inactive",
+                      })
+    else
+      changes << { name: self[:name], start_date: created_at, end_date: nil, status: "active" }
+    end
+
+    changes.each do |change|
+      change[:status] ||= if change[:start_date].to_date > Time.zone.now.to_date
+                            "scheduled"
+                          elsif change[:end_date].nil? || change[:end_date].to_date >= Time.zone.now.to_date
+                            "active"
+                          else
+                            "inactive"
+                          end
+    end
+
+    changes
+  end
+
+  def fetch_name_changes_with_dates
+    organisation_name_changes.order(:change_date).map.with_index do |change, index|
+      next_change = organisation_name_changes.order(:change_date)[index + 1]
+      {
+        name: change.name,
+        start_date: change.change_date,
+        end_date: next_change&.change_date&.yesterday,
+      }
     end
   end
 
@@ -191,8 +235,9 @@ class Organisation < ApplicationRecord
     update!(discarded_at: Time.zone.now)
   end
 
-  def label
-    status == :deleted ? "#{name} (deleted)" : name
+  def label(date:)
+    date ||= Time.zone.now
+    status == :deleted ? "#{name(date:)} (deleted)" : name(date:)
   end
 
   def has_visible_users?
