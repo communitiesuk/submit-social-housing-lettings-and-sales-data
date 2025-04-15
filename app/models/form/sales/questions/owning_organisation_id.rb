@@ -15,7 +15,7 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
     return answer_opts unless log
 
     if log.owning_organisation_id.present?
-      org_value = log.owning_organisation.label
+      org_value = log.owning_organisation.label(date: log.startdate)
       answer_opts[log.owning_organisation.id] = org_value
     end
 

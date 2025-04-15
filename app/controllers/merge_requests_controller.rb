@@ -105,8 +105,9 @@ private
     answer_options = { "" => "Select an option" }
 
     if current_user.support?
-      Organisation.all.pluck(:id, :name).each do |organisation|
-        answer_options[organisation[0]] = organisation[1]
+      Organisation.all.each do |organisation|
+        date = @merge_request.merge_date || Time.zone.today
+        answer_options[organisation.id] = organisation.name(date:)
       end
     end
 

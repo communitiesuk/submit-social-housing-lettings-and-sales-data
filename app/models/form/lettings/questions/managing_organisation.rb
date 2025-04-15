@@ -15,7 +15,7 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     return opts unless log
 
     if log.managing_organisation.present?
-      org_value = log.managing_organisation.label
+      org_value = log.managing_organisation.label(date: log.startdate)
       opts = opts.merge({ log.managing_organisation.id => org_value })
     end
 
@@ -74,7 +74,7 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     organisation = Organisation.find_by(id: log.managing_organisation_id)
     return unless organisation
 
-    organisation.label
+    organisation.label(date: log.startdate)
   end
 
 private
