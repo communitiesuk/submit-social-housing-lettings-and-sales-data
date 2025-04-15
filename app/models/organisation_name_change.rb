@@ -13,6 +13,13 @@ class OrganisationNameChange < ApplicationRecord
 
   before_validation :set_change_date_if_immediate
 
+  CHANGE_TYPE = {
+    user_change: 1,
+    merge: 2,
+  }.freeze
+
+  enum :change_type, CHANGE_TYPE, prefix: true
+
   has_paper_trail
 
   def includes_date?(date)
@@ -46,7 +53,7 @@ class OrganisationNameChange < ApplicationRecord
 private
 
   def set_change_date_if_immediate
-    self.change_date = Time.zone.now if immediate_change == true
+    self.change_date = Time.zone.now if immediate_change
   end
 
   def change_date_must_be_after_last_change_date
@@ -66,8 +73,8 @@ private
   def change_date_must_be_unique_for_organisation
     return if change_date.blank?
 
-    if organisation.organisation_name_changes.visible.select(&:persisted?).any? { |record| record.change_date.to_date == change_date.to_date }
-      errors.add(:change_date, "Start date cannot be the same as a previous change date for this organisation.")
+    if organisation.organisation_name_changes.visible.select(&:persisted?).any? { |record| record.change_date == change_date }
+      errors.add(:change_date, "Start date cannot be the same as an existing name change.")
     end
   end
 
