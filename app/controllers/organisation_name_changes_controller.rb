@@ -10,13 +10,13 @@ class OrganisationNameChangesController < ApplicationController
       notice_message = @organisation_name_change.immediate_change ? "Name change saved successfully." : "Name change scheduled for #{@organisation_name_change.formatted_change_date}."
       redirect_to organisation_path(@organisation), notice: notice_message
     else
-      render template: "organisations/change_name", status: :unprocessable_entity
+      render :new, status: :unprocessable_entity
     end
   end
 
   def change_name
     @organisation_name_change = OrganisationNameChange.new
-    render "organisations/change_name", layout: "application"
+    render :new, layout: "application"
   end
 
 private

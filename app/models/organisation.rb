@@ -73,7 +73,7 @@ class Organisation < ApplicationRecord
   end
 
   def name(date: Time.zone.now)
-    name_change = organisation_name_changes.find { |change| change.includes_date?(date) }
+    name_change = organisation_name_changes.visible.find { |change| change.includes_date?(date) }
     name_change&.name || read_attribute(:name)
   end
 
@@ -105,8 +105,8 @@ class Organisation < ApplicationRecord
   end
 
   def fetch_name_changes_with_dates
-    organisation_name_changes.order(:change_date).map.with_index do |change, index|
-      next_change = organisation_name_changes.order(:change_date)[index + 1]
+    organisation_name_changes.visible.order(:change_date).map.with_index do |change, index|
+      next_change = organisation_name_changes.visible.order(:change_date)[index + 1]
       {
         name: change.name,
         start_date: change.change_date,

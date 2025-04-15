@@ -7,6 +7,7 @@ class OrganisationNameChange < ApplicationRecord
   validates :change_date, presence: true, unless: -> { immediate_change }
   validate :change_date_must_be_after_last_change_date
   validate :name_must_be_different_from_current
+  validate :change_date_must_be_unique_for_organisation
 
   attr_accessor :immediate_change
 
@@ -45,15 +46,28 @@ class OrganisationNameChange < ApplicationRecord
 private
 
   def set_change_date_if_immediate
-    self.change_date = Time.zone.now if immediate_change
+    self.change_date = Time.zone.now if immediate_change == true
   end
 
   def change_date_must_be_after_last_change_date
     return if change_date.blank?
 
-    last_change_date = organisation.organisation_name_changes.where("change_date < ?", change_date).order(change_date: :desc).first&.change_date
+    last_change_date = organisation.organisation_name_changes
+                                   .visible
+                                   .where("change_date < ?", change_date)
+                                   .order(change_date: :desc)
+                                   .first&.change_date
+
     if last_change_date && change_date <= last_change_date
       errors.add(:change_date, "Start date must be after the last change date (#{last_change_date}).")
+    end
+  end
+
+  def change_date_must_be_unique_for_organisation
+    return if change_date.blank?
+
+    if organisation.organisation_name_changes.visible.select(&:persisted?).any? { |record| record.change_date.to_date == change_date.to_date }
+      errors.add(:change_date, "Start date cannot be the same as a previous change date for this organisation.")
     end
   end
 
