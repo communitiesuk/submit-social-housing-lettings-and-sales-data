@@ -500,7 +500,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_05_092900) do
   create_table "organisation_name_changes", force: :cascade do |t|
     t.bigint "organisation_id", null: false
     t.string "name", null: false
-    t.integer "change_type", null: false
+    t.integer "change_type"
     t.date "startdate", null: false
     t.datetime "discarded_at"
     t.datetime "created_at", null: false

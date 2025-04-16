@@ -3,7 +3,7 @@ class CreateOrganisationNameChanges < ActiveRecord::Migration[7.2]
     create_table :organisation_name_changes do |t|
       t.references :organisation, null: false, foreign_key: true
       t.string :name, null: false
-      t.integer :change_type, null: false
+      t.integer :change_type
       t.date :startdate, null: false
       t.datetime :discarded_at
 
