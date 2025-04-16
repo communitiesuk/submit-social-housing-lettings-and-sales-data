@@ -10,6 +10,7 @@ class OrganisationNameChange < ApplicationRecord
   validate :startdate_must_be_after_last_change
   validate :name_must_be_different_from_current
   validate :startdate_must_be_unique_for_organisation
+  validate :startdate_must_be_before_merge_date
 
   attr_accessor :immediate_change
 
@@ -92,6 +93,15 @@ private
 
     if name == organisation.name(date: startdate)
       errors.add(:name, "New name must be different from the current name on the change date.")
+    end
+  end
+
+  def startdate_must_be_before_merge_date
+    return if startdate.blank? || organisation.merge_date.blank?
+
+    if startdate >= organisation.merge_date
+      errors.add(:startdate, "Start date must be earlier than the organisation's merge date (#{organisation.merge_date.to_formatted_s(:govuk_date)}). You cannot make changes to the name of an organisation after it has merged.") unless immediate_change
+      errors.add(:immediate_change, "Start date must be earlier than the organisation's merge date (#{organisation.merge_date.to_formatted_s(:govuk_date)}). You cannot make changes to the name of an organisation after it has merged.") if immediate_change
     end
   end
 end
