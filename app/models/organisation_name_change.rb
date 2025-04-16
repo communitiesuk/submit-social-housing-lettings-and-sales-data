@@ -5,8 +5,8 @@ class OrganisationNameChange < ApplicationRecord
   scope :before_date, ->(date) { where("startdate < ?", date) }
   scope :after_date, ->(date) { where("startdate > ?", date) }
 
-  validates :name, presence: { message: "New name is required and cannot be left blank." }
-  validates :startdate, presence: { message: "Start date must be provided unless this is an immediate change." }, unless: -> { immediate_change }
+  validates :name, presence: { message: I18n.t("validations.organisation.name_changes.name.blank") }
+  validates :startdate, presence: { message: I18n.t("validations.organisation.name_changes.startdate.blank") }, unless: -> { immediate_change }
   validate :startdate_must_be_after_last_change
   validate :name_must_be_different_from_current
   validate :startdate_must_be_unique_for_organisation
@@ -75,7 +75,7 @@ private
                                    .first&.startdate
 
     if last_startdate && startdate <= last_startdate
-      errors.add(:startdate, "Start date must be after the last change date (#{last_startdate}).")
+      errors.add(:startdate, I18n.t("validations.organisation.name_changes.startdate.must_be_after_last_change", last_startdate:))
     end
   end
 
@@ -83,8 +83,8 @@ private
     return if startdate.blank?
 
     if organisation.organisation_name_changes.visible.select(&:persisted?).any? { |record| record.startdate == startdate }
-      errors.add(:startdate, "Start date cannot be the same as another name change.") unless immediate_change
-      errors.add(:immediate_change, "Start date cannot be the same as another name change.") if immediate_change
+      errors.add(:startdate, I18n.t("validations.organisation.name_changes.startdate.cannot_be_the_same_as_another_change")) unless immediate_change
+      errors.add(:immediate_change, I18n.t("validations.organisation.name_changes.immediate_change.cannot_be_the_same_as_another_change")) if immediate_change
     end
   end
 
@@ -92,7 +92,7 @@ private
     return if name.blank? || startdate.blank?
 
     if name == organisation.name(date: startdate)
-      errors.add(:name, "New name must be different from the current name on the change date.")
+      errors.add(:name, I18n.t("validations.organisation.name_changes.name.must_be_different"))
     end
   end
 
@@ -100,8 +100,8 @@ private
     return if startdate.blank? || organisation.merge_date.blank?
 
     if startdate >= organisation.merge_date
-      errors.add(:startdate, "Start date must be earlier than the organisation's merge date (#{organisation.merge_date.to_formatted_s(:govuk_date)}). You cannot make changes to the name of an organisation after it has merged.") unless immediate_change
-      errors.add(:immediate_change, "Start date must be earlier than the organisation's merge date (#{organisation.merge_date.to_formatted_s(:govuk_date)}). You cannot make changes to the name of an organisation after it has merged.") if immediate_change
+      errors.add(:startdate, I18n.t("validations.organisation.name_changes.startdate.must_be_before_merge_date", merge_date: organisation.merge_date.to_formatted_s(:govuk_date))) unless immediate_change
+      errors.add(:immediate_change, I18n.t("validations.organisation.name_changes.immediate_change.must_be_before_merge_date", merge_date: organisation.merge_date.to_formatted_s(:govuk_date))) if immediate_change
     end
   end
 end

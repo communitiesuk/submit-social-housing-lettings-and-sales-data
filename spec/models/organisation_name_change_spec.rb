@@ -12,34 +12,34 @@ RSpec.describe OrganisationNameChange, type: :model do
     it "is invalid without a name" do
       name_change = build(:organisation_name_change, organisation:, name: nil)
       expect(name_change).not_to be_valid
-      expect(name_change.errors[:name]).to include("New name is required and cannot be left blank.")
+      expect(name_change.errors[:name]).to include(I18n.t("validations.organisation.name_changes.name.blank"))
     end
 
     it "is invalid without a startdate if not immediate" do
       name_change = build(:organisation_name_change, organisation:, startdate: nil, immediate_change: false)
       expect(name_change).not_to be_valid
-      expect(name_change.errors[:startdate]).to include("Start date must be provided unless this is an immediate change.")
+      expect(name_change.errors[:startdate]).to include(I18n.t("validations.organisation.name_changes.startdate.blank"))
     end
 
     it "is invalid if startdate is not unique for the organisation" do
       create(:organisation_name_change, organisation:, startdate: Time.zone.tomorrow)
       name_change = build(:organisation_name_change, organisation:, immediate_change: false, startdate: Time.zone.tomorrow)
       expect(name_change).not_to be_valid
-      expect(name_change.errors[:startdate]).to include("Start date cannot be the same as another name change.")
+      expect(name_change.errors[:startdate]).to include(I18n.t("validations.organisation.name_changes.startdate.cannot_be_the_same_as_another_change"))
     end
 
     it "is invalid if name is the same as the current name on the change date" do
       create(:organisation_name_change, organisation:, name: "New Name", startdate: 1.day.ago)
       name_change = build(:organisation_name_change, organisation:, name: "New Name", startdate: Time.zone.now)
       expect(name_change).not_to be_valid
-      expect(name_change.errors[:name]).to include("New name must be different from the current name on the change date.")
+      expect(name_change.errors[:name]).to include(I18n.t("validations.organisation.name_changes.name.must_be_different"))
     end
 
     it "is invalid if startdate is after the organisation's merge date" do
       organisation.update!(merge_date: Time.zone.now)
       name_change = build(:organisation_name_change, organisation:, immediate_change: false, startdate: Time.zone.tomorrow)
       expect(name_change).not_to be_valid
-      expect(name_change.errors[:startdate]).to include("Start date must be earlier than the organisation's merge date (#{organisation.merge_date.to_formatted_s(:govuk_date)}). You cannot make changes to the name of an organisation after it has merged.")
+      expect(name_change.errors[:startdate]).to include(I18n.t("validations.organisation.name_changes.startdate.must_be_before_merge_date", merge_date: organisation.merge_date.to_formatted_s(:govuk_date)))
     end
   end
 
