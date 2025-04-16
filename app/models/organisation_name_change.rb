@@ -36,7 +36,7 @@ class OrganisationNameChange < ApplicationRecord
   end
 
   def includes_date?(date)
-    startdate <= date && (next_change&.startdate.nil? || next_change&.startdate > date)
+    startdate <= date && (!next_change&.startdate || next_change.startdate > date)
   end
 
   def next_change

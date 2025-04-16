@@ -217,7 +217,7 @@ class Organisation < ApplicationRecord
       start_date: created_at,
       end_date: changes.first&.dig(:start_date)&.yesterday,
       status: changes.empty? ? "active" : "inactive",
-      )
+    )
 
     changes
   end
