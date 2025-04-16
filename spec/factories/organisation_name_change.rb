@@ -3,7 +3,7 @@ FactoryBot.define do
     association :organisation
     name { "#{Faker::Name.name} Housing Org" }
     immediate_change { true }
-    startdate { Time.zone.now }
+    startdate { Time.zone.tomorrow }
     change_type { :user_change }
 
     trait :future_change do

@@ -5,8 +5,8 @@ class OrganisationNameChange < ApplicationRecord
   scope :before_date, ->(date) { where("startdate < ?", date) }
   scope :after_date, ->(date) { where("startdate > ?", date) }
 
-  validates :name, presence: true
-  validates :startdate, presence: true, unless: -> { immediate_change }
+  validates :name, presence: { message: "New name is required and cannot be left blank." }
+  validates :startdate, presence: { message: "Start date must be provided unless this is an immediate change." }, unless: -> { immediate_change }
   validate :startdate_must_be_after_last_change
   validate :name_must_be_different_from_current
   validate :startdate_must_be_unique_for_organisation
