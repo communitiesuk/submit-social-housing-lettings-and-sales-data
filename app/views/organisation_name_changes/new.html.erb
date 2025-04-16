@@ -14,7 +14,9 @@
       </h1>
 
       <%= f.govuk_text_field :name, autocomplete: "name", label: { text: "Enter new name", size: "m" }, value: @organisation.name %>
+    </div>
 
+    <div class="govuk-grid-column-three-quarters">
       <%= govuk_details(summary_text: "View name history") do %>
         <%= govuk_table do |table| %>
           <%= table.with_head do |head| %>
@@ -37,7 +39,9 @@
           <% end %>
         <% end %>
       <% end %>
+    </div>
 
+    <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_radio_buttons_fieldset :immediate_change,
                                          legend: { text: "Does this change take effect starting today?", size: "m" } do %>
         <%= f.govuk_radio_button :immediate_change, "true", label: { text: "Yes" } %>
