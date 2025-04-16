@@ -53,7 +53,7 @@ class OrganisationNameChange < ApplicationRecord
 private
 
   def set_startdate_if_immediate
-    self.startdate = Time.zone.now if immediate_change
+    self.startdate ||= Time.zone.now if immediate_change
   end
 
   def startdate_must_be_after_last_change
