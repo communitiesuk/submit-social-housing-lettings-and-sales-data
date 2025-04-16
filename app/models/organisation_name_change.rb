@@ -1,7 +1,7 @@
 class OrganisationNameChange < ApplicationRecord
   belongs_to :organisation
 
-  scope :visible, -> { where(discarded_at: nil) }
+  scope :visible, -> { where(discarded_at: nil) } # We could add the ability to 'delete' scheduled name changes by using discarded_at
   scope :before_date, ->(date) { where("startdate < ?", date) }
   scope :after_date, ->(date) { where("startdate > ?", date) }
 
@@ -18,7 +18,7 @@ class OrganisationNameChange < ApplicationRecord
 
   CHANGE_TYPE = {
     user_change: 1,
-    merge: 2,
+    merge: 2, # Currently not used, we could differentiate name changes resulting from a merge
   }.freeze
 
   enum :change_type, CHANGE_TYPE, prefix: true
