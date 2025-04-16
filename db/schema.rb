@@ -497,18 +497,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_05_092900) do
     t.boolean "show_additional_page"
   end
 
-  create_table "organisation_name_changes", force: :cascade do |t|
-    t.bigint "organisation_id", null: false
-    t.string "name", null: false
-    t.integer "change_type"
-    t.date "startdate", null: false
-    t.datetime "discarded_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["organisation_id", "startdate"], name: "index_org_name_changes_on_org_id_and_startdate", unique: true
-    t.index ["organisation_id"], name: "index_organisation_name_changes_on_organisation_id"
-  end
-
   create_table "organisation_relationships", force: :cascade do |t|
     t.integer "child_organisation_id"
     t.integer "parent_organisation_id"
