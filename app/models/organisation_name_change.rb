@@ -2,6 +2,8 @@ class OrganisationNameChange < ApplicationRecord
   belongs_to :organisation
 
   scope :visible, -> { where(discarded_at: nil) }
+  scope :before_date, ->(date) { where("startdate < ?", date) }
+  scope :after_date, ->(date) { where("startdate > ?", date) }
 
   validates :name, presence: true
   validates :startdate, presence: true, unless: -> { immediate_change }
@@ -22,20 +24,26 @@ class OrganisationNameChange < ApplicationRecord
 
   has_paper_trail
 
+  def status
+    if startdate > Time.zone.now.to_date
+      "scheduled"
+    elsif end_date.nil? || end_date >= Time.zone.now.to_date
+      "active"
+    else
+      "inactive"
+    end
+  end
+
   def includes_date?(date)
     startdate <= date && (next_change&.startdate.nil? || next_change&.startdate > date)
   end
 
-  def before_date?(date)
-    startdate < date
-  end
-
-  def after_date?(date)
-    startdate > date
-  end
-
   def next_change
     organisation.organisation_name_changes.where("startdate > ?", startdate).order(startdate: :asc).first
+  end
+
+  def end_date
+    next_change&.startdate&.yesterday
   end
 
   def previous_change
@@ -87,4 +95,3 @@ private
     end
   end
 end
-

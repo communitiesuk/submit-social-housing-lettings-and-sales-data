@@ -77,44 +77,6 @@ class Organisation < ApplicationRecord
     name_change&.name || read_attribute(:name)
   end
 
-  def name_changes_with_dates
-    changes = fetch_name_changes_with_dates
-
-    if changes.any?
-      changes.unshift({
-                        name: self[:name],
-                        start_date: created_at,
-                        end_date: changes.first[:start_date]&.yesterday,
-                        status: Time.zone.now.to_date < changes.first[:start_date].to_date ? "scheduled" : "inactive",
-                      })
-    else
-      changes << { name: self[:name], start_date: created_at, end_date: nil, status: "active" }
-    end
-
-    changes.each do |change|
-      change[:status] ||= if change[:start_date].to_date > Time.zone.now.to_date
-                            "scheduled"
-                          elsif change[:end_date].nil? || change[:end_date].to_date >= Time.zone.now.to_date
-                            "active"
-                          else
-                            "inactive"
-                          end
-    end
-
-    changes
-  end
-
-  def fetch_name_changes_with_dates
-    organisation_name_changes.visible.order(:startdate).map.with_index do |change, index|
-      next_change = organisation_name_changes.visible.order(:startdate)[index + 1]
-      {
-        name: change.name,
-        start_date: change.startdate,
-        end_date: next_change&.startdate&.yesterday,
-      }
-    end
-  end
-
   def can_be_managed_by?(organisation:)
     organisation == self || managing_agents.include?(organisation)
   end
@@ -238,6 +200,26 @@ class Organisation < ApplicationRecord
   def label(date:)
     date ||= Time.zone.now
     status == :deleted ? "#{name(date:)} (deleted)" : name(date:)
+  end
+
+  def name_changes_with_dates
+    changes = organisation_name_changes.visible.order(:startdate).map do |change|
+      {
+        name: change.name,
+        start_date: change.startdate,
+        end_date: change.end_date,
+        status: change.status,
+      }
+    end
+
+    changes.unshift(
+      name: self[:name],
+      start_date: created_at,
+      end_date: changes.first&.dig(:start_date)&.yesterday,
+      status: Time.zone.now.to_date < changes.first&.dig(:start_date) ? "scheduled" : "inactive",
+      )
+
+    changes
   end
 
   def has_visible_users?
