@@ -45,7 +45,7 @@
                                  label: { text: "No" },
                                  "data-controller": "conditional-question",
                                  "data-action": "click->conditional-question#displayConditional",
-                                 "data-info": { conditional_questions: { scheduled_date: [false] } }.to_json do %>
+                                 "data-info": { conditional_questions: { startdate: [false] } }.to_json do %>
           <%= render partial: "components/date_picker", locals: {
             resource: @organisation_name_change,
             question_id: :startdate,
