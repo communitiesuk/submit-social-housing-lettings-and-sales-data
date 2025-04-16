@@ -30,6 +30,8 @@ private
   end
 
   def organisation_name_change_params
-    params.require(:organisation_name_change).permit(:name, :startdate, :immediate_change)
+    params.require(:organisation_name_change).permit(:name, :startdate, :immediate_change).tap do |whitelisted|
+      whitelisted[:immediate_change] = ActiveModel::Type::Boolean.new.cast(whitelisted[:immediate_change])
+    end
   end
 end
