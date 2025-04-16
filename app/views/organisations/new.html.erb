@@ -80,7 +80,7 @@
           profit_status_options,
           :id,
           :name,
-          label: { text: "Is the organisation for-profit?", size: "m" },
+          label: { text: "Is the organisation for profit?", size: "m" },
           options: { disabled: [""], selected: @organisation.profit_status || "" } %>
 
       <%= f.govuk_check_boxes_fieldset :rent_periods,

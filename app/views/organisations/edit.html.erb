@@ -56,7 +56,7 @@
             profit_status_options(@organisation.provider_type),
             :id,
             :name,
-            label: { text: "Is the organisation for-profit?", size: "m" },
+            label: { text: "Is the organisation for profit?", size: "m" },
             options: { disabled: [""], selected: @organisation.profit_status || "" } %>
       <% end %>
 
