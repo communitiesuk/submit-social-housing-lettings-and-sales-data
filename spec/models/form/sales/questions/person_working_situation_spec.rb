@@ -35,10 +35,10 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
       "7" => { "value" => "Full-time student" },
       "9" => { "value" => "Child under 16",
                "depends_on" =>
-        [{ "saledate" => { "operator" => "<", "operand" => Time.zone.local(2024, 4, 1) } },
-         { "age2_known" => 1 },
-         { "age2_known" => nil },
-         { "age2" => { "operator" => "<", "operand" => 16 } }] },
+                  [{ "saledate" => { "operator" => "<", "operand" => Time.zone.local(2024, 4, 1) } },
+                   { "age2_known" => 1 },
+                   { "age2_known" => nil },
+                   { "age2" => { "operator" => "<", "operand" => 16 } }] },
     })
   end
 
@@ -55,6 +55,27 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
 
     it "uses the new ordering for answer options" do
       expect(question.answer_options.keys).to eq(%w[1 2 3 4 5 6 7 8 9 0 10])
+    end
+
+    it "has the correct answer_options" do
+      expect(question.answer_options).to eq({
+        "1" => { "value" => "Full-time – 30 hours or more per week" },
+        "2" => { "value" => "Part-time – Less than 30 hours per week" },
+        "3" => { "value" => "In government training into work" },
+        "4" => { "value" => "Jobseeker" },
+        "6" => { "value" => "Not seeking work" },
+        "8" => { "value" => "Unable to work because of long-term sickness or disability" },
+        "5" => { "value" => "Retired" },
+        "0" => { "value" => "Other" },
+        "10" => { "value" => "Person prefers not to say" },
+        "7" => { "value" => "Full-time student" },
+        "9" => { "value" => "Child under 16",
+                 "depends_on" =>
+                   [{ "saledate" => { "operator" => "<", "operand" => Time.zone.local(2024, 4, 1) } },
+                    { "age2_known" => 1 },
+                    { "age2_known" => nil },
+                    { "age2" => { "operator" => "<", "operand" => 16 } }] },
+      })
     end
   end
 

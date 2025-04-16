@@ -27,7 +27,7 @@ en:
             page_header: ""
             previous_la_known:
               check_answer_label: "Local authority of buyer 1’s last settled accommodation"
-              check_answer_prompt: "Enter the local authority of the buyer's last settled accommodation if known"
+              check_answer_prompt: "Enter the local authority of the buyer’s last settled accommodation if known"
               hint_text: "This is also known as the household’s 'last settled home'"
               question_text: "Do you know the local authority of buyer 1’s last settled accommodation?"
             prevloc:

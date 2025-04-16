@@ -12,6 +12,10 @@ class Form::Sales::Questions::NationalityAll < ::Form::Question
     answer_options[log.send(id).to_s]["name"]
   end
 
+  def displayed_answer_options(_log, _current_user = nil)
+    @answer_options.reject { |key, _| key == "826" }
+  end
+
   QUESTION_NUMBER_FROM_YEAR_AND_BUYER_INDEX = {
     2023 => { 1 => 24, 2 => 32 },
     2024 => { 1 => 26, 2 => 34 },
