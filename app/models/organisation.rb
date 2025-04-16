@@ -216,7 +216,7 @@ class Organisation < ApplicationRecord
       name: self[:name],
       start_date: created_at,
       end_date: changes.first&.dig(:start_date)&.yesterday,
-      status: Time.zone.now.to_date < changes.first&.dig(:start_date) ? "scheduled" : "inactive",
+      status: changes.empty? ? "active" : "inactive",
       )
 
     changes
