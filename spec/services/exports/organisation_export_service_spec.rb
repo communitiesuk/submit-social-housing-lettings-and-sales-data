@@ -110,7 +110,10 @@ RSpec.describe Exports::OrganisationExportService do
 
     context "and one organisation with a name change is available for export" do
       let!(:organisation) { create(:organisation, name: "MHCLG", address_line1: "2 Marsham Street", address_line2: "London", postcode: "SW1P 4DF", housing_registration_no: "1234") }
-      let!(:organisation_name_change) { create(:organisation_name_change, organisation:, name: "MHCLG New", startdate: Time.zone.local(2022, 5, 1)) }
+
+      before do
+        create(:organisation_name_change, organisation:, name: "MHCLG New", startdate: Time.zone.local(2022, 5, 1))
+      end
 
       it "generates an XML export file with the expected content within the ZIP file" do
         expected_content = replace_entity_ids(organisation, new_name_xml_export_file.read)
