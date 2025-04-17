@@ -72,7 +72,8 @@ class Organisation < ApplicationRecord
     end
   end
 
-  def name(date: Time.zone.now)
+  def name(date: nil)
+    date ||= Time.zone.now
     name_change = organisation_name_changes.visible.find { |change| change.includes_date?(date) }
     name_change&.name || read_attribute(:name)
   end
