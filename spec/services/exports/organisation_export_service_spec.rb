@@ -6,6 +6,7 @@ RSpec.describe Exports::OrganisationExportService do
   let(:storage_service) { instance_double(Storage::S3Service) }
 
   let(:xml_export_file) { File.open("spec/fixtures/exports/organisation.xml", "r:UTF-8") }
+  let(:new_name_xml_export_file) { File.open("spec/fixtures/exports/organisation_new_name.xml", "r:UTF-8") }
   let(:local_manifest_file) { File.open("spec/fixtures/exports/manifest.xml", "r:UTF-8") }
 
   let(:expected_zip_filename) { "organisations_2024_2025_apr_mar_f0001_inc0001.zip" }
@@ -16,7 +17,7 @@ RSpec.describe Exports::OrganisationExportService do
 
   def replace_entity_ids(organisation, export_template)
     export_template.sub!(/\{id\}/, organisation["id"].to_s)
-    export_template.sub!(/\{name\}/, organisation["name"])
+    export_template.sub!(/\{name\}/, organisation.name(date: start_time))
     export_template.sub!(/\{dsa_signed_at\}/, organisation.data_protection_confirmation&.signed_at&.iso8601)
     export_template.sub!(/\{dpo_email\}/, organisation.data_protection_confirmation&.data_protection_officer_email)
   end
@@ -87,6 +88,48 @@ RSpec.describe Exports::OrganisationExportService do
 
       context "and the organisation is merged" do
         let(:expected_content) { replace_entity_ids(organisation, xml_export_file.read) }
+
+        before do
+          organisation.update!(merge_date: Time.zone.yesterday)
+          expected_content.sub!("<active>true</active>", "<active>false</active>")
+          expected_content.sub!("<merge_date/>", "<merge_date>#{organisation.merge_date.iso8601}</merge_date>")
+          expected_content.sub!("<status>active</status>", "<status>merged</status>")
+        end
+
+        it "generates an XML export file with the expected content within the ZIP file" do
+          expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+            entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
+            expect(entry).not_to be_nil
+            expect(entry.get_input_stream.read).to eq(expected_content)
+          end
+
+          export_service.export_xml_organisations
+        end
+      end
+    end
+
+    context "and one organisation with a name change is available for export" do
+      let!(:organisation) { create(:organisation, name: "MHCLG", address_line1: "2 Marsham Street", address_line2: "London", postcode: "SW1P 4DF", housing_registration_no: "1234") }
+      let!(:organisation_name_change) { create(:organisation_name_change, organisation:, name: "MHCLG New", startdate: Time.zone.local(2022, 5, 1)) }
+
+      it "generates an XML export file with the expected content within the ZIP file" do
+        expected_content = replace_entity_ids(organisation, new_name_xml_export_file.read)
+
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+          entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
+          expect(entry).not_to be_nil
+          expect(entry.get_input_stream.read).to eq(expected_content)
+        end
+
+        export_service.export_xml_organisations
+      end
+
+      it "returns the list with correct archive" do
+        expect(export_service.export_xml_organisations).to eq({ expected_zip_filename.gsub(".zip", "") => start_time })
+      end
+
+      context "and the organisation is merged" do
+        let(:expected_content) { replace_entity_ids(organisation, new_name_xml_export_file.read) }
 
         before do
           organisation.update!(merge_date: Time.zone.yesterday)

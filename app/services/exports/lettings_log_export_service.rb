@@ -57,12 +57,12 @@ module Exports
       # Organisation fields
       if lettings_log.owning_organisation
         attribute_hash["owningorgid"] = lettings_log.owning_organisation.old_visible_id || (lettings_log.owning_organisation.id + LOG_ID_OFFSET)
-        attribute_hash["owningorgname"] = lettings_log.owning_organisation.name
+        attribute_hash["owningorgname"] = lettings_log.owning_organisation.name(date: lettings_log.startdate)
         attribute_hash["hcnum"] = lettings_log.owning_organisation.housing_registration_no
       end
       if lettings_log.managing_organisation
         attribute_hash["maningorgid"] = lettings_log.managing_organisation.old_visible_id || (lettings_log.managing_organisation.id + LOG_ID_OFFSET)
-        attribute_hash["maningorgname"] = lettings_log.managing_organisation.name
+        attribute_hash["maningorgname"] = lettings_log.managing_organisation.name(date: lettings_log.startdate)
         attribute_hash["manhcnum"] = lettings_log.managing_organisation.housing_registration_no
       end
 
