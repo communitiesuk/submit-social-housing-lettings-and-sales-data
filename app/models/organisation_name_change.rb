@@ -33,7 +33,7 @@ class OrganisationNameChange < ApplicationRecord
   end
 
   def next_change
-    organisation.organisation_name_changes.where("startdate > ?", startdate).order(startdate: :asc).first
+    organisation.organisation_name_changes.visible.where("startdate > ?", startdate).order(startdate: :asc).first
   end
 
   def end_date
@@ -41,7 +41,7 @@ class OrganisationNameChange < ApplicationRecord
   end
 
   def previous_change
-    organisation.organisation_name_changes.where("startdate < ?", startdate).order(startdate: :desc).first
+    organisation.organisation_name_changes.visible.where("startdate < ?", startdate).order(startdate: :desc).first
   end
 
   def active?(date = Time.zone.now)

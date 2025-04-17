@@ -206,6 +206,7 @@ class Organisation < ApplicationRecord
   def name_changes_with_dates
     changes = organisation_name_changes.visible.order(:startdate).map do |change|
       {
+        id: change.id,
         name: change.name,
         start_date: change.startdate,
         end_date: change.end_date,
@@ -214,6 +215,7 @@ class Organisation < ApplicationRecord
     end
 
     changes.unshift(
+      id: nil,
       name: self[:name],
       start_date: created_at,
       end_date: changes.first&.dig(:start_date)&.yesterday,

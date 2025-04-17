@@ -18,6 +18,20 @@ class OrganisationNameChangesController < ApplicationController
     render :new, layout: "application"
   end
 
+  def cancel_confirmation
+    @organisation_name_change = OrganisationNameChange.find(params[:change_id])
+    render :cancel_confirmation, layout: "application"
+  end
+
+  def cancel
+    @organisation_name_change = OrganisationNameChange.find(params[:change_id])
+    if @organisation_name_change.update_column(:discarded_at, Time.zone.today)
+      redirect_to organisation_path(@organisation_name_change.organisation), notice: "The scheduled name change has been successfully cancelled."
+    else
+      redirect_to organisation_path(@organisation_name_change.organisation), notice: "Failed to cancel the scheduled name change."
+    end
+  end
+
 private
 
   def set_organisation

@@ -1,0 +1,30 @@
+<% content_for :before_content do %>
+  <% content_for :title, "Are you sure you want to cancel this name change?" %>
+  <%= govuk_back_link(href: change_name_organisation_path(@organisation_name_change.organisation)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <span class="govuk-caption-xl">Cancel scheduled name change </span>
+    <h1 class="govuk-heading-xl">
+      <%= content_for(:title) %>
+    </h1>
+
+    <%= govuk_warning_text(text: "You will not be able to undo this action.") %>
+
+    <div class="govuk-inset-text">
+      This name change would have updated the organisation name from
+      <strong><%= @organisation_name_change.previous_change.is_a?(OrganisationNameChange) ? @organisation_name_change.previous_change.name : @organisation_name_change.organisation.name %></strong>
+      to <strong><%= @organisation_name_change.name %></strong>.
+    </div>
+
+    <div class="govuk-button-group">
+      <%= govuk_button_to(
+            "Cancel",
+            cancel_name_change_organisation_path(@organisation_name_change),
+            method: :delete,
+            ) %>
+      <%= govuk_button_link_to "Back", change_name_organisation_path(@organisation_name_change.organisation), secondary: true %>
+    </div>
+  </div>
+</div>

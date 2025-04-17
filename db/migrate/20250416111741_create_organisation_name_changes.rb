@@ -9,6 +9,6 @@ class CreateOrganisationNameChanges < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_index :organisation_name_changes, %i[organisation_id startdate], unique: true, name: "index_org_name_changes_on_org_id_and_startdate"
+    add_index :organisation_name_changes, %i[organisation_id startdate discarded_at], unique: true, name: "index_org_name_changes_on_org_id_startdate_discarded_at"
   end
 end

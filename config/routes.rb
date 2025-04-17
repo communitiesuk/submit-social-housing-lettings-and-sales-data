@@ -158,6 +158,8 @@ Rails.application.routes.draw do
       post "data-sharing-agreement", to: "organisations#confirm_data_sharing_agreement"
       get "change-name", to: "organisation_name_changes#change_name", as: "change_name"
       post "change-name", to: "organisation_name_changes#create"
+      get "cancel-name-change/:change_id", to: "organisation_name_changes#cancel_confirmation", as: "cancel_name_change_confirmation"
+      delete "cancel-name-change/:change_id", to: "organisation_name_changes#cancel", as: "cancel_name_change"
 
       get "users", to: "organisations#users"
       get "lettings-logs", to: "organisations#lettings_logs"

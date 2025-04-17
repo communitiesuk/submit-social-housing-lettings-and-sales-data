@@ -14,7 +14,12 @@
           <% row.with_cell(text: change[:name]) %>
           <% row.with_cell(text: change[:start_date]&.to_formatted_s(:govuk_date)) %>
           <% row.with_cell(text: change[:end_date]&.to_formatted_s(:govuk_date) || "None") %>
-          <% row.with_cell text: status_tag(change[:status].to_sym) %>
+          <% row.with_cell do %>
+            <%= status_tag(change[:status].to_sym, ["govuk-!-margin-right-2 govuk-!-margin-bottom-1"]) %>
+            <% if change[:status] == "scheduled" && change[:id].present? %>
+              <%= govuk_link_to "Cancel", cancel_name_change_confirmation_organisation_url(change_id: change[:id]), class: "app-red-link app-red-link---no-visited-state" %>
+            <% end %>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>
