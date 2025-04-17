@@ -2766,7 +2766,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             expect(parser.errors[:field_125]).to eql([I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "basic rent")])
             expect(parser.errors[:field_126]).to eql([I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "service charge")])
             expect(parser.errors[:field_127]).to eql([I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "personal service charge")])
-            expect(parser.errors[:field_128]).to eql([I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "basic rent"), I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "service charge"), I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "personal service charge")])
+            expect(parser.errors[:field_128]).to eql([I18n.t("validations.lettings.2024.bulk_upload.charges.related_to_missing_charge")])
           end
         end
       end
