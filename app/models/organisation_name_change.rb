@@ -16,13 +16,6 @@ class OrganisationNameChange < ApplicationRecord
 
   before_validation :set_startdate_if_immediate
 
-  CHANGE_TYPE = {
-    user_change: 1,
-    merge: 2, # Currently not used, we could differentiate name changes resulting from a merge
-  }.freeze
-
-  enum :change_type, CHANGE_TYPE, prefix: true
-
   has_paper_trail
 
   def status

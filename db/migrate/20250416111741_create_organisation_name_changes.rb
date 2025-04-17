@@ -5,7 +5,6 @@ class CreateOrganisationNameChanges < ActiveRecord::Migration[7.0]
       t.string :name, null: false
       t.date :startdate, null: false
       t.date :discarded_at
-      t.integer :change_type
 
       t.timestamps
     end

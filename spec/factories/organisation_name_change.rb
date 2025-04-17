@@ -4,7 +4,6 @@ FactoryBot.define do
     name { "#{Faker::Name.name} Housing Org" }
     immediate_change { true }
     startdate { Time.zone.tomorrow }
-    change_type { :user_change }
 
     trait :future_change do
       immediate_change { false }

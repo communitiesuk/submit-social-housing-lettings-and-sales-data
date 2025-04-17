@@ -502,7 +502,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_111741) do
     t.string "name", null: false
     t.date "startdate", null: false
     t.date "discarded_at"
-    t.integer "change_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organisation_id", "startdate"], name: "index_org_name_changes_on_org_id_and_startdate", unique: true
