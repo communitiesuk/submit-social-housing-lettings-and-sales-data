@@ -137,7 +137,7 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["referral"])
           .to include(match(I18n.t("validations.lettings.household.referral.leaving_last_settled_home.reason_permanently_decanted")))
         expect(record.errors["referral_type"])
-          .to include(match(I18n.t("validations.lettings.household.referral.leaving_last_settled_home.reason_permanently_decanted")))
+          .to include(match(I18n.t("validations.lettings.household.referral_type.leaving_last_settled_home.reason_permanently_decanted")))
       end
     end
 
@@ -163,16 +163,12 @@ RSpec.describe Validations::HouseholdValidations do
         household_validator.validate_referral(record)
         expect(record.errors["referral"])
           .to include(match(I18n.t("validations.lettings.household.referral.la_general_needs.internal_transfer")))
-        expect(record.errors["referral_type"])
-          .to include(match(I18n.t("validations.lettings.household.referral.la_general_needs.internal_transfer")))
         expect(record.errors["prevten"])
           .to include(match(I18n.t("validations.lettings.household.prevten.la_general_needs.internal_transfer")))
 
         record.prevten = 31
         household_validator.validate_referral(record)
         expect(record.errors["referral"])
-          .to include(match(I18n.t("validations.lettings.household.referral.la_general_needs.internal_transfer")))
-        expect(record.errors["referral_type"])
           .to include(match(I18n.t("validations.lettings.household.referral.la_general_needs.internal_transfer")))
         expect(record.errors["prevten"])
           .to include(match(I18n.t("validations.lettings.household.prevten.la_general_needs.internal_transfer")))
@@ -766,12 +762,10 @@ RSpec.describe Validations::HouseholdValidations do
           record.referral = 1
           record.prevten = prevten[:code]
           household_validator.validate_previous_housing_situation(record)
-          label = record.form.start_year_2025_or_later? && prevten[:code] == 28 ? "Living with friends and family (long-term)" : prevten[:label]
+          label = record.form.start_year_2025_or_later? && prevten[:code] == 28 ? "Living with friends or family (long-term)" : prevten[:label]
           expect(record.errors["prevten"])
             .to include(match I18n.t("validations.lettings.household.prevten.internal_transfer", prevten: label))
           expect(record.errors["referral"])
-            .to include(match I18n.t("validations.lettings.household.referral.prevten_invalid", prevten: ""))
-          expect(record.errors["referral_type"])
             .to include(match I18n.t("validations.lettings.household.referral.prevten_invalid", prevten: ""))
         end
       end

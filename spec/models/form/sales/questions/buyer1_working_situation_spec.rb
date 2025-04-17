@@ -24,21 +24,6 @@ RSpec.describe Form::Sales::Questions::Buyer1WorkingSituation, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
-  it "has the correct answer_options" do
-    expect(question.answer_options).to eq({
-      "1" => { "value" => "Full-time - 30 hours or more" },
-      "2" => { "value" => "Part-time - Less than 30 hours" },
-      "3" => { "value" => "In government training into work" },
-      "4" => { "value" => "Jobseeker" },
-      "6" => { "value" => "Not seeking work" },
-      "8" => { "value" => "Unable to work due to long term sick or disability" },
-      "5" => { "value" => "Retired" },
-      "0" => { "value" => "Other" },
-      "10" => { "value" => "Buyer prefers not to say" },
-      "7" => { "value" => "Full-time student" },
-    })
-  end
-
   context "with start year before 2025" do
     let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2025_or_later?: false) }
 
@@ -52,6 +37,21 @@ RSpec.describe Form::Sales::Questions::Buyer1WorkingSituation, type: :model do
 
     it "uses the new ordering for answer options" do
       expect(question.answer_options.keys).to eq(%w[1 2 3 4 5 6 7 8 0 10])
+    end
+
+    it "has the correct answer_options" do
+      expect(question.answer_options).to eq({
+        "1" => { "value" => "Full-time – 30 hours or more per week" },
+        "2" => { "value" => "Part-time – Less than 30 hours per week" },
+        "3" => { "value" => "In government training into work" },
+        "4" => { "value" => "Jobseeker" },
+        "6" => { "value" => "Not seeking work" },
+        "8" => { "value" => "Unable to work because of long-term sickness or disability" },
+        "5" => { "value" => "Retired" },
+        "0" => { "value" => "Other" },
+        "10" => { "value" => "Buyer prefers not to say" },
+        "7" => { "value" => "Full-time student" },
+      })
     end
   end
 

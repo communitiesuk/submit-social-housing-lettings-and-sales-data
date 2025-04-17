@@ -32,7 +32,7 @@ en:
           staircasing:
             page_header: ""
             check_answer_label: "Staircasing transaction"
-            check_answer_prompt: "Tell us if it's a staircasing transaction"
+            check_answer_prompt: "Tell us if it’s a staircasing transaction"
             hint_text: "A staircasing transaction is when the household purchases more shares in their property, increasing the proportion they own and decreasing the proportion the housing association owns. Once the household purchases 100% of the shares, they own the property."
             question_text: "Is this a staircasing transaction?"
           about_staircasing:
@@ -179,11 +179,24 @@ en:
             question_text: "Does this include any extra borrowing?"
 
           deposit:
-            page_header: "About the deposit"
-            check_answer_label: "Deposit amount"
-            check_answer_prompt: ""
-            hint_text: "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan. As this is a fully staircased sale this question is optional. If you do not have the information available click save and continue"
-            question_text: "How much cash deposit was paid on the property?"
+            discounted_ownership:
+              page_header: "About the deposit"
+              check_answer_label: "Deposit amount"
+              check_answer_prompt: ""
+              hint_text: "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan."
+              question_text: "How much cash deposit was paid on the property?"
+            shared_ownership:
+              page_header: "About the deposit"
+              check_answer_label: "Deposit amount"
+              check_answer_prompt: ""
+              hint_text: "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage."
+              question_text: "How much cash deposit was paid on the property?"
+            outright_sale:
+              page_header: "About the deposit"
+              check_answer_label: "Deposit amount"
+              check_answer_prompt: ""
+              hint_text: "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage."
+              question_text: "How much cash deposit was paid on the property?"
 
           cashdis:
             page_header: "About the deposit"

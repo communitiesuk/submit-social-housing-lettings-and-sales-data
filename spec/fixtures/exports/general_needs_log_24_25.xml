@@ -99,7 +99,7 @@
     <totchild>0</totchild>
     <totelder>0</totelder>
     <totadult>2</totadult>
-    <nocharge>0</nocharge>
+    <nocharge/>
     <referral>2</referral>
     <brent>200.0</brent>
     <scharge>50.0</scharge>

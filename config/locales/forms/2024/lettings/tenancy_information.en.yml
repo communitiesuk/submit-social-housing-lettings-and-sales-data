@@ -6,14 +6,14 @@ en:
           joint:
             page_header: ""
             check_answer_label: "Joint tenancy"
-            check_answer_prompt: "Tell us if it's a joint tenancy"
+            check_answer_prompt: "Tell us if it’s a joint tenancy"
             hint_text: "This is where two or more people are named on the tenancy agreement"
             question_text: "Is this a joint tenancy?"
 
           startertenancy:
             page_header: ""
             check_answer_label: "Starter or introductory tenancy"
-            check_answer_prompt: "Tell us if it's a starter or introductory tenancy"
+            check_answer_prompt: "Tell us if it’s a starter or introductory tenancy"
             hint_text: "If the tenancy has an ‘introductory period’ answer ‘yes’.<br><br>You should submit a CORE log at the beginning of the starter tenancy or introductory period, with the best information you have at the time. You do not need to submit a log when a tenant later rolls onto the main tenancy."
             question_text: "Is this a starter tenancy?"
 

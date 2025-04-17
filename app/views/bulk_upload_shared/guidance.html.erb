@@ -32,7 +32,7 @@
 
         <%= govuk_list ["the CORE form questions and their field numbers", "each field’s valid responses", "if/when certain fields can be left blank", "which fields are used to check for duplicate logs"], type: :bullet %>
 
-        <p class="govuk-body">You can paste your data below the headers or copy the headers and insert them above the data in your file. The bulk upload fields start at column B. Leave column A blank.</p>
+        <p class="govuk-body">You can paste your data below the headers or copy the headers and insert them above the data in your file - your data should start in column B.</p>
         <p class="govuk-body">Make sure that each column of data aligns with the corresponding question in the headers. We recommend ordering your data to match the headers, but you can also reorder the headers to match your data. When processing the file, we check what each column of data represents based on the headers above.</p>
         <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload template (#{@form.year} to #{@form.year + 1})", @form.lettings_template_path %></p>
         <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload template (#{@form.year} to #{@form.year + 1})", @form.sales_template_path %></p>

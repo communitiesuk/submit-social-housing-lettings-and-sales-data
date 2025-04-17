@@ -41,6 +41,6 @@ Detail-level data is anonymised and protected, minimising identification risk. I
 
 ## Complaints
 
-If you’re unhappy with any privacy notice aspect, or how we process your information, contact the Department Data Protection Officer: <dataprotection@communities.gsi.gov.uk>
+If you’re unhappy with any privacy notice aspect, or how we process your information, contact the Department Data Protection Officer: <dataprotection@communities.gov.uk>
 
 You also have the right to complain to the Information Commissioner’s Office (ICO): [https://ico.org.uk/make-a-complaint/](https://ico.org.uk/make-a-complaint/)

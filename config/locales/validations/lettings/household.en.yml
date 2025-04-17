@@ -67,7 +67,7 @@ en:
           same_la_just_moved_to_area: "You told us the tenant had just moved into the local authority, but this location is in the same local authority. Check your answers are correct"
 
         age:
-          child_under_16_relat: "Answer cannot be under 16 as person %{person_num}'s relationship to the lead tenant is ‘partner’."
+          child_under_16_relat: "Answer cannot be under 16 as person %{person_num}’s relationship to the lead tenant is ‘partner’."
           child_under_16_ecstat: "Answer cannot be under 16 as person %{person_num}’s working situation is not ‘child under 16’, ‘other’ or ‘prefers not to say’."
           child_over_16: "Answer cannot be over 16 as person’s %{person_num} working situation is ‘child under 16‘."
           student_16_19:
@@ -87,7 +87,7 @@ en:
 
         relat:
           one_partner: "Number of partners cannot be greater than 1."
-          child_under_16: "Answer cannot be ‘partner’ as you told us person %{person_num}'s age is under 16."
+          child_under_16: "Answer cannot be ‘partner’ as you told us person %{person_num}’s age is under 16."
           student_16_19:
             cannot_be_child:
               student_not_16_19: "Answer cannot be ‘child’ if the person is a student but not aged 16-19."
@@ -107,3 +107,6 @@ en:
           la_general_needs:
             internal_transfer: "Answer cannot be internal transfer as it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting."
 
+        referral_type:
+          leaving_last_settled_home:
+            reason_permanently_decanted: "Answer must be from a PRP-only housing register or waiting list (no local authority involvement) as the tenant was permanently decanted from another property owned by this landlord."

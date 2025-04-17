@@ -37,10 +37,10 @@ en:
           outside_non_london_income_range: "Income must be between £0 and £80,000 for properties in a non-London local authority."
           combined_over_hard_max_for_london: "Combined income must be £90,000 or lower for properties within a London local authority."
           combined_over_hard_max_for_outside_london: "Combined income must be £80,000 or lower for properties outside London local authorities."
-          child_has_income: "Child's income must be £0."
+          child_has_income: "Child’s income must be £0."
 
         ecstat2:
-          child_has_income: "Child's income must be £0."
+          child_has_income: "Child’s income must be £0."
 
         mortgage:
           mortgage_zero: "Mortgage value cannot be £0 if a mortgage was used for the purchase of this property."
