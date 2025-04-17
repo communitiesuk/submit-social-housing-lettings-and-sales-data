@@ -70,6 +70,14 @@ module FiltersHelper
     }.freeze
   end
 
+  def salestype_filters
+    {
+      "1" => "Shared ownership",
+      "2" => "Discounted ownership",
+      "3" => "Outright or other sale",
+    }.freeze
+  end
+
   def location_status_filters
     {
       "incomplete" => "Incomplete",
@@ -210,6 +218,13 @@ module FiltersHelper
     [1, 2].all? { |needstype| current_user.lettings_logs.visible.where(needstype:).count.positive? }
   end
 
+  def logs_for_multiple_salestypes_present?(organisation)
+    return true if current_user.support? && organisation.blank?
+    return [1, 2, 3].count { |ownershipsch| organisation.sales_logs.visible.where(ownershipsch:).count.positive? } > 1 if current_user.support?
+
+    [1, 2, 3].count { |ownershipsch| current_user.sales_logs.visible.where(ownershipsch:).count.positive? } > 1
+  end
+
   def non_support_with_multiple_owning_orgs?
     return true if current_user.organisation.stock_owners.count > 1
     return true if current_user.organisation.stock_owners.count.positive? && current_user.organisation.holds_own_stock?
@@ -227,6 +242,10 @@ module FiltersHelper
 
   def user_or_org_lettings_path?
     request.path.include?("/lettings-logs")
+  end
+
+  def user_or_org_sales_path?
+    request.path.include?("/sales-logs")
   end
 
   def specific_organisation_path?
