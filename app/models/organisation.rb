@@ -220,7 +220,7 @@ class Organisation < ApplicationRecord
       start_date: created_at,
       end_date: changes.first&.dig(:start_date)&.yesterday,
       status: changes.empty? || Time.zone.now.to_date < changes.first[:start_date] ? "active" : "inactive",
-      )
+    )
 
     changes
   end
