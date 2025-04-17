@@ -8,6 +8,7 @@ class Organisation < ApplicationRecord
   has_many :parent_organisations, through: :parent_organisation_relationships
   has_many :child_organisation_relationships, foreign_key: :parent_organisation_id, class_name: "OrganisationRelationship"
   has_many :child_organisations, through: :child_organisation_relationships
+  has_many :organisation_name_changes, dependent: :destroy
 
   has_many :stock_owner_relationships, foreign_key: :child_organisation_id, class_name: "OrganisationRelationship"
   has_many :stock_owners, through: :stock_owner_relationships, source: :parent_organisation
@@ -69,6 +70,12 @@ class Organisation < ApplicationRecord
     else
       where(old_visible_id: id).first
     end
+  end
+
+  def name(date: nil)
+    date ||= Time.zone.now
+    name_change = organisation_name_changes.visible.find { |change| change.includes_date?(date) }
+    name_change&.name || read_attribute(:name)
   end
 
   def can_be_managed_by?(organisation:)
@@ -191,8 +198,31 @@ class Organisation < ApplicationRecord
     update!(discarded_at: Time.zone.now)
   end
 
-  def label
-    status == :deleted ? "#{name} (deleted)" : name
+  def label(date:)
+    date ||= Time.zone.now
+    status == :deleted ? "#{name(date:)} (deleted)" : name(date:)
+  end
+
+  def name_changes_with_dates
+    changes = organisation_name_changes.visible.order(:startdate).map do |change|
+      {
+        id: change.id,
+        name: change.name,
+        start_date: change.startdate,
+        end_date: change.end_date,
+        status: change.status,
+      }
+    end
+
+    changes.unshift(
+      id: nil,
+      name: self[:name],
+      start_date: created_at,
+      end_date: changes.first&.dig(:start_date)&.yesterday,
+      status: changes.empty? || Time.zone.now.to_date < changes.first[:start_date] ? "active" : "inactive",
+    )
+
+    changes
   end
 
   def has_visible_users?

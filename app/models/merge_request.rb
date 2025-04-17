@@ -25,7 +25,7 @@ class MergeRequest < ApplicationRecord
   }
 
   def absorbing_organisation_name
-    absorbing_organisation&.name || ""
+    absorbing_organisation&.name(date: merge_date) || ""
   end
 
   def dpo_user

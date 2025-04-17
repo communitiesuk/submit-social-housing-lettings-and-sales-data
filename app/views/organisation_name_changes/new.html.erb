@@ -1,0 +1,49 @@
+<% content_for :title, "Change #{@organisation.name}’s name" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(href: details_organisation_path(@organisation)) %>
+<% end %>
+
+<%= form_for(@organisation_name_change, url: change_name_organisation_path(@organisation), html: { method: :post }) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <%= content_for(:title) %>
+      </h1>
+
+      <%= f.govuk_text_field :name, autocomplete: "name", label: { text: "Enter new name", size: "m" }, value: @organisation.name %>
+    </div>
+
+    <div class="govuk-grid-column-three-quarters">
+      <%= render partial: "organisation_name_changes/name_history_list" %>
+    </div>
+
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_radio_buttons_fieldset :immediate_change,
+                                         legend: { text: "Does this change take effect starting today?", size: "m" } do %>
+        <%= f.govuk_radio_button :immediate_change, "true", label: { text: "Yes" } %>
+        <%= f.govuk_radio_button :immediate_change, "false",
+                                 label: { text: "No" },
+                                 "data-controller": "conditional-question",
+                                 "data-action": "click->conditional-question#displayConditional",
+                                 "data-info": { conditional_questions: { startdate: [false] } }.to_json do %>
+          <%= render partial: "components/date_picker", locals: {
+            resource: @organisation_name_change,
+            question_id: :startdate,
+            legend: { text: "Set start date", size: "m" },
+            resource_type: "organisation_name_change",
+            hint: "For example, 13/9/2025",
+            f:,
+          } %>
+        <% end %>
+      <% end %>
+
+      <div class="govuk-button-group">
+        <%= f.govuk_submit "Save changes" %>
+        <%= govuk_button_link_to "Cancel", details_organisation_path(@organisation), secondary: true %>
+      </div>
+    </div>
+  </div>
+<% end %>

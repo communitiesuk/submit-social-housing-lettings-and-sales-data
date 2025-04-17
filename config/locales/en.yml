@@ -229,12 +229,23 @@ en:
         already_added: "You have already added this managing agent."
       merged: "That organisation has already been merged. Select a different organisation."
       scheme_duplicates_not_resolved: "You must resolve all duplicates or indicate that there are no duplicates"
+      name_changes:
+        name:
+          blank: "New name is required and cannot be left blank."
+          must_be_different: "New name must be different from the current name on the change date."
+        startdate:
+          blank: "Start date must be provided unless this is an immediate change."
+          must_be_after_last_change: "Start date must be after the last change date (%{last_startdate})."
+          cannot_be_the_same_as_another_change: "Start date cannot be the same as another name change."
+          must_be_before_merge_date: "Start date must be earlier than the organisation's merge date (%{merge_date}). You cannot make changes to the name of an organisation after it has merged."
+        immediate_change:
+          cannot_be_the_same_as_another_change: "Start date cannot be the same as another name change."
+          must_be_before_merge_date: "Start date must be earlier than the organisation's merge date (%{merge_date}). You cannot make changes to the name of an organisation after it has merged."
     not_answered: "You must answer %{question}"
     not_number: "%{field} must be a number."
     invalid_option: "Enter a valid value for %{question}"
     invalid_number: "Enter a number for %{question}"
     no_address_found: "We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."
-
     date:
       outside_collection_window: "Enter a date within the %{year_combo} collection year, which is between 1st April %{start_year} and 31st March %{end_year}."
     postcode: "Enter a postcode in the correct format, for example AA1 1AA."
@@ -361,6 +372,7 @@ en:
         before_deactivation: "This location was deactivated on %{date}. The reactivation date must be on or after deactivation date."
       deactivation:
         during_deactivated_period: "The location is already deactivated during this date, please enter a different date."
+
     merge_request:
       organisation_part_of_another_merge: "This organisation is part of another merge - select a different one."
       organisation_part_of_another_incomplete_merge: "Another merge request records %{organisation} as merging into %{absorbing_organisation} on %{merge_date}. Select another organisation or remove this organisation from the other merge request."

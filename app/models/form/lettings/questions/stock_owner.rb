@@ -15,7 +15,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     return answer_opts unless log
 
     if log.owning_organisation_id.present?
-      org_value = log.owning_organisation.label
+      org_value = log.owning_organisation.label(date: log.startdate)
       answer_opts[log.owning_organisation.id] = org_value
     end
 
@@ -31,19 +31,19 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     if user.support?
       Organisation.visible.filter_by_active.where(holds_own_stock: true).find_each do |org|
         if org.merge_date.present?
-          answer_opts[org.id] = "#{org.name} (inactive as of #{org.merge_date.to_fs(:govuk_date)})" if org.merge_date >= FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period
+          answer_opts[org.id] = "#{org.name(date: org.merge_date)} (inactive as of #{org.merge_date.to_fs(:govuk_date)})" if org.merge_date >= FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period
         elsif org.absorbed_organisations.merged_during_open_collection_period.exists? && org.available_from.present?
-          answer_opts[org.id] = "#{org.name} (active as of #{org.available_from.to_fs(:govuk_date)})"
+          answer_opts[org.id] = "#{org.name(date: org.available_from)} (active as of #{org.available_from.to_fs(:govuk_date)})"
         else
-          answer_opts[org.id] = org.name
+          answer_opts[org.id] = org.name(date: log.startdate)
         end
       end
     else
       user.organisation.stock_owners.visible.filter_by_active.each do |stock_owner|
-        answer_opts[stock_owner.id] = stock_owner.name
+        answer_opts[stock_owner.id] = stock_owner.name(date: log.startdate)
       end
       recently_absorbed_organisations.visible.each do |absorbed_org|
-        answer_opts[absorbed_org.id] = merged_organisation_label(absorbed_org.name, absorbed_org.merge_date) if absorbed_org.holds_own_stock?
+        answer_opts[absorbed_org.id] = merged_organisation_label(absorbed_org.name(date: log.startdate), absorbed_org.merge_date) if absorbed_org.holds_own_stock?
       end
     end
 

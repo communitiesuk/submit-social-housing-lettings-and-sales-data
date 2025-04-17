@@ -57,9 +57,9 @@ module Exports
       attribute_hash["amendedbyid"] = sales_log.updated_by_id
 
       attribute_hash["owningorgid"] = sales_log.owning_organisation&.id
-      attribute_hash["owningorgname"] = sales_log.owning_organisation&.name
+      attribute_hash["owningorgname"] = sales_log.owning_organisation&.name(date: sales_log.saledate)
       attribute_hash["maningorgid"] = sales_log.managing_organisation&.id
-      attribute_hash["maningorgname"] = sales_log.managing_organisation&.name
+      attribute_hash["maningorgname"] = sales_log.managing_organisation&.name(date: sales_log.saledate)
 
       attribute_hash["creationmethod"] = sales_log.creation_method_before_type_cast
       attribute_hash["bulkuploadid"] = sales_log.bulk_upload_id

@@ -30,7 +30,7 @@ module OrganisationsHelper
       if user.support?
         row.with_action(
           visually_hidden_text: organisation.name.humanize.downcase,
-          href: edit_organisation_path(organisation),
+          href: change_name_organisation_path(organisation),
           html_attributes: { "data-qa": "change-#{organisation.name.downcase}" },
         )
       else
