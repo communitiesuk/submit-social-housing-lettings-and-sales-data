@@ -7,7 +7,7 @@ module TasklistHelper
   def breadcrumb_logs_title(log, current_user)
     log_type = log.lettings? ? "Lettings" : "Sales"
     if current_user.support? && breadcrumb_organisation(log).present?
-      "#{log_type} logs (#{breadcrumb_organisation(log).name})"
+      "#{log_type} logs (#{breadcrumb_organisation(log).name(date: log.startdate)})"
     else
       "#{log_type} logs"
     end
