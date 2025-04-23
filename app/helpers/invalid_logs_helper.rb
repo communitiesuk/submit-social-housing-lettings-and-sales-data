@@ -10,7 +10,10 @@ module InvalidLogsHelper
         next unless log.status == "completed"
 
         total_logs_seen += 1
-        invalid_ids << log.id unless log.valid?
+
+        next unless !log.valid? || log.incomplete_subsections.any? || log.incomplete_questions.any?
+
+        invalid_ids << log.id
       end
 
       Rails.logger.info "Batch #{batch_index} complete. Progress: #{invalid_ids.size} invalid logs found out of #{total_logs_seen} logs seen so far."
@@ -32,7 +35,8 @@ module InvalidLogsHelper
         next unless log.status == "completed"
 
         total_logs_seen += 1
-        next if log.valid?
+
+        next unless !log.valid? || log.incomplete_subsections.any? || log.incomplete_questions.any?
 
         invalid_ids << log.id
         error_messages = log.errors.full_messages.join(";\n")
