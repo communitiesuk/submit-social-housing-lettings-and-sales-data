@@ -261,6 +261,7 @@ module FiltersHelper
       { id: "years", label: "Collection year", value: formatted_years_filter(session_filters) },
       { id: "status", label: "Status", value: formatted_status_filter(session_filters) },
       filter_type == "lettings_logs" ? { id: "needstype", label: "Needs type", value: formatted_needstype_filter(session_filters) } : nil,
+      filter_type == "sales_logs" ? { id: "salestype", label: "Sales type", value: formatted_salestype_filter(session_filters) } : nil,
       { id: "assigned_to", label: "Assigned to", value: formatted_assigned_to_filter(session_filters) },
       { id: "owned_by", label: "Owned by", value: formatted_owned_by_filter(session_filters, filter_type) },
       { id: "managed_by", label: "Managed by", value: formatted_managed_by_filter(session_filters, filter_type) },
@@ -335,6 +336,12 @@ private
     return unanswered_filter_value if session_filters["needstypes"].blank?
 
     session_filters["needstypes"].map { |needstype| needstype_filters[needstype] }.to_sentence
+  end
+
+  def formatted_salestype_filter(session_filters)
+    return unanswered_filter_value if session_filters["salestypes"].blank?
+
+    session_filters["salestypes"].map { |salestype| salestype_filters[salestype] }.to_sentence
   end
 
   def formatted_assigned_to_filter(session_filters)
