@@ -7,6 +7,8 @@ module InvalidLogsHelper
     model.filter_by_year(year).find_in_batches(batch_size: 1000).with_index(1) do |batch, batch_index|
       Rails.logger.info "Processing batch #{batch_index} with #{batch.size} logs..."
       batch.each do |log|
+        next unless log.status == "completed"
+
         total_logs_seen += 1
         invalid_ids << log.id unless log.valid?
       end
@@ -27,6 +29,8 @@ module InvalidLogsHelper
     model.filter_by_year(year).find_in_batches(batch_size: 1000).with_index(1) do |batch, batch_index|
       Rails.logger.info "Processing batch #{batch_index} with #{batch.size} logs..."
       batch.each do |log|
+        next unless log.status == "completed"
+
         total_logs_seen += 1
         next if log.valid?
 
