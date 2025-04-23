@@ -1,19 +1,19 @@
 module InvalidLogsHelper
   def count_and_display_invalid_logs(model, log_type, year)
     invalid_logs = fetch_invalid_logs(model, year)
-    Rails.logger.debug "Number of invalid #{log_type} for year #{year}: #{invalid_logs.size}"
-    Rails.logger.debug "Invalid #{log_type} IDs: #{invalid_logs.map(&:id).join(', ')}"
+    Rails.logger.info "Number of invalid #{log_type} for year #{year}: #{invalid_logs.size}"
+    Rails.logger.info "Invalid #{log_type} IDs: #{invalid_logs.map(&:id).join(', ')}"
   end
 
   def surface_invalid_logs(model, log_type, year)
     invalid_logs = fetch_invalid_logs(model, year)
     if invalid_logs.any?
       invalid_logs.each do |log|
-        Rails.logger.debug "#{log_type} ID: #{log.id}"
-        log.errors.full_messages.each { |message| Rails.logger.debug "  - #{message}" }
+        Rails.logger.info "#{log_type} ID: #{log.id}"
+        log.errors.full_messages.each { |message| Rails.logger.info "  - #{message}" }
       end
     else
-      Rails.logger.debug "No invalid #{log_type} found for year #{year}."
+      Rails.logger.info "No invalid #{log_type} found for year #{year}."
     end
   end
 
