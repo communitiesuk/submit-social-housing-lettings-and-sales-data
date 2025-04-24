@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_16_111741) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_24_132427) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -374,7 +374,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_111741) do
     t.integer "multiple_partners_value_check"
     t.bigint "created_by_id"
     t.integer "referral_type"
-    t.boolean "manual_address_entry_selected", default: false
+    t.string "country"
     t.index ["assigned_to_id"], name: "index_lettings_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
