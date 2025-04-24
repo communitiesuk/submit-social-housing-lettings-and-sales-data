@@ -6,13 +6,9 @@ module InvalidLogsHelper
 
     model.filter_by_year(year).where(status: "completed").find_in_batches(batch_size: 1000).with_index(1) do |batch, batch_index|
       Rails.logger.info "Processing batch #{batch_index} with #{batch.size} logs..."
-      batch.each do |log|
-        total_logs_checked += 1
-
-        next unless log_invalid?(log)
-
-        invalid_ids << log.id
-      end
+      invalid_logs = batch.select { |log| log_invalid?(log) }
+      invalid_ids.concat(invalid_logs.map(&:id))
+      total_logs_checked += batch.size
 
       Rails.logger.info "Batch #{batch_index} complete. Progress: #{invalid_ids.size} invalid logs found out of #{total_logs_checked} completed logs checked so far."
     end
@@ -26,18 +22,14 @@ module InvalidLogsHelper
     Rails.logger.info "Surfacing invalid #{log_type} for year #{year}..."
     invalid_ids = []
     total_logs_checked = 0
-    log_messages = []
-
-    log_messages << headers(log_type).join(", ")
+    log_messages = [headers(log_type).join(", ")]
 
     model.filter_by_year(year).where(status: "completed").find_in_batches(batch_size: 1000).with_index(1) do |batch, batch_index|
       Rails.logger.info "Processing batch #{batch_index} with #{batch.size} logs..."
-      batch.each do |log|
-        total_logs_checked += 1
 
-        next unless log_invalid?(log)
-
-        invalid_ids << log.id
+      invalid_logs = batch.select { |log| log_invalid?(log) }
+      invalid_ids.concat(invalid_logs.map(&:id))
+      invalid_logs.each do |log|
         log_row_data = log_row(log, log_type).join(", ")
         log_messages << log_row_data
         Rails.logger.info log_row_data
