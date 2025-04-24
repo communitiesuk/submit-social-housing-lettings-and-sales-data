@@ -43,7 +43,7 @@ module InvalidLogsHelper
     Rails.logger.info "--------------------------------"
   end
 
-  private
+private
 
   def log_invalid?(log)
     !log.valid? || log.incomplete_subsections.any? || log.incomplete_questions.any?
