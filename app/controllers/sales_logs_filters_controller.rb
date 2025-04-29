@@ -3,7 +3,7 @@ class SalesLogsFiltersController < ApplicationController
   before_action -> { sales_filter_manager.serialize_filters_to_session }, if: :current_user
   before_action :authenticate_user!
 
-  %w[years status assigned_to owned_by managed_by].each do |filter|
+  %w[years status salestype assigned_to owned_by managed_by].each do |filter|
     define_method(filter) do
       @filter_type = "sales_logs"
       @filter = filter
@@ -18,7 +18,7 @@ class SalesLogsFiltersController < ApplicationController
     end
   end
 
-  %w[status assigned_to owned_by managed_by].each do |filter|
+  %w[status salestype assigned_to owned_by managed_by].each do |filter|
     define_method("update_#{filter}") do
       @filter_type = "sales_logs"
 

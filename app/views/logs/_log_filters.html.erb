@@ -55,6 +55,17 @@
                          size: "s",
                        } %>
           <% end %>
+
+          <% if logs_for_multiple_salestypes_present?(@organisation) && user_or_org_sales_path? %>
+            <%= render partial: "filters/checkbox_filter",
+                       locals: {
+                         f:,
+                         options: salestype_filters,
+                         label: "Sales type",
+                         category: "salestypes",
+                         size: "s",
+                       } %>
+          <% end %>
         <% end %>
 
         <%= render partial: "filters/radio_filter",

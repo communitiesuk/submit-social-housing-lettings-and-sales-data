@@ -45,6 +45,13 @@ class SalesLog < Log
     query.all
   }
   scope :filter_by_purchaser_code, ->(purchid) { where("purchid ILIKE ?", "%#{purchid}%") }
+  scope :filter_by_salestype, ->(salestype) { where(ownershipsch: salestype) }
+  scope :filter_by_salestypes, lambda { |salestypes, _user = nil|
+    first_salestype = salestypes.shift
+    query = filter_by_salestype(first_salestype)
+    salestypes.each { |salestype| query = query.or(filter_by_salestype(salestype)) }
+    query.all
+  }
   scope :search_by, lambda { |param|
     sanitized_param = ActiveRecord::Base.sanitize_sql(param)
     param_without_spaces = sanitized_param.delete(" ")
