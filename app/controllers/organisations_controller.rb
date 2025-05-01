@@ -128,9 +128,6 @@ class OrganisationsController < ApplicationController
 
   def update
     if (current_user.data_coordinator? && org_params[:active].nil?) || current_user.support?
-      if org_params[:group_member] && org_params[:group_member_id]
-        @organisation.group = assign_group_number(@organisation.id, org_params[:group_member_id])
-      end
       if @organisation.update(org_params)
         case org_params[:active]
         when "false"
@@ -146,6 +143,9 @@ class OrganisationsController < ApplicationController
           end
           flash[:notice] = I18n.t("organisation.reactivated", organisation: @organisation.name)
         else
+          if org_params[:group_member] && org_params[:group_member_id]
+            @organisation.group = assign_group_number(@organisation.id, org_params[:group_member_id])
+          end
           flash[:notice] = I18n.t("organisation.updated")
         end
         if rent_period_params[:rent_periods].present?
