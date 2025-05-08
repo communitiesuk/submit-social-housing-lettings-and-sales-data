@@ -106,10 +106,18 @@ private
   end
 
   def merged_owning_organisation_inactive?(record)
+    # if the user has not explicitly picked an organisation ignore this validation
+    # this is because the saledate question appears before a user can select their organisation in the 2025 form
+    return false unless record.has_selected_organisation
+
     record.owning_organisation&.merge_date.present? && record.owning_organisation.merge_date <= record.saledate
   end
 
   def absorbing_owning_organisation_inactive?(record)
+    # if the user has not explicitly picked an organisation ignore this validation
+    # this is because the saledate question appears before a user can select their organisation in the 2025 form
+    return false unless record.has_selected_organisation
+
     record.owning_organisation&.absorbed_organisations.present? && record.owning_organisation.available_from.present? && record.owning_organisation.available_from.to_date > record.saledate.to_date
   end
 end

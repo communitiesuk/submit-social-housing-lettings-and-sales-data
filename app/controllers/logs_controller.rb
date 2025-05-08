@@ -68,6 +68,7 @@ private
       "owning_organisation_id" => owning_organisation_id,
       "assigned_to_id" => current_user.id,
       "managing_organisation_id" => current_user.organisation.id,
+      "has_selected_organisation" => false,
     }
   end
 
