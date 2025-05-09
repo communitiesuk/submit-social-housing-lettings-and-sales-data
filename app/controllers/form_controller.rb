@@ -167,6 +167,7 @@ private
         owning_organisation = result["owning_organisation_id"].present? ? Organisation.find(result["owning_organisation_id"]) : nil
 
         result["managing_organisation_id"] = owning_organisation.id if set_managing_organisation_to_owning_organisation?(owning_organisation)
+        result["has_selected_organisation"] = true
       end
 
       result
