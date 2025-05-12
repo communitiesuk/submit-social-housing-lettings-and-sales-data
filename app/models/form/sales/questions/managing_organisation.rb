@@ -4,7 +4,7 @@ class Form::Sales::Questions::ManagingOrganisation < ::Form::Question
     @id = "managing_organisation_id"
     @derived = true
     @type = "select"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = 2
   end
 
   def answer_options(log = nil, user = nil)
@@ -71,6 +71,4 @@ private
   def selected_answer_option_is_derived?(_log)
     true
   end
-
-  QUESTION_NUMBER_FROM_YEAR = { 2024 => 2, 2025 => 3 }.freeze
 end
