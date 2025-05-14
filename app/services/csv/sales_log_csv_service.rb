@@ -262,6 +262,7 @@ module Csv
       attributes = insert_checkbox_options(ordered_questions)
       final_attributes = insert_derived_and_related_attributes(non_question_fields + attributes)
       order_address_fields_for_support(final_attributes)
+      order_organisation_fields_before_sales_date_field(final_attributes)
       @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES
     end
 
@@ -318,6 +319,14 @@ module Csv
           attributes.reject! { |q| all_address_fields.include?(q) }
           attributes.insert(first_address_field_index, *ORDERED_ADDRESS_FIELDS)
         end
+      end
+    end
+
+    def order_organisation_fields_before_sales_date_field(attributes)
+      sales_date_index = attributes.find_index { |q| q == "saledate" }
+      if sales_date_index
+        attributes.reject! { |q| q == "owning_organisation_name" || q == "managing_organisation_name" }
+        attributes.insert(sales_date_index, "owning_organisation_name", "managing_organisation_name")
       end
     end
 
