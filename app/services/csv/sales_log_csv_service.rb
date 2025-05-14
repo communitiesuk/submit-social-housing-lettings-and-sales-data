@@ -255,14 +255,17 @@ module Csv
       end
     end
 
+    # "id", "status", "duplicate_set_id", "owning_organisation_name", "owning_organisation_id", "managing_organisation_name", "managing_organisation_id", "created_at", "created_by", "created_by_id", "assigned_to", "assigned_to_id", "updated_at", "updated_by", "updated_by_id", "creation_method", "bulk_upload_id", "collection_start_year", "day", "month", "year", "purchid", "ownershipsch", "type", "staircase", "jointpur", "jointmore", "noint", "privacynotice", "uprn", "uprn_confirmed", "address_line1_input", "postcode_full_input", "uprn_selection", "address_line1", "address_line2", "town_or_city", "county", "pcode1", "pcode2", "la", "la_label", "proptype", "beds", "builtype", "wchair", "age1", "sex1", "ethnic_group", "ethnic", "nationality_all", "ecstat1", "buy1livein", "relat2", "age2", "sex2", "ethnic_group2", "ethnicbuy2", "nationality_all_buyer2", "ecstat2", "buy2livein", "hholdcount", "relat3", "age3", "sex3", "ecstat3", "relat4", "age4", "sex4", "ecstat4", "relat5", "age5", "sex5", "ecstat5", "relat6", "age6", "sex6", "ecstat6", "hhtype", "prevten", "ppcodenk", "ppostc1", "ppostc2", "previous_la_known", "prevloc", "prevloc_label", "buy2living", "prevtenbuy2", "hhregres", "hhregresstill", "armedforcesspouse", "disabled", "wheel", "income1nk", "income1", "inc1mort", "income2nk", "income2", "inc2mort", "hb", "savingsnk", "savings", "prevown", "prevshared", "resale", "proplen", "hoday", "homonth", "hoyear", "frombeds", "fromprop", "socprevten", "value", "value_value_check", "equity", "mortgageused", "mortgage", "mortlen", "deposit", "cashdis", "mrent", "has_servicecharges", "servicecharges", "has_management_fee", "management_fee", "stairbought", "stairowned", "staircasesale", "firststair", "numstair", "stairlastday", "stairlastmonth", "stairlastyear", "stairinitialday", "stairinitialmonth", "stairinitialyear", "mrentprestaircasing", "grant", "discount", "extrabor", "has_mscharge", "mscharge", "mscharge_value_check"
+    # "id", "status", "duplicate_set_id", "owning_organisation_name", "owning_organisation_id", "managing_organisation_name", "managing_organisation_id", "created_at", "created_by", "created_by_id", "assigned_to", "assigned_to_id", "updated_at", "updated_by", "updated_by_id", "creation_method", "bulk_upload_id", "collection_start_year", "day", "month", "year", "purchid", "ownershipsch", "type", "staircase", "jointpur", "jointmore", "noint", "privacynotice", "uprn", "uprn_confirmed", "address_line1_input", "postcode_full_input", "uprn_selection", "address_line1", "address_line2", "town_or_city", "county", "pcode1", "pcode2", "la", "la_label", "proptype", "beds", "builtype", "wchair", "age1", "sex1", "ethnic_group", "ethnic", "nationality_all", "ecstat1", "buy1livein", "relat2", "age2", "sex2", "ethnic_group2", "ethnicbuy2", "nationality_all_buyer2", "ecstat2", "buy2livein", "hholdcount", "relat3", "age3", "sex3", "ecstat3", "relat4", "age4", "sex4", "ecstat4", "relat5", "age5", "sex5", "ecstat5", "relat6", "age6", "sex6", "ecstat6", "hhtype", "prevten", "ppcodenk", "ppostc1", "ppostc2", "previous_la_known", "prevloc", "prevloc_label", "buy2living", "prevtenbuy2", "hhregres", "hhregresstill", "armedforcesspouse", "disabled", "wheel", "income1nk", "income1", "inc1mort", "income2nk", "income2", "inc2mort", "hb", "savingsnk", "savings", "prevown", "prevshared", "resale", "proplen", "hoday", "homonth", "hoyear", "frombeds", "fromprop", "socprevten", "value", "value_value_check", "equity", "mortgageused", "mortgage", "mortlen", "deposit", "cashdis", "mrent", "has_servicecharges", "servicecharges", "has_management_fee", "management_fee", "stairbought", "stairowned", "staircasesale", "firststair", "numstair", "stairlastday", "stairlastmonth", "stairlastyear", "stairinitialday", "stairinitialmonth", "stairinitialyear", "mrentprestaircasing", "grant", "discount", "extrabor", "has_mscharge", "mscharge", "mscharge_value_check"
+
     def sales_log_attributes
       ordered_questions = FormHandler.instance.ordered_questions_for_year(@year, "sales")
       ordered_questions.reject! { |q| q.id.match?(/((?<!la)_known)|(_check)|(_asked)|nationality_all_group|nationality_all_buyer2_group/) }
       ordered_questions.reject! { |q| q.id.match?(/organisation_id|created_by|assigned_to|soctenant|has_management_fee|management_fee|grant|discount|has_mscharge|mscharge|extrabor/) } if @year >= 2025
+      order_saledate_question_before_owning_organisation_question(ordered_questions)
       attributes = insert_checkbox_options(ordered_questions)
       final_attributes = insert_derived_and_related_attributes(non_question_fields + attributes)
       order_address_fields_for_support(final_attributes)
-      order_organisation_fields_before_sales_date_field(final_attributes)
       @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES
     end
 
@@ -322,11 +325,12 @@ module Csv
       end
     end
 
-    def order_organisation_fields_before_sales_date_field(attributes)
-      sales_date_index = attributes.find_index { |q| q == "saledate" }
-      if sales_date_index
-        attributes.reject! { |q| q == "owning_organisation_name" || q == "managing_organisation_name" }
-        attributes.insert(sales_date_index, "owning_organisation_name", "managing_organisation_name")
+    def order_saledate_question_before_owning_organisation_question(ordered_questions)
+      saledate_question_index = ordered_questions.find_index { |q| q.id == "saledate" }
+      owning_organisation_index = ordered_questions.find_index { |q| q.id == "owning_organisation_id" }
+      if saledate_question_index && owning_organisation_index
+        saledate_question = ordered_questions.delete_at(saledate_question_index)
+        ordered_questions.insert(owning_organisation_index, saledate_question)
       end
     end
 
