@@ -322,6 +322,12 @@ module Csv
       end
     end
 
+    # as part of CLDC-3719 it was decided to move the saledate question to be first in the form
+    # this caused issues reported in CLDC-4025 where the user only enter saledates for their active organisation
+    # we decided to move the organisation question back to being first
+    # however, we did not want to reorder the CSV export as this would disrupt existing users' data pipelines
+    # so, this function reorders questions back when exporting CSVs
+    # next year, we can remove this function as we will be reordering the csv fields anyway
     def order_saledate_question_before_owning_organisation_question(ordered_questions)
       saledate_question_index = ordered_questions.find_index { |q| q.id == "saledate" }
       owning_organisation_index = ordered_questions.find_index { |q| q.id == "owning_organisation_id" }
