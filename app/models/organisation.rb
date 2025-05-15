@@ -63,7 +63,6 @@ class Organisation < ApplicationRecord
   enum :profit_status, PROFIT_STATUS
 
   attribute :group_member, :boolean
-  attr_accessor :skip_group_member_validation
 
   before_save :clear_group_member_fields_if_not_group_member
 
@@ -72,7 +71,7 @@ class Organisation < ApplicationRecord
   validates :name, presence: { message: I18n.t("validations.organisation.name_missing") }
   validates :name, uniqueness: { case_sensitive: false, message: I18n.t("validations.organisation.name_not_unique") }
   validates :provider_type, presence: { message: I18n.t("validations.organisation.provider_type_missing") }
-  validates :group_member_id, presence: { message: I18n.t("validations.organisation.group_missing") }, if: -> { group_member? && !skip_group_member_validation }
+  validates :group_member_id, presence: { message: I18n.t("validations.organisation.group_missing") }, if: -> { group_member? }
   validate :validate_profit_status
 
   def self.find_by_id_on_multiple_fields(id)

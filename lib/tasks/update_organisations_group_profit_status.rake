@@ -12,12 +12,20 @@ namespace :data_update do
     CSV.foreach(csv_path, headers: true) do |row|
       organisation = Organisation.find_by(id: row["id"].to_i)
       if organisation
-        organisation.skip_group_member_validation = true
         organisation.update!(
-          profit_status: row["profit_status"].to_i,
-          group_member: true,
-          group: row["group"].to_i,
+          profit_status: map_profit_status(row["profit_status"]),
         )
+        # not all orgs have a group
+        if row["group"].present?
+          organisation.update!(
+            group_member: true,
+            group: row["group"].to_i,
+            # normally set to the ID of the other organisation you picked on the group form
+            # we can't set that here so we default to its own org ID
+            group_member_id: organisation.id,
+          )
+        end
+
         Rails.logger.info "Updated ORG#{row['id']}"
       else
         Rails.logger.warn "Organisation with ID #{row['id']} not found"
@@ -26,4 +34,12 @@ namespace :data_update do
 
     Rails.logger.info "Organisation update task completed"
   end
+end
+
+def map_profit_status(profit_status)
+  return :non_profit if profit_status == "Non-profit"
+  return :profit if profit_status == "Profit"
+  return :local_authority if profit_status == "Local authority"
+
+  nil
 end
