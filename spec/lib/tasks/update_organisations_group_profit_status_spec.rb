@@ -11,14 +11,37 @@ RSpec.describe "data_update:update_organisations", type: :task do
   end
 
   context "when the CSV file is valid" do
-    let!(:organisation) { create(:organisation, id: 234) }
+    let!(:organisation_la) { create(:organisation, id: 234, provider_type: "LA") }
+    let!(:organisation_prp_non_profit) { create(:organisation, id: 750, provider_type: "PRP") }
+    let!(:organisation_prp_profit) { create(:organisation, id: 642, provider_type: "PRP") }
     let(:csv_path) { Rails.root.join("spec/fixtures/files/organisations_group_profit_status_valid.csv") }
 
-    it "updates the organisation fields" do
+    it "updates an organisation profit status field" do
       expect {
         task.invoke(csv_path.to_s)
-      }.to change { organisation.reload.profit_status }.to("local_authority")
-                                                       .and change { organisation.reload.group }.to(2)
+      }
+        .to change { organisation_la.reload.profit_status }.to("local_authority")
+        .and change { organisation_prp_non_profit.reload.profit_status }.to("non_profit")
+        .and change { organisation_prp_profit.reload.profit_status }.to("profit")
+    end
+
+    it "updates an organisation group fields" do
+      task.invoke(csv_path.to_s)
+      organisation_la.reload
+      organisation_prp_non_profit.reload
+      organisation_prp_profit.reload
+
+      expect(organisation_la.group).to eq(2)
+      expect(organisation_la.group_member).to be_truthy
+      expect(organisation_la.group_member_id).to eq(organisation_la.id)
+
+      expect(organisation_prp_non_profit.group).to eq(2)
+      expect(organisation_prp_non_profit.group_member).to be_truthy
+      expect(organisation_prp_non_profit.group_member_id).to eq(organisation_prp_non_profit.id)
+
+      expect(organisation_prp_profit.group).to be_nil
+      expect(organisation_prp_profit.group_member).to be_falsy
+      expect(organisation_prp_profit.group_member_id).to be_nil
     end
   end
 

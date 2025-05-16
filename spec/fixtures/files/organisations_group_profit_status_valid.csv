@@ -1,2 +1,4 @@
-id,profit_status,group
-234,3,2
+id,provider_type,profit_status,group
+234,LA,Local authority,2
+750,PRP,Non-profit,2
+642,PRP,Profit,
