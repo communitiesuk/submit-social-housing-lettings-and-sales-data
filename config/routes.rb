@@ -156,6 +156,10 @@ Rails.application.routes.draw do
       get "details", to: "organisations#details"
       get "data-sharing-agreement", to: "organisations#data_sharing_agreement"
       post "data-sharing-agreement", to: "organisations#confirm_data_sharing_agreement"
+      get "change-name", to: "organisation_name_changes#change_name", as: "change_name"
+      post "change-name", to: "organisation_name_changes#create"
+      get "cancel-name-change/:change_id", to: "organisation_name_changes#cancel_confirmation", as: "cancel_name_change_confirmation"
+      delete "cancel-name-change/:change_id", to: "organisation_name_changes#cancel", as: "cancel_name_change"
 
       get "users", to: "organisations#users"
       get "lettings-logs", to: "organisations#lettings_logs"
@@ -197,7 +201,7 @@ Rails.application.routes.draw do
         get "lettings-logs/filters/#{filter}", to: "lettings_logs_filters#organisation_#{filter.underscore}"
         get "lettings-logs/filters/update-#{filter}", to: "lettings_logs_filters#update_organisation_#{filter.underscore}"
       end
-      %w[years status assigned-to owned-by managed-by].each do |filter|
+      %w[years status salestype assigned-to owned-by managed-by].each do |filter|
         get "sales-logs/filters/#{filter}", to: "sales_logs_filters#organisation_#{filter.underscore}"
         get "sales-logs/filters/update-#{filter}", to: "sales_logs_filters#update_organisation_#{filter.underscore}"
       end
@@ -327,7 +331,7 @@ Rails.application.routes.draw do
       post "delete-logs-confirmation", to: "delete_logs#delete_sales_logs_confirmation"
       delete "delete-logs", to: "delete_logs#discard_sales_logs"
 
-      %w[years status assigned-to owned-by managed-by].each do |filter|
+      %w[years status salestype assigned-to owned-by managed-by].each do |filter|
         get "filters/#{filter}", to: "sales_logs_filters##{filter.underscore}"
         get "filters/update-#{filter}", to: "sales_logs_filters#update_#{filter.underscore}"
       end

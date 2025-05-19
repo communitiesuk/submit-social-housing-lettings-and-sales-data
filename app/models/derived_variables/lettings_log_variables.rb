@@ -67,7 +67,7 @@ module DerivedVariables::LettingsLogVariables
                        end
     self.has_benefits = get_has_benefits
     self.tshortfall_known = 0 if tshortfall
-    self.nocharge = household_charge&.zero? ? 1 : 0
+    self.nocharge = household_charge # Nocharge: 0 = No, 1 = Yes, Household charge: 0 = Yes, 1 = No
     if form.start_year_2024_or_later? && is_bedsit?
       self.beds = 1
     end
@@ -181,6 +181,7 @@ private
       },
       derived_values: {
         referral: 1,
+        referral_type: 3,
         waityear: 2,
         offered: 0,
         rsnvac: 14,

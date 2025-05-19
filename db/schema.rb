@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_05_092900) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_16_111741) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -495,6 +495,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_05_092900) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "show_additional_page"
+  end
+
+  create_table "organisation_name_changes", force: :cascade do |t|
+    t.bigint "organisation_id", null: false
+    t.string "name", null: false
+    t.date "startdate", null: false
+    t.date "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organisation_id", "startdate"], name: "index_org_name_changes_on_org_id_and_startdate", unique: true
+    t.index ["organisation_id"], name: "index_organisation_name_changes_on_organisation_id"
   end
 
   create_table "organisation_relationships", force: :cascade do |t|

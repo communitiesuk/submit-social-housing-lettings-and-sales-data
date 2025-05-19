@@ -70,6 +70,14 @@ module FiltersHelper
     }.freeze
   end
 
+  def salestype_filters
+    {
+      "1" => "Shared ownership",
+      "2" => "Discounted ownership",
+      "3" => "Outright or other sale",
+    }.freeze
+  end
+
   def location_status_filters
     {
       "incomplete" => "Incomplete",
@@ -167,7 +175,7 @@ module FiltersHelper
 
   def reset_filters_link(filter_type, filter_path_params = {})
     if applied_filters_count(filter_type).positive?
-      govuk_link_to "Clear", clear_filters_path(filter_type:, filter_path_params:)
+      govuk_link_to "Clear", clear_filters_path(filter_type:, filter_path_params:), aria: { label: "Clear filters" }
     end
   end
 
@@ -210,6 +218,13 @@ module FiltersHelper
     [1, 2].all? { |needstype| current_user.lettings_logs.visible.where(needstype:).count.positive? }
   end
 
+  def logs_for_multiple_salestypes_present?(organisation)
+    return true if current_user.support? && organisation.blank?
+    return [1, 2, 3].count { |ownershipsch| organisation.sales_logs.visible.where(ownershipsch:).count.positive? } > 1 if current_user.support?
+
+    [1, 2, 3].count { |ownershipsch| current_user.sales_logs.visible.where(ownershipsch:).count.positive? } > 1
+  end
+
   def non_support_with_multiple_owning_orgs?
     return true if current_user.organisation.stock_owners.count > 1
     return true if current_user.organisation.stock_owners.count.positive? && current_user.organisation.holds_own_stock?
@@ -229,6 +244,10 @@ module FiltersHelper
     request.path.include?("/lettings-logs")
   end
 
+  def user_or_org_sales_path?
+    request.path.include?("/sales-logs")
+  end
+
   def specific_organisation_path?
     request.path.include?("/organisations")
   end
@@ -242,6 +261,7 @@ module FiltersHelper
       { id: "years", label: "Collection year", value: formatted_years_filter(session_filters) },
       { id: "status", label: "Status", value: formatted_status_filter(session_filters) },
       filter_type == "lettings_logs" ? { id: "needstype", label: "Needs type", value: formatted_needstype_filter(session_filters) } : nil,
+      filter_type == "sales_logs" ? { id: "salestype", label: "Sales type", value: formatted_salestype_filter(session_filters) } : nil,
       { id: "assigned_to", label: "Assigned to", value: formatted_assigned_to_filter(session_filters) },
       { id: "owned_by", label: "Owned by", value: formatted_owned_by_filter(session_filters, filter_type) },
       { id: "managed_by", label: "Managed by", value: formatted_managed_by_filter(session_filters, filter_type) },
@@ -316,6 +336,12 @@ private
     return unanswered_filter_value if session_filters["needstypes"].blank?
 
     session_filters["needstypes"].map { |needstype| needstype_filters[needstype] }.to_sentence
+  end
+
+  def formatted_salestype_filter(session_filters)
+    return unanswered_filter_value if session_filters["salestypes"].blank?
+
+    session_filters["salestypes"].map { |salestype| salestype_filters[salestype] }.to_sentence
   end
 
   def formatted_assigned_to_filter(session_filters)

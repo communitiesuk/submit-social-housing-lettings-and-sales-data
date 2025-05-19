@@ -1053,6 +1053,27 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
       end
     end
 
+    describe "#field_100" do
+      context "when log is a renewal and field 100 is an invalid value" do
+        let(:attributes) { { bulk_upload:, field_7: 1, field_100: 4 } }
+
+        it "adds an error to field 100" do
+          parser.valid?
+          expect(parser.errors[:field_100]).to be_present
+          expect(parser.errors[:field_100]).to include(I18n.t("validations.lettings.2025.bulk_upload.prevten.invalid"))
+        end
+      end
+
+      context "when log is a renewal and field 100 is a valid value" do
+        let(:attributes) { { bulk_upload:, field_7: 1, field_100: 38 } }
+
+        it "does not add an error" do
+          parser.valid?
+          expect(parser.errors[:field_100]).to be_blank
+        end
+      end
+    end
+
     describe "#field_112 - 115 (lettings allocation methods)" do
       %i[field_112 field_113 field_114 field_115].each do |field|
         context "when only #{field} is not given" do
@@ -2376,7 +2397,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#irproduct_other" do
-      let(:attributes) { { bulk_upload:, field_12: "some other product" } }
+      let(:attributes) { { bulk_upload:, field_11: 6, field_12: "some other product" } }
 
       it "sets value to given free text string" do
         expect(parser.log.irproduct_other).to eql("some other product")
@@ -2408,7 +2429,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#reasonother" do
-      context "when reason is 'other'" do
+      context "when reason is 'Other'" do
         let(:attributes) { { bulk_upload:, field_98: "20", field_99: "some other reason" } }
 
         it "is set to given free text string" do
@@ -2416,7 +2437,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
         end
       end
 
-      context "when reason is not 'other'" do
+      context "when reason is not 'Other'" do
         let(:attributes) { { bulk_upload:, field_98: "50", field_99: "some other reason" } }
 
         it "is set to nil" do

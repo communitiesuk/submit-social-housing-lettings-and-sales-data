@@ -218,10 +218,10 @@ private
         record.errors.add :uprn, I18n.t("validations.lettings.financial.uprn.rent_below_hard_min")
         record.errors.add :la, I18n.t("validations.lettings.financial.la.rent_below_hard_min")
         record.errors.add :postcode_known, I18n.t("validations.lettings.financial.postcode_known.rent_below_hard_min")
-        record.errors.add :scheme_id, I18n.t("validations.lettings.financial.scheme_id.rent_below_hard_min")
-        record.errors.add :location_id, I18n.t("validations.lettings.financial.location_id.rent_below_hard_min")
-        record.errors.add :rent_type, I18n.t("validations.lettings.financial.rent_type.rent_below_hard_min")
-        record.errors.add :needstype, I18n.t("validations.lettings.financial.needstype.rent_below_hard_min")
+        record.errors.add :scheme_id, :skip_bu_error, message: I18n.t("validations.lettings.financial.scheme_id.rent_below_hard_min")
+        record.errors.add :location_id, :skip_bu_error, message: I18n.t("validations.lettings.financial.location_id.rent_below_hard_min")
+        record.errors.add :rent_type, :skip_bu_error, message: I18n.t("validations.lettings.financial.rent_type.rent_below_hard_min")
+        record.errors.add :needstype, :skip_bu_error, message: I18n.t("validations.lettings.financial.needstype.rent_below_hard_min")
         record.errors.add :period, I18n.t("validations.lettings.financial.period.rent_below_hard_min")
       end
 
@@ -231,10 +231,10 @@ private
         record.errors.add :uprn, I18n.t("validations.lettings.financial.uprn.rent_above_hard_max")
         record.errors.add :la, I18n.t("validations.lettings.financial.la.rent_above_hard_max")
         record.errors.add :postcode_known, I18n.t("validations.lettings.financial.postcode_known.rent_above_hard_max")
-        record.errors.add :scheme_id, I18n.t("validations.lettings.financial.scheme_id.rent_above_hard_max")
-        record.errors.add :location_id, I18n.t("validations.lettings.financial.location_id.rent_above_hard_max")
-        record.errors.add :rent_type, I18n.t("validations.lettings.financial.rent_type.rent_above_hard_max")
-        record.errors.add :needstype, I18n.t("validations.lettings.financial.needstype.rent_above_hard_max")
+        record.errors.add :scheme_id, :skip_bu_error, message: I18n.t("validations.lettings.financial.scheme_id.rent_above_hard_max")
+        record.errors.add :location_id, :skip_bu_error, message: I18n.t("validations.lettings.financial.location_id.rent_above_hard_max")
+        record.errors.add :rent_type, :skip_bu_error, message: I18n.t("validations.lettings.financial.rent_type.rent_above_hard_max")
+        record.errors.add :needstype, :skip_bu_error, message: I18n.t("validations.lettings.financial.needstype.rent_above_hard_max")
         record.errors.add :period, I18n.t("validations.lettings.financial.period.rent_above_hard_max")
       end
     end

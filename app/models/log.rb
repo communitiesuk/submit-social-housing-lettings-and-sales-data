@@ -317,6 +317,20 @@ class Log < ApplicationRecord
     !!public_send("age#{person_num}_known")&.zero?
   end
 
+  def incomplete_subsections
+    form.subsections.reject do |subsection|
+      subsection.complete?(self) || subsection.not_displayed_in_tasklist?(self)
+    end
+  end
+
+  def incomplete_questions
+    incomplete_subsections.flat_map do |subsection|
+      subsection.questions.select do |question|
+        question.displayed_to_user?(self) && question.unanswered?(self)
+      end
+    end
+  end
+
 private
 
   # Handle logs that are older than previous collection start date

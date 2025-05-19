@@ -11,10 +11,6 @@
         <%= content_for(:title) %>
       </h1>
 
-      <% if current_user.support? %>
-        <%= f.govuk_text_field :name, autocomplete: "name", label: { size: "m" } %>
-      <% end %>
-
       <%= f.govuk_text_field :address_line1,
         label: { text: "Address line 1", size: "m" },
         autocomplete: "address-line1" %>

@@ -6,19 +6,19 @@ en:
           first_time_property_let_as_social_housing:
             page_header: ""
             check_answer_label: "First time being let as social housing"
-            check_answer_prompt: "Tell us if it's the first time being let as social housing"
+            check_answer_prompt: "Tell us if it’s the first time being let as social housing"
             hint_text: ""
             question_text: "Is this the first time the property has been let as social housing?"
 
           address_search:
-            page_header: "What is the property's address?"
+            page_header: "What is the property’s address?"
             check_answer_label: "Address"
             check_answer_prompt: "Enter address or UPRN"
             hint_text: "For example, '1 Victoria Road' or '10010457355'"
             question_text: "Enter address or UPRN"
 
           address:
-            page_header: "What is the property's address?"
+            page_header: "What is the property’s address?"
             address_line1:
               check_answer_label: "Address lines 1 and 2"
               check_answer_prompt: "Enter address lines 1 and 2"

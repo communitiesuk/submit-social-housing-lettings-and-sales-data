@@ -4,8 +4,12 @@ RSpec.describe Form::Lettings::Questions::PersonWorkingSituation, type: :model d
   subject(:question) { described_class.new(nil, question_definition, page, person_index:) }
 
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 4)))) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2025, 4, 4)))) }
   let(:person_index) { 2 }
+
+  before do
+    allow(page.subsection.form).to receive(:start_year_2025_or_later?).and_return(true)
+  end
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -21,15 +25,15 @@ RSpec.describe Form::Lettings::Questions::PersonWorkingSituation, type: :model d
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq("0" => { "value" => "Other" },
-                                          "1" => { "value" => "Full-time – 30 hours or more" },
+                                          "1" => { "value" => "Full-time – 30 hours or more per week" },
                                           "10" => { "value" => "Person prefers not to say" },
-                                          "2" => { "value" => "Part-time – Less than 30 hours" },
+                                          "2" => { "value" => "Part-time – Less than 30 hours per week" },
                                           "3" => { "value" => "In government training into work" },
                                           "4" => { "value" => "Jobseeker" },
                                           "5" => { "value" => "Retired" },
                                           "6" => { "value" => "Not seeking work" },
                                           "7" => { "value" => "Full-time student" },
-                                          "8" => { "value" => "Unable to work because of long term sick or disability" },
+                                          "8" => { "value" => "Unable to work because of long-term sickness or disability" },
                                           "9" => {
                                             "depends_on" => [
                                               { "age2_known" => 1 },

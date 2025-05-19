@@ -28,10 +28,20 @@ module Exports
     def retrieve_resources(recent_export, full_update, _year)
       if !full_update && recent_export
         params = { from: recent_export.started_at, to: @start_time }
-        Organisation.where("(updated_at >= :from AND updated_at <= :to)", params)
+
+        Organisation
+          .where(updated_at: params[:from]..params[:to])
+          .or(
+            Organisation.where(id: OrganisationNameChange.where(created_at: params[:from]..params[:to]).select(:organisation_id)),
+          )
       else
         params = { to: @start_time }
-        Organisation.where("updated_at <= :to", params)
+
+        Organisation
+          .where("updated_at <= :to", params)
+          .or(
+            Organisation.where(id: OrganisationNameChange.where("created_at <= :to", params).select(:organisation_id)),
+          )
       end
     end
 
@@ -56,6 +66,7 @@ module Exports
 
     def apply_cds_transformation(organisation)
       attribute_hash = organisation.attributes
+      attribute_hash["name"] = organisation.name(date: Time.zone.now)
       attribute_hash["deleted_at"] = organisation.discarded_at&.iso8601
       attribute_hash["dsa_signed"] = organisation.data_protection_confirmed?
       attribute_hash["dsa_signed_at"] = organisation.data_protection_confirmation&.signed_at&.iso8601

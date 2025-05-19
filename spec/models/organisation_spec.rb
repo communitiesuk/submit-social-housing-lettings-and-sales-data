@@ -332,4 +332,36 @@ RSpec.describe Organisation, type: :model do
       end
     end
   end
+
+  describe "organisation name changes" do
+    let(:organisation) { create(:organisation, name: "Original Name") }
+
+    before do
+      create(:organisation_name_change, organisation:, name: "New Name", immediate_change: false, startdate: 1.day.ago)
+    end
+
+    context "when checking the name before the change" do
+      it "returns the original name" do
+        expect(organisation.name(date: 2.days.ago)).to eq("Original Name")
+      end
+    end
+
+    context "when checking the name day of the change" do
+      it "returns the new name" do
+        expect(organisation.name(date: Time.zone.now)).to eq("New Name")
+      end
+    end
+
+    context "when checking the name after the change" do
+      it "returns the new name" do
+        expect(organisation.name(date: 5.days.from_now)).to eq("New Name")
+      end
+    end
+
+    context "when there is no name change for the given date" do
+      it "returns the current name" do
+        expect(organisation.name(date: 10.years.ago)).to eq("Original Name")
+      end
+    end
+  end
 end
