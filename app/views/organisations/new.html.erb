@@ -48,6 +48,8 @@
         :id,
         :name,
         label: { text: "Organisation type", size: "m" },
+        "data-controller": "organisations",
+        "data-action": "change->organisations#updateProfitStatusOptions",
         options: { disabled: [""], selected: @organisation.provider_type || "" } %>
 
       <%= f.govuk_collection_radio_buttons :holds_own_stock,
@@ -55,6 +57,31 @@
         :id,
         :name,
         legend: { text: "Does the organisation hold its own stock?", size: "m" } %>
+
+      <%= f.govuk_radio_buttons_fieldset :group_member,
+                                         legend: { text: "Is this organisation part of a housing provider group structure?", size: "m" } do %>
+        <%= f.govuk_radio_button :group_member, true,
+             label: { text: "Yes" },
+             "data-controller": "conditional-question",
+             "data-action": "click->conditional-question#displayConditional",
+             "data-info": { conditional_questions: { group: [true] }, type: "organisation" }.to_json do %>
+            <%= f.govuk_collection_select :group_member_id,
+                group_organisation_options,
+                :id,
+                :name,
+                label: { text: "Search for an organisation that is part of the same group as this organisation", size: "m" },
+                options: { disabled: [""], selected: @organisation.oldest_group_member&.id || "" },
+                "data-controller": %w[accessible-autocomplete conditional-filter] %>
+        <% end %>
+        <%= f.govuk_radio_button :group_member, false, label: { text: "No" } %>
+      <% end %>
+
+      <%= f.govuk_collection_select :profit_status,
+          profit_status_options,
+          :id,
+          :name,
+          label: { text: "Is the organisation for profit?", size: "m" },
+          options: { disabled: [""], selected: @organisation.profit_status || "" } %>
 
       <%= f.govuk_check_boxes_fieldset :rent_periods,
         legend: { text: "What are the rent periods for the organisation?" } do %>
