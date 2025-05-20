@@ -28,7 +28,8 @@ class Form::Lettings::Questions::CreatedById < ::Form::Question
                    end),
                ].flatten
              else
-               current_user.organisation.users.visible
+               # ensure data coordinators can't assign a log to an inactive user
+               current_user.organisation.users.visible.active_status
              end.uniq.compact
 
     users.each_with_object(ANSWER_OPTS.dup) do |user, hsh|

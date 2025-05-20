@@ -25,7 +25,8 @@ class Form::Sales::Questions::CreatedById < ::Form::Question
                    end),
                ].flatten
              else
-               log.managing_organisation.users.visible
+               # ensure data coordinators can't assign a log to an inactive user
+               log.managing_organisation.users.visible.active_status
              end.uniq.compact
     users.each_with_object(ANSWER_OPTS.dup) do |user, hsh|
       hsh[user.id] = present_user(user)
