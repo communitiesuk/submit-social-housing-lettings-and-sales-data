@@ -74,7 +74,7 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
       end
 
       it "only displays users that belong to managing organisation" do
-        expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(owning_org_user.organisation.users))
+        expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(owning_org_user.organisation.users.active_status))
       end
 
       context "when organisation has deleted users" do
@@ -83,7 +83,17 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
         end
 
         it "does not display deleted users" do
-          expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(owning_org_user.organisation.users.visible))
+          expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(owning_org_user.organisation.users.visible.active_status))
+        end
+      end
+
+      context "when organisation has inactive users" do
+        before do
+          create(:user, name: "Inactive user", active: false, organisation: data_coordinator.organisation)
+        end
+
+        it "does not display inactive users" do
+          expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(data_coordinator.organisation.users.visible.active_status))
         end
       end
     end

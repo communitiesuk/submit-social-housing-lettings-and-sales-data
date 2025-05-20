@@ -74,7 +74,7 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
       let(:user_in_same_org) { create(:user, organisation: data_coordinator.organisation) }
 
       it "only displays users that belong user's org" do
-        expect(question.displayed_answer_options(lettings_log, data_coordinator)).to eq(expected_option_for_users(data_coordinator.organisation.users))
+        expect(question.displayed_answer_options(lettings_log, data_coordinator)).to eq(expected_option_for_users(data_coordinator.organisation.users.active_status))
       end
 
       context "when organisation has deleted users" do
@@ -83,7 +83,17 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
         end
 
         it "does not display deleted users" do
-          expect(question.displayed_answer_options(lettings_log, data_coordinator)).to eq(expected_option_for_users(data_coordinator.organisation.users.visible))
+          expect(question.displayed_answer_options(lettings_log, data_coordinator)).to eq(expected_option_for_users(data_coordinator.organisation.users.visible.active_status))
+        end
+      end
+
+      context "when organisation has inactive users" do
+        before do
+          create(:user, name: "Inactive user", active: false, organisation: data_coordinator.organisation)
+        end
+
+        it "does not display deleted users" do
+          expect(question.displayed_answer_options(lettings_log, data_coordinator)).to eq(expected_option_for_users(data_coordinator.organisation.users.visible.active_status))
         end
       end
     end
