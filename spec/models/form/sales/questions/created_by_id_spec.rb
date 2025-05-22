@@ -55,6 +55,16 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
           expect(question.displayed_answer_options(sales_log, support_user)).to eq(expected_option_for_users(owning_org_user.organisation.users.visible))
         end
       end
+
+      context "when organisation has inactive users" do
+        before do
+          create(:user, name: "Inactive user", active: false, organisation: owning_org_user.organisation)
+        end
+
+        it "does not display inactive users" do
+          expect(question.displayed_answer_options(sales_log, support_user)).to eq(expected_option_for_users(owning_org_user.organisation.users.visible.activated))
+        end
+      end
     end
   end
 
@@ -74,7 +84,7 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
       end
 
       it "only displays users that belong to managing organisation" do
-        expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(owning_org_user.organisation.users.active_status))
+        expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(owning_org_user.organisation.users))
       end
 
       context "when organisation has deleted users" do
@@ -83,7 +93,7 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
         end
 
         it "does not display deleted users" do
-          expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(owning_org_user.organisation.users.visible.active_status))
+          expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(owning_org_user.organisation.users.visible))
         end
       end
 
@@ -92,8 +102,8 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
           create(:user, name: "Inactive user", active: false, organisation: data_coordinator.organisation)
         end
 
-        it "does not display inactive users" do
-          expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(data_coordinator.organisation.users.visible.active_status))
+        it "does not display deleted users" do
+          expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(owning_org_user.organisation.users.visible.activated))
         end
       end
     end
