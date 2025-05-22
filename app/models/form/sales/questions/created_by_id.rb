@@ -19,13 +19,13 @@ class Form::Sales::Questions::CreatedById < ::Form::Question
     users = []
     users += if current_user.support?
                [
-                 (
-                   if log.managing_organisation
-                     log.managing_organisation.absorbing_organisation.present? ? log.managing_organisation&.absorbing_organisation&.users&.visible : log.managing_organisation.users.visible
-                   end),
+                 if log.managing_organisation
+                   log.managing_organisation.absorbing_organisation.present? ? log.managing_organisation&.absorbing_organisation&.users : log.managing_organisation.users
+                 end&.visible&.activated,
                ].flatten
              else
-               log.managing_organisation.users.visible
+               # ensure data coordinators can't assign a log to an inactive user
+               log.managing_organisation.users.visible.activated
              end.uniq.compact
     users.each_with_object(ANSWER_OPTS.dup) do |user, hsh|
       hsh[user.id] = present_user(user)
