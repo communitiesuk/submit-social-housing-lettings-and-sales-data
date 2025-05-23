@@ -271,7 +271,14 @@ class User < ApplicationRecord
   end
 
   def valid_for_authentication?
-    super && active?
+    super && account_is_active?
+  end
+
+  def account_is_active?
+    unless active?
+      throw(:warden, message: :inactive_account)
+    end
+    true
   end
 
   def editable_duplicate_lettings_logs_sets
