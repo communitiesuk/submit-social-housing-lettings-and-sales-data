@@ -358,6 +358,14 @@ class User < ApplicationRecord
     end
   end
 
+  def send_reset_password_instructions
+    if confirmed?
+      super
+    else
+      send_confirmation_instructions
+    end
+  end
+
 protected
 
   # Checks whether a password is needed or not. For validations only.
