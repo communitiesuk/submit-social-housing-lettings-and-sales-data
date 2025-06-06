@@ -708,7 +708,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           end
 
           it "does not change the lettings log location" do
-            create(:scheme, owning_organisation: merging_organisation)
+            scheme = create(:scheme, owning_organisation: merging_organisation)
             create(:location, scheme:, name: nil, postcode: nil)
             # necessary to have a couple valid locations else the scheme will be invalid
             create(:location, scheme:)
@@ -1595,8 +1595,6 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(new_absorbing_organisation.available_from.to_date).to eq(Time.zone.today)
         end
       end
-
-      context "and "
     end
 
     context "when merging multiple organisations into a new organisation" do
