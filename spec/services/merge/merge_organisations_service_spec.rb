@@ -715,12 +715,16 @@ RSpec.describe Merge::MergeOrganisationsService do
             create(:location, scheme:)
             incomplete_lettings_log = build(:lettings_log, scheme:, owning_organisation: merging_organisation, startdate: Time.zone.today)
             incomplete_lettings_log.save!(validate: false)
-            expect(Rails.logger).not_to receive(:error)
 
+            # if the location is overwritten with the nil one above, it will fail validation
+            # since a rollback will occur incomplete_lettings_log will not change so there's nothing to verify later
+            # so instead we verify that no rollback occurs
+            expect(Rails.logger).not_to receive(:error)
             merge_organisations_service.call
 
             incomplete_lettings_log.reload
 
+            # also ensure it wasn't overwritten with a valid location
             expect(incomplete_lettings_log.location).to be_nil
           end
 
