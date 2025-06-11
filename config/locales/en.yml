@@ -222,8 +222,8 @@ en:
       provider_type_missing: "Select the organisation type."
       group_missing: "Select a group member."
       profit_status:
-        must_be_LA: "This organisation is a local authority, it's profit status must also be local authority."
-        must_not_be_LA: "This organisation is a private registered provider, it's profit status cannot be local authority."
+        must_be_LA: "This organisation is a local authority, its profit status must also be local authority."
+        must_not_be_LA: "This organisation is a private registered provider, its profit status cannot be local authority."
       stock_owner:
         blank: "You must choose a stock owner."
         already_added: "You have already added this stock owner."
