@@ -42,7 +42,7 @@
                 :id,
                 :name,
                 label: { text: "Search for an organisation that is part of the same group as this organisation", size: "m" },
-                options: { disabled: [""], selected: @organisation.oldest_group_member&.id || "" },
+                options: { disabled: [""], selected: @organisation.selected_group_member&.id || "" },
                 "data-controller": %w[accessible-autocomplete conditional-filter] %>
           <% end %>
           <%= f.govuk_radio_button :group_member, false, label: { text: "No" } %>

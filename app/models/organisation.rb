@@ -258,6 +258,21 @@ class Organisation < ApplicationRecord
     Organisation.visible.where(group:).order(:created_at).first
   end
 
+  # Shown on the edit organisation page to indicate which group member the user initially entered, if possible
+  def selected_group_member
+    return nil if oldest_group_member.nil?
+
+    # find organisation by group_member_id if it exists
+    selected_group = Organisation.visible.find_by(id: group_member_id)
+
+    # ensure that its still in the same group
+    if selected_group.present? && selected_group.group == group
+      selected_group
+    else
+      oldest_group_member
+    end
+  end
+
 private
 
   def validate_profit_status
