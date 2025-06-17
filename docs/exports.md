@@ -141,6 +141,9 @@ Full exports can only be run via a **rake task**.
 
 <!-- Update this section when sales exports are added, as they will affect rake tasks -->
 
-If the collection size is very large, full exports may fail due to memory issues. In such cases, it is better to batch exports into chunks of ~60,000 records and run several partial exports over multiple days. The `values_updated_at` field can help with this.
+If the collection size is very large, full exports may fail due to memory issues. In such cases:
+- Delete the incomplete export files from the S3 bucket.
+- It is better to batch exports into chunks of ~60,000 records and run several partial exports over multiple days. The `values_updated_at` field can help with this.
+- Rerun the task with more memory allocated, see 'Running Rake Tasks'.
 
 The simplest approach is to mark a batch of logs for export each day and allow scheduled morning exports to handle them.
