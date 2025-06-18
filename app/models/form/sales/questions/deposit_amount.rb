@@ -13,6 +13,7 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     @optional = optional
     @top_guidance_partial = top_guidance_partial
     @copy_key = copy_key
+    @strip_commas = true
   end
 
   def derived?(log)

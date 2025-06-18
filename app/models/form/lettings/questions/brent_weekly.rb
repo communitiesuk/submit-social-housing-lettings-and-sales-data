@@ -13,6 +13,7 @@ class Form::Lettings::Questions::BrentWeekly < ::Form::Question
     @prefix = "£"
     @suffix = " every week"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @strip_commas = true
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 95, 2024 => 94, 2025 => 92 }.freeze
