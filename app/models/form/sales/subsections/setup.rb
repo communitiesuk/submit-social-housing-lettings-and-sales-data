@@ -7,9 +7,9 @@ class Form::Sales::Subsections::Setup < ::Form::Subsection
 
   def pages
     @pages ||= [
-      Form::Sales::Pages::SaleDate.new(nil, nil, self),
       Form::Sales::Pages::OwningOrganisation.new(nil, nil, self),
       Form::Sales::Pages::ManagingOrganisation.new(nil, nil, self),
+      Form::Sales::Pages::SaleDate.new(nil, nil, self),
       Form::Sales::Pages::CreatedBy.new(nil, nil, self),
       Form::Sales::Pages::PurchaserCode.new(nil, nil, self),
       Form::Sales::Pages::OwnershipScheme.new(nil, nil, self),
