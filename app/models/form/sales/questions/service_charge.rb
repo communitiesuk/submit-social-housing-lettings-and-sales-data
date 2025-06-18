@@ -9,6 +9,7 @@ class Form::Sales::Questions::ServiceCharge < ::Form::Question
     @prefix = "£"
     @copy_key = "sales.sale_information.servicecharges.servicecharge"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @strip_commas = true
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2025 => 88 }.freeze

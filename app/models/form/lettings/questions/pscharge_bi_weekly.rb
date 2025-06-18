@@ -13,6 +13,7 @@ class Form::Lettings::Questions::PschargeBiWeekly < ::Form::Question
     @prefix = "£"
     @suffix = " every 2 weeks"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @strip_commas = true
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 97, 2024 => 96, 2025 => 94 }.freeze

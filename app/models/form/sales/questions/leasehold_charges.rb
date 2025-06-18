@@ -10,6 +10,7 @@ class Form::Sales::Questions::LeaseholdCharges < ::Form::Question
     @copy_key = "sales.sale_information.leaseholdcharges.mscharge"
     @ownershipsch = ownershipsch
     @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
+    @strip_commas = true
   end
 
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {

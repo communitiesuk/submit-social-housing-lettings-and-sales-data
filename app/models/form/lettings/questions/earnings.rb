@@ -16,6 +16,7 @@ class Form::Lettings::Questions::Earnings < ::Form::Question
       { "label" => " every year", "depends_on" => { "incfreq" => 3 } },
     ]
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @strip_commas = true
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 88, 2024 => 87 }.freeze
