@@ -58,6 +58,7 @@ en:
             invalid: "Select a valid nationality."
           charges:
             missing_charges: "Please enter the %{sentence_fragment}. If there is no %{sentence_fragment}, please enter '0'."
+            related_to_missing_charge: "You must enter all these fields: basic rent, service charge, personal service charge and support charge. Please enter ‘0' for any types of charges that you don’t issue."
           reasonpref:
             conflict:
               dont_know: "You cannot select 'Don't know' if any of the other reasonable preference reasons are also selected."
