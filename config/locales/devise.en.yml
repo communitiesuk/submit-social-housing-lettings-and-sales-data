@@ -16,6 +16,7 @@ en:
       timeout: "Your session expired. Sign in again to continue."
       unauthenticated: "You need to sign in or sign up before continuing."
       unconfirmed: "You must confirm your email address before continuing."
+      inactive_account: "Your account has been deactivated. Ask a data coordinator at your organisation to reactivate your account. Contact the helpdesk if you don't know who your data coordinator is."
     mailer:
       confirmation_instructions:
         subject: "Confirmation instructions."
