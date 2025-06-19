@@ -91,6 +91,7 @@ class OrganisationsController < ApplicationController
     selected_rent_periods = rent_period_params[:rent_periods].compact_blank
     @organisation = Organisation.new(org_params)
     if @organisation.save
+      @organisation.update!(group: assign_group_number(@organisation.id, org_params[:group_member_id])) if org_params[:group_member]
       OrganisationRentPeriod.transaction do
         selected_rent_periods.each { |period| OrganisationRentPeriod.create!(organisation: @organisation, rent_period: period) }
       end
@@ -142,6 +143,9 @@ class OrganisationsController < ApplicationController
           end
           flash[:notice] = I18n.t("organisation.reactivated", organisation: @organisation.name)
         else
+          if org_params[:group_member] && org_params[:group_member_id]
+            @organisation.group = assign_group_number(@organisation.id, org_params[:group_member_id])
+          end
           flash[:notice] = I18n.t("organisation.updated")
         end
         if rent_period_params[:rent_periods].present?
@@ -341,7 +345,7 @@ private
   end
 
   def org_params
-    params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone, :holds_own_stock, :provider_type, :housing_registration_no, :active)
+    params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone, :holds_own_stock, :provider_type, :housing_registration_no, :active, :profit_status, :group_member, :group_member_id)
   end
 
   def rent_period_params
@@ -384,5 +388,20 @@ private
         @duplicate_locations << { scheme: scheme, locations: duplicate_set.map { |id| scheme.locations.find(id) } }
       end
     end
+  end
+
+  def assign_group_number(current_org_id, selected_org_id)
+    selected_org = Organisation.find_by(id: selected_org_id)
+    if selected_org&.group.present?
+      selected_org.group
+    else
+      next_group_number = next_available_group_number
+      selected_org.update!(group_member: true, group_member_id: current_org_id, group: next_group_number) if selected_org
+      next_group_number
+    end
+  end
+
+  def next_available_group_number
+    Organisation.maximum(:group).to_i + 1
   end
 end

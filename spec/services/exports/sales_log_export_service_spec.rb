@@ -87,7 +87,7 @@ RSpec.describe Exports::SalesLogExportService do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
           entry = Zip::File.open_buffer(content).find_entry(expected_manifest_filename)
           expect(entry).not_to be_nil
-          expect(entry.get_input_stream.read).to eq(expected_content)
+          expect(entry.get_input_stream.read).to have_same_xml_contents_as(expected_content)
         end
 
         export_service.export_xml_sales_logs
@@ -98,7 +98,7 @@ RSpec.describe Exports::SalesLogExportService do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
           entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
           expect(entry).not_to be_nil
-          expect(entry.get_input_stream.read).to eq(expected_content)
+          expect(entry.get_input_stream.read).to have_same_xml_contents_as(expected_content)
         end
 
         export_service.export_xml_sales_logs
@@ -183,7 +183,7 @@ RSpec.describe Exports::SalesLogExportService do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
           entry = Zip::File.open_buffer(content).find_entry(expected_manifest_filename)
           expect(entry).not_to be_nil
-          expect(entry.get_input_stream.read).to eq(expected_content)
+          expect(entry.get_input_stream.read).to have_same_xml_contents_as(expected_content)
         end
 
         export_service.export_xml_sales_logs
@@ -304,7 +304,7 @@ RSpec.describe Exports::SalesLogExportService do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
           entry = Zip::File.open_buffer(content).find_entry(expected_manifest_filename)
           expect(entry).not_to be_nil
-          expect(entry.get_input_stream.read).to eq(expected_content)
+          expect(entry.get_input_stream.read).to have_same_xml_contents_as(expected_content)
         end
 
         expect(export_service.export_xml_sales_logs).to eq({ expected_zip_filename.gsub(".zip", "") => start_time })
@@ -324,7 +324,7 @@ RSpec.describe Exports::SalesLogExportService do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
           entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
           expect(entry).not_to be_nil
-          expect(entry.get_input_stream.read).to eq(expected_content)
+          expect(entry.get_input_stream.read).to have_same_xml_contents_as(expected_content)
         end
 
         export_service.export_xml_sales_logs
@@ -355,7 +355,7 @@ RSpec.describe Exports::SalesLogExportService do
           expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
             entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
             expect(entry).not_to be_nil
-            expect(entry.get_input_stream.read).to eq(expected_content)
+            expect(entry.get_input_stream.read).to have_same_xml_contents_as(expected_content)
           end
 
           export_service.export_xml_sales_logs(full_update: true, collection_year: 2024)
@@ -377,7 +377,7 @@ RSpec.describe Exports::SalesLogExportService do
           expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
             entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
             expect(entry).not_to be_nil
-            expect(entry.get_input_stream.read).to eq(expected_content)
+            expect(entry.get_input_stream.read).to have_same_xml_contents_as(expected_content)
           end
 
           export_service.export_xml_sales_logs
@@ -414,7 +414,7 @@ RSpec.describe Exports::SalesLogExportService do
           expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
             entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
             expect(entry).not_to be_nil
-            expect(entry.get_input_stream.read).to eq(expected_content)
+            expect(entry.get_input_stream.read).to have_same_xml_contents_as(expected_content)
           end
 
           export_service.export_xml_sales_logs
