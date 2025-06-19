@@ -8,7 +8,7 @@ class Form::Question
                 :top_guidance_partial, :bottom_guidance_partial, :prefix, :suffix,
                 :requires_js, :fields_added, :derived, :check_answers_card_number,
                 :unresolved_hint_text, :question_number, :hide_question_number_on_page,
-                :plain_label, :error_label
+                :plain_label, :error_label, :strip_commas
 
   def initialize(id, hsh, page)
     @id = id
@@ -45,6 +45,7 @@ class Form::Question
       @plain_label = hsh["plain_label"]
       @error_label = hsh["error_label"]
       @disable_clearing_if_not_routed_or_dynamic_answer_options = hsh["disable_clearing_if_not_routed_or_dynamic_answer_options"]
+      @strip_commas = hsh["strip_commas"] || false
     end
   end
 
