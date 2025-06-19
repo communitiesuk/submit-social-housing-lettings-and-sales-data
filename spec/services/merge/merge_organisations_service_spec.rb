@@ -707,6 +707,27 @@ RSpec.describe Merge::MergeOrganisationsService do
             expect(owned_lettings_log.managing_organisation).to eq(absorbing_organisation)
           end
 
+          it "does not change the lettings log location" do
+            scheme = create(:scheme, owning_organisation: merging_organisation)
+            create(:location, scheme:, name: nil, postcode: nil)
+            # necessary to have a couple valid locations else the scheme will be invalid
+            create(:location, scheme:)
+            create(:location, scheme:)
+            incomplete_lettings_log = build(:lettings_log, scheme:, owning_organisation: merging_organisation, startdate: Time.zone.today)
+            incomplete_lettings_log.save!(validate: false)
+
+            # if the location is overwritten with the nil one above, it will fail validation
+            # since a rollback will occur incomplete_lettings_log will not change so there's nothing to verify later
+            # so instead we verify that no rollback occurs
+            expect(Rails.logger).not_to receive(:error)
+            merge_organisations_service.call
+
+            incomplete_lettings_log.reload
+
+            # also ensure it wasn't overwritten with a valid location
+            expect(incomplete_lettings_log.location).to be_nil
+          end
+
           context "with merge date in closed collection year" do
             subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids:, merge_date: Time.zone.local(2021, 3, 3)) }
 
