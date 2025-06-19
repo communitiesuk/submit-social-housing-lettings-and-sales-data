@@ -1070,7 +1070,7 @@ private
       leftreg: %i[field_76],
       reservist: %i[field_77],
       preg_occ: %i[field_78],
-      housingneeds: %i[field_78],
+      housingneeds: %i[field_79 field_80 field_81 field_82 field_83 field_84],
 
       illness: %i[field_85],
 
