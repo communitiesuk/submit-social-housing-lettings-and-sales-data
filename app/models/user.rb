@@ -83,6 +83,8 @@ class User < ApplicationRecord
   }
   scope :not_signed_in, -> { where(last_sign_in_at: nil, active: true) }
   scope :deactivated, -> { where(active: false) }
+  scope :activated, -> { where(active: true) }
+  # in some cases we only count the user as active if they completed the onboarding flow and signed in, rather than just being added
   scope :active_status, -> { where(active: true).where.not(last_sign_in_at: nil) }
   scope :visible, lambda { |user = nil|
     if user && !user.support?
@@ -269,7 +271,14 @@ class User < ApplicationRecord
   end
 
   def valid_for_authentication?
-    super && active?
+    super && account_is_active?
+  end
+
+  def account_is_active?
+    unless active?
+      throw(:warden, message: :inactive_account)
+    end
+    true
   end
 
   def editable_duplicate_lettings_logs_sets

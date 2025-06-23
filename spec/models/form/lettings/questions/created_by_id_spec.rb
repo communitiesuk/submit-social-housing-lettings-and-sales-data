@@ -59,6 +59,17 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
           expect(question.displayed_answer_options(lettings_log, support_user)).to eq(expected_option_for_users(managing_org_user.organisation.users.visible + owning_org_user.organisation.users.visible))
         end
       end
+
+      context "when organisation has inactive users" do
+        before do
+          create(:user, name: "Inactive user", active: false, organisation: owning_org_user.organisation)
+          create(:user, name: "Inactive managing user", active: false, organisation: managing_org_user.organisation)
+        end
+
+        it "does not display inactive users" do
+          expect(question.displayed_answer_options(lettings_log, support_user)).to eq(expected_option_for_users(managing_org_user.organisation.users.visible.activated + owning_org_user.organisation.users.visible.activated))
+        end
+      end
     end
   end
 
@@ -84,6 +95,16 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
 
         it "does not display deleted users" do
           expect(question.displayed_answer_options(lettings_log, data_coordinator)).to eq(expected_option_for_users(data_coordinator.organisation.users.visible))
+        end
+      end
+
+      context "when organisation has inactive users" do
+        before do
+          create(:user, name: "Inactive user", active: false, organisation: data_coordinator.organisation)
+        end
+
+        it "does not display inactive users" do
+          expect(question.displayed_answer_options(lettings_log, data_coordinator)).to eq(expected_option_for_users(data_coordinator.organisation.users.visible.activated))
         end
       end
     end
