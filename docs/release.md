@@ -6,15 +6,11 @@ nav_order: 6
 
 Getting code released on core has the following steps.
 
-## Gaining PO approval
+## Releasing to staging
 
-Once a PR is dev approved, send the review app link to the PO for them to review, moving the ticket to PO review on Jira. Do not yet merge into main.
+Merging a branch to `main` will trigger the staging deployment pipeline.
 
-## Merging to main
-
-Once the ticket is PO approved, the PR can be merged into main. This will deploy the branch to the staging environment.
-
-## Creating a release
+## Releasing to prod
 
 This is managed through GitHub releases
 
@@ -24,9 +20,7 @@ In the GitHub releases section, create a new release. Release notes can be auto 
 
 Create a new version tag with an incremented version number.
 
-### Getting release approval
-
-Copy paste the release notes in the team slack channel and get tech lead approval.
+Be sure to save the release as a draft until it is ready to be deployed.
 
 ### Publish
 
