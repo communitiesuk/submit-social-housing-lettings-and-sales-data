@@ -11,6 +11,7 @@ class Form::Sales::Questions::Buyer1Income < ::Form::Question
     @prefix = "£"
     @check_answers_card_number = 1
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @strip_commas = true
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 67, 2024 => 69, 2025 => 66 }.freeze

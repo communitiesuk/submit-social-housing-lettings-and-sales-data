@@ -10,6 +10,7 @@ class Form::Sales::Questions::Value < ::Form::Question
     @prefix = "£"
     @question_number = question_number_from_year[form.start_date.year] || question_number_from_year[question_number_from_year.keys.max]
     @top_guidance_partial = "financial_calculations_shared_ownership"
+    @strip_commas = true
   end
 
   def question_number_from_year
