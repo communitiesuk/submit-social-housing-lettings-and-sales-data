@@ -21,6 +21,8 @@ import TabsController from './tabs_controller.js'
 
 import AddressSearchController from './address_search_controller.js'
 
+import OrganisationsController from './organisations_controller.js'
+
 application.register('accessible-autocomplete', AccessibleAutocompleteController)
 application.register('conditional-filter', ConditionalFilterController)
 application.register('conditional-question', ConditionalQuestionController)
@@ -30,3 +32,4 @@ application.register('filter-layout', FilterLayoutController)
 application.register('search', SearchController)
 application.register('tabs', TabsController)
 application.register('address-search', AddressSearchController)
+application.register('organisations', OrganisationsController)
