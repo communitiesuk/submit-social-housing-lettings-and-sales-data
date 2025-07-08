@@ -16,3 +16,5 @@ Ruby on Rails app that handles the submission of lettings and sales of social ho
 ## User interface
 
 ![View of the logs list](docs/images/service.jpeg)
+
+Temporary change
