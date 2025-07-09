@@ -915,6 +915,8 @@ private
   def should_process_uprn_change?
     return unless uprn
     return unless startdate
+    # Skip for Sage Homes for this year as they are having issues with address matching
+    return if owning_organisation.id == 334 && form.start_year_2024?
 
     uprn_changed? || startdate_changed?
   end
