@@ -6,7 +6,11 @@
       <%= content_for(:title) %>
     </h1>
 
-    <p class="govuk-body">We’ve sent a link to reset your password to <strong><%= @email %></strong>.</p>
+    <% if @unconfirmed %>
+      <p class="govuk-body">We’ve sent a link to confirm your email address to <strong><%= @email %></strong>. This will complete your registration onto the CORE service.</p>
+    <% else %>
+      <p class="govuk-body">We’ve sent a link to reset your password to <strong><%= @email %></strong>.</p>
+    <% end %>
     <p class="govuk-body">You’ll only receive this link if your email address already exists in our system.</p>
     <p class="govuk-body">If you don’t receive the email within 5 minutes, check your spam or junk folders. Try again if you still haven’t received the email.</p>
   </div>
