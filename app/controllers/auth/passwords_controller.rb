@@ -67,7 +67,7 @@ protected
   end
 
   def after_sending_reset_password_instructions_path_for(_resource)
-    account_password_reset_confirmation_path(email: params.dig("user", "email"), unconfirmed: !resource.confirmed?)
+    account_password_reset_confirmation_path(email: params.dig("user", "email"), unconfirmed: resource.initial_confirmation_sent && !resource.confirmed?)
   end
 
   def after_resetting_password_path_for(resource)
