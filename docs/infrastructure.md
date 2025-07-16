@@ -57,7 +57,7 @@ Where to find the Infrastructure?
 The infrastructure is managed as code.
 In the terraform folder of the codebase, there will be dedicated sub-folders for each of the aforementioned environments, where all the infrastructure for them is defined.
 
-## Deployment (Pipeline — Recommended)
+## Production Deployment
 
 The application is set up so that it can be deployed via GitHub actions. We use Git tags to mark releases. The only pre-requisite is that your GitHub account is added to our team.
 
@@ -66,12 +66,13 @@ To deploy you need to:
 1. Determine [previous version](https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data/tags), such as `v0.1.1`.
 2. Create a [new release](https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data/releases/new) with subsequent version (e.g., `v0.1.2`). On this page, create a new tag with that version and generate release notes. Save as draft.
 3. Post release notes on Slack.
-4. Publish release.
-5. Monitor alerting, logging and Sentry.
-6. Post success message on Slack.
-7. Tag tickets as ‘Released’ and move tickets to done on JIRA.
+4. Ensure that there are no other pipelines running on the repo right now. If a staging deployment is running, it must complete before you can deploy to production.
+5. Publish release. This will trigger the deployment pipeline.
+6. Monitor alerting, logging and Sentry.
+7. Post success message on Slack.
+8. Tag tickets as ‘Released’ and move tickets to done on JIRA.
 
-## CI/CD
+## Staging Deployment
 
 When a commit is made to `main` the following GitHub action jobs are triggered:
 
