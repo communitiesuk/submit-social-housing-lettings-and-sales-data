@@ -66,7 +66,7 @@ protected
     resource.need_two_factor_authentication?(request) ? :updated_2FA : :updated
   end
 
-  def after_sending_reset_password_instructions_path_for(_resource)
+  def after_sending_reset_password_instructions_path_for(resource)
     account_password_reset_confirmation_path(email: params.dig("user", "email"), unconfirmed: resource.initial_confirmation_sent && !resource.confirmed?)
   end
 
