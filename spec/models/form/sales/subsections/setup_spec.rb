@@ -29,9 +29,9 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
     it "has correct pages" do
       expect(setup.pages.map(&:id)).to eq(
         %w[
-          completion_date
           owning_organisation
           managing_organisation
+          completion_date
           assigned_to
           purchaser_code
           ownership_scheme
@@ -56,9 +56,9 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
     it "has correct pages" do
       expect(setup.pages.map(&:id)).to eq(
         %w[
-          completion_date
           owning_organisation
           managing_organisation
+          completion_date
           assigned_to
           purchaser_code
           ownership_scheme
@@ -87,9 +87,9 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
     it "has correct pages" do
       expect(setup.pages.map(&:id)).to eq(
         %w[
-          completion_date
           owning_organisation
           managing_organisation
+          completion_date
           assigned_to
           purchaser_code
           ownership_scheme

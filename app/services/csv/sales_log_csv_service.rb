@@ -259,6 +259,7 @@ module Csv
       ordered_questions = FormHandler.instance.ordered_questions_for_year(@year, "sales")
       ordered_questions.reject! { |q| q.id.match?(/((?<!la)_known)|(_check)|(_asked)|nationality_all_group|nationality_all_buyer2_group/) }
       ordered_questions.reject! { |q| q.id.match?(/organisation_id|created_by|assigned_to|soctenant|has_management_fee|management_fee|grant|discount|has_mscharge|mscharge|extrabor/) } if @year >= 2025
+      order_saledate_question_before_owning_organisation_question(ordered_questions)
       attributes = insert_checkbox_options(ordered_questions)
       final_attributes = insert_derived_and_related_attributes(non_question_fields + attributes)
       order_address_fields_for_support(final_attributes)
@@ -318,6 +319,21 @@ module Csv
           attributes.reject! { |q| all_address_fields.include?(q) }
           attributes.insert(first_address_field_index, *ORDERED_ADDRESS_FIELDS)
         end
+      end
+    end
+
+    # as part of CLDC-3719 it was decided to move the saledate question to be first in the form
+    # this caused issues reported in CLDC-4025 where the user only enter saledates for their active organisation
+    # we decided to move the organisation question back to being first
+    # however, we did not want to reorder the CSV export as this would disrupt existing users' data pipelines
+    # so, this function reorders questions back when exporting CSVs
+    # next year, we can remove this function as we will be reordering the csv fields anyway
+    def order_saledate_question_before_owning_organisation_question(ordered_questions)
+      saledate_question_index = ordered_questions.find_index { |q| q.id == "saledate" }
+      owning_organisation_index = ordered_questions.find_index { |q| q.id == "owning_organisation_id" }
+      if saledate_question_index && owning_organisation_index
+        saledate_question = ordered_questions.delete_at(saledate_question_index)
+        ordered_questions.insert(owning_organisation_index, saledate_question)
       end
     end
 

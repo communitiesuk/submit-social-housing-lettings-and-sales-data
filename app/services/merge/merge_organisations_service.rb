@@ -26,7 +26,7 @@ class Merge::MergeOrganisationsService
       log_success_message
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("Organisation merge failed with: #{e.message}")
-      raise ActiveRecord::Rollback
+      raise
     end
   end
 
@@ -102,7 +102,11 @@ private
         location_to_set = scheme_to_set.locations.find_by(name: lettings_log.location&.name, postcode: lettings_log.location&.postcode)
 
         lettings_log.scheme = scheme_to_set if scheme_to_set.present?
-        lettings_log.location = location_to_set if location_to_set.present?
+        # in some cases the lettings_log location is nil even if scheme is present (they're two different questions).
+        # in certain cases the location_to_set query can find a location in the scheme with nil values for name and postcode,
+        # so we can end up setting the location to non nil.
+        # hence the extra check here
+        lettings_log.location = location_to_set if location_to_set.present? && lettings_log.location.present?
       end
       lettings_log.owning_organisation = @absorbing_organisation
       lettings_log.managing_organisation = @absorbing_organisation if lettings_log.managing_organisation == merging_organisation

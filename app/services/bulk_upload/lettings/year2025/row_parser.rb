@@ -944,9 +944,10 @@ private
       errors.add(field, I18n.t("#{ERROR_BASE_KEY}.charges.missing_charges", sentence_fragment: charge))
     end
 
-    other_charge_fields.each do |field, _charge|
-      blank_charge_fields.each do |_blank_field, blank_charge|
-        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.charges.missing_charges", sentence_fragment: blank_charge))
+    # if there were any errors, add an error to all the remaining present charges to make this entire section invalid
+    if blank_charge_fields.any?
+      other_charge_fields.each_key do |field|
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.charges.related_to_missing_charge"))
       end
     end
   end

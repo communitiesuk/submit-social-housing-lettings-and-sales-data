@@ -182,7 +182,7 @@ RSpec.describe FormController, type: :request do
 
       it "correctly sets owning organisation" do
         post "/sales-logs/#{sales_log.id}/owning-organisation", params: params
-        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/assigned-to")
+        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/completion-date")
         follow_redirect!
         sales_log.reload
         expect(sales_log.owning_organisation).to eq(managing_organisation)
@@ -209,7 +209,7 @@ RSpec.describe FormController, type: :request do
 
       it "does not reset assigned to" do
         post "/sales-logs/#{sales_log.id}/owning-organisation", params: params
-        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/assigned-to")
+        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/completion-date")
         follow_redirect!
         sales_log.reload
         expect(sales_log.assigned_to).to eq(assigned_to)
@@ -238,7 +238,7 @@ RSpec.describe FormController, type: :request do
 
       it "does not reset assigned to" do
         post "/sales-logs/#{sales_log.id}/owning-organisation", params: params
-        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/assigned-to")
+        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/completion-date")
         follow_redirect!
         sales_log.reload
         expect(sales_log.assigned_to).to eq(assigned_to)

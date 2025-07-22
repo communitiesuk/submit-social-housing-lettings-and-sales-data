@@ -93,5 +93,5 @@ private
     "#{name} (inactive as of #{merge_date.to_fs(:govuk_date)})"
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => nil, 2024 => 1, 2025 => 2 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => nil, 2024 => 1, 2025 => 1 }.freeze
 end
