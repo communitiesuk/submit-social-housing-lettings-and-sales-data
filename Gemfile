@@ -71,6 +71,10 @@ gem "sidekiq"
 gem "sidekiq-cron"
 gem "unread"
 
+# Pinning versions to address vulnerabilities
+gem "nokogiri", "~> 1.18.9"
+gem "thor", "~> 1.4.0"
+
 group :development, :test do
   # Check gems for known vulnerabilities
   gem "bundler-audit"
