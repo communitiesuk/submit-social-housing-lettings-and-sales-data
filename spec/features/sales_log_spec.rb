@@ -4,6 +4,7 @@ RSpec.describe "Sales Log Features" do
   context "when searching for specific sales logs" do
     context "when I am signed in and there are sales logs in the database" do
       let(:user) { FactoryBot.create(:user, last_sign_in_at: Time.zone.now, name: "Jimbo") }
+      let(:current_year) { current_collection_start_year }
       let!(:log_to_search) { FactoryBot.create(:sales_log, owning_organisation: user.organisation) }
       let!(:same_organisation_log) { FactoryBot.create(:sales_log, owning_organisation: user.organisation) }
       let!(:another_organisation_log) { FactoryBot.create(:sales_log) }
@@ -161,7 +162,7 @@ RSpec.describe "Sales Log Features" do
           expect(page).to have_selector(".govuk-error-summary__title")
           expect(page).to have_content("There is a problem")
 
-          choose("years-2023-field", allow_label_click: true)
+          choose("years-#{current_year}-field", allow_label_click: true)
           click_button("Save changes")
 
           expect(page).to have_current_path("/sales-logs/csv-download?codes_only=false&search=1")
@@ -175,7 +176,7 @@ RSpec.describe "Sales Log Features" do
           expect(page).to have_selector(".govuk-error-summary__title")
           expect(page).to have_content("There is a problem")
 
-          choose("years-2023-field", allow_label_click: true)
+          choose("years-#{current_year}-field", allow_label_click: true)
           click_button("Save changes")
 
           expect(page).to have_current_path("/sales-logs/csv-download?codes_only=true&search=1")
