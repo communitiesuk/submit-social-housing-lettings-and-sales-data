@@ -26,7 +26,7 @@ class Merge::MergeOrganisationsService
       log_success_message
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("Organisation merge failed with: #{e.message}")
-      raise
+      raise ActiveRecord::Rollback
     end
   end
 
