@@ -7,6 +7,7 @@ RSpec.describe SalesLog, type: :model do
 
   let(:owning_organisation) { create(:organisation) }
   let(:assigned_to_user) { create(:user) }
+  let(:current_date) { current_collection_start_date }
 
   include_examples "shared log examples", :sales_log
 
@@ -1088,8 +1089,8 @@ RSpec.describe SalesLog, type: :model do
 
   context "when form year changes and LA is no longer active" do
     let!(:sales_log) { create(:sales_log) }
-    let(:end_date) { Time.zone.local(2025, 3, 30) }
-    let(:date_after_end_date) { Time.zone.local(2025, 3, 31) }
+    let(:end_date) { current_date }
+    let(:date_after_end_date) { current_date + 1.day }
 
     before do
       LocalAuthority.find_by(code: "E08000003").update!(end_date:)
