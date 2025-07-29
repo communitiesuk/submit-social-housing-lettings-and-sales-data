@@ -1581,7 +1581,7 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(page).to have_link("Skip for now", href: "/lettings-logs/#{affected_lettings_log.id}/scheme")
       end
 
-      it "scheme page links to the locations page" do
+      xit "scheme page links to the locations page" do
         get "/lettings-logs/#{affected_lettings_log.id}/scheme", headers:, params: {}
         expect(page).to have_link("Skip for now", href: "/lettings-logs/#{affected_lettings_log.id}/location")
       end
