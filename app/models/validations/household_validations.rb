@@ -31,10 +31,6 @@ module Validations::HouseholdValidations
     validate_other_field(record, 20, :reason, :reasonother)
 
     if record.is_reason_permanently_decanted?
-      if record.referral_type.present? && !record.is_from_prp_only_housing_register_or_waiting_list?
-        record.errors.add :referral_type, I18n.t("validations.lettings.household.referral_type.leaving_last_settled_home.reason_permanently_decanted")
-      end
-
       if record.referral.present? && !record.is_internal_transfer?
         record.errors.add :referral, I18n.t("validations.lettings.household.referral.leaving_last_settled_home.reason_permanently_decanted")
         record.errors.add :reason, I18n.t("validations.lettings.household.reason.leaving_last_settled_home.not_internal_transfer")
