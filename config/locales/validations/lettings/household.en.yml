@@ -106,7 +106,3 @@ en:
             reason_permanently_decanted: "Answer must be internal transfer as the tenant was permanently decanted from another property owned by this landlord."
           la_general_needs:
             internal_transfer: "Answer cannot be internal transfer as it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting."
-
-        referral_type:
-          leaving_last_settled_home:
-            reason_permanently_decanted: "Answer must be from a PRP-only housing register or waiting list (no local authority involvement) as the tenant was permanently decanted from another property owned by this landlord."
