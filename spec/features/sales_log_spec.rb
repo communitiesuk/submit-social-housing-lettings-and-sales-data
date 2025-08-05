@@ -1,9 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "Sales Log Features" do
+  include CollectionTimeHelper
+
   context "when searching for specific sales logs" do
     context "when I am signed in and there are sales logs in the database" do
       let(:user) { FactoryBot.create(:user, last_sign_in_at: Time.zone.now, name: "Jimbo") }
+      let(:current_year) { current_collection_start_year }
       let!(:log_to_search) { FactoryBot.create(:sales_log, owning_organisation: user.organisation) }
       let!(:same_organisation_log) { FactoryBot.create(:sales_log, owning_organisation: user.organisation) }
       let!(:another_organisation_log) { FactoryBot.create(:sales_log) }
@@ -161,7 +164,7 @@ RSpec.describe "Sales Log Features" do
           expect(page).to have_selector(".govuk-error-summary__title")
           expect(page).to have_content("There is a problem")
 
-          choose("years-2023-field", allow_label_click: true)
+          choose("years-#{current_year}-field", allow_label_click: true)
           click_button("Save changes")
 
           expect(page).to have_current_path("/sales-logs/csv-download?codes_only=false&search=1")
@@ -175,7 +178,7 @@ RSpec.describe "Sales Log Features" do
           expect(page).to have_selector(".govuk-error-summary__title")
           expect(page).to have_content("There is a problem")
 
-          choose("years-2023-field", allow_label_click: true)
+          choose("years-#{current_year}-field", allow_label_click: true)
           click_button("Save changes")
 
           expect(page).to have_current_path("/sales-logs/csv-download?codes_only=true&search=1")
@@ -233,6 +236,7 @@ RSpec.describe "Sales Log Features" do
 
   context "when I am signed in" do
     let(:user) { create(:user, last_sign_in_at: Time.zone.now) }
+    let(:current_date) { current_collection_start_date }
 
     before do
       create(:sales_log, :in_progress, owning_organisation: user.organisation, assigned_to: user)
@@ -242,7 +246,7 @@ RSpec.describe "Sales Log Features" do
     end
 
     context "when viewing pages within a log" do
-      let(:sales_log) { FactoryBot.create(:sales_log, :shared_ownership_setup_complete, jointpur: 2, owning_organisation: user.organisation, assigned_to: user, saledate: Time.zone.local(2024, 12, 3)) }
+      let(:sales_log) { FactoryBot.create(:sales_log, :shared_ownership_setup_complete, jointpur: 2, owning_organisation: user.organisation, assigned_to: user, saledate: current_date) }
 
       context "when visiting the address page" do
         before do
@@ -250,7 +254,7 @@ RSpec.describe "Sales Log Features" do
         end
 
         it "displays the question number in the page header" do
-          expect(page).to have_content("Q16")
+          expect(page).to have_content("Q14")
         end
       end
 
@@ -260,7 +264,7 @@ RSpec.describe "Sales Log Features" do
         end
 
         it "has the expected content" do
-          expect(page).to have_content(/Shared ownership scheme\s*About the staircasing transaction/)
+          expect(page).to have_content(/Shared ownership - staircasing transaction\s*About the staircasing transaction/)
         end
       end
     end

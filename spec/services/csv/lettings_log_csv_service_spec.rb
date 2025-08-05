@@ -117,12 +117,12 @@ RSpec.describe Csv::LettingsLogCsvService do
 
     context "when exporting with human readable labels" do
       let(:export_type) { "labels" }
-      let(:log) { create(:lettings_log, :setup_completed, hhmemb: 2, details_known_2: 0, relat2: "P", age1: 35, la: "E09000003", duplicate_set_id: 12_312, startdate: Time.zone.local(2024, 11, 1)) }
+      let(:log) { create(:lettings_log, :setup_completed, hhmemb: 2, details_known_2: 0, relat2: "P", age1: 35, la: "E09000003", duplicate_set_id: 12_312) }
 
       it "gives answer to radio questions as labels" do
         relat2_column_index = attribute_line.index("relat2")
         relat2_value = content_line[relat2_column_index]
-        expect(relat2_value).to eq "Partner"
+        expect(relat2_value).to eq "Yes"
       end
 
       it "gives answers to free input questions as the user input" do
