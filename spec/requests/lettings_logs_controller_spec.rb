@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe LettingsLogsController, type: :request do
+  include CollectionTimeHelper
+
   let(:user) { FactoryBot.create(:user, organisation: create(:organisation, rent_periods: [2])) }
   let(:owning_organisation) { user.organisation }
   let(:managing_organisation) { owning_organisation }
@@ -10,6 +12,7 @@ RSpec.describe LettingsLogsController, type: :request do
     ActionController::HttpAuthentication::Basic
       .encode_credentials(api_username, api_password)
   end
+  let(:current_date) { current_collection_start_date }
 
   let(:headers) do
     {
@@ -1562,7 +1565,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when viewing a specific log affected by deactivated location" do
-      let!(:affected_lettings_log) { FactoryBot.create(:lettings_log, unresolved: true, assigned_to: user, needstype: 2) }
+      let!(:affected_lettings_log) { FactoryBot.create(:lettings_log, unresolved: true, assigned_to: user, needstype: 2, startdate: current_date) }
       let(:headers) { { "Accept" => "text/html" } }
 
       before do
@@ -1574,6 +1577,8 @@ RSpec.describe LettingsLogsController, type: :request do
       it "routes to the tenancy date question" do
         get "/lettings-logs/#{affected_lettings_log.id}", headers:, params: {}
         expect(response).to redirect_to("/lettings-logs/#{affected_lettings_log.id}/tenancy-start-date")
+        follow_redirect!
+        expect(page).to have_content("What is the tenancy start date?")
       end
 
       it "tenancy start date page links to the scheme page" do
@@ -1581,7 +1586,7 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(page).to have_link("Skip for now", href: "/lettings-logs/#{affected_lettings_log.id}/scheme")
       end
 
-      xit "scheme page links to the locations page" do
+      it "scheme page links to the locations page" do
         get "/lettings-logs/#{affected_lettings_log.id}/scheme", headers:, params: {}
         expect(page).to have_link("Skip for now", href: "/lettings-logs/#{affected_lettings_log.id}/location")
       end
