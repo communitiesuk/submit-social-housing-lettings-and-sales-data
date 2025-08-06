@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Log, type: :model do
+  include CollectionTimeHelper
+
   it "has two child log classes" do
     expect(SalesLog).to be < described_class
     expect(LettingsLog).to be < described_class
@@ -62,12 +64,12 @@ RSpec.describe Log, type: :model do
     end
 
     context "when a non setup field is invalid for a lettings log" do
-      subject(:model) { build_stubbed(:lettings_log, :completed, startdate: Time.zone.local(2023, 12, 12), offered: 234) }
+      subject(:model) { build_stubbed(:lettings_log, :completed, startdate: current_collection_start_date, age1: 234) }
 
       it "blanks it" do
         model.valid?
         model.blank_invalid_non_setup_fields!
-        expect(model.offered).to be_nil
+        expect(model.age1).to be_nil
       end
     end
 
