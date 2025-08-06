@@ -42,6 +42,10 @@ module CollectionTimeHelper
     current_collection_start_year + 1
   end
 
+  def next_collection_end_year
+    next_collection_start_year + 1
+  end
+
   def previous_collection_start_year
     current_collection_start_year - 1
   end
