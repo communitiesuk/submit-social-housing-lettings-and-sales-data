@@ -74,8 +74,7 @@ module Exports
       attribute_hash["provider_type"] = organisation.provider_type_before_type_cast
       attribute_hash["merge_date"] = organisation.merge_date&.iso8601
       attribute_hash["available_from"] = organisation.available_from&.iso8601
-      attribute_hash["profit_status"] = nil # will need update when we add the field to the org
-      attribute_hash["group"] = nil # will need update when we add the field to the org
+      attribute_hash["profit_status"] = organisation.profit_status_before_type_cast
       attribute_hash["status"] = organisation.status
       attribute_hash["active"] = attribute_hash["status"] == :active
 

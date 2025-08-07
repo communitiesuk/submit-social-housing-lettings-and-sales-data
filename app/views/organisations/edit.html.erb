@@ -29,6 +29,33 @@
         autocomplete: "tel",
         width: 20 %>
 
+      <% if current_user.support? %>
+        <%= f.govuk_radio_buttons_fieldset :group_member,
+           legend: { text: "Is this organisation part of a housing provider group structure?", size: "m" } do %>
+          <%= f.govuk_radio_button :group_member, true,
+             label: { text: "Yes" },
+             "data-controller": "conditional-question",
+             "data-action": "click->conditional-question#displayConditional",
+             "data-info": { conditional_questions: { group: [true] }, type: "organisation" }.to_json do %>
+            <%= f.govuk_collection_select :group_member_id,
+                group_organisation_options,
+                :id,
+                :name,
+                label: { text: "Search for an organisation that is part of the same group as this organisation", size: "m" },
+                options: { disabled: [""], selected: @organisation.selected_group_member&.id || "" },
+                "data-controller": %w[accessible-autocomplete conditional-filter] %>
+          <% end %>
+          <%= f.govuk_radio_button :group_member, false, label: { text: "No" } %>
+        <% end %>
+
+        <%= f.govuk_collection_select :profit_status,
+            profit_status_options(@organisation.provider_type),
+            :id,
+            :name,
+            label: { text: "Is the organisation for profit?", size: "m" },
+            options: { disabled: [""], selected: @organisation.profit_status || "" } %>
+      <% end %>
+
       <%= f.govuk_check_boxes_fieldset :rent_periods,
         legend: { text: "What are the rent periods for the organisation?" },
         hint: { text: "It is not possible to deselect rent periods that are used in logs" } do %>

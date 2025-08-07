@@ -126,3 +126,25 @@ RSpec.configure do |config|
 end
 
 RSpec::Matchers.define_negated_matcher :not_change, :change
+
+def fix_xml_content_order(xml_file_content)
+  # split the content up my lines, sort them, then join together again
+  # this ensures the order of the output elements doesn't matter for the tests
+  # as the tests care about the content of the XML, not the order
+  xml_file_content.split("\n").sort.join("\n")
+end
+
+# write a matcher that checks if two strings are equal after apply fix_xml_content_order to both
+RSpec::Matchers.define :have_same_xml_contents_as do |expected|
+  match do |actual|
+    fix_xml_content_order(actual) == fix_xml_content_order(expected)
+  end
+
+  failure_message do |actual|
+    "expected that unordered #{fix_xml_content_order(actual)} would be equal to unordered #{fix_xml_content_order(expected)}"
+  end
+
+  failure_message_when_negated do |actual|
+    "expected that unordered #{fix_xml_content_order(actual)} would not be equal to unordered #{fix_xml_content_order(expected)}"
+  end
+end
