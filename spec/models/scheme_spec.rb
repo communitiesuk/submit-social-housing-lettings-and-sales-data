@@ -472,7 +472,7 @@ RSpec.describe Scheme, type: :model do
 
       context "when the most recently created deactivation is not the current one" do
         before do
-          FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.today - 300.days, reactivation_date: Time.zone.today - 200.days, scheme:)
+          FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.today - 5.days, reactivation_date: Time.zone.today - 4.days, scheme:)
         end
 
         it "returns reactivating_soon" do

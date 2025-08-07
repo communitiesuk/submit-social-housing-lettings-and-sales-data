@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Validations::Sales::FinancialValidations do
+  include CollectionTimeHelper
+
   subject(:financial_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::Sales::FinancialValidations } }
@@ -208,47 +210,28 @@ RSpec.describe Validations::Sales::FinancialValidations do
   end
 
   describe "#validate_percentage_bought_not_equal_percentage_owned" do
-    let(:record) { FactoryBot.build(:sales_log) }
+    let(:record) { FactoryBot.build(:sales_log, :saledate_today) }
 
-    context "with 24/25 logs" do
-      before do
-        record.saledate = Time.zone.local(2024, 4, 3)
-      end
-
-      it "does not add an error if the percentage bought is less than the percentage owned" do
-        record.stairbought = 20
-        record.stairowned = 40
-        financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
-        expect(record.errors).to be_empty
-      end
-
-      it "adds an error if the percentage bought is equal to the percentage owned" do
-        record.stairbought = 30
-        record.stairowned = 30
-        financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
-        expect(record.errors["stairowned"]).to eq([I18n.t("validations.sales.financial.stairowned.percentage_bought_equal_percentage_owned", stairbought: 30, stairowned: 30)])
-        expect(record.errors["stairbought"]).to eq([I18n.t("validations.sales.financial.stairbought.percentage_bought_equal_percentage_owned", stairbought: 30, stairowned: 30)])
-      end
-
-      it "does not add an error to stairowned and not stairbought if the percentage bought is more than the percentage owned" do
-        record.stairbought = 50
-        record.stairowned = 40
-        financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
-        expect(record.errors).to be_empty
-      end
+    it "does not add an error if the percentage bought is less than the percentage owned" do
+      record.stairbought = 20
+      record.stairowned = 40
+      financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
+      expect(record.errors).to be_empty
     end
 
-    context "with 23/24 logs" do
-      before do
-        record.saledate = Time.zone.local(2023, 4, 3)
-      end
+    it "adds an error if the percentage bought is equal to the percentage owned" do
+      record.stairbought = 30
+      record.stairowned = 30
+      financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
+      expect(record.errors["stairowned"]).to eq([I18n.t("validations.sales.financial.stairowned.percentage_bought_equal_percentage_owned", stairbought: 30, stairowned: 30)])
+      expect(record.errors["stairbought"]).to eq([I18n.t("validations.sales.financial.stairbought.percentage_bought_equal_percentage_owned", stairbought: 30, stairowned: 30)])
+    end
 
-      it "does not add an error if the percentage bought is equal to the percentage owned" do
-        record.stairbought = 30
-        record.stairowned = 30
-        financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
-        expect(record.errors).to be_empty
-      end
+    it "does not add an error to stairowned and not stairbought if the percentage bought is more than the percentage owned" do
+      record.stairbought = 50
+      record.stairowned = 40
+      financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
+      expect(record.errors).to be_empty
     end
   end
 
@@ -348,195 +331,151 @@ RSpec.describe Validations::Sales::FinancialValidations do
   describe "#validate_equity_in_range_for_year_and_type" do
     let(:record) { FactoryBot.build(:sales_log, saledate:, resale: nil) }
 
-    context "with a log in the 22/23 collection year" do
-      let(:saledate) { Time.zone.local(2023, 1, 1) }
+    let(:saledate) { current_collection_start_date }
 
-      it "adds an error for type 2, equity below min with the correct percentage" do
-        record.type = 2
-        record.equity = 1
-        financial_validator.validate_equity_in_range_for_year_and_type(record)
-        expect(record.errors["equity"]).to include(match I18n.t("validations.sales.financial.equity.equity_under_min", min_equity: 25))
-        expect(record.errors["type"]).to include(match I18n.t("validations.sales.financial.type.equity_under_min", min_equity: 25))
-      end
-
-      it "adds an error for type 30, equity below min with the correct percentage" do
-        record.type = 30
-        record.equity = 1
-        financial_validator.validate_equity_in_range_for_year_and_type(record)
-        expect(record.errors["equity"]).to include(match I18n.t("validations.sales.financial.equity.equity_under_min", min_equity: 10))
-        expect(record.errors["type"]).to include(match I18n.t("validations.sales.financial.type.equity_under_min", min_equity: 10))
-      end
-
-      it "does not add an error for equity in range with the correct percentage" do
-        record.type = 2
-        record.equity = 50
-        financial_validator.validate_equity_in_range_for_year_and_type(record)
-        expect(record.errors).to be_empty
-      end
-
-      it "adds an error for equity above max with the correct percentage" do
-        record.type = 2
-        record.equity = 90
-        financial_validator.validate_equity_in_range_for_year_and_type(record)
-        expect(record.errors["equity"]).to include(match I18n.t("validations.sales.financial.equity.equity_over_max", max_equity: 75))
-        expect(record.errors["type"]).to include(match I18n.t("validations.sales.financial.type.equity_over_max", max_equity: 75))
-      end
-
-      it "does not add an error if it's a resale" do
-        record.type = 2
-        record.equity = 90
-        record.resale = 1
-        financial_validator.validate_equity_in_range_for_year_and_type(record)
-        expect(record.errors).to be_empty
-      end
+    it "adds an error for type 2, equity below min with the correct percentage" do
+      record.type = 2
+      record.equity = 1
+      financial_validator.validate_equity_in_range_for_year_and_type(record)
+      expect(record.errors["equity"]).to include(match I18n.t("validations.sales.financial.equity.equity_under_min", min_equity: 25))
+      expect(record.errors["type"]).to include(match I18n.t("validations.sales.financial.type.equity_under_min", min_equity: 25))
     end
 
-    context "with a log in 23/24 collection year" do
-      let(:saledate) { Time.zone.local(2024, 1, 1) }
+    it "adds an error for type 30, equity below min with the correct percentage" do
+      record.type = 30
+      record.equity = 1
+      financial_validator.validate_equity_in_range_for_year_and_type(record)
+      expect(record.errors["equity"]).to include(match I18n.t("validations.sales.financial.equity.equity_under_min", min_equity: 10))
+      expect(record.errors["type"]).to include(match I18n.t("validations.sales.financial.type.equity_under_min", min_equity: 10))
+    end
 
-      it "adds an error for type 2, equity below min with the correct percentage" do
-        record.type = 2
-        record.equity = 1
-        financial_validator.validate_equity_in_range_for_year_and_type(record)
-        expect(record.errors["equity"]).to include(match I18n.t("validations.sales.financial.equity.equity_under_min", min_equity: 25))
-        expect(record.errors["type"]).to include(match I18n.t("validations.sales.financial.type.equity_under_min", min_equity: 25))
-      end
+    it "adds an error for type 18, low equity below min with the correct percentage" do
+      record.type = 18
+      record.equity = 10
+      financial_validator.validate_equity_in_range_for_year_and_type(record)
+      expect(record.errors["equity"]).to include(match I18n.t("validations.sales.financial.equity.equity_under_min", min_equity: 25))
+      expect(record.errors["type"]).to include(match I18n.t("validations.sales.financial.type.equity_under_min", min_equity: 25))
+    end
 
-      it "adds an error for type 30, equity below min with the correct percentage" do
-        record.type = 30
-        record.equity = 1
-        financial_validator.validate_equity_in_range_for_year_and_type(record)
-        expect(record.errors["equity"]).to include(match I18n.t("validations.sales.financial.equity.equity_under_min", min_equity: 10))
-        expect(record.errors["type"]).to include(match I18n.t("validations.sales.financial.type.equity_under_min", min_equity: 10))
-      end
+    it "does not add an error for type 30, low equity in range with the correct percentage" do
+      record.type = 30
+      record.equity = 10
+      financial_validator.validate_equity_in_range_for_year_and_type(record)
+      expect(record.errors).to be_empty
+    end
 
-      it "does not add an error for equity in range with the correct percentage" do
-        record.type = 2
-        record.equity = 50
-        financial_validator.validate_equity_in_range_for_year_and_type(record)
-        expect(record.errors).to be_empty
-      end
+    it "does not add an error for equity in range with the correct percentage" do
+      record.type = 2
+      record.equity = 50
+      financial_validator.validate_equity_in_range_for_year_and_type(record)
+      expect(record.errors).to be_empty
+    end
 
-      it "adds an error for equity above max with the correct percentage" do
-        record.type = 2
-        record.equity = 90
-        financial_validator.validate_equity_in_range_for_year_and_type(record)
-        expect(record.errors["equity"]).to include(match I18n.t("validations.sales.financial.equity.equity_over_max", max_equity: 75))
-        expect(record.errors["type"]).to include(match I18n.t("validations.sales.financial.type.equity_over_max", max_equity: 75))
-      end
+    it "adds an error for equity above max with the correct percentage" do
+      record.type = 2
+      record.equity = 90
+      financial_validator.validate_equity_in_range_for_year_and_type(record)
+      expect(record.errors["equity"]).to include(match I18n.t("validations.sales.financial.equity.equity_over_max", max_equity: 75))
+      expect(record.errors["type"]).to include(match I18n.t("validations.sales.financial.type.equity_over_max", max_equity: 75))
     end
   end
 
   describe "#validate_staircase_difference" do
     let(:record) { FactoryBot.build(:sales_log, saledate:) }
 
-    context "with a log in the 23/24 collection year" do
-      let(:saledate) { Time.zone.local(2023, 4, 1) }
+    let(:saledate) { current_collection_start_date }
 
-      it "does not add an error" do
-        record.stairbought = 2
-        record.stairowned = 3
-        record.equity = 2
-        financial_validator.validate_staircase_difference(record)
-        expect(record.errors).to be_empty
-      end
+    it "adds errors if equity is more than stairowned - stairbought for joint purchase" do
+      record.stairbought = 2.5
+      record.stairowned = 3
+      record.equity = 2
+      record.jointpur = 1
+      financial_validator.validate_staircase_difference(record)
+      expect(record.errors["equity"]).to include(I18n.t("validations.sales.financial.equity.equity_over_stairowned_minus_stairbought.joint_purchase", equity: 2, staircase_difference: 0.5))
+      expect(record.errors["stairowned"]).to include(I18n.t("validations.sales.financial.stairowned.equity_over_stairowned_minus_stairbought.joint_purchase", equity: 2, staircase_difference: 0.5))
+      expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.financial.stairbought.equity_over_stairowned_minus_stairbought.joint_purchase", equity: 2, staircase_difference: 0.5))
     end
 
-    context "with a log in 24/25 collection year" do
-      let(:saledate) { Time.zone.local(2024, 4, 1) }
+    it "adds errors if equity is more than stairowned - stairbought for non joint purchase" do
+      record.stairbought = 2
+      record.stairowned = 3
+      record.equity = 2.5
+      record.jointpur = 2
+      financial_validator.validate_staircase_difference(record)
+      expect(record.errors["equity"]).to include(I18n.t("validations.sales.financial.equity.equity_over_stairowned_minus_stairbought.not_joint_purchase", equity: 2.5, staircase_difference: 1.0))
+      expect(record.errors["stairowned"]).to include(I18n.t("validations.sales.financial.stairowned.equity_over_stairowned_minus_stairbought.not_joint_purchase", equity: 2.5, staircase_difference: 1.0))
+      expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.financial.stairbought.equity_over_stairowned_minus_stairbought.not_joint_purchase", equity: 2.5, staircase_difference: 1.0))
+    end
 
-      it "adds errors if equity is more than stairowned - stairbought for joint purchase" do
-        record.stairbought = 2.5
-        record.stairowned = 3
-        record.equity = 2
-        record.jointpur = 1
-        financial_validator.validate_staircase_difference(record)
-        expect(record.errors["equity"]).to include(I18n.t("validations.sales.financial.equity.equity_over_stairowned_minus_stairbought.joint_purchase", equity: 2, staircase_difference: 0.5))
-        expect(record.errors["stairowned"]).to include(I18n.t("validations.sales.financial.stairowned.equity_over_stairowned_minus_stairbought.joint_purchase", equity: 2, staircase_difference: 0.5))
-        expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.financial.stairbought.equity_over_stairowned_minus_stairbought.joint_purchase", equity: 2, staircase_difference: 0.5))
-      end
+    it "does not add errors if equity is less than stairowned - stairbought and stairnum is nil" do
+      record.stairbought = 2
+      record.stairowned = 10
+      record.equity = 2
+      financial_validator.validate_staircase_difference(record)
+      expect(record.errors).to be_empty
+    end
 
-      it "adds errors if equity is more than stairowned - stairbought for non joint purchase" do
-        record.stairbought = 2
-        record.stairowned = 3
-        record.equity = 2.5
-        record.jointpur = 2
-        financial_validator.validate_staircase_difference(record)
-        expect(record.errors["equity"]).to include(I18n.t("validations.sales.financial.equity.equity_over_stairowned_minus_stairbought.not_joint_purchase", equity: 2.5, staircase_difference: 1.0))
-        expect(record.errors["stairowned"]).to include(I18n.t("validations.sales.financial.stairowned.equity_over_stairowned_minus_stairbought.not_joint_purchase", equity: 2.5, staircase_difference: 1.0))
-        expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.financial.stairbought.equity_over_stairowned_minus_stairbought.not_joint_purchase", equity: 2.5, staircase_difference: 1.0))
-      end
+    it "does not add errors if equity is equal stairowned - stairbought and stairnum is nil" do
+      record.stairbought = 2
+      record.stairowned = 10
+      record.equity = 8
+      financial_validator.validate_staircase_difference(record)
+      expect(record.errors).to be_empty
+    end
 
-      it "does not add errors if equity is less than stairowned - stairbought and stairnum is nil" do
-        record.stairbought = 2
-        record.stairowned = 10
-        record.equity = 2
-        financial_validator.validate_staircase_difference(record)
-        expect(record.errors).to be_empty
-      end
+    it "does not add errors if stairbought is not given" do
+      record.stairbought = nil
+      record.stairowned = 10
+      record.equity = 2
+      financial_validator.validate_staircase_difference(record)
+      expect(record.errors).to be_empty
+    end
 
-      it "does not add errors if equity is equal stairowned - stairbought and stairnum is nil" do
-        record.stairbought = 2
-        record.stairowned = 10
-        record.equity = 8
-        financial_validator.validate_staircase_difference(record)
-        expect(record.errors).to be_empty
-      end
+    it "does not add errors if stairowned is not given" do
+      record.stairbought = 2
+      record.stairowned = nil
+      record.equity = 2
+      financial_validator.validate_staircase_difference(record)
+      expect(record.errors).to be_empty
+    end
 
-      it "does not add errors if stairbought is not given" do
-        record.stairbought = nil
-        record.stairowned = 10
-        record.equity = 2
-        financial_validator.validate_staircase_difference(record)
-        expect(record.errors).to be_empty
-      end
+    it "does not add errors if equity is not given" do
+      record.stairbought = 2
+      record.stairowned = 10
+      record.equity = 0
+      financial_validator.validate_staircase_difference(record)
+      expect(record.errors).to be_empty
+    end
 
-      it "does not add errors if stairowned is not given" do
-        record.stairbought = 2
-        record.stairowned = nil
-        record.equity = 2
-        financial_validator.validate_staircase_difference(record)
-        expect(record.errors).to be_empty
-      end
+    it "adds errors if stairnum is present and stairowned is not enough more than stairbought + equity" do
+      record.stairowned = 20
+      record.stairbought = 10
+      record.equity = 9
+      record.numstair = 3
+      financial_validator.validate_staircase_difference(record)
+      expect(record.errors["equity"]).to include(I18n.t("validations.sales.financial.equity.more_than_stairowned_minus_stairbought_minus_prev_staircasing", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
+      expect(record.errors["stairowned"]).to include(I18n.t("validations.sales.financial.stairowned.less_than_stairbought_plus_equity_plus_prev_staircasing", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
+      expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.financial.stairbought.more_than_stairowned_minus_equity_minus_prev_staircasing", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
+      expect(record.errors["numstair"]).to include(I18n.t("validations.sales.financial.numstair.too_high_for_stairowned_minus_stairbought_minus_equity", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
+      expect(record.errors["firststair"]).to include(I18n.t("validations.sales.financial.firststair.invalid_for_stairowned_minus_stairbought_minus_equity", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
+    end
 
-      it "does not add errors if equity is not given" do
-        record.stairbought = 2
-        record.stairowned = 10
-        record.equity = 0
-        financial_validator.validate_staircase_difference(record)
-        expect(record.errors).to be_empty
-      end
+    it "does not add errors if stairnum is present and stairowned is enough more than stairbought + equity" do
+      record.stairowned = 25
+      record.stairbought = 10
+      record.equity = 9
+      record.numstair = 3
+      financial_validator.validate_staircase_difference(record)
+      expect(record.errors).to be_empty
+    end
 
-      it "adds errors if stairnum is present and stairowned is not enough more than stairbought + equity" do
-        record.stairowned = 20
-        record.stairbought = 10
-        record.equity = 9
-        record.numstair = 3
-        financial_validator.validate_staircase_difference(record)
-        expect(record.errors["equity"]).to include(I18n.t("validations.sales.financial.equity.more_than_stairowned_minus_stairbought_minus_prev_staircasing", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
-        expect(record.errors["stairowned"]).to include(I18n.t("validations.sales.financial.stairowned.less_than_stairbought_plus_equity_plus_prev_staircasing", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
-        expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.financial.stairbought.more_than_stairowned_minus_equity_minus_prev_staircasing", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
-        expect(record.errors["numstair"]).to include(I18n.t("validations.sales.financial.numstair.too_high_for_stairowned_minus_stairbought_minus_equity", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
-        expect(record.errors["firststair"]).to include(I18n.t("validations.sales.financial.firststair.invalid_for_stairowned_minus_stairbought_minus_equity", equity: 9, bought: 10, numprevstair: 2, equity_sum: 21, stair_total: 20))
-      end
-
-      it "does not add errors if stairnum is present and stairowned is enough more than stairbought + equity" do
-        record.stairowned = 25
-        record.stairbought = 10
-        record.equity = 9
-        record.numstair = 3
-        financial_validator.validate_staircase_difference(record)
-        expect(record.errors).to be_empty
-      end
-
-      it "does not add errors if stairnum is present and stairowned exactly equals minimum" do
-        record.stairowned = 20
-        record.stairbought = 10
-        record.equity = 9
-        record.numstair = 2
-        financial_validator.validate_staircase_difference(record)
-        expect(record.errors).to be_empty
-      end
+    it "does not add errors if stairnum is present and stairowned exactly equals minimum" do
+      record.stairowned = 20
+      record.stairbought = 10
+      record.equity = 9
+      record.numstair = 2
+      financial_validator.validate_staircase_difference(record)
+      expect(record.errors).to be_empty
     end
   end
 end

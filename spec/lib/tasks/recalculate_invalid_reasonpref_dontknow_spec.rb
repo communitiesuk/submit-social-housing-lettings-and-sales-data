@@ -2,12 +2,19 @@ require "rails_helper"
 require "rake"
 
 RSpec.describe "recalculate_invalid_reasonpref_dontknow" do
+  include CollectionTimeHelper
+
   subject(:task) { Rake::Task["recalculate_invalid_rpdontknow"] }
 
   before do
     Rake.application.rake_require("tasks/recalculate_invalid_reasonpref_dontknow")
     Rake::Task.define_task(:environment)
     task.reenable
+    Timecop.freeze(previous_collection_end_date)
+  end
+
+  after do
+    Timecop.return
   end
 
   let(:invalid_logs) { create_list(:lettings_log, 5, :completed, :ignore_validation_errors, reasonpref: 1, rp_dontknow: 1, rp_homeless: 1, rp_insan_unsat: rand(2), rp_medwel: rand(2), rp_hardship: rand(2), updated_at: Time.zone.local(2024, 4, 2, 12, 0, 0), startdate: Time.zone.local(2024, rand(4..12), rand(1..30))) }

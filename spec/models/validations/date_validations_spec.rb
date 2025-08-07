@@ -56,7 +56,7 @@ RSpec.describe Validations::DateValidations do
 
     context "with 2024 logs or earlier" do
       it "cannot be more than 10 years before the tenancy start date" do
-        record.startdate = Time.zone.local(2024, 2, 1)
+        record.startdate = Time.zone.local(2024, 4, 1)
         record.mrcdate = Time.zone.local(2014, 1, 31)
         date_validator.validate_property_major_repairs(record)
         expect(record.errors["mrcdate"])
@@ -150,7 +150,7 @@ RSpec.describe Validations::DateValidations do
 
     context "with 2024 logs or earlier" do
       it "cannot be more than 10 years before the tenancy start date" do
-        record.startdate = Time.zone.local(2024, 2, 1)
+        record.startdate = Time.zone.local(2024, 4, 1)
         record.voiddate = Time.zone.local(2014, 1, 31)
         date_validator.validate_property_void_date(record)
         expect(record.errors["voiddate"])

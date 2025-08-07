@@ -4,19 +4,9 @@ RSpec.describe DuplicateLogsController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { create(:user, :data_coordinator) }
   let(:lettings_log) { create(:lettings_log, :duplicate, assigned_to: user) }
-  let(:sales_log) { create(:sales_log, :duplicate, assigned_to: user) }
+  let(:sales_log) { create(:sales_log, :duplicate, staircase: 2, assigned_to: user) }
 
   describe "GET show" do
-    before do
-      Timecop.freeze(Time.zone.local(2024, 3, 1))
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
-
     context "when user is not signed in" do
       it "redirects to sign in page" do
         get "/lettings-logs/#{lettings_log.id}/duplicate-logs"
@@ -64,11 +54,11 @@ RSpec.describe DuplicateLogsController, type: :request do
             end
 
             it "displays check your answers for each log with correct questions" do
-              expect(page).to have_content("Q5 - Tenancy start date", count: 3)
-              expect(page).to have_content("Q7 - Tenant code", count: 3)
-              expect(page).to have_content("Q32 - Lead tenant’s age", count: 3)
-              expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 3)
-              expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 3)
+              expect(page).to have_content("- Tenancy start date", count: 3)
+              expect(page).to have_content("- Tenant code", count: 3)
+              expect(page).to have_content("- Lead tenant’s age", count: 3)
+              expect(page).to have_content("- Lead tenant’s gender identity", count: 3)
+              expect(page).to have_content("- Lead tenant’s working situation", count: 3)
               expect(page).to have_content("Household rent and charges", count: 3)
               expect(page).to have_link("Change", count: 24)
               expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
@@ -81,12 +71,12 @@ RSpec.describe DuplicateLogsController, type: :request do
               duplicate_logs[0].update!(uprn: "123", uprn_known: 1, uprn_confirmed: 1, manual_address_entry_selected: false)
               get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}"
 
-              expect(page).to have_content("Q5 - Tenancy start date", count: 3)
-              expect(page).to have_content("Q7 - Tenant code", count: 3)
+              expect(page).to have_content("- Tenancy start date", count: 3)
+              expect(page).to have_content("- Tenant code", count: 3)
               expect(page).to have_content("Postcode (from UPRN)", count: 2)
-              expect(page).to have_content("Q32 - Lead tenant’s age", count: 3)
-              expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 3)
-              expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 3)
+              expect(page).to have_content("- Lead tenant’s age", count: 3)
+              expect(page).to have_content("- Lead tenant’s gender identity", count: 3)
+              expect(page).to have_content("- Lead tenant’s working situation", count: 3)
               expect(page).to have_content("Household rent and charges", count: 3)
               expect(page).to have_link("Change", count: 24)
               expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
@@ -110,11 +100,11 @@ RSpec.describe DuplicateLogsController, type: :request do
               end
 
               it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("Q5 - Tenancy start date", count: 1)
-                expect(page).to have_content("Q7 - Tenant code", count: 1)
-                expect(page).to have_content("Q32 - Lead tenant’s age", count: 1)
-                expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 1)
-                expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 1)
+                expect(page).to have_content("- Tenancy start date", count: 1)
+                expect(page).to have_content("- Tenant code", count: 1)
+                expect(page).to have_content("- Lead tenant’s age", count: 1)
+                expect(page).to have_content("- Lead tenant’s gender identity", count: 1)
+                expect(page).to have_content("- Lead tenant’s working situation", count: 1)
                 expect(page).to have_content("Household rent and charges", count: 1)
                 expect(page).to have_link("Change", count: 8)
                 expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
@@ -136,11 +126,11 @@ RSpec.describe DuplicateLogsController, type: :request do
               end
 
               it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("Q5 - Tenancy start date", count: 1)
-                expect(page).to have_content("Q7 - Tenant code", count: 1)
-                expect(page).to have_content("Q32 - Lead tenant’s age", count: 1)
-                expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 1)
-                expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 1)
+                expect(page).to have_content("- Tenancy start date", count: 1)
+                expect(page).to have_content("- Tenant code", count: 1)
+                expect(page).to have_content("- Lead tenant’s age", count: 1)
+                expect(page).to have_content("- Lead tenant’s gender identity", count: 1)
+                expect(page).to have_content("- Lead tenant’s working situation", count: 1)
                 expect(page).to have_content("Household rent and charges", count: 1)
                 expect(page).to have_link("Change", count: 8)
                 expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
@@ -173,12 +163,13 @@ RSpec.describe DuplicateLogsController, type: :request do
             end
 
             it "displays check your answers for each log with correct questions" do
-              expect(page).to have_content("Q1 - Sale completion date", count: 3)
-              expect(page).to have_content("Q2 - Purchaser code", count: 3)
-              expect(page).to have_content("Q20 - Buyer 1’s age", count: 3)
-              expect(page).to have_content("Q21 - Buyer 1’s gender identity", count: 3)
-              expect(page).to have_content("Q25 - Buyer 1’s working situation", count: 3)
-              expect(page).to have_content("Q15 - Postcode", count: 3)
+              expect(page).to have_content("- Owning organisation", count: 3)
+              expect(page).to have_content("- Sale completion date", count: 3)
+              expect(page).to have_content("- Purchaser code", count: 3)
+              expect(page).to have_content("- Buyer 1’s age", count: 3)
+              expect(page).to have_content("- Buyer 1’s gender identity", count: 3)
+              expect(page).to have_content("- Buyer 1’s working situation", count: 3)
+              expect(page).to have_content("- Postcode", count: 3)
               expect(page).to have_link("Change", count: 21)
               expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
               expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
@@ -191,11 +182,11 @@ RSpec.describe DuplicateLogsController, type: :request do
               duplicate_logs[1].update!(uprn: "123", uprn_known: 1, manual_address_entry_selected: false)
               get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}"
 
-              expect(page).to have_content("Q1 - Sale completion date", count: 3)
-              expect(page).to have_content("Q2 - Purchaser code", count: 3)
-              expect(page).to have_content("Q20 - Buyer 1’s age", count: 3)
-              expect(page).to have_content("Q21 - Buyer 1’s gender identity", count: 3)
-              expect(page).to have_content("Q25 - Buyer 1’s working situation", count: 3)
+              expect(page).to have_content("- Sale completion date", count: 3)
+              expect(page).to have_content("- Purchaser code", count: 3)
+              expect(page).to have_content("- Buyer 1’s age", count: 3)
+              expect(page).to have_content("- Buyer 1’s gender identity", count: 3)
+              expect(page).to have_content("- Buyer 1’s working situation", count: 3)
               expect(page).to have_content("Postcode (from UPRN)", count: 3)
               expect(page).to have_link("Change", count: 21)
               expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
@@ -219,12 +210,12 @@ RSpec.describe DuplicateLogsController, type: :request do
               end
 
               it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("Q1 - Sale completion date", count: 1)
-                expect(page).to have_content("Q2 - Purchaser code", count: 1)
-                expect(page).to have_content("Q20 - Buyer 1’s age", count: 1)
-                expect(page).to have_content("Q21 - Buyer 1’s gender identity", count: 1)
-                expect(page).to have_content("Q25 - Buyer 1’s working situation", count: 1)
-                expect(page).to have_content("Q15 - Postcode", count: 1)
+                expect(page).to have_content("- Sale completion date", count: 1)
+                expect(page).to have_content("- Purchaser code", count: 1)
+                expect(page).to have_content("- Buyer 1’s age", count: 1)
+                expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
+                expect(page).to have_content("- Buyer 1’s working situation", count: 1)
+                expect(page).to have_content("- Postcode", count: 1)
                 expect(page).to have_link("Change", count: 7)
                 expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
               end
@@ -245,12 +236,12 @@ RSpec.describe DuplicateLogsController, type: :request do
               end
 
               it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("Q1 - Sale completion date", count: 1)
-                expect(page).to have_content("Q2 - Purchaser code", count: 1)
-                expect(page).to have_content("Q20 - Buyer 1’s age", count: 1)
-                expect(page).to have_content("Q21 - Buyer 1’s gender identity", count: 1)
-                expect(page).to have_content("Q25 - Buyer 1’s working situation", count: 1)
-                expect(page).to have_content("Q15 - Postcode", count: 1)
+                expect(page).to have_content("- Sale completion date", count: 1)
+                expect(page).to have_content("- Purchaser code", count: 1)
+                expect(page).to have_content("- Buyer 1’s age", count: 1)
+                expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
+                expect(page).to have_content("- Buyer 1’s working situation", count: 1)
+                expect(page).to have_content("- Postcode", count: 1)
                 expect(page).to have_link("Change", count: 7)
                 expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
               end
@@ -289,11 +280,11 @@ RSpec.describe DuplicateLogsController, type: :request do
             end
 
             it "displays check your answers for each log with correct questions" do
-              expect(page).to have_content("Q5 - Tenancy start date", count: 3)
-              expect(page).to have_content("Q7 - Tenant code", count: 3)
-              expect(page).to have_content("Q32 - Lead tenant’s age", count: 3)
-              expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 3)
-              expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 3)
+              expect(page).to have_content("- Tenancy start date", count: 3)
+              expect(page).to have_content("- Tenant code", count: 3)
+              expect(page).to have_content("- Lead tenant’s age", count: 3)
+              expect(page).to have_content("- Lead tenant’s gender identity", count: 3)
+              expect(page).to have_content("- Lead tenant’s working situation", count: 3)
               expect(page).to have_content("Household rent and charges", count: 3)
               expect(page).to have_link("Change", count: 21)
               expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
@@ -317,11 +308,11 @@ RSpec.describe DuplicateLogsController, type: :request do
               end
 
               it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("Q5 - Tenancy start date", count: 1)
-                expect(page).to have_content("Q7 - Tenant code", count: 1)
-                expect(page).to have_content("Q32 - Lead tenant’s age", count: 1)
-                expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 1)
-                expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 1)
+                expect(page).to have_content("- Tenancy start date", count: 1)
+                expect(page).to have_content("- Tenant code", count: 1)
+                expect(page).to have_content("- Lead tenant’s age", count: 1)
+                expect(page).to have_content("- Lead tenant’s gender identity", count: 1)
+                expect(page).to have_content("- Lead tenant’s working situation", count: 1)
                 expect(page).to have_content("Household rent and charges", count: 1)
                 expect(page).to have_link("Change", count: 7)
                 expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
@@ -343,11 +334,11 @@ RSpec.describe DuplicateLogsController, type: :request do
               end
 
               it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("Q5 - Tenancy start date", count: 1)
-                expect(page).to have_content("Q7 - Tenant code", count: 1)
-                expect(page).to have_content("Q32 - Lead tenant’s age", count: 1)
-                expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 1)
-                expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 1)
+                expect(page).to have_content("- Tenancy start date", count: 1)
+                expect(page).to have_content("- Tenant code", count: 1)
+                expect(page).to have_content("- Lead tenant’s age", count: 1)
+                expect(page).to have_content("- Lead tenant’s gender identity", count: 1)
+                expect(page).to have_content("- Lead tenant’s working situation", count: 1)
                 expect(page).to have_content("Household rent and charges", count: 1)
                 expect(page).to have_link("Change", count: 7)
                 expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
@@ -380,12 +371,12 @@ RSpec.describe DuplicateLogsController, type: :request do
             end
 
             it "displays check your answers for each log with correct questions" do
-              expect(page).to have_content("Q1 - Sale completion date", count: 3)
-              expect(page).to have_content("Q2 - Purchaser code", count: 3)
-              expect(page).to have_content("Q20 - Buyer 1’s age", count: 3)
-              expect(page).to have_content("Q21 - Buyer 1’s gender identity", count: 3)
-              expect(page).to have_content("Q25 - Buyer 1’s working situation", count: 3)
-              expect(page).to have_content("Q15 - Postcode", count: 3)
+              expect(page).to have_content("- Sale completion date", count: 3)
+              expect(page).to have_content("- Purchaser code", count: 3)
+              expect(page).to have_content("- Buyer 1’s age", count: 3)
+              expect(page).to have_content("- Buyer 1’s gender identity", count: 3)
+              expect(page).to have_content("- Buyer 1’s working situation", count: 3)
+              expect(page).to have_content("- Postcode", count: 3)
               expect(page).to have_link("Change", count: 18)
               expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
               expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
@@ -408,12 +399,12 @@ RSpec.describe DuplicateLogsController, type: :request do
               end
 
               it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("Q1 - Sale completion date", count: 1)
-                expect(page).to have_content("Q2 - Purchaser code", count: 1)
-                expect(page).to have_content("Q20 - Buyer 1’s age", count: 1)
-                expect(page).to have_content("Q21 - Buyer 1’s gender identity", count: 1)
-                expect(page).to have_content("Q25 - Buyer 1’s working situation", count: 1)
-                expect(page).to have_content("Q15 - Postcode", count: 1)
+                expect(page).to have_content("- Sale completion date", count: 1)
+                expect(page).to have_content("- Purchaser code", count: 1)
+                expect(page).to have_content("- Buyer 1’s age", count: 1)
+                expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
+                expect(page).to have_content("- Buyer 1’s working situation", count: 1)
+                expect(page).to have_content("- Postcode", count: 1)
                 expect(page).to have_link("Change", count: 6)
                 expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
               end
@@ -434,12 +425,12 @@ RSpec.describe DuplicateLogsController, type: :request do
               end
 
               it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("Q1 - Sale completion date", count: 1)
-                expect(page).to have_content("Q2 - Purchaser code", count: 1)
-                expect(page).to have_content("Q20 - Buyer 1’s age", count: 1)
-                expect(page).to have_content("Q21 - Buyer 1’s gender identity", count: 1)
-                expect(page).to have_content("Q25 - Buyer 1’s working situation", count: 1)
-                expect(page).to have_content("Q15 - Postcode", count: 1)
+                expect(page).to have_content("- Sale completion date", count: 1)
+                expect(page).to have_content("- Purchaser code", count: 1)
+                expect(page).to have_content("- Buyer 1’s age", count: 1)
+                expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
+                expect(page).to have_content("- Buyer 1’s working situation", count: 1)
+                expect(page).to have_content("- Postcode", count: 1)
                 expect(page).to have_link("Change", count: 6)
                 expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
               end

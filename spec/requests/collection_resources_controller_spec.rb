@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe CollectionResourcesController, type: :request do
+  include CollectionTimeHelper
+
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:storage_service) { instance_double(Storage::S3Service, get_file_metadata: nil, delete_file: nil) }
 
@@ -56,10 +58,10 @@ RSpec.describe CollectionResourcesController, type: :request do
       it "displays collection resources" do
         get collection_resources_path
 
-        expect(page).to have_content("Lettings 2024 to 2025")
-        expect(page).to have_content("Lettings 2025 to 2026")
-        expect(page).to have_content("Sales 2024 to 2025")
-        expect(page).to have_content("Sales 2025 to 2026")
+        expect(page).to have_content("Lettings #{next_collection_start_year} to #{next_collection_end_year}")
+        expect(page).to have_content("Lettings #{current_collection_start_year} to #{current_collection_end_year}")
+        expect(page).to have_content("Sales #{next_collection_start_year} to #{next_collection_end_year}")
+        expect(page).to have_content("Sales #{current_collection_start_year} to #{current_collection_end_year}")
       end
 
       it "displays mandatory files" do
@@ -73,10 +75,10 @@ RSpec.describe CollectionResourcesController, type: :request do
       it "allows uploading new resources" do
         get collection_resources_path
 
-        expect(page).to have_link("Add new sales 2024 to 2025 resource", href: new_collection_resource_path(year: 2024, log_type: "sales"))
-        expect(page).to have_link("Add new lettings 2024 to 2025 resource", href: new_collection_resource_path(year: 2024, log_type: "lettings"))
-        expect(page).to have_link("Add new sales 2025 to 2026 resource", href: new_collection_resource_path(year: 2025, log_type: "sales"))
-        expect(page).to have_link("Add new lettings 2025 to 2026 resource", href: new_collection_resource_path(year: 2025, log_type: "lettings"))
+        expect(page).to have_link("Add new sales #{next_collection_start_year} to #{next_collection_end_year} resource", href: new_collection_resource_path(year: next_collection_start_year, log_type: "sales"))
+        expect(page).to have_link("Add new lettings #{next_collection_start_year} to #{next_collection_end_year} resource", href: new_collection_resource_path(year: next_collection_start_year, log_type: "lettings"))
+        expect(page).to have_link("Add new sales #{current_collection_start_year} to #{current_collection_end_year} resource", href: new_collection_resource_path(year: current_collection_start_year, log_type: "sales"))
+        expect(page).to have_link("Add new lettings #{current_collection_start_year} to #{current_collection_end_year} resource", href: new_collection_resource_path(year: current_collection_start_year, log_type: "lettings"))
       end
 
       context "when files are on S3" do
@@ -86,36 +88,36 @@ RSpec.describe CollectionResourcesController, type: :request do
         end
 
         it "displays file names with download links" do
-          expect(page).to have_link("2024_25_lettings_paper_form.pdf", href: download_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "paper_form"))
-          expect(page).to have_link("bulk-upload-lettings-template-2024-25.xlsx", href: download_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "bulk_upload_template"))
-          expect(page).to have_link("bulk-upload-lettings-specification-2024-25.xlsx", href: download_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "bulk_upload_specification"))
-          expect(page).to have_link("2024_25_sales_paper_form.pdf", href: download_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "paper_form"))
-          expect(page).to have_link("bulk-upload-sales-template-2024-25.xlsx", href: download_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template"))
-          expect(page).to have_link("bulk-upload-sales-specification-2024-25.xlsx", href: download_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link(href: download_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "lettings", resource_type: "paper_form"))
+          expect(page).to have_link(href: download_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "lettings", resource_type: "bulk_upload_template"))
+          expect(page).to have_link(href: download_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "lettings", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link(href: download_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "sales", resource_type: "paper_form"))
+          expect(page).to have_link(href: download_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "sales", resource_type: "bulk_upload_template"))
+          expect(page).to have_link(href: download_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "sales", resource_type: "bulk_upload_specification"))
 
-          expect(page).to have_link("2025_26_lettings_paper_form.pdf", href: download_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "paper_form"))
-          expect(page).to have_link("bulk-upload-lettings-template-2025-26.xlsx", href: download_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "bulk_upload_template"))
-          expect(page).to have_link("bulk-upload-lettings-specification-2025-26.xlsx", href: download_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "bulk_upload_specification"))
-          expect(page).to have_link("2025_26_sales_paper_form.pdf", href: download_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "paper_form"))
-          expect(page).to have_link("bulk-upload-sales-template-2025-26.xlsx", href: download_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_template"))
-          expect(page).to have_link("bulk-upload-sales-specification-2025-26.xlsx", href: download_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link(href: download_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "lettings", resource_type: "paper_form"))
+          expect(page).to have_link(href: download_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "lettings", resource_type: "bulk_upload_template"))
+          expect(page).to have_link(href: download_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "lettings", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link(href: download_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "sales", resource_type: "paper_form"))
+          expect(page).to have_link(href: download_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "sales", resource_type: "bulk_upload_template"))
+          expect(page).to have_link(href: download_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "sales", resource_type: "bulk_upload_specification"))
         end
 
         it "displays change links" do
           expect(page).to have_selector(:link_or_button, "Change", count: 12)
-          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "paper_form"))
-          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "bulk_upload_template"))
-          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "bulk_upload_specification"))
-          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "paper_form"))
-          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template"))
-          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "lettings", resource_type: "paper_form"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "lettings", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "lettings", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "sales", resource_type: "paper_form"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "sales", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "sales", resource_type: "bulk_upload_specification"))
 
-          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "paper_form"))
-          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "bulk_upload_template"))
-          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "bulk_upload_specification"))
-          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "paper_form"))
-          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_template"))
-          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "lettings", resource_type: "paper_form"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "lettings", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "lettings", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "sales", resource_type: "paper_form"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "sales", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "sales", resource_type: "bulk_upload_specification"))
         end
 
         context "when the collection year has not started yet" do
@@ -157,19 +159,19 @@ RSpec.describe CollectionResourcesController, type: :request do
 
         it "displays upload links" do
           expect(page).to have_selector(:link_or_button, "Upload", count: 12)
-          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "paper_form"))
-          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "bulk_upload_template"))
-          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "bulk_upload_specification"))
-          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "paper_form"))
-          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template"))
-          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "lettings", resource_type: "paper_form"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "lettings", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "lettings", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "sales", resource_type: "paper_form"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "sales", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "sales", resource_type: "bulk_upload_specification"))
 
-          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "paper_form"))
-          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "bulk_upload_template"))
-          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "bulk_upload_specification"))
-          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "paper_form"))
-          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_template"))
-          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "lettings", resource_type: "paper_form"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "lettings", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "lettings", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "sales", resource_type: "paper_form"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "sales", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: next_collection_start_year, log_type: "sales", resource_type: "bulk_upload_specification"))
         end
 
         context "when the collection year has not started yet" do
@@ -333,9 +335,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         end
 
         it "displays update collection resources page content" do
-          get edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template")
+          get edit_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "sales", resource_type: "bulk_upload_template")
 
-          expect(page).to have_content("Sales 2024 to 2025")
+          expect(page).to have_content("Sales #{current_collection_start_year} to #{current_collection_end_year}")
           expect(page).to have_content("Change the bulk upload template")
           expect(page).to have_content("This file will be available for all users to download.")
           expect(page).to have_content("Upload file")
@@ -351,9 +353,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         end
 
         it "displays upload collection resources page content" do
-          get edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template")
+          get edit_mandatory_collection_resource_path(year: current_collection_start_year, log_type: "sales", resource_type: "bulk_upload_template")
 
-          expect(page).to have_content("Sales 2024 to 2025")
+          expect(page).to have_content("Sales #{current_collection_start_year} to #{current_collection_end_year}")
           expect(page).to have_content("Upload the bulk upload template")
           expect(page).to have_content("This file will be available for all users to download.")
           expect(page).to have_content("Upload file")

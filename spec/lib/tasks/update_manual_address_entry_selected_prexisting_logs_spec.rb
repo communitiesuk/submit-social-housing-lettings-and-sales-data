@@ -2,10 +2,17 @@ require "rails_helper"
 require "rake"
 
 RSpec.describe "update_manual_address_entry_selected_preexisting_logs_spec", type: :task do
+  include CollectionTimeHelper
+
   before do
     Rake.application.rake_require("tasks/update_manual_address_entry_selected_prexisting_logs")
     Rake::Task.define_task(:environment)
     task.reenable
+    Timecop.freeze(previous_collection_end_date)
+  end
+
+  after do
+    Timecop.return
   end
 
   describe "bulk_update:update_manual_address_entry_selected" do
