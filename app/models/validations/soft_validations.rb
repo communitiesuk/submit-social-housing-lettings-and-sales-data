@@ -6,7 +6,7 @@ module Validations::SoftValidations
     2 => OpenStruct.new(soft_min: 67, soft_max: 620, hard_min: 50, hard_max: 950),
     3 => OpenStruct.new(soft_min: 80, soft_max: 480, hard_min: 40, hard_max: 990),
     4 => OpenStruct.new(soft_min: 50, soft_max: 370, hard_min: 10, hard_max: 450),
-    5 => OpenStruct.new(soft_min: 50, soft_max: 380, hard_min: 10, hard_max: 690),
+    5 => OpenStruct.new(soft_min: 50, soft_max: 380, hard_min: 10, hard_max: 1000),
     6 => OpenStruct.new(soft_min: 53, soft_max: 540, hard_min: 10, hard_max: 890),
     7 => OpenStruct.new(soft_min: 47, soft_max: 460, hard_min: 10, hard_max: 1300),
     8 => OpenStruct.new(soft_min: 54, soft_max: 460, hard_min: 10, hard_max: 2000),
