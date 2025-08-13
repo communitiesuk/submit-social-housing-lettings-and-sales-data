@@ -10,7 +10,7 @@ RSpec.describe Validations::Sales::PropertyValidations do
   describe "#validate_postcodes_match_if_discounted_ownership" do
     let(:record) { build(:sales_log, ownershipsch: 1, saledate: current_collection_start_date) }
 
-    it "is not validated" do
+    it "is not validated for years >= 2024" do
       record.postcode_full = "SW1A 1AA"
       record.ppostcode_full = "SW1A 0AA"
 

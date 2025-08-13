@@ -12,7 +12,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
   describe "#validate_partner_count" do
     let(:saledate) { current_collection_start_date }
 
-    it "does not validate" do
+    it "does not validate for years >= 2024" do
       record.relat2 = "P"
       record.relat3 = "P"
       household_validator.validate_partner_count(record)
