@@ -165,7 +165,7 @@ RSpec.describe MergeRequestsHelper do
     let(:organisation) { create(:organisation, name: "Org 1") }
     let(:merging_organisation) { create(:organisation, name: "Org 2") }
     let(:merging_organisation_2) { create(:organisation, name: "Org 3") }
-    let(:merge_date) { Time.zone.local(2025, 1, 1) }
+    let(:merge_date) { current_collection_start_date }
     let(:merge_request) { create(:merge_request, absorbing_organisation: organisation, merge_date:) }
 
     before do

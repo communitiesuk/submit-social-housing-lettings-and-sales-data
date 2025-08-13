@@ -155,8 +155,8 @@ describe DocumentationGenerator do
 
     context "when the service is run for lettings" do
       let(:log_type)  { "lettings" }
-      let(:form) { FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(2023, "lettings")] }
-      let(:row_parser_class) { BulkUpload::Lettings::Year2023::RowParser }
+      let(:form) { FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(2025, "lettings")] }
+      let(:row_parser_class) { BulkUpload::Lettings::Year2025::RowParser }
 
       it "creates new validation documentation records" do
         expect(Rails.logger).to receive(:info).with(/described/).at_least(:once)
@@ -167,7 +167,7 @@ describe DocumentationGenerator do
         expect(any_validation.field).to eq("ppostcode_full")
         expect(any_validation.error_message).to eq("Enter a valid postcode")
         expect(any_validation.case).to eq("Previous postcode is known and current postcode is blank")
-        expect(any_validation.collection_year).to eq("2023/2024")
+        expect(any_validation.collection_year).to eq("2025/2026")
         expect(any_validation.validation_type).to eq("format")
         expect(any_validation.hard_soft).to eq("hard")
         expect(any_validation.other_validated_models).to eq("User")
@@ -207,8 +207,8 @@ describe DocumentationGenerator do
 
     context "when the service is run for sales" do
       let(:log_type)  { "sales" }
-      let(:form) { FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(2023, "sales")] }
-      let(:row_parser_class) { BulkUpload::Sales::Year2023::RowParser }
+      let(:form) { FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(2025, "sales")] }
+      let(:row_parser_class) { BulkUpload::Sales::Year2025::RowParser }
 
       it "creates new validation documentation records" do
         expect(Rails.logger).to receive(:info).with(/described/).at_least(:once)
@@ -219,7 +219,7 @@ describe DocumentationGenerator do
         expect(any_validation.field).to eq("ppostcode_full")
         expect(any_validation.error_message).to eq("Enter a valid postcode")
         expect(any_validation.case).to eq("Previous postcode is known and current postcode is blank")
-        expect(any_validation.collection_year).to eq("2023/2024")
+        expect(any_validation.collection_year).to eq("2025/2026")
         expect(any_validation.validation_type).to eq("format")
         expect(any_validation.hard_soft).to eq("hard")
         expect(any_validation.other_validated_models).to eq("User")

@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe LettingsLogsController, type: :request do
+  include CollectionTimeHelper
+
   let(:user) { FactoryBot.create(:user, organisation: create(:organisation, rent_periods: [2])) }
   let(:owning_organisation) { user.organisation }
   let(:managing_organisation) { owning_organisation }
@@ -10,6 +12,7 @@ RSpec.describe LettingsLogsController, type: :request do
     ActionController::HttpAuthentication::Basic
       .encode_credentials(api_username, api_password)
   end
+  let(:current_date) { current_collection_start_date }
 
   let(:headers) do
     {
@@ -1218,32 +1221,6 @@ RSpec.describe LettingsLogsController, type: :request do
             end
           end
 
-          context "when a lettings log is for a renewal of supported housing in 2024" do
-            let(:lettings_log) { create(:lettings_log, :startdate_today, assigned_to: user, renewal: 1, needstype: 2, rent_type: 3, postcode_known: 0, startdate: Time.zone.local(2024, 10, 20)) }
-
-            before do
-              Timecop.freeze(2024, 10, 15)
-              Singleton.__init__(FormHandler)
-              lettings_log.startdate = Time.zone.local(2024, 10, 20)
-              lettings_log.save!
-            end
-
-            after do
-              Timecop.return
-              Singleton.__init__(FormHandler)
-            end
-
-            it "does not show property information" do
-              get lettings_log_path(lettings_log)
-              expect(page).to have_content "Tenancy information"
-              expect(page).not_to have_content "Property information"
-            end
-
-            it "does not crash the app if postcode_known is not nil" do
-              expect { get lettings_log_path(lettings_log) }.not_to raise_error
-            end
-          end
-
           context "when a lettings log is for a renewal of supported housing in 2025" do
             let(:lettings_log) { create(:lettings_log, :startdate_today, assigned_to: user, renewal: 1, needstype: 2, rent_type: 3, postcode_known: 0) }
 
@@ -1588,7 +1565,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when viewing a specific log affected by deactivated location" do
-      let!(:affected_lettings_log) { FactoryBot.create(:lettings_log, unresolved: true, assigned_to: user, needstype: 2, startdate: Time.zone.local(2024, 4, 1)) }
+      let!(:affected_lettings_log) { FactoryBot.create(:lettings_log, unresolved: true, assigned_to: user, needstype: 2, startdate: current_date) }
       let(:headers) { { "Accept" => "text/html" } }
 
       before do
