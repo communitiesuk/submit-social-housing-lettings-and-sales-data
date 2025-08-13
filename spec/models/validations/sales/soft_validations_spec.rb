@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Validations::Sales::SoftValidations do
+  include CollectionTimeHelper
+
   let(:record) { build(:sales_log) }
 
   describe "income validations" do
@@ -404,87 +406,16 @@ RSpec.describe Validations::Sales::SoftValidations do
     end
 
     context "when validating extra borrowing" do
-      context "when the log is for 2023" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2023, 12, 1)) }
+      let(:record) { build(:sales_log, saledate: previous_collection_start_date) }
 
-        it "returns false if extrabor not present" do
-          record.mortgage = 50_000
-          record.deposit = 40_000
-          record.value = 100_000
-          record.discount = 11
-          expect(record)
-            .not_to be_extra_borrowing_expected_but_not_reported
-        end
-
-        it "returns false if mortgage not present" do
-          record.extrabor = 2
-          record.deposit = 40_000
-          record.value = 100_000
-          record.discount = 11
-          expect(record)
-            .not_to be_extra_borrowing_expected_but_not_reported
-        end
-
-        it "returns false if deposit not present" do
-          record.extrabor = 2
-          record.mortgage = 50_000
-          record.value = 100_000
-          record.discount = 11
-          expect(record)
-            .not_to be_extra_borrowing_expected_but_not_reported
-        end
-
-        it "returns false if value not present" do
-          record.extrabor = 2
-          record.mortgage = 50_000
-          record.deposit = 40_000
-          record.discount = 11
-          expect(record)
-            .not_to be_extra_borrowing_expected_but_not_reported
-        end
-
-        it "returns false if discount not present" do
-          record.extrabor = 2
-          record.mortgage = 50_000
-          record.deposit = 40_000
-          record.value = 100_000
-          expect(record)
-            .not_to be_extra_borrowing_expected_but_not_reported
-        end
-
-        it "returns false if extra borrowing expected and reported" do
-          record.extrabor = 1
-          record.mortgage = 50_000
-          record.deposit = 40_000
-          record.value = 100_000
-          record.discount = 11
-          expect(record)
-            .not_to be_extra_borrowing_expected_but_not_reported
-        end
-
-        it "returns true if extra borrowing expected but not reported" do
-          record.extrabor = 2
-          record.mortgage = 50_000
-          record.deposit = 40_000
-          record.value = 100_000
-          record.discount = 11
-          expect(record)
-            .to be_extra_borrowing_expected_but_not_reported
-        end
-      end
-
-      context "when the log is for 2024" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2024, 12, 1)) }
-
-        it "returns false for logs from 2024 onwards" do
-          record.extrabor = 2
-          record.mortgage = 50_000
-          record.deposit = 40_000
-          record.value = 100_000
-          record.discount = 11
-          expect(record)
-            .not_to be_extra_borrowing_expected_but_not_reported
-        end
+      it "returns false for logs from 2024 onwards" do
+        record.extrabor = 2
+        record.mortgage = 50_000
+        record.deposit = 40_000
+        record.value = 100_000
+        record.discount = 11
+        expect(record)
+          .not_to be_extra_borrowing_expected_but_not_reported
       end
     end
   end
