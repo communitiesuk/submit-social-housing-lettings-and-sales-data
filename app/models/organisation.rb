@@ -38,7 +38,13 @@ class Organisation < ApplicationRecord
     Organisation.where(id: ids)
   end
 
-  scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
+  scope :search_by_name, lambda { |name|
+    # we can't use the activerecord queries to query the DB as the `name` col doesn't update when the org changes name.
+    # this is due to the info being stored in the organisation_name_changes table.
+    # so we load all and filter in memory. the number of organisations is small so this should be fine.
+    matched_ids = all.filter { |org| org.name.downcase.include?(name.downcase) }.map(&:id)
+    where(id: matched_ids)
+  }
   scope :search_by, ->(param) { search_by_name(param) }
   scope :filter_by_active, -> { where(active: true) }
   scope :filter_by_inactive, -> { where(active: false) }
