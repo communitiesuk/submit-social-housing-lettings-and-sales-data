@@ -14,5 +14,6 @@ class Form::Lettings::Questions::Tcharge4Weekly < ::Form::Question
     @requires_js = true
     @fields_added = %w[brent scharge pscharge supcharg]
     @hidden_in_check_answers = true
+    @strip_commas = true
   end
 end
