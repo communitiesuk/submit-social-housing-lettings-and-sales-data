@@ -877,7 +877,7 @@ RSpec.describe Validations::FinancialValidations do
       context "when period is every 2 weeks" do
         it "validates that total charge is at least 10 per week" do
           record.period = 2
-          record.tcharge = 19.99
+          record.tcharge = 19.98
           financial_validator.validate_rent_amount(record)
           expect(record.errors["tcharge"])
                 .to include(match I18n.t("validations.lettings.financial.tcharge.under_10"))
