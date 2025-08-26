@@ -385,7 +385,7 @@ RSpec.describe LettingsLog, type: :model do
         {
           test_title: "correctly derives floats and weekly total charge",
           fields_to_set: { supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97 },
-          expected_values: { wsupchrg: 25.03, wpschrge: 25.03, wscharge: 25.24, wrent: 25.24, wtcharge: 100.55 },
+          expected_values: { wsupchrg: 25.03, wpschrge: 25.03, wscharge: 25.25, wrent: 25.24, wtcharge: 100.55 },
         },
         {
           test_title: "correctly derives weekly care home charge when the letting is supported housing",
