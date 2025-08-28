@@ -52,6 +52,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          msg: "Created review app at https://review.submit-social-housing-data.communities.gov.uk/${{ github.event.pull_request.number }}"
+          msg: "Created review app at https://review.submit-social-housing-data.communities.gov.uk/${{ github.event.pull_request.number }}. Note that the review app will be automatically deprovisioned after 30 days and will need the review app pipeline running again."
           check_for_duplicate_msg: true
           duplicate_msg_pattern: Created review app at*
