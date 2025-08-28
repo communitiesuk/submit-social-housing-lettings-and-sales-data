@@ -160,6 +160,9 @@ private
           result[option] = 1 if question_params.include?(option)
         end
       elsif question.type != "date"
+        if question.strip_commas
+          question_params = question_params.delete(",")
+        end
         result[question.id] = question_params
       end
 
