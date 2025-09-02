@@ -6,7 +6,7 @@ class Form::Lettings::Pages::Scheme < ::Form::Page
         "needstype" => 2,
       },
     ]
-    @next_unresolved_page_id = "location"
+    @next_unresolved_page_id = :location_or_location_search
   end
 
   def questions

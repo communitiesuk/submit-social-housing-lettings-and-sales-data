@@ -86,7 +86,11 @@ class Form
   end
 
   def next_page_id(page, log, current_user, ignore_answered: false)
-    return page.next_unresolved_page_id || :check_answers if log.unresolved
+    if log.unresolved
+      return log.scheme_has_large_number_of_locations? ? "location_search" : "location" if page.next_unresolved_page_id == :location_or_location_search
+
+      return page.next_unresolved_page_id || :check_answers
+    end
 
     page_ids = page.subsection.pages.map(&:id)
     page_index = page_ids.index(page.id)
