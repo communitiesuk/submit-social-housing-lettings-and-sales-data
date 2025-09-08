@@ -1,80 +1,21 @@
 require "rails_helper"
 
 RSpec.describe Validations::Sales::PropertyValidations do
+  include CollectionTimeHelper
+
   subject(:property_validator) { property_validator_class.new }
 
   let(:property_validator_class) { Class.new { include Validations::Sales::PropertyValidations } }
 
   describe "#validate_postcodes_match_if_discounted_ownership" do
-    context "when ownership scheme is not discounted ownership" do
-      let(:record) { build(:sales_log, ownershipsch: 1) }
+    let(:record) { build(:sales_log, ownershipsch: 1, saledate: current_collection_start_date) }
 
-      it "when postcodes match no error is added" do
-        record.postcode_full = "SW1A 1AA"
-        record.ppostcode_full = "SW1A 1AA"
+    it "is not validated for years >= 2024" do
+      record.postcode_full = "SW1A 1AA"
+      record.ppostcode_full = "SW1A 0AA"
 
-        property_validator.validate_postcodes_match_if_discounted_ownership(record)
-        expect(record.errors["postcode_full"]).to be_empty
-      end
-    end
-
-    context "when ownership scheme is discounted ownership" do
-      let(:record) { build(:sales_log, ownershipsch: 2, saledate: Time.zone.local(2023, 4, 5)) }
-
-      it "when ppostcode_full is not present no error is added" do
-        record.postcode_full = "SW1A 1AA"
-        property_validator.validate_postcodes_match_if_discounted_ownership(record)
-        expect(record.errors["postcode_full"]).to be_empty
-        expect(record.errors["ppostcode_full"]).to be_empty
-        expect(record.errors["ownershipsch"]).to be_empty
-      end
-
-      it "when postcode_full is not present no error is added" do
-        record.ppostcode_full = "SW1A 1AA"
-        property_validator.validate_postcodes_match_if_discounted_ownership(record)
-        expect(record.errors["postcode_full"]).to be_empty
-        expect(record.errors["ppostcode_full"]).to be_empty
-        expect(record.errors["ownershipsch"]).to be_empty
-      end
-
-      it "when postcodes match no error is added" do
-        record.postcode_full = "SW1A 1AA"
-        record.ppostcode_full = "SW1A 1AA"
-        property_validator.validate_postcodes_match_if_discounted_ownership(record)
-        expect(record.errors["postcode_full"]).to be_empty
-        expect(record.errors["ppostcode_full"]).to be_empty
-        expect(record.errors["ownershipsch"]).to be_empty
-      end
-
-      it "when postcodes do not match an error is added for joint purchase" do
-        record.postcode_full = "SW1A 1AA"
-        record.ppostcode_full = "SW1A 0AA"
-        record.jointpur = 1
-        property_validator.validate_postcodes_match_if_discounted_ownership(record)
-        expect(record.errors["postcode_full"]).to include("Buyers’ last accommodation and discounted ownership postcodes must match.")
-        expect(record.errors["ppostcode_full"]).to include("Buyers’ last accommodation and discounted ownership postcodes must match.")
-        expect(record.errors["ownershipsch"]).to include("Buyers’ last accommodation and discounted ownership postcodes must match.")
-      end
-
-      it "when postcodes do not match an error is added for non joint purchase" do
-        record.postcode_full = "SW1A 1AA"
-        record.ppostcode_full = "SW1A 0AA"
-        record.jointpur = 2
-        property_validator.validate_postcodes_match_if_discounted_ownership(record)
-        expect(record.errors["postcode_full"]).to include("Buyer’s last accommodation and discounted ownership postcodes must match.")
-        expect(record.errors["ppostcode_full"]).to include("Buyer’s last accommodation and discounted ownership postcodes must match.")
-        expect(record.errors["ownershipsch"]).to include("Buyer’s last accommodation and discounted ownership postcodes must match.")
-      end
-
-      it "does not add error for 2024 log" do
-        record.postcode_full = "SW1A 1AA"
-        record.ppostcode_full = "SW1A 0AA"
-        record.saledate = Time.zone.local(2024, 4, 5)
-        property_validator.validate_postcodes_match_if_discounted_ownership(record)
-        expect(record.errors["postcode_full"]).to be_empty
-        expect(record.errors["ppostcode_full"]).to be_empty
-        expect(record.errors["ownershipsch"]).to be_empty
-      end
+      property_validator.validate_postcodes_match_if_discounted_ownership(record)
+      expect(record.errors["postcode_full"]).to be_empty
     end
   end
 

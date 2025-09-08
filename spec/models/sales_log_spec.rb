@@ -7,6 +7,7 @@ RSpec.describe SalesLog, type: :model do
 
   let(:owning_organisation) { create(:organisation) }
   let(:assigned_to_user) { create(:user) }
+  let(:current_date) { current_collection_start_date }
 
   include_examples "shared log examples", :sales_log
 
@@ -559,67 +560,8 @@ RSpec.describe SalesLog, type: :model do
       expect(record_from_db["la"]).to eq("E08000003")
     end
 
-    context "with 24/25 logs" do
-      let(:address_sales_log_24_25) do
-        described_class.create({
-          owning_organisation:,
-          assigned_to: assigned_to_user,
-          ppcodenk: 1,
-          postcode_full: "CA10 1AA",
-          ppostcode_full: nil,
-          prevloc: nil,
-          saledate: Time.zone.local(2024, 5, 2),
-          manual_address_entry_selected: true,
-        })
-      end
-
-      before do
-        WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/CA101AA/)
-        .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Eden","codes":{"admin_district":"E06000064"}}}', headers: {})
-      end
-
-      it "sets previous postcode for discounted sale" do
-        address_sales_log_24_25.update!(ownershipsch: 2, ppostcode_full: nil)
-        record_from_db = described_class.find(address_sales_log_24_25.id)
-        expect(address_sales_log_24_25.ppostcode_full).to eq("CA10 1AA")
-        expect(record_from_db["ppostcode_full"]).to eq("CA10 1AA")
-        expect(record_from_db["prevloc"]).to eq("E06000064")
-      end
-
-      it "does not set previous postcode for non discounted sale" do
-        address_sales_log_24_25.update!(ownershipsch: 1, ppostcode_full: nil)
-        record_from_db = described_class.find(address_sales_log_24_25.id)
-        expect(address_sales_log_24_25.ppostcode_full).to eq(nil)
-        expect(record_from_db["ppostcode_full"]).to eq(nil)
-        expect(record_from_db["prevloc"]).to eq(nil)
-      end
-
-      context "when validating household members derived vars" do
-        let!(:household_sales_log) do
-          create(
-            :sales_log,
-            :completed,
-            managing_organisation: owning_organisation,
-            owning_organisation:,
-            assigned_to: assigned_to_user,
-            age6: 14,
-            saledate: Time.zone.local(2024, 5, 2),
-          )
-        end
-
-        it "correctly derives economic status for tenants under 16" do
-          record_from_db = described_class.find(household_sales_log.id)
-          expect(record_from_db["ecstat6"]).to eq(9)
-        end
-      end
-    end
-
     context "when saving address with LAs that have changed E-codes (LA inferred from postcode)" do
       context "when LA is inferred from postcode" do
-        let(:address_sales_log_24_25) do
-          create(:sales_log, :shared_ownership_setup_complete, uprn_known: 0, uprn: nil, postcode_full: "CA10 1AA", saledate: Time.zone.local(2024, 5, 2))
-        end
-
         let(:address_sales_log_25_26) do
           create(:sales_log, :shared_ownership_setup_complete, postcode_full: "CA10 1AA", saledate: Time.zone.local(2025, 5, 2), manual_address_entry_selected: true)
         end
@@ -639,12 +581,6 @@ RSpec.describe SalesLog, type: :model do
             .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Barnsley","codes":{"admin_district":"E08000016"}}}', headers: {})
           end
 
-          context "with 2024 log" do
-            it "keeps 2024 E-code" do
-              expect(address_sales_log_24_25.la).to eq("E08000016")
-            end
-          end
-
           context "with 2025 log" do
             it "uses new 2025 E-code if" do
               expect(address_sales_log_25_26.la).to eq("E08000038")
@@ -658,12 +594,6 @@ RSpec.describe SalesLog, type: :model do
             .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Barnsley","codes":{"admin_district":"E08000038"}}}', headers: {})
           end
 
-          context "with 2024 log" do
-            it "uses 2024 E-code" do
-              expect(address_sales_log_24_25.la).to eq("E08000016")
-            end
-          end
-
           context "with 2025 log" do
             it "keeps 2025 E-code if new(2025) E-code gets returned" do
               expect(address_sales_log_25_26.la).to eq("E08000038")
@@ -675,10 +605,6 @@ RSpec.describe SalesLog, type: :model do
 
     context "when saving address with LAs that have changed E-codes" do
       context "when address inferred from uprn - we still get LA from postcode" do
-        let(:address_sales_log_24_25) do
-          create(:sales_log, :shared_ownership_setup_complete, manual_address_entry_selected: false, uprn_known: 1, uprn: 1, saledate: Time.zone.local(2024, 5, 2))
-        end
-
         let(:address_sales_log_25_26) do
           create(:sales_log, :shared_ownership_setup_complete, manual_address_entry_selected: false, uprn_known: 1, uprn: 1, saledate: Time.zone.local(2025, 5, 2))
         end
@@ -698,12 +624,6 @@ RSpec.describe SalesLog, type: :model do
             .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Barnsley","codes":{"admin_district":"E08000016"}}}', headers: {})
           end
 
-          context "with 2024 log" do
-            it "keeps 2024 E-code" do
-              expect(address_sales_log_24_25.la).to eq("E08000016")
-            end
-          end
-
           context "with 2025 log" do
             it "uses new 2025 E-code if" do
               expect(address_sales_log_25_26.la).to eq("E08000038")
@@ -715,12 +635,6 @@ RSpec.describe SalesLog, type: :model do
           before do
             WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/AA11AA/)
             .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Barnsley","codes":{"admin_district":"E08000038"}}}', headers: {})
-          end
-
-          context "with 2024 log" do
-            it "uses 2024 E-code" do # currently returns nil
-              expect(address_sales_log_24_25.la).to eq("E08000016")
-            end
           end
 
           context "with 2025 log" do
@@ -1088,8 +1002,8 @@ RSpec.describe SalesLog, type: :model do
 
   context "when form year changes and LA is no longer active" do
     let!(:sales_log) { create(:sales_log) }
-    let(:end_date) { Time.zone.local(2025, 3, 30) }
-    let(:date_after_end_date) { Time.zone.local(2025, 3, 31) }
+    let(:end_date) { current_date }
+    let(:date_after_end_date) { current_date + 1.day }
 
     before do
       LocalAuthority.find_by(code: "E08000003").update!(end_date:)
