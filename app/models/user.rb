@@ -167,6 +167,11 @@ class User < ApplicationRecord
     update!(
       active: true,
       reactivate_with_organisation: false,
+      # resetting these fields ensures that the 'resend confirmation instructions' button shows
+      # we have this button be based on sign in date than confirmation status to ensure that the
+      # user has successfully completed the entire login flow before we hide the button
+      last_sign_in_at: nil,
+      last_sign_in_ip: nil,
     )
   end
 
