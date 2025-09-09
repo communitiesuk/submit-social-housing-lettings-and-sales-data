@@ -8,6 +8,8 @@ class Merge::MergeOrganisationsService
 
   def call
     ActiveRecord::Base.transaction do
+      raise ActiveRecord::RecordInvalid
+
       @merged_users = {}
       @merged_schemes = {}
       merge_organisation_details
