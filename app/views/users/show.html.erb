@@ -154,7 +154,7 @@
       <div class="govuk-button-group">
         <% if @user.active? %>
           <%= govuk_button_link_to "Deactivate user", deactivate_user_path(@user), warning: true %>
-          <% if current_user.support? && @user.last_sign_in_at.nil? %>
+          <% if current_user.support? && (@user.last_sign_in_at.nil? || !@user.confirmed?) %>
             <%= govuk_button_to "Resend invite link", resend_invite_user_path(@user), secondary: true %>
           <% end %>
         <% else %>
