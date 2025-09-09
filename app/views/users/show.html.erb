@@ -154,6 +154,9 @@
       <div class="govuk-button-group">
         <% if @user.active? %>
           <%= govuk_button_link_to "Deactivate user", deactivate_user_path(@user), warning: true %>
+          <%# Some users are confirmed but have no sign in date, since logging in is a separate step that happens after confirmation %>
+          <%# Some users are unconfirmed but have a sign in date, since deactivating an account will unconfirm but not reset login date %>
+          <%# So, allow both cases to receive invite links %>
           <% if current_user.support? && (@user.last_sign_in_at.nil? || !@user.confirmed?) %>
             <%= govuk_button_to "Resend invite link", resend_invite_user_path(@user), secondary: true %>
           <% end %>
