@@ -39,7 +39,7 @@ private
     client.use_ssl = true
     client.verify_mode = OpenSSL::SSL::VERIFY_PEER
     client.max_retries = 3
-    client.read_timeout = 30 # seconds
+    client.read_timeout = 20 # seconds
     client
   end
 
