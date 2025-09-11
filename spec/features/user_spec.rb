@@ -608,6 +608,19 @@ RSpec.describe "User Features" do
         click_button("Resend invite link")
       end
     end
+
+    context "when reactivating a user" do
+      let!(:other_user) { create(:user, name: "Other name", active: false, organisation: user.organisation, last_sign_in_at: Time.zone.now, confirmed_at: nil) }
+
+      it "allows for reactivation email to be resent" do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in(user)
+        visit(user_path(other_user))
+        click_link("Reactivate user")
+        click_button("I’m sure – reactivate this user")
+        expect(page).to have_button("Resend invite link")
+      end
+    end
   end
 
   context "when the user is a customer support person" do
