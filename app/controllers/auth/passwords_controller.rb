@@ -4,6 +4,7 @@ class Auth::PasswordsController < Devise::PasswordsController
   def reset_confirmation
     self.resource = resource_class.new
     @email = params["email"]
+    @unconfirmed = params["unconfirmed"] == "true"
     if @email.blank?
       resource.errors.add :email, I18n.t("validations.email.blank")
       render "devise/passwords/new", status: :unprocessable_entity
@@ -65,8 +66,8 @@ protected
     resource.need_two_factor_authentication?(request) ? :updated_2FA : :updated
   end
 
-  def after_sending_reset_password_instructions_path_for(_resource)
-    account_password_reset_confirmation_path(email: params.dig("user", "email"))
+  def after_sending_reset_password_instructions_path_for(_resource_name)
+    account_password_reset_confirmation_path(email: params.dig("user", "email"), unconfirmed: resource.initial_confirmation_sent && !resource.confirmed?)
   end
 
   def after_resetting_password_path_for(resource)
