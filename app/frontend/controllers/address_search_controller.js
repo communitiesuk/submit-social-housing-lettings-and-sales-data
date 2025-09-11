@@ -4,10 +4,28 @@ import 'accessible-autocomplete/dist/accessible-autocomplete.min.css'
 
 const options = []
 
+let latestQueryId = 0;
+
+const sleep = (ms) => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 const fetchOptions = async (query, searchUrl) => {
   if (query.length < 2) {
     throw new Error('Query must be at least 2 characters long.')
   }
+
+  // implement a debounce
+  // this is because this API has periods of high latency if OS Places has an outage
+  // making too many requests can overwhelm the number of threads available on the server
+  // which can in turn cause a site wide outage
+  latestQueryId++;
+  const myQueryId = latestQueryId;
+  await sleep(500);
+  if (myQueryId !== latestQueryId) {
+    throw new Error('Outdated query, ignoring result.');
+  }
+
   try {
     const response = await fetch(`${searchUrl}?query=${encodeURIComponent(query.trim())}`)
     return await response.json()
