@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Exports::SalesLogExportService do
+  include CollectionTimeHelper
+
   subject(:export_service) { described_class.new(storage_service, start_time) }
 
   let(:storage_service) { instance_double(Storage::S3Service) }
@@ -419,6 +421,75 @@ RSpec.describe Exports::SalesLogExportService do
 
           export_service.export_xml_sales_logs
         end
+      end
+    end
+
+    context "and one sales log has not been updated in the time range" do
+      let(:expected_zip_filename) { "core_sales_#{current_collection_start_year}_#{current_collection_end_year}_apr_mar_f0001_inc0001.zip" }
+      let(:start_time) { current_collection_start_date }
+      let!(:owning_organisation) { create(:organisation, name: "MHCLG owning", housing_registration_no: 1234) }
+      let!(:managing_organisation) { create(:organisation, name: "MHCLG managing", housing_registration_no: 1234) }
+      let!(:created_by_user) { create(:user, email: "test-created-by@example.com", organisation: managing_organisation) }
+      let!(:updated_by_user) { create(:user, email: "test-updated-by@example.com", organisation: managing_organisation) }
+      let!(:assigned_to_user) { create(:user, email: "test-assigned-to@example.com", organisation: managing_organisation) }
+      let!(:sales_log) { create(:sales_log, :export, saledate: start_time, assigned_to: assigned_to_user, created_by: created_by_user, updated_by: updated_by_user, owning_organisation:, managing_organisation:) }
+
+      before do
+        # touch all the related records to ensure their updated_at value is outside the export range
+        Timecop.freeze(start_time + 1.month)
+        owning_organisation.touch
+        managing_organisation.touch
+        created_by_user.touch
+        updated_by_user.touch
+        assigned_to_user.touch
+        sales_log.touch
+        Timecop.freeze(start_time)
+      end
+
+      it "does not export the sales log" do
+        expect(storage_service).not_to receive(:write_file).with(expected_zip_filename, any_args)
+
+        export_service.export_xml_sales_logs(collection_year: current_collection_start_year)
+      end
+
+      it "does export the sales log if created_by_user is updated" do
+        created_by_user.touch
+
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
+
+        export_service.export_xml_sales_logs(collection_year: current_collection_start_year)
+      end
+
+      it "does export the sales log if updated_by_user is updated" do
+        updated_by_user.touch
+
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
+
+        export_service.export_xml_sales_logs(collection_year: current_collection_start_year)
+      end
+
+      it "does export the sales log if assigned_to_user is updated" do
+        assigned_to_user.touch
+
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
+
+        export_service.export_xml_sales_logs(collection_year: current_collection_start_year)
+      end
+
+      it "does export the sales log if owning_organisation is updated" do
+        owning_organisation.touch
+
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
+
+        export_service.export_xml_sales_logs(collection_year: current_collection_start_year)
+      end
+
+      it "does export the sales log if managing_organisation is updated" do
+        managing_organisation.touch
+
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
+
+        export_service.export_xml_sales_logs(collection_year: current_collection_start_year)
       end
     end
   end
