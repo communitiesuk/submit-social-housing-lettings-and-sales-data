@@ -25,24 +25,19 @@ module Exports
       "organisations_2024_2025_apr_mar_#{base_number_str}_#{increment_str}".downcase
     end
 
-    def retrieve_resources(recent_export, full_update, _year)
-      if !full_update && recent_export
-        params = { from: recent_export.started_at, to: @start_time }
+    def retrieve_resources_from_range(range, _year)
+      relation = Organisation.left_joins(:users, :organisation_name_changes)
+      ids = relation
+              .where({ updated_at: range })
+              .or(
+                relation.where(organisation_name_changes: { created_at: range }),
+              )
+              .or(
+                relation.where(users: { is_dpo: true, updated_at: range }),
+              )
+              .pluck(:id)
 
-        Organisation
-          .where(updated_at: params[:from]..params[:to])
-          .or(
-            Organisation.where(id: OrganisationNameChange.where(created_at: params[:from]..params[:to]).select(:organisation_id)),
-          )
-      else
-        params = { to: @start_time }
-
-        Organisation
-          .where("updated_at <= :to", params)
-          .or(
-            Organisation.where(id: OrganisationNameChange.where("created_at <= :to", params).select(:organisation_id)),
-          )
-      end
+      Organisation.where(id: ids)
     end
 
     def build_export_xml(organisations)

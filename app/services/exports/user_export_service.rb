@@ -25,14 +25,19 @@ module Exports
       "users_2024_2025_apr_mar_#{base_number_str}_#{increment_str}".downcase
     end
 
-    def retrieve_resources(recent_export, full_update, _year)
-      if !full_update && recent_export
-        params = { from: recent_export.started_at, to: @start_time }
-        User.where("(updated_at >= :from AND updated_at <= :to) OR (values_updated_at IS NOT NULL AND values_updated_at >= :from AND values_updated_at <= :to)", params)
-      else
-        params = { to: @start_time }
-        User.where("updated_at <= :to", params)
-      end
+    def retrieve_resources_from_range(range, _year)
+      relation = User.left_joins(organisation: :organisation_name_changes)
+      ids = relation
+              .where({ updated_at: range })
+              .or(
+                relation.where.not(organisations: { updated_at: nil }).where(organisations: { updated_at: range }),
+              )
+              .or(
+                relation.where(organisation_name_changes: { created_at: range }),
+              )
+              .pluck(:id)
+
+      User.where(id: ids)
     end
 
     def build_export_xml(users)
