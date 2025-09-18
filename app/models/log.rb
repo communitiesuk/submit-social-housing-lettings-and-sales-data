@@ -57,7 +57,7 @@ class Log < ApplicationRecord
   scope :filter_by_owning_organisation_text_search, ->(param, _user) { where(owning_organisation: Organisation.search_by(param)) }
   scope :filter_by_managing_organisation_text_search, ->(param, _user) { where(managing_organisation: Organisation.search_by(param)) }
 
-  attr_accessor :skip_update_status, :skip_update_uprn_confirmed, :select_best_address_match, :skip_dpo_validation
+  attr_accessor :skip_update_status, :skip_update_uprn_confirmed, :select_best_address_match, :skip_dpo_validation, :skip_uprn_lookup, :skip_address_lookup
 
   delegate :present?, to: :address_options, prefix: true
 
@@ -73,6 +73,9 @@ class Log < ApplicationRecord
       end
 
       presenter = UprnDataPresenter.new(service.result)
+
+      # the address for this uprn is already known, skip further lookups for this object
+      self.skip_uprn_lookup = true if address_line1 == presenter.address_line1 && address_line2 == presenter.address_line2 && town_or_city == presenter.town_or_city && postcode_full == presenter.postcode
 
       self.uprn_known = 1
       self.uprn_selection = uprn
@@ -98,9 +101,14 @@ class Log < ApplicationRecord
         presenter = AddressDataPresenter.new(service.result.first)
         os_match_threshold_for_bulk_upload = 0.7
         if presenter.match >= os_match_threshold_for_bulk_upload
+          # the address for this uprn is already known, skip further lookups for this object
+          self.skip_address_lookup = true if uprn_selection == presenter.uprn
+
           self.uprn_selection = presenter.uprn
         else
           select_manual_address_entry!
+          # this uprn cannot be used for lookup
+          self.skip_address_lookup = true
           return nil
         end
       end
@@ -119,7 +127,7 @@ class Log < ApplicationRecord
         self.uprn = uprn_selection
         self.uprn_confirmed = 1
         self.skip_update_uprn_confirmed = true
-        process_uprn_change!
+        process_uprn_change! unless skip_uprn_lookup
       end
     end
   end
