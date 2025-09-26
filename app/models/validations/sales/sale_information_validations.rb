@@ -134,6 +134,12 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
+  def validate_purchase_amount(record)
+    return unless record.value && record.value > 999_999
+
+    record.errors.add :value, I18n.t("validations.sales.sale_information.value.purchase_price_out_of_range")
+  end
+
   def validate_grant_amount(record)
     return unless record.saledate && record.form.start_year_2024_or_later?
     return unless record.grant && (record.type == 8 || record.type == 21)
@@ -141,6 +147,12 @@ module Validations::Sales::SaleInformationValidations
     unless record.grant.between?(9_000, 16_000)
       record.errors.add :grant, I18n.t("validations.sales.sale_information.grant.out_of_range")
     end
+  end
+
+  def validate_mortgage_amount(record)
+    return unless record.mortgage && record.mortgage > 999_999
+
+    record.errors.add :mortgage, I18n.t("validations.sales.sale_information.mortgage.mortgage_out_of_range")
   end
 
   def validate_stairbought(record)

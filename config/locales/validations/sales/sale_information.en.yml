@@ -53,6 +53,7 @@ en:
           staircasing_mortgage:
             mortgage_used: "The mortgage (%{mortgage}) and cash deposit (%{deposit}) added together is %{mortgage_and_deposit_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought is %{stairbought_part_of_value}.</br></br>These two amounts should be the same."
             mortgage_used_socialhomebuy: "The mortgage amount (%{mortgage}), cash deposit (%{deposit}), and cash discount (%{cashdis}) added together is %{mortgage_deposit_and_discount_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought (%{stairbought}) is %{stairbought_part_of_value}.</br></br>These two amounts should be the same."
+          mortgage_out_of_range: "Mortgage amount must be between £0 and £999,999."
         value:
           discounted_ownership_value: "The mortgage%{mortgage}%{deposit_and_grant_sentence} added together is %{mortgage_deposit_and_grant_total}.</br></br>The full purchase price%{discount_sentence} is %{value_with_discount}.</br></br>These two amounts should be the same."
           outright_sale_value: "The mortgage%{mortgage} and cash deposit (%{deposit}) when added together is %{mortgage_and_deposit_total}.</br></br>The full purchase price is %{value}.</br></br>These two amounts should be the same."
@@ -68,6 +69,7 @@ en:
             mortgage_not_used: "The cash deposit is %{deposit}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought is %{stairbought_part_of_value}.</br></br>These two amounts should be the same."
             mortgage_used_socialhomebuy: "The mortgage amount (%{mortgage}), cash deposit (%{deposit}), and cash discount (%{cashdis}) added together is %{mortgage_deposit_and_discount_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought (%{stairbought}) is %{stairbought_part_of_value}.</br></br>These two amounts should be the same."
             mortgage_not_used_socialhomebuy: "The cash deposit (%{deposit}) and cash discount (%{cashdis}) added together is %{deposit_and_discount_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought (%{stairbought}) is %{stairbought_part_of_value}.</br></br>These two amounts should be the same."
+          purchase_price_out_of_range: "Purchase price must be between £0 and £999,999."
         deposit:
           discounted_ownership_value: "The mortgage%{mortgage}%{deposit_and_grant_sentence} added together is %{mortgage_deposit_and_grant_total}.</br></br>The full purchase price%{discount_sentence} is %{value_with_discount}.</br></br>These two amounts should be the same."
           outright_sale_value: "The mortgage%{mortgage} and cash deposit (%{deposit}) when added together is %{mortgage_and_deposit_total}.</br></br>The full purchase price is %{value}.</br></br>These two amounts should be the same."
