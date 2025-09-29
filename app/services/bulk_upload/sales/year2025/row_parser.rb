@@ -12,7 +12,7 @@ class BulkUpload::Sales::Year2025::RowParser
     field_5: "Which organisation is reporting this sale?",
     field_6: "Username",
     field_7: "What is the purchaser code?",
-    field_8: "What is the sale type?",
+    field_8: "Is this a shared ownership or discounted ownership sale?",
     field_9: "What is the type of shared ownership sale?",
     field_10: "Is this a staircasing transaction?",
     field_11: "What is the type of discounted ownership sale?",
@@ -311,7 +311,7 @@ class BulkUpload::Sales::Year2025::RowParser
 
   validates :field_8,
             presence: {
-              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "shared ownership sale type."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "sale type."),
               category: :setup,
             },
             on: :after_log
