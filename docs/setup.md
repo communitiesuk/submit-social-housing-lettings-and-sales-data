@@ -121,19 +121,19 @@ Also ensure you have firefox installed
 2. Install the dependencies:
 
    ```bash
-   rbenv exec bundle install && yarn install
+   bundle install && yarn install
    ```
 
 3. Create the database & run migrations:
 
    ```bash
-   rbenv exec bundle exec rake db:create db:migrate
+   bundle exec rake db:create db:migrate
    ```
 
 4. Seed the database if required:
 
    ```bash
-   rbenv exec bundle exec rake db:seed
+   bundle exec rake db:seed
    ```
 
 5. Build assets once before running the app for the first time:
@@ -164,7 +164,7 @@ c. Individually:
 Rails:
 
 ```bash
-rbenv exec bundle exec rails s
+bundle exec rails s
 ```
 
 JavaScript (for hot reloading):
@@ -183,7 +183,7 @@ You can also insert a new user row using SQL, but you will need to generate a co
 
 ### rbenv
 
-In general, whenever needing to run a Ruby command, use `rbenv exec bundle exec <command>` to ensure the correct Ruby version and gemset are used.
+In general, whenever needing to run a Ruby command, use `bundle exec <command>` to ensure the correct Ruby version and gemset are used. Rbenv will automatically use the correct Ruby version.
 
 ### Debugging
 
@@ -211,7 +211,7 @@ More details on debugging in RubyMine can be found at <https://www.jetbrains.com
 ### Tests
 
 ```bash
-rbenv exec bundle exec rspec
+bundle exec rspec
 ```
 
 Or if using RubyMine, right click a spec file and select the 'Run' option.
@@ -219,13 +219,13 @@ Or if using RubyMine, right click a spec file and select the 'Run' option.
 To run a specific folder use
 
 ```bash
-rbenv exec bundle exec rspec ./spec/folder
+bundle exec rspec ./spec/folder
 ```
 
 To run individual files use
 
 ```bash
-rbenv exec bundle exec rspec ./spec/path/to/file.rb
+bundle exec rspec ./spec/path/to/file.rb
 ```
 
 or run individual files/tests from your IDE
@@ -244,7 +244,7 @@ Feature toggles can be found in `app/services/feature_toggle.rb`
 ### Linting
 
 ```bash
-rbenv exec bundle exec rake lint
+bundle exec rake lint
 ```
 
 ## Using Docker
