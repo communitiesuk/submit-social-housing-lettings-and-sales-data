@@ -31,7 +31,8 @@ module Exports
     end
 
     def retrieve_resources_from_range(range, year)
-      relation = LettingsLog.exportable.filter_by_year(year).left_joins(:created_by, :updated_by, :assigned_to, :owning_organisation, :managing_organisation)
+      relation = LettingsLog.exportable.filter_by_year(year)
+                            .left_joins(:created_by, :updated_by, :assigned_to, :owning_organisation, :managing_organisation)
 
       ids = relation
         .where({ updated_at: range })
@@ -54,6 +55,14 @@ module Exports
           relation.where.not({ managing_organisation: { updated_at: nil } }).where({ managing_organisation: { updated_at: range } }),
         )
         .pluck(:id)
+
+      # these must be separate as activerecord struggles to join to two different name change tables in the same query
+      ids.concat(
+        relation.left_joins(owning_organisation: :organisation_name_changes).where(owning_organisation: { organisation_name_changes: { created_at: range } }).pluck(:id),
+      )
+      ids.concat(
+        relation.left_joins(managing_organisation: :organisation_name_changes).where(managing_organisation: { organisation_name_changes: { created_at: range } }).pluck(:id),
+      )
 
       LettingsLog.where(id: ids)
     end

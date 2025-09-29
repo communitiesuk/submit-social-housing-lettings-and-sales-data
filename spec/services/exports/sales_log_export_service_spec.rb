@@ -491,6 +491,22 @@ RSpec.describe Exports::SalesLogExportService do
 
         export_service.export_xml_sales_logs(collection_year: current_collection_start_year)
       end
+
+      it "does export the sales log if owning_organisation name change is created" do
+        create(:organisation_name_change, organisation: owning_organisation)
+
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
+
+        export_service.export_xml_sales_logs(collection_year: current_collection_start_year)
+      end
+
+      it "does export the sales log if managing_organisation name change is created" do
+        create(:organisation_name_change, organisation: managing_organisation)
+
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
+
+        export_service.export_xml_sales_logs(collection_year: current_collection_start_year)
+      end
     end
   end
 end

@@ -33,7 +33,7 @@ module Exports
                 relation.where.not(organisations: { updated_at: nil }).where(organisations: { updated_at: range }),
               )
               .or(
-                relation.where(organisation_name_changes: { created_at: range }),
+                relation.where(organisation_name_changes: { updated_at: range }),
               )
               .pluck(:id)
 
