@@ -28,7 +28,6 @@ en:
         reason:
           leaving_last_settled_home:
             dont_know_required: "Answer must be ‘don’t know’ as you told us you don’t know the tenant’s main reason for leaving."
-            not_internal_transfer: "Answer cannot be ‘permanently decanted from another property owned by this landlord’ as you told us the source of referral for this tenancy was not an internal transfer."
             other_not_settled: "Please give the reason for the tenant leaving their last settled home. This is where they were living before they became homeless, were living in temporary accommodation or sleeping rough."
 
         condition_effects:
@@ -102,7 +101,5 @@ en:
 
         referral:
           prevten_invalid: "Answer cannot be internal transfer as the household situation immediately before this letting was %{prevten}."
-          leaving_last_settled_home:
-            reason_permanently_decanted: "Answer must be internal transfer as the tenant was permanently decanted from another property owned by this landlord."
           la_general_needs:
             internal_transfer: "Answer cannot be internal transfer as it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting."
