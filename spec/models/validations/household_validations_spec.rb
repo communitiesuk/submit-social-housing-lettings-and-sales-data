@@ -116,17 +116,17 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "when referral is not internal transfer" do
-      it "cannot be permanently decanted from another property owned by this landlord" do
+      it "can be permanently decanted from another property owned by this landlord" do
         record.reason = 1
         record.referral_type = 1
         record.referral = 2
         household_validator.validate_reason_for_leaving_last_settled_home(record)
         expect(record.errors["reason"])
-          .to include(match(I18n.t("validations.lettings.household.reason.leaving_last_settled_home.not_internal_transfer")))
+          .to be_empty
         expect(record.errors["referral"])
-          .to include(match(I18n.t("validations.lettings.household.referral.leaving_last_settled_home.reason_permanently_decanted")))
+          .to be_empty
         expect(record.errors["referral_type"])
-          .to include(match(I18n.t("validations.lettings.household.referral_type.leaving_last_settled_home.reason_permanently_decanted")))
+          .to be_empty
       end
     end
 
