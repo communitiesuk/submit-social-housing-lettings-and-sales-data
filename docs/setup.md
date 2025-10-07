@@ -230,6 +230,12 @@ bundle exec rspec ./spec/path/to/file.rb
 
 or run individual files/tests from your IDE
 
+If you have made database changes, you may need to run the migrations for the test database:
+
+```bash
+bundle exec rake db:migrate RAILS_ENV=test
+```
+
 ### Feature toggles
 
 Feature toggles can be found in `app/services/feature_toggle.rb`
