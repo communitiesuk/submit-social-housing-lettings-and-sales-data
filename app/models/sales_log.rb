@@ -435,6 +435,7 @@ class SalesLog < Log
   def should_process_uprn_change?
     return unless uprn
     return unless saledate
+    return if skip_uprn_lookup
 
     uprn_changed? || saledate_changed?
   end
@@ -443,6 +444,7 @@ class SalesLog < Log
     return unless uprn_selection || select_best_address_match
     return unless saledate
     return unless form.start_year_2024_or_later?
+    return if skip_address_lookup
 
     if select_best_address_match
       address_line1_input.present? && postcode_full_input.present?

@@ -915,6 +915,7 @@ private
   def should_process_uprn_change?
     return unless uprn
     return unless startdate
+    return if skip_uprn_lookup
 
     uprn_changed? || startdate_changed?
   end
@@ -923,6 +924,7 @@ private
     return unless uprn_selection || select_best_address_match
     return unless startdate
     return unless form.start_year_2024_or_later?
+    return if skip_address_lookup
 
     if select_best_address_match
       address_line1_input.present? && postcode_full_input.present?
