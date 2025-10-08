@@ -31,16 +31,6 @@ module Exports
       Export.new(collection:, year:, started_at: @start_time, base_number:, increment_number:)
     end
 
-    def retrieve_resources(recent_export, full_update, year)
-      range = if !full_update && recent_export
-                recent_export.started_at..@start_time
-              else
-                ..@start_time
-              end
-
-      retrieve_resources_from_range(range, year)
-    end
-
     def write_export_archive(export, year, recent_export, full_update)
       archive = get_archive_name(year, export.base_number, export.increment_number)
 
