@@ -5,6 +5,7 @@ en:
         postcode_full:
           invalid: "Enter a postcode in the correct format, for example AA1 1AA."
           not_in_england: "It looks like you have an entered a postcode outside of England. Only create logs for lettings in England."
+          la_not_valid_for_date: "%{la} does not exist on the tenancy start date, due to a change in local authority names and boundaries. Please enter the local authority name in use on the tenancy start date"
         rsnvac:
           non_temp_accommodation: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as this accommodation is not temporary."
           referral_invalid: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as a different source of referral for this letting."
@@ -22,17 +23,24 @@ en:
         uprn:
           invalid: "UPRN must be 12 digits or less."
           not_in_england: "It looks like you have entered an address outside of England. Only create logs for lettings in England."
+          la_not_valid_for_date: "%{la} does not exist on the tenancy start date, due to a change in local authority names and boundaries. Please enter the local authority name in use on the tenancy start date"
         uprn_confirmation:
           not_in_england: "It looks like you have entered an address outside of England. Only create logs for lettings in England."
+          la_not_valid_for_date: "%{la} does not exist on the tenancy start date, due to a change in local authority names and boundaries. Please enter the local authority name in use on the tenancy start date"
         uprn_selection:
           not_in_england: "It looks like you have entered an address outside of England. Only create logs for lettings in England."
+          la_not_valid_for_date: "%{la} does not exist on the tenancy start date, due to a change in local authority names and boundaries. Please enter the local authority name in use on the tenancy start date"
         la:
           not_in_england: "It looks like you have entered an address outside of England. Only create logs for lettings in England."
+          la_not_valid_for_date: "%{la} does not exist on the tenancy start date, due to a change in local authority names and boundaries. Please enter the local authority name in use on the tenancy start date"
         scheme_id:
           not_in_england: "This scheme’s only location is outside of England. Only create logs for lettings in England."
+          la_not_valid_for_date: "%{la} does not exist on the tenancy start date, due to a change in local authority names and boundaries. Please enter the local authority name in use on the tenancy start date"
         location_id:
           not_in_england: "It looks like you have selected a location outside of England. Only create logs for lettings in England."
+          la_not_valid_for_date: "%{la} does not exist on the tenancy start date, due to a change in local authority names and boundaries. Please enter the local authority name in use on the tenancy start date"
         startdate:
           postcode_not_in_england: "It looks like you have an entered a postcode outside of England. Only create logs for lettings in England."
           address_not_in_england: "It looks like you have entered an address outside of England. Only create logs for lettings in England."
           location_not_in_england: "It looks like you have selected a location outside of England. Only create logs for lettings in England."
+          la_not_valid_for_date: "%{la} does not exist on the tenancy start date, due to a change in local authority names and boundaries. Please enter the local authority name in use on the tenancy start date"
