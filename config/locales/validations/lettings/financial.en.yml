@@ -24,6 +24,9 @@ en:
         ecstat:
           earnings_over_hard_max: "The household’s income of %{earnings} %{frequency} is too high given the household’s working situation."
           earnings_under_hard_min: "The household’s income of %{earnings} %{frequency} is too low given the household’s working situation."
+          part_or_full_time: "Answer cannot be ‘full-time’ or ‘part-time’ if ‘all’ household income is from Universal Credit, state pensions or benefits."
+        relat:
+          part_or_full_time: "Tenant %{person_num} cannot be the partner of tenant 1 if ‘all’ household income is from Universal Credit, state pensions or benefits and tenant %{person_num} works full-time or part-time."
         age:
           earnings_over_hard_max: "The household’s income of %{earnings} %{frequency} is too high for the number of adults. Change either the household income or the age of the tenants."
         incfreq:
