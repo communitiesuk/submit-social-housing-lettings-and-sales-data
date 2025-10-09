@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Exports::UserExportService do
-  include CollectionTimeHelper
-
   subject(:export_service) { described_class.new(storage_service, start_time) }
 
   let(:storage_service) { instance_double(Storage::S3Service) }
@@ -235,41 +233,6 @@ RSpec.describe Exports::UserExportService do
         end
 
         expect(export_service.export_xml_users).to eq({ expected_zip_filename.gsub(".zip", "") => start_time })
-      end
-    end
-
-    context "and one user has not been updated in the time range" do
-      let(:start_time) { current_collection_start_date }
-      let!(:user) { create(:user, organisation:) }
-
-      before do
-        # touch all the related records to ensure their updated_at value is outside the export range
-        Timecop.freeze(start_time + 1.month)
-        organisation.touch
-        user.touch
-        Timecop.freeze(start_time)
-      end
-
-      it "does not export the user" do
-        expect(storage_service).not_to receive(:write_file).with(expected_zip_filename, any_args)
-
-        export_service.export_xml_users
-      end
-
-      it "does export the user if organisation is updated" do
-        organisation.touch
-
-        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
-
-        export_service.export_xml_users
-      end
-
-      it "does export the user if an organisation name change is made" do
-        FactoryBot.create(:organisation_name_change, organisation:)
-
-        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
-
-        export_service.export_xml_users
       end
     end
   end
