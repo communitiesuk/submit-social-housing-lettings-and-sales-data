@@ -511,7 +511,7 @@ GEM
     unicode-display_width (2.5.0)
     unread (0.14.0)
       activerecord (>= 6.1)
-    uri (1.0.3)
+    uri (1.0.4)
     useragent (0.16.11)
     view_component (3.10.0)
       activesupport (>= 5.2.0, < 8.0)
