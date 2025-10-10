@@ -98,10 +98,12 @@ We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage NodeJS version
 
    Linux (Debian):
 
+   Find the latest version at https://github.com/mozilla/geckodriver/releases/, right click the linux64.tar.gz download and copy URL.
+
    ```bash
-   wget https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz
-   tar -xvzf geckodriver-v0.31.0-linux64.tar.gz
-   rm geckodriver-v0.31.0-linux64.tar.gz
+   wget <url copied>
+   tar -xvzf <file downloaded>
+   rm <file downloaded>
    chmod +x geckodriver
    sudo mv geckodriver /usr/local/bin/
    ```
