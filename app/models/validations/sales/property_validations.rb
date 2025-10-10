@@ -56,7 +56,7 @@ module Validations::Sales::PropertyValidations
   end
 
   def validate_la_is_active(record)
-    return unless record.form.start_year_2025_or_later? && record.la.present?
+    return unless record.form.start_year_2025_or_later? && record.la.present? && record.startdate.present?
 
     la = LocalAuthority.england.find_by(code: record.la)
 

@@ -78,7 +78,7 @@ module Validations::PropertyValidations
   end
 
   def validate_la_is_active(record)
-    return unless record.form.start_year_2025_or_later?
+    return unless record.form.start_year_2025_or_later? && record.startdate.present?
 
     if record.is_general_needs?
       return unless record.la
