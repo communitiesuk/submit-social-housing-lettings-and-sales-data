@@ -22,6 +22,8 @@ We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage NodeJS version
 
 1. Install PostgreSQL
 
+   If you already have a valid Postgres installation you can skip this step.
+
    macOS:
 
    ```bash
@@ -37,6 +39,8 @@ We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage NodeJS version
    ```
 
 2. Create a Postgres user
+
+   If you already have a valid Postgres installation you can skip this step.
 
    ```bash
    sudo su - postgres -c "createuser <username> -s -P"
@@ -84,35 +88,22 @@ We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage NodeJS version
    brew install yarn
    ```
 
-   or you could run it without specifying the version and it should use the version from .nvmrc
-
-   ```bash
-   nvm install
-   nvm use
-   brew install yarn
-   ```
-
    Linux (Debian):
 
    ```bash
-   curl -sL https://deb.nodesource.com/setup_20.x | sudo bash -
-   sudo apt -y install nodejs
-   mkdir -p ~/.npm-packages
-   npm config set prefix ~/.npm-packages
-   echo 'NPM_PACKAGES="~/.npm-packages"' >> ~/.bashrc
-   echo 'export PATH="$PATH:$NPM_PACKAGES/bin"' >> ~/.bashrc
-   source ~/.bashrc
-   npm install --location=global yarn
+   npm install --global yarn
    ```
 
 6. (For running tests) Install Gecko Driver
 
    Linux (Debian):
 
+   Find the latest version at https://github.com/mozilla/geckodriver/releases/, right click the linux64.tar.gz download and copy URL.
+
    ```bash
-   wget https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz
-   tar -xvzf geckodriver-v0.31.0-linux64.tar.gz
-   rm geckodriver-v0.31.0-linux64.tar.gz
+   wget <url copied>
+   tar -xvzf <file downloaded>
+   rm <file downloaded>
    chmod +x geckodriver
    sudo mv geckodriver /usr/local/bin/
    ```
@@ -147,22 +138,30 @@ Also ensure you have firefox installed
    bundle exec rake db:seed
    ```
 
-5. For Ordinance Survey related functionality, such as using the UPRN, you will need to set `OS_DATA_KEY` in your .env file. This key is shared across the team and can be found in AWS Secrets Manager.
-6. For email functionality, you will need a GOV.UK Notify API key, which is individual to you. Ask an existing team member to invite you to the "CORE Helpdesk" Notify service. Once invited, sign in and go to "API integration" to generate an API key, and set this as `GOVUK_NOTIFY_API_KEY` in your .env file.
+5. Build assets once before running the app for the first time:
+
+   ```bash
+   yarn build --mode=development
+   ```
+
+6. For Ordinance Survey related functionality, such as using the UPRN, you will need to set `OS_DATA_KEY` in your .env file. This key is shared across the team and can be found in AWS Secrets Manager.
+7. For email functionality, you will need a GOV.UK Notify API key, which is individual to you. Ask an existing team member to invite you to the "CORE Helpdesk" Notify service. Once invited, sign in and go to "API integration" to generate an API key, and set this as `GOVUK_NOTIFY_API_KEY` in your .env file.
 
 ## Running Locally
 
 ### Application
 
-Start the dev servers
+Start the dev servers via one of the following methods:
 
-a. Using Foreman:
+a. If using RubyMine, run the "submit-social-housing-lettings-and-sales-data" Rails configuration.
+
+b. Using Foreman:
 
 ```bash
 ./bin/dev
 ```
 
-b. Individually:
+c. Individually:
 
 Rails:
 
@@ -176,19 +175,17 @@ JavaScript (for hot reloading):
 yarn build --mode=development --watch
 ```
 
-If you’re not modifying front end assets you can bundle them as a one off task:
-
-```bash
-yarn build --mode=development
-```
-
 Development mode will target the latest versions of Chrome, Firefox and Safari for transpilation while production mode will target older browsers.
 
 The Rails server will start on <http://localhost:3000>.
 
 To sign in locally, you can use any username and password from your local database. The seed task in `seeds.rb` creates users in various roles all with the password `REVIEW_APP_USER_PASSWORD` from your .env file (which has default value `password`).
-To create any other users, you can edit the seed commands, or run similar commands in the rails console.
+To create any other users, you can log in as a support user and create new users via the admin interface. Or, you can edit the seed commands, or run similar commands in the rails console.
 You can also insert a new user row using SQL, but you will need to generate a correctly encrypted password. You can find the value to use for encrypted password which corresponds to the password `YOURPASSWORDHERE` using `User.new(:password => [YOURPASSWORDHERE]).encrypted_password`.
+
+### rbenv
+
+In general, whenever needing to run a Ruby command, use `bundle exec <command>` to ensure the correct Ruby version and gemset are used. Rbenv will automatically use the correct Ruby version.
 
 ### Debugging
 
@@ -219,6 +216,8 @@ More details on debugging in RubyMine can be found at <https://www.jetbrains.com
 bundle exec rspec
 ```
 
+Or if using RubyMine, right click a spec file and select the 'Run' option.
+
 To run a specific folder use
 
 ```bash
@@ -232,6 +231,12 @@ bundle exec rspec ./spec/path/to/file.rb
 ```
 
 or run individual files/tests from your IDE
+
+If you have made database changes, you may need to run the migrations for the test database:
+
+```bash
+bundle exec rake db:migrate RAILS_ENV=test
+```
 
 ### Feature toggles
 
