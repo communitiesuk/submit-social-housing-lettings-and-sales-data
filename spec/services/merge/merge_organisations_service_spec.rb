@@ -728,6 +728,31 @@ RSpec.describe Merge::MergeOrganisationsService do
             expect(incomplete_lettings_log.location).to be_nil
           end
 
+          it "associates correct lettings logs with correct locations which share a name and postcode" do
+            scheme = create(:scheme, owning_organisation: merging_organisation)
+            location_0 = create(:location, scheme:, name: "duplicate name", postcode: "EE1 1EE", location_admin_district: "dist1", startdate: Time.zone.today)
+            location_1 = create(:location, scheme:, name: "duplicate name", postcode: "EE1 1EE", location_admin_district: "dist2", startdate: Time.zone.today)
+            location_2 = create(:location, scheme:, name: "duplicate name", postcode: "EE1 1EE", location_admin_district: "dist3", startdate: Time.zone.today)
+
+            lettings_log_0 = build(:lettings_log, scheme:, owning_organisation: merging_organisation, startdate: Time.zone.today, location: location_0)
+            lettings_log_0.save!(validate: false)
+            lettings_log_1 = build(:lettings_log, scheme:, owning_organisation: merging_organisation, startdate: Time.zone.today, location: location_1)
+            lettings_log_1.save!(validate: false)
+            lettings_log_2 = build(:lettings_log, scheme:, owning_organisation: merging_organisation, startdate: Time.zone.today, location: location_2)
+            lettings_log_2.save!(validate: false)
+
+            expect(Rails.logger).not_to receive(:error)
+            merge_organisations_service.call
+
+            lettings_log_0.reload
+            lettings_log_1.reload
+            lettings_log_2.reload
+
+            expect(lettings_log_0.location.location_admin_district).to eq("dist1")
+            expect(lettings_log_1.location.location_admin_district).to eq("dist2")
+            expect(lettings_log_2.location.location_admin_district).to eq("dist3")
+          end
+
           context "with merge date in closed collection year" do
             subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids:, merge_date: Time.zone.local(2021, 3, 3)) }
 

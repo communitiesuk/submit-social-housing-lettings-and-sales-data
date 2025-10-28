@@ -4,6 +4,8 @@ class Merge::MergeOrganisationsService
     @merging_organisations = Organisation.find(merging_organisation_ids)
     @merge_date = merge_date || Time.zone.today
     @absorbing_organisation_active_from_merge_date = absorbing_organisation_active_from_merge_date
+    @pre_to_post_merge_scheme_ids = {}
+    @pre_to_post_merge_location_ids = {}
   end
 
   def call
@@ -70,12 +72,14 @@ private
     merging_organisation.owned_schemes.each do |scheme|
       new_scheme = Scheme.new(scheme.attributes.except("id", "owning_organisation_id", "old_id", "old_visible_id").merge(owning_organisation: @absorbing_organisation, startdate: [scheme&.startdate, @merge_date].compact.max))
       new_scheme.save!(validate: false)
+      @pre_to_post_merge_scheme_ids[scheme.id] = new_scheme.id
       scheme.scheme_deactivation_periods.each do |deactivation_period|
         split_scheme_deactivation_period_between_organisations(deactivation_period, new_scheme)
       end
       scheme.locations.each do |location|
         new_location = Location.new(location.attributes.except("id", "scheme_id", "old_id", "old_visible_id").merge(scheme: new_scheme, startdate: [location&.startdate, @merge_date].compact.max))
         new_location.save!(validate: false)
+        @pre_to_post_merge_location_ids[location.id] = new_location.id
         location.location_deactivation_periods.each do |deactivation_period|
           split_location_deactivation_period_between_organisations(deactivation_period, new_location)
         end
@@ -98,8 +102,8 @@ private
         lettings_log.managing_organisation = @absorbing_organisation
       end
       if lettings_log.scheme.present?
-        scheme_to_set = @absorbing_organisation.owned_schemes.find_by(service_name: lettings_log.scheme.service_name)
-        location_to_set = scheme_to_set.locations.find_by(name: lettings_log.location&.name, postcode: lettings_log.location&.postcode)
+        scheme_to_set = @absorbing_organisation.owned_schemes.find_by(id: @pre_to_post_merge_scheme_ids[lettings_log.scheme.id])
+        location_to_set = scheme_to_set.locations.find_by(id: @pre_to_post_merge_location_ids[lettings_log.location&.id])
 
         lettings_log.scheme = scheme_to_set if scheme_to_set.present?
         # in some cases the lettings_log location is nil even if scheme is present (they're two different questions).
