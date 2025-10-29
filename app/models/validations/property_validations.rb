@@ -32,6 +32,7 @@ module Validations::PropertyValidations
     end
   end
 
+  # see also: this validation in sales/property_validations.rb
   def validate_uprn(record)
     return unless record.uprn
 
@@ -40,6 +41,7 @@ module Validations::PropertyValidations
     record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.invalid")
   end
 
+  # see also: this validation in sales/property_validations.rb
   def validate_property_postcode(record)
     postcode = record.postcode_full
     return unless postcode
@@ -50,6 +52,7 @@ module Validations::PropertyValidations
     end
   end
 
+  # see also: this validation in sales/property_validations.rb
   def validate_la_in_england(record)
     return unless record.form.start_year_2025_or_later?
 
@@ -77,6 +80,7 @@ module Validations::PropertyValidations
     end
   end
 
+  # see also: this validation in sales/property_validations.rb
   def validate_la_is_active(record)
     return unless record.form.start_year_2025_or_later? && record.startdate.present?
 
