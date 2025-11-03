@@ -30,14 +30,32 @@ module Exports
       "core_#{year}_#{year + 1}_apr_mar_#{base_number_str}_#{increment_str}".downcase
     end
 
-    def retrieve_resources(recent_export, full_update, year)
-      if !full_update && recent_export
-        params = { from: recent_export.started_at, to: @start_time }
-        LettingsLog.exportable.where("(updated_at >= :from AND updated_at <= :to) OR (values_updated_at IS NOT NULL AND values_updated_at >= :from AND values_updated_at <= :to)", params).filter_by_year(year)
-      else
-        params = { to: @start_time }
-        LettingsLog.exportable.where("updated_at <= :to", params).filter_by_year(year)
-      end
+    def retrieve_resources_from_range(range, year)
+      relation = LettingsLog.exportable.filter_by_year(year).left_joins(:created_by, :updated_by, :assigned_to, :owning_organisation, :managing_organisation)
+
+      ids = relation
+        .where({ updated_at: range })
+        .or(
+          relation.where.not(values_updated_at: nil).where(values_updated_at: range),
+        )
+        .or(
+          relation.where.not({ created_by: { updated_at: nil } }).where({ created_by: { updated_at: range } }),
+        )
+        .or(
+          relation.where.not({ updated_by: { updated_at: nil } }).where({ updated_by: { updated_at: range } }),
+        )
+        .or(
+          relation.where.not({ assigned_to: { updated_at: nil } }).where({ assigned_to: { updated_at: range } }),
+        )
+        .or(
+          relation.where.not({ owning_organisation: { updated_at: nil } }).where({ owning_organisation: { updated_at: range } }),
+        )
+        .or(
+          relation.where.not({ managing_organisation: { updated_at: nil } }).where({ managing_organisation: { updated_at: range } }),
+        )
+        .pluck(:id)
+
+      LettingsLog.where(id: ids)
     end
 
     def apply_cds_transformation(lettings_log, export_mode)

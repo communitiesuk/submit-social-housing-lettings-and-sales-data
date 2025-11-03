@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Exports::LettingsLogExportService do
+  include CollectionTimeHelper
+
   subject(:export_service) { described_class.new(storage_service, start_time) }
 
   let(:storage_service) { instance_double(Storage::S3Service) }
@@ -16,7 +18,7 @@ RSpec.describe Exports::LettingsLogExportService do
   let(:expected_manifest_filename) { "manifest.xml" }
   let(:start_time) { Time.zone.local(2022, 5, 1) }
   let(:organisation) { create(:organisation, name: "MHCLG", housing_registration_no: 1234) }
-  let(:user) { FactoryBot.create(:user, email: "test1@example.com", organisation:) }
+  let(:user) { create(:user, email: "test1@example.com", organisation:) }
 
   def replace_entity_ids(lettings_log, export_template)
     export_template.sub!(/\{id\}/, (lettings_log["id"] + Exports::LettingsLogExportService::LOG_ID_OFFSET).to_s)
@@ -478,6 +480,75 @@ RSpec.describe Exports::LettingsLogExportService do
 
           export_service.export_xml_lettings_logs
         end
+      end
+    end
+
+    context "and one lettings log has not been updated in the time range" do
+      let(:expected_zip_filename) { "core_#{current_collection_start_year}_#{current_collection_end_year}_apr_mar_f0001_inc0001.zip" }
+      let(:start_time) { current_collection_start_date }
+      let!(:owning_organisation) { create(:organisation, name: "MHCLG owning", housing_registration_no: 1234) }
+      let!(:managing_organisation) { create(:organisation, name: "MHCLG managing", housing_registration_no: 1234) }
+      let!(:created_by_user) { create(:user, email: "test-created-by@example.com", organisation: managing_organisation) }
+      let!(:updated_by_user) { create(:user, email: "test-updated-by@example.com", organisation: managing_organisation) }
+      let!(:assigned_to_user) { create(:user, email: "test-assigned-to@example.com", organisation: managing_organisation) }
+      let!(:lettings_log) { create(:lettings_log, :completed, startdate: current_collection_start_date, created_by: created_by_user, updated_by: updated_by_user, assigned_to: assigned_to_user, owning_organisation:, managing_organisation:) }
+
+      before do
+        # touch all the related records to ensure their updated_at value is outside the export range
+        Timecop.freeze(start_time + 1.month)
+        owning_organisation.touch
+        managing_organisation.touch
+        created_by_user.touch
+        updated_by_user.touch
+        assigned_to_user.touch
+        lettings_log.touch
+        Timecop.freeze(start_time)
+      end
+
+      it "does not export the lettings log" do
+        expect(storage_service).not_to receive(:write_file).with(expected_zip_filename, any_args)
+
+        export_service.export_xml_lettings_logs(collection_year: current_collection_start_year)
+      end
+
+      it "does export the lettings log if created_by_user is updated" do
+        created_by_user.touch
+
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
+
+        export_service.export_xml_lettings_logs(collection_year: current_collection_start_year)
+      end
+
+      it "does export the lettings log if updated_by_user is updated" do
+        updated_by_user.touch
+
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
+
+        export_service.export_xml_lettings_logs(collection_year: current_collection_start_year)
+      end
+
+      it "does export the lettings log if assigned_to_user is updated" do
+        assigned_to_user.touch
+
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
+
+        export_service.export_xml_lettings_logs(collection_year: current_collection_start_year)
+      end
+
+      it "does export the lettings log if owning_organisation is updated" do
+        owning_organisation.touch
+
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
+
+        export_service.export_xml_lettings_logs(collection_year: current_collection_start_year)
+      end
+
+      it "does export the lettings log if managing_organisation is updated" do
+        managing_organisation.touch
+
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
+
+        export_service.export_xml_lettings_logs(collection_year: current_collection_start_year)
       end
     end
   end
