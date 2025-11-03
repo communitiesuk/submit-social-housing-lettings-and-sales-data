@@ -55,6 +55,14 @@ module Exports
               )
               .pluck(:id)
 
+      # these must be separate as activerecord struggles to join to two different name change tables in the same query
+      ids.concat(
+        relation.left_joins(owning_organisation: :organisation_name_changes).where(owning_organisation: { organisation_name_changes: { updated_at: range } }).pluck(:id),
+      )
+      ids.concat(
+        relation.left_joins(managing_organisation: :organisation_name_changes).where(managing_organisation: { organisation_name_changes: { updated_at: range } }).pluck(:id),
+      )
+
       SalesLog.where(id: ids)
     end
 
