@@ -20,6 +20,8 @@ module Validations::FinancialValidations
       is_partner_or_main = relationship == "P" || n == 1
       if is_employed && is_partner_or_main && record.benefits == 1
         record.errors.add :benefits, I18n.t("validations.lettings.financial.benefits.part_or_full_time")
+        record.errors.add "ecstat#{n}", I18n.t("validations.lettings.financial.ecstat.part_or_full_time")
+        record.errors.add "relat#{n}", I18n.t("validations.lettings.financial.relat.part_or_full_time", person_num: n) if n > 1
       end
     end
   end
