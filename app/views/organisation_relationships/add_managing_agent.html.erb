@@ -31,7 +31,7 @@
     <%= govuk_list [
       "Double check the spelling and try again",
       "Type the first few letters to see the suggestions",
-      "If you still can't find it, #{govuk_link_to('contact the MHCLG service desk', GlobalConstants::HELPDESK_URL, rel: 'noreferrer noopener', target: '_blank')}",
+      "If you still can't find it, #{govuk_link_to('contact the MHCLG service desk', GlobalConstants::HELPDESK_URL, rel: 'noreferrer noopener', target: '_blank')}".html_safe,
       ], type: :bullet %>
   <% end %>
 <% end %>
