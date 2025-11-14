@@ -49,7 +49,6 @@ module Validations::Sales::PropertyValidations
     record.errors.add :la, I18n.t("validations.sales.property_information.la.not_in_england")
     record.errors.add :postcode_full, I18n.t("validations.sales.property_information.postcode_full.not_in_england")
     record.errors.add :uprn, I18n.t("validations.sales.property_information.uprn.not_in_england")
-    record.errors.add :uprn_confirmation, I18n.t("validations.sales.property_information.uprn_confirmation.not_in_england")
     record.errors.add :uprn_selection, I18n.t("validations.sales.property_information.uprn_selection.not_in_england")
     if record.uprn.present?
       record.errors.add :saledate, :skip_bu_error, message: I18n.t("validations.sales.property_information.saledate.address_not_in_england")
@@ -72,7 +71,6 @@ module Validations::Sales::PropertyValidations
     record.errors.add :la, I18n.t("validations.sales.property_information.la.la_not_valid_for_date", la: la.name)
     record.errors.add :postcode_full, I18n.t("validations.sales.property_information.postcode_full.la_not_valid_for_date", la: la.name)
     record.errors.add :uprn, I18n.t("validations.sales.property_information.uprn.la_not_valid_for_date", la: la.name)
-    record.errors.add :uprn_confirmation, I18n.t("validations.sales.property_information.uprn_confirmation.la_not_valid_for_date", la: la.name)
     record.errors.add :uprn_selection, I18n.t("validations.sales.property_information.uprn_selection.la_not_valid_for_date", la: la.name)
     record.errors.add :saledate, :skip_bu_error, message: I18n.t("validations.sales.property_information.saledate.la_not_valid_for_date", la: la.name)
   end

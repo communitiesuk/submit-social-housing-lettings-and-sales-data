@@ -33,9 +33,8 @@ en:
         la:
           not_in_england: "It looks like you have entered an address outside of England. Only create logs for sales in England."
           la_not_valid_for_date: "%{la} does not exist on the property sale date, due to a change in local authority names and boundaries. Please enter the local authority name in use on the sale date"
-        uprn_confirmation:
+        uprn_confirmation: # legacy question
           not_in_england: "It looks like you have entered an address outside of England. Only create logs for sales in England."
-          la_not_valid_for_date: "%{la} does not exist on the property sale date, due to a change in local authority names and boundaries. Please enter the local authority name in use on the sale date"
         uprn_selection:
           not_in_england: "It looks like you have entered an address outside of England. Only create logs for sales in England."
           la_not_valid_for_date: "%{la} does not exist on the property sale date, due to a change in local authority names and boundaries. Please enter the local authority name in use on the sale date"

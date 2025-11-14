@@ -63,7 +63,6 @@ module Validations::PropertyValidations
       record.errors.add :la, I18n.t("validations.lettings.property.la.not_in_england")
       record.errors.add :postcode_full, I18n.t("validations.lettings.property.postcode_full.not_in_england")
       record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.not_in_england")
-      record.errors.add :uprn_confirmation, I18n.t("validations.lettings.property.uprn_confirmation.not_in_england")
       record.errors.add :uprn_selection, I18n.t("validations.lettings.property.uprn_selection.not_in_england")
       if record.uprn.present?
         record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.address_not_in_england")
@@ -97,7 +96,6 @@ module Validations::PropertyValidations
       record.errors.add :la, I18n.t("validations.lettings.property.la.la_not_valid_for_date", la: la.name)
       record.errors.add :postcode_full, I18n.t("validations.lettings.property.postcode_full.la_not_valid_for_date", la: la.name)
       record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.la_not_valid_for_date", la: la.name)
-      record.errors.add :uprn_confirmation, I18n.t("validations.lettings.property.uprn_confirmation.la_not_valid_for_date", la: la.name)
       record.errors.add :uprn_selection, I18n.t("validations.lettings.property.uprn_selection.la_not_valid_for_date", la: la.name)
       record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: la.name)
     elsif record.is_supported_housing?
