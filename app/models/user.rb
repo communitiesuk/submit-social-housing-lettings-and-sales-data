@@ -81,6 +81,29 @@ class User < ApplicationRecord
 
     filtered_records
   }
+  scope :filter_by_role, ->(role, _user = nil) { where(role:) }
+  scope :filter_by_additional_responsibilities, lambda { |additional_responsibilities, _user|
+    filtered_records = all
+    scopes = []
+
+    additional_responsibilities.each do |responsibility|
+      case responsibility
+      when "key_contact"
+        scopes << send("is_key_contact")
+      when "data_protection_officer"
+        scopes << send("is_data_protection_officer")
+      end
+    end
+
+    if scopes.any?
+      filtered_records = filtered_records.merge(scopes.reduce(&:or))
+    end
+
+    filtered_records
+  }
+
+  scope :is_key_contact, -> { where(is_key_contact: true) }
+  scope :is_data_protection_officer, -> { where(is_dpo: true) }
   scope :not_signed_in, -> { where(last_sign_in_at: nil, active: true) }
   scope :deactivated, -> { where(active: false) }
   scope :activated, -> { where(active: true) }

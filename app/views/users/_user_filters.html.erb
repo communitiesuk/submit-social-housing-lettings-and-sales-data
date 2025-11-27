@@ -17,12 +17,30 @@
 
         <%= render partial: "filters/checkbox_filter",
                    locals: {
-                    f:,
-                    options: user_status_filters,
-                    label: "Status",
-                    category: "status",
-                    size: "s",
-                  } %>
+                     f:,
+                     options: user_status_filters,
+                     label: "Status",
+                     category: "status",
+                     size: "s",
+                   } %>
+
+        <%= render partial: "filters/checkbox_filter",
+                   locals: {
+                     f:,
+                     options: user_role_type_filters(current_user.support?),
+                     label: "Role type",
+                     category: "role",
+                     size: "s",
+                   } %>
+
+        <%= render partial: "filters/checkbox_filter",
+                   locals: {
+                     f:,
+                     options: user_additional_responsibilities_filters,
+                     label: "Additional responsibilities",
+                     category: "additional_responsibilities",
+                     size: "s",
+                   } %>
 
         <% if request.params["search"].present? %>
           <%= f.hidden_field :search, value: request.params["search"] %>

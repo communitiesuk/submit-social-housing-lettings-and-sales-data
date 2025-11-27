@@ -52,6 +52,22 @@ module FiltersHelper
     }.freeze
   end
 
+  def user_role_type_filters(include_support = false)
+    roles = {
+      "1" => "Data provider",
+      "2" => "Coordinator",
+    }
+    roles["99"] = "Support" if include_support
+    roles.freeze
+  end
+
+  def user_additional_responsibilities_filters
+    {
+      "data_protection_officer" => "Data protection officer",
+      "key_contact" => "Key contact",
+    }.freeze
+  end
+
   def scheme_status_filters
     {
       "incomplete" => "Incomplete",
@@ -306,7 +322,7 @@ private
 
   def filters_count(filters)
     filters.each.sum do |category, category_filters|
-      if %w[years status needstypes bulk_upload_id].include?(category)
+      if %w[years status needstypes bulk_upload_id role additional_responsibilities].include?(category)
         category_filters.count(&:present?)
       elsif %w[user owning_organisation managing_organisation user_text_search owning_organisation_text_search managing_organisation_text_search uploading_organisation].include?(category)
         1
