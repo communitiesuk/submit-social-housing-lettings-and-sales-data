@@ -52,7 +52,7 @@ module FiltersHelper
     }.freeze
   end
 
-  def user_role_type_filters(include_support = false)
+  def user_role_type_filters(include_support: false)
     roles = {
       "1" => "Data provider",
       "2" => "Coordinator",
