@@ -40,6 +40,7 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat1 = 1
         financial_validator.validate_net_income_uc_proportion(record)
         expect(record.errors["benefits"]).to include(match I18n.t("validations.lettings.financial.benefits.part_or_full_time"))
+        expect(record.errors["ecstat1"]).to include(match I18n.t("validations.lettings.financial.ecstat.part_or_full_time"))
       end
 
       it "validates that the lead tenant is not in part time employment" do
@@ -47,6 +48,7 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat1 = 2
         financial_validator.validate_net_income_uc_proportion(record)
         expect(record.errors["benefits"]).to include(match I18n.t("validations.lettings.financial.benefits.part_or_full_time"))
+        expect(record.errors["ecstat1"]).to include(match I18n.t("validations.lettings.financial.ecstat.part_or_full_time"))
       end
 
       it "expects that the lead tenant is not in full-time or part-time employment" do
@@ -54,6 +56,7 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat1 = 4
         financial_validator.validate_net_income_uc_proportion(record)
         expect(record.errors["benefits"]).to be_empty
+        expect(record.errors["ecstat1"]).to be_empty
       end
 
       it "validates that the tenant’s partner is not in full time employment" do
@@ -62,6 +65,8 @@ RSpec.describe Validations::FinancialValidations do
         record.relat2 = "P"
         financial_validator.validate_net_income_uc_proportion(record)
         expect(record.errors["benefits"]).to include(match I18n.t("validations.lettings.financial.benefits.part_or_full_time"))
+        expect(record.errors["ecstat2"]).to include(match I18n.t("validations.lettings.financial.ecstat.part_or_full_time"))
+        expect(record.errors["relat2"]).to include(match I18n.t("validations.lettings.financial.relat.part_or_full_time", person_num: 2))
       end
 
       it "expects that the tenant’s partner is not in full-time or part-time employment" do
@@ -70,6 +75,8 @@ RSpec.describe Validations::FinancialValidations do
         record.relat2 = "P"
         financial_validator.validate_net_income_uc_proportion(record)
         expect(record.errors["benefits"]).to be_empty
+        expect(record.errors["ecstat2"]).to be_empty
+        expect(record.errors["relat2"]).to be_empty
       end
     end
   end
