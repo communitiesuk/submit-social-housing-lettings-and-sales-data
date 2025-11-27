@@ -71,6 +71,9 @@ module DerivedVariables::LettingsLogVariables
     if form.start_year_2024_or_later? && is_bedsit?
       self.beds = 1
     end
+    if bedsit_changed_to_not_bedsit? # make user answer num of bedrooms again
+      self.beds = nil
+    end
 
     clear_child_ecstat_for_age_changes!
     child_under_16_constraints!

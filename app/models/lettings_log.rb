@@ -399,6 +399,10 @@ class LettingsLog < Log
     form.start_year_2024_or_later? && is_bedsit?
   end
 
+  def bedsit_changed_to_not_bedsit?
+    unittype_gn_changed? && unittype_gn_was == 2
+  end
+
   def is_shared_housing?
     # 4: Shared flat or maisonette
     # 9: Shared house
