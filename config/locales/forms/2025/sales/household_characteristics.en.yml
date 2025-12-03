@@ -223,13 +223,13 @@ en:
               page_header: ""
               check_answer_label: "Number of other people living in the property"
               check_answer_prompt: ""
-              hint_text: "You can provide details for a maximum of 4 other people for a joint purchase."
+              hint_text: "Include all people living in the property who are not the buyers. In later questions you will only be asked for details about the first 4 other people for a joint purchase."
               question_text: "Besides the buyers, how many other people live or will live in the property?"
             not_joint_purchase:
               page_header: ""
               check_answer_label: "Number of other people living in the property"
               check_answer_prompt: ""
-              hint_text: "You can provide details for a maximum of 5 other people if there is only one buyer."
+              hint_text: "Include all people living in the property who are not the buyer. In later questions you will only be asked for details about the first 5 other people for a sole purchase."
               question_text: "Besides the buyer, how many other people live or will live in the property?"
 
           details_known_2:
