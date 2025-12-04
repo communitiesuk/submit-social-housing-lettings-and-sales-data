@@ -183,6 +183,7 @@ class User < ApplicationRecord
       initial_confirmation_sent: false,
       reactivate_with_organisation:,
       unconfirmed_email: nil,
+      second_factor_attempts_count: 0,
     )
   end
 

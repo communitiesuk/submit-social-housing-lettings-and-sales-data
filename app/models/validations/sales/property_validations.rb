@@ -21,6 +21,7 @@ module Validations::Sales::PropertyValidations
     end
   end
 
+  # see also: this validation in validations/property_validations.rb
   def validate_uprn(record)
     return unless record.uprn
 
@@ -29,6 +30,7 @@ module Validations::Sales::PropertyValidations
     record.errors.add :uprn, I18n.t("validations.sales.property_information.uprn.invalid")
   end
 
+  # see also: this validation in validations/property_validations.rb
   def validate_property_postcode(record)
     postcode = record.postcode_full
     return unless postcode
@@ -39,6 +41,7 @@ module Validations::Sales::PropertyValidations
     end
   end
 
+  # see also: this validation in validations/property_validations.rb
   def validate_la_in_england(record)
     return unless record.form.start_year_2025_or_later? && record.la.present?
     return if record.la.in?(LocalAuthority.england.pluck(:code))
@@ -46,12 +49,29 @@ module Validations::Sales::PropertyValidations
     record.errors.add :la, I18n.t("validations.sales.property_information.la.not_in_england")
     record.errors.add :postcode_full, I18n.t("validations.sales.property_information.postcode_full.not_in_england")
     record.errors.add :uprn, I18n.t("validations.sales.property_information.uprn.not_in_england")
-    record.errors.add :uprn_confirmation, I18n.t("validations.sales.property_information.uprn_confirmation.not_in_england")
     record.errors.add :uprn_selection, I18n.t("validations.sales.property_information.uprn_selection.not_in_england")
     if record.uprn.present?
       record.errors.add :saledate, :skip_bu_error, message: I18n.t("validations.sales.property_information.saledate.address_not_in_england")
     else
       record.errors.add :saledate, :skip_bu_error, message: I18n.t("validations.sales.property_information.saledate.postcode_not_in_england")
     end
+  end
+
+  # see also: this validation in validations/property_validations.rb
+  def validate_la_is_active(record)
+    return unless record.form.start_year_2025_or_later? && record.la.present? && record.startdate.present?
+
+    la = LocalAuthority.england.find_by(code: record.la)
+
+    # will be caught by the not in england validation
+    return if la.nil?
+    # only compare end date if it exists
+    return if record.startdate >= la.start_date && (la.end_date.nil? || record.startdate <= la.end_date)
+
+    record.errors.add :la, I18n.t("validations.sales.property_information.la.la_not_valid_for_date", la: la.name)
+    record.errors.add :postcode_full, I18n.t("validations.sales.property_information.postcode_full.la_not_valid_for_date", la: la.name)
+    record.errors.add :uprn, I18n.t("validations.sales.property_information.uprn.la_not_valid_for_date", la: la.name)
+    record.errors.add :uprn_selection, I18n.t("validations.sales.property_information.uprn_selection.la_not_valid_for_date", la: la.name)
+    record.errors.add :saledate, :skip_bu_error, message: I18n.t("validations.sales.property_information.saledate.la_not_valid_for_date", la: la.name)
   end
 end
