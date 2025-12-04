@@ -27,7 +27,7 @@
         <%= render partial: "filters/checkbox_filter",
                    locals: {
                      f:,
-                     options: user_role_type_filters(current_user.support?),
+                     options: user_role_type_filters(include_support: current_user.support?),
                      label: "Role type",
                      category: "role",
                      size: "s",
