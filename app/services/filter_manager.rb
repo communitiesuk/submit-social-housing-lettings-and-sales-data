@@ -130,6 +130,14 @@ class FilterManager
       new_filters["status"] = params["status"]
     end
 
+    if filter_type.include?("users") && params["role"].present?
+      new_filters["role"] = params["role"]
+    end
+
+    if filter_type.include?("users") && params["additional_responsibilities"].present?
+      new_filters["additional_responsibilities"] = params["additional_responsibilities"]
+    end
+
     if filter_type.include?("schemes")
       current_user.scheme_filters(specific_org:).each do |filter|
         new_filters[filter] = params[filter] if params[filter].present?
