@@ -55,11 +55,10 @@ module Validations::PropertyValidations
   # see also: this validation in sales/property_validations.rb
   def validate_la_in_england(record)
     return unless record.form.start_year_2025_or_later?
+    return unless record.la
+    return if record.la.in?(LocalAuthority.england.pluck(:code))
 
     if record.is_general_needs?
-      return unless record.la
-      return if record.la.in?(LocalAuthority.england.pluck(:code))
-
       record.errors.add :la, I18n.t("validations.lettings.property.la.not_in_england")
       record.errors.add :postcode_full, I18n.t("validations.lettings.property.postcode_full.not_in_england")
       record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.not_in_england")
@@ -70,9 +69,6 @@ module Validations::PropertyValidations
         record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.postcode_not_in_england")
       end
     elsif record.is_supported_housing?
-      return unless record.location
-      return if record.location.location_code.in?(LocalAuthority.england.pluck(:code))
-
       record.errors.add :location_id, I18n.t("validations.lettings.property.location_id.not_in_england")
       record.errors.add :scheme_id, I18n.t("validations.lettings.property.scheme_id.not_in_england")
       record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.location_not_in_england")
@@ -82,32 +78,22 @@ module Validations::PropertyValidations
   # see also: this validation in sales/property_validations.rb
   def validate_la_is_active(record)
     return unless record.form.start_year_2025_or_later? && record.startdate.present?
+    return unless record.la
+
+    la = LocalAuthority.england.find_by(code: record.la)
+
+    # will be caught by the not in england validation
+    return if la.nil?
+    # only compare end date if it exists
+    return if record.startdate >= la.start_date && (la.end_date.nil? || record.startdate <= la.end_date)
 
     if record.is_general_needs?
-      return unless record.la
-
-      la = LocalAuthority.england.find_by(code: record.la)
-
-      # will be caught by the not in england validation
-      return if la.nil?
-      # only compare end date if it exists
-      return if record.startdate >= la.start_date && (la.end_date.nil? || record.startdate <= la.end_date)
-
       record.errors.add :la, I18n.t("validations.lettings.property.la.la_not_valid_for_date", la: la.name)
       record.errors.add :postcode_full, I18n.t("validations.lettings.property.postcode_full.la_not_valid_for_date", la: la.name)
       record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.la_not_valid_for_date", la: la.name)
       record.errors.add :uprn_selection, I18n.t("validations.lettings.property.uprn_selection.la_not_valid_for_date", la: la.name)
       record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: la.name)
     elsif record.is_supported_housing?
-      return unless record.location
-
-      la = LocalAuthority.england.find_by(code: record.location.location_code)
-
-      # will be caught by the not in england validation
-      return if la.nil?
-      # only compare end date if it exists
-      return if record.startdate >= la.start_date && (la.end_date.nil? || record.startdate <= la.end_date)
-
       record.errors.add :location_id, I18n.t("validations.lettings.property.location_id.la_not_valid_for_date", la: la.name)
       record.errors.add :scheme_id, I18n.t("validations.lettings.property.scheme_id.la_not_valid_for_date", la: la.name)
       record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: la.name)
