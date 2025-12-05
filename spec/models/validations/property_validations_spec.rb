@@ -336,15 +336,31 @@ RSpec.describe Validations::PropertyValidations do
         let(:location) { create(:location, location_code: la_ecode_inactive) }
         let(:log) { build(:lettings_log, :completed, needstype: 2, location:) }
 
-        it "adds an error" do
-          property_validator.validate_la_is_active(log)
-          expect(log.errors["scheme_id"]).to include(I18n.t("validations.lettings.property.scheme_id.la_not_valid_for_date", la: local_authority_inactive.name))
-          expect(log.errors["location_id"]).to include(I18n.t("validations.lettings.property.location_id.la_not_valid_for_date", la: local_authority_inactive.name))
-          expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: local_authority_inactive.name))
-          expect(log.errors["la"]).to be_empty
-          expect(log.errors["postcode_full"]).to be_empty
-          expect(log.errors["uprn"]).to be_empty
-          expect(log.errors["uprn_selection"]).to be_empty
+        context "and the inactive local authority is not linked to an active one" do
+          it "adds an error" do
+            property_validator.validate_la_is_active(log)
+            expect(log.errors["scheme_id"]).to include(I18n.t("validations.lettings.property.scheme_id.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["location_id"]).to include(I18n.t("validations.lettings.property.location_id.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["la"]).to be_empty
+            expect(log.errors["postcode_full"]).to be_empty
+            expect(log.errors["uprn"]).to be_empty
+            expect(log.errors["uprn_selection"]).to be_empty
+          end
+        end
+
+        context "and the inactive local authority is linked to an active one" do
+          it "does not add an error" do
+            LocalAuthorityLink.create!(local_authority: local_authority_inactive, linked_local_authority: local_authority_active)
+            property_validator.validate_la_is_active(log)
+            expect(log.errors["scheme_id"]).to be_empty
+            expect(log.errors["location_id"]).to be_empty
+            expect(log.errors["startdate"]).to be_empty
+            expect(log.errors["la"]).to be_empty
+            expect(log.errors["postcode_full"]).to be_empty
+            expect(log.errors["uprn"]).to be_empty
+            expect(log.errors["uprn_selection"]).to be_empty
+          end
         end
       end
     end
