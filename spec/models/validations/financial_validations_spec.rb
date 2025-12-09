@@ -1191,18 +1191,6 @@ RSpec.describe Validations::FinancialValidations do
         end
       end
 
-      context "and charges are not provided" do
-        xit "throws an error" do
-          record.period = 3
-          record.chcharge = nil
-          financial_validator.validate_care_home_charges(record)
-          expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.lettings.financial.carehome.not_provided", period: "every 4 weeks"))
-          expect(record.errors["is_carehome"])
-            .to include(match I18n.t("validations.lettings.financial.carehome.not_provided", period: "every 4 weeks"))
-        end
-      end
-
       context "and charges under valid limit (£10pw)" do
         it "validates charge when period is weekly for 52 weeks" do
           record.period = 1
