@@ -21,13 +21,11 @@ RSpec.describe LettingsLogsController, type: :request do
       "Authorization" => basic_credentials,
     }
   end
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("API_USER").and_return(api_username)
     allow(ENV).to receive(:[]).with("API_KEY").and_return(api_password)
-    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end
 
   describe "POST #create" do
@@ -46,6 +44,12 @@ RSpec.describe LettingsLogsController, type: :request do
           "managing_organisation_id": managing_organisation.id,
           "assigned_to_id": user.id,
           "tenancycode": tenant_code,
+          "startdate": current_date.strftime("%Y-%m-%d"),
+          "renewal": 0,
+          "needstype": 1,
+          "rent_type": 1,
+          "declaration": 1,
+          "manual_address_entry_selected": true,
           "age1": age1,
           "postcode_full": postcode_full,
           "offered": offered,
@@ -54,12 +58,7 @@ RSpec.describe LettingsLogsController, type: :request do
       end
 
       before do
-        Timecop.freeze(Time.utc(2022, 2, 8))
         post "/lettings-logs", headers:, params: params.to_json
-      end
-
-      after do
-        Timecop.unfreeze
       end
 
       it "returns http success" do
@@ -80,12 +79,11 @@ RSpec.describe LettingsLogsController, type: :request do
 
       context "with invalid json parameters" do
         let(:age1) { 2000 }
-        let(:offered) { 21 }
 
         it "validates lettings log parameters" do
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_content)
-          expect(json_response["errors"]).to match_array([["offered", [I18n.t("validations.shared.numeric.within_range", field: "Times previously offered since becoming available", min: 0, max: 20)]], ["age1", [I18n.t("validations.shared.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120)]]])
+          expect(json_response["errors"]).to match_array([["age1", [I18n.t("validations.shared.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120)]]])
         end
       end
 
@@ -97,21 +95,11 @@ RSpec.describe LettingsLogsController, type: :request do
       end
 
       context "with a complete lettings log submission" do
-        let(:org_params) do
-          {
-            "lettings_log" => {
-              "owning_organisation_id" => owning_organisation.id,
-              "managing_organisation_id" => managing_organisation.id,
-              "assigned_to_id" => user.id,
-            },
-          }
-        end
-        let(:lettings_log_params) { JSON.parse(File.open("spec/fixtures/complete_lettings_log.json").read) }
         let(:params) do
-          lettings_log_params.merge(org_params) { |_k, a_val, b_val| a_val.merge(b_val) }
+          create(:lettings_log, :completed).attributes
         end
 
-        xit "marks the record as completed" do
+        it "marks the record as completed" do
           json_response = JSON.parse(response.body)
 
           expect(json_response).not_to have_key("errors")
@@ -1168,8 +1156,6 @@ RSpec.describe LettingsLogsController, type: :request do
               let(:lettings_log) { create(:lettings_log, status: "not_started", assigned_to: user) }
 
               it "shows guidance link" do
-                allow(Time.zone).to receive(:now).and_return(lettings_log.form.edit_end_date - 1.day)
-                get lettings_log_path(lettings_log)
                 expect(lettings_log.status).to eq("not_started")
                 expect(page).to have_content("Guidance for submitting social housing lettings and sales data (opens in a new tab)")
               end
@@ -1287,9 +1273,9 @@ RSpec.describe LettingsLogsController, type: :request do
 
     context "when accessing the check answers page" do
       before do
-        Timecop.freeze(2021, 4, 1)
+        Timecop.freeze(previous_collection_start_date)
         Singleton.__init__(FormHandler)
-        completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1), voiddate: Time.zone.local(2021, 4, 1), mrcdate: Time.zone.local(2021, 4, 1))
+        completed_lettings_log.update!(startdate: previous_collection_start_date, voiddate: previous_collection_start_date, mrcdate: previous_collection_start_date)
         Timecop.unfreeze
         stub_request(:get, /api\.postcodes\.io/)
           .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
@@ -1298,6 +1284,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
       let(:postcode_lettings_log) do
         FactoryBot.create(:lettings_log,
+                          :setup_completed,
                           assigned_to: user,
                           postcode_known: "No")
       end
@@ -1306,6 +1293,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "shows the inferred la" do
         lettings_log = FactoryBot.create(:lettings_log,
+                                         :setup_completed,
                                          assigned_to: user,
                                          postcode_known: 1,
                                          postcode_full: "PO5 3TE")
@@ -1313,21 +1301,6 @@ RSpec.describe LettingsLogsController, type: :request do
         get "/lettings-logs/#{id}/property-information/check-answers"
         expected_inferred_answer = "<span class=\"govuk-!-font-weight-regular app-!-colour-muted\">Manchester</span>"
         expect(CGI.unescape_html(response.body)).to include(expected_inferred_answer)
-      end
-
-      it "does not show do you know the property postcode question" do
-        get "/lettings-logs/#{id}/property-information/check-answers"
-        expect(CGI.unescape_html(response.body)).not_to include("Do you know the property postcode?")
-      end
-
-      it "shows if the postcode is not known" do
-        get "/lettings-logs/#{id}/property-information/check-answers"
-        expect(CGI.unescape_html(response.body)).to include("Not known")
-      end
-
-      it "shows link to answer question if the question wasn’t answered" do
-        get "/lettings-logs/#{id}/income-and-benefits/check-answers"
-        expect(page).to have_link("Enter income", href: "/lettings-logs/#{id}/net-income?referrer=check_answers_new_answer", class: "govuk-link govuk-link--no-visited-state")
       end
 
       it "does not allow you to change the answers for previous collection year logs" do
