@@ -151,10 +151,6 @@ RSpec.describe BulkUpload::Sales::LogCreator do
         end
       end
 
-      context "when valid csv with existing log" do
-        xit "what should happen?"
-      end
-
       context "with a valid csv and soft validations" do
         let(:log) do
           build(
