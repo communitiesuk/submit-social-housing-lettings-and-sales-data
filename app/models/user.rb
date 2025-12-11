@@ -89,9 +89,9 @@ class User < ApplicationRecord
     additional_responsibilities.each do |responsibility|
       case responsibility
       when "key_contact"
-        scopes << send("is_key_contact")
+        scopes << is_key_contact
       when "data_protection_officer"
-        scopes << send("is_data_protection_officer")
+        scopes << is_data_protection_officer
       end
     end
 
