@@ -60,6 +60,7 @@ Things to watch out for when destroying/creating infra:
   - Terraform won’t let you delete buckets that have objects in them.
 - Secrets
   - If you destroy secrets, they will actually be marked as ‘scheduled to delete’ which will take effect after a minimum of 7 days. You can’t recreate secrets with the same name during this period.
+  - If you want to destroy immediately, you need to do it from the command line (using AWS CLI, see [here](https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/blob/main/docs/development_setup.md#set-up-aws-vault--cli)) with this command: aws secretsmanager delete-secret --force-delete-without-recovery --secret-id <secret-arn>. (Note that if a secret is marked as scheduled to delete, you can undo this in the console to make it an ‘active’ secret again.)
   - You may need to manually re-enter secret values into Secrets Manager at some point. When you do, just paste the secret value as plain text (don’t enter a key name, or format it as JSON).
 - ECS
   - Sometimes task definitions don’t get deleted. You may need to manually delete them.
