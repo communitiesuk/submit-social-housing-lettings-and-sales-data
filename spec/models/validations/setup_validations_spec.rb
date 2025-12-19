@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Validations::SetupValidations do
+  include CollectionTimeHelper
+
   subject(:setup_validator) { setup_validator_class.new }
 
   let(:setup_validator_class) { Class.new { include Validations::SetupValidations } }
@@ -96,24 +98,28 @@ RSpec.describe Validations::SetupValidations do
 
       context "when after the new logs end date but before edit end date for the previous period" do
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 1, 8))
+          Timecop.freeze(previous_collection_edit_end_date)
+        end
+
+        after do
+          Timecop.return
         end
 
         it "cannot create new logs for the previous collection year" do
           record.update!(startdate: nil)
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = previous_collection_start_date
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 2023 to 2024 collection year, which is between 1st April 2023 and 31st March 2024")
+          expect(record.errors["startdate"]).to include(match "Enter a date within the #{current_collection_start_year} to #{next_collection_start_year} collection year, which is between 1st April #{current_collection_start_year} and 31st March #{next_collection_start_year}")
         end
 
-        xit "can edit already created logs for the previous collection year" do
-          record.startdate = Time.zone.local(2023, 1, 2)
+        it "can edit already created logs for the previous collection year" do
+          record.startdate = previous_collection_start_date + 1.day
           record.save!(validate: false)
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = previous_collection_start_date
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).not_to include(match "Enter a date within the 2023 to 2024 collection year, which is between 1st April 2023 and 31st March 2024")
+          expect(record.errors["startdate"]).not_to include(match "Enter a date within the #{current_collection_start_year} to #{next_collection_start_year} collection year, which is between 1st April #{current_collection_start_year} and 31st March #{next_collection_start_year}")
         end
       end
 

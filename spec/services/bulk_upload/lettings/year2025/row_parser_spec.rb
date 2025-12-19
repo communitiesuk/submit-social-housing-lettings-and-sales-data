@@ -259,7 +259,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
             expect(parser).to be_valid
           end
 
-          xit "instantiates a log with everything completed", aggregate_failures: true do
+          it "instantiates a log with everything completed", aggregate_failures: true do
             parser.valid?
 
             questions = parser.send(:questions).reject do |q|

@@ -153,9 +153,5 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
         expect(log.retirement_value_check).to be(nil)
       end
     end
-
-    context "when valid csv with existing log" do
-      xit "what should happen?"
-    end
   end
 end
