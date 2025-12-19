@@ -4,16 +4,6 @@ class Form
               :setup_sections, :form_sections, :unresolved_log_redirect_page_id, :edit_end_date
 
   DEADLINES = {
-    2022 => {
-      submission_deadline: Time.zone.local(2023, 6, 9),
-      new_logs_end_date: Time.zone.local(2023, 11, 20),
-      edit_end_date: Time.zone.local(2023, 11, 20),
-    },
-    2023 => {
-      submission_deadline: Time.zone.local(2024, 6, 7),
-      new_logs_end_date: Time.zone.local(2024, 7, 22),
-      edit_end_date: Time.zone.local(2024, 7, 22),
-    },
     2024 => {
       submission_deadline: Time.zone.local(2025, 6, 6),
       new_logs_end_date: Time.zone.local(2025, 7, 24),
