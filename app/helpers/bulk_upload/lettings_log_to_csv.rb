@@ -17,7 +17,7 @@ class BulkUpload::LettingsLogToCsv
   def to_csv_row(seed: nil)
     year = log.collection_start_year
     case year
-    when 2022, 2023, 2024, 2025
+    when 2022, 2023, 2024, 2025, 2026
       to_year_csv_row(year, seed:)
     else
       raise NotImplementedError "No mapping function implemented for year #{year}"
@@ -89,6 +89,15 @@ class BulkUpload::LettingsLogToCsv
 
   def default_2025_field_numbers
     (1..129).to_a
+  end
+
+  def default_2026_field_numbers
+    (1..129).to_a
+  end
+
+  def to_2026_row
+    # TODO: Implement when 2026 format is known
+    to_2025_row
   end
 
   def to_2025_row
