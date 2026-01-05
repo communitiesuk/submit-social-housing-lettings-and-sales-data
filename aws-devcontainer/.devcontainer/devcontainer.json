@@ -1,0 +1,6 @@
+{
+  "name": "CORE aws-vault",
+  "build": {
+    "dockerfile": "Dockerfile"
+  }
+}
