@@ -264,6 +264,8 @@ module Csv
       "uprn" => %w[uprn_known uprn],
     }.freeze
 
+    IGNORED_ATTRIBUTES_2026 = %w[builtype].freeze
+
     def attribute_mappings
       if @year >= 2024
         ATTRIBUTE_MAPPINGS.merge(ATTRIBUTE_MAPPINGS_2024)
@@ -282,6 +284,7 @@ module Csv
       ordered_questions = FormHandler.instance.ordered_questions_for_year(@year, "lettings")
       soft_validations_attributes = soft_validations_attributes(ordered_questions)
       ordered_questions.reject! { |q| q.id.match?(/age\d_known|nationality_all_group|rent_value_check/) }
+      ordered_questions.reject! { |q| IGNORED_ATTRIBUTES_2026.include?(q.id) } if @year >= 2026
       attributes = insert_derived_and_related_attributes(ordered_questions)
       order_address_fields_for_support(attributes)
       final_attributes = non_question_fields + attributes + SCHEME_AND_LOCATION_ATTRIBUTES
