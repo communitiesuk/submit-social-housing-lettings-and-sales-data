@@ -199,4 +199,8 @@ module Exports::LettingsLogExportConstants
     "carehome_charges_value_check",
     "chcharge"
   ]
+
+  PRE_2026_EXPORT_FIELDS = Set[
+    "builtype"
+  ]
 end
