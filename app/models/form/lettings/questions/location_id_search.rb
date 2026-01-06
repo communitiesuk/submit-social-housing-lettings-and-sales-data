@@ -16,7 +16,9 @@ class Form::Lettings::Questions::LocationIdSearch < ::Form::Question
   end
 
   def answer_options
-    answer_opts = { "" => "Select an option" }
+    answer_opts = {
+      "" => "Select an option"
+    }
     return answer_opts unless ActiveRecord::Base.connected?
 
     Location.visible.started_in_2_weeks.select(:id, :postcode, :name).each_with_object(answer_opts) do |location, hsh|
