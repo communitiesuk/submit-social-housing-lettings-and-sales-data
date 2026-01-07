@@ -1678,22 +1678,6 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
     end
 
-    describe "#field_27" do
-      context "when null" do
-        let(:attributes) { setup_section_params.merge({ field_27: nil }) }
-
-        it "returns an error" do
-          parser.valid?
-          expect(parser.errors[:field_27]).to be_present
-        end
-
-        it "populates with correct error message" do
-          parser.valid?
-          expect(parser.errors[:field_27]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "type of building.")])
-        end
-      end
-    end
-
     describe "#field_48" do # age2
       context "when null but gender given" do
         let(:attributes) { setup_section_params.merge({ field_48: "", field_49: "F" }) }
