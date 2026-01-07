@@ -14,6 +14,46 @@ class Form::Lettings::Questions::Reason < ::Form::Question
   end
 
   def answer_options
+    if form.start_year_2026_or_later?
+      return {
+        "50" => { "value" => "End of social or private sector tenancy - no fault" },
+        "51" => { "value" => "End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)" },
+        "52" => { "value" => "End of social or private sector tenancy - evicted due to rent arrears" },
+        "53" => { "value" => "End of social or private sector tenancy - evicted for any other reason" },
+        "1" => { "value" => "Permanently decanted from another property owned by this landlord" },
+        "2" => { "value" => "Left home country as a refugee" },
+        "45" => { "value" => "Discharged from prison" },
+        "46" => { "value" => "Discharged from long-stay hospital or similar institution" },
+        "4" => { "value" => "Loss of tied accommodation" },
+        "55" => { "value" => "Leaving foster care or children's home" },
+        "9" => { "value" => "Asked to leave by family or friends" },
+        "8" => { "value" => "Relationship breakdown (non-violent) with partner" },
+        "44" => { "value" => "Death of household member in last settled accommodation" },
+        "16" => { "value" => "To move nearer to family, friends or school" },
+        "17" => { "value" => "To move nearer to work" },
+        "48" => { "value" => "Domestic abuse - previously joint tenancy with partner" },
+        "49" => { "value" => "Domestic abuse - other" },
+        "56" => { "value" => "Non-domestic violence (e.g. gang violence)"},
+        "57" => { "value" => "Cuckooing (property being used by others for illegal activity)"},
+        "10" => { "value" => "Racial harassment" },
+        "31" => { "value" => "Hate crime" },
+        "11" => { "value" => "Other problems with neighbours" },
+        "34" => { "value" => "Repossession" },
+        "54" => { "value" => "Could no longer afford rent or mortgage" },
+        "12" => { "value" => "Property unsuitable because of overcrowding" },
+        "13" => { "value" => "Property unsuitable because of ill health or disability" },
+        "14" => { "value" => "Property unsuitable because of poor condition" },
+        "29" => { "value" => "Under occupation (offered incentive to downsize)" },
+        "30" => { "value" => "Under occupation (no incentive)" },
+        "18" => { "value" => "To move to accommodation with support" },
+        "19" => { "value" => "To move to independent accommodation" },
+        "47" => { "value" => "Tenant prefers not to say" },
+        "20" => { "value" => "Other" },
+        "divider" => { "value" => true },
+        "28" => { "value" => "Don’t know" },
+      }.freeze
+    end
+
     if form.start_year_2025_or_later?
       return {
         "50" => { "value" => "End of social or private sector tenancy - no fault" },
