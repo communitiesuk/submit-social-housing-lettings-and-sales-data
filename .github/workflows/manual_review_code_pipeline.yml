@@ -1,0 +1,29 @@
+name: Manual review app code pipeline
+
+concurrency:
+  group: review-${{ inputs.key }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      review-app-key:
+        required: true
+        type: string
+        description: "The review app ID to deploy code for."
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  code:
+    name: Deploy review app code
+    uses: ./.github/workflows/aws_deploy.yml
+    with:
+      aws_account_id: 837698168072
+      aws_role_prefix: core-dev
+      aws_task_prefix: core-review-${{ inputs.key }}
+      concurrency_tag: ${{ inputs.key }}
+      environment: review
+    permissions:
+      id-token: write
