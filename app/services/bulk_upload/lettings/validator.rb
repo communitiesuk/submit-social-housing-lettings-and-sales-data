@@ -115,6 +115,8 @@ private
                       BulkUpload::Lettings::Year2024::CsvParser.new(path:)
                     when 2025
                       BulkUpload::Lettings::Year2025::CsvParser.new(path:)
+                    when 2026
+                      BulkUpload::Lettings::Year2026::CsvParser.new(path:)
                     else
                       raise "csv parser not found"
                     end
