@@ -15,11 +15,11 @@ class Form::Lettings::Questions::Reason < ::Form::Question
 
   def answer_options
     if form.start_year_2026_or_later?
-      return QUESTIONS_FROM_YEAR[2026]
+      QUESTIONS_FROM_YEAR[2026]
     elsif form.start_year_2025_or_later?
-      return QUESTIONS_FROM_YEAR[2025]
+      QUESTIONS_FROM_YEAR[2025]
     else
-      return QUESTIONS_FROM_YEAR[2024]
+      QUESTIONS_FROM_YEAR[2024]
     end
   end
 
@@ -42,8 +42,8 @@ class Form::Lettings::Questions::Reason < ::Form::Question
       "17" => { "value" => "To move nearer to work" },
       "48" => { "value" => "Domestic abuse - previously joint tenancy with partner" },
       "49" => { "value" => "Domestic abuse - other" },
-      "56" => { "value" => "Non-domestic violence (e.g. gang violence)"},
-      "57" => { "value" => "Cuckooing (property being used by others for illegal activity)"},
+      "56" => { "value" => "Non-domestic violence (e.g. gang violence)" },
+      "57" => { "value" => "Cuckooing (property being used by others for illegal activity)" },
       "10" => { "value" => "Racial harassment" },
       "31" => { "value" => "Hate crime" },
       "11" => { "value" => "Other problems with neighbours" },
@@ -129,7 +129,7 @@ class Form::Lettings::Questions::Reason < ::Form::Question
       "47" => { "value" => "Tenant prefers not to say" },
       "divider" => { "value" => true },
       "28" => { "value" => "Don’t know" },
-    }.freeze
+    }.freeze,
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 77, 2024 => 76 }.freeze
