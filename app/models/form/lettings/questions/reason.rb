@@ -80,7 +80,7 @@ class Form::Lettings::Questions::Reason < ::Form::Question
       "48" => { "value" => "Domestic abuse - previously joint tenancy with partner" },
       "49" => { "value" => "Domestic abuse - other" },
       "10" => { "value" => "Racial harassment" },
-      "31" => { "value" => "Hate crime"        },
+      "31" => { "value" => "Hate crime" },
       "11" => { "value" => "Other problems with neighbours" },
       "34" => { "value" => "Repossession" },
       "54" => { "value" => "Could no longer afford rent or mortgage" },
@@ -114,7 +114,7 @@ class Form::Lettings::Questions::Reason < ::Form::Question
       "48" => { "value" => "Domestic abuse - previously joint tenancy with partner" },
       "49" => { "value" => "Domestic abuse - other" },
       "10" => { "value" => "Racial harassment" },
-      "31" => { "value" => "Hate crime"        },
+      "31" => { "value" => "Hate crime" },
       "11" => { "value" => "Other problems with neighbours" },
       "34" => { "value" => "Repossession" },
       "54" => { "value" => "Could no longer afford rent or mortgage" },
@@ -132,5 +132,5 @@ class Form::Lettings::Questions::Reason < ::Form::Question
     }.freeze,
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 77, 2024 => 76 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2024 => 76 }.freeze
 end
