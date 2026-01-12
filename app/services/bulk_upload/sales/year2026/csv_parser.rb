@@ -3,6 +3,7 @@ require "csv"
 class BulkUpload::Sales::Year2026::CsvParser
   include CollectionTimeHelper
 
+  # TODO: CLDC-4162: Update when 2026 format is known
   FIELDS = 121
   MAX_COLUMNS = 142
   FORM_YEAR = 2026
@@ -26,6 +27,7 @@ class BulkUpload::Sales::Year2026::CsvParser
   end
 
   def cols
+    # TODO: CLDC-4162: Update when 2026 format is known
     @cols ||= ("A".."DR").to_a
   end
 
