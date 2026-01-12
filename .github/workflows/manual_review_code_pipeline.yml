@@ -1,12 +1,12 @@
 name: Manual review app code pipeline
 
 concurrency:
-  group: review-${{ inputs.key }}
+  group: review-${{ inputs.review_app_key }}
 
 on:
   workflow_dispatch:
     inputs:
-      review-app-key:
+      review_app_key:
         required: true
         type: string
         description: "The review app ID to deploy code for."
@@ -22,8 +22,8 @@ jobs:
     with:
       aws_account_id: 837698168072
       aws_role_prefix: core-dev
-      aws_task_prefix: core-review-${{ inputs.key }}
-      concurrency_tag: ${{ inputs.key }}
+      aws_task_prefix: core-review-${{ inputs.review_app_key }}
+      concurrency_tag: ${{ inputs.review_app_key }}
       environment: review
     permissions:
       id-token: write
