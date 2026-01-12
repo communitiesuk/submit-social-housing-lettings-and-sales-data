@@ -152,7 +152,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
     end
   end
 
-  context "with start year >= 2024" do
+  context "with start year 2024" do
     before do
       allow(form).to receive(:start_year_2024_or_later?).and_return(true)
       allow(form).to receive(:start_year_2026_or_later?).and_return(false)
@@ -307,7 +307,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
     end
   end
 
-  context "with start year >= 2025" do
+  context "with start year 2025" do
     before do
       allow(form).to receive(:start_year_2024_or_later?).and_return(true)
       allow(form).to receive(:start_year_2025_or_later?).and_return(true)
