@@ -159,7 +159,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
         expect { validator.call }.to change(BulkUploadError, :count)
       end
 
-      context "and in 2025", metadata: { year: 2025 } do
+      context "and in 2025", metadata: { year: 25 } do
         let(:year) { 2025 }
 
         it "create validation error with correct values" do
@@ -177,7 +177,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
         end
       end
 
-      context "and in 2026", metadata: { year: 2026 } do
+      context "and in 2026", metadata: { year: 26 } do
         let(:year) { 2026 }
 
         it "create validation error with correct values" do
