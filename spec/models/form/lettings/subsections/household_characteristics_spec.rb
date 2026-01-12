@@ -472,7 +472,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
 
     it "has correct pages" do
       expect(household_characteristics.pages.map(&:id)).to eq(
-                                                             %w[
+        %w[
           household_members
           no_females_pregnant_household_lead_hhmemb_value_check
           females_in_soft_age_range_in_pregnant_household_lead_hhmemb_value_check
@@ -615,7 +615,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           working_situation_8_under_retirement_value_check
           working_situation_8_over_retirement_value_check
         ],
-                                                             )
+      )
     end
   end
 
