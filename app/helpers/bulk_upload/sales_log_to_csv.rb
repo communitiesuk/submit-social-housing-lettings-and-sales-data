@@ -70,6 +70,7 @@ class BulkUpload::SalesLogToCsv
     when 2025
       (1..121).to_a
     when 2026
+      # TODO: CLDC-4162: Replace with actual field numbers when 2026 format is known
       (1..121).to_a
     else
       raise NotImplementedError "No mapping function implemented for year #{year}"
@@ -535,7 +536,7 @@ class BulkUpload::SalesLogToCsv
   end
 
   def to_2026_row
-    # TODO: Implement when 2026 template is available
+    # TODO: CLDC-4162: Implement when 2026 template is available
     to_2025_row
   end
 
