@@ -159,18 +159,40 @@ RSpec.describe BulkUpload::Lettings::Validator do
         expect { validator.call }.to change(BulkUploadError, :count)
       end
 
-      it "create validation error with correct values" do
-        validator.call
+      context "and in 2025", metadata: { year: 2025 } do
+        let(:year) { 2025 }
 
-        error = BulkUploadError.find_by(field: "field_4")
+        it "create validation error with correct values" do
+          validator.call
 
-        expect(error.field).to eql("field_4")
-        expect(error.error).to eql("You must answer needs type.")
-        expect(error.tenant_code).to eql(log.tenancycode)
-        expect(error.property_ref).to eql(log.propcode)
-        expect(error.row).to eql("2")
-        expect(error.cell).to eql("CX2")
-        expect(error.col).to eql("CX")
+          error = BulkUploadError.find_by(field: "field_4")
+
+          expect(error.field).to eql("field_4")
+          expect(error.error).to eql("You must answer needs type.")
+          expect(error.tenant_code).to eql(log.tenancycode)
+          expect(error.property_ref).to eql(log.propcode)
+          expect(error.row).to eql("2")
+          expect(error.cell).to eql("CX2")
+          expect(error.col).to eql("CX")
+        end
+      end
+
+      context "and in 2026", metadata: { year: 2026 } do
+        let(:year) { 2026 }
+
+        it "create validation error with correct values" do
+          validator.call
+
+          error = BulkUploadError.find_by(field: "field_4")
+
+          expect(error.field).to eql("field_4")
+          expect(error.error).to eql("You must answer needs type.")
+          expect(error.tenant_code).to eql(log.tenancycode)
+          expect(error.property_ref).to eql(log.propcode)
+          expect(error.row).to eql("2")
+          expect(error.cell).to eql("CX2")
+          expect(error.col).to eql("CX")
+        end
       end
     end
 

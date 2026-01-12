@@ -136,17 +136,38 @@ RSpec.describe BulkUpload::Sales::Validator do
         expect { validator.call }.to change(BulkUploadError, :count)
       end
 
-      it "create validation error with correct values" do
-        validator.call
+      context "and in 2025", metadata: { year: 2025 } do
+        let(:year) { 2025 }
 
-        error = BulkUploadError.find_by(row: "2", field: "field_4", category: "setup")
+        it "create validation error with correct values" do
+          validator.call
 
-        expect(error.field).to eql("field_4")
-        expect(error.error).to eql("You must answer owning organisation.")
-        expect(error.purchaser_code).to eql(log.purchaser_code)
-        expect(error.row).to eql("2")
-        expect(error.cell).to eql("E2")
-        expect(error.col).to eql("E")
+          error = BulkUploadError.find_by(row: "2", field: "field_4", category: "setup")
+
+          expect(error.field).to eql("field_4")
+          expect(error.error).to eql("You must answer owning organisation.")
+          expect(error.purchaser_code).to eql(log.purchaser_code)
+          expect(error.row).to eql("2")
+          expect(error.cell).to eql("E2")
+          expect(error.col).to eql("E")
+        end
+      end
+
+      context "and in 2026", metadata: { year: 2026 } do
+        let(:year) { 2026 }
+
+        it "create validation error with correct values" do
+          validator.call
+
+          error = BulkUploadError.find_by(row: "2", field: "field_4", category: "setup")
+
+          expect(error.field).to eql("field_4")
+          expect(error.error).to eql("You must answer owning organisation.")
+          expect(error.purchaser_code).to eql(log.purchaser_code)
+          expect(error.row).to eql("2")
+          expect(error.cell).to eql("E2")
+          expect(error.col).to eql("E")
+        end
       end
     end
 
