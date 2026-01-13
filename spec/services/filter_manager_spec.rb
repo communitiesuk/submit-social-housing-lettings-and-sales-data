@@ -94,4 +94,51 @@ describe FilterManager do
       expect(described_class.filter_schemes(Scheme.all, nil, {}, nil, nil)).to eq(alphabetical_order_schemes)
     end
   end
+
+  describe "filter_users" do
+    let(:data_provider_user) { FactoryBot.create(:user, role: "data_provider") }
+    let(:data_coordinator_user) { FactoryBot.create(:user, role: "data_coordinator") }
+    let(:support_user) { FactoryBot.create(:user, role: "support") }
+    let(:key_contact_user) { FactoryBot.create(:user, is_key_contact: true) }
+    let(:dpo_user) { FactoryBot.create(:user, is_dpo: true) }
+    let(:key_contact_dpo_user) { FactoryBot.create(:user, is_key_contact: true, is_dpo: true) }
+
+    context "when filtering by role" do
+      it "returns users with the role" do
+        filter = { "role" => %w[data_provider] }
+        result = described_class.filter_users(User.all, nil, filter, nil)
+        expect(result).to include(data_provider_user)
+        expect(result).not_to include(data_coordinator_user)
+        expect(result).not_to include(support_user)
+      end
+
+      it "returns users with multiple roles selected" do
+        filter = { "role" => %w[data_provider data_coordinator] }
+        result = described_class.filter_users(User.all, nil, filter, nil)
+        expect(result).to include(data_provider_user)
+        expect(result).to include(data_coordinator_user)
+        expect(result).not_to include(support_user)
+      end
+    end
+
+    context "when filtering by additional responsibilities" do
+      it "returns users with the additional responsibilities" do
+        filter = { "additional_responsibilities" => %w[data_protection_officer] }
+        result = described_class.filter_users(User.all, nil, filter, nil)
+        expect(result).to include(dpo_user)
+        expect(result).to include(key_contact_dpo_user)
+        expect(result).not_to include(key_contact_user)
+        expect(result).not_to include(support_user)
+      end
+
+      it "returns users with multiple additional responsibilities selected" do
+        filter = { "additional_responsibilities" => %w[data_protection_officer key_contact] }
+        result = described_class.filter_users(User.all, nil, filter, nil)
+        expect(result).to include(dpo_user)
+        expect(result).to include(key_contact_dpo_user)
+        expect(result).to include(key_contact_user)
+        expect(result).not_to include(support_user)
+      end
+    end
+  end
 end
