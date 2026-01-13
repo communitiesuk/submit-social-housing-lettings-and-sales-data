@@ -27,4 +27,8 @@ class Form::Lettings::Questions::PersonPartner < ::Form::Question
 
     base_question_number + (4 * @person_index)
   end
+
+  def derived?(log)
+    form.start_year_2026_or_later? && log.is_partner_inferred?(@person_index)
+  end
 end

@@ -403,6 +403,10 @@ class LettingsLog < Log
     unittype_gn_changed? && unittype_gn_was == 2
   end
 
+  def is_partner_inferred?(person_index)
+    public_send("age#{person_index}") && public_send("age#{person_index}") < 16
+  end
+
   def is_shared_housing?
     # 4: Shared flat or maisonette
     # 9: Shared house
