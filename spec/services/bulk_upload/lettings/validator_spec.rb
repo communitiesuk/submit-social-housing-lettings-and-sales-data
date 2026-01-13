@@ -1,8 +1,12 @@
 require "rails_helper"
 
 RSpec.describe BulkUpload::Lettings::Validator do
+  include CollectionTimeHelper
+
   subject(:validator) { described_class.new(bulk_upload:, path:) }
 
+  let(:year) { current_collection_start_year }
+  let(:date) { current_collection_start_date }
   let(:organisation) { create(:organisation, old_visible_id: "3", rent_periods: [2]) }
   let(:user) { create(:user, organisation:) }
   let(:log) { build(:lettings_log, :completed, period: 2, assigned_to: user) }
@@ -73,14 +77,14 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
     end
 
-    context "when uploading a 2023 logs for 2024 bulk upload" do
-      let(:log) { build(:lettings_log, :completed, startdate: Time.zone.local(2023, 5, 6), tenancycode: "5234234234234") }
-      let(:bulk_upload) { build(:bulk_upload, user:, year: 2024) }
+    context "when uploading a previous logs for current bulk upload" do
+      let(:log) { build(:lettings_log, :completed, startdate: previous_collection_start_date, tenancycode: "5234234234234") }
+      let(:bulk_upload) { build(:bulk_upload, user:, year:) }
 
       context "with headers" do
         let(:seed) { rand }
-        let(:field_numbers) { log_to_csv.default_2024_field_numbers }
-        let(:field_values) { log_to_csv.to_2024_row }
+        let(:field_numbers) { log_to_csv.send("default_#{year}_field_numbers") }
+        let(:field_values) { log_to_csv.send("to_#{year}_row") }
 
         before do
           file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
@@ -97,13 +101,13 @@ RSpec.describe BulkUpload::Lettings::Validator do
   end
 
   describe "#call" do
-    context "with an invalid 2024 csv" do
-      let(:log) { build(:lettings_log, :completed, startdate: Time.zone.local(2024, 7, 1), period: 2, assigned_to: user) }
+    context "with an invalid csv" do
+      let(:log) { build(:lettings_log, :completed, startdate: date, period: 2, assigned_to: user) }
 
       before do
-        values = log_to_csv.to_2024_row
+        values = log_to_csv.send("to_#{year}_row")
         values[7] = nil
-        file.write(log_to_csv.default_field_numbers_row_for_year(2024))
+        file.write(log_to_csv.default_field_numbers_row_for_year(year))
         file.write(log_to_csv.to_custom_csv_row(seed: nil, field_values: values))
         file.rewind
       end
@@ -141,12 +145,12 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
     context "with arbitrary ordered invalid csv" do
       let(:seed) { 321 }
-      let(:log) { build(:lettings_log, :completed, startdate: Time.zone.local(2024, 7, 1), period: 2, assigned_to: user) }
+      let(:log) { build(:lettings_log, :completed, startdate: date, period: 2, assigned_to: user) }
 
       before do
         log.needstype = nil
-        values = log_to_csv.to_2024_row
-        file.write(log_to_csv.default_field_numbers_row_for_year(2024, seed:))
+        values = log_to_csv.send("to_#{year}_row")
+        file.write(log_to_csv.default_field_numbers_row_for_year(year, seed:))
         file.write(log_to_csv.to_custom_csv_row(seed:, field_values: values))
         file.close
       end
@@ -155,18 +159,40 @@ RSpec.describe BulkUpload::Lettings::Validator do
         expect { validator.call }.to change(BulkUploadError, :count)
       end
 
-      it "create validation error with correct values" do
-        validator.call
+      context "and in 2025", metadata: { year: 25 } do
+        let(:year) { 2025 }
 
-        error = BulkUploadError.find_by(field: "field_4")
+        it "create validation error with correct values" do
+          validator.call
 
-        expect(error.field).to eql("field_4")
-        expect(error.error).to eql("You must answer needs type.")
-        expect(error.tenant_code).to eql(log.tenancycode)
-        expect(error.property_ref).to eql(log.propcode)
-        expect(error.row).to eql("2")
-        expect(error.cell).to eql("CY2")
-        expect(error.col).to eql("CY")
+          error = BulkUploadError.find_by(field: "field_4")
+
+          expect(error.field).to eql("field_4")
+          expect(error.error).to eql("You must answer needs type.")
+          expect(error.tenant_code).to eql(log.tenancycode)
+          expect(error.property_ref).to eql(log.propcode)
+          expect(error.row).to eql("2")
+          expect(error.cell).to eql("CX2")
+          expect(error.col).to eql("CX")
+        end
+      end
+
+      context "and in 2026", metadata: { year: 26 } do
+        let(:year) { 2026 }
+
+        it "create validation error with correct values" do
+          validator.call
+
+          error = BulkUploadError.find_by(field: "field_4")
+
+          expect(error.field).to eql("field_4")
+          expect(error.error).to eql("You must answer needs type.")
+          expect(error.tenant_code).to eql(log.tenancycode)
+          expect(error.property_ref).to eql(log.propcode)
+          expect(error.row).to eql("2")
+          expect(error.cell).to eql("CX2")
+          expect(error.col).to eql("CX")
+        end
       end
     end
 
@@ -218,8 +244,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
     end
 
-    context "with a 2024 csv without headers" do
-      let(:log) { build(:lettings_log, :completed, startdate: Time.zone.local(2024, 7, 1), period: 2, assigned_to: user) }
+    context "with a csv without headers" do
+      let(:log) { build(:lettings_log, :completed, startdate: date, period: 2, assigned_to: user) }
 
       before do
         file.write(log_to_csv.to_csv_row)
