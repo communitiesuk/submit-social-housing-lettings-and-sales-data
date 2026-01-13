@@ -115,7 +115,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
 
       it "has correct pages" do
         expect(property_information.pages.map(&:id)).to eq(
-                                                          %w[
+          %w[
             first_time_property_let_as_social_housing
             property_let_type
             property_vacancy_reason_not_first_let
@@ -134,7 +134,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
             property_major_repairs_value_check
             sheltered_accommodation
           ],
-                                                          )
+        )
       end
     end
   end
