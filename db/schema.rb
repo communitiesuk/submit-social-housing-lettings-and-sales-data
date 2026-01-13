@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_16_111741) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_13_143404) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -373,8 +373,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_111741) do
     t.integer "partner_under_16_value_check"
     t.integer "multiple_partners_value_check"
     t.bigint "created_by_id"
-    t.integer "referral_type"
     t.boolean "manual_address_entry_selected", default: false
+    t.integer "referral_type"
     t.index ["assigned_to_id"], name: "index_lettings_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
@@ -504,7 +504,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_111741) do
     t.date "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["organisation_id", "startdate"], name: "index_org_name_changes_on_org_id_and_startdate", unique: true
+    t.index ["organisation_id", "startdate", "discarded_at"], name: "index_org_name_changes_on_org_id_startdate_discarded_at", unique: true
     t.index ["organisation_id"], name: "index_organisation_name_changes_on_organisation_id"
   end
 
@@ -787,6 +787,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_111741) do
     t.datetime "lasttransaction"
     t.datetime "initialpurchase"
     t.boolean "manual_address_entry_selected", default: false
+    t.string "sexRAB1"
+    t.string "sexRAB2"
+    t.string "sexRAB3"
+    t.string "sexRAB4"
+    t.string "sexRAB5"
+    t.string "sexRAB6"
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
@@ -894,6 +900,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_111741) do
   add_foreign_key "local_authority_links", "local_authorities"
   add_foreign_key "local_authority_links", "local_authorities", column: "linked_local_authority_id"
   add_foreign_key "locations", "schemes"
+  add_foreign_key "organisation_name_changes", "organisations"
   add_foreign_key "organisation_relationships", "organisations", column: "child_organisation_id"
   add_foreign_key "organisation_relationships", "organisations", column: "parent_organisation_id"
   add_foreign_key "organisations", "organisations", column: "absorbing_organisation_id"
