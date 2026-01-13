@@ -407,6 +407,10 @@ class LettingsLog < Log
     public_send("age#{person_index}") && public_send("age#{person_index}") < 16
   end
 
+  def age_changed_from_below_16(person_index)
+    public_send("age#{person_index}") && public_send("age#{person_index}_was") < 16
+  end
+
   def is_shared_housing?
     # 4: Shared flat or maisonette
     # 9: Shared house
