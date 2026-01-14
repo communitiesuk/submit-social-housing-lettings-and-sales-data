@@ -1251,6 +1251,12 @@ RSpec.describe LettingsLog, type: :model do
       context "and it is 2025", metadata: { year: 25 } do
         let(:startdate) { collection_start_date_for_year(2025) }
 
+        around do |example|
+          Timecop.freeze(collection_start_date_for_year(2025)) do
+            example.run
+          end
+        end
+
         it "does not clear the relationship" do
           expect { log.set_derived_fields! }.to not_change(log, :relat2)
         end
@@ -1258,6 +1264,13 @@ RSpec.describe LettingsLog, type: :model do
 
       context "and it is 2026", metadata: { year: 26 } do
         let(:startdate) { collection_start_date_for_year(2026) }
+
+        around do |example|
+          Timecop.freeze(collection_start_date_for_year(2026)) do
+            Singleton.__init__(FormHandler)
+            example.run
+          end
+        end
 
         it "clears the relationship" do
           expect { log.set_derived_fields! }.to change(log, :relat2).from("X").to(nil)
@@ -1276,6 +1289,13 @@ RSpec.describe LettingsLog, type: :model do
       context "and it is 2025", metadata: { year: 25 } do
         let(:startdate) { collection_start_date_for_year(2025) }
 
+        around do |example|
+          Timecop.freeze(collection_start_date_for_year(2025)) do
+            Singleton.__init__(FormHandler)
+            example.run
+          end
+        end
+
         it "does not clear the relationship" do
           expect { log.set_derived_fields! }.to not_change(log, :relat2)
         end
@@ -1283,6 +1303,13 @@ RSpec.describe LettingsLog, type: :model do
 
       context "and it is 2026", metadata: { year: 26 } do
         let(:startdate) { collection_start_date_for_year(2026) }
+
+        around do |example|
+          Timecop.freeze(collection_start_date_for_year(2026)) do
+            Singleton.__init__(FormHandler)
+            example.run
+          end
+        end
 
         it "does not clear the relationship" do
           expect { log.set_derived_fields! }.to not_change(log, :relat2)
@@ -1301,6 +1328,13 @@ RSpec.describe LettingsLog, type: :model do
       context "and it is 2025", metadata: { year: 25 } do
         let(:startdate) { collection_start_date_for_year(2025) }
 
+        around do |example|
+          Timecop.freeze(collection_start_date_for_year(2025)) do
+            Singleton.__init__(FormHandler)
+            example.run
+          end
+        end
+
         it "does not clear the relationship" do
           expect { log.set_derived_fields! }.to not_change(log, :relat2)
         end
@@ -1308,6 +1342,13 @@ RSpec.describe LettingsLog, type: :model do
 
       context "and it is 2026", metadata: { year: 26 } do
         let(:startdate) { collection_start_date_for_year(2026) }
+
+        around do |example|
+          Timecop.freeze(collection_start_date_for_year(2026)) do
+            Singleton.__init__(FormHandler)
+            example.run
+          end
+        end
 
         it "does not clear the relationship" do
           expect { log.set_derived_fields! }.to not_change(log, :relat2)
