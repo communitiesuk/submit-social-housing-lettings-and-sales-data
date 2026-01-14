@@ -246,8 +246,13 @@ private
   end
 
   def get_totchild
-    relationships = [relat2, relat3, relat4, relat5, relat6, relat7, relat8]
-    relationships.count("C")
+    if form.start_year_2025_or_later?
+      ages = [age1, age2, age3, age4, age5, age6, age7, age8]
+      ages.count { |x| !x.nil? && x < 16 }
+    else
+      relationships = [relat2, relat3, relat4, relat5, relat6, relat7, relat8]
+      relationships.count("C")
+    end
   end
 
   def get_totadult
