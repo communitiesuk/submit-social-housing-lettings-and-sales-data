@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_16_111741) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_14_160036) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -84,7 +84,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_111741) do
     t.datetime "last_accessed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.check_constraint "log_type::text = ANY (ARRAY['lettings'::character varying, 'sales'::character varying]::text[])", name: "log_type_check"
+    t.check_constraint "log_type::text = ANY (ARRAY['lettings'::character varying::text, 'sales'::character varying::text])", name: "log_type_check"
     t.check_constraint "year >= 2000 AND year <= 2099", name: "year_check"
   end
 
