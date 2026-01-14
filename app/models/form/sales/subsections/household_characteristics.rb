@@ -24,6 +24,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       (Form::Sales::Pages::NotRetiredValueCheck.new("age_1_not_retired_value_check", nil, self, person_index: 1) if form.start_year_2024_or_later?),
       Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck.new("age_1_old_persons_shared_ownership_joint_purchase_value_check", nil, self, joint_purchase: true),
       Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck.new("age_1_old_persons_shared_ownership_value_check", nil, self, joint_purchase: false),
+      Form::Sales::Pages::SexRegisteredAtBirth1.new(nil, nil, self),
       Form::Sales::Pages::GenderIdentity1.new(nil, nil, self),
       Form::Sales::Pages::Buyer1EthnicGroup.new(nil, nil, self),
       Form::Sales::Pages::Buyer1EthnicBackgroundBlack.new(nil, nil, self),

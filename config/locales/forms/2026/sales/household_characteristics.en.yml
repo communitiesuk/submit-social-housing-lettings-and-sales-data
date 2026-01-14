@@ -16,6 +16,13 @@ en:
               hint_text: ""
               question_text: "Age"
 
+          sexRAB1:
+            page_header: ""
+            check_answer_label: "Buyer 1’s sex registered at birth"
+            check_answer_prompt: ""
+            hint_text: "This is your sex that was registered at birth. The next question will ask about your gender identity."
+            question_text: "What is your sex?"
+
           sex1:
             page_header: ""
             check_answer_label: "Buyer 1’s gender identity"
