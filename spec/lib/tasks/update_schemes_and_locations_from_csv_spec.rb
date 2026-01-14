@@ -57,7 +57,7 @@ RSpec.describe "bulk_update" do
                     3,
                     service_name: "Test name",
                     sensitive: 1,
-                    registered_under_care_act: 4,
+                    registered_under_care_act: 5,
                     support_type: 4,
                     scheme_type: 7,
                     arrangement_type: "D",
