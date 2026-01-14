@@ -2,9 +2,12 @@ require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
 
 RSpec.describe LettingsLog, type: :model do
+  include CollectionTimeHelper
+
   let(:organisation) { build(:organisation, name: "derived fields org") }
   let(:user) { build(:user, organisation:) }
-  let(:log) { build(:lettings_log, :startdate_today, assigned_to: user) }
+  let(:startdate) { current_collection_start_date }
+  let(:log) { build(:lettings_log, startdate:, assigned_to: user) }
 
   include_examples "shared examples for derived fields", :lettings_log
 
@@ -111,10 +114,10 @@ RSpec.describe LettingsLog, type: :model do
     before do
       log.assign_attributes(
         relat2: "X",
-        relat3: "C",
+        relat3: "X",
         relat4: "X",
-        relat5: "C",
-        relat7: "C",
+        relat5: "X",
+        # relat7 is derived
         relat8: "X",
         age1: 22,
         age2: 16,
@@ -128,7 +131,7 @@ RSpec.describe LettingsLog, type: :model do
     end
 
     it "correctly derives totchild" do
-      expect(log.totchild).to eq 3
+      expect(log.totchild).to eq 1
     end
 
     it "correctly derives totelder" do
@@ -141,6 +144,22 @@ RSpec.describe LettingsLog, type: :model do
 
     it "correctly derives economic status for tenants under 16" do
       expect(log.ecstat7).to eq 9
+    end
+
+    context "when it is 2025", metadata: { year: 25 } do
+      let(:startdate) { collection_start_date_for_year(2025) }
+
+      it "does not derive relationship for tenants under 16" do
+        expect(log.relat7).to be_nil
+      end
+    end
+
+    context "when it is 2026", metadata: { year: 26 } do
+      let(:startdate) { collection_start_date_for_year(2026) }
+
+      it "derives relationship for tenants under 16" do
+        expect(log.relat7).to eq "X"
+      end
     end
   end
 
@@ -1213,23 +1232,87 @@ RSpec.describe LettingsLog, type: :model do
     end
   end
 
-  describe "#clear_child_ecstat_for_age_changes!" do
-    it "clears the working situation of a person that was previously a child under 16" do
-      log = create(:lettings_log, :completed, age2: 13)
-      log.age2 = 17
-      expect { log.set_derived_fields! }.to change(log, :ecstat2).from(9).to(nil)
+  describe "#clear_child_constraints_for_age_changes!" do
+    let(:startdate) { current_collection_start_date }
+    let(:log) { create(:lettings_log, :completed, startdate:, age2: initial_age2) }
+
+    before do
+      log.age2 = updated_age2
     end
 
-    it "does not clear the working situation of a person that had an age change but is still a child under 16" do
-      log = create(:lettings_log, :completed, age2: 13)
-      log.age2 = 15
-      expect { log.set_derived_fields! }.to not_change(log, :ecstat2)
+    context "when person was previously a child under 16" do
+      let(:initial_age2) { 13 }
+      let(:updated_age2) { 16 }
+
+      it "clears the working situation" do
+        expect { log.set_derived_fields! }.to change(log, :ecstat2).from(9).to(nil)
+      end
+
+      context "and it is 2025", metadata: { year: 25 } do
+        let(:startdate) { collection_start_date_for_year(2025) }
+
+        it "does not clear the relationship" do
+          expect { log.set_derived_fields! }.to not_change(log, :relat2)
+        end
+      end
+
+      context "and it is 2026", metadata: { year: 26 } do
+        let(:startdate) { collection_start_date_for_year(2026) }
+
+        it "clears the relationship" do
+          expect { log.set_derived_fields! }.to change(log, :relat2).from("X").to(nil)
+        end
+      end
     end
 
-    it "does not clear the working situation of a person that had an age change but is still an adult" do
-      log = create(:lettings_log, :completed, age2: 45)
-      log.age2 = 46
-      expect { log.set_derived_fields! }.to not_change(log, :ecstat2)
+    context "when person had an age change but is still a child under 16" do
+      let(:initial_age2) { 13 }
+      let(:updated_age2) { 15 }
+
+      it "does not clear the working situation" do
+        expect { log.set_derived_fields! }.to not_change(log, :ecstat2)
+      end
+
+      context "and it is 2025", metadata: { year: 25 } do
+        let(:startdate) { collection_start_date_for_year(2025) }
+
+        it "does not clear the relationship" do
+          expect { log.set_derived_fields! }.to not_change(log, :relat2)
+        end
+      end
+
+      context "and it is 2026", metadata: { year: 26 } do
+        let(:startdate) { collection_start_date_for_year(2026) }
+
+        it "does not clear the relationship" do
+          expect { log.set_derived_fields! }.to not_change(log, :relat2)
+        end
+      end
+    end
+
+    context "when person had an age change but is still an adult" do
+      let(:initial_age2) { 45 }
+      let(:updated_age2) { 46 }
+
+      it "does not clear the working situation" do
+        expect { log.set_derived_fields! }.to not_change(log, :ecstat2)
+      end
+
+      context "and it is 2025", metadata: { year: 25 } do
+        let(:startdate) { collection_start_date_for_year(2025) }
+
+        it "does not clear the relationship" do
+          expect { log.set_derived_fields! }.to not_change(log, :relat2)
+        end
+      end
+
+      context "and it is 2026", metadata: { year: 26 } do
+        let(:startdate) { collection_start_date_for_year(2026) }
+
+        it "does not clear the relationship" do
+          expect { log.set_derived_fields! }.to not_change(log, :relat2)
+        end
+      end
     end
   end
 
