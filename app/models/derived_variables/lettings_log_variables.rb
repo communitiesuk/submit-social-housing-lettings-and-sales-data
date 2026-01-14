@@ -75,7 +75,7 @@ module DerivedVariables::LettingsLogVariables
       self.beds = nil
     end
 
-    clear_child_ecstat_for_age_changes!
+    clear_child_constraints_for_age_changes!
     child_under_16_constraints!
 
     self.hhtype = household_type
@@ -246,8 +246,13 @@ private
   end
 
   def get_totchild
-    relationships = [relat2, relat3, relat4, relat5, relat6, relat7, relat8]
-    relationships.count("C")
+    if form.start_year_2025_or_later?
+      ages = [age1, age2, age3, age4, age5, age6, age7, age8]
+      ages.count { |x| !x.nil? && x < 16 }
+    else
+      relationships = [relat2, relat3, relat4, relat5, relat6, relat7, relat8]
+      relationships.count("C")
+    end
   end
 
   def get_totadult
@@ -269,15 +274,19 @@ private
     (2..8).each do |idx|
       if age_under_16?(idx)
         self["ecstat#{idx}"] = 9
+        self["relat#{idx}"] = "X" if form.start_year_2026_or_later?
       end
     end
   end
 
-  def clear_child_ecstat_for_age_changes!
+  def clear_child_constraints_for_age_changes!
     (2..8).each do |idx|
-      if public_send("age#{idx}_changed?") && self["ecstat#{idx}"] == 9
-        self["ecstat#{idx}"] = nil
-      end
+      next unless public_send("age#{idx}_changed?")
+
+      self["ecstat#{idx}"] = nil if self["ecstat#{idx}"] == 9
+      # since the user can also input 'No' for relat there are cases when we don't want to clear this (changing age from 50 to 55 for example)
+      # note if age is changed from 10 to 15 we will clear it but the inference will set it back immediately after, see child_under_16_constraints!
+      self["relat#{idx}"] = nil if self["relat#{idx}"] == "X" && age_changed_from_below_16(idx) && form.start_year_2026_or_later?
     end
   end
 

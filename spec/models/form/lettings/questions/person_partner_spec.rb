@@ -1,10 +1,26 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(nil, question_definition, page, person_index:) }
 
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2025, 4, 4), start_year_2025_or_later?: true))) }
+  let(:year) { nil }
+  let(:page) do
+    instance_double(
+      Form::Page,
+      subsection: instance_double(
+        Form::Subsection,
+        form: instance_double(
+          Form,
+          start_date: year ? collection_start_date_for_year(year) : current_collection_start_date,
+          start_year_2025_or_later?: year.nil? || year >= 2025,
+          start_year_2026_or_later?: year.nil? || year >= 2026,
+        ),
+      ),
+    )
+  end
   let(:person_index) { 2 }
 
   it "has correct page" do
@@ -13,10 +29,6 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
 
   it "has the correct type" do
     expect(question.type).to eq("radio")
-  end
-
-  it "is not marked as derived" do
-    expect(question.derived?(nil)).to be false
   end
 
   it "has the correct answer_options" do
@@ -40,6 +52,46 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
 
     it "has the correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(2)
+    end
+
+    context "with person 2 age < 16" do
+      let(:log) { build(:lettings_log, age2: 10) }
+
+      context "and in 2025", metadata: { year: 25 } do
+        let(:year) { 2025 }
+
+        it "is not marked as derived" do
+          expect(question.derived?(log)).to be false
+        end
+      end
+
+      context "and in 2026", metadata: { year: 26 } do
+        let(:year) { 2026 }
+
+        it "is marked as derived" do
+          expect(question.derived?(log)).to be true
+        end
+      end
+    end
+
+    context "with person 2 age >= 16" do
+      let(:log) { build(:lettings_log, age2: 20) }
+
+      context "and in 2025", metadata: { year: 25 } do
+        let(:year) { 2025 }
+
+        it "is not marked as derived" do
+          expect(question.derived?(log)).to be false
+        end
+      end
+
+      context "and in 2026", metadata: { year: 26 } do
+        let(:year) { 2026 }
+
+        it "is not marked as derived" do
+          expect(question.derived?(log)).to be false
+        end
+      end
     end
   end
 
