@@ -123,7 +123,7 @@ RSpec.describe "bulk_update" do
         schemes[1].reload
         expect(schemes[1].service_name).to eq("Test name")
         expect(schemes[1].sensitive).to eq("Yes")
-        expect(schemes[1].registered_under_care_act).to eq("Yes – registered care home providing nursing care")
+        expect(schemes[1].registered_under_care_act).to eq("Yes")
         expect(schemes[1].support_type).to eq("High level")
         expect(schemes[1].scheme_type).to eq("Housing for older people")
         expect(schemes[1].arrangement_type).to eq("The same organisation that owns the housing stock")
@@ -141,7 +141,7 @@ RSpec.describe "bulk_update" do
         schemes[2].reload
         expect(schemes[2].service_name).to eq("Test name")
         expect(schemes[2].sensitive).to eq("Yes")
-        expect(schemes[2].registered_under_care_act).to eq("Yes – registered care home providing nursing care")
+        expect(schemes[2].registered_under_care_act).to eq("Yes")
         expect(schemes[2].support_type).to eq("High level")
         expect(schemes[2].scheme_type).to eq("Housing for older people")
         expect(schemes[2].arrangement_type).to eq("The same organisation that owns the housing stock")
