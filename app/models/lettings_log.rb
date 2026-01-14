@@ -408,7 +408,7 @@ class LettingsLog < Log
   end
 
   def age_changed_from_below_16(person_index)
-    public_send("age#{person_index}") && public_send("age#{person_index}_was") < 16
+    public_send("age#{person_index}_was") && public_send("age#{person_index}_was") < 16
   end
 
   def is_shared_housing?
