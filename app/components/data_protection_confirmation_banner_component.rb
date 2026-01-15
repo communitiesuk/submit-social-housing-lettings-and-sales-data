@@ -12,16 +12,16 @@ class DataProtectionConfirmationBannerComponent < ViewComponent::Base
 
   def display_banner?
     return false if user.support? && organisation.blank?
-    return true if org_without_dpo?
+    return true if show_no_dpo_message?
     return false if !org_or_user_org.holds_own_stock? && org_or_user_org.stock_owners.empty? && org_or_user_org.absorbed_organisations.empty?
 
-    !org_or_user_org.data_protection_confirmed? || !org_or_user_org.organisation_or_stock_owner_signed_dsa_and_holds_own_stock?
+    !dsa_signed? || !org_or_user_org.organisation_or_stock_owner_signed_dsa_and_holds_own_stock?
   end
 
   def header_text
-    if org_without_dpo?
+    if show_no_dpo_message?
       "To create logs your organisation must state a data protection officer. They must sign the Data Sharing Agreement."
-    elsif !org_or_user_org.holds_own_stock? && org_or_user_org.data_protection_confirmed?
+    elsif show_no_stock_owner_message?
       "Your organisation does not own stock. To create logs your stock owner(s) must accept the Data Sharing Agreement on CORE."
     elsif user.is_dpo?
       "Your organisation must accept the Data Sharing Agreement before you can create any logs."
@@ -31,7 +31,7 @@ class DataProtectionConfirmationBannerComponent < ViewComponent::Base
   end
 
   def banner_text
-    if org_without_dpo? || user.is_dpo? || !org_or_user_org.holds_own_stock?
+    if show_no_dpo_message? || user.is_dpo? || !org_or_user_org.holds_own_stock?
       govuk_link_to(
         link_text,
         link_href,
@@ -51,9 +51,9 @@ private
   end
 
   def link_text
-    if dpo_required?
+    if show_no_dpo_message?
       "Contact helpdesk to assign a data protection officer"
-    elsif !org_or_user_org.holds_own_stock? && org_or_user_org.data_protection_confirmed?
+    elsif show_no_stock_owner_message?
       "View or add stock owners"
     else
       "Read the Data Sharing Agreement"
@@ -61,24 +61,32 @@ private
   end
 
   def link_href
-    if dpo_required?
+    if show_no_dpo_message?
       GlobalConstants::HELPDESK_URL
-    elsif !org_or_user_org.holds_own_stock? && org_or_user_org.data_protection_confirmed?
+    elsif show_no_stock_owner_message?
       stock_owners_organisation_path(org_or_user_org)
     else
       data_sharing_agreement_organisation_path(org_or_user_org)
     end
   end
 
-  def dpo_required?
-    org_or_user_org.data_protection_officers.empty?
+  def show_no_dpo_message?
+    # it is fine if an org has a DSA and the DPO has moved on
+    # CORE staff do this sometimes as a single DPO covers multiple 'orgs' that exist as branches of the same real world org
+    # so, they move the DPO to all the mini orgs and have the sign each DSA
+    # so the DSA being signed can silence this warning
+    org_or_user_org.data_protection_officers.empty? && !dsa_signed?
+  end
+
+  def dsa_signed?
+    org_or_user_org.data_protection_confirmed?
+  end
+
+  def show_no_stock_owner_message?
+    !org_or_user_org.holds_own_stock? && dsa_signed?
   end
 
   def org_or_user_org
     organisation.presence || user.organisation
-  end
-
-  def org_without_dpo?
-    org_or_user_org.data_protection_officers.empty?
   end
 end
