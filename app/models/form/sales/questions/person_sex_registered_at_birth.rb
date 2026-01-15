@@ -10,7 +10,7 @@ class Form::Sales::Questions::PersonSexRegisteredAtBirth < ::Form::Question
       "condition" => {
         id => "R",
       },
-      "value" => "Prefers not to say",
+      "value" => "Person prefers not to say",
     }]
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]

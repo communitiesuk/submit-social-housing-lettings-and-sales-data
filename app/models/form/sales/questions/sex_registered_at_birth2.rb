@@ -9,9 +9,9 @@ class Form::Sales::Questions::SexRegisteredAtBirth2 < ::Form::Question
     @check_answers_card_number = 2
     @inferred_check_answers_value = [{
       "condition" => {
-        "sex2" => "R",
+        "sexRAB2" => "R",
       },
-      "value" => "Prefers not to say",
+      "value" => "Buyer prefers not to say",
     }]
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
