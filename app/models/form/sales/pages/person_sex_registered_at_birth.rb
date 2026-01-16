@@ -12,7 +12,7 @@ class Form::Sales::Pages::PersonSexRegisteredAtBirth < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::PersonSexRegisteredAtBirth.new("sexRAB#{@person_index}", nil, self, person_index:@person_index),
+      Form::Sales::Questions::PersonSexRegisteredAtBirth.new("sexRAB#{@person_index}", nil, self, person_index: @person_index),
     ]
   end
 end

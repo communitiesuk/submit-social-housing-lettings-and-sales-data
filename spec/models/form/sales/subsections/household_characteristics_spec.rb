@@ -522,7 +522,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           working_situation_6_retirement_value_check
           working_situation_6_not_retired_value_check
         ],
-                                                             )
+      )
     end
 
     it "has correct depends on" do
