@@ -137,6 +137,7 @@ module Exports::SalesLogExportConstants
   (1..6).each do |index|
     EXPORT_FIELDS << "AGE#{index}"
     EXPORT_FIELDS << "ECSTAT#{index}"
+    EXPORT_FIELDS << "SEXRAB#{index}"
     EXPORT_FIELDS << "SEX#{index}"
   end
 
