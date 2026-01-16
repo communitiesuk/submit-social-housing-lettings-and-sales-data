@@ -50,6 +50,16 @@ module Validations::PropertyValidations
       error_message = I18n.t("validations.lettings.property.postcode_full.invalid")
       record.errors.add :postcode_full, :wrong_format, message: error_message
     end
+
+    return unless record.form.start_year_2026_or_later?
+
+    location_postcode = record.location&.postcode
+    return unless location_postcode
+
+    if postcode != location_postcode
+      record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.postcode_does_not_match_scheme_location_postcode")
+      record.errors.add :postcode_full, I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")
+    end
   end
 
   # see also: this validation in sales/property_validations.rb
