@@ -184,7 +184,7 @@ class LettingsLog < Log
   end
 
   def la
-    if location
+    if (!form.start_year_2026_or_later? && location) || (form.start_year_2026_or_later? && !super)
       location.linked_local_authorities.active(form.start_date).first&.code || location.location_code
     else
       super
@@ -192,7 +192,7 @@ class LettingsLog < Log
   end
 
   def postcode_full
-    if location
+    if (!form.start_year_2026_or_later? && location) || (form.start_year_2026_or_later? && !super)
       location.postcode
     else
       super
@@ -771,6 +771,10 @@ class LettingsLog < Log
 
   def changed_from_newbuild?
     rsnvac != 15 && rsnvac_was == 15
+  end
+
+  def is_address_asked?
+    form.start_year_2026_or_later? || !is_supported_housing?
   end
 
 private
