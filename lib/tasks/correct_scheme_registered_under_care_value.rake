@@ -1,0 +1,4 @@
+desc "Alter registered under care act values for lettings logs in the database to 5 if they are 3 or 4, as these options are being deprecated"
+task correct_scheme_registered_under_care_value: :environment do
+  Scheme.where(registered_under_care_act: [3, 4]).update!(registered_under_care_act: 5)
+end
