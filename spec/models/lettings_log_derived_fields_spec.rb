@@ -111,43 +111,82 @@ RSpec.describe LettingsLog, type: :model do
   end
 
   describe "deriving household member fields" do
-    before do
-      log.assign_attributes(
-        relat2: "X",
-        relat3: "X",
-        relat4: "X",
-        relat5: "X",
-        # relat7 is derived
-        relat8: "X",
-        age1: 22,
-        age2: 16,
-        age4: 60,
-        age6: 88,
-        age7: 14,
-        age8: 42,
-      )
+    context "when it is 2024", metadata: { year: 24 } do
+      let(:startdate) { collection_start_date_for_year(2024) }
 
-      log.set_derived_fields!
-    end
+      before do
+        log.assign_attributes(
+          relat2: "X",
+          relat3: "C",
+          relat4: "X",
+          relat5: "C",
+          relat7: "C",
+          relat8: "X",
+          age1: 22,
+          age2: 16,
+          age4: 60,
+          age6: 88,
+          age7: 14,
+          age8: 42,
+          )
 
-    it "correctly derives totchild" do
-      expect(log.totchild).to eq 1
-    end
+        log.set_derived_fields!
+      end
 
-    it "correctly derives totelder" do
-      expect(log.totelder).to eq 2
-    end
+      it "correctly derives totchild" do
+        expect(log.totchild).to eq 3
+      end
 
-    it "correctly derives totadult" do
-      expect(log.totadult).to eq 3
-    end
+      it "correctly derives totelder" do
+        expect(log.totelder).to eq 2
+      end
 
-    it "correctly derives economic status for tenants under 16" do
-      expect(log.ecstat7).to eq 9
+      it "correctly derives totadult" do
+        expect(log.totadult).to eq 3
+      end
+
+      it "correctly derives economic status for tenants under 16" do
+        expect(log.ecstat7).to eq 9
+      end
     end
 
     context "when it is 2025", metadata: { year: 25 } do
       let(:startdate) { collection_start_date_for_year(2025) }
+
+      before do
+        log.assign_attributes(
+          relat2: "X",
+          relat3: "X",
+          relat4: "X",
+          relat5: "X",
+          # relat7 is derived
+          relat8: "X",
+          age1: 22,
+          age2: 16,
+          age4: 60,
+          age6: 88,
+          age7: 14,
+          age8: 42,
+          )
+
+        log.set_derived_fields!
+      end
+
+      it "correctly derives totchild" do
+        expect(log.totchild).to eq 1
+      end
+
+      it "correctly derives totelder" do
+        expect(log.totelder).to eq 2
+      end
+
+      it "correctly derives totadult" do
+        expect(log.totadult).to eq 3
+      end
+
+      it "correctly derives economic status for tenants under 16" do
+        expect(log.ecstat7).to eq 9
+      end
 
       it "does not derive relationship for tenants under 16" do
         expect(log.relat7).to be_nil
@@ -156,6 +195,41 @@ RSpec.describe LettingsLog, type: :model do
 
     context "when it is 2026", metadata: { year: 26 } do
       let(:startdate) { collection_start_date_for_year(2026) }
+
+      before do
+        log.assign_attributes(
+          relat2: "X",
+          relat3: "X",
+          relat4: "X",
+          relat5: "X",
+          # relat7 is derived
+          relat8: "X",
+          age1: 22,
+          age2: 16,
+          age4: 60,
+          age6: 88,
+          age7: 14,
+          age8: 42,
+          )
+
+        log.set_derived_fields!
+      end
+
+      it "correctly derives totchild" do
+        expect(log.totchild).to eq 1
+      end
+
+      it "correctly derives totelder" do
+        expect(log.totelder).to eq 2
+      end
+
+      it "correctly derives totadult" do
+        expect(log.totadult).to eq 3
+      end
+
+      it "correctly derives economic status for tenants under 16" do
+        expect(log.ecstat7).to eq 9
+      end
 
       it "derives relationship for tenants under 16" do
         expect(log.relat7).to eq "X"
