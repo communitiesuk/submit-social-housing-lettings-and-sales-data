@@ -419,7 +419,7 @@ RSpec.describe Exports::LettingsLogExportService do
       end
     end
 
-    context "with 24/25 collection period" do
+    context "with 24/25 collection period", metadata: { year: 24 } do
       let(:start_time) { Time.zone.local(2024, 4, 3) }
 
       before do
@@ -451,7 +451,7 @@ RSpec.describe Exports::LettingsLogExportService do
       end
     end
 
-    context "with 25/26 collection period" do
+    context "with 25/26 collection period", metadata: { year: 25 } do
       let(:start_time) { Time.zone.local(2025, 4, 3) }
 
       before do
@@ -469,6 +469,38 @@ RSpec.describe Exports::LettingsLogExportService do
         let(:expected_zip_filename) { "core_2025_2026_apr_mar_f0001_inc0001.zip" }
         let(:expected_data_filename) { "core_2025_2026_apr_mar_f0001_inc0001_pt001.xml" }
         let(:xml_export_file) { File.open("spec/fixtures/exports/general_needs_log_25_26.xml", "r:UTF-8") }
+
+        it "generates an XML export file with the expected content within the ZIP file" do
+          expected_content = replace_entity_ids(lettings_log, xml_export_file.read)
+          expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+            entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
+            expect(entry).not_to be_nil
+            expect(entry.get_input_stream.read).to have_same_xml_contents_as(expected_content)
+          end
+
+          export_service.export_xml_lettings_logs
+        end
+      end
+    end
+
+    context "with 26/27 collection period", metadata: { year: 26 } do
+      let(:start_time) { Time.zone.local(2026, 4, 3) }
+
+      before do
+        Timecop.freeze(start_time)
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.unfreeze
+        Singleton.__init__(FormHandler)
+      end
+
+      context "and one lettings log is available for export" do
+        let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, startdate: Time.zone.local(2026, 4, 3), assigned_to: user, age1: 35, sex1: "F", age2: 32, sex2: "M", ppostcode_full: "A1 1AA", nationality_all_group: 13, propcode: "123", postcode_full: "SE2 6RT", tenancycode: "BZ737", voiddate: Time.zone.local(2021, 11, 3), mrcdate: Time.zone.local(2022, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4, creation_method: 2, bulk_upload_id: 1, address_line1_as_entered: "address line 1 as entered", address_line2_as_entered: "address line 2 as entered", town_or_city_as_entered: "town or city as entered", county_as_entered: "county as entered", postcode_full_as_entered: "AB1 2CD", la_as_entered: "la as entered", manual_address_entry_selected: false, uprn: "1", uprn_known: 1) }
+        let(:expected_zip_filename) { "core_2026_2027_apr_mar_f0001_inc0001.zip" }
+        let(:expected_data_filename) { "core_2026_2027_apr_mar_f0001_inc0001_pt001.xml" }
+        let(:xml_export_file) { File.open("spec/fixtures/exports/general_needs_log_26_27.xml", "r:UTF-8") }
 
         it "generates an XML export file with the expected content within the ZIP file" do
           expected_content = replace_entity_ids(lettings_log, xml_export_file.read)
