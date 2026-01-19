@@ -4,6 +4,10 @@ module CollectionTimeHelper
     date < window_end_date ? date.year - 1 : date.year
   end
 
+  def collection_start_date_for_year(year)
+    Time.zone.local(year, 4, 1)
+  end
+
   def current_collection_start_year
     collection_start_year_for_date(Time.zone.now)
   end
