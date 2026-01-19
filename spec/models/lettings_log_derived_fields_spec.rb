@@ -128,7 +128,7 @@ RSpec.describe LettingsLog, type: :model do
           age6: 88,
           age7: 14,
           age8: 42,
-          )
+        )
 
         log.set_derived_fields!
       end
@@ -167,7 +167,7 @@ RSpec.describe LettingsLog, type: :model do
           age6: 88,
           age7: 14,
           age8: 42,
-          )
+        )
 
         log.set_derived_fields!
       end
@@ -210,7 +210,7 @@ RSpec.describe LettingsLog, type: :model do
           age6: 88,
           age7: 14,
           age8: 42,
-          )
+        )
 
         log.set_derived_fields!
       end
