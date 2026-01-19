@@ -59,7 +59,7 @@ class TestDataController < ApplicationController
       return render_not_found unless FeatureToggle.create_test_logs_enabled?
 
       file = Tempfile.new("#{year}_test_sales_log.csv")
-      end_date_override = year == current_collection_start_year ? Time.zone.now + 14.days : collection_start_date(Time.zone.local(year.to_i, 4, 1)) + 14.days
+      end_date_override = FeatureToggle.allow_future_form_use? ? nil : Time.zone.now + 14.days
       log = FactoryBot.create(:sales_log, :completed, assigned_to: current_user, value: 180_000, deposit: 150_000, county: "Somerset", saledate: generate_different_date_within_collection_year(Time.zone.local(year.to_i, 4, 1), end_date_override:))
       log_to_csv = BulkUpload::SalesLogToCsv.new(log:, line_ending: "\n", overrides: { organisation_id: "ORG#{log.owning_organisation_id}", managing_organisation_id: "ORG#{log.owning_organisation_id}" })
       file.write(log_to_csv.default_field_numbers_row)
