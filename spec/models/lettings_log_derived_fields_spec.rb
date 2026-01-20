@@ -1446,4 +1446,139 @@ RSpec.describe LettingsLog, type: :model do
       expect { log.set_derived_fields! }.to change(log, :beds).to nil
     end
   end
+
+  describe "resetting address fields and LA" do
+    let(:uprn) { "123456789" }
+    let(:uprn_known) { 1 } # A value of 1 is necessary for this test as there is separate logic that resets `uprn` if `uprn_known` is 0.
+    let(:uprn_confirmed) { 1 } # A value of 1 is necessary for this test as there is separate logic that resets the address fields and LA if `uprn_confirmed` is 0 (and `uprn_known` is 1).
+    let(:address_line1) { "1 Test Street" }
+    let(:address_line2) { "Testville" }
+    let(:town_or_city) { "Testford" }
+    let(:county) { "Testshire" }
+    let(:postcode_full) { "SW1 1AA" }
+    let(:la) { "Test LA" }
+    let(:manual_address_entry_selected) { false } # A value of `false` is necessary for this test as there is separate logic that resets some of the UPRN fields if `manual_address_entry_selected` is `false`.
+
+    context "when it is 2025", metadata: { year: 25 } do
+      let(:startdate) { collection_start_date_for_year(2025) }
+
+      around do |example|
+        Timecop.freeze(collection_start_date_for_year(2025)) do
+          Singleton.__init__(FormHandler)
+
+          log.save! # This is necessary to prevent `startdate_changed?` returning true; if this happens, some separate logic runs that resets LA to nil.
+
+          log.assign_attributes(uprn:, uprn_known:, uprn_confirmed:, address_line1:, address_line2:, town_or_city:, county:, postcode_full:, la:, manual_address_entry_selected:)
+
+          example.run
+        end
+      end
+
+      context "when the log is marked as general needs housing" do
+        before do
+          log.needstype = 1
+        end
+
+        it "does not reset the address fields" do
+          expect { log.set_derived_fields! }
+            .to not_change(log, :uprn)
+            .and not_change(log, :uprn_known)
+            .and not_change(log, :uprn_confirmed)
+            .and not_change(log, :address_line1)
+            .and not_change(log, :address_line2)
+            .and not_change(log, :town_or_city)
+            .and not_change(log, :county)
+            .and not_change(log, :postcode_full)
+        end
+
+        it "does not reset LA" do
+          expect { log.set_derived_fields! }.to not_change(log, :la)
+        end
+      end
+
+      context "when the log is marked as supported housing" do
+        before do
+          log.needstype = 2
+        end
+
+        it "resets the address fields to nil" do
+          expect { log.set_derived_fields! }
+            .to change(log, :uprn).from(uprn).to(nil)
+            .and change(log, :uprn_known).from(uprn_known).to(nil)
+            .and change(log, :uprn_confirmed).from(uprn_confirmed).to(nil)
+            .and change(log, :address_line1).from(address_line1).to(nil)
+            .and change(log, :address_line2).from(address_line2).to(nil)
+            .and change(log, :town_or_city).from(town_or_city).to(nil)
+            .and change(log, :county).from(county).to(nil)
+            .and change(log, :postcode_full).from(postcode_full).to(nil)
+        end
+
+        it "does not reset LA" do
+          expect { log.set_derived_fields! }.to not_change(log, :la)
+        end
+      end
+    end
+
+    context "when it is 2026", metadata: { year: 26 } do
+      let(:startdate) { collection_start_date_for_year(2026) }
+      let(:location_a) { create(:location) }
+      let(:location_b) { create(:location) }
+
+      around do |example|
+        Timecop.freeze(collection_start_date_for_year(2026)) do
+          Singleton.__init__(FormHandler)
+          example.run
+        end
+      end
+
+      before do
+        allow(location_a).to receive(:lookup_postcode!).and_return(nil)
+
+        log.location = location_a
+        log.save!
+
+        log.assign_attributes(uprn:, uprn_known:, uprn_confirmed:, address_line1:, address_line2:, town_or_city:, county:, postcode_full:, la:, manual_address_entry_selected:)
+      end
+
+      context "when the location is not changed" do
+        it "does not reset the address fields" do
+          expect { log.set_derived_fields! }
+            .to not_change(log, :uprn)
+            .and not_change(log, :uprn_known)
+            .and not_change(log, :uprn_confirmed)
+            .and not_change(log, :address_line1)
+            .and not_change(log, :address_line2)
+            .and not_change(log, :town_or_city)
+            .and not_change(log, :county)
+            .and not_change(log, :postcode_full)
+        end
+
+        it "does not reset LA" do
+          expect { log.set_derived_fields! }.to not_change(log, :la)
+        end
+      end
+
+      context "when the location is changed" do
+        before do
+          log.location = location_b
+        end
+
+        it "resets the address fields to nil" do
+          expect { log.set_derived_fields! }
+            .to change(log, :uprn).from(uprn).to(nil)
+            .and change(log, :uprn_known).from(uprn_known).to(nil)
+            .and change(log, :uprn_confirmed).from(uprn_confirmed).to(nil)
+            .and change(log, :address_line1).from(address_line1).to(nil)
+            .and change(log, :address_line2).from(address_line2).to(nil)
+            .and change(log, :town_or_city).from(town_or_city).to(nil)
+            .and change(log, :county).from(county).to(nil)
+            .and change(log, :postcode_full).from(postcode_full).to(nil)
+        end
+
+        it "resets LA to nil" do
+          expect { log.set_derived_fields! }.to change(log, :la).from(la).to(nil)
+        end
+      end
+    end
+  end
 end
