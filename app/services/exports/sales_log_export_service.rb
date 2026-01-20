@@ -150,9 +150,9 @@ module Exports
       attribute_hash
     end
 
-    def is_omitted_field?(field_name, _sales_log)
+    def is_omitted_field?(field_name, sales_log)
       !EXPORT_FIELDS.include?(field_name) ||
-        (!_sales_log.form.start_year_2026_or_later? && POST_2026_EXPORT_FIELDS.include?(field_name))
+        (!sales_log.form.start_year_2026_or_later? && POST_2026_EXPORT_FIELDS.include?(field_name))
     end
 
     def build_export_xml(sales_logs)
