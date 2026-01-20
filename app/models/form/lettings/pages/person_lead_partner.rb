@@ -9,4 +9,21 @@ class Form::Lettings::Pages::PersonLeadPartner < ::Form::Page
   def questions
     @questions ||= [Form::Lettings::Questions::PersonPartner.new(nil, nil, self, person_index: @person_index)]
   end
+
+  def depends_on
+    if form.start_year_2026_or_later?
+      [
+        {
+          "details_known_#{@person_index}" => 0,
+          "age#{@person_index}" => {
+            "operator" => ">=",
+            "operand" => 16,
+          },
+        },
+        { "details_known_#{@person_index}" => 0, "age#{@person_index}" => nil },
+      ]
+    else
+      [{ "details_known_#{@person_index}" => 0 }]
+    end
+  end
 end
