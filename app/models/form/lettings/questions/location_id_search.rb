@@ -16,7 +16,7 @@ class Form::Lettings::Questions::LocationIdSearch < ::Form::Question
   end
 
   def answer_options
-    answer_opts = {}
+    answer_opts = { "" => "Select an option" }
     return answer_opts unless ActiveRecord::Base.connected?
 
     Location.visible.started_in_2_weeks.select(:id, :postcode, :name).each_with_object(answer_opts) do |location, hsh|
@@ -29,7 +29,7 @@ class Form::Lettings::Questions::LocationIdSearch < ::Form::Question
     return {} unless lettings_log.scheme
 
     scheme_location_ids = lettings_log.scheme.locations.visible.confirmed.pluck(:id)
-    answer_options.select { |k, _v| scheme_location_ids.include?(k.to_i) }.to_h
+    answer_options.select { |k, _v| scheme_location_ids.include?(k.to_i) or k == "" }.to_h
   end
 
   def hidden_in_check_answers?(lettings_log, _current_user = nil)

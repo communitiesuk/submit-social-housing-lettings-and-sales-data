@@ -386,6 +386,10 @@ class SalesLog < Log
     form.start_year_2025_or_later? && is_bedsit?
   end
 
+  def bedsit_changed_to_not_bedsit?
+    proptype_changed? && proptype_was == 2
+  end
+
   def shared_ownership_scheme?
     ownershipsch == 1
   end

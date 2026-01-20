@@ -186,5 +186,23 @@ RSpec.describe SalesLog, type: :model do
         end
       end
     end
+
+    describe "deriving num of bedrooms from whether property is bedsit" do
+      let(:log) { create(:sales_log, :completed) }
+
+      it "sets num of bedrooms to 1 when property is a bedsit" do
+        log.proptype = 2
+        expect { log.set_derived_fields! }.to change(log, :beds).to 1
+      end
+
+      it "sets num of bedrooms to nil when property is change from a bedsit" do
+        log.proptype = 2
+        log.set_derived_fields!
+        log.clear_changes_information
+
+        log.proptype = 1
+        expect { log.set_derived_fields! }.to change(log, :beds).to nil
+      end
+    end
   end
 end

@@ -58,6 +58,14 @@ module CollectionTimeHelper
     current_collection_start_year - 2
   end
 
+  def previous_collection_new_logs_end_date
+    FormHandler.instance.lettings_form_for_start_year(previous_collection_start_year).new_logs_end_date
+  end
+
+  def previous_collection_edit_end_date
+    FormHandler.instance.lettings_form_for_start_year(previous_collection_start_year).edit_end_date
+  end
+
   def generate_different_date_within_collection_year(date, start_date_override: nil, end_date_override: nil)
     start_date = [start_date_override&.to_date, collection_start_date(date).to_date].compact.max.to_date
     end_date = [end_date_override&.to_date, collection_end_date(date).to_date].compact.min.to_date

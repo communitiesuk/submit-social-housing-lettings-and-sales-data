@@ -19,7 +19,7 @@ class BulkUpload::SalesLogToCsv
     case year
     when 2022
       to_2022_csv_row
-    when 2023, 2024, 2025
+    when 2023, 2024, 2025, 2026
       to_year_csv_row(year, seed:)
     else
       raise NotImplementedError "No mapping function implemented for year #{year}"
@@ -68,6 +68,9 @@ class BulkUpload::SalesLogToCsv
     when 2024
       (1..131).to_a
     when 2025
+      (1..121).to_a
+    when 2026
+      # TODO: CLDC-4162: Replace with actual field numbers when 2026 format is known
       (1..121).to_a
     else
       raise NotImplementedError "No mapping function implemented for year #{year}"
@@ -530,6 +533,11 @@ class BulkUpload::SalesLogToCsv
       log.deposit, # 120
       log.mscharge,
     ]
+  end
+
+  def to_2026_row
+    # TODO: CLDC-4162: Implement when 2026 template is available
+    to_2025_row
   end
 
   def custom_field_numbers_row(seed: nil, field_numbers: nil)

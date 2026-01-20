@@ -1,8 +1,12 @@
 require "rails_helper"
 
 RSpec.describe BulkUpload::Sales::Validator do
+  include CollectionTimeHelper
+
   subject(:validator) { described_class.new(bulk_upload:, path:) }
 
+  let(:year) { current_collection_start_year }
+  let(:date) { current_collection_start_date }
   let(:user) { create(:user, organisation:) }
   let(:organisation) { create(:organisation, old_visible_id: "123") }
   let(:log) { build(:sales_log, :completed, assigned_to: user) }
@@ -15,7 +19,7 @@ RSpec.describe BulkUpload::Sales::Validator do
     context "when file is empty" do
       it "is not valid" do
         expect(validator).not_to be_valid
-        expect(validator.errors["base"]).to eql([I18n.t("validations.sales.2024.bulk_upload.blank_file")])
+        expect(validator.errors["base"]).to eql([I18n.t("validations.sales.#{year}.bulk_upload.blank_file")])
       end
     end
 
@@ -27,13 +31,13 @@ RSpec.describe BulkUpload::Sales::Validator do
 
       it "is not valid" do
         expect(validator).not_to be_valid
-        expect(validator.errors["base"]).to eql([I18n.t("validations.sales.2024.bulk_upload.blank_file")])
+        expect(validator.errors["base"]).to eql([I18n.t("validations.sales.#{year}.bulk_upload.blank_file")])
       end
     end
 
     context "when file has too many columns" do
       before do
-        file.write((%w[a] * (BulkUpload::Sales::Year2023::CsvParser::MAX_COLUMNS + 1)).join(","))
+        file.write((%w[a] * (Object.const_get("BulkUpload::Sales::Year#{year}::CsvParser::MAX_COLUMNS") + 1)).join(","))
         file.rewind
       end
 
@@ -42,35 +46,19 @@ RSpec.describe BulkUpload::Sales::Validator do
       end
     end
 
-    context "when trying to upload 2023 logs for 2024 bulk upload" do
-      let(:bulk_upload) { create(:bulk_upload, user:, year: 2024) }
-      let(:log) { build(:sales_log, :completed, saledate: Time.zone.local(2023, 10, 10), assigned_to: user) }
+    context "when trying to upload previous logs for current bulk upload" do
+      let(:bulk_upload) { create(:bulk_upload, user:, year:) }
+      let(:log) { build(:sales_log, :completed, saledate: previous_collection_start_date, assigned_to: user) }
 
       before do
-        file.write(log_to_csv.default_field_numbers_row_for_year(2024))
-        file.write(log_to_csv.to_year_csv_row(2024))
+        file.write(log_to_csv.default_field_numbers_row_for_year(year))
+        file.write(log_to_csv.to_year_csv_row(year))
         file.rewind
       end
 
       it "is not valid" do
         expect(validator).not_to be_valid
-        expect(validator.errors["base"]).to eql([I18n.t("validations.sales.2024.bulk_upload.wrong_template.wrong_template")])
-      end
-    end
-
-    context "when trying to upload 2024 logs for 2025 bulk upload" do
-      let(:bulk_upload) { create(:bulk_upload, user:, year: 2025) }
-      let(:log) { build(:sales_log, :completed, saledate: Time.zone.local(2024, 10, 10), assigned_to: user) }
-
-      before do
-        file.write(log_to_csv.default_field_numbers_row_for_year(2025))
-        file.write(log_to_csv.to_year_csv_row(2025))
-        file.rewind
-      end
-
-      it "is not valid" do
-        expect(validator).not_to be_valid
-        expect(validator.errors["base"]).to eql([I18n.t("validations.sales.2025.bulk_upload.wrong_template.wrong_template")])
+        expect(validator.errors["base"]).to eql([I18n.t("validations.sales.#{year}.bulk_upload.wrong_template.wrong_template")])
       end
     end
 
@@ -135,10 +123,10 @@ RSpec.describe BulkUpload::Sales::Validator do
       end
     end
 
-    context "with an invalid 2024 csv" do
+    context "with an invalid csv" do
       before do
         log.owning_organisation = nil
-        log.saledate = Time.zone.local(2024, 10, 10)
+        log.saledate = date
         file.write(log_to_csv.default_field_numbers_row)
         file.write(log_to_csv.to_csv_row)
         file.rewind
@@ -148,17 +136,38 @@ RSpec.describe BulkUpload::Sales::Validator do
         expect { validator.call }.to change(BulkUploadError, :count)
       end
 
-      it "create validation error with correct values" do
-        validator.call
+      context "and in 2025", metadata: { year: 25 } do
+        let(:year) { 2025 }
 
-        error = BulkUploadError.find_by(row: "2", field: "field_1", category: "setup")
+        it "create validation error with correct values" do
+          validator.call
 
-        expect(error.field).to eql("field_1")
-        expect(error.error).to eql("You must answer owning organisation.")
-        expect(error.purchaser_code).to eql(log.purchaser_code)
-        expect(error.row).to eql("2")
-        expect(error.cell).to eql("B2")
-        expect(error.col).to eql("B")
+          error = BulkUploadError.find_by(row: "2", field: "field_4", category: "setup")
+
+          expect(error.field).to eql("field_4")
+          expect(error.error).to eql("You must answer owning organisation.")
+          expect(error.purchaser_code).to eql(log.purchaser_code)
+          expect(error.row).to eql("2")
+          expect(error.cell).to eql("E2")
+          expect(error.col).to eql("E")
+        end
+      end
+
+      context "and in 2026", metadata: { year: 26 } do
+        let(:year) { 2026 }
+
+        it "create validation error with correct values" do
+          validator.call
+
+          error = BulkUploadError.find_by(row: "2", field: "field_4", category: "setup")
+
+          expect(error.field).to eql("field_4")
+          expect(error.error).to eql("You must answer owning organisation.")
+          expect(error.purchaser_code).to eql(log.purchaser_code)
+          expect(error.row).to eql("2")
+          expect(error.cell).to eql("E2")
+          expect(error.col).to eql("E")
+        end
       end
     end
 

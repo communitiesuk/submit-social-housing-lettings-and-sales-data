@@ -1,18 +1,22 @@
 require "rails_helper"
 
 RSpec.describe BulkUpload::Lettings::LogCreator do
+  include CollectionTimeHelper
+
   subject(:service) { described_class.new(bulk_upload:, path: "") }
+
+  let(:year) { current_collection_start_year }
 
   let(:owning_org) { create(:organisation, old_visible_id: 123, rent_periods: [2]) }
   let(:user) { create(:user, organisation: owning_org) }
 
-  let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2024) }
-  let(:csv_parser) { instance_double(BulkUpload::Lettings::Year2024::CsvParser) }
-  let(:row_parser) { instance_double(BulkUpload::Lettings::Year2024::RowParser) }
+  let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year:) }
+  let(:csv_parser) { instance_double("BulkUpload::Lettings::Year#{year}::CsvParser") }
+  let(:row_parser) { instance_double("BulkUpload::Lettings::Year#{year}::RowParser") }
   let(:log) { build(:lettings_log, :completed, assigned_to: user, owning_organisation: owning_org, managing_organisation: owning_org) }
 
   before do
-    allow(BulkUpload::Lettings::Year2024::CsvParser).to receive(:new).and_return(csv_parser)
+    allow(Object.const_get("BulkUpload::Lettings::Year#{year}::CsvParser")).to receive(:new).and_return(csv_parser)
     allow(csv_parser).to receive(:row_parsers).and_return([row_parser])
     allow(row_parser).to receive(:log).and_return(log)
     allow(row_parser).to receive(:bulk_upload=).and_return(true)
@@ -152,10 +156,6 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
         expect(log.ecstat1).to be(5)
         expect(log.retirement_value_check).to be(nil)
       end
-    end
-
-    context "when valid csv with existing log" do
-      xit "what should happen?"
     end
   end
 end

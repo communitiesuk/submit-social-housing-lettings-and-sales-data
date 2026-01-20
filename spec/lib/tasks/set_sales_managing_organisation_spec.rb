@@ -14,13 +14,13 @@ RSpec.describe "set_sales_managing_organisation" do
     context "when the rake task is run" do
       let!(:sales_log) { create(:sales_log, :completed, managing_organisation_id: nil) }
 
-      xit "updates sales log managing_organisation_id with owning_organisation_id" do
+      it "updates sales log managing_organisation_id with owning_organisation_id" do
         expect(sales_log.managing_organisation_id).to eq(nil)
-        expect(sales_log.status).to eq("completed")
+        expect(sales_log.status).to eq("in_progress")
         task.invoke
         sales_log.reload
         expect(sales_log.managing_organisation_id).to eq(sales_log.owning_organisation_id)
-        expect(sales_log.status).to eq("completed")
+        expect(sales_log.status).to eq("in_progress")
       end
 
       it "does not update sales log managing_organisation_id if owning_organisation_id is nil" do
