@@ -135,6 +135,13 @@ class BulkUpload::Sales::Year2026::RowParser
     field_119: "Does this include any extra borrowing?",
     field_120: "How much was the cash deposit paid on the property?",
     field_121: "What are the total monthly leasehold charges for the property?",
+
+    field_122: "Buyer 1's sex, as registered at birth",
+    field_123: "Buyer 2's sex, as registered at birth",
+    field_124: "Person 3's sex, as registered at birth",
+    field_125: "Person 4's sex, as registered at birth",
+    field_126: "Person 5's sex, as registered at birth",
+    field_127: "Person 6's sex, as registered at birth",
   }.freeze
 
   ERROR_BASE_KEY = "validations.sales.2026.bulk_upload".freeze
@@ -274,6 +281,13 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_119, :integer
   attribute :field_120, :decimal
   attribute :field_121, :decimal
+
+  attribute :field_122, :string
+  attribute :field_123, :string
+  attribute :field_124, :string
+  attribute :field_125, :string
+  attribute :field_126, :string
+  attribute :field_127, :string
 
   validates :field_1,
             presence: {
@@ -513,6 +527,7 @@ class BulkUpload::Sales::Year2026::RowParser
       "field_22", # postcode
       "field_28", # age1
       "field_29", # sex1
+      "field_122", #sexRAB1
       "field_32", # ecstat1
     )
   end
@@ -780,6 +795,12 @@ private
       lasttransaction: %i[field_104 field_105 field_106],
       initialpurchase: %i[field_100 field_101 field_102],
 
+      sexRAB1: %i[field_122],
+      sexRAB2: %i[field_123],
+      sexRAB3: %i[field_124],
+      sexRAB4: %i[field_125],
+      sexRAB5: %i[field_126],
+      sexRAB6: %i[field_127],
     }
   end
 
@@ -814,6 +835,13 @@ private
     attributes["sex4"] = field_48
     attributes["sex5"] = field_52
     attributes["sex6"] = field_56
+
+    attributes["sexRAB1"] = field_122
+    attributes["sexRAB2"] = field_123
+    attributes["sexRAB3"] = field_124
+    attributes["sexRAB4"] = field_125
+    attributes["sexRAB5"] = field_126
+    attributes["sexRAB6"] = field_127
 
     attributes["relat2"] = relationship_from_is_partner(field_34)
     attributes["relat3"] = relationship_from_is_partner(field_42)
@@ -1241,6 +1269,7 @@ private
     %w[
       saledate
       age1
+      sexRAB1
       sex1
       ecstat1
       owning_organisation
@@ -1419,6 +1448,7 @@ private
       errors.add(:field_22, error_message) # Postcode
       errors.add(:field_28, error_message) # Buyer 1 age
       errors.add(:field_29, error_message) # Buyer 1 gender
+      errors.add(:field_122, error_message) # Buyer 1 sex registered at birth
       errors.add(:field_32, error_message) # Buyer 1 working situation
       errors.add(:field_7, error_message) # Purchaser code
     end
