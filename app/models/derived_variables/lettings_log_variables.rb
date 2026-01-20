@@ -170,7 +170,9 @@ module DerivedVariables::LettingsLogVariables
     self.referral = 7 if referral_type == 6
     self.referral = 16 if referral_type == 7
 
-    if location_changed?
+    if !form.start_year_2026_or_later? && is_supported_housing?
+      reset_address_fields!
+    elsif form.start_year_2026_or_later? && location_changed?
       reset_address_fields!
       self.la = nil
     end
