@@ -137,11 +137,16 @@ module Exports::SalesLogExportConstants
   (1..6).each do |index|
     EXPORT_FIELDS << "AGE#{index}"
     EXPORT_FIELDS << "ECSTAT#{index}"
-    EXPORT_FIELDS << "SEXRAB#{index}"
     EXPORT_FIELDS << "SEX#{index}"
   end
 
   (2..6).each do |index|
     EXPORT_FIELDS << "RELAT#{index}"
+  end
+
+  POST_2026_EXPORT_FIELDS = Set[]
+
+  (1..6).each do |index|
+    POST_2026_EXPORT_FIELDS << "SEXRAB#{index}"
   end
 end
