@@ -8,10 +8,6 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
   let(:subsection) { instance_double(Form::Subsection, form:) }
   let(:person_index) { 2 }
 
-  before do
-    allow(form).to receive(:start_year_2026_or_later?).and_return(false)
-  end
-
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
   end
@@ -29,7 +25,7 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
       expect(page.id).to eq("person_2_lead_partner")
     end
 
-    context "with start year >= 2025", metadata: { year: 25 } do
+    context "with start year < 2026", metadata: { year: 25 } do
       before do
         allow(form).to receive(:start_year_2026_or_later?).and_return(false)
       end
@@ -74,7 +70,7 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
       expect(page.id).to eq("person_3_lead_partner")
     end
 
-    context "with start year >= 2025", metadata: { year: 25 } do
+    context "with start year < 2026", metadata: { year: 25 } do
       before do
         allow(form).to receive(:start_year_2026_or_later?).and_return(false)
       end
