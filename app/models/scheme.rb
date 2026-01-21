@@ -262,9 +262,7 @@ class Scheme < ApplicationRecord
   end
 
   def self.care_acts_options_with_hints
-    hints = { "Yes – part registered as a care home": "A proportion of units are registered as being a care home." }
-
-    Scheme.registered_under_care_acts.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s, description: hints[key.to_sym]) }
+    Scheme.registered_under_care_acts.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s) }
   end
 
   def support_level_options_with_hints
