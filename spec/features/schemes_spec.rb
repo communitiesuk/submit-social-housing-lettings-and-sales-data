@@ -446,7 +446,7 @@ RSpec.describe "Schemes scheme Features" do
           expect(page).to have_content "This scheme contains confidential information"
           expect(page).to have_content "Which organisation owns the housing stock for this scheme?"
           expect(page).to have_content "What is this type of scheme?"
-          expect(page).to have_content "Is this scheme registered under the Care Standards Act 2000?"
+          expect(page).to have_content "Is the scheme regulated by the Care Quality Commission (CQC)?"
           expect(page).to have_content "Who provides the support services used by this scheme?"
         end
 
@@ -463,7 +463,7 @@ RSpec.describe "Schemes scheme Features" do
           expect(page).to have_content "This scheme contains confidential information"
           expect(page).to have_content "What is this type of scheme?"
           expect(page).to have_content "Who provides the support services used by this scheme?"
-          expect(page).to have_content "Is this scheme registered under the Care Standards Act 2000?"
+          expect(page).to have_content "Is the scheme regulated by the Care Quality Commission (CQC)?"
         end
 
         it "returns to the primary client group question after amending scheme details" do
