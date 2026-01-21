@@ -250,7 +250,7 @@ class Scheme < ApplicationRecord
       { name: "Status", value: status, id: "status" },
       { name: "Confidential information", value: sensitive, id: "sensitive", edit: true },
       { name: "Type of scheme", value: scheme_type, id: "scheme_type", edit: true },
-      { name: "Registered under Care Standards Act 2000", value: registered_under_care_act, id: "registered_under_care_act", edit: true },
+      { name: "Regulated by the Care Quality Commission", value: registered_under_care_act, id: "registered_under_care_act", edit: true },
       { name: "Housing stock owned by", value: owning_organisation.name, id: "owning_organisation_id", edit: true },
       { name: "Support services provided by", value: arrangement_type, id: "arrangement_type", edit: true },
       { name: "Primary client group", value: primary_client_group, id: "primary_client_group", edit: true },
