@@ -261,7 +261,7 @@ class Scheme < ApplicationRecord
     ]
   end
 
-  def self.care_acts_options_with_hints
+  def self.care_acts_options
     Scheme.registered_under_care_acts.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s) }
   end
 
