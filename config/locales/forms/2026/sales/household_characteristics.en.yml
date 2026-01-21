@@ -80,7 +80,7 @@ en:
             page_header: ""
             check_answer_label: "Buyer 1’s working situation"
             check_answer_prompt: ""
-            hint_text: ""
+            hint_text: "This is the household member who does the most paid work. If several people do the same amount of paid work, it's the oldest household member. People providing informal care for family and friends who are not in formal employment (but may receive carer's allowance) should answer 'Not seeking work'."
             question_text: "Which of these best describes buyer 1’s working situation?"
 
           buy1livein:
@@ -202,13 +202,13 @@ en:
               page_header: ""
               check_answer_label: "Buyer 2’s working situation"
               check_answer_prompt: ""
-              hint_text: ""
+              hint_text: "People providing informal care for family and friends who are not in formal employment (but may receive carer's allowance) should answer 'Not seeking work'."
               question_text: "Which of these best describes buyer 2’s working situation?"
             person:
               page_header: ""
               check_answer_label: "Person 2’s working situation"
               check_answer_prompt: ""
-              hint_text: ""
+              hint_text: "People providing informal care for family and friends who are not in formal employment (but may receive carer's allowance) should answer 'Not seeking work'."
               question_text: "Which of these best describes person 2’s working situation?"
 
           buy2livein:
@@ -277,7 +277,7 @@ en:
             page_header: ""
             check_answer_label: "Person 3’s working situation"
             check_answer_prompt: ""
-            hint_text: ""
+            hint_text: "People providing informal care for family and friends who are not in formal employment (but may receive carer's allowance) should answer 'Not seeking work'."
             question_text: "Which of these best describes person 3’s working situation?"
 
           details_known_4:
@@ -318,7 +318,7 @@ en:
             page_header: ""
             check_answer_label: "Person 4’s working situation"
             check_answer_prompt: ""
-            hint_text: ""
+            hint_text: "People providing informal care for family and friends who are not in formal employment (but may receive carer's allowance) should answer 'Not seeking work'."
             question_text: "Which of these best describes person 4’s working situation?"
 
           details_known_5:
@@ -359,7 +359,7 @@ en:
             page_header: ""
             check_answer_label: "Person 5’s working situation"
             check_answer_prompt: ""
-            hint_text: ""
+            hint_text: "People providing informal care for family and friends who are not in formal employment (but may receive carer's allowance) should answer 'Not seeking work'."
             question_text: "Which of these best describes person 5’s working situation?"
 
           details_known_6:
@@ -400,5 +400,5 @@ en:
             page_header: ""
             check_answer_label: "Person 6’s working situation"
             check_answer_prompt: ""
-            hint_text: ""
+            hint_text: "People providing informal care for family and friends who are not in formal employment (but may receive carer's allowance) should answer 'Not seeking work'."
             question_text: "Which of these best describes person 6’s working situation?"
