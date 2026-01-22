@@ -4,7 +4,7 @@ class Form::Sales::Pages::SexRegisteredAtBirth2 < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_2_sex_registered_at_birth"
-    @copy_key = "sales.household_characteristics.sex2.buyer"
+    @copy_key = "sales.household_characteristics.sexRAB2.buyer"
     @depends_on = [
       {
         "joint_purchase?" => true,

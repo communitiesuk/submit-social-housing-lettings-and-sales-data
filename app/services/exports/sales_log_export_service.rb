@@ -162,7 +162,7 @@ module Exports
         included_fields.merge(POST_2026_EXPORT_FIELDS)
       end
 
-      return included_fields
+      included_fields
     end
 
     def build_export_xml(sales_logs)
