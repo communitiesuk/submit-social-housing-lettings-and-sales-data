@@ -12,7 +12,7 @@ RSpec.describe Form::Sales::Pages::SexRegisteredAtBirth1, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[sexRAB1])
+    expect(page.questions.map(&:id)).to eq(%w[sexrab1])
   end
 
   it "has the correct id" do

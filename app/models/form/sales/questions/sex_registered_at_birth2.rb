@@ -3,13 +3,13 @@
 class Form::Sales::Questions::SexRegisteredAtBirth2 < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "sexRAB2"
+    @id = "sexrab2"
     @type = "radio"
-    @copy_key = "sales.household_characteristics.sexRAB2.buyer"
+    @copy_key = "sales.household_characteristics.sexrab2.buyer"
     @check_answers_card_number = 2
     @inferred_check_answers_value = [{
       "condition" => {
-        "sexRAB2" => "R",
+        "sexrab2" => "R",
       },
       "value" => "Buyer prefers not to say",
     }]

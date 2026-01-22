@@ -19,7 +19,7 @@ RSpec.describe Form::Sales::Questions::SexRegisteredAtBirth2, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("sexRAB2")
+    expect(question.id).to eq("sexrab2")
   end
 
   it "has the correct type" do
@@ -45,7 +45,7 @@ RSpec.describe Form::Sales::Questions::SexRegisteredAtBirth2, type: :model do
 
   it "has the correct inferred_check_answers_value" do
     expect(question.inferred_check_answers_value).to eq([
-      { "condition" => { "sexRAB2" => "R" }, "value" => "Buyer prefers not to say" },
+      { "condition" => { "sexrab2" => "R" }, "value" => "Buyer prefers not to say" },
     ])
   end
 end

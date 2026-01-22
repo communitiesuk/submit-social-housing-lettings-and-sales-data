@@ -3,7 +3,7 @@
 class Form::Sales::Questions::SexRegisteredAtBirth1 < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "sexRAB1"
+    @id = "sexrab1"
     @type = "radio"
     @check_answers_card_number = 1
     @answer_options = ANSWER_OPTIONS

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Form::Sales::Questions::PersonSexRegisteredAtBirth, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page, person_index:) }
 
-  let(:question_id) { "sexRAB2" }
+  let(:question_id) { "sexrab2" }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
   let(:person_index) { 2 }
@@ -37,11 +37,11 @@ RSpec.describe Form::Sales::Questions::PersonSexRegisteredAtBirth, type: :model 
   end
 
   context "when person 2" do
-    let(:question_id) { "sexRAB2" }
+    let(:question_id) { "sexrab2" }
     let(:person_index) { 2 }
 
     it "has the correct id" do
-      expect(question.id).to eq("sexRAB2")
+      expect(question.id).to eq("sexrab2")
     end
 
     it "has expected check answers card number" do
@@ -50,17 +50,17 @@ RSpec.describe Form::Sales::Questions::PersonSexRegisteredAtBirth, type: :model 
 
     it "has the correct inferred_check_answers_value" do
       expect(question.inferred_check_answers_value).to eq([
-        { "condition" => { "sexRAB2" => "R" }, "value" => "Person prefers not to say" },
+        { "condition" => { "sexrab2" => "R" }, "value" => "Person prefers not to say" },
       ])
     end
   end
 
   context "when person 3" do
-    let(:question_id) { "sexRAB3" }
+    let(:question_id) { "sexrab3" }
     let(:person_index) { 3 }
 
     it "has the correct id" do
-      expect(question.id).to eq("sexRAB3")
+      expect(question.id).to eq("sexrab3")
     end
 
     it "has expected check answers card number" do
@@ -69,17 +69,17 @@ RSpec.describe Form::Sales::Questions::PersonSexRegisteredAtBirth, type: :model 
 
     it "has the correct inferred_check_answers_value" do
       expect(question.inferred_check_answers_value).to eq([
-        { "condition" => { "sexRAB3" => "R" }, "value" => "Person prefers not to say" },
+        { "condition" => { "sexrab3" => "R" }, "value" => "Person prefers not to say" },
       ])
     end
   end
 
   context "when person 4" do
-    let(:question_id) { "sexRAB4" }
+    let(:question_id) { "sexrab4" }
     let(:person_index) { 4 }
 
     it "has the correct id" do
-      expect(question.id).to eq("sexRAB4")
+      expect(question.id).to eq("sexrab4")
     end
 
     it "has expected check answers card number" do
@@ -88,17 +88,17 @@ RSpec.describe Form::Sales::Questions::PersonSexRegisteredAtBirth, type: :model 
 
     it "has the correct inferred_check_answers_value" do
       expect(question.inferred_check_answers_value).to eq([
-        { "condition" => { "sexRAB4" => "R" }, "value" => "Person prefers not to say" },
+        { "condition" => { "sexrab4" => "R" }, "value" => "Person prefers not to say" },
       ])
     end
   end
 
   context "when person 5" do
-    let(:question_id) { "sexRAB5" }
+    let(:question_id) { "sexrab5" }
     let(:person_index) { 5 }
 
     it "has the correct id" do
-      expect(question.id).to eq("sexRAB5")
+      expect(question.id).to eq("sexrab5")
     end
 
     it "has expected check answers card number" do
@@ -107,17 +107,17 @@ RSpec.describe Form::Sales::Questions::PersonSexRegisteredAtBirth, type: :model 
 
     it "has the correct inferred_check_answers_value" do
       expect(question.inferred_check_answers_value).to eq([
-        { "condition" => { "sexRAB5" => "R" }, "value" => "Person prefers not to say" },
+        { "condition" => { "sexrab5" => "R" }, "value" => "Person prefers not to say" },
       ])
     end
   end
 
   context "when person 6" do
-    let(:question_id) { "sexRAB6" }
+    let(:question_id) { "sexrab6" }
     let(:person_index) { 6 }
 
     it "has the correct id" do
-      expect(question.id).to eq("sexRAB6")
+      expect(question.id).to eq("sexrab6")
     end
 
     it "has expected check answers card number" do
@@ -126,7 +126,7 @@ RSpec.describe Form::Sales::Questions::PersonSexRegisteredAtBirth, type: :model 
 
     it "has the correct inferred_check_answers_value" do
       expect(question.inferred_check_answers_value).to eq([
-        { "condition" => { "sexRAB6" => "R" }, "value" => "Person prefers not to say" },
+        { "condition" => { "sexrab6" => "R" }, "value" => "Person prefers not to say" },
       ])
     end
   end

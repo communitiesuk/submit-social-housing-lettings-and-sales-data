@@ -22,7 +22,7 @@ RSpec.describe Form::Sales::Pages::PersonSexRegisteredAtBirth, type: :model do
     let(:page_id) { "person_2_sex_registered_at_birth" }
 
     it "has correct questions" do
-      expect(page.questions.map(&:id)).to eq(%w[sexRAB2])
+      expect(page.questions.map(&:id)).to eq(%w[sexrab2])
     end
 
     it "has the correct id" do
@@ -39,7 +39,7 @@ RSpec.describe Form::Sales::Pages::PersonSexRegisteredAtBirth, type: :model do
     let(:page_id) { "person_3_sex_registered_at_birth" }
 
     it "has correct questions" do
-      expect(page.questions.map(&:id)).to eq(%w[sexRAB3])
+      expect(page.questions.map(&:id)).to eq(%w[sexrab3])
     end
 
     it "has the correct id" do
@@ -56,7 +56,7 @@ RSpec.describe Form::Sales::Pages::PersonSexRegisteredAtBirth, type: :model do
     let(:page_id) { "person_4_sex_registered_at_birth" }
 
     it "has correct questions" do
-      expect(page.questions.map(&:id)).to eq(%w[sexRAB4])
+      expect(page.questions.map(&:id)).to eq(%w[sexrab4])
     end
 
     it "has the correct id" do
@@ -73,7 +73,7 @@ RSpec.describe Form::Sales::Pages::PersonSexRegisteredAtBirth, type: :model do
     let(:page_id) { "person_5_sex_registered_at_birth" }
 
     it "has correct questions" do
-      expect(page.questions.map(&:id)).to eq(%w[sexRAB5])
+      expect(page.questions.map(&:id)).to eq(%w[sexrab5])
     end
 
     it "has the correct id" do
@@ -90,7 +90,7 @@ RSpec.describe Form::Sales::Pages::PersonSexRegisteredAtBirth, type: :model do
     let(:page_id) { "person_6_sex_registered_at_birth" }
 
     it "has correct questions" do
-      expect(page.questions.map(&:id)).to eq(%w[sexRAB6])
+      expect(page.questions.map(&:id)).to eq(%w[sexrab6])
     end
 
     it "has the correct id" do

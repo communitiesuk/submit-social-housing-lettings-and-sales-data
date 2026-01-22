@@ -4,7 +4,7 @@ class Form::Sales::Questions::PersonSexRegisteredAtBirth < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
     @type = "radio"
-    @copy_key = "sales.household_characteristics.sexRAB2.person" if person_index == 2
+    @copy_key = "sales.household_characteristics.sexrab2.person" if person_index == 2
     @check_answers_card_number = person_index
     @inferred_check_answers_value = [{
       "condition" => {
