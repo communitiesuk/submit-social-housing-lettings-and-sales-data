@@ -814,12 +814,12 @@ RSpec.describe Merge::MergeOrganisationsService do
               it "moves active schemes and locations to absorbing organisation" do
                 expect(absorbing_organisation.owned_schemes.count).to eq(2)
 
-                expect(absorbing_organisation.owned_schemes.first.locations.map(&:postcode)).to match_array([location, deactivated_location, location_without_startdate, location_with_past_startdate, location_with_future_startdate].map(&:postcode))
-                expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_without_startdate.postcode).startdate).to eq(Time.zone.yesterday)
-                expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_with_past_startdate.postcode).startdate).to eq(Time.zone.yesterday)
-                expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_with_future_startdate.postcode).startdate.to_date).to eq(Time.zone.today + 2.months)
                 absorbed_active_scheme = absorbing_organisation.owned_schemes.find_by(service_name: scheme.service_name)
                 absorbed_active_location = absorbed_active_scheme.locations.find_by(postcode: location.postcode)
+                expect(absorbed_active_scheme.locations.map(&:postcode)).to match_array([location, deactivated_location, location_without_startdate, location_with_past_startdate, location_with_future_startdate].map(&:postcode))
+                expect(absorbed_active_scheme.locations.find_by(postcode: location_without_startdate.postcode).startdate).to eq(Time.zone.yesterday)
+                expect(absorbed_active_scheme.locations.find_by(postcode: location_with_past_startdate.postcode).startdate).to eq(Time.zone.yesterday)
+                expect(absorbed_active_scheme.locations.find_by(postcode: location_with_future_startdate.postcode).startdate.to_date).to eq(Time.zone.today + 2.months)
                 expect(absorbed_active_scheme.service_name).to eq(scheme.service_name)
                 expect(absorbed_active_scheme.old_id).to be_nil
                 expect(absorbed_active_scheme.old_visible_id).to be_nil
