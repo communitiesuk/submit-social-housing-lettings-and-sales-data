@@ -1448,6 +1448,9 @@ RSpec.describe LettingsLog, type: :model do
   end
 
   describe "resetting address fields and LA" do
+    # log.read_attribute is used in these tests to read the underlying attribute (which is what
+    # is being reset) rather than the getter method, which may override the underlying attribute.
+
     let(:uprn) { "123456789" }
     let(:uprn_known) { 1 } # A value of 1 is necessary for this test as there is separate logic that resets `uprn` if `uprn_known` is 0.
     let(:uprn_confirmed) { 1 } # A value of 1 is necessary for this test as there is separate logic that resets the address fields and LA if `uprn_confirmed` is 0 (and `uprn_known` is 1).
@@ -1481,18 +1484,19 @@ RSpec.describe LettingsLog, type: :model do
 
         it "does not reset the address fields" do
           expect { log.set_derived_fields! }
-            .to not_change(log, :uprn)
-            .and not_change(log, :uprn_known)
-            .and not_change(log, :uprn_confirmed)
-            .and not_change(log, :address_line1)
-            .and not_change(log, :address_line2)
-            .and not_change(log, :town_or_city)
-            .and not_change(log, :county)
-            .and not_change(log, :postcode_full)
+            .to not_change { log.read_attribute(:uprn) }
+            .and not_change { log.read_attribute(:uprn_known) }
+            .and not_change { log.read_attribute(:uprn_confirmed) }
+            .and not_change { log.read_attribute(:address_line1) }
+            .and not_change { log.read_attribute(:address_line2) }
+            .and not_change { log.read_attribute(:town_or_city) }
+            .and not_change { log.read_attribute(:county) }
+            .and not_change { log.read_attribute(:postcode_full) }
         end
 
         it "does not reset LA" do
-          expect { log.set_derived_fields! }.to not_change(log, :la)
+          expect { log.set_derived_fields! }
+            .to not_change { log.read_attribute(:la) }
         end
       end
 
@@ -1503,18 +1507,19 @@ RSpec.describe LettingsLog, type: :model do
 
         it "resets the address fields to nil" do
           expect { log.set_derived_fields! }
-            .to change(log, :uprn).from(uprn).to(nil)
-            .and change(log, :uprn_known).from(uprn_known).to(nil)
-            .and change(log, :uprn_confirmed).from(uprn_confirmed).to(nil)
-            .and change(log, :address_line1).from(address_line1).to(nil)
-            .and change(log, :address_line2).from(address_line2).to(nil)
-            .and change(log, :town_or_city).from(town_or_city).to(nil)
-            .and change(log, :county).from(county).to(nil)
-            .and change(log, :postcode_full).from(postcode_full).to(nil)
+            .to change { log.read_attribute(:uprn) }.from(uprn).to(nil)
+            .and change { log.read_attribute(:uprn_known) }.from(uprn_known).to(nil)
+            .and change { log.read_attribute(:uprn_confirmed) }.from(uprn_confirmed).to(nil)
+            .and change { log.read_attribute(:address_line1) }.from(address_line1).to(nil)
+            .and change { log.read_attribute(:address_line2) }.from(address_line2).to(nil)
+            .and change { log.read_attribute(:town_or_city) }.from(town_or_city).to(nil)
+            .and change { log.read_attribute(:county) }.from(county).to(nil)
+            .and change { log.read_attribute(:postcode_full) }.from(postcode_full).to(nil)
         end
 
         it "does not reset LA" do
-          expect { log.set_derived_fields! }.to not_change(log, :la)
+          expect { log.set_derived_fields! }
+            .to not_change { log.read_attribute(:la) }
         end
       end
     end
@@ -1543,18 +1548,19 @@ RSpec.describe LettingsLog, type: :model do
       context "when the location is not changed" do
         it "does not reset the address fields" do
           expect { log.set_derived_fields! }
-            .to not_change(log, :uprn)
-            .and not_change(log, :uprn_known)
-            .and not_change(log, :uprn_confirmed)
-            .and not_change(log, :address_line1)
-            .and not_change(log, :address_line2)
-            .and not_change(log, :town_or_city)
-            .and not_change(log, :county)
-            .and not_change(log, :postcode_full)
+            .to not_change { log.read_attribute(:uprn) }
+            .and not_change { log.read_attribute(:uprn_known) }
+            .and not_change { log.read_attribute(:uprn_confirmed) }
+            .and not_change { log.read_attribute(:address_line1) }
+            .and not_change { log.read_attribute(:address_line2) }
+            .and not_change { log.read_attribute(:town_or_city) }
+            .and not_change { log.read_attribute(:county) }
+            .and not_change { log.read_attribute(:postcode_full) }
         end
 
         it "does not reset LA" do
-          expect { log.set_derived_fields! }.to not_change(log, :la)
+          expect { log.set_derived_fields! }
+            .to not_change { log.read_attribute(:la) }
         end
       end
 
@@ -1565,18 +1571,19 @@ RSpec.describe LettingsLog, type: :model do
 
         it "resets the address fields to nil" do
           expect { log.set_derived_fields! }
-            .to change(log, :uprn).from(uprn).to(nil)
-            .and change(log, :uprn_known).from(uprn_known).to(nil)
-            .and change(log, :uprn_confirmed).from(uprn_confirmed).to(nil)
-            .and change(log, :address_line1).from(address_line1).to(nil)
-            .and change(log, :address_line2).from(address_line2).to(nil)
-            .and change(log, :town_or_city).from(town_or_city).to(nil)
-            .and change(log, :county).from(county).to(nil)
-            .and change(log, :postcode_full).from(postcode_full).to(nil)
+            .to change { log.read_attribute(:uprn) }.from(uprn).to(nil)
+            .and change { log.read_attribute(:uprn_known) }.from(uprn_known).to(nil)
+            .and change { log.read_attribute(:uprn_confirmed) }.from(uprn_confirmed).to(nil)
+            .and change { log.read_attribute(:address_line1) }.from(address_line1).to(nil)
+            .and change { log.read_attribute(:address_line2) }.from(address_line2).to(nil)
+            .and change { log.read_attribute(:town_or_city) }.from(town_or_city).to(nil)
+            .and change { log.read_attribute(:county) }.from(county).to(nil)
+            .and change { log.read_attribute(:postcode_full) }.from(postcode_full).to(nil)
         end
 
         it "resets LA to nil" do
-          expect { log.set_derived_fields! }.to change(log, :la).from(la).to(nil)
+          expect { log.set_derived_fields! }
+            .to change { log.read_attribute(:la) } .from(la).to(nil)
         end
       end
     end
