@@ -1491,12 +1491,12 @@ RSpec.describe LettingsLog, type: :model do
             .and not_change { log.read_attribute(:address_line2) }
             .and not_change { log.read_attribute(:town_or_city) }
             .and not_change { log.read_attribute(:county) }
-            .and not_change { log.read_attribute(:postcode_full) }
+            .and(not_change { log.read_attribute(:postcode_full) })
         end
 
         it "does not reset LA" do
           expect { log.set_derived_fields! }
-            .to not_change { log.read_attribute(:la) }
+            .to(not_change { log.read_attribute(:la) })
         end
       end
 
@@ -1519,7 +1519,7 @@ RSpec.describe LettingsLog, type: :model do
 
         it "does not reset LA" do
           expect { log.set_derived_fields! }
-            .to not_change { log.read_attribute(:la) }
+            .to(not_change { log.read_attribute(:la) })
         end
       end
     end
@@ -1555,12 +1555,12 @@ RSpec.describe LettingsLog, type: :model do
             .and not_change { log.read_attribute(:address_line2) }
             .and not_change { log.read_attribute(:town_or_city) }
             .and not_change { log.read_attribute(:county) }
-            .and not_change { log.read_attribute(:postcode_full) }
+            .and(not_change { log.read_attribute(:postcode_full) })
         end
 
         it "does not reset LA" do
           expect { log.set_derived_fields! }
-            .to not_change { log.read_attribute(:la) }
+            .to(not_change { log.read_attribute(:la) })
         end
       end
 
@@ -1583,7 +1583,7 @@ RSpec.describe LettingsLog, type: :model do
 
         it "resets LA to nil" do
           expect { log.set_derived_fields! }
-            .to change { log.read_attribute(:la) } .from(la).to(nil)
+            .to change { log.read_attribute(:la) }.from(la).to(nil)
         end
       end
     end
