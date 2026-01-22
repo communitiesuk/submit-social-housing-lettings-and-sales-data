@@ -16,7 +16,7 @@ en:
               hint_text: ""
               question_text: "Age"
 
-          sexRAB1:
+          sexrab1:
             page_header: ""
             check_answer_label: "Buyer 1’s sex registered at birth"
             check_answer_prompt: ""
@@ -137,7 +137,7 @@ en:
                 hint_text: ""
                 question_text: "Age"
 
-          sexRAB2:
+          sexrab2:
             buyer:
               page_header: ""
               check_answer_label: "Buyer 2’s sex registered at birth"
@@ -287,7 +287,7 @@ en:
               hint_text: ""
               question_text: "Age"
 
-          sexRAB3:
+          sexrab3:
             page_header: ""
             check_answer_label: "Person 3’s sex registered at birth"
             check_answer_prompt: ""
@@ -335,7 +335,7 @@ en:
               hint_text: ""
               question_text: "Age"
 
-          sexRAB4:
+          sexrab4:
             page_header: ""
             check_answer_label: "Person 4’s sex registered at birth"
             check_answer_prompt: ""
@@ -383,7 +383,7 @@ en:
               hint_text: ""
               question_text: "Age"
 
-          sexRAB5:
+          sexrab5:
             page_header: ""
             check_answer_label: "Person 5’s sex registered at birth"
             check_answer_prompt: ""
@@ -431,7 +431,7 @@ en:
               hint_text: ""
               question_text: "Age"
 
-          sexRAB6:
+          sexrab6:
             page_header: ""
             check_answer_label: "Person 6’s sex registered at birth"
             check_answer_prompt: ""

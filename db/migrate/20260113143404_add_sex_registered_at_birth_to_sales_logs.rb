@@ -1,12 +1,12 @@
 class AddSexRegisteredAtBirthToSalesLogs < ActiveRecord::Migration[7.2]
   def change
     change_table :sales_logs, bulk: true do |t|
-      t.column :sexRAB1, :string
-      t.column :sexRAB2, :string
-      t.column :sexRAB3, :string
-      t.column :sexRAB4, :string
-      t.column :sexRAB5, :string
-      t.column :sexRAB6, :string
+      t.column :sexrab1, :string
+      t.column :sexrab2, :string
+      t.column :sexrab3, :string
+      t.column :sexrab4, :string
+      t.column :sexrab5, :string
+      t.column :sexrab6, :string
     end
   end
 end

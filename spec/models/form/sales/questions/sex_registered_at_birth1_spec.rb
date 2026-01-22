@@ -19,7 +19,7 @@ RSpec.describe Form::Sales::Questions::SexRegisteredAtBirth1, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("sexRAB1")
+    expect(question.id).to eq("sexrab1")
   end
 
   it "has the correct type" do
