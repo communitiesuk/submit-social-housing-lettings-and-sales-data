@@ -599,6 +599,7 @@ RSpec.describe FiltersHelper do
     context "with 24/25 as the current collection year" do
       before do
         allow(Time).to receive(:now).and_return(Time.zone.local(2024, 5, 1))
+        Singleton.__init__(FormHandler)
       end
 
       it "has the correct options" do
