@@ -44,8 +44,6 @@ RSpec.describe "Accessibility", js: true do
     it "is has accessible pages" do
       user_paths.each do |path|
         visit(path)
-        wait = Selenium::WebDriver::Wait.new(timeout: 10)
-        wait.until { execute_script("return document.readyState") == "complete" }
         expect(page).to have_current_path(path)
         expect(page).to be_axe_clean.according_to :wcag2aa
       end
@@ -79,8 +77,6 @@ RSpec.describe "Accessibility", js: true do
     it "is has accessible pages" do
       organisation_paths.each do |path|
         visit(path)
-        wait = Selenium::WebDriver::Wait.new(timeout: 10)
-        wait.until { execute_script("return document.readyState") == "complete" }
         expect(page).to have_current_path(path)
         expect(page).to be_axe_clean.according_to :wcag2aa
       end
@@ -124,8 +120,6 @@ RSpec.describe "Accessibility", js: true do
         path.gsub!("/start", "/prepare-your-file?form[year]=2024") if path.include?("bulk-upload-logs/start")
         path.gsub!("/start", "/fix-choice") if path.include?("/bulk-upload-resume/#{bulk_upload.id}/start")
         visit(path)
-        wait = Selenium::WebDriver::Wait.new(timeout: 10)
-        wait.until { execute_script("return document.readyState") == "complete" }
         expect(page).to have_current_path(path)
         expect(page).to be_axe_clean.according_to :wcag2aa
       end
@@ -170,8 +164,6 @@ RSpec.describe "Accessibility", js: true do
         path.gsub!("/start", "/fix-choice") if path.include?("/bulk-upload-resume/#{bulk_upload.id}/start")
 
         visit(path)
-        wait = Selenium::WebDriver::Wait.new(timeout: 10)
-        wait.until { execute_script("return document.readyState") == "complete" }
         expect(page).to have_current_path(path)
         expect(page).to be_axe_clean.according_to :wcag2aa
       end
@@ -197,8 +189,6 @@ RSpec.describe "Accessibility", js: true do
     it "is has accessible pages" do
       scheme_paths.each do |path|
         visit(path)
-        wait = Selenium::WebDriver::Wait.new(timeout: 10)
-        wait.until { execute_script("return document.readyState") == "complete" }
         expect(page).to have_current_path(path)
         expect(page).to be_axe_clean.according_to :wcag2aa
       end
@@ -213,8 +203,6 @@ RSpec.describe "Accessibility", js: true do
      { path: "/sales-logs/bulk-upload-logs/guidance?form[year]=2024&referrer=home", title: "sales BU guidance" }].each do |test_case|
       it "is has accessible #{test_case[:title]} page" do
         visit(test_case[:path])
-        wait = Selenium::WebDriver::Wait.new(timeout: 10)
-        wait.until { execute_script("return document.readyState") == "complete" }
         expect(page).to have_current_path(test_case[:path])
         expect(page).to be_axe_clean.according_to :wcag2aa
       end
