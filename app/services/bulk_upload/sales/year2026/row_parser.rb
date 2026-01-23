@@ -527,7 +527,7 @@ class BulkUpload::Sales::Year2026::RowParser
       "field_22", # postcode
       "field_28", # age1
       "field_29", # sex1
-      "field_122", #sexRAB1
+      "field_122", # sexrab1
       "field_32", # ecstat1
     )
   end
@@ -795,12 +795,12 @@ private
       lasttransaction: %i[field_104 field_105 field_106],
       initialpurchase: %i[field_100 field_101 field_102],
 
-      sexRAB1: %i[field_122],
-      sexRAB2: %i[field_123],
-      sexRAB3: %i[field_124],
-      sexRAB4: %i[field_125],
-      sexRAB5: %i[field_126],
-      sexRAB6: %i[field_127],
+      sexrab1: %i[field_122],
+      sexrab2: %i[field_123],
+      sexrab3: %i[field_124],
+      sexrab4: %i[field_125],
+      sexrab5: %i[field_126],
+      sexrab6: %i[field_127],
     }
   end
 
@@ -836,12 +836,12 @@ private
     attributes["sex5"] = field_52
     attributes["sex6"] = field_56
 
-    attributes["sexRAB1"] = field_122
-    attributes["sexRAB2"] = field_123
-    attributes["sexRAB3"] = field_124
-    attributes["sexRAB4"] = field_125
-    attributes["sexRAB5"] = field_126
-    attributes["sexRAB6"] = field_127
+    attributes["sexrab1"] = field_122
+    attributes["sexrab2"] = field_123
+    attributes["sexrab3"] = field_124
+    attributes["sexrab4"] = field_125
+    attributes["sexrab5"] = field_126
+    attributes["sexrab6"] = field_127
 
     attributes["relat2"] = relationship_from_is_partner(field_34)
     attributes["relat3"] = relationship_from_is_partner(field_42)
@@ -1269,7 +1269,7 @@ private
     %w[
       saledate
       age1
-      sexRAB1
+      sexrab1
       sex1
       ecstat1
       owning_organisation
