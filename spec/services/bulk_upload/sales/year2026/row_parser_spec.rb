@@ -1434,7 +1434,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       let(:attributes) { { bulk_upload: } }
 
       before do
-        build(:sales_log, owning_organisation: nil, saledate: nil, purchid: nil, age1: nil, sexRAB1: nil, sex1: nil, ecstat1: nil).save(validate: false)
+        build(:sales_log, owning_organisation: nil, saledate: nil, purchid: nil, age1: nil, sexrab1: nil, sex1: nil, ecstat1: nil).save(validate: false)
       end
 
       it "does not add duplicate logs validation to the blank row" do
