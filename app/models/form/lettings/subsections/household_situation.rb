@@ -27,7 +27,13 @@ class Form::Lettings::Subsections::HouseholdSituation < ::Form::Subsection
   end
 
   def referral_questions
-    if form.start_year_2025_or_later?
+    if form.start_year_2026_or_later?
+      [
+        Form::Lettings::Pages::ReferralRegister.new(nil, nil, self),
+        Form::Lettings::Pages::ReferralNoms.new(nil, nil, self),
+        Form::Lettings::Pages::ReferralOrg.new(nil, nil, self),
+      ]
+    elsif form.start_year_2025_or_later?
       [
         Form::Lettings::Pages::ReferralType.new(nil, nil, self),
         Form::Lettings::Pages::ReferralDirect.new(nil, nil, self),
