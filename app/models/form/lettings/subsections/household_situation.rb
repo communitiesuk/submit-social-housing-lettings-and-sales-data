@@ -22,7 +22,6 @@ class Form::Lettings::Subsections::HouseholdSituation < ::Form::Subsection
       Form::Lettings::Pages::ReasonablePreferenceReason.new(nil, nil, self),
       Form::Lettings::Pages::AllocationSystem.new("allocation_system", nil, self),
       referral_questions,
-      Form::Lettings::Pages::ReferralValueCheck.new(nil, nil, self),
     ].flatten.compact
   end
 
@@ -41,6 +40,7 @@ class Form::Lettings::Subsections::HouseholdSituation < ::Form::Subsection
         Form::Lettings::Pages::ReferralPrp.new(nil, nil, self),
         Form::Lettings::Pages::ReferralHsc.new(nil, nil, self),
         Form::Lettings::Pages::ReferralJustice.new(nil, nil, self),
+        Form::Lettings::Pages::ReferralValueCheck.new(nil, nil, self),
       ]
     else
       [
@@ -48,6 +48,7 @@ class Form::Lettings::Subsections::HouseholdSituation < ::Form::Subsection
         Form::Lettings::Pages::ReferralGeneralNeedsPrp.new(nil, nil, self),
         Form::Lettings::Pages::ReferralSupportedHousing.new(nil, nil, self),
         Form::Lettings::Pages::ReferralSupportedHousingPrp.new(nil, nil, self),
+        Form::Lettings::Pages::ReferralValueCheck.new(nil, nil, self),
       ]
     end
   end
