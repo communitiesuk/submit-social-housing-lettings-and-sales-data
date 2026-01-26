@@ -120,7 +120,7 @@ class BulkUpload::Lettings::Year2026::RowParser
     field_113: "Was the letting made under the Common Allocation Policy (CAP)?",
     field_114: "Was the letting made under the Common Housing Register (CHR)?",
     field_115: "Was the letting made under the Accessible Register?",
-    field_116: "What was the source of referral for this letting?",
+    field_116: "What was the source of referral for this letting? - LA properties",
     field_117: "Do you know the household’s combined total income after tax?",
     field_118: "How often does the household receive income?",
     field_119: "How much income does the household have in total?",
@@ -134,6 +134,9 @@ class BulkUpload::Lettings::Year2026::RowParser
     field_127: "What is the support charge?",
     field_128: "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
     field_129: "What do you expect the outstanding amount to be?",
+    field_130: "What was the source of referral for this letting? - PRP properties part 1",
+    field_131: "What was the source of referral for this letting? - PRP properties part 2",
+    field_132: "What was the source of referral for this letting? - PRP properties part 3",
   }.freeze
 
   RENT_TYPE_BU_MAPPING = {
@@ -282,6 +285,9 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_127, :decimal
   attribute :field_128, :integer
   attribute :field_129, :decimal
+  attribute :field_130, :integer
+  attribute :field_131, :integer
+  attribute :field_132, :integer
 
   validate :validate_valid_radio_option, on: :before_log
 
@@ -1101,8 +1107,9 @@ private
       accessible_register: %i[field_115],
       letting_allocation: %i[field_112 field_113 field_114 field_115],
 
-      referral_type: %i[field_116],
-      referral: %i[field_116],
+      referral_register: %i[field_116 field_130],
+      referral_noms: %i[field_131],
+      referral_org: %i[field_132],
 
       net_income_known: %i[field_117],
       incfreq: %i[field_118],
@@ -1287,8 +1294,9 @@ private
     attributes["accessible_register"] = accessible_register
     attributes["letting_allocation_unknown"] = letting_allocation_unknown
 
-    attributes["referral_type"] = referral_type
-    attributes["referral"] = field_116
+    attributes["referral_register"] = referral_register
+    attributes["referral_noms"] = referral_noms
+    attributes["referral_org"] = referral_org
 
     attributes["net_income_known"] = net_income_known
     attributes["earnings"] = earnings
@@ -1681,21 +1689,29 @@ private
     false
   end
 
-  def referral_type
-    mapping = {
-      1 => [20, 2, 8],
-      2 => [21, 3, 4, 22],
-      3 => [1, 10, 23],
-      4 => [15, 9, 14, 24, 17],
-      5 => [18, 19],
-      6 => [7],
-      7 => [16],
-    }
+  def referral_register
+    return unless owning_organisation
 
-    mapping.each do |key, values|
-      return key if values.include?(field_116)
+    if owning_organisation.la?
+      field_116
+    else
+      field_130
     end
+  end
 
-    0
+  def referral_noms
+    return unless owning_organisation
+
+    if owning_organisation.la?
+      field_131
+    end
+  end
+
+  def referral_org
+    return unless owning_organisation
+
+    if owning_organisation.la?
+      field_132
+    end
   end
 end
