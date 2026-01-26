@@ -1354,4 +1354,42 @@ RSpec.describe Validations::SoftValidations do
       expect(record).to be_reasonother_might_be_existing_category
     end
   end
+
+  describe "at_least_one_working_situation_is_sickness_and_household_sickness_is_no" do
+    it "returns true if one person has working situation as illness and household sickness is no" do
+      record.illness = 2
+      record.hhmemb = 2
+      record.ecstat1 = 8
+      record.ecstat2 = 1
+
+      expect(record.at_least_one_working_situation_is_sickness_and_household_sickness_is_no?).to be true
+    end
+
+    it "returns true if all people has working situation as illness and household sickness is no" do
+      record.illness = 2
+      record.hhmemb = 2
+      record.ecstat1 = 8
+      record.ecstat2 = 8
+
+      expect(record.at_least_one_working_situation_is_sickness_and_household_sickness_is_no?).to be true
+    end
+
+    it "returns false if household sickness is yes" do
+      record.illness = 1
+      record.hhmemb = 2
+      record.ecstat1 = 8
+      record.ecstat2 = 1
+
+      expect(record.at_least_one_working_situation_is_sickness_and_household_sickness_is_no?).to be false
+    end
+
+    it "returns false if no working situation is illness" do
+      record.illness = 2
+      record.hhmemb = 2
+      record.ecstat1 = 1
+      record.ecstat2 = 1
+
+      expect(record.at_least_one_working_situation_is_sickness_and_household_sickness_is_no?).to be false
+    end
+  end
 end
