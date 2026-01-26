@@ -1,3 +1,4 @@
+# removed in 2026
 class Form::Lettings::Pages::ReferralValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
