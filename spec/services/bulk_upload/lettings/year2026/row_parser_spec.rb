@@ -296,7 +296,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                 :field_13, # tenancycode
                 :field_23, # postcode_full
                 :field_24, # postcode_full
-                :field_25, # postcode_full
+                :field_25, # LA
                 :field_42, # age1
                 :field_43, # sex1
                 :field_46, # ecstat1
@@ -327,7 +327,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             end
           end
 
-          context "when a supported housing log already exists in the db" do
+          context "when a supported housing log already exists in the db" do # TODO: CLDC-4119: Beware! The `postcode_full` method in the `LettingsLog` class may cause issues with these supported housing log duplicate detection tests after postcode is added. See comment on the `postcode_full` method for details.
             let(:attributes) { valid_attributes.merge({ field_4: "2", field_5: "S#{scheme.id}", field_6: location.old_visible_id, field_36: 3, field_122: 0 }) }
 
             before do
