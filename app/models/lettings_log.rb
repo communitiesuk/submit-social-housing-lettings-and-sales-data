@@ -184,19 +184,17 @@ class LettingsLog < Log
   end
 
   def la
-    if location && (!form.start_year_2026_or_later? || (form.start_year_2026_or_later? && !super))
-      location.linked_local_authorities.active(form.start_date).first&.code || location.location_code
-    else
-      super
-    end
+    return super unless location
+    return super if form.start_year_2026_or_later? && super
+
+    location.linked_local_authorities.active(form.start_date).first&.code || location.location_code
   end
 
   def postcode_full
-    if location && (!form.start_year_2026_or_later? || (form.start_year_2026_or_later? && !super))
-      location.postcode
-    else
-      super
-    end
+    return super unless location
+    return super if form.start_year_2026_or_later? && super
+
+    location.postcode
   end
 
   def postcode_full=(postcode)
