@@ -18,8 +18,11 @@ class Form::Lettings::Pages::PersonLeadPartner < ::Form::Page
             "operator" => ">=",
             "operand" => 16,
           },
+          **(2...@person_index).map { |i| ["relat#{i}", { "operator" => "!=", "operand" => "P" }] }.to_h,
         },
-        { "details_known_#{@person_index}" => 0, "age#{@person_index}" => nil },
+        { "details_known_#{@person_index}" => 0,
+          "age#{@person_index}" => nil,
+          **(2...@person_index).map { |i| ["relat#{i}", { "operator" => "!=", "operand" => "P" }] }.to_h },
       ]
     else
       [{ "details_known_#{@person_index}" => 0 }]

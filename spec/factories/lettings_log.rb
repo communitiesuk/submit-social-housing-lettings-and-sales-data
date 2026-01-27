@@ -131,7 +131,7 @@ FactoryBot.define do
       rp_hardship { 0 }
       rp_dontknow { 0 }
       tenancyother { nil }
-      net_income_value_check { nil }
+      net_income_value_check { 1 }
       void_date_value_check { 1 }
       major_repairs_date_value_check { 1 }
       net_income_known { 0 }
