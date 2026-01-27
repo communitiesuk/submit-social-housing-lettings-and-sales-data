@@ -105,5 +105,9 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
     it "has the correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(3)
     end
+
+    it "has the correct hidden_in_check_answers" do
+      expect(question.hidden_in_check_answers).to eq("relat2" => "P", "relat3" => "X")
+    end
   end
 end
