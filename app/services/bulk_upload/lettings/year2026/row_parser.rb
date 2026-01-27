@@ -438,8 +438,8 @@ class BulkUpload::Lettings::Year2026::RowParser
   validate :validate_assigned_to_when_support, on: :after_log
   validate :validate_all_charges_given, on: :after_log
 
-  validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log, unless: -> { supported_housing? }
-  validate :validate_address_fields, on: :after_log, unless: -> { supported_housing? }
+  validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log
+  validate :validate_address_fields, on: :after_log
 
   validate :validate_incomplete_soft_validations, on: :after_log
   validate :validate_nationality, on: :after_log
@@ -536,9 +536,9 @@ class BulkUpload::Lettings::Year2026::RowParser
       "field_9",   # startdate
       "field_10", # startdate
       "field_13", # tenancycode
-      !general_needs? ? :field_6.to_s : nil, # location
-      !supported_housing? ? "field_23" : nil,  # postcode
-      !supported_housing? ? "field_24" : nil,  # postcode
+      !general_needs? ? :field_6.to_s : nil, # location # TODO: CLDC-4119: remove location from hash
+      !supported_housing? ? "field_23" : nil,  # postcode # TODO: CLDC-4119: add postcode to hash for supported housing
+      !supported_housing? ? "field_24" : nil,  # postcode # TODO: CLDC-4119: add postcode to hash for supported housing
       "field_42", # age1
       "field_43",  # sex1
       "field_46",  # ecstat1
@@ -693,8 +693,8 @@ private
       "ecstat1",
       "owning_organisation",
       "tcharge",
-      !supported_housing? ? "postcode_full" : nil,
-      !general_needs? ? "location" : nil,
+      !supported_housing? ? "postcode_full" : nil, # TODO: CLDC-4119: add postcode to duplicate check fields for supported housing
+      !general_needs? ? "location" : nil, # TODO: CLDC-4119: remove location from duplicate check fields
       "tenancycode",
       log.chcharge.present? ? "chcharge" : nil,
     ].compact
@@ -973,11 +973,11 @@ private
       errors.add(:field_9, error_message) # startdate
       errors.add(:field_10, error_message) # startdate
       errors.add(:field_13, error_message) # tenancycode
-      errors.add(:field_6, error_message) if !general_needs? && :field_6.present? # location
+      errors.add(:field_6, error_message) if !general_needs? && :field_6.present? # location # TODO: CLDC-4119: remove location from error fields
       errors.add(:field_5, error_message) if !general_needs? && :field_6.blank? # add to Scheme field as unclear whether log uses New or Old CORE ids
-      errors.add(:field_23, error_message) unless supported_housing? # postcode_full
-      errors.add(:field_24, error_message) unless supported_housing? # postcode_full
-      errors.add(:field_25, error_message) unless supported_housing? # la
+      errors.add(:field_23, error_message) unless supported_housing? # postcode_full # TODO: CLDC-4119: add postcode to error fields for supported housing
+      errors.add(:field_24, error_message) unless supported_housing? # postcode_full # TODO: CLDC-4119: add postcode to error fields for supported housing
+      errors.add(:field_25, error_message) unless supported_housing? # la # TODO: CLDC-4119: add LA to error fields for supported housing
       errors.add(:field_42, error_message) # age1
       errors.add(:field_43, error_message) # sex1
       errors.add(:field_46, error_message) # ecstat1
@@ -1335,29 +1335,26 @@ private
 
     attributes["first_time_property_let_as_social_housing"] = first_time_property_let_as_social_housing
 
-    if general_needs?
-      attributes["uprn_known"] = field_18.present? ? 1 : 0
-      attributes["uprn_confirmed"] = 1 if field_18.present?
-      attributes["skip_update_uprn_confirmed"] = true
-      attributes["uprn"] = field_18
-      attributes["address_line1"] = field_19
-      attributes["address_line1_as_entered"] = field_19
-      attributes["address_line2"] = field_20
-      attributes["address_line2_as_entered"] = field_20
-      attributes["town_or_city"] = field_21
-      attributes["town_or_city_as_entered"] = field_21
-      attributes["county"] = field_22
-      attributes["county_as_entered"] = field_22
-      attributes["postcode_full"] = postcode_full
-      attributes["postcode_full_as_entered"] = postcode_full
-      attributes["postcode_known"] = postcode_known
-      attributes["la"] = field_25
-      attributes["la_as_entered"] = field_25
-
-      attributes["address_line1_input"] = address_line1_input
-      attributes["postcode_full_input"] = postcode_full
-      attributes["select_best_address_match"] = true if field_18.blank?
-    end
+    attributes["uprn_known"] = field_18.present? ? 1 : 0
+    attributes["uprn_confirmed"] = 1 if field_18.present?
+    attributes["skip_update_uprn_confirmed"] = true
+    attributes["uprn"] = field_18
+    attributes["address_line1"] = field_19
+    attributes["address_line1_as_entered"] = field_19
+    attributes["address_line2"] = field_20
+    attributes["address_line2_as_entered"] = field_20
+    attributes["town_or_city"] = field_21
+    attributes["town_or_city_as_entered"] = field_21
+    attributes["county"] = field_22
+    attributes["county_as_entered"] = field_22
+    attributes["postcode_full"] = postcode_full
+    attributes["postcode_full_as_entered"] = postcode_full
+    attributes["postcode_known"] = postcode_known
+    attributes["la"] = field_25
+    attributes["la_as_entered"] = field_25
+    attributes["address_line1_input"] = address_line1_input
+    attributes["postcode_full_input"] = postcode_full
+    attributes["select_best_address_match"] = true if field_18.blank?
 
     attributes
   end
