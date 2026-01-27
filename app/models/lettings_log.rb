@@ -190,7 +190,8 @@ class LettingsLog < Log
     location.linked_local_authorities.active(form.start_date).first&.code || location.location_code
   end
 
-  def postcode_full # TODO: CLDC-4119: Beware! This method may cause issues when testing supported housing log duplicate detection after postcode is added, as it can return `location.postcode` instead of the actual `postcode_full` stored on the log record (`super`). If this happens, investigate why it isn't returning `super`, as it should when `form.start_year_2026_or_later? && super`.
+  # TODO: CLDC-4119: Beware! This method may cause issues when testing supported housing log duplicate detection after postcode is added, as it can return `location.postcode` instead of the actual `postcode_full` stored on the log record (`super`). If this happens, investigate why it isn't returning `super`, as it should when `form.start_year_2026_or_later? && super`.
+  def postcode_full
     return super unless location
     return super if form.start_year_2026_or_later? && super
 
