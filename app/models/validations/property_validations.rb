@@ -57,6 +57,7 @@ module Validations::PropertyValidations
     return unless location_postcode
 
     if postcode != location_postcode
+      record.errors.add :location_id, I18n.t("validations.lettings.property.location_id.postcode_does_not_match_scheme_location_postcode")
       record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.postcode_does_not_match_scheme_location_postcode")
       record.errors.add :postcode_full, I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")
     end
