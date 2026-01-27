@@ -75,6 +75,10 @@ module DerivedVariables::LettingsLogVariables
       self.beds = nil
     end
 
+    if form.start_year_2026_or_later?
+      infer_at_most_one_relationship!
+    end
+
     clear_child_constraints_for_age_changes!
     child_under_16_constraints!
 
@@ -293,6 +297,23 @@ private
       # note if age is changed from 10 to 15 we will clear it but the inference will set it back immediately after, see child_under_16_constraints!
       self["relat#{idx}"] = nil if self["relat#{idx}"] == "X" && age_changed_from_below_16(idx) && form.start_year_2026_or_later?
     end
+  end
+
+  def infer_at_most_one_relationship!
+    new_partner_numbers = partner_numbers.select { |i| public_send("relat#{i}_changed?") }
+    if new_partner_numbers.any?
+      infer_only_partner!(new_partner_numbers.first)
+    elsif partner_numbers.any?
+      infer_only_partner!(partner_numbers.first)
+    end
+  end
+
+  def infer_only_partner!(partner_number)
+    other_partner_numbers = partner_numbers.reject { |x| x == partner_number }
+    other_partner_numbers.each { |i| self["relat#{i}"] = "X" }
+
+    unanswered_partner_questions = (2..8).select { |i| public_send("relat#{i}").nil? }
+    unanswered_partner_questions.each { |i| self["relat#{i}"] = "X" }
   end
 
   def household_type
