@@ -103,7 +103,7 @@ module Validations::PropertyValidations
       record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.la_not_valid_for_date", la: la.name)
       record.errors.add :uprn_selection, I18n.t("validations.lettings.property.uprn_selection.la_not_valid_for_date", la: la.name)
       record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: la.name)
-    elsif record.is_supported_housing?
+    elsif record.is_supported_housing? # TODO: revisit
       record.errors.add :location_id, I18n.t("validations.lettings.property.location_id.la_not_valid_for_date", la: la.name)
       record.errors.add :scheme_id, I18n.t("validations.lettings.property.scheme_id.la_not_valid_for_date", la: la.name)
       record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: la.name)

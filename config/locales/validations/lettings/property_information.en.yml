@@ -40,6 +40,7 @@ en:
         location_id:
           not_in_england: "It looks like you have selected a location outside of England. Only create logs for lettings in England."
           la_not_valid_for_date: "%{la} does not exist on the tenancy start date, due to a change in local authority names and boundaries. Please enter the local authority name in use on the tenancy start date"
+          postcode_does_not_match_scheme_location_postcode: "The postcode in the address does not match the postcode for the location in the scheme. Please review your answers to the address or UPRN question (whichever you answered) and the location question."
         startdate:
           postcode_not_in_england: "It looks like you have an entered a postcode outside of England. Only create logs for lettings in England."
           address_not_in_england: "It looks like you have entered an address outside of England. Only create logs for lettings in England."
