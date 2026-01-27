@@ -143,4 +143,10 @@ module Exports::SalesLogExportConstants
   (2..6).each do |index|
     EXPORT_FIELDS << "RELAT#{index}"
   end
+
+  POST_2026_EXPORT_FIELDS = Set[]
+
+  (1..6).each do |index|
+    POST_2026_EXPORT_FIELDS << "SEXRAB#{index}"
+  end
 end
