@@ -137,7 +137,7 @@ class BulkUpload::Sales::Year2026::RowParser
     field_121: "What are the total monthly leasehold charges for the property?",
 
     field_122: "Buyer 1's sex, as registered at birth",
-    field_123: "Buyer 2's sex, as registered at birth",
+    field_123: "Buyer/Person 2's sex, as registered at birth",
     field_124: "Person 3's sex, as registered at birth",
     field_125: "Person 4's sex, as registered at birth",
     field_126: "Person 5's sex, as registered at birth",
