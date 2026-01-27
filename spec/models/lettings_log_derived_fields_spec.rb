@@ -1588,4 +1588,156 @@ RSpec.describe LettingsLog, type: :model do
       end
     end
   end
+
+  describe "#infer_at_most_one_relationship!" do
+    context "when 2025", metadata: { year: 25 } do
+      before do
+        Timecop.freeze(Time.zone.local(2025, 5, 10))
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
+      context "when there are no existing relationships" do
+        let(:log) { create(:lettings_log, :completed, relat2: "X", relat3: "X", relat4: "R") }
+
+        it "does not infer no to any relationship answers when a new relationship is added" do
+          log.relat2 = "P"
+          expect { log.set_derived_fields! }.to not_change(log, :relat3)
+          expect { log.set_derived_fields! }.to not_change(log, :relat4)
+          expect { log.set_derived_fields! }.to not_change(log, :relat5)
+        end
+      end
+
+      context "when there is an existing relationship" do
+        let(:log) { create(:lettings_log, :completed, relat2: "X", relat3: "P", relat4: "R", relat5: "X") }
+
+        it "does not infer no to any relationship answers when a new relationship is added" do
+          log.relat2 = "P"
+          expect { log.set_derived_fields! }.to not_change(log, :relat3)
+          expect { log.set_derived_fields! }.to not_change(log, :relat4)
+          expect { log.set_derived_fields! }.to not_change(log, :relat5)
+          expect { log.set_derived_fields! }.to not_change(log, :relat6)
+        end
+      end
+
+      context "when more than one relationship is set" do
+        let(:log) { create(:lettings_log, :completed, relat2: "X", relat3: "X", relat4: "R", relat5: "X") }
+
+        before do
+          log.relat3 = "P"
+          log.relat2 = "P"
+        end
+
+        it "does not infer no to any relationship answers" do
+          expect { log.set_derived_fields! }.to not_change(log, :relat2)
+          expect { log.set_derived_fields! }.to not_change(log, :relat3)
+          expect { log.set_derived_fields! }.to not_change(log, :relat4)
+          expect { log.set_derived_fields! }.to not_change(log, :relat5)
+          expect { log.set_derived_fields! }.to not_change(log, :relat6)
+        end
+      end
+    end
+
+    context "when 2026", metadata: { year: 26 } do
+      before do
+        Timecop.freeze(Time.zone.local(2026, 5, 10))
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
+      context "when there are no existing relationships" do
+        let(:log) { create(:lettings_log, :completed, relat2: "X", relat3: "X", relat4: "R") }
+
+        context "and a new relationship is added" do
+          before do
+            log.relat2 = "P"
+          end
+
+          it "infers no to unanswered questions" do
+            expect { log.set_derived_fields! }.to change(log, :relat5).to "X"
+          end
+
+          it "does not change relationship answers of no or prefer not to say" do
+            expect { log.set_derived_fields! }.to not_change(log, :relat3)
+            expect { log.set_derived_fields! }.to not_change(log, :relat4)
+          end
+        end
+
+        it "does not change other relationship values if no is changed to prefer not to say" do
+          log.relat2 = "R"
+          expect { log.set_derived_fields! }.to not_change(log, :relat3)
+          expect { log.set_derived_fields! }.to not_change(log, :relat4)
+        end
+
+        it "does not change other relationship values if prefer not to say is changed to no" do
+          log.relat4 = "X"
+          expect { log.set_derived_fields! }.to not_change(log, :relat2)
+          expect { log.set_derived_fields! }.to not_change(log, :relat3)
+        end
+      end
+
+      context "when there is an existing relationship" do
+        let(:log) { create(:lettings_log, :completed, relat2: "X", relat3: "P", relat4: "R", relat5: "X") }
+
+        context "and a new relationship is added" do
+          before do
+            log.relat6 = nil
+            log.relat2 = "P"
+          end
+
+          it "infers no to the previous relationship" do
+            expect { log.set_derived_fields! }.to change(log, :relat3).to "X"
+          end
+
+          it "infers no to unanswered questions" do
+            expect { log.set_derived_fields! }.to change(log, :relat6).to "X"
+          end
+
+          it "does not change relationship answers of no or prefer not to say" do
+            expect { log.set_derived_fields! }.to not_change(log, :relat5)
+            expect { log.set_derived_fields! }.to not_change(log, :relat4)
+          end
+        end
+
+        it "does not change other relationship values if the partner is removed" do
+          log.relat3 = "X"
+          expect { log.set_derived_fields! }.to not_change(log, :relat2)
+          expect { log.set_derived_fields! }.to not_change(log, :relat4)
+          expect { log.set_derived_fields! }.to not_change(log, :relat5)
+          expect { log.set_derived_fields! }.to not_change(log, :relat6)
+        end
+      end
+
+      context "when more than one relationship is set" do
+        let(:log) { create(:lettings_log, :completed, hhmemb: 6, relat2: "X", relat3: "X", relat4: "R", relat5: "X") }
+
+        before do
+          log.relat3 = "P"
+          log.relat2 = "P"
+        end
+
+        it "keeps the lower numbered relationship and infers the higher numbered one to false" do
+          expect { log.set_derived_fields! }.to change(log, :relat3).to "X"
+          expect { log.set_derived_fields! }.to not_change(log, :relat2)
+        end
+
+        it "infers no to unanswered questions" do
+          expect { log.set_derived_fields! }.to change(log, :relat6).to "X"
+        end
+
+        it "does not change relationship answers of no or prefer not to say" do
+          expect { log.set_derived_fields! }.to not_change(log, :relat5)
+          expect { log.set_derived_fields! }.to not_change(log, :relat4)
+        end
+      end
+    end
+  end
 end
