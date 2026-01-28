@@ -1,0 +1,15 @@
+# frozen_string_literal: true
+
+class Form::Lettings::Pages::LeadTenantSexRegisteredAtBirth1 < ::Form::Page
+  def initialize(id, hsh, subsection)
+    super
+    @id = "lead_tenant_sex_registered_at_birth"
+    @depends_on = [{ "declaration" => 1 }]
+  end
+
+  def questions
+    @questions ||= [
+      Form::Sales::Questions::SexRegisteredAtBirth1.new(nil, nil, self),
+    ]
+  end
+end
