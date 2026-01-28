@@ -25,7 +25,7 @@ RSpec.describe Form::Lettings::Pages::AddressSearch, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{ "is_supported_housing?" => false, "manual_address_entry_selected" => false }])
+    expect(page.depends_on).to eq([{ "is_address_asked?" => true, "manual_address_entry_selected" => false }])
   end
 
   it "has the correct question number" do
