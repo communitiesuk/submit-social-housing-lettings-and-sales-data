@@ -1529,9 +1529,10 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                        }}]}', headers: {})
                   end
 
-                  it "adds an appropriate error to the UPRN field" do
+                  it "adds an appropriate error to the UPRN and location fields" do
                     parser.valid?
                     expect(parser.errors[:field_18]).to eql([I18n.t("validations.lettings.property.uprn.postcode_does_not_match_scheme_location_postcode")])
+                    expect(parser.errors[:field_6]).to eql([I18n.t("validations.lettings.property.location_id.postcode_does_not_match_scheme_location_postcode")])
                   end
                 end
               end
@@ -1648,11 +1649,12 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                   context "and the postcode entered manually does not match the postcode associated with the location" do
                     let(:attributes) { base_attributes.merge({ field_18: nil, field_19: "address line 1", field_21: "town or city", field_23: "BB2", field_24: "2BB" }) }
 
-                    it "adds appropriate errors to postcode and LA fields" do
+                    it "adds appropriate errors to the postcode, LA and location fields" do
                       parser.valid?
                       expect(parser.errors[:field_23]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
                       expect(parser.errors[:field_24]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
                       expect(parser.errors[:field_25]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
+                      expect(parser.errors[:field_6]).to eql([I18n.t("validations.lettings.property.location_id.postcode_does_not_match_scheme_location_postcode")])
                     end
                   end
                 end
@@ -1683,11 +1685,12 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                   context "and the postcode entered manually does not match the postcode associated with the location" do
                     let(:attributes) { base_attributes.merge({ field_18: nil, field_19: "address line 1", field_21: "town or city", field_23: "BB2", field_24: "2BB" }) }
 
-                    it "adds appropriate errors to postcode and LA fields" do
+                    it "adds appropriate errors to the postcode, LA and location fields" do
                       parser.valid?
                       expect(parser.errors[:field_23]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
                       expect(parser.errors[:field_24]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
                       expect(parser.errors[:field_25]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
+                      expect(parser.errors[:field_6]).to eql([I18n.t("validations.lettings.property.location_id.postcode_does_not_match_scheme_location_postcode")])
                     end
                   end
                 end
@@ -1719,11 +1722,12 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                   context "and the postcode entered manually does not match the postcode associated with the location" do
                     let(:attributes) { base_attributes.merge({ field_18: nil, field_19: "address line 1", field_21: "town or city", field_23: "BB2", field_24: "2BB" }) }
 
-                    it "adds appropriate errors to postcode and LA fields" do
+                    it "adds appropriate errors to the postcode, LA and location fields" do
                       parser.valid?
                       expect(parser.errors[:field_23]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
                       expect(parser.errors[:field_24]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
                       expect(parser.errors[:field_25]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
+                      expect(parser.errors[:field_6]).to eql([I18n.t("validations.lettings.property.location_id.postcode_does_not_match_scheme_location_postcode")])
                     end
                   end
                 end
