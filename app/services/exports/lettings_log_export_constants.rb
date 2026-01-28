@@ -203,4 +203,9 @@ module Exports::LettingsLogExportConstants
   PRE_2026_EXPORT_FIELDS = Set[
     "builtype"
   ]
+
+  POST_2026_EXPORT_FIELDS = Set[]
+  (1..8).each do |index|
+    POST_2026_EXPORT_FIELDS << "sexrab#{index}"
+  end
 end
