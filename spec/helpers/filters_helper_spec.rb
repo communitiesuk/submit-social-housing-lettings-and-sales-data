@@ -478,135 +478,99 @@ RSpec.describe FiltersHelper do
   end
 
   describe "#collection_year_options" do
-    context "with 23/24 as the current collection year" do
+    context "and in crossover period" do
       before do
-        allow(Time).to receive(:now).and_return(Time.zone.local(2023, 5, 1))
+        allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(true)
       end
 
-      context "and in crossover period" do
-        before do
-          allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(true)
-        end
-
-        it "has the correct options" do
-          expect(collection_year_options).to eq(
-            {
-              "2023" => "2023 to 2024", "2022" => "2022 to 2023", "2021" => "2021 to 2022"
-            },
-          )
-        end
-      end
-
-      context "and not in crossover period" do
-        before do
-          allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(false)
-        end
-
-        it "has the correct options" do
-          expect(collection_year_options).to eq(
-            {
-              "2023" => "2023 to 2024", "2022" => "2022 to 2023"
-            },
-          )
-        end
+      it "has the correct options" do
+        expect(collection_year_options).to eq(
+          {
+            current_collection_start_year.to_s => "#{current_collection_start_year} to #{current_collection_end_year}",
+            previous_collection_start_year.to_s => "#{previous_collection_start_year} to #{previous_collection_end_year}",
+            archived_collection_start_year.to_s => "#{archived_collection_start_year} to #{archived_collection_end_year}",
+          },
+        )
       end
     end
 
-    context "with 24/25 as the current collection year" do
+    context "and not in crossover period" do
       before do
-        allow(Time).to receive(:now).and_return(Time.zone.local(2024, 5, 1))
+        allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(false)
       end
 
-      context "and in crossover period" do
-        before do
-          allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(true)
-        end
-
-        it "has the correct options" do
-          expect(collection_year_options).to eq(
-            {
-              "2024" => "2024 to 2025", "2023" => "2023 to 2024", "2022" => "2022 to 2023"
-            },
-          )
-        end
+      it "has the correct options" do
+        expect(collection_year_options).to eq(
+          {
+            current_collection_start_year.to_s => "#{current_collection_start_year} to #{current_collection_end_year}",
+            previous_collection_start_year.to_s => "#{previous_collection_start_year} to #{previous_collection_end_year}",
+          },
+        )
       end
 
-      context "and not in crossover period" do
+      context "with future form use turned on" do
         before do
-          allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(false)
+          allow(FeatureToggle).to receive(:allow_future_form_use?).and_return(true)
         end
 
-        it "has the correct options" do
+        it "includes next year in the options" do
           expect(collection_year_options).to eq(
             {
-              "2024" => "2024 to 2025", "2023" => "2023 to 2024"
+              next_collection_start_year.to_s => "#{next_collection_start_year} to #{next_collection_end_year}",
+              current_collection_start_year.to_s => "#{current_collection_start_year} to #{current_collection_end_year}",
+              previous_collection_start_year.to_s => "#{previous_collection_start_year} to #{previous_collection_end_year}",
             },
           )
-        end
-
-        context "with future form use turned on" do
-          before do
-            allow(FeatureToggle).to receive(:allow_future_form_use?).and_return(true)
-          end
-
-          it "includes next year in the options" do
-            expect(collection_year_options).to eq(
-              {
-                "2025" => "2025 to 2026", "2024" => "2024 to 2025", "2023" => "2023 to 2024"
-              },
-            )
-          end
         end
       end
     end
   end
 
   describe "#collection_year_radio_options" do
-    context "with 23/24 as the current collection year" do
+    context "and in crossover period" do
       before do
-        allow(Time).to receive(:now).and_return(Time.zone.local(2023, 5, 1))
-      end
-
-      context "and in crossover period" do
-        before do
-          allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(true)
-        end
-
-        it "has the correct options" do
-          expect(collection_year_radio_options).to eq(
-            {
-              "2023" => { label: "2023 to 2024" }, "2022" => { label: "2022 to 2023" }, "2021" => { label: "2021 to 2022" }
-            },
-          )
-        end
-      end
-
-      context "and not in crossover period" do
-        before do
-          allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(false)
-        end
-
-        it "has the correct options" do
-          expect(collection_year_radio_options).to eq(
-            {
-              "2023" => { label: "2023 to 2024" }, "2022" => { label: "2022 to 2023" }
-            },
-          )
-        end
-      end
-    end
-
-    context "with 24/25 as the current collection year" do
-      before do
-        allow(Time).to receive(:now).and_return(Time.zone.local(2024, 5, 1))
+        allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(true)
       end
 
       it "has the correct options" do
         expect(collection_year_radio_options).to eq(
           {
-            "2024" => { label: "2024 to 2025" }, "2023" => { label: "2023 to 2024" }, "2022" => { label: "2022 to 2023" }
+            current_collection_start_year.to_s => { label: "#{current_collection_start_year} to #{current_collection_end_year}" },
+            previous_collection_start_year.to_s => { label: "#{previous_collection_start_year} to #{previous_collection_end_year}" },
+            archived_collection_start_year.to_s => { label: "#{archived_collection_start_year} to #{archived_collection_end_year}" },
           },
         )
+      end
+    end
+
+    context "and not in crossover period" do
+      before do
+        allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(false)
+      end
+
+      it "has the correct options" do
+        expect(collection_year_radio_options).to eq(
+          {
+            current_collection_start_year.to_s => { label: "#{current_collection_start_year} to #{current_collection_end_year}" },
+            previous_collection_start_year.to_s => { label: "#{previous_collection_start_year} to #{previous_collection_end_year}" },
+          },
+        )
+      end
+
+      context "with future form use turned on" do
+        before do
+          allow(FeatureToggle).to receive(:allow_future_form_use?).and_return(true)
+        end
+
+        it "includes next year in the options" do
+          expect(collection_year_radio_options).to eq(
+            {
+              next_collection_start_year.to_s => { label: "#{next_collection_start_year} to #{next_collection_end_year}" },
+              current_collection_start_year.to_s => { label: "#{current_collection_start_year} to #{current_collection_end_year}" },
+              previous_collection_start_year.to_s => { label: "#{previous_collection_start_year} to #{previous_collection_end_year}" },
+            },
+          )
+        end
       end
     end
   end

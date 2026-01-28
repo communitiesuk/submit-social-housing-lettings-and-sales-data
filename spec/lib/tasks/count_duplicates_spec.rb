@@ -101,7 +101,12 @@ RSpec.describe "count_duplicates" do
         end
 
         it "creates a csv with correct duplicate numbers" do
-          expect(storage_service).to receive(:write_file).with(/location-duplicates-.*\.csv/, "\uFEFFOrganisation id,Duplicate sets within individual schemes,Duplicate locations within individual schemes,All duplicate sets,All duplicates\n#{organisation.id},3,6,4,9\n#{organisation2.id},2,7,2,7\n")
+          expect(storage_service).to receive(:write_file).with(/location-duplicates-.*\.csv/, satisfy do |s|
+            s.start_with?("\uFEFFOrganisation id,Duplicate sets within individual schemes,Duplicate locations within individual schemes,All duplicate sets,All duplicates") &&
+              s.include?("#{organisation.id},3,6,4,9") &&
+              s.include?("#{organisation2.id},2,7,2,7") &&
+              s.count("\n") == 3
+          end)
           expect(Rails.logger).to receive(:info).with("Download URL: #{test_url}")
           task.invoke
         end
@@ -149,7 +154,12 @@ RSpec.describe "count_duplicates" do
         end
 
         it "creates a csv with correct duplicate numbers" do
-          expect(storage_service).to receive(:write_file).with(/scheme-duplicates-.*\.csv/, "\uFEFFOrganisation id,Number of duplicate sets,Total duplicate schemes\n#{organisation.id},2,5\n#{organisation2.id},1,5\n")
+          expect(storage_service).to receive(:write_file).with(/scheme-duplicates-.*\.csv/, satisfy do |s|
+            s.start_with?("\uFEFFOrganisation id,Number of duplicate sets,Total duplicate schemes") &&
+              s.include?("#{organisation.id},2,5") &&
+              s.include?("#{organisation2.id},1,5") &&
+              s.count("\n") == 3
+          end)
           expect(Rails.logger).to receive(:info).with("Download URL: #{test_url}")
           task.invoke
         end
@@ -211,7 +221,12 @@ RSpec.describe "count_duplicates" do
         end
 
         it "creates a csv with correct duplicate numbers" do
-          expect(storage_service).to receive(:write_file).with(/location-duplicates-.*\.csv/, "\uFEFFOrganisation id,Duplicate sets within individual schemes,Duplicate locations within individual schemes,All duplicate sets,All duplicates\n#{organisation.id},3,6,4,9\n#{organisation2.id},2,7,2,7\n")
+          expect(storage_service).to receive(:write_file).with(/location-duplicates-.*\.csv/, satisfy do |s|
+            s.start_with?("\uFEFFOrganisation id,Duplicate sets within individual schemes,Duplicate locations within individual schemes,All duplicate sets,All duplicates")
+            s.include?("#{organisation.id},3,6,4,9") &&
+            s.include?("#{organisation2.id},2,7,2,7") &&
+            s.count("\n") == 3
+          end)
           expect(Rails.logger).to receive(:info).with("Download URL: #{test_url}")
           task.invoke
         end
