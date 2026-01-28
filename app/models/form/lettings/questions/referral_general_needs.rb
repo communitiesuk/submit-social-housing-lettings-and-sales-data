@@ -1,3 +1,4 @@
+# removed in 2025
 class Form::Lettings::Questions::ReferralGeneralNeeds < ::Form::Question
   def initialize(id, hsh, page)
     super

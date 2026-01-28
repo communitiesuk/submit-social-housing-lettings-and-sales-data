@@ -4,8 +4,8 @@ class BulkUpload::Lettings::Year2026::CsvParser
   include CollectionTimeHelper
 
   # TODO: CLDC-4162: Update when 2026 format is known
-  FIELDS = 129
-  MAX_COLUMNS = 130
+  FIELDS = 132
+  MAX_COLUMNS = 133
   FORM_YEAR = 2026
 
   attr_reader :path
@@ -28,7 +28,7 @@ class BulkUpload::Lettings::Year2026::CsvParser
 
   def cols
     # TODO: CLDC-4162: Update when 2026 format is known
-    @cols ||= ("A".."DZ").to_a
+    @cols ||= ("A".."EC").to_a
   end
 
   def row_parsers

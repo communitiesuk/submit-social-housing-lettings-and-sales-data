@@ -1,10 +1,9 @@
-# added in 2025
-# removed in 2026
-class Form::Lettings::Questions::ReferralJustice < ::Form::Question
+# added in 2026
+class Form::Lettings::Questions::ReferralRegister < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "referral"
-    @copy_key = "lettings.household_situation.referral.justice"
+    @id = "referral_register"
+    @copy_key = "lettings.household_situation.referral.register"
     @type = "radio"
     @check_answers_card_number = 0
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
@@ -12,11 +11,11 @@ class Form::Lettings::Questions::ReferralJustice < ::Form::Question
 
   def answer_options
     {
-      "18" => {
-        "value" => "With a custodial sentence",
+      "1" => {
+        "value" => "Answer A",
       },
-      "19" => {
-        "value" => "No custodial sentence",
+      "2" => {
+        "value" => "Answer B",
       },
     }.freeze
   end
