@@ -671,8 +671,8 @@ RSpec.describe LettingsLog do
             Timecop.freeze(startdate)
             Singleton.__init__(FormHandler)
             lettings_log.update_columns( # We can't call `.update!` as validations prevent this invalid state from being persisted.
-              startdate: startdate,
-              postcode_full: "BB2 2BB"
+              startdate,
+              postcode_full: "BB2 2BB",
             )
             lettings_log.reload
           end
