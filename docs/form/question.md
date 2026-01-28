@@ -6,7 +6,7 @@ nav_order: 4
 
 # Question
 
-*Updated for 2026.*
+_Updated for 2026._
 
 Questions are under the page level of the form definition.
 

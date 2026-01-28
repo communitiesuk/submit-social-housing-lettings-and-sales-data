@@ -90,7 +90,7 @@ Copy the entry for an existing question and substitute in the text for your new 
 
 The fields that get exported in CSVs and XMLs are defined in `app/services/exports/sales_log_export_constants.rb`.
 
-If there is not a set for POST_<year>_EXPORT_FIELDS, create one. Add your new field to the current year's set.
+If there is not a set for POST\_<year>\_EXPORT_FIELDS, create one. Add your new field to the current year's set.
 
 You may also have to update the `sales_log_export_service.rb` to correctly filter the year-specific fields.
 
@@ -112,7 +112,7 @@ You will need to add a new `field_XXX` for the new field. In total, update the f
 
 You may also have to add some additional validation rules in this file.
 
-Validation for ensuring that the value uploaded is one of the permitted options is handled automatically, using the question class as the original source of truth.  
+Validation for ensuring that the value uploaded is one of the permitted options is handled automatically, using the question class as the original source of truth.
 
 ### 9. Update unit tests
 

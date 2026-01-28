@@ -20,9 +20,9 @@ We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage NodeJS version
 
 ## Instructions for Windows users
 
-If you are working on a windows machine, you will want to install the tools on [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) as some of them are not native to windows. The instructions in these docs assume a Debian-based distribution, such as Ubuntu. 
+If you are working on a windows machine, you will want to install the tools on [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) as some of them are not native to windows. The instructions in these docs assume a Debian-based distribution, such as Ubuntu.
 
-*You will see a significant performance degradation if you are running the server on WSL whilst the files are on windows.* Thus, make sure to clone the repository into your WSL instance.
+_You will see a significant performance degradation if you are running the server on WSL whilst the files are on windows._ Thus, make sure to clone the repository into your WSL instance.
 
 Some windows IDEs, such as [VSCode](https://code.visualstudio.com/docs/remote/wsl) and [RubyMine](jetbrains.com/help/ruby/remote-development-starting-page.html#run_in_wsl_ij) can connect you to WSL, which will allow you to develop as though the files were on the local windows filesystem. Ignore any reccommendations that you might see suggesting you keep the files on windows - our experience is that both tests and page loads are much slower when the files are on windows.
 
