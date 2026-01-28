@@ -50,8 +50,13 @@ module Validations::PropertyValidations
       error_message = I18n.t("validations.lettings.property.postcode_full.invalid")
       record.errors.add :postcode_full, :wrong_format, message: error_message
     end
+  end
 
+  def validate_property_and_location_postcodes_match(record)
     return unless record.form.start_year_2026_or_later?
+
+    postcode = record.postcode_full
+    return unless postcode
 
     location_postcode = record.location&.postcode
     return unless location_postcode
@@ -79,7 +84,7 @@ module Validations::PropertyValidations
       else
         record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.postcode_not_in_england")
       end
-    elsif record.is_supported_housing?
+    elsif record.is_supported_housing? # TODO: revisit
       record.errors.add :location_id, I18n.t("validations.lettings.property.location_id.not_in_england")
       record.errors.add :scheme_id, I18n.t("validations.lettings.property.scheme_id.not_in_england")
       record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.location_not_in_england")
