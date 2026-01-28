@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Form::Lettings::Pages::LeadTenantSexRegisteredAtBirth1 < ::Form::Page
+class Form::Lettings::Pages::LeadTenantSexRegisteredAtBirth < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "lead_tenant_sex_registered_at_birth"
