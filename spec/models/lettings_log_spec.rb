@@ -664,6 +664,66 @@ RSpec.describe LettingsLog do
             expect(lettings_log.la).to eq("E01231231")
           end
         end
+
+        context "and the log has different postcodes set on the location and the log itself" do
+          before do
+            location.update!(postcode: "AA1 1AA")
+            Timecop.freeze(startdate)
+            Singleton.__init__(FormHandler)
+            lettings_log.update_columns( # We can't call `.update!` as validations prevent this invalid state from being persisted.
+              startdate: startdate,
+              postcode_full: "BB2 2BB"
+            )
+            lettings_log.reload
+          end
+
+          after do
+            Timecop.unfreeze
+            Singleton.__init__(FormHandler)
+          end
+
+          context "with 25/26" do
+            let(:startdate) { Time.zone.local(2025, 4, 2) }
+
+            it "returns the postcode from the location" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.postcode_full).to eq("AA1 1AA")
+            end
+          end
+
+          context "with 26/27" do
+            let(:startdate) { Time.zone.local(2026, 4, 2) }
+
+            it "returns the postcode from the log itself" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.postcode_full).to eq("BB2 2BB")
+            end
+          end
+        end
+
+        context "and the log only has a postcode set on the location" do
+          before do
+            location.update!(postcode: "AA1 1AA")
+            Timecop.freeze(startdate)
+            Singleton.__init__(FormHandler)
+            lettings_log.update!(startdate:)
+            lettings_log.reload
+          end
+
+          after do
+            Timecop.unfreeze
+            Singleton.__init__(FormHandler)
+          end
+
+          context "with 26/27" do
+            let(:startdate) { Time.zone.local(2026, 4, 2) }
+
+            it "returns the LA from the location" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.postcode_full).to eq("AA1 1AA")
+            end
+          end
+        end
       end
 
       context "and not renewal" do
