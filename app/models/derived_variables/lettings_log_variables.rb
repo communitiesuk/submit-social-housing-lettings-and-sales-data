@@ -86,7 +86,7 @@ module DerivedVariables::LettingsLogVariables
     end
 
     set_housingneeds_fields if housingneeds?
-    if form.start_year_2025_or_later? && is_general_needs?
+    if form.start_year_2026_or_later? || (form.start_year_2025_or_later? && is_general_needs?)
       if changed_to_newbuild? && uprn.nil?
         self.manual_address_entry_selected = true
       end
