@@ -38,5 +38,9 @@ class Form::Lettings::Questions::ReferralRegister < ::Form::Question
     end
   end
 
+  def derived?(log)
+    log.is_renewal?
+  end
+
   QUESTION_NUMBER_FROM_YEAR = { 2026 => 84 }.freeze
 end
