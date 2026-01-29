@@ -28,11 +28,20 @@ class Form::Lettings::Questions::ReferralRegister < ::Form::Question
       }.freeze
     else
       {
-        "1" => {
-          "value" => "Answer A",
+        "5" => {
+          "value" => "Renewal to the same tenant in the same property",
         },
-        "2" => {
-          "value" => "Answer B",
+        "6" => {
+          "value" => "From a local authority housing register (waiting list) or a register with local authority involvement",
+        },
+        "7" => {
+          "value" => "From a housing register (waiting list) with no local authority involvement",
+        },
+        "8" => {
+          "value" => "Tenant applied directly (not via a nomination or waiting list)",
+        },
+        "9" => {
+          "value" => "Don't know",
         },
       }.freeze
     end
