@@ -378,8 +378,12 @@ class LettingsLog < Log
   end
 
   def is_internal_transfer?
-    # 1: Internal Transfer
-    referral == 1
+    if form.start_year_2026_or_later?
+      referral_register == 2
+    else
+      # 1: Internal Transfer
+      referral == 1
+    end
   end
 
   def is_from_prp_only_housing_register_or_waiting_list?
