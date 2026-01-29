@@ -109,8 +109,10 @@ RSpec.describe Form::Lettings::Subsections::HouseholdSituation, type: :model do
           allocation_system
           referral_register_la
           referral_register_prp
-          referral_noms
-          referral_org
+          referral_noms_la_hr
+          referral_noms_hr
+          referral_org_nominated
+          referral_org_directly_referred
         ],
       )
     end
