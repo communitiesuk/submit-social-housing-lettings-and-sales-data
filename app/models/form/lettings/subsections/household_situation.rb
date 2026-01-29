@@ -30,8 +30,10 @@ class Form::Lettings::Subsections::HouseholdSituation < ::Form::Subsection
       [
         Form::Lettings::Pages::ReferralRegisterLa.new(nil, nil, self),
         Form::Lettings::Pages::ReferralRegisterPrp.new(nil, nil, self),
-        Form::Lettings::Pages::ReferralNoms.new(nil, nil, self),
-        Form::Lettings::Pages::ReferralOrg.new(nil, nil, self),
+        Form::Lettings::Pages::ReferralNomsLaHr.new(nil, nil, self),
+        Form::Lettings::Pages::ReferralNomsHr.new(nil, nil, self),
+        Form::Lettings::Pages::ReferralOrgNominated.new(nil, nil, self),
+        Form::Lettings::Pages::ReferralOrgDirectlyReferred.new(nil, nil, self),
       ]
     elsif form.start_year_2025_or_later?
       [

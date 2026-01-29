@@ -781,6 +781,22 @@ class LettingsLog < Log
     form.start_year_2026_or_later? || !is_supported_housing?
   end
 
+  def referral_is_from_local_authority_housing_register?
+    referral_register == 6
+  end
+
+  def referral_is_from_housing_register?
+    referral_register == 7
+  end
+
+  def referral_is_nominated_by_local_authority?
+    referral_is_from_local_authority_housing_register? && referral_noms == 1
+  end
+
+  def referral_is_directly_referred?
+    referral_is_from_housing_register? && referral_noms == 7
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!
