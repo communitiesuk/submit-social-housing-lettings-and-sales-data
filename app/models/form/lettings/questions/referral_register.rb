@@ -1,23 +1,41 @@
 # added in 2026
 class Form::Lettings::Questions::ReferralRegister < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, page, provider_type)
+    super(id, hsh, page)
     @id = "referral_register"
     @copy_key = "lettings.household_situation.referral.register"
     @type = "radio"
     @check_answers_card_number = 0
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @provider_type = provider_type
   end
 
   def answer_options
-    {
-      "1" => {
-        "value" => "Answer A",
-      },
-      "2" => {
-        "value" => "Answer B",
-      },
-    }.freeze
+    if @provider_type == :la
+      {
+        "1" => {
+          "value" => "Renewal to the same tenant in the same property",
+        },
+        "2" => {
+          "value" => "Internal transfer from another property owned by the same local authority - for existing social tenants only",
+        },
+        "3" => {
+          "value" => "From a housing register (waiting list)",
+        },
+        "4" => {
+          "value" => "Tenant applied directly (not via a nomination or housing register)",
+        },
+      }.freeze
+    else
+      {
+        "1" => {
+          "value" => "Answer A",
+        },
+        "2" => {
+          "value" => "Answer B",
+        },
+      }.freeze
+    end
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2026 => 84 }.freeze
