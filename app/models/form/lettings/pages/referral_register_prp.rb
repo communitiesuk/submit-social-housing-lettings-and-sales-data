@@ -10,6 +10,6 @@ class Form::Lettings::Pages::ReferralRegisterPrp < ::Form::Page
   end
 
   def routed_to?(log, _current_user)
-    log.owning_organisation&.prp?
+    log.owning_organisation&.prp? && !log.is_renewal?
   end
 end
