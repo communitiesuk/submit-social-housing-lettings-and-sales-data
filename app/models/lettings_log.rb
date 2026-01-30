@@ -379,7 +379,7 @@ class LettingsLog < Log
 
   def is_internal_transfer?
     if form.start_year_2026_or_later?
-      referral_register == 2
+      referral_register == 2 || (referral_register == 6 && referral_noms == 3) || (referral_register == 7 && referral_noms == 5)
     else
       # 1: Internal Transfer
       referral == 1
@@ -548,6 +548,10 @@ class LettingsLog < Log
     # 30: Fixed term Local Authority General Needs tenancy
     # 31: Lifetime Local Authority General Needs tenancy
     [30, 31].any?(prevten)
+  end
+
+  def is_prevten_general_needs?
+    ![30, 31, 32, 33, 35, 38, 6].include?(prevten)
   end
 
   def owning_organisation_name
