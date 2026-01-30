@@ -1138,46 +1138,10 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
     end
 
-    describe "#field_116" do # referral
-      context "when 3 ie PRP nominated by LA and owning org is LA" do
-        let(:attributes) { { bulk_upload:, field_116: "3", field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
-
-        it "is not permitted" do
-          parser.valid?
-          expect(parser.errors[:field_116]).to be_present
-        end
-      end
-
-      context "when 4 ie referred by LA and is general needs and owning org is LA" do
-        let(:attributes) { { bulk_upload:, field_116: "4", field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "1" } }
-
-        it "is not permitted" do
-          parser.valid?
-          expect(parser.errors[:field_116]).to be_present
-        end
-      end
-
-      context "when 4 ie referred by LA and is general needs and owning org is PRP" do
-        let(:owning_org) { create(:organisation, :prp, :with_old_visible_id) }
-
-        let(:attributes) { { bulk_upload:, field_116: "4", field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
-
-        it "is permitted" do
-          parser.valid?
-          expect(parser.errors[:field_116]).to be_blank
-        end
-      end
-
-      context "when 4 ie referred by LA and is not general needs" do
-        let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
-        let(:attributes) { { bulk_upload:, field_116: "4", field_4: "2" } }
-
-        it "is permitted" do
-          parser.valid?
-          expect(parser.errors[:field_116]).to be_blank
-        end
-      end
-    end
+    # TODO: CLDC-4191: Add tests for the new referral fields
+    # describe "#field_116" do # referral
+    #
+    # end
 
     describe "fields 7, 8, 9 => startdate" do
       context "when any one of these fields is blank" do
