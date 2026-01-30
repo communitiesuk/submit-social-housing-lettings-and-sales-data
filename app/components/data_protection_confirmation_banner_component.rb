@@ -73,7 +73,7 @@ private
   def show_no_dpo_message?
     # it is fine if an org has a DSA and the DPO has moved on
     # CORE staff do this sometimes as a single DPO covers multiple 'orgs' that exist as branches of the same real world org
-    # so, they move the DPO to all the mini orgs and have the sign each DSA
+    # so, they move the DPO to all the mini orgs and have them sign each DSA
     # so the DSA being signed can silence this warning
     org_or_user_org.data_protection_officers.empty? && !dsa_signed?
   end
