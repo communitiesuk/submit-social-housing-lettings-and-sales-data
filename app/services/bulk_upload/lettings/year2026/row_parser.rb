@@ -1705,7 +1705,7 @@ private
   def referral_noms
     return unless owning_organisation
 
-    if owning_organisation.la?
+    if owning_organisation.prp?
       field_131
     end
   end
@@ -1713,7 +1713,7 @@ private
   def referral_org
     return unless owning_organisation
 
-    if owning_organisation.la?
+    if owning_organisation.prp?
       field_132
     end
   end
