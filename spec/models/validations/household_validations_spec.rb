@@ -494,6 +494,11 @@ RSpec.describe Validations::HouseholdValidations do
     context "when start year is 2026 and record is internal transfer and owning organisation is LA" do
       let(:startdate) { collection_start_date_for_year(2026) }
 
+      before do
+        record.owning_organisation.provider_type = "LA"
+        record.referral_register = 2
+      end
+
       [
         { code: 3, label: "Private sector tenancy" },
         { code: 27, label: "Owner occupation (low-cost home ownership)" },
@@ -515,14 +520,18 @@ RSpec.describe Validations::HouseholdValidations do
         { code: 4, label: "Tied housing or rented with job" },
         { code: 25, label: "Any other accommodation" },
       ].each do |prevten|
-        it "prevten cannot be #{prevten[:code]}" do
-          record.referral_register = 2
-          record.prevten = prevten[:code]
-          household_validator.validate_referral(record)
-          expect(record.errors["prevten"])
-            .to include(match I18n.t("validations.lettings.household.prevten.general_needs.internal_transfer", prevten: prevten[:label]))
-          expect(record.errors["referral_register"])
-            .to include(match I18n.t("validations.lettings.household.referral.general_needs.internal_transfer", prevten: prevten[:label]))
+        context "and prevten is #{prevten[:code]}" do
+          before do
+            record.prevten = prevten[:code]
+          end
+
+          it "adds an error" do
+            household_validator.validate_referral(record)
+            expect(record.errors["prevten"])
+              .to include(match I18n.t("validations.lettings.household.prevten.general_needs.internal_transfer", prevten: prevten[:label]))
+            expect(record.errors["referral_register"])
+              .to include(match I18n.t("validations.lettings.household.referral.general_needs.internal_transfer", prevten: prevten[:label]))
+          end
         end
       end
 
@@ -535,12 +544,16 @@ RSpec.describe Validations::HouseholdValidations do
         { code: 38, label: "Older people’s housing for tenants with low support needs" },
         { code: 6, label: "Other supported housing" },
       ].each do |prevten|
-        it "prevten can be #{prevten[:code]}" do
-          record.referral_register = 2
-          record.prevten = prevten[:code]
-          household_validator.validate_referral(record)
-          expect(record.errors["prevten"]).to be_empty
-          expect(record.errors["referral"]).to be_empty
+        context "and prevten is #{prevten[:code]}" do
+          before do
+            record.prevten = prevten[:code]
+          end
+
+          it "does not add an error" do
+            household_validator.validate_referral(record)
+            expect(record.errors["prevten"]).to be_empty
+            expect(record.errors["referral"]).to be_empty
+          end
         end
       end
     end
@@ -620,10 +633,15 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
 
-    context "when the referral is internal transfer" do
-      it "prevten can be 9" do
+    context "when the referral is internal transfer for 2025" do
+      let(:startdate) { collection_start_date_for_year(2025) }
+
+      before do
         record.referral_type = 3
         record.referral = 1
+      end
+
+      it "prevten can be 9" do
         record.prevten = 9
         household_validator.validate_previous_housing_situation(record)
         expect(record.errors["prevten"])
@@ -649,12 +667,9 @@ RSpec.describe Validations::HouseholdValidations do
         { code: 28, label: "Living with friends or family" },
         { code: 29, label: "Prison or approved probation hostel" },
       ].each do |prevten|
-        context "when year is 2025" do
-          let(:startdate) { collection_start_date_for_year(2025) }
+        context "and prevten is #{prevten}" do
 
-          it "prevten cannot be #{prevten[:code]}" do
-            record.referral_type = 3
-            record.referral = 1
+          it "adds an error" do
             record.prevten = prevten[:code]
             household_validator.validate_previous_housing_situation(record)
             label = record.form.start_year_2025_or_later? && prevten[:code] == 28 ? "Living with friends or family (long-term)" : prevten[:label]
@@ -664,14 +679,38 @@ RSpec.describe Validations::HouseholdValidations do
               .to include(match I18n.t("validations.lettings.household.referral.prevten_invalid", prevten: ""))
           end
         end
+      end
+    end
 
-        context "when year is 2026" do
-          let(:startdate) { collection_start_date_for_year(2026) }
+    context "when the referral is internal transfer for 2026" do
+      let(:startdate) { collection_start_date_for_year(2026) }
 
-          it "prevten can be #{prevten[:code]}" do
-            record.referral_type = 3
-            record.referral = 1
+      before do
+        record.owning_organisation.provider_type = "LA"
+        record.referral_register = 2
+      end
+
+      [
+        { code: 3, label: "Private sector tenancy" },
+        { code: 4, label: "Tied housing or rented with job" },
+        { code: 7, label: "Direct access hostel" },
+        { code: 10, label: "Hospital" },
+        { code: 13, label: "Children’s home or foster care" },
+        { code: 14, label: "Bed and breakfast" },
+        { code: 19, label: "Rough sleeping" },
+        { code: 23, label: "Mobile home or caravan" },
+        { code: 24, label: "Home Office Asylum Support" },
+        { code: 25, label: "Any other accommodation" },
+        { code: 26, label: "Owner occupation (private)" },
+        { code: 28, label: "Living with friends or family" },
+        { code: 29, label: "Prison or approved probation hostel" },
+      ].each do |prevten|
+        context "and prevten is #{prevten}" do
+          before do
             record.prevten = prevten[:code]
+          end
+
+          it "does not add an error" do
             household_validator.validate_previous_housing_situation(record)
             expect(record.errors["prevten"]).to be_empty
             expect(record.errors["referral"]).to be_empty
