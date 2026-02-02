@@ -42,6 +42,7 @@ en:
           referral:
             general_needs_prp_referred_by_la: "The source of the referral cannot be referred by local authority housing department for a general needs log."
             nominated_by_local_ha_but_la: "The source of the referral cannot be Nominated by local housing authority as your organisation is a local authority."
+            invalid_option: "Your answers for each part of \"What is the source of referral for this letting?\" are incompatible with each other. Use the bulk upload specification or paper form to see which combinations are valid (available from ‘Collection resources’ on the homepage)."
           scheme:
             must_relate_to_org: "This scheme code does not belong to the owning organisation or managing organisation."
           location:

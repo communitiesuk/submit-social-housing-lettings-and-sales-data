@@ -426,6 +426,7 @@ class BulkUpload::Lettings::Year2026::RowParser
   validate :validate_reasonable_preference_dont_know, on: :after_log
   validate :validate_condition_effects, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
+  validate :validate_referral_fields, on: :after_log
 
   validate :validate_owning_org_data_given, on: :after_log
   validate :validate_owning_org_exists, on: :after_log
@@ -992,6 +993,56 @@ private
       errors.add(:field_125, error_message) # scharge
       errors.add(:field_126, error_message) # pscharge
       errors.add(:field_127, error_message) # chcharge
+    end
+  end
+
+  def field_116_valid?
+    if owning_organisation&.la?
+      [1, 2, 3, 4].include?(field_116)
+    else
+      field_116.blank?
+    end
+  end
+
+  def field_130_valid?
+    if owning_organisation&.prp?
+      [5, 6, 7, 8, 9].include?(field_130)
+    else
+      field_130.blank?
+    end
+  end
+
+  def field_131_valid?
+    case field_130
+    when 6
+      [1, 2, 3, 4].include?(field_131)
+    when 7
+      [5, 6, 7, 8].include?(field_131)
+    else
+      field_131.blank?
+    end
+  end
+
+  def field_132_valid?
+    case field_131
+    when 1
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].include?(field_132)
+    when 7
+      [11, 12, 13, 14, 15, 16, 17, 18, 19, 20].include?(field_132)
+    else
+      field_132.blank?
+    end
+  end
+
+  def referral_fields_valid?
+    field_116_valid? && field_130_valid? && field_131_valid? && field_132_valid?
+  end
+
+  def validate_referral_fields
+    return if referral_fields_valid?
+
+    %i[field_116 field_130 field_131 field_132].each do |field|
+      errors.add(field, I18n.t("#{ERROR_BASE_KEY}.referral.invalid_option"))
     end
   end
 
@@ -1694,6 +1745,11 @@ private
 
   def referral_register
     return unless owning_organisation
+    # by default CORE will ingest all these fields and nil questions that aren't asked
+    # here, we specifically want the log to be invalid if any of the referral fields are wrong
+    # BU will only consider a log invalid if its incomplete
+    # so, nil these fields if any are invalid
+    return unless referral_fields_valid?
 
     if owning_organisation.la?
       field_116
@@ -1703,12 +1759,20 @@ private
   end
 
   def referral_noms
-    field_131
+    return unless owning_organisation
+    return unless referral_fields_valid?
+
+    if owning_organisation.prp?
+      field_131
+    end
   end
 
   def referral_org
     return unless owning_organisation
+    return unless referral_fields_valid?
 
-    field_132
+    if owning_organisation.prp?
+      field_132
+    end
   end
 end
