@@ -33,7 +33,7 @@ class Form::Lettings::Questions::ReferralNoms < ::Form::Question
           "value" => "Internal transfer from another property owned by the same PRP landlord - for existing social tenants only",
         },
         "6" => {
-          "value" => " A different PRP landlord - for existing socail tenants only",
+          "value" => " A different PRP landlord - for existing social tenants only",
         },
         "7" => {
           "value" => "Directly referred by a third party",
