@@ -671,7 +671,7 @@ RSpec.describe LettingsLog do
             Timecop.freeze(startdate)
             Singleton.__init__(FormHandler)
             lettings_log.update!(
-              startdate:
+              startdate:,
             )
             lettings_log.reload
             lettings_log.postcode_full = "BB2 2BB"
