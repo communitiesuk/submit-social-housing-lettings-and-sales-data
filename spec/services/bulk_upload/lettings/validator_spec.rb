@@ -172,8 +172,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
           expect(error.tenant_code).to eql(log.tenancycode)
           expect(error.property_ref).to eql(log.propcode)
           expect(error.row).to eql("2")
-          expect(error.cell).to eql("CX2")
-          expect(error.col).to eql("CX")
+          expect(error.cell).to eql("CX2") # this may change when adding a new field as the cols are in a random order
+          expect(error.col).to eql("CX") # this may change when adding a new field as the cols are in a random order
         end
       end
 
@@ -190,8 +190,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
           expect(error.tenant_code).to eql(log.tenancycode)
           expect(error.property_ref).to eql(log.propcode)
           expect(error.row).to eql("2")
-          expect(error.cell).to eql("DA2")
-          expect(error.col).to eql("DA")
+          expect(error.cell).to eql("DA2") # this may change when adding a new field as the cols are in a random order
+          expect(error.col).to eql("DA") # this may change when adding a new field as the cols are in a random order
         end
       end
     end
