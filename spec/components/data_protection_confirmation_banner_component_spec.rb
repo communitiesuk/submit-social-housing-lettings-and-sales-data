@@ -36,6 +36,13 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
         expect(render).to have_selector("p", text: "To create logs your organisation must state a data protection officer. They must sign the Data Sharing Agreement.")
       end
     end
+
+    context "when org does have a signed data sharing agreement" do
+      it "does not display banner" do
+        expect(component.display_banner?).to eq(false)
+        expect(render.content).to be_empty
+      end
+    end
   end
 
   context "when org has a DPO" do
