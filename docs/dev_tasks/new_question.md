@@ -3,7 +3,7 @@ parent: Common dev tasks
 nav_order: 1
 ---
 
-# New Sales Log Questions
+# New Questions
 
 Concerns adding a brand-new question to Lettings Logs or Sales Logs. This question will appear on the website as part of the Sales form and should be handled in Bulk Uploads.
 
