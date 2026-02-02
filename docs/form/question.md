@@ -53,7 +53,7 @@ Let's take a look at the properties in the `initialize` function.
 <dd>The name of the field. This should correspond to a column in the database. In the example, the id is 'ppcodenk'.</dd>
 
 <dt>copy_key</dt>
-<dd>Unknown; requires investigation.</dd>
+<dd>This specifies copy from <code>config/locales/forms/...</code> that should be associated with the question</dd>
 
 <dt>type</dt>
 <dd>Determines what type of question is rendered on the page. In the example, the question is a Radio Form so the <code>app/views/form/_radio_question.html.erb</code> partial will be rendered on the page when this question is displayed to the user</dd>
