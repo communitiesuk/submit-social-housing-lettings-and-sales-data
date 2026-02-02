@@ -14,7 +14,7 @@ class Form::Lettings::Questions::SexRegisteredAtBirth1 < ::Form::Question
     "F" => { "value" => "Female" },
     "M" => { "value" => "Male" },
     "divider" => { "value" => true },
-    "R" => { "value" => "Buyer prefers not to say" },
+    "R" => { "value" => "Lead tenant prefers not to say" },
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2026 => 0 }.freeze
