@@ -5,7 +5,7 @@ class BulkUpload::Lettings::Year2026::CsvParser
 
   # TODO: CLDC-4162: Update when 2026 format is known
   FIELDS = 132
-  MAX_COLUMNS = 133
+  MAX_COLUMNS = 132
   FORM_YEAR = 2026
 
   attr_reader :path

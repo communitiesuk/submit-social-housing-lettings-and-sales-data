@@ -104,7 +104,7 @@ class BulkUpload::LettingsLogToCsv
                             log.owning_organisation
                           end
     [
-      owning_organisation&.id, # 1
+      owning_organisation&.old_visible_id, # 1
       overrides[:managing_organisation_id] || log.managing_organisation&.old_visible_id,
       log.assigned_to&.email,
       log.needstype,
