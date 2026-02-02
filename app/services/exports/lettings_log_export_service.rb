@@ -171,7 +171,8 @@ module Exports
         (lettings_log.form.start_year_2024_or_later? && PRE_2024_EXPORT_FIELDS.include?(field_name)) ||
         (!lettings_log.form.start_year_2024_or_later? && POST_2024_EXPORT_FIELDS.include?(field_name)) ||
         (lettings_log.form.start_year_2025_or_later? && PRE_2025_EXPORT_FIELDS.include?(field_name)) ||
-        (lettings_log.form.start_year_2026_or_later? && PRE_2026_EXPORT_FIELDS.include?(field_name))
+        (lettings_log.form.start_year_2026_or_later? && PRE_2026_EXPORT_FIELDS.include?(field_name)) ||
+        (!lettings_log.form.start_year_2026_or_later? && POST_2026_EXPORT_FIELDS.include?(field_name))
     end
 
     def build_export_xml(lettings_logs)

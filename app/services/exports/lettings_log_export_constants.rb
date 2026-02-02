@@ -82,6 +82,9 @@ module Exports::LettingsLogExportConstants
     "reasonother",
     "reasonpref",
     "referral",
+    "referral_register",
+    "referral_noms",
+    "referral_org",
     "refused",
     "reghome",
     "renttype",
@@ -201,6 +204,14 @@ module Exports::LettingsLogExportConstants
   ]
 
   PRE_2026_EXPORT_FIELDS = Set[
-    "builtype"
+    "builtype",
+    "referral",
+    "referral_type",
+  ]
+
+  POST_2026_EXPORT_FIELDS = Set[
+    "referral_register",
+    "referral_noms",
+    "referral_org",
   ]
 end

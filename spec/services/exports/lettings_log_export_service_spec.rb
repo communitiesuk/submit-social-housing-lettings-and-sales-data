@@ -502,8 +502,7 @@ RSpec.describe Exports::LettingsLogExportService do
         let(:expected_data_filename) { "core_2026_2027_apr_mar_f0001_inc0001_pt001.xml" }
         let(:xml_export_file) { File.open("spec/fixtures/exports/general_needs_log_26_27.xml", "r:UTF-8") }
 
-        # TODO: CLDC-4191 Reinstate this test when we update log export
-        xit "generates an XML export file with the expected content within the ZIP file" do
+        it "generates an XML export file with the expected content within the ZIP file" do
           expected_content = replace_entity_ids(lettings_log, xml_export_file.read)
           expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
             entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
