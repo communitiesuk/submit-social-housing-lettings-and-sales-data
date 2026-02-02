@@ -684,7 +684,7 @@ private
   end
 
   def validate_prevten_value_when_renewal
-    return unless field_7 == 1
+    return unless renewal?
     return if field_100.blank? || [6, 30, 31, 32, 33, 34, 35, 38].include?(field_100)
 
     errors.add(:field_100, I18n.t("#{ERROR_BASE_KEY}.prevten.invalid"))
@@ -790,7 +790,7 @@ private
   end
 
   def validate_leaving_reason_for_renewal
-    if field_7 == 1 && ![50, 51, 52, 53].include?(field_98)
+    if renewal? && ![50, 51, 52, 53].include?(field_98)
       errors.add(:field_98, I18n.t("#{ERROR_BASE_KEY}.reason.renewal_reason_needed"))
     end
   end
@@ -801,6 +801,10 @@ private
 
   def supported_housing?
     field_4 == 2
+  end
+
+  def renewal?
+    field_7 == 1
   end
 
   def validate_relevant_collection_window
@@ -1025,6 +1029,7 @@ private
   end
 
   def validate_referral_fields
+    return if renewal?
     return if referral_fields_valid?
 
     %i[field_116 field_130 field_131 field_132].each do |field|
