@@ -414,8 +414,6 @@ class BulkUpload::Lettings::Year2026::RowParser
   validate :validate_needs_type_present, on: :after_log
   validate :validate_data_types, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
-  validate :validate_la_with_local_housing_referral, on: :after_log
-  validate :validate_cannot_be_la_referral_if_general_needs_and_la, on: :after_log
   validate :validate_leaving_reason_for_renewal, on: :after_log
   validate :validate_only_one_housing_needs_type, on: :after_log
   validate :validate_no_disabled_needs_conjunction, on: :after_log
@@ -803,18 +801,6 @@ private
 
   def supported_housing?
     field_4 == 2
-  end
-
-  def validate_cannot_be_la_referral_if_general_needs_and_la
-    if field_116 == 4 && general_needs? && owning_organisation && owning_organisation.la?
-      errors.add :field_116, I18n.t("#{ERROR_BASE_KEY}.referral.general_needs_prp_referred_by_la")
-    end
-  end
-
-  def validate_la_with_local_housing_referral
-    if field_116 == 3 && owning_organisation && owning_organisation.la?
-      errors.add(:field_116, I18n.t("#{ERROR_BASE_KEY}.referral.nominated_by_local_ha_but_la"))
-    end
   end
 
   def validate_relevant_collection_window
