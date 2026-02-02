@@ -98,13 +98,8 @@ class BulkUpload::LettingsLogToCsv
 
   def to_2026_row
     # TODO: CLDC-4162: Implement when 2026 format is known
-    owning_organisation = if overrides[:organisation_id]
-                          then Organisation.find(overrides[:organisation_id])
-                          else
-                            log.owning_organisation
-                          end
     [
-      owning_organisation&.old_visible_id, # 1
+      overrides[:organisation_id] || log.owning_organisation&.old_visible_id, # 1
       overrides[:managing_organisation_id] || log.managing_organisation&.old_visible_id,
       log.assigned_to&.email,
       log.needstype,
@@ -230,7 +225,7 @@ class BulkUpload::LettingsLogToCsv
       chr,
       cap,
       accessible_register,
-      owning_organisation&.la? ? log.referral_register : nil,
+      log.owning_organisation.la? ? log.referral_register : nil,
       net_income_known,
       log.incfreq,
       log.earnings,
@@ -245,7 +240,7 @@ class BulkUpload::LettingsLogToCsv
       log.supcharg,
       log.hbrentshortfall,
       log.tshortfall,
-      owning_organisation&.prp? ? log.referral_register : nil,
+      log.owning_organisation.prp? ? log.referral_register : nil,
       log.referral_noms,
       log.referral_org, # 132
     ]
