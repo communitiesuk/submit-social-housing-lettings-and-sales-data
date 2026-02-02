@@ -668,7 +668,6 @@ RSpec.describe Validations::HouseholdValidations do
         { code: 29, label: "Prison or approved probation hostel" },
       ].each do |prevten|
         context "and prevten is #{prevten}" do
-
           it "adds an error" do
             record.prevten = prevten[:code]
             household_validator.validate_previous_housing_situation(record)
