@@ -181,23 +181,11 @@ private
     if form.start_year_2026_or_later?
       DEPENDENCIES_2026
     else
-      DEPENDENCIES_PRE_2026
+      DEPENDENCIES_2025_2024
     end
   end
 
-  DEPENDENCIES_2026 = [
-    {
-      conditions: {
-        renewal: 1,
-      },
-      derived_values: {
-        referral_register: 1, # new in 2026
-        waityear: 2,
-        offered: 0,
-        rsnvac: 14,
-        first_time_property_let_as_social_housing: 0,
-      },
-    },
+  COMMON_DEPENDENCIES = [
     {
       conditions: {
         net_income_known: 2,
@@ -224,7 +212,23 @@ private
     },
   ].freeze
 
-  DEPENDENCIES_PRE_2026 = [
+  DEPENDENCIES_2026 = [
+    {
+      conditions: {
+        renewal: 1,
+      },
+      derived_values: {
+        referral_register: 1,
+        waityear: 2,
+        offered: 0,
+        rsnvac: 14,
+        first_time_property_let_as_social_housing: 0,
+      },
+    },
+    *COMMON_DEPENDENCIES,
+  ].freeze
+
+  DEPENDENCIES_2025_2024 = [
     {
       conditions: {
         renewal: 1,
@@ -238,30 +242,7 @@ private
         first_time_property_let_as_social_housing: 0,
       },
     },
-    {
-      conditions: {
-        net_income_known: 2,
-      },
-      derived_values: {
-        incref: 1,
-      },
-    },
-    {
-      conditions: {
-        net_income_known: 0,
-      },
-      derived_values: {
-        incref: 0,
-      },
-    },
-    {
-      conditions: {
-        net_income_known: 1,
-      },
-      derived_values: {
-        incref: 2,
-      },
-    },
+    *COMMON_DEPENDENCIES,
   ].freeze
 
   def clear_inapplicable_derived_values!
