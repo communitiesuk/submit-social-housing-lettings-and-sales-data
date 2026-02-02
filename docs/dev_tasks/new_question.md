@@ -80,7 +80,7 @@ To make your new page only appear in the forms for the upcoming year, you wrap t
 (Form::Sales::Pages::SexRegisteredAtBirth1.new(nil, nil, self) if form.start_year_2026_or_later?),
 ```
 
-Note: the `@id` attribute of a page is what will be displayed in the url when visiting it. It must be unique within a collection year (i.e. two pages in 25/26 cannot share an ID, but two pages in different collection years can share an ID). 
+Note: the `@id` attribute of a page is what will be displayed in the url when visiting it. It must be unique within a collection year (i.e. two pages in 25/26 cannot share an ID, but two pages in different collection years can share an ID).
 
 ### 6. Update the locale file
 
@@ -92,7 +92,7 @@ Copy the entry for an existing question and substitute in the text for your new 
 
 ### 7. Include the new field in exports
 
-The fields that get exported in CSVs and XMLs are defined in  `app/services/exports/sales_log_export_constants.rb`.
+The fields that get exported in CSVs and XMLs are defined in `app/services/exports/sales_log_export_constants.rb`.
 
 If there is not a set for POST\_<year>\_EXPORT_FIELDS, create one. Add your new field to the current year's set.
 
@@ -122,4 +122,3 @@ Validation for ensuring that the value uploaded is one of the permitted options 
 
 - Create new test files for any new classes you have created. Update any test files for files that you have edited.
 - Update `spec/fixtures/variable_definitions/sales_download_25_26.csv` (for sales/lettings and for the relevant collection year) with the new question's field name and definition.
-
