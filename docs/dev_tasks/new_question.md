@@ -118,4 +118,6 @@ Validation for ensuring that the value uploaded is one of the permitted options 
 
 ### 9. Update unit tests
 
-Create new test files for any new classes you have created. Update any test files for files that you have edited.
+- Create new test files for any new classes you have created. Update any test files for files that you have edited.
+- Update `spec/fixtures/variable_definitions/sales_download_25_26.csv` (for sales/lettings and for the relevant collection year) with the new question's field name and definition.
+
