@@ -178,7 +178,7 @@ module Validations::HouseholdValidations
         record.errors.add :prevten, message: I18n.t("validations.lettings.household.prevten.general_needs.internal_transfer", prevten: label)
         record.errors.add :referral_register, message: I18n.t("validations.lettings.household.referral.general_needs.internal_transfer", prevten: label)
       end
-    elsif record.is_internal_transfer? && record.owning_organisation.provider_type == "PRP" && record.is_prevten_la_general_needs?
+    elsif record.is_internal_transfer? && record.owning_organisation.prp? && record.is_prevten_la_general_needs?
       record.errors.add :prevten, :internal_transfer_fixed_or_lifetime, message: I18n.t("validations.lettings.household.prevten.la_general_needs.internal_transfer")
       record.errors.add :referral, :internal_transfer_fixed_or_lifetime, message: I18n.t("validations.lettings.household.referral.la_general_needs.internal_transfer")
     end
