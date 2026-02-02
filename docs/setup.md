@@ -86,7 +86,7 @@ Some windows IDEs, such as [VSCode](https://code.visualstudio.com/docs/remote/ws
 
 5. Install JavaScript dependencies
 
-   Note that we currently use node v16, which is no longer the latest LTS version so you will need to specify the version number when installing
+   Note that we currently use node v20, which is no longer the latest LTS version so you will need to specify the version number when installing
 
    macOS (using nvm):
 
