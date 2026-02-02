@@ -5,7 +5,9 @@ nav_order: 1
 
 # New Sales Log Questions
 
-Concerns adding a brand-new question to Sales Logs. This question will appear on the website as part of the Sales form and should be handled in Bulk Uploads.
+Concerns adding a brand-new question to Lettings Logs or Sales Logs. This question will appear on the website as part of the Sales form and should be handled in Bulk Uploads.
+
+Note: this document focuses on Sales Logs but the steps are equivalent for Lettings Logs by replacing `sales` with `lettings` in file paths etc.
 
 Guide is up-to-date as of 2026.
 
@@ -88,7 +90,7 @@ Copy the entry for an existing question and substitute in the text for your new 
 
 ### 7. Include the new field in exports
 
-The fields that get exported in CSVs and XMLs are defined in `app/services/exports/sales_log_export_constants.rb`.
+The fields that get exported in CSVs and XMLs are defined in  `app/services/exports/sales_log_export_constants.rb`.
 
 If there is not a set for POST\_<year>\_EXPORT_FIELDS, create one. Add your new field to the current year's set.
 
