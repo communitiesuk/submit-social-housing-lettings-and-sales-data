@@ -80,6 +80,8 @@ To make your new page only appear in the forms for the upcoming year, you wrap t
 (Form::Sales::Pages::SexRegisteredAtBirth1.new(nil, nil, self) if form.start_year_2026_or_later?),
 ```
 
+Note: the `@id` attribute of a page is what will be displayed in the url when visiting it. It must be unique within a collection year (i.e. two pages in 25/26 cannot share an ID, but two pages in different collection years can share an ID). 
+
 ### 6. Update the locale file
 
 The locale files define some of the text for the new question, including hints and the question itself.
