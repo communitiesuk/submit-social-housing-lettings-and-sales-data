@@ -1211,7 +1211,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
         context "and not renewal" do
           let(:renewal_attributes) { org_attributes.merge({ field_7: nil }) }
 
-          context "and field_130 is valid" do
+          context "and field_130 is valid and does not expect an answer for field_131" do
             let(:attributes) { renewal_attributes.merge({ field_130: 5 }) }
 
             it "does not add an error" do
@@ -1259,10 +1259,10 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             end
           end
 
-          context "and field_130 expects an answer for field_131" do
+          context "and field_130 is valid and expects an answer for field_131" do
             let(:field_130_attributes) { renewal_attributes.merge({ field_130: 6 }) }
 
-            context "and field_131 is valid" do
+            context "and field_131 is valid and does not expect an answer for field_132" do
               let(:attributes) { field_130_attributes.merge({ field_131: 2 }) }
 
               it "does not add an error" do
@@ -1310,7 +1310,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
               end
             end
 
-            context "and field_131 expects an answer for field_132" do
+            context "and field_131 is valid and expects an answer for field_132" do
               let(:field_131_attributes) { field_130_attributes.merge({ field_131: 1 }) }
 
               context "and field_132 is valid" do
