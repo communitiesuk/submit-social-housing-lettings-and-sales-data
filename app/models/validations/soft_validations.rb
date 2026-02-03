@@ -288,9 +288,9 @@ private
   end
 
   def at_least_one_person_working_situation_is_illness?
-    return unless hhmemb
+    person_count = hhmemb || 8
 
-    (1..hhmemb).any? { |n| public_send("ecstat#{n}") == 8 }
+    (1..person_count).any? { |n| public_send("ecstat#{n}") == 8 }
   end
 
   def no_one_in_household_with_illness?
