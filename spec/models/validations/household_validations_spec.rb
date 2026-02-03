@@ -637,7 +637,6 @@ RSpec.describe Validations::HouseholdValidations do
       let(:startdate) { collection_start_date_for_year(2025) }
 
       before do
-        record.referral_type = 3
         record.referral = 1
       end
 
