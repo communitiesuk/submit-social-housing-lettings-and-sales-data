@@ -986,7 +986,7 @@ private
     end
   end
 
-  def field_116_valid?
+  def field_referral_register_la_valid?
     if owning_organisation&.la?
       [1, 2, 3, 4].include?(field_116)
     else
@@ -994,7 +994,7 @@ private
     end
   end
 
-  def field_130_valid?
+  def field_referral_register_prp_valid?
     if owning_organisation&.prp?
       [5, 6, 7, 8, 9].include?(field_130)
     else
@@ -1002,7 +1002,7 @@ private
     end
   end
 
-  def field_131_valid?
+  def field_referral_noms_valid?
     case field_130
     when 6
       [1, 2, 3, 4].include?(field_131)
@@ -1013,7 +1013,7 @@ private
     end
   end
 
-  def field_132_valid?
+  def field_referral_org_valid?
     case field_131
     when 1
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].include?(field_132)
@@ -1025,7 +1025,7 @@ private
   end
 
   def referral_fields_valid?
-    field_116_valid? && field_130_valid? && field_131_valid? && field_132_valid?
+    field_referral_register_la_valid? && field_referral_register_prp_valid? && field_referral_noms_valid? && field_referral_org_valid?
   end
 
   def validate_referral_fields
@@ -1736,10 +1736,10 @@ private
 
   def referral_register
     return unless owning_organisation
-    # by default CORE will ingest all these fields and nil questions that aren't asked
-    # here, we specifically want the log to be invalid if any of the referral fields are wrong
-    # BU will only consider a log invalid if its incomplete
-    # so, nil these fields if any are invalid
+    # by default CORE will ingest all these fields and nil questions that aren't asked.
+    # here, we specifically want the log to be invalid if any of the referral fields are wrong.
+    # BU will only consider a log invalid if its incomplete.
+    # so, nil these fields if any are invalid.
     return unless referral_fields_valid?
 
     if owning_organisation.la?
