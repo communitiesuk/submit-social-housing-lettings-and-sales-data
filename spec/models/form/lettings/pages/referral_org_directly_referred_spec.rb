@@ -37,6 +37,14 @@ RSpec.describe Form::Lettings::Pages::ReferralOrgDirectlyReferred, type: :model 
     expect(page.depends_on).to be nil
   end
 
+  context "and log owning organisation is not prp" do
+    let(:prp?) { false }
+
+    it "is not routed to" do
+      expect(page.routed_to?(log, nil)).to be false
+    end
+  end
+
   context "and log owning organisation is prp" do
     let(:prp?) { true }
 
