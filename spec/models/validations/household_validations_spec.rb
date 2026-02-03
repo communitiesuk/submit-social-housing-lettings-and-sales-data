@@ -508,6 +508,12 @@ RSpec.describe Validations::HouseholdValidations do
           referral_noms: 3,
         },
         {
+          internal_transfer: true,
+          label: "PRP",
+          referral_register: 7,
+          referral_noms: 5,
+        },
+        {
           internal_transfer: false,
           label: "LA",
           referral_register: 1,
@@ -519,9 +525,15 @@ RSpec.describe Validations::HouseholdValidations do
           referral_register: 6,
           referral_noms: 2,
         },
+        {
+          internal_transfer: false,
+          label: "PRP",
+          referral_register: 7,
+          referral_noms: 6,
+        },
       ]
       .each do |scenario|
-        context "and record #{scenario[:internal_transfer] ? 'is ' : ''}internal transfer via #{scenario[:label]} path" do
+        context "and record #{scenario[:internal_transfer] ? 'is ' : 'is not '}internal transfer via #{scenario[:label]} path" do
           before do
             record.owning_organisation.provider_type = scenario[:label]
             record.referral_register = scenario[:referral_register]
