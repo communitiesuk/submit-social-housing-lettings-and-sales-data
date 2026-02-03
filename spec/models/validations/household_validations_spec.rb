@@ -528,6 +528,19 @@ RSpec.describe Validations::HouseholdValidations do
             record.referral_noms = scenario[:referral_noms]
           end
 
+          context "and prevten is nil" do
+            before do
+              record.prevten = nil
+            end
+
+            it "does not add an error" do
+              household_validator.validate_referral(record)
+              expect(record.errors["prevten"]).to be_empty
+              expect(record.errors["referral_register"]).to be_empty
+              expect(record.errors["referral_noms"]).to be_empty
+            end
+          end
+
           [
             { code: 3, label: "Private sector tenancy" },
             { code: 27, label: "Owner occupation (low-cost home ownership)" },
