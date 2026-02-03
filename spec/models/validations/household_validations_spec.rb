@@ -494,128 +494,107 @@ RSpec.describe Validations::HouseholdValidations do
     context "when start year is 2026" do
       let(:startdate) { collection_start_date_for_year(2026) }
 
-      context "and record is internal transfer via LA path" do
-        before do
-          record.owning_organisation.provider_type = "LA"
-          record.referral_register = 2
-        end
+      [
+        {
+          internal_transfer: true,
+          label: "LA",
+          referral_register: 2,
+          referral_noms: nil,
+        },
+        {
+          internal_transfer: true,
+          label: "PRP",
+          referral_register: 6,
+          referral_noms: 3,
+        },
+        {
+          internal_transfer: false,
+          label: "LA",
+          referral_register: 1,
+          referral_noms: nil,
+        },
+        {
+          internal_transfer: false,
+          label: "PRP",
+          referral_register: 6,
+          referral_noms: 2,
+        },
+      ]
+      .each do |scenario|
+        context "and record #{scenario[:internal_transfer] ? 'is ' : ''}internal transfer via #{scenario[:label]} path" do
+          before do
+            record.owning_organisation.provider_type = scenario[:label]
+            record.referral_register = scenario[:referral_register]
+            record.referral_noms = scenario[:referral_noms]
+          end
 
-        [
-          { code: 3, label: "Private sector tenancy" },
-          { code: 27, label: "Owner occupation (low-cost home ownership)" },
-          { code: 26, label: "Owner occupation (private)" },
-          { code: 28, label: "Living with friends or family (long-term)" },
-          { code: 39, label: "Sofa surfing (moving regularly between family or friends, no permanent bed)" },
-          { code: 14, label: "Bed and breakfast" },
-          { code: 7, label: "Direct access hostel" },
-          { code: 10, label: "Hospital" },
-          { code: 29, label: "Prison or approved probation hostel" },
-          { code: 19, label: "Rough sleeping" },
-          { code: 18, label: "Any other temporary accommodation" },
-          { code: 13, label: "Children’s home or foster care" },
-          { code: 24, label: "Home Office Asylum Support" },
-          { code: 37, label: "Host family or similar refugee accommodation" },
-          { code: 23, label: "Mobile home or caravan" },
-          { code: 21, label: "Refuge" },
-          { code: 9, label: "Residential care home" },
-          { code: 4, label: "Tied housing or rented with job" },
-          { code: 25, label: "Any other accommodation" },
-        ].each do |prevten|
-          context "and prevten is #{prevten[:code]}" do
-            it "adds an error" do
-              record.referral_register = 2
-              record.prevten = prevten[:code]
-              household_validator.validate_referral(record)
-              expect(record.errors["prevten"])
-                .to include(match I18n.t("validations.lettings.household.prevten.general_needs.internal_transfer", prevten: prevten[:label]))
-              expect(record.errors["referral_register"])
-                .to include(match I18n.t("validations.lettings.household.referral.general_needs.internal_transfer", prevten: prevten[:label]))
+          [
+            { code: 3, label: "Private sector tenancy" },
+            { code: 27, label: "Owner occupation (low-cost home ownership)" },
+            { code: 26, label: "Owner occupation (private)" },
+            { code: 28, label: "Living with friends or family (long-term)" },
+            { code: 39, label: "Sofa surfing (moving regularly between family or friends, no permanent bed)" },
+            { code: 14, label: "Bed and breakfast" },
+            { code: 7, label: "Direct access hostel" },
+            { code: 10, label: "Hospital" },
+            { code: 29, label: "Prison or approved probation hostel" },
+            { code: 19, label: "Rough sleeping" },
+            { code: 18, label: "Any other temporary accommodation" },
+            { code: 13, label: "Children’s home or foster care" },
+            { code: 24, label: "Home Office Asylum Support" },
+            { code: 37, label: "Host family or similar refugee accommodation" },
+            { code: 23, label: "Mobile home or caravan" },
+            { code: 21, label: "Refuge" },
+            { code: 9, label: "Residential care home" },
+            { code: 4, label: "Tied housing or rented with job" },
+            { code: 25, label: "Any other accommodation" },
+          ].each do |prevten|
+            context "and prevten is #{prevten[:code]}" do
+              before do
+                record.prevten = prevten[:code]
+              end
+
+              if scenario[:internal_transfer]
+                it "adds an error" do
+                  household_validator.validate_referral(record)
+                  expect(record.errors["prevten"])
+                    .to include(match I18n.t("validations.lettings.household.prevten.general_needs.internal_transfer", prevten: prevten[:label]))
+                  expect(record.errors["referral_register"])
+                    .to include(match I18n.t("validations.lettings.household.referral.general_needs.internal_transfer", prevten: prevten[:label]))
+                  expect(record.errors["referral_noms"])
+                    .to include(match I18n.t("validations.lettings.household.referral.general_needs.internal_transfer", prevten: prevten[:label]))
+                end
+              else
+                it "does not add an error" do
+                  household_validator.validate_referral(record)
+                  expect(record.errors["prevten"]).to be_empty
+                  expect(record.errors["referral_register"]).to be_empty
+                  expect(record.errors["referral_noms"]).to be_empty
+                end
+              end
             end
           end
-        end
 
-        [
-          { code: 30, label: "Fixed-term local authority general needs tenancy" },
-          { code: 31, label: "Lifetime local authority general needs tenancy" },
-          { code: 32, label: "Fixed-term private registered provider (PRP) general needs tenancy" },
-          { code: 33, label: "Lifetime private registered provider (PRP) general needs tenancy" },
-          { code: 35, label: "Extra care housing" },
-          { code: 38, label: "Older people’s housing for tenants with low support needs" },
-          { code: 6, label: "Other supported housing" },
-        ].each do |prevten|
-          context "and prevten is #{prevten[:code]}" do
-            before do
-              record.prevten = prevten[:code]
-            end
+          [
+            { code: 30, label: "Fixed-term local authority general needs tenancy" },
+            { code: 31, label: "Lifetime local authority general needs tenancy" },
+            { code: 32, label: "Fixed-term private registered provider (PRP) general needs tenancy" },
+            { code: 33, label: "Lifetime private registered provider (PRP) general needs tenancy" },
+            { code: 35, label: "Extra care housing" },
+            { code: 38, label: "Older people’s housing for tenants with low support needs" },
+            { code: 6, label: "Other supported housing" },
+          ].each do |prevten|
+            context "and prevten is #{prevten[:code]}" do
+              before do
+                record.prevten = prevten[:code]
+              end
 
-            it "does not add an error" do
-              household_validator.validate_referral(record)
-              expect(record.errors["prevten"]).to be_empty
-              expect(record.errors["referral"]).to be_empty
-            end
-          end
-        end
-      end
-
-      context "and record is internal transfer via PRP path" do
-        before do
-          record.owning_organisation.provider_type = "PRP"
-          record.referral_register = 6
-          record.referral_noms = 3
-        end
-
-        [
-          { code: 3, label: "Private sector tenancy" },
-          { code: 27, label: "Owner occupation (low-cost home ownership)" },
-          { code: 26, label: "Owner occupation (private)" },
-          { code: 28, label: "Living with friends or family (long-term)" },
-          { code: 39, label: "Sofa surfing (moving regularly between family or friends, no permanent bed)" },
-          { code: 14, label: "Bed and breakfast" },
-          { code: 7, label: "Direct access hostel" },
-          { code: 10, label: "Hospital" },
-          { code: 29, label: "Prison or approved probation hostel" },
-          { code: 19, label: "Rough sleeping" },
-          { code: 18, label: "Any other temporary accommodation" },
-          { code: 13, label: "Children’s home or foster care" },
-          { code: 24, label: "Home Office Asylum Support" },
-          { code: 37, label: "Host family or similar refugee accommodation" },
-          { code: 23, label: "Mobile home or caravan" },
-          { code: 21, label: "Refuge" },
-          { code: 9, label: "Residential care home" },
-          { code: 4, label: "Tied housing or rented with job" },
-          { code: 25, label: "Any other accommodation" },
-        ].each do |prevten|
-          context "and prevten is #{prevten[:code]}" do
-            it "adds an error" do
-              record.referral_register = 2
-              record.prevten = prevten[:code]
-              household_validator.validate_referral(record)
-              expect(record.errors["prevten"])
-                .to include(match I18n.t("validations.lettings.household.prevten.general_needs.internal_transfer", prevten: prevten[:label]))
-              expect(record.errors["referral_register"])
-                .to include(match I18n.t("validations.lettings.household.referral.general_needs.internal_transfer", prevten: prevten[:label]))
-            end
-          end
-        end
-
-        [
-          { code: 30, label: "Fixed-term local authority general needs tenancy" },
-          { code: 31, label: "Lifetime local authority general needs tenancy" },
-          { code: 32, label: "Fixed-term private registered provider (PRP) general needs tenancy" },
-          { code: 33, label: "Lifetime private registered provider (PRP) general needs tenancy" },
-          { code: 35, label: "Extra care housing" },
-          { code: 38, label: "Older people’s housing for tenants with low support needs" },
-          { code: 6, label: "Other supported housing" },
-        ].each do |prevten|
-          context "and prevten is #{prevten[:code]}" do
-            before do
-              record.prevten = prevten[:code]
-            end
-
-            it "does not add an error" do
-              household_validator.validate_referral(record)
-              expect(record.errors["prevten"]).to be_empty
-              expect(record.errors["referral"]).to be_empty
+              it "does not add an error" do
+                household_validator.validate_referral(record)
+                expect(record.errors["prevten"]).to be_empty
+                expect(record.errors["referral_register"]).to be_empty
+                expect(record.errors["referral_noms"]).to be_empty
+              end
             end
           end
         end
