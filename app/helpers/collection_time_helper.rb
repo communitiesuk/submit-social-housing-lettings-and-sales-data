@@ -54,12 +54,20 @@ module CollectionTimeHelper
     current_collection_start_year - 1
   end
 
+  def previous_collection_end_year
+    current_collection_end_year - 1
+  end
+
   def previous_collection_start_date
     current_collection_start_date - 1.year
   end
 
   def archived_collection_start_year
     current_collection_start_year - 2
+  end
+
+  def archived_collection_end_year
+    current_collection_end_year - 2
   end
 
   def previous_collection_new_logs_end_date
