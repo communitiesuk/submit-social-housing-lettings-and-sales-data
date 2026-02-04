@@ -162,16 +162,38 @@ module Exports
       attribute_hash["location_status"] = location.status_at(attribute_hash["startdate"])
     end
 
-    def is_omitted_field?(field_name, lettings_log)
-      pattern_age = /age\d_known/
+    def is_included_field?(field_name, fields_for_form)
       details_known_prefix = "details_known_"
-      field_name.starts_with?(details_known_prefix) ||
-        pattern_age.match(field_name) ||
-        !EXPORT_FIELDS.include?(field_name) ||
-        (lettings_log.form.start_year_2024_or_later? && PRE_2024_EXPORT_FIELDS.include?(field_name)) ||
-        (!lettings_log.form.start_year_2024_or_later? && POST_2024_EXPORT_FIELDS.include?(field_name)) ||
-        (lettings_log.form.start_year_2025_or_later? && PRE_2025_EXPORT_FIELDS.include?(field_name)) ||
-        (lettings_log.form.start_year_2026_or_later? && PRE_2026_EXPORT_FIELDS.include?(field_name))
+      pattern_age = /age\d_known/
+
+      if field_name.starts_with?(details_known_prefix) || pattern_age.match(field_name)
+        false
+      end
+
+      fields_for_form.include?(field_name)
+    end
+
+    def get_fields_for_form(lettings_log)
+      included_fields = Set[]
+      included_fields.merge(EXPORT_FIELDS)
+
+      if lettings_log.form.start_year_2024_or_later?
+        included_fields.merge(POST_2024_EXPORT_FIELDS)
+      else
+        included_fields.merge(PRE_2024_EXPORT_FIELDS)
+      end
+
+      unless lettings_log.form.start_year_2025_or_later?
+        included_fields.merge(PRE_2025_EXPORT_FIELDS)
+      end
+
+      if lettings_log.form.start_year_2026_or_later?
+        included_fields.merge(POST_2026_EXPORT_FIELDS)
+      else
+        included_fields.merge(PRE_2026_EXPORT_FIELDS)
+      end
+
+      included_fields
     end
 
     def build_export_xml(lettings_logs)
@@ -181,11 +203,13 @@ module Exports
         attribute_hash = apply_cds_transformation(lettings_log, EXPORT_MODE[:xml])
         form = doc.create_element("form")
         doc.at("forms") << form
+        fields_for_form = get_fields_for_form(lettings_log)
+
         attribute_hash.each do |key, value|
-          if is_omitted_field?(key, lettings_log)
-            next
-          else
+          if is_included_field?(key, fields_for_form)
             form << doc.create_element(key, value)
+          else
+            next
           end
         end
         form << doc.create_element("providertype", lettings_log.owning_organisation&.read_attribute_before_type_cast(:provider_type))
