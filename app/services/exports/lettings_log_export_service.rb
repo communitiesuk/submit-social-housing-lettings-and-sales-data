@@ -183,7 +183,7 @@ module Exports
         included_fields.merge(PRE_2024_EXPORT_FIELDS)
       end
 
-      if !lettings_log.form.start_year_2025_or_later?
+      unless lettings_log.form.start_year_2025_or_later?
         included_fields.merge(PRE_2025_EXPORT_FIELDS)
       end
 

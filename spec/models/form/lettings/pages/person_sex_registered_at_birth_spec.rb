@@ -30,7 +30,7 @@ RSpec.describe Form::Lettings::Pages::PersonSexRegisteredAtBirth, type: :model d
     end
 
     it "has correct depends_on" do
-      expect(page.depends_on).to eq([{ "details_known_2" => 1 }])
+      expect(page.depends_on).to eq([{ "details_known_2" => 0 }])
     end
   end
 
@@ -47,7 +47,7 @@ RSpec.describe Form::Lettings::Pages::PersonSexRegisteredAtBirth, type: :model d
     end
 
     it "has correct depends_on" do
-      expect(page.depends_on).to eq([{ "details_known_3" => 1 }])
+      expect(page.depends_on).to eq([{ "details_known_3" => 0 }])
     end
   end
 
@@ -64,7 +64,7 @@ RSpec.describe Form::Lettings::Pages::PersonSexRegisteredAtBirth, type: :model d
     end
 
     it "has correct depends_on" do
-      expect(page.depends_on).to eq([{ "details_known_4" => 1 }])
+      expect(page.depends_on).to eq([{ "details_known_4" => 0 }])
     end
   end
 
@@ -81,7 +81,7 @@ RSpec.describe Form::Lettings::Pages::PersonSexRegisteredAtBirth, type: :model d
     end
 
     it "has correct depends_on" do
-      expect(page.depends_on).to eq([{ "details_known_5" => 1 }])
+      expect(page.depends_on).to eq([{ "details_known_5" => 0 }])
     end
   end
 
@@ -98,7 +98,7 @@ RSpec.describe Form::Lettings::Pages::PersonSexRegisteredAtBirth, type: :model d
     end
 
     it "has correct depends_on" do
-      expect(page.depends_on).to eq([{ "details_known_6" => 1 }])
+      expect(page.depends_on).to eq([{ "details_known_6" => 0 }])
     end
   end
 
@@ -115,7 +115,7 @@ RSpec.describe Form::Lettings::Pages::PersonSexRegisteredAtBirth, type: :model d
     end
 
     it "has correct depends_on" do
-      expect(page.depends_on).to eq([{ "details_known_7" => 1 }])
+      expect(page.depends_on).to eq([{ "details_known_7" => 0 }])
     end
   end
 
@@ -132,7 +132,7 @@ RSpec.describe Form::Lettings::Pages::PersonSexRegisteredAtBirth, type: :model d
     end
 
     it "has correct depends_on" do
-      expect(page.depends_on).to eq([{ "details_known_8" => 1 }])
+      expect(page.depends_on).to eq([{ "details_known_8" => 0 }])
     end
   end
 end
