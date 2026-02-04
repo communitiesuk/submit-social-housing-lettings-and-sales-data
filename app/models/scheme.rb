@@ -148,9 +148,8 @@ class Scheme < ApplicationRecord
   enum :sensitive, SENSITIVE, suffix: true
 
   REGISTERED_UNDER_CARE_ACT = {
-    "Yes – registered care home providing nursing care": 4,
-    "Yes – registered care home providing personal care": 3,
-    "Yes – part registered as a care home": 2,
+    "Yes": 5,
+    "Partially - some but not all units in the scheme are regulated by the CQC": 2,
     "No": 1,
   }.freeze
 
@@ -251,7 +250,7 @@ class Scheme < ApplicationRecord
       { name: "Status", value: status, id: "status" },
       { name: "Confidential information", value: sensitive, id: "sensitive", edit: true },
       { name: "Type of scheme", value: scheme_type, id: "scheme_type", edit: true },
-      { name: "Registered under Care Standards Act 2000", value: registered_under_care_act, id: "registered_under_care_act", edit: true },
+      { name: "Regulated by the Care Quality Commission", value: registered_under_care_act, id: "registered_under_care_act", edit: true },
       { name: "Housing stock owned by", value: owning_organisation.name, id: "owning_organisation_id", edit: true },
       { name: "Support services provided by", value: arrangement_type, id: "arrangement_type", edit: true },
       { name: "Primary client group", value: primary_client_group, id: "primary_client_group", edit: true },
@@ -262,10 +261,8 @@ class Scheme < ApplicationRecord
     ]
   end
 
-  def care_acts_options_with_hints
-    hints = { "Yes – part registered as a care home": "A proportion of units are registered as being a care home." }
-
-    Scheme.registered_under_care_acts.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
+  def self.care_acts_options
+    Scheme.registered_under_care_acts.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s) }
   end
 
   def support_level_options_with_hints

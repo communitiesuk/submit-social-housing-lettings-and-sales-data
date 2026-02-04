@@ -152,7 +152,7 @@ RSpec.describe CollectionTimeHelper do
       it "returns a different date within the collection year" do
         result = generate_different_date_within_collection_year(date)
         expect(result).not_to eq(date)
-        expect(result).to be_between(Time.zone.local(2024, 4, 1), Time.zone.local(2025, 3, 31)).inclusive
+        expect(result).to be_between(Date.new(2024, 4, 1), Date.new(2025, 3, 31)).inclusive
       end
     end
 
@@ -162,7 +162,7 @@ RSpec.describe CollectionTimeHelper do
       it "returns a different date within the collection year" do
         result = generate_different_date_within_collection_year(date)
         expect(result).not_to eq(date)
-        expect(result).to be_between(Time.zone.local(2024, 4, 1), Time.zone.local(2025, 3, 31)).inclusive
+        expect(result).to be_between(Date.new(2024, 4, 1), Date.new(2025, 3, 31)).inclusive
       end
     end
 
@@ -170,7 +170,7 @@ RSpec.describe CollectionTimeHelper do
       it "ignores the override and returns a different date within the collection year" do
         result = generate_different_date_within_collection_year(date, start_date_override: Time.zone.local(2023, 12, 31))
         expect(result).not_to eq(date)
-        expect(result).to be_between(Time.zone.local(2024, 4, 1), Time.zone.local(2025, 3, 31)).inclusive
+        expect(result).to be_between(Date.new(2024, 4, 1), Date.new(2025, 3, 31)).inclusive
       end
     end
 
@@ -178,7 +178,7 @@ RSpec.describe CollectionTimeHelper do
       it "ignores the override and returns a different date within the collection year" do
         result = generate_different_date_within_collection_year(date, end_date_override: Time.zone.local(2025, 12, 1))
         expect(result).not_to eq(date)
-        expect(result).to be_between(Time.zone.local(2024, 4, 1), Time.zone.local(2025, 3, 31)).inclusive
+        expect(result).to be_between(Date.new(2024, 4, 1), Date.new(2025, 3, 31)).inclusive
       end
     end
 
@@ -186,7 +186,7 @@ RSpec.describe CollectionTimeHelper do
       it "returns a different date within the overridden range" do
         result = generate_different_date_within_collection_year(date, start_date_override: Time.zone.local(2024, 8, 1), end_date_override: Time.zone.local(2024, 9, 1))
         expect(result).not_to eq(date)
-        expect(result).to be_between(Time.zone.local(2024, 8, 1), Time.zone.local(2024, 9, 1)).inclusive
+        expect(result).to be_between(Date.new(2024, 8, 1), Date.new(2024, 9, 1)).inclusive
       end
     end
 
@@ -194,7 +194,7 @@ RSpec.describe CollectionTimeHelper do
       it "ignores the start_date_override and returns a different date within the collection year" do
         result = generate_different_date_within_collection_year(date, start_date_override: Time.zone.local(2023, 12, 31), end_date_override: Time.zone.local(2024, 5, 1))
         expect(result).not_to eq(date)
-        expect(result).to be_between(Time.zone.local(2024, 4, 1), Time.zone.local(2024, 5, 1)).inclusive
+        expect(result).to be_between(Date.new(2024, 4, 1), Date.new(2024, 5, 1)).inclusive
       end
     end
 
@@ -202,7 +202,7 @@ RSpec.describe CollectionTimeHelper do
       it "ignores the end_date_override and returns a different date within the collection year" do
         result = generate_different_date_within_collection_year(date, start_date_override: Time.zone.local(2025, 3, 1), end_date_override: Time.zone.local(2025, 12, 1))
         expect(result).not_to eq(date)
-        expect(result).to be_between(Time.zone.local(2025, 3, 1), Time.zone.local(2025, 3, 31)).inclusive
+        expect(result).to be_between(Date.new(2025, 3, 1), Date.new(2025, 3, 31)).inclusive
       end
     end
 
@@ -210,7 +210,7 @@ RSpec.describe CollectionTimeHelper do
       it "ignores both overrides and returns a different date within the collection year" do
         result = generate_different_date_within_collection_year(date, start_date_override: Time.zone.local(2023, 12, 31), end_date_override: Time.zone.local(2025, 12, 1))
         expect(result).not_to eq(date)
-        expect(result).to be_between(Time.zone.local(2024, 4, 1), Time.zone.local(2025, 3, 31)).inclusive
+        expect(result).to be_between(Date.new(2024, 4, 1), Date.new(2025, 3, 31)).inclusive
       end
     end
   end
