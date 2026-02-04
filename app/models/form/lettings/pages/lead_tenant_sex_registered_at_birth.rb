@@ -9,7 +9,7 @@ class Form::Lettings::Pages::LeadTenantSexRegisteredAtBirth < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::SexRegisteredAtBirth1.new(nil, nil, self),
+      Form::Lettings::Questions::SexRegisteredAtBirth1.new(nil, nil, self),
     ]
   end
 end
