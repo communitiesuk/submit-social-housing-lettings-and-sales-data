@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Form::Lettings::Questions::PersonSexRegisteredAtBirth < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)

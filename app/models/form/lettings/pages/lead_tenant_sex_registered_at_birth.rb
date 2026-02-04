@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Form::Lettings::Pages::LeadTenantSexRegisteredAtBirth < ::Form::Page
   def initialize(id, hsh, subsection)
     super
