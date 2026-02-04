@@ -248,6 +248,12 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
 
             field_130: "F",
             field_131: "M",
+            field_132: "R",
+            field_133: "F",
+            field_134: "M",
+            field_135: "R",
+            field_136: "F",
+            field_137: "M",
           }
         end
 
