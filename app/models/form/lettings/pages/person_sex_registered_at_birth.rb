@@ -6,7 +6,7 @@ class Form::Lettings::Pages::PersonSexRegisteredAtBirth < ::Form::Page
     @id = "person_#{person_index}_sex_registered_at_birth"
     @person_index = person_index
     @depends_on = [
-      { "details_known_#{person_index}" => 0 },
+      { "details_known_#{person_index}" => 1 },
     ]
   end
 

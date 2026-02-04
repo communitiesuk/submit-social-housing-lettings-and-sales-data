@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Form::Lettings::Questions::SexRegisteredAtBirth1 < ::Form::Question
+class Form::Lettings::Questions::LeadTenantSexRegisteredAtBirth < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "sexrab1"
