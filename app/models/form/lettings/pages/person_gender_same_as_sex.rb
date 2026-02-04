@@ -11,6 +11,7 @@ class Form::Lettings::Pages::PersonGenderSameAsSex < ::Form::Page
   def questions
     @questions ||= [
       Form::Lettings::Questions::GenderSameAsSex.new(nil, nil, self, person_index: @person_index),
+      Form::Lettings::Questions::GenderDescription.new(nil, nil, self, person_index: @person_index),
     ]
   end
 end
