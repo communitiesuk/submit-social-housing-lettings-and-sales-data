@@ -21,6 +21,22 @@ RSpec.describe "Accessibility", js: true do
   end
 
   before do
+    # see https://github.com/dequelabs/axe-core-gems/issues/386#issuecomment-2135927504 for why this is needed
+    # axe-core will normally use 1 second page load timeout.
+    # see https://github.com/dequelabs/axe-core-gems/blob/87632f5e8e947214f10e35b57ea5e2c327f20612/packages/axe-core-api/lib/axe/api/run.rb#L36
+    # this causes timeout errors for slower pages
+    # so we override the page load timeout to 10 seconds for feature specs
+    # this is for the a11y tests, we can only scope to feature specs
+    page.driver.browser.manage.timeouts.instance_eval do
+      def page_load=(*)
+        # no-op don't want axe-core changing this
+      end
+
+      def page_load
+        10 # seconds
+      end
+    end
+
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
     allow(storage_service).to receive(:configuration).and_return(OpenStruct.new(bucket_name: "core-test-collection-resources"))
     allow(user).to receive(:need_two_factor_authentication?).and_return(false)
