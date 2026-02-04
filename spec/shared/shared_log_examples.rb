@@ -8,14 +8,14 @@ RSpec.shared_examples "shared log examples" do |log_type|
     [
       {
         start_date: :current_collection_start_date,
-        label: "current year",
+        label: "current",
       },
       {
         start_date: :next_collection_start_date,
-        label: "next year",
+        label: "next",
       },
     ].each do |scenario|
-      context "when creating a log for #{scenario[:label]}" do
+      context "when creating a log for #{scenario[:label]} year" do
         around do |example|
           start_date = Timecop.return { send(scenario[:start_date]) }
 
@@ -30,8 +30,8 @@ RSpec.shared_examples "shared log examples" do |log_type|
         let(:completed_log) { create(log_type, :completed) }
 
         it "is set to not started for an empty #{log_type} log" do
-          expect(empty_log.not_started?).to be(true)
           expect(empty_log.in_progress?).to be(false)
+          expect(empty_log.not_started?).to be(true)
           expect(empty_log.completed?).to be(false)
           expect(empty_log.deleted?).to be(false)
         end
