@@ -37,6 +37,13 @@ en:
             hint_text: ""
             question_text: "Is the gender the lead tenant identifies with the same as their sex registered at birth?"
 
+          gender_description1:
+            page_header: ""
+            check_answer_label: "Gender identity"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Enter gender identity"
+
           sex1:
             page_header: ""
             check_answer_label: "Lead tenant’s gender identity"
@@ -144,6 +151,13 @@ en:
             hint_text: ""
             question_text: "Is the gender person 2 identifies with the same as their sex registered at birth?"
 
+          gender_description2:
+            page_header: ""
+            check_answer_label: "Gender identity"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Enter gender identity"
+
           sex2:
             page_header: ""
             check_answer_label: "Person 2’s gender identity"
@@ -198,6 +212,13 @@ en:
             check_answer_prompt: ""
             hint_text: ""
             question_text: "Is the gender person 3 identifies with the same as their sex registered at birth?"
+
+          gender_description3:
+            page_header: ""
+            check_answer_label: "Gender identity"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Enter gender identity"
 
           sex3:
             page_header: ""
@@ -254,6 +275,13 @@ en:
             hint_text: ""
             question_text: "Is the gender person 4 identifies with the same as their sex registered at birth?"
 
+          gender_description4:
+            page_header: ""
+            check_answer_label: "Gender identity"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Enter gender identity"
+
           sex4:
             page_header: ""
             check_answer_label: "Person 4’s gender identity"
@@ -308,6 +336,13 @@ en:
             check_answer_prompt: ""
             hint_text: ""
             question_text: "Is the gender person 5 identifies with the same as their sex registered at birth?"
+
+          gender_description5:
+            page_header: ""
+            check_answer_label: "Gender identity"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Enter gender identity"
 
           sex5:
             page_header: ""
@@ -364,6 +399,13 @@ en:
             hint_text: ""
             question_text: "Is the gender person 6 identifies with the same as their sex registered at birth?"
 
+          gender_description6:
+            page_header: ""
+            check_answer_label: "Gender identity"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Enter gender identity"
+
           sex6:
             page_header: ""
             check_answer_label: "Person 6’s gender identity"
@@ -419,6 +461,13 @@ en:
             hint_text: ""
             question_text: "Is the gender person 7 identifies with the same as their sex registered at birth?"
 
+          gender_description7:
+            page_header: ""
+            check_answer_label: "Gender identity"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Enter gender identity"
+
           sex7:
             page_header: ""
             check_answer_label: "Person 7’s gender identity"
@@ -473,6 +522,13 @@ en:
             check_answer_prompt: ""
             hint_text: ""
             question_text: "Is the gender person 8 identifies with the same as their sex registered at birth?"
+
+          gender_description8:
+            page_header: ""
+            check_answer_label: "Gender identity"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Enter gender identity"
 
           sex8:
             page_header: ""

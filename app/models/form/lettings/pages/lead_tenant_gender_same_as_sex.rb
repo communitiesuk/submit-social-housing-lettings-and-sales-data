@@ -8,6 +8,7 @@ class Form::Lettings::Pages::LeadTenantGenderSameAsSex < ::Form::Page
   def questions
     @questions ||= [
       Form::Lettings::Questions::GenderSameAsSex.new(nil, nil, self, person_index: 1),
+      Form::Lettings::Questions::GenderDescription.new(nil, nil, self, person_index: 1),
     ]
   end
 end
