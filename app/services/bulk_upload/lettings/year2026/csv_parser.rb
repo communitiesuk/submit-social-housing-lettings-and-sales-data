@@ -5,7 +5,6 @@ class BulkUpload::Lettings::Year2026::CsvParser
 
   # TODO: CLDC-4162: Update when 2026 format is known
   FIELDS = 137
-  MAX_COLUMNS = 130
   FORM_YEAR = 2026
 
   attr_reader :path
@@ -59,14 +58,6 @@ class BulkUpload::Lettings::Year2026::CsvParser
     valid_field_numbers_count = field_numbers.count { |f| f != "field_blank" }
 
     valid_field_numbers_count == FIELDS
-  end
-
-  def too_many_columns?
-    return if with_headers?
-
-    max_columns_count = body_rows.map(&:size).max - col_offset
-
-    max_columns_count > MAX_COLUMNS
   end
 
   def wrong_template_for_year?
