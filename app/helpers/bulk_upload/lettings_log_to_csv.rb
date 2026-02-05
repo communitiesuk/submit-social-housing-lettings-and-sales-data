@@ -98,158 +98,17 @@ class BulkUpload::LettingsLogToCsv
 
   def to_2026_row
     # TODO: CLDC-4162: Implement when 2026 format is known
-    [
-      overrides[:organisation_id] || log.owning_organisation&.old_visible_id, # 1
-      overrides[:managing_organisation_id] || log.managing_organisation&.old_visible_id,
-      log.assigned_to&.email,
-      log.needstype,
-      log.scheme&.id ? "S#{log.scheme&.id}" : "",
-      log.location&.id,
-      renewal,
-      log.startdate&.day,
-      log.startdate&.month,
-      log.startdate&.strftime("%y"), # 10
-
-      rent_type,
-      log.irproduct_other,
-      log.tenancycode,
-      log.propcode,
-      log.declaration,
-      log.rsnvac,
-      log.unitletas,
-      log.uprn,
-      log.address_line1&.tr(",", " "),
-      log.address_line2&.tr(",", " "), # 20
-
-      log.town_or_city&.tr(",", " "),
-      log.county&.tr(",", " "),
-      ((log.postcode_full || "").split(" ") || [""]).first,
-      ((log.postcode_full || "").split(" ") || [""]).last,
-      log.la,
-      log.unittype_gn,
-      log.builtype,
-      log.wchair,
-      log.beds,
-      log.voiddate&.day, # 30
-
-      log.voiddate&.month,
-      log.voiddate&.strftime("%y"),
-      log.mrcdate&.day,
-      log.mrcdate&.month,
-      log.mrcdate&.strftime("%y"),
-      log.sheltered,
-      log.joint,
-      log.startertenancy,
-      log.tenancy,
-      log.tenancyother, # 40
-
-      log.tenancylength,
-      log.age1 || overrides[:age1],
-      log.sex1,
-      log.ethnic,
-      log.nationality_all_group,
-      log.ecstat1,
-      relat_number(log.relat2),
-      log.age2 || overrides[:age2],
-      log.sex2,
-      log.ecstat2, # 50
-
-      relat_number(log.relat3),
-      log.age3 || overrides[:age3],
-      log.sex3,
-      log.ecstat3,
-      relat_number(log.relat4),
-      log.age4 || overrides[:age4],
-      log.sex4,
-      log.ecstat4,
-      relat_number(log.relat5),
-      log.age5 || overrides[:age5], # 60
-
-      log.sex5,
-      log.ecstat5,
-      relat_number(log.relat6),
-      log.age6 || overrides[:age6],
-      log.sex6,
-      log.ecstat6,
-      relat_number(log.relat7),
-      log.age7 || overrides[:age7],
-      log.sex7,
-      log.ecstat7, # 70
-
-      relat_number(log.relat8),
-      log.age8 || overrides[:age8],
-      log.sex8,
-      log.ecstat8,
-      log.armedforces,
-      log.leftreg,
-      log.reservist,
-      log.preg_occ,
-      log.housingneeds_a,
-      log.housingneeds_b, # 80
-
-      log.housingneeds_c,
-      log.housingneeds_f,
-      log.housingneeds_g,
-      log.housingneeds_h,
-      overrides[:illness] || log.illness,
-      log.illness_type_1,
-      log.illness_type_2,
-      log.illness_type_3,
-      log.illness_type_4,
-      log.illness_type_5, # 90
-
-      log.illness_type_6,
-      log.illness_type_7,
-      log.illness_type_8,
-      log.illness_type_9,
-      log.illness_type_10,
-      log.layear,
-      log.waityear,
-      log.reason,
-      log.reasonother,
-      log.prevten, # 100
-
-      homeless,
-      previous_postcode_known,
-      ((log.ppostcode_full || "").split(" ") || [""]).first,
-      ((log.ppostcode_full || "").split(" ") || [""]).last,
-      log.prevloc,
-      log.reasonpref,
-      log.rp_homeless,
-      log.rp_insan_unsat,
-      log.rp_medwel,
-      log.rp_hardship, # 110
-
-      log.rp_dontknow,
-      cbl,
-      chr,
-      cap,
-      accessible_register,
-      log.referral,
-      net_income_known,
-      log.incfreq,
-      log.earnings,
-      log.hb, # 120
-
-      log.benefits,
-      log.household_charge,
-      log.period,
-      log.brent,
-      log.scharge,
-      log.pscharge,
-      log.supcharg,
-      log.hbrentshortfall,
-      log.tshortfall,
-
-      log.sexrab1,  # 130
-      log.sexrab2,
-      log.sexrab3,
-      log.sexrab4,
-      log.sexrab5,
-      log.sexrab6,
-      log.sexrab7,
-      log.sexrab8, # 137
-    ]
+    to_2025_row +
+      [
+        log.sexrab1, # 130
+        log.sexrab2,
+        log.sexrab3,
+        log.sexrab4,
+        log.sexrab5,
+        log.sexrab6,
+        log.sexrab7,
+        log.sexrab8, # 137
+      ]
   end
 
   def to_2025_row
