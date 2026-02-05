@@ -1501,31 +1501,31 @@ private
   end
 
   def person_2_present?
-    field_47.present? || field_48.present? || field_49.present?
+    field_47.present? || field_48.present? || field_49.present? || field_131.present?
   end
 
   def person_3_present?
-    field_51.present? || field_52.present? || field_53.present?
+    field_51.present? || field_52.present? || field_53.present? || field_132.present?
   end
 
   def person_4_present?
-    field_55.present? || field_56.present? || field_57.present?
+    field_55.present? || field_56.present? || field_57.present? || field_133.present?
   end
 
   def person_5_present?
-    field_59.present? || field_60.present? || field_61.present?
+    field_59.present? || field_60.present? || field_61.present? || field_134.present?
   end
 
   def person_6_present?
-    field_63.present? || field_64.present? || field_65.present?
+    field_63.present? || field_64.present? || field_65.present? || field_135.present?
   end
 
   def person_7_present?
-    field_67.present? || field_68.present? || field_69.present?
+    field_67.present? || field_68.present? || field_69.present? || field_136.present?
   end
 
   def person_8_present?
-    field_71.present? || field_72.present? || field_73.present?
+    field_71.present? || field_72.present? || field_73.present? || field_137.present?
   end
 
   def leftreg
