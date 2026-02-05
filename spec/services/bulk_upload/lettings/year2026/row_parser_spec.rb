@@ -257,6 +257,22 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             field_135: "R",
             field_136: "F",
             field_137: "M",
+            field_138: "1",
+            field_139: "",
+            field_140: "2",
+            field_141: "identity",
+            field_142: "3",
+            field_143: "",
+            field_144: "1",
+            field_145: "",
+            field_146: "2",
+            field_147: "identity",
+            field_148: "3",
+            field_149: "",
+            field_150: "1",
+            field_151: "",
+            field_152: "2",
+            field_153: "identity",
           }
         end
 
