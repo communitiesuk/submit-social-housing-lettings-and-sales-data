@@ -2,30 +2,57 @@ require "rails_helper"
 
 # rubocop:disable RSpec/AnyInstance
 RSpec.shared_examples "shared log examples" do |log_type|
+  include CollectionTimeHelper
+
   describe "status" do
-    let(:empty_log) { create(log_type) }
-    let(:in_progress_log) { create(log_type, :in_progress) }
-    let(:completed_log) { create(log_type, :completed) }
+    [
+      {
+        start_date: :current_collection_start_date,
+        label: "current",
+      },
+      {
+        start_date: :next_collection_start_date,
+        label: "next",
+      },
+    ].each do |scenario|
+      context "when creating a log for #{scenario[:label]} year" do
+        around do |example|
+          start_date = Timecop.return { send(scenario[:start_date]) }
 
-    it "is set to not started for an empty #{log_type} log" do
-      expect(empty_log.not_started?).to be(true)
-      expect(empty_log.in_progress?).to be(false)
-      expect(empty_log.completed?).to be(false)
-      expect(empty_log.deleted?).to be(false)
-    end
+          Timecop.freeze(start_date) do
+            Singleton.__init__(FormHandler)
+            example.run
+          end
+        end
 
-    it "is set to in progress for a started #{log_type} log" do
-      expect(in_progress_log.in_progress?).to be(true)
-      expect(in_progress_log.not_started?).to be(false)
-      expect(in_progress_log.completed?).to be(false)
-      expect(in_progress_log.deleted?).to be(false)
-    end
+        let(:empty_log) { create(log_type) }
+        let(:in_progress_log) { create(log_type, :in_progress) }
+        let(:completed_log) { create(log_type, :completed) }
 
-    it "is set to completed for a completed #{log_type} log" do
-      expect(completed_log.in_progress?).to be(false)
-      expect(completed_log.not_started?).to be(false)
-      expect(completed_log.completed?).to be(true)
-      expect(completed_log.deleted?).to be(false)
+        it "is set to not started for an empty #{log_type} log" do
+          expect(empty_log.in_progress?).to be(false)
+          expect(empty_log.not_started?).to be(true)
+          expect(empty_log.completed?).to be(false)
+          expect(empty_log.deleted?).to be(false)
+        end
+
+        it "is set to in progress for a started #{log_type} log" do
+          expect(in_progress_log.in_progress?).to be(true)
+          expect(in_progress_log.not_started?).to be(false)
+          expect(in_progress_log.completed?).to be(false)
+          expect(in_progress_log.deleted?).to be(false)
+        end
+
+        # if this test starts failing, likely because a new question has been added
+        # and the :completed trait in spec/factories/lettings_log.rb (or sales_log.rb)
+        # needs to be updated to set the database col with that questions answer
+        it "is set to completed for a completed #{log_type} log" do
+          expect(completed_log.in_progress?).to be(false)
+          expect(completed_log.not_started?).to be(false)
+          expect(completed_log.completed?).to be(true)
+          expect(completed_log.deleted?).to be(false)
+        end
+      end
     end
   end
 
