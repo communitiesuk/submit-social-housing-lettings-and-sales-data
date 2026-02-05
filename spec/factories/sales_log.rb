@@ -83,6 +83,7 @@ FactoryBot.define do
       privacynotice { 1 }
       age1_known { 0 }
       age1 { Faker::Number.within(range: 27..45) }
+      sexrab1 { %w[F M X R].sample }
       sex1 { %w[F M X R].sample }
       national { 18 }
       buy1livein { 1 }
@@ -93,6 +94,7 @@ FactoryBot.define do
       builtype { 1 }
       ethnic { 3 }
       ethnic_group { 17 }
+      sexrab2 { %w[F M X R].sample }
       sex2 { "X" }
       buy2livein { "1" }
       ecstat1 { "1" }
@@ -125,9 +127,13 @@ FactoryBot.define do
       savingsnk { 1 }
       prevown { 1 }
       prevshared { 2 }
+      sexrab3 { %w[F M X R].sample }
       sex3 { %w[F M X R].sample }
+      sexrab4 { %w[F M X R].sample }
       sex4 { %w[F M X R].sample }
+      sexrab5 { %w[F M X R].sample }
       sex5 { %w[F M X R].sample }
+      sexrab6 { %w[F M X R].sample }
       sex6 { %w[F M X R].sample }
       mortgage { 20_000 }
       ecstat3 { 9 }
