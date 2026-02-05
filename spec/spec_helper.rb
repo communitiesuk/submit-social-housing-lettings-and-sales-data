@@ -141,7 +141,9 @@ RSpec::Matchers.define :have_same_xml_contents_as do |expected|
   end
 
   failure_message do |actual|
-    "expected that unordered #{fix_xml_content_order(actual)} would be equal to unordered #{fix_xml_content_order(expected)}"
+    actual_unique_lines = fix_xml_content_order(actual).split("\n") - fix_xml_content_order(expected).split("\n")
+    expected_unique_lines = fix_xml_content_order(expected).split("\n") - fix_xml_content_order(actual).split("\n")
+    "expected that unordered #{fix_xml_content_order(actual)} would be equal to unordered #{fix_xml_content_order(expected)}. Unique lines in actual: #{actual_unique_lines.join("\n")}. Unique lines in expected: #{expected_unique_lines.join("\n")}"
   end
 
   failure_message_when_negated do |actual|
