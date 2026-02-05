@@ -131,6 +131,7 @@ module Exports
 
         attribute_hash["age#{index}"] = -9
         attribute_hash["sex#{index}"] = "R"
+        attribute_hash["sexrab#{index}"] = "R"
         attribute_hash["relat#{index}"] = "R"
         attribute_hash["ecstat#{index}"] = 10
       end
@@ -167,11 +168,13 @@ module Exports
       details_known_prefix = "details_known_"
       field_name.starts_with?(details_known_prefix) ||
         pattern_age.match(field_name) ||
-        !EXPORT_FIELDS.include?(field_name) ||
+        (!EXPORT_FIELDS.include?(field_name) && !POST_2026_EXPORT_FIELDS.include?(field_name)) ||
         (lettings_log.form.start_year_2024_or_later? && PRE_2024_EXPORT_FIELDS.include?(field_name)) ||
         (!lettings_log.form.start_year_2024_or_later? && POST_2024_EXPORT_FIELDS.include?(field_name)) ||
         (lettings_log.form.start_year_2025_or_later? && PRE_2025_EXPORT_FIELDS.include?(field_name)) ||
-        (lettings_log.form.start_year_2026_or_later? && PRE_2026_EXPORT_FIELDS.include?(field_name))
+        (lettings_log.form.start_year_2026_or_later? && PRE_2026_EXPORT_FIELDS.include?(field_name)) ||
+        (!lettings_log.form.start_year_2026_or_later? && POST_2026_EXPORT_FIELDS.include?(field_name))
+      # TODO: refactor to include rather than omit - and note that it seems POST 2024 additions have been omitted thus far...
     end
 
     def build_export_xml(lettings_logs)
