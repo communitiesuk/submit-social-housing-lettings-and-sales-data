@@ -92,7 +92,7 @@ class BulkUpload::LettingsLogToCsv
   end
 
   def default_2026_field_numbers
-    (1..BulkUpload::Lettings::Year2026::CsvParser::FIELDS).to_a
+    (1..137).to_a
   end
 
   def to_2026_row
