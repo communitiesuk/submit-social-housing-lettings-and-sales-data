@@ -1582,9 +1582,11 @@ RSpec.describe Merge::MergeOrganisationsService do
             owned_lettings_log_no_location.reload
             expect(new_absorbing_organisation.owned_lettings_logs.count).to eq(2)
             expect(new_absorbing_organisation.managed_lettings_logs.count).to eq(1)
-            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
-            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(new_absorbing_organisation.owned_schemes.first.locations.first)
-            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
+            new_lettings_log = new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id)
+            new_lettings_log_scheme = new_absorbing_organisation.owned_schemes.find_by(service_name: new_lettings_log.scheme.service_name)
+            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(new_lettings_log_scheme)
+            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(new_lettings_log_scheme.locations.first)
+            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(new_lettings_log_scheme)
             expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
           end
 
