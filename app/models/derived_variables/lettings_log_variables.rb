@@ -177,6 +177,8 @@ module DerivedVariables::LettingsLogVariables
       self.la = nil
     end
 
+    clear_gender_description! if form.start_year_2026_or_later?
+
     set_checkbox_values!
   end
 
@@ -416,6 +418,16 @@ private
     return 1 if rent_type == 3
     return 2 if rent_type == 4
     return 3 if rent_type == 5
+  end
+
+  def clear_gender_description!
+    # if gender matching sex not picked as "No, enter gender identity", clear the dependent description field
+    (1..8).each do |person_index|
+      gender_same_as_sex = public_send("gender_same_as_sex#{person_index}")
+      if gender_same_as_sex.present? && gender_same_as_sex != 2
+        self["gender_description#{person_index}"] = nil
+      end
+    end
   end
 
   def set_checkbox_values!

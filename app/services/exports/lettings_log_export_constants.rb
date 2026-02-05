@@ -207,5 +207,7 @@ module Exports::LettingsLogExportConstants
   POST_2026_EXPORT_FIELDS = Set[]
   (1..8).each do |index|
     POST_2026_EXPORT_FIELDS << "sexrab#{index}"
+    POST_2026_EXPORT_FIELDS << "gender_same_as_sex#{index}"
+    POST_2026_EXPORT_FIELDS << "gender_description#{index}"
   end
 end
