@@ -11,7 +11,7 @@ RSpec.describe BulkUpload::Sales::Validator do
   let(:organisation) { create(:organisation, old_visible_id: "123") }
   let(:log) { build(:sales_log, :completed, assigned_to: user) }
   let(:log_to_csv) { BulkUpload::SalesLogToCsv.new(log:) }
-  let(:bulk_upload) { create(:bulk_upload, user:, year: log.collection_start_year) }
+  let(:bulk_upload) { create(:bulk_upload, :sales, user:, year: year) }
   let(:path) { file.path }
   let(:file) { Tempfile.new }
 
