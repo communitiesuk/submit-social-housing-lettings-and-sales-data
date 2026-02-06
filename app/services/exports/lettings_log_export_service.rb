@@ -168,8 +168,6 @@ module Exports
     end
 
     def get_included_fields(lettings_log)
-      pattern_age = /age\d_known/
-      details_known_prefix = "details_known_"
       included_fields = Set[]
       included_fields.merge(ALL_YEAR_EXPORT_FIELDS)
 
@@ -191,7 +189,6 @@ module Exports
                     end
 
       included_fields.merge(year_fields)
-      included_fields.reject! { |field| field.starts_with?(details_known_prefix) || pattern_age.match(field) }
 
       included_fields
     end
