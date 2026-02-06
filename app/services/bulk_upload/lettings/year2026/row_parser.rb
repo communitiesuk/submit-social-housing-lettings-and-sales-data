@@ -414,8 +414,6 @@ class BulkUpload::Lettings::Year2026::RowParser
   validate :validate_needs_type_present, on: :after_log
   validate :validate_data_types, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
-  validate :validate_la_with_local_housing_referral, on: :after_log
-  validate :validate_cannot_be_la_referral_if_general_needs_and_la, on: :after_log
   validate :validate_leaving_reason_for_renewal, on: :after_log
   validate :validate_only_one_housing_needs_type, on: :after_log
   validate :validate_no_disabled_needs_conjunction, on: :after_log
@@ -426,6 +424,7 @@ class BulkUpload::Lettings::Year2026::RowParser
   validate :validate_reasonable_preference_dont_know, on: :after_log
   validate :validate_condition_effects, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
+  validate :validate_referral_fields, on: :after_log
 
   validate :validate_owning_org_data_given, on: :after_log
   validate :validate_owning_org_exists, on: :after_log
@@ -685,7 +684,7 @@ private
   end
 
   def validate_prevten_value_when_renewal
-    return unless field_7 == 1
+    return unless renewal?
     return if field_100.blank? || [6, 30, 31, 32, 33, 34, 35, 38].include?(field_100)
 
     errors.add(:field_100, I18n.t("#{ERROR_BASE_KEY}.prevten.invalid"))
@@ -791,7 +790,7 @@ private
   end
 
   def validate_leaving_reason_for_renewal
-    if field_7 == 1 && ![50, 51, 52, 53].include?(field_98)
+    if renewal? && ![50, 51, 52, 53].include?(field_98)
       errors.add(:field_98, I18n.t("#{ERROR_BASE_KEY}.reason.renewal_reason_needed"))
     end
   end
@@ -804,16 +803,8 @@ private
     field_4 == 2
   end
 
-  def validate_cannot_be_la_referral_if_general_needs_and_la
-    if field_116 == 4 && general_needs? && owning_organisation && owning_organisation.la?
-      errors.add :field_116, I18n.t("#{ERROR_BASE_KEY}.referral.general_needs_prp_referred_by_la")
-    end
-  end
-
-  def validate_la_with_local_housing_referral
-    if field_116 == 3 && owning_organisation && owning_organisation.la?
-      errors.add(:field_116, I18n.t("#{ERROR_BASE_KEY}.referral.nominated_by_local_ha_but_la"))
-    end
+  def renewal?
+    field_7 == 1
   end
 
   def validate_relevant_collection_window
@@ -992,6 +983,57 @@ private
       errors.add(:field_125, error_message) # scharge
       errors.add(:field_126, error_message) # pscharge
       errors.add(:field_127, error_message) # chcharge
+    end
+  end
+
+  def field_referral_register_la_valid?
+    if owning_organisation&.la?
+      [1, 2, 3, 4].include?(field_116)
+    else
+      field_116.blank?
+    end
+  end
+
+  def field_referral_register_prp_valid?
+    if owning_organisation&.prp?
+      [5, 6, 7, 8, 9].include?(field_130)
+    else
+      field_130.blank?
+    end
+  end
+
+  def field_referral_noms_valid?
+    case field_130
+    when 6
+      [1, 2, 3, 4].include?(field_131)
+    when 7
+      [5, 6, 7, 8].include?(field_131)
+    else
+      field_131.blank?
+    end
+  end
+
+  def field_referral_org_valid?
+    case field_131
+    when 1
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].include?(field_132)
+    when 7
+      [11, 12, 13, 14, 15, 16, 17, 18, 19, 20].include?(field_132)
+    else
+      field_132.blank?
+    end
+  end
+
+  def referral_fields_valid?
+    field_referral_register_la_valid? && field_referral_register_prp_valid? && field_referral_noms_valid? && field_referral_org_valid?
+  end
+
+  def validate_referral_fields
+    return if renewal?
+    return if referral_fields_valid?
+
+    %i[field_116 field_130 field_131 field_132].each do |field|
+      errors.add(field, I18n.t("#{ERROR_BASE_KEY}.referral.invalid_option"))
     end
   end
 
@@ -1694,6 +1736,11 @@ private
 
   def referral_register
     return unless owning_organisation
+    # by default CORE will ingest all these fields and nil questions that aren't asked.
+    # here, we specifically want the log to be invalid if any of the referral fields are wrong.
+    # BU will only consider a log invalid if its incomplete.
+    # so, nil these fields if any are invalid.
+    return unless referral_fields_valid?
 
     if owning_organisation.la?
       field_116
@@ -1703,12 +1750,20 @@ private
   end
 
   def referral_noms
-    field_131
+    return unless owning_organisation
+    return unless referral_fields_valid?
+
+    if owning_organisation.prp?
+      field_131
+    end
   end
 
   def referral_org
     return unless owning_organisation
+    return unless referral_fields_valid?
 
-    field_132
+    if owning_organisation.prp?
+      field_132
+    end
   end
 end
