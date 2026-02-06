@@ -13,13 +13,13 @@ RSpec.describe Imports::VariableDefinitionsService, type: :service do
 
   describe "#call" do
     before do
-      allow(Dir).to receive(:glob).and_return(%w[lettings_download_23_24.csv lettings_download_24_25.csv sales_download_23_24.csv sales_download_24_25.csv])
+      allow(Dir).to receive(:glob).and_return(%w[lettings_download_23_24.csv lettings_download_24_25.csv sales_download_23_24.csv sales_download_24_25.csv sales_download_26_27.csv])
       allow(service).to receive(:process_file)
     end
 
     it "processes each file in the directory" do
       service.call
-      %w[lettings_download_23_24.csv lettings_download_24_25.csv sales_download_23_24.csv sales_download_24_25.csv].each do |file|
+      %w[lettings_download_23_24.csv lettings_download_24_25.csv sales_download_23_24.csv sales_download_24_25.csv sales_download_26_27.csv].each do |file|
         expect(service).to have_received(:process_file).with(file)
       end
     end
