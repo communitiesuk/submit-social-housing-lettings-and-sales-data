@@ -172,7 +172,6 @@ module Exports
       details_known_prefix = "details_known_"
       included_fields = Set[]
       included_fields.merge(EXPORT_FIELDS)
-      included_fields.merge(POST_2026_EXPORT_FIELDS)
 
       if lettings_log.form.start_year_2024_or_later?
         included_fields.subtract(PRE_2024_EXPORT_FIELDS)

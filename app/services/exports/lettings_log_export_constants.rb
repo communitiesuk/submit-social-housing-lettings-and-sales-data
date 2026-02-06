@@ -161,6 +161,7 @@ module Exports::LettingsLogExportConstants
     EXPORT_FIELDS << "age#{index}"
     EXPORT_FIELDS << "ecstat#{index}"
     EXPORT_FIELDS << "sex#{index}"
+    EXPORT_FIELDS << "sexrab#{index}"
   end
   (2..8).each do |index|
     EXPORT_FIELDS << "relat#{index}"
