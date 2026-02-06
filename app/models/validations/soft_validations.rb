@@ -215,6 +215,10 @@ module Validations::SoftValidations
     (2..max_person_with_details).many? { |n| public_send("relat#{n}") == "P" }
   end
 
+  def at_least_one_working_situation_is_sickness_and_household_sickness_is_no?
+    at_least_one_person_working_situation_is_illness? && no_one_in_household_with_illness?
+  end
+
 private
 
   def details_known_or_lead_tenant?(tenant_number)
@@ -281,5 +285,17 @@ private
     return unless age && relationship
 
     age < 16 && relationship == "P"
+  end
+
+  def at_least_one_person_working_situation_is_illness?
+    person_count = hhmemb || 8
+
+    (1..person_count).any? { |n| public_send("ecstat#{n}") == 8 }
+  end
+
+  def no_one_in_household_with_illness?
+    return unless illness
+
+    illness == 2
   end
 end
