@@ -60,6 +60,14 @@ class BulkUpload::Lettings::Year2026::CsvParser
     valid_field_numbers_count == FIELDS
   end
 
+  def too_many_columns?
+    return if with_headers?
+
+    max_columns_count = body_rows.map(&:size).max - col_offset
+
+    max_columns_count > FIELDS
+  end
+
   def wrong_template_for_year?
     collection_start_year_for_date(first_record_start_date) != FORM_YEAR
   rescue Date::Error
