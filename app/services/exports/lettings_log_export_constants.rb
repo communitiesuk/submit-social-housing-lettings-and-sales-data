@@ -98,7 +98,7 @@ module Exports::LettingsLogExportConstants
     "startertenancy",
     "supcharg",
     "support",
-    "status",
+    "status", # New metadata coming from our system
     "tcharge",
     "tshortfall",
     "tenancy",
