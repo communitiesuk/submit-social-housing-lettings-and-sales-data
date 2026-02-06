@@ -133,7 +133,8 @@ module Exports::SalesLogExportConstants
     "STAIRINITIALMONTH",
     "STAIRINITIALDAY",
     "HASSERVICECHARGES",
-    "SERVICECHARGES",]
+    "SERVICECHARGES",
+  ]
 
   (1..6).each do |index|
     ALL_YEAR_EXPORT_FIELDS << "AGE#{index}"
