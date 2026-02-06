@@ -134,6 +134,15 @@ class BulkUpload::Lettings::Year2026::RowParser
     field_127: "What is the support charge?",
     field_128: "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
     field_129: "What do you expect the outstanding amount to be?",
+
+    field_130: "Lead tenant's sex, as registered at birth",
+    field_131: "Person 2's sex, as registered at birth",
+    field_132: "Person 3's sex, as registered at birth",
+    field_133: "Person 4's sex, as registered at birth",
+    field_134: "Person 5's sex, as registered at birth",
+    field_135: "Person 6's sex, as registered at birth",
+    field_136: "Person 7's sex, as registered at birth",
+    field_137: "Person 8's sex, as registered at birth",
   }.freeze
 
   RENT_TYPE_BU_MAPPING = {
@@ -282,6 +291,15 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_127, :decimal
   attribute :field_128, :integer
   attribute :field_129, :decimal
+
+  attribute :field_130, :string
+  attribute :field_131, :string
+  attribute :field_132, :string
+  attribute :field_133, :string
+  attribute :field_134, :string
+  attribute :field_135, :string
+  attribute :field_136, :string
+  attribute :field_137, :string
 
   validate :validate_valid_radio_option, on: :before_log
 
@@ -541,6 +559,7 @@ class BulkUpload::Lettings::Year2026::RowParser
       !supported_housing? ? "field_24" : nil,  # postcode # TODO: CLDC-4119: add postcode to hash for supported housing
       "field_42", # age1
       "field_43",  # sex1
+      "field_130", # sexrab1
       "field_46",  # ecstat1
     )
     if [field_124, field_125, field_126, field_127].all?(&:present?)
@@ -689,6 +708,7 @@ private
     [
       "startdate",
       "age1",
+      "sexrab1",
       "sex1",
       "ecstat1",
       "owning_organisation",
@@ -979,6 +999,7 @@ private
       errors.add(:field_24, error_message) unless supported_housing? # postcode_full # TODO: CLDC-4119: add postcode to error fields for supported housing
       errors.add(:field_25, error_message) unless supported_housing? # la # TODO: CLDC-4119: add LA to error fields for supported housing
       errors.add(:field_42, error_message) # age1
+      errors.add(:field_130, error_message) # sexrab1
       errors.add(:field_43, error_message) # sex1
       errors.add(:field_46, error_message) # ecstat1
       errors.add(:field_122, error_message) unless general_needs? # household_charge
@@ -1150,6 +1171,15 @@ private
       town_or_city: [:field_21],
       county: [:field_22],
       uprn_selection: [:field_19],
+
+      sexrab1: %i[field_130],
+      sexrab2: %i[field_131],
+      sexrab3: %i[field_132],
+      sexrab4: %i[field_133],
+      sexrab5: %i[field_134],
+      sexrab6: %i[field_135],
+      sexrab7: %i[field_136],
+      sexrab8: %i[field_137],
     }.compact
   end
 
@@ -1356,6 +1386,15 @@ private
     attributes["postcode_full_input"] = postcode_full
     attributes["select_best_address_match"] = true if field_18.blank?
 
+    attributes["sexrab1"] = field_130
+    attributes["sexrab2"] = field_131
+    attributes["sexrab3"] = field_132
+    attributes["sexrab4"] = field_133
+    attributes["sexrab5"] = field_134
+    attributes["sexrab6"] = field_135
+    attributes["sexrab7"] = field_136
+    attributes["sexrab8"] = field_137
+
     attributes
   end
 
@@ -1462,31 +1501,31 @@ private
   end
 
   def person_2_present?
-    field_47.present? || field_48.present? || field_49.present?
+    field_47.present? || field_48.present? || field_49.present? || field_131.present?
   end
 
   def person_3_present?
-    field_51.present? || field_52.present? || field_53.present?
+    field_51.present? || field_52.present? || field_53.present? || field_132.present?
   end
 
   def person_4_present?
-    field_55.present? || field_56.present? || field_57.present?
+    field_55.present? || field_56.present? || field_57.present? || field_133.present?
   end
 
   def person_5_present?
-    field_59.present? || field_60.present? || field_61.present?
+    field_59.present? || field_60.present? || field_61.present? || field_134.present?
   end
 
   def person_6_present?
-    field_63.present? || field_64.present? || field_65.present?
+    field_63.present? || field_64.present? || field_65.present? || field_135.present?
   end
 
   def person_7_present?
-    field_67.present? || field_68.present? || field_69.present?
+    field_67.present? || field_68.present? || field_69.present? || field_136.present?
   end
 
   def person_8_present?
-    field_71.present? || field_72.present? || field_73.present?
+    field_71.present? || field_72.present? || field_73.present? || field_137.present?
   end
 
   def leftreg

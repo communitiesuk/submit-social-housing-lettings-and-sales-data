@@ -92,13 +92,22 @@ class BulkUpload::LettingsLogToCsv
   end
 
   def default_2026_field_numbers
-    # TODO: CLDC-4162 Replace with actual field numbers when 2026 format is known
-    (1..129).to_a
+    (1..BulkUpload::Lettings::Year2026::CsvParser::FIELDS).to_a
   end
 
   def to_2026_row
     # TODO: CLDC-4162: Implement when 2026 format is known
-    to_2025_row
+    to_2025_row +
+      [
+        log.sexrab1, # 130
+        log.sexrab2,
+        log.sexrab3,
+        log.sexrab4,
+        log.sexrab5,
+        log.sexrab6,
+        log.sexrab7,
+        log.sexrab8, # 137
+      ]
   end
 
   def to_2025_row
