@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_01_23_150201) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_28_121417) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -376,6 +376,14 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_23_150201) do
     t.boolean "manual_address_entry_selected", default: false
     t.integer "referral_type"
     t.integer "working_situation_illness_check"
+    t.string "sexrab1"
+    t.string "sexrab2"
+    t.string "sexrab3"
+    t.string "sexrab4"
+    t.string "sexrab5"
+    t.string "sexrab6"
+    t.string "sexrab7"
+    t.string "sexrab8"
     t.index ["assigned_to_id"], name: "index_lettings_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
@@ -788,6 +796,12 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_23_150201) do
     t.datetime "lasttransaction"
     t.datetime "initialpurchase"
     t.boolean "manual_address_entry_selected", default: false
+    t.string "sexrab1"
+    t.string "sexrab2"
+    t.string "sexrab3"
+    t.string "sexrab4"
+    t.string "sexrab5"
+    t.string "sexrab6"
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
