@@ -8,4 +8,8 @@ class Form::Lettings::Pages::ReferralOrg < ::Form::Page
   def questions
     @questions ||= [Form::Lettings::Questions::ReferralOrg.new(nil, nil, self)]
   end
+
+  def routed_to?(log, _current_user)
+    log.owning_organisation&.prp?
+  end
 end

@@ -35,6 +35,7 @@ class LettingsLog < Log
   before_validation :set_derived_fields!
   before_validation :process_uprn_change!, if: :should_process_uprn_change?
   before_validation :process_address_change!, if: :should_process_address_change?
+  before_validation :reset_referral_register!, if: :should_reset_referral_register?
 
   belongs_to :scheme, optional: true
   belongs_to :location, optional: true
@@ -377,8 +378,12 @@ class LettingsLog < Log
   end
 
   def is_internal_transfer?
-    # 1: Internal Transfer
-    referral == 1
+    if form.start_year_2026_or_later?
+      referral_register == 2
+    else
+      # 1: Internal Transfer
+      referral == 1
+    end
   end
 
   def is_from_prp_only_housing_register_or_waiting_list?
@@ -943,5 +948,17 @@ private
     else
       uprn_selection_changed? || startdate_changed?
     end
+  end
+
+  def reset_referral_register!
+    self.referral_register = nil
+  end
+
+  def should_reset_referral_register?
+    return unless owning_organisation_id_changed? && owning_organisation_id && owning_organisation_id_was
+
+    old_owning_organisation = Organisation.find(owning_organisation_id_was)
+
+    old_owning_organisation.provider_type != owning_organisation.provider_type
   end
 end
