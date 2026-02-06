@@ -1,16 +1,24 @@
 class Form::Sales::Questions::ServiceCharge < ::Form::Question
-  def initialize(id, hsh, subsection)
-    super
+  def initialize(id, hsh, subsection, staircasing:)
+    super(id, hsh, subsection)
     @id = "mscharge"
     @type = "numeric"
     @min = 1
+    @max = 9999.99
     @step = 0.01
     @width = 5
     @prefix = "£"
     @copy_key = "sales.sale_information.servicecharges.servicecharge"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @staircasing = staircasing
+    @question_number = question_number_from_year[form.start_date.year] || question_number_from_year[question_number_from_year.keys.max]
     @strip_commas = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2025 => 88 }.freeze
+  def question_number_from_year
+    if @staircasing
+      { 2026 => 0 }.freeze
+    else
+      { 2025 => 88 }.freeze
+    end
+  end
 end
