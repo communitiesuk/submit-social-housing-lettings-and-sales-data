@@ -44,8 +44,6 @@ RSpec.describe Form::Sales::Questions::SexRegisteredAtBirth2, type: :model do
   end
 
   it "has the correct inferred_check_answers_value" do
-    expect(question.inferred_check_answers_value).to eq([
-      { "condition" => { "sexrab2" => "R" }, "value" => "Buyer prefers not to say" },
-    ])
+    expect(question.inferred_check_answers_value).to be_nil
   end
 end

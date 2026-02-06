@@ -156,12 +156,16 @@ module Exports
 
     def get_included_fields(sales_log)
       included_fields = Set[]
-      included_fields.merge(EXPORT_FIELDS)
+      included_fields.merge(ALL_YEAR_EXPORT_FIELDS)
 
-      if sales_log.form.start_year_2026_or_later?
-        included_fields.merge(POST_2026_EXPORT_FIELDS)
-      end
+      year_fields = case sales_log.collection_start_year
+                    when 2026
+                      YEAR_2026_EXPORT_FIELDS
+                    else
+                      Set[]
+                    end
 
+      included_fields.merge(year_fields)
       included_fields
     end
 
