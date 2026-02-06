@@ -42,4 +42,8 @@ RSpec.describe Form::Sales::Questions::SexRegisteredAtBirth1, type: :model do
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to eq(1)
   end
+
+  it "has the correct inferred_check_answers_value" do
+    expect(question.inferred_check_answers_value).to be_nil
+  end
 end
