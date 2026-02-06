@@ -171,24 +171,26 @@ module Exports
       pattern_age = /age\d_known/
       details_known_prefix = "details_known_"
       included_fields = Set[]
-      included_fields.merge(EXPORT_FIELDS)
+      included_fields.merge(ALL_YEAR_EXPORT_FIELDS)
 
-      if lettings_log.form.start_year_2024_or_later?
-        included_fields.subtract(PRE_2024_EXPORT_FIELDS)
-      else
-        included_fields.subtract(POST_2024_EXPORT_FIELDS)
-      end
+      year_fields = case lettings_log.collection_start_year
+                    when 2021
+                      YEAR_2021_EXPORT_FIELDS
+                    when 2022
+                      YEAR_2022_EXPORT_FIELDS
+                    when 2023
+                      YEAR_2023_EXPORT_FIELDS
+                    when 2024
+                      YEAR_2024_EXPORT_FIELDS
+                    when 2025
+                      YEAR_2025_EXPORT_FIELDS
+                    when 2026
+                      YEAR_2026_EXPORT_FIELDS
+                    else
+                      Set[]
+                    end
 
-      if lettings_log.form.start_year_2025_or_later?
-        included_fields.subtract(PRE_2025_EXPORT_FIELDS)
-      end
-
-      if lettings_log.form.start_year_2026_or_later?
-        included_fields.subtract(PRE_2026_EXPORT_FIELDS)
-      else
-        included_fields.subtract(POST_2026_EXPORT_FIELDS)
-      end
-
+      included_fields.merge(year_fields)
       included_fields.reject! { |field| field.starts_with?(details_known_prefix) || pattern_age.match(field) }
 
       included_fields
