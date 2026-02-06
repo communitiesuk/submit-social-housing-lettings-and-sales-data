@@ -1041,23 +1041,23 @@ private
   end
 
   def person_2_present?
-    field_35.present? || field_36.present? || field_34.present?
+    field_35.present? || field_36.present? || field_34.present? || field_123.present?
   end
 
   def person_3_present?
-    field_43.present? || field_44.present? || field_42.present?
+    field_43.present? || field_44.present? || field_42.present? || field_124.present?
   end
 
   def person_4_present?
-    field_47.present? || field_48.present? || field_46.present?
+    field_47.present? || field_48.present? || field_46.present? || field_125.present?
   end
 
   def person_5_present?
-    field_51.present? || field_52.present? || field_50.present?
+    field_51.present? || field_52.present? || field_50.present? || field_126.present?
   end
 
   def person_6_present?
-    field_55.present? || field_56.present? || field_54.present?
+    field_55.present? || field_56.present? || field_54.present? || field_127.present?
   end
 
   def relationship_from_is_partner(is_partner)
