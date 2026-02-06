@@ -7,7 +7,7 @@ module Exports::SalesLogExportConstants
     csv: 2,
   }.freeze
 
-  EXPORT_FIELDS = Set["ID",
+  ALL_YEAR_EXPORT_FIELDS = Set["ID",
                       "STATUS",
                       "DAY",
                       "MONTH",
@@ -135,18 +135,18 @@ module Exports::SalesLogExportConstants
                       "SERVICECHARGES",]
 
   (1..6).each do |index|
-    EXPORT_FIELDS << "AGE#{index}"
-    EXPORT_FIELDS << "ECSTAT#{index}"
-    EXPORT_FIELDS << "SEX#{index}"
+    ALL_YEAR_EXPORT_FIELDS << "AGE#{index}"
+    ALL_YEAR_EXPORT_FIELDS << "ECSTAT#{index}"
+    ALL_YEAR_EXPORT_FIELDS << "SEX#{index}"
   end
 
   (2..6).each do |index|
-    EXPORT_FIELDS << "RELAT#{index}"
+    ALL_YEAR_EXPORT_FIELDS << "RELAT#{index}"
   end
 
-  POST_2026_EXPORT_FIELDS = Set[]
+  YEAR_2026_EXPORT_FIELDS = Set[]
 
   (1..6).each do |index|
-    POST_2026_EXPORT_FIELDS << "SEXRAB#{index}"
+    YEAR_2026_EXPORT_FIELDS << "SEXRAB#{index}"
   end
 end
