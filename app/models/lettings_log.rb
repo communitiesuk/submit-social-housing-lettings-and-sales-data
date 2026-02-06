@@ -876,6 +876,10 @@ private
     end
   end
 
+  def partner_numbers
+    (2..8).select { |i| public_send("relat#{i}") == "P" }
+  end
+
   def age_refused?
     [age1_known, age2_known, age3_known, age4_known, age5_known, age6_known, age7_known, age8_known].any?(1)
   end

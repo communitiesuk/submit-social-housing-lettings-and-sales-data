@@ -96,8 +96,13 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
                 "operator" => ">=",
                 "operand" => 16,
               },
+              "relat2" => { "operator" => "!=", "operand" => "P" },
             },
-            { "details_known_3" => 0, "age3" => nil },
+            {
+              "details_known_3" => 0,
+              "age3" => nil,
+              "relat2" => { "operator" => "!=", "operand" => "P" },
+            },
           ],
         )
       end

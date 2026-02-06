@@ -323,7 +323,12 @@ class Form
         if value.is_a?(Hash) && value.key?("operator")
           operator = value["operator"]
           operand = value["operand"]
-          log[question]&.send(operator, operand)
+
+          if operator == "!=" # This branch is needed as `nil` does not behave as expected with the default logic (`nil&.send("!=", operand)` => `nil` i.e., `false`).
+            log[question] != operand
+          else
+            log[question]&.send(operator, operand)
+          end
         else
           parts = question.split(".")
           log_value = send_chain(parts, log)
