@@ -537,7 +537,15 @@ class BulkUpload::SalesLogToCsv
 
   def to_2026_row
     # TODO: CLDC-4162: Implement when 2026 template is available
-    to_2025_row
+    to_2025_row +
+      [
+        log.sexrab1,
+        log.sexrab2,
+        log.sexrab3,
+        log.sexrab4,
+        log.sexrab5,
+        log.sexrab6, # 127
+      ]
   end
 
   def custom_field_numbers_row(seed: nil, field_numbers: nil)
