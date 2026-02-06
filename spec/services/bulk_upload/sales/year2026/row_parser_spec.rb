@@ -112,6 +112,12 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       field_105: "07",
       field_106: "2023",
       field_110: "900",
+      field_122: "F",
+      field_123: "F",
+      field_124: "M",
+      field_125: "M",
+      field_126: "R",
+      field_127: "R",
     }
   end
 
@@ -1432,7 +1438,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       let(:attributes) { { bulk_upload: } }
 
       before do
-        build(:sales_log, owning_organisation: nil, saledate: nil, purchid: nil, age1: nil, sex1: nil, ecstat1: nil).save(validate: false)
+        build(:sales_log, owning_organisation: nil, saledate: nil, purchid: nil, age1: nil, sexrab1: nil, sex1: nil, ecstat1: nil).save(validate: false)
       end
 
       it "does not add duplicate logs validation to the blank row" do

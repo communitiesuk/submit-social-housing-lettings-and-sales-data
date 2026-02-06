@@ -150,8 +150,23 @@ module Exports
       attribute_hash
     end
 
-    def is_omitted_field?(field_name, _sales_log)
-      !EXPORT_FIELDS.include?(field_name)
+    def is_included_field?(field_name, included_fields)
+      included_fields.include?(field_name)
+    end
+
+    def get_included_fields(sales_log)
+      included_fields = Set[]
+      included_fields.merge(ALL_YEAR_EXPORT_FIELDS)
+
+      year_fields = case sales_log.collection_start_year
+                    when 2026
+                      YEAR_2026_EXPORT_FIELDS
+                    else
+                      Set[]
+                    end
+
+      included_fields.merge(year_fields)
+      included_fields
     end
 
     def build_export_xml(sales_logs)
@@ -161,11 +176,12 @@ module Exports
         attribute_hash = apply_cds_transformation(sales_log, EXPORT_MODE[:xml])
         form = doc.create_element("form")
         doc.at("forms") << form
+        included_fields = get_included_fields(sales_log)
         attribute_hash.each do |key, value|
-          if is_omitted_field?(key, sales_log)
-            next
-          else
+          if is_included_field?(key, included_fields)
             form << doc.create_element(key, value)
+          else
+            next
           end
         end
       end
