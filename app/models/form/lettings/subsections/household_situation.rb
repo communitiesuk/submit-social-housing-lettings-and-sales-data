@@ -22,12 +22,18 @@ class Form::Lettings::Subsections::HouseholdSituation < ::Form::Subsection
       Form::Lettings::Pages::ReasonablePreferenceReason.new(nil, nil, self),
       Form::Lettings::Pages::AllocationSystem.new("allocation_system", nil, self),
       referral_questions,
-      Form::Lettings::Pages::ReferralValueCheck.new(nil, nil, self),
     ].flatten.compact
   end
 
   def referral_questions
-    if form.start_year_2025_or_later?
+    if form.start_year_2026_or_later?
+      [
+        Form::Lettings::Pages::ReferralRegisterLa.new(nil, nil, self),
+        Form::Lettings::Pages::ReferralRegisterPrp.new(nil, nil, self),
+        Form::Lettings::Pages::ReferralNoms.new(nil, nil, self),
+        Form::Lettings::Pages::ReferralOrg.new(nil, nil, self),
+      ]
+    elsif form.start_year_2025_or_later?
       [
         Form::Lettings::Pages::ReferralType.new(nil, nil, self),
         Form::Lettings::Pages::ReferralDirect.new(nil, nil, self),
@@ -35,6 +41,7 @@ class Form::Lettings::Subsections::HouseholdSituation < ::Form::Subsection
         Form::Lettings::Pages::ReferralPrp.new(nil, nil, self),
         Form::Lettings::Pages::ReferralHsc.new(nil, nil, self),
         Form::Lettings::Pages::ReferralJustice.new(nil, nil, self),
+        Form::Lettings::Pages::ReferralValueCheck.new(nil, nil, self),
       ]
     else
       [
@@ -42,6 +49,7 @@ class Form::Lettings::Subsections::HouseholdSituation < ::Form::Subsection
         Form::Lettings::Pages::ReferralGeneralNeedsPrp.new(nil, nil, self),
         Form::Lettings::Pages::ReferralSupportedHousing.new(nil, nil, self),
         Form::Lettings::Pages::ReferralSupportedHousingPrp.new(nil, nil, self),
+        Form::Lettings::Pages::ReferralValueCheck.new(nil, nil, self),
       ]
     end
   end

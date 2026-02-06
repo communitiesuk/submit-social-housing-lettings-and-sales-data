@@ -1,3 +1,5 @@
+# added in 2025
+# removed in 2026
 class Form::Lettings::Pages::ReferralHsc < ::Form::Page
   def initialize(id, hsh, subsection)
     super
