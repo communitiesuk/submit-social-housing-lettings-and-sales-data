@@ -6,7 +6,7 @@ class Form::Lettings::Questions::ReferralNoms < ::Form::Question
     @copy_key = "lettings.household_situation.referral.noms"
     @type = "radio"
     @check_answers_card_number = 0
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
     @referral_register = referral_register
   end
 
@@ -45,5 +45,5 @@ class Form::Lettings::Questions::ReferralNoms < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2026 => 84 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2026 => 92 }.freeze
 end

@@ -66,6 +66,10 @@ RSpec.describe Form::Lettings::Questions::ReferralRegister, type: :model do
         }.freeze,
       )
     end
+
+    it "has the correct question_number" do
+      expect(question.question_number).to eq(91)
+    end
   end
 
   context "when log is owned by an PRP" do
@@ -92,9 +96,9 @@ RSpec.describe Form::Lettings::Questions::ReferralRegister, type: :model do
         }.freeze,
       )
     end
-  end
 
-  it "has the correct question_number" do
-    expect(question.question_number).to eq(84)
+    it "has the correct question_number" do
+      expect(question.question_number).to eq(92)
+    end
   end
 end

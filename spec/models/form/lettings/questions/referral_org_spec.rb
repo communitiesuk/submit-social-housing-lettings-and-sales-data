@@ -114,6 +114,6 @@ RSpec.describe Form::Lettings::Questions::ReferralOrg, type: :model do
   end
 
   it "has the correct question_number" do
-    expect(question.question_number).to eq(84)
+    expect(question.question_number).to eq(92)
   end
 end
