@@ -18,5 +18,5 @@ class Form::Lettings::Questions::Armedforces < ::Form::Question
     "6" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 66, 2024 => 65, 2025 => 65, 2026 => 65 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 66, 2024 => 65, 2025 => 65, 2026 => 64 }.freeze
 end

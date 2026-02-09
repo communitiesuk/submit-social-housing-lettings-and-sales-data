@@ -13,5 +13,5 @@ class Form::Lettings::Questions::Age1Known < ::Form::Question
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 32, 2024 => 31, 2025 => 31, 2026 => 31 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 32, 2024 => 31, 2025 => 31, 2026 => 30 }.freeze
 end

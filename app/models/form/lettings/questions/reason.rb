@@ -132,5 +132,5 @@ class Form::Lettings::Questions::Reason < ::Form::Question
     }.freeze,
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2024 => 76, 2025 => 76, 2026 => 76 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2024 => 76, 2025 => 76, 2026 => 75 }.freeze
 end

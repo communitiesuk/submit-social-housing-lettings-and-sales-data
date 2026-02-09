@@ -22,7 +22,7 @@ class Form::Lettings::Questions::Period < ::Form::Question
     "10" => { "value" => "Weekly for 53 weeks" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 92, 2024 => 91, 2025 => 91, 2026 => 91 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 92, 2024 => 91, 2025 => 91, 2026 => 90 }.freeze
 
   def displayed_answer_options(log, _user)
     return ANSWER_OPTIONS if log.managing_organisation.nil?

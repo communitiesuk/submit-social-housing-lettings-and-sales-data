@@ -16,5 +16,5 @@ class Form::Lettings::Questions::GenderIdentity1 < ::Form::Question
     "R" => { "value" => "Tenant prefers not to say" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 33, 2024 => 32, 2025 => 32, 2026 => 32 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 33, 2024 => 32, 2025 => 32, 2026 => 31 }.freeze
 end

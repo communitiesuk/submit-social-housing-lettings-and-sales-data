@@ -7,5 +7,5 @@ class Form::Lettings::Questions::Mrcdate < ::Form::Question
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 24, 2024 => 24, 2025 => 24, 2026 => 24 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 24, 2024 => 24, 2025 => 24, 2026 => 23 }.freeze
 end

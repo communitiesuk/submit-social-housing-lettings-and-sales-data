@@ -15,5 +15,5 @@ class Form::Lettings::Questions::Reservist < ::Form::Question
     "3" => { "value" => "Person prefers not to say" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 68, 2024 => 67, 2025 => 67, 2026 => 67 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 68, 2024 => 67, 2025 => 67, 2026 => 66 }.freeze
 end

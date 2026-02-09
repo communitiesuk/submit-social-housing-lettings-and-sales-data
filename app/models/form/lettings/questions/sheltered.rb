@@ -27,5 +27,5 @@ class Form::Lettings::Questions::Sheltered < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 29, 2024 => 29, 2025 => 25, 2026 => 25 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 29, 2024 => 29, 2025 => 25, 2026 => 24 }.freeze
 end

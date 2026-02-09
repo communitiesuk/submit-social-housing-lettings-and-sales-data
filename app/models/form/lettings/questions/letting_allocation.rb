@@ -28,5 +28,5 @@ class Form::Lettings::Questions::LettingAllocation < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 84, 2024 => 83, 2025 => 83, 2026 => 83 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 84, 2024 => 83, 2025 => 83, 2026 => 82 }.freeze
 end

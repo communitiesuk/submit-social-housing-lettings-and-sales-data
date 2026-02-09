@@ -11,5 +11,5 @@ class Form::Lettings::Questions::Majorrepairs < ::Form::Question
 
   ANSWER_OPTIONS = { "1" => { "value" => "Yes" }, "0" => { "value" => "No" } }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 24, 2024 => 24, 2025 => 24, 2026 => 24 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 24, 2024 => 24, 2025 => 24, 2026 => 23 }.freeze
 end

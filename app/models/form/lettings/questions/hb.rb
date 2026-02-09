@@ -17,5 +17,5 @@ class Form::Lettings::Questions::Hb < ::Form::Question
     "3" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 89, 2024 => 88, 2025 => 88, 2026 => 88 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 89, 2024 => 88, 2025 => 88, 2026 => 87 }.freeze
 end

@@ -17,7 +17,7 @@ class Form::Lettings::Questions::NationalityAll < ::Form::Question
     @answer_options.reject { |key, _| key == "826" }
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 36, 2024 => 35, 2025 => 35, 2026 => 35 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 36, 2024 => 35, 2025 => 35, 2026 => 34 }.freeze
 
   def label_from_value(value)
     return unless value

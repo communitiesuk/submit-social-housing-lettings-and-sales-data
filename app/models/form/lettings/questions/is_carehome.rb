@@ -23,5 +23,5 @@ class Form::Lettings::Questions::IsCarehome < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 93, 2024 => 92, 2025 => 92, 2026 => 92 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 93, 2024 => 92, 2025 => 92, 2026 => 91 }.freeze
 end

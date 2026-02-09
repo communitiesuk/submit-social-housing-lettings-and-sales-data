@@ -67,5 +67,5 @@ class Form::Lettings::Questions::PreviousTenure < ::Form::Question
     "25" => { "value" => "Any other accommodation" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 78, 2024 => 77, 2025 => 77, 2026 => 77 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 78, 2024 => 77, 2025 => 77, 2026 => 76 }.freeze
 end

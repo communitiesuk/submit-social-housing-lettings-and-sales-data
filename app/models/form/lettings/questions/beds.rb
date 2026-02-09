@@ -14,5 +14,5 @@ class Form::Lettings::Questions::Beds < ::Form::Question
     log.is_bedsit?
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 22, 2024 => 22, 2025 => 22, 2026 => 22 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 22, 2024 => 22, 2025 => 22, 2026 => 21 }.freeze
 end

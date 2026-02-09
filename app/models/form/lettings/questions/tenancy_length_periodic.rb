@@ -12,5 +12,5 @@ class Form::Lettings::Questions::TenancyLengthPeriodic < ::Form::Question
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 28, 2024 => 28, 2025 => 29, 2026 => 29 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 28, 2024 => 28, 2025 => 29, 2026 => 28 }.freeze
 end

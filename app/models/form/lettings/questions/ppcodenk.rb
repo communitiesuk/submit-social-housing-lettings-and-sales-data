@@ -17,5 +17,5 @@ class Form::Lettings::Questions::Ppcodenk < ::Form::Question
     "1" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 80, 2024 => 79, 2025 => 79, 2026 => 79 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 80, 2024 => 79, 2025 => 79, 2026 => 78 }.freeze
 end

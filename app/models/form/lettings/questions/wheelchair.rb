@@ -12,5 +12,5 @@ class Form::Lettings::Questions::Wheelchair < ::Form::Question
     "2" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 21, 2024 => 21, 2025 => 21, 2026 => 21 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 21, 2024 => 21, 2025 => 21, 2026 => 20 }.freeze
 end

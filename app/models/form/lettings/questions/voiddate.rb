@@ -7,5 +7,5 @@ class Form::Lettings::Questions::Voiddate < ::Form::Question
     @top_guidance_partial = "void_date"
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 23, 2024 => 23, 2025 => 23, 2026 => 23 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 23, 2024 => 23, 2025 => 23, 2026 => 22 }.freeze
 end

@@ -15,5 +15,5 @@ class Form::Lettings::Questions::Illness < ::Form::Question
     "3" => { "value" => "Tenant prefers not to say" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 73, 2024 => 72, 2025 => 72, 2026 => 72 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 73, 2024 => 72, 2025 => 72, 2026 => 71 }.freeze
 end

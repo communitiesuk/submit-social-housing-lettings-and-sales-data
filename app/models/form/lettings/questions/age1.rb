@@ -13,5 +13,5 @@ class Form::Lettings::Questions::Age1 < ::Form::Question
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 32, 2024 => 31, 2025 => 31, 2026 => 31 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 32, 2024 => 31, 2025 => 31, 2026 => 30 }.freeze
 end

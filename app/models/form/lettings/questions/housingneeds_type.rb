@@ -17,5 +17,5 @@ class Form::Lettings::Questions::HousingneedsType < ::Form::Question
     "3" => { "value" => "None of the listed options" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 71, 2024 => 70, 2025 => 70, 2026 => 70 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 71, 2024 => 70, 2025 => 70, 2026 => 69 }.freeze
 end

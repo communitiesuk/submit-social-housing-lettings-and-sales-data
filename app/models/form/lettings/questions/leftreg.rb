@@ -16,5 +16,5 @@ class Form::Lettings::Questions::Leftreg < ::Form::Question
     "3" => { "value" => "Person prefers not to say" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 67, 2024 => 66, 2025 => 66, 2026 => 66 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 67, 2024 => 66, 2025 => 66, 2026 => 65 }.freeze
 end

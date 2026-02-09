@@ -17,5 +17,5 @@ class Form::Lettings::Questions::PpostcodeFull < ::Form::Question
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 80, 2024 => 79, 2025 => 79, 2026 => 79 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 80, 2024 => 79, 2025 => 79, 2026 => 78 }.freeze
 end
