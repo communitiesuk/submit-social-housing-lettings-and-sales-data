@@ -4,9 +4,9 @@ class Form::Lettings::Questions::GenderSameAsSex < ::Form::Question
     @id = "gender_same_as_sex#{person_index}"
     @type = "radio"
     @check_answers_card_number = person_index
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @conditional_for = { "gender_description#{person_index}" => [2] }
     @person_index = person_index
+    @question_number = question_number
   end
 
   def answer_options
@@ -18,5 +18,11 @@ class Form::Lettings::Questions::GenderSameAsSex < ::Form::Question
     }.freeze
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2026 => 0 }.freeze
+  def question_number
+    return 32 if @person_index == 1
+
+    base_question_number = 30
+
+    base_question_number + (form.person_question_count * @person_index)
+  end
 end
