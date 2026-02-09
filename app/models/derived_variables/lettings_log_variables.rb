@@ -311,10 +311,7 @@ private
   end
 
   def infer_at_most_one_relationship!
-    new_partner_numbers = partner_numbers.select { |i| public_send("relat#{i}_changed?") }
-    if new_partner_numbers.any?
-      infer_only_partner!(new_partner_numbers.first)
-    elsif partner_numbers.any?
+    if partner_numbers.any?
       infer_only_partner!(partner_numbers.first)
     end
   end
