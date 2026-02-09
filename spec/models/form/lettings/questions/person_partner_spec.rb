@@ -45,6 +45,22 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
     expect(question.hidden_in_check_answers).to be nil
   end
 
+  context "and in 2025", metadata: { year: 25 } do
+    let(:year) { 2025 }
+
+    it "has the correct disable_clearing_if_not_routed_or_dynamic_answer_options value" do
+      expect(question.disable_clearing_if_not_routed_or_dynamic_answer_options).to eq(false)
+    end
+  end
+
+  context "and in 2026", metadata: { year: 26 } do
+    let(:year) { 2026 }
+
+    it "has the correct disable_clearing_if_not_routed_or_dynamic_answer_options value" do
+      expect(question.disable_clearing_if_not_routed_or_dynamic_answer_options).to eq(true)
+    end
+  end
+
   context "with person 2" do
     it "has the correct id" do
       expect(question.id).to eq("relat2")
@@ -108,6 +124,22 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
 
     it "has the correct hidden_in_check_answers" do
       expect(question.hidden_in_check_answers).to eq("relat2" => "P", "relat3" => "X")
+    end
+  end
+
+  context "with person 4" do
+    let(:person_index) { 4 }
+
+    it "has the correct id" do
+      expect(question.id).to eq("relat4")
+    end
+
+    it "has the correct check_answers_card_number" do
+      expect(question.check_answers_card_number).to eq(4)
+    end
+
+    it "has the correct hidden_in_check_answers" do
+      expect(question.hidden_in_check_answers).to eq("depends_on" => [{"relat2"=>"P", "relat4"=>"X"}, {"relat3"=>"P", "relat4"=>"X"}])
     end
   end
 end
