@@ -7,11 +7,6 @@ class Form::Lettings::Questions::PersonPartner < ::Form::Question
     @answer_options = answer_options
     @person_index = person_index
     @question_number = question_number
-    @hidden_in_check_answers = {
-      "depends_on" => (2...person_index).map do |i|
-        { "relat#{i}" => "P", "relat#{person_index}" => "X" }
-      end,
-    }
     @disable_clearing_if_not_routed_or_dynamic_answer_options = form.start_year_2026_or_later?
   end
 
@@ -36,5 +31,15 @@ class Form::Lettings::Questions::PersonPartner < ::Form::Question
 
   def derived?(log)
     form.start_year_2026_or_later? && log.is_partner_inferred?(@person_index)
+  end
+
+  def hidden_in_check_answers?(log, _current_user = nil)
+    if form.start_year_2026_or_later?
+      (2...@person_index).any? do |i|
+        log["relat#{i}"] == "P"
+      end
+    else
+      false
+    end
   end
 end

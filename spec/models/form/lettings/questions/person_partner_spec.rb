@@ -122,8 +122,44 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
       expect(question.check_answers_card_number).to eq(3)
     end
 
-    it "has the correct hidden_in_check_answers" do
-      expect(question.hidden_in_check_answers).to eq("relat2" => "P", "relat3" => "X")
+    context "when the log has a preceding value of `relat` as 'P'" do
+      let(:log) { build(:lettings_log, relat2: "P") }
+
+      context "and in 2025", metadata: { year: 25 } do
+        let(:year) { 2025 }
+
+        it "has the correct hidden_in_check_answers?" do
+          expect(question.hidden_in_check_answers?(log)).to eq(false)
+        end
+      end
+
+      context "and in 2026", metadata: { year: 26 } do
+        let(:year) { 2026 }
+
+        it "has the correct hidden_in_check_answers?" do
+          expect(question.hidden_in_check_answers?(log)).to eq(true)
+        end
+      end
+    end
+
+    context "when the log does not have a preceding value of `relat` as 'P'" do
+      let(:log) { build(:lettings_log, relat2: "X") }
+
+      context "and in 2025", metadata: { year: 25 } do
+        let(:year) { 2025 }
+
+        it "has the correct hidden_in_check_answers?" do
+          expect(question.hidden_in_check_answers?(log)).to eq(false)
+        end
+      end
+
+      context "and in 2026", metadata: { year: 26 } do
+        let(:year) { 2026 }
+
+        it "has the correct hidden_in_check_answers?" do
+          expect(question.hidden_in_check_answers?(log)).to eq(false)
+        end
+      end
     end
   end
 
@@ -138,8 +174,44 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
       expect(question.check_answers_card_number).to eq(4)
     end
 
-    it "has the correct hidden_in_check_answers" do
-      expect(question.hidden_in_check_answers).to eq("depends_on" => [{"relat2"=>"P", "relat4"=>"X"}, {"relat3"=>"P", "relat4"=>"X"}])
+    context "when the log has a preceding value of `relat` as 'P'" do
+      let(:log) { build(:lettings_log, relat2: "P", relat3: "X") }
+
+      context "and in 2025", metadata: { year: 25 } do
+        let(:year) { 2025 }
+
+        it "has the correct hidden_in_check_answers?" do
+          expect(question.hidden_in_check_answers?(log)).to eq(false)
+        end
+      end
+
+      context "and in 2026", metadata: { year: 26 } do
+        let(:year) { 2026 }
+
+        it "has the correct hidden_in_check_answers?" do
+          expect(question.hidden_in_check_answers?(log)).to eq(true)
+        end
+      end
+    end
+
+    context "when the log does not have a preceding value of `relat` as 'P'" do
+      let(:log) { build(:lettings_log, relat2: "R", relat3: "X") }
+
+      context "and in 2025", metadata: { year: 25 } do
+        let(:year) { 2025 }
+
+        it "has the correct hidden_in_check_answers?" do
+          expect(question.hidden_in_check_answers?(log)).to eq(false)
+        end
+      end
+
+      context "and in 2026", metadata: { year: 26 } do
+        let(:year) { 2026 }
+
+        it "has the correct hidden_in_check_answers?" do
+          expect(question.hidden_in_check_answers?(log)).to eq(false)
+        end
+      end
     end
   end
 end
