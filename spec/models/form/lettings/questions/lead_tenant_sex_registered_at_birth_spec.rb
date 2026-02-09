@@ -46,4 +46,8 @@ RSpec.describe Form::Lettings::Questions::LeadTenantSexRegisteredAtBirth, type: 
   it "has the correct inferred_check_answers_value" do
     expect(question.inferred_check_answers_value).to be_nil
   end
+
+  it "has the correct question number" do
+    expect(question.question_number).to eq(31)
+  end
 end

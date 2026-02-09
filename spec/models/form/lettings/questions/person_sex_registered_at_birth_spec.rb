@@ -51,6 +51,10 @@ RSpec.describe Form::Lettings::Questions::PersonSexRegisteredAtBirth, type: :mod
     it "has the correct inferred_check_answers_value" do
       expect(question.inferred_check_answers_value).to be_nil
     end
+
+    it "has the correct question number" do
+      expect(question.question_number).to eq(39)
+    end
   end
 
   context "when person 3" do
@@ -67,6 +71,10 @@ RSpec.describe Form::Lettings::Questions::PersonSexRegisteredAtBirth, type: :mod
 
     it "has the correct inferred_check_answers_value" do
       expect(question.inferred_check_answers_value).to be_nil
+    end
+
+    it "has the correct question number" do
+      expect(question.question_number).to eq(44)
     end
   end
 
@@ -85,6 +93,10 @@ RSpec.describe Form::Lettings::Questions::PersonSexRegisteredAtBirth, type: :mod
     it "has the correct inferred_check_answers_value" do
       expect(question.inferred_check_answers_value).to be_nil
     end
+
+    it "has the correct question number" do
+      expect(question.question_number).to eq(49)
+    end
   end
 
   context "when person 5" do
@@ -101,6 +113,10 @@ RSpec.describe Form::Lettings::Questions::PersonSexRegisteredAtBirth, type: :mod
 
     it "has the correct inferred_check_answers_value" do
       expect(question.inferred_check_answers_value).to be_nil
+    end
+
+    it "has the correct question number" do
+      expect(question.question_number).to eq(54)
     end
   end
 
@@ -119,6 +135,10 @@ RSpec.describe Form::Lettings::Questions::PersonSexRegisteredAtBirth, type: :mod
     it "has the correct inferred_check_answers_value" do
       expect(question.inferred_check_answers_value).to be_nil
     end
+
+    it "has the correct question number" do
+      expect(question.question_number).to eq(59)
+    end
   end
 
   context "when person 7" do
@@ -136,6 +156,10 @@ RSpec.describe Form::Lettings::Questions::PersonSexRegisteredAtBirth, type: :mod
     it "has the correct inferred_check_answers_value" do
       expect(question.inferred_check_answers_value).to be_nil
     end
+
+    it "has the correct question number" do
+      expect(question.question_number).to eq(64)
+    end
   end
 
   context "when person 8" do
@@ -152,6 +176,10 @@ RSpec.describe Form::Lettings::Questions::PersonSexRegisteredAtBirth, type: :mod
 
     it "has the correct inferred_check_answers_value" do
       expect(question.inferred_check_answers_value).to be_nil
+    end
+
+    it "has the correct question number" do
+      expect(question.question_number).to eq(69)
     end
   end
 end
