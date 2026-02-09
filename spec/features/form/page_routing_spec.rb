@@ -270,6 +270,78 @@ RSpec.describe "Form Page Routing" do
 
         expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
       end
+
+      describe "using the 'not equal to' operator" do
+        it "returns true if both values are non-nil and different" do
+          depends_on = [
+            {
+              "relat2" => {
+                "operator" => "!=",
+                "operand" => "P",
+              },
+            },
+          ]
+          lettings_log.relat2 = "X"
+
+          expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+        end
+
+        it "returns false if both values are non-nil and the same" do
+          depends_on = [
+            {
+              "relat2" => {
+                "operator" => "!=",
+                "operand" => "P",
+              },
+            },
+          ]
+          lettings_log.relat2 = "P"
+
+          expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(false)
+        end
+
+        it "returns true if the being tested is nil and the operand is non-nil" do
+          depends_on = [
+            {
+              "relat2" => {
+                "operator" => "!=",
+                "operand" => "P",
+              },
+            },
+          ]
+          lettings_log.relat2 = nil
+
+          expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+        end
+
+        it "returns true if the being tested is non-nil and the operand is nil" do
+          depends_on = [
+            {
+              "relat2" => {
+                "operator" => "!=",
+                "operand" => nil,
+              },
+            },
+          ]
+          lettings_log.relat2 = "P"
+
+          expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+        end
+
+        it "returns false if both values are nil" do
+          depends_on = [
+            {
+              "relat2" => {
+                "operator" => "!=",
+                "operand" => nil,
+              },
+            },
+          ]
+          lettings_log.relat2 = nil
+
+          expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(false)
+        end
+      end
     end
   end
 
