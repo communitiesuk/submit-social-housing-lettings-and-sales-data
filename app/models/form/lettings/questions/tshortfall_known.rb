@@ -7,10 +7,10 @@ class Form::Lettings::Questions::TshortfallKnown < ::Form::Question
     @check_answers_card_number = 0
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "tshortfall" => [0] }
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 100, 2024 => 99, 2025 => 97 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 100, 2024 => 99, 2025 => 97, 2026 => 97 }.freeze
 end

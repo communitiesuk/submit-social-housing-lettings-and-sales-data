@@ -4,8 +4,8 @@ class Form::Lettings::Questions::PropertyReference < ::Form::Question
     @id = "propcode"
     @type = "text"
     @width = 10
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] if form.start_date.present?
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 8, 2024 => 10 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 8, 2024 => 10, 2025 => 10, 2026 => 10 }.freeze
 end

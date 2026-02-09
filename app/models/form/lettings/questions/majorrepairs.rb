@@ -6,10 +6,10 @@ class Form::Lettings::Questions::Majorrepairs < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "mrcdate" => [1] }
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = { "1" => { "value" => "Yes" }, "0" => { "value" => "No" } }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 24 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 24, 2024 => 24, 2025 => 24, 2026 => 24 }.freeze
 end

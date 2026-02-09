@@ -9,8 +9,8 @@ class Form::Lettings::Questions::TenancyLength < ::Form::Question
     @max = 150
     @min = 0
     @step = 1
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 28, 2024 => 28, 2025 => 29 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 28, 2024 => 28, 2025 => 29, 2026 => 29 }.freeze
 end

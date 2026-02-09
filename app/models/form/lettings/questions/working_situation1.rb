@@ -5,7 +5,7 @@ class Form::Lettings::Questions::WorkingSituation1 < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 1
     @answer_options = answer_options
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   def answer_options
@@ -40,5 +40,5 @@ class Form::Lettings::Questions::WorkingSituation1 < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 37, 2024 => 36 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 37, 2024 => 36, 2025 => 36, 2026 => 36 }.freeze
 end

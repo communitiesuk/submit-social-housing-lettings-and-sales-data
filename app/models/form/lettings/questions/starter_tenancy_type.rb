@@ -6,7 +6,7 @@ class Form::Lettings::Questions::StarterTenancyType < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 0
     @conditional_for = { "tenancyother" => [3] }
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   def answer_options
@@ -65,5 +65,5 @@ class Form::Lettings::Questions::StarterTenancyType < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 27, 2024 => 27, 2025 => 28 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 27, 2024 => 27, 2025 => 28, 2026 => 28 }.freeze
 end

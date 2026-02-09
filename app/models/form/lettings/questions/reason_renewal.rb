@@ -5,7 +5,7 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
     @type = "radio"
     @copy_key = "lettings.household_situation.reason.#{page.id}.reason"
     @check_answers_card_number = 0
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
     @conditional_for = {
       "reasonother" => [
         20,
@@ -37,5 +37,5 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 77, 2024 => 76 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 77, 2024 => 76, 2025 => 76, 2026 => 76 }.freeze
 end

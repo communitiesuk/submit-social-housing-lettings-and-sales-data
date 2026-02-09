@@ -6,7 +6,7 @@ class Form::Lettings::Questions::AddressSearch < ::Form::Question
     @copy_key = "lettings.property_information.address_search"
     @plain_label = true
     @bottom_guidance_partial = "address_search"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
     @hide_question_number_on_page = true
   end
 
@@ -38,5 +38,5 @@ class Form::Lettings::Questions::AddressSearch < ::Form::Question
     answer_options(log, user).transform_values { |value| value["value"] } || {}
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2024 => 12, 2025 => 16 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2024 => 12, 2025 => 16, 2026 => 16 }.freeze
 end

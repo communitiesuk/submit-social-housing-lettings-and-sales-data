@@ -4,7 +4,7 @@ class Form::Lettings::Questions::Renewal < ::Form::Question
     @id = "renewal"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] if form.start_date.present?
   end
 
   ANSWER_OPTIONS = {
@@ -13,5 +13,5 @@ class Form::Lettings::Questions::Renewal < ::Form::Question
   }
   .freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 4, 2024 => 6 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 4, 2024 => 6, 2025 => 6, 2026 => 6 }.freeze
 end

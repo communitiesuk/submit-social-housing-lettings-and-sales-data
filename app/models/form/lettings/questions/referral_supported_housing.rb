@@ -5,7 +5,7 @@ class Form::Lettings::Questions::ReferralSupportedHousing < ::Form::Question
     @copy_key = "lettings.household_situation.referral.supported_housing.la"
     @type = "radio"
     @check_answers_card_number = 0
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   def answer_options
@@ -92,5 +92,5 @@ class Form::Lettings::Questions::ReferralSupportedHousing < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 85, 2024 => 84 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 85, 2024 => 84, 2025 => 84, 2026 => 84 }.freeze
 end

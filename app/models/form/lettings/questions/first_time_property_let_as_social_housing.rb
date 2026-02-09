@@ -3,7 +3,7 @@ class Form::Lettings::Questions::FirstTimePropertyLetAsSocialHousing < ::Form::Q
     super
     @id = "first_time_property_let_as_social_housing"
     @type = "radio"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   def answer_options
@@ -21,5 +21,5 @@ class Form::Lettings::Questions::FirstTimePropertyLetAsSocialHousing < ::Form::Q
     form.start_year_2024_or_later? ? "This is a re-let of existing social housing stock." : "This is a re-let of existing social housing."
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 14, 2024 => 15, 2025 => 12 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 14, 2024 => 15, 2025 => 12, 2026 => 12 }.freeze
 end

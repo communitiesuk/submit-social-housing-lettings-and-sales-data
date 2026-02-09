@@ -12,9 +12,9 @@ class Form::Lettings::Questions::BrentMonthly < ::Form::Question
     @result_field = "tcharge"
     @prefix = "£"
     @suffix = " every month"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
     @strip_commas = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 95, 2024 => 94, 2025 => 92 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 95, 2024 => 94, 2025 => 92, 2026 => 92 }.freeze
 end

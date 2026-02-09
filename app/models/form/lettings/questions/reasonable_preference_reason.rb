@@ -5,7 +5,7 @@ class Form::Lettings::Questions::ReasonablePreferenceReason < ::Form::Question
     @type = "checkbox"
     @check_answers_card_number = 0
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
@@ -17,5 +17,5 @@ class Form::Lettings::Questions::ReasonablePreferenceReason < ::Form::Question
     "rp_dontknow" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 83, 2024 => 82 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 83, 2024 => 82, 2025 => 82, 2026 => 82 }.freeze
 end
