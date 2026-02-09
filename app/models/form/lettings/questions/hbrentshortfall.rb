@@ -15,5 +15,5 @@ class Form::Lettings::Questions::Hbrentshortfall < ::Form::Question
     "3" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 99, 2024 => 98, 2025 => 96, 2026 => 103 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 99, 2024 => 98, 2025 => 96, 2026 => 104 }.freeze
 end

@@ -12,5 +12,5 @@ class Form::Lettings::Questions::TshortfallKnown < ::Form::Question
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 100, 2024 => 99, 2025 => 97, 2026 => 104 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 100, 2024 => 99, 2025 => 97, 2026 => 105 }.freeze
 end
