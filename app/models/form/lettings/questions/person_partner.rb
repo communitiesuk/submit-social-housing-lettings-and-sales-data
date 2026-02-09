@@ -35,9 +35,7 @@ class Form::Lettings::Questions::PersonPartner < ::Form::Question
 
   def hidden_in_check_answers?(log, _current_user = nil)
     if form.start_year_2026_or_later?
-      (2...@person_index).any? do |i|
-        log["relat#{i}"] == "P"
-      end
+      log.is_an_earlier_person_partner(@person_index)
     else
       false
     end

@@ -131,6 +131,10 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
         it "has the correct hidden_in_check_answers?" do
           expect(question.hidden_in_check_answers?(log)).to eq(false)
         end
+
+        it "is not marked as derived" do
+          expect(question.derived?(log)).to be false
+        end
       end
 
       context "and in 2026", metadata: { year: 26 } do
@@ -138,6 +142,10 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
 
         it "has the correct hidden_in_check_answers?" do
           expect(question.hidden_in_check_answers?(log)).to eq(true)
+        end
+
+        it "is marked as derived" do
+          expect(question.derived?(log)).to be true
         end
       end
     end
@@ -151,6 +159,10 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
         it "has the correct hidden_in_check_answers?" do
           expect(question.hidden_in_check_answers?(log)).to eq(false)
         end
+
+        it "is not marked as derived" do
+          expect(question.derived?(log)).to be false
+        end
       end
 
       context "and in 2026", metadata: { year: 26 } do
@@ -158,6 +170,10 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
 
         it "has the correct hidden_in_check_answers?" do
           expect(question.hidden_in_check_answers?(log)).to eq(false)
+        end
+
+        it "is not marked as derived" do
+          expect(question.derived?(log)).to be false
         end
       end
     end
@@ -183,6 +199,10 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
         it "has the correct hidden_in_check_answers?" do
           expect(question.hidden_in_check_answers?(log)).to eq(false)
         end
+
+        it "is not marked as derived" do
+          expect(question.derived?(log)).to be false
+        end
       end
 
       context "and in 2026", metadata: { year: 26 } do
@@ -190,6 +210,10 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
 
         it "has the correct hidden_in_check_answers?" do
           expect(question.hidden_in_check_answers?(log)).to eq(true)
+        end
+
+        it "is marked as derived" do
+          expect(question.derived?(log)).to be true
         end
       end
     end
@@ -203,6 +227,10 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
         it "has the correct hidden_in_check_answers?" do
           expect(question.hidden_in_check_answers?(log)).to eq(false)
         end
+
+        it "is not marked as derived" do
+          expect(question.derived?(log)).to be false
+        end
       end
 
       context "and in 2026", metadata: { year: 26 } do
@@ -210,6 +238,10 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
 
         it "has the correct hidden_in_check_answers?" do
           expect(question.hidden_in_check_answers?(log)).to eq(false)
+        end
+
+        it "is not marked as derived" do
+          expect(question.derived?(log)).to be false
         end
       end
     end
