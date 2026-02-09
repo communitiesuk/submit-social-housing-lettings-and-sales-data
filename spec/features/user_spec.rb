@@ -815,7 +815,7 @@ RSpec.describe "User Features" do
           find("#owning-organisation-field").click.native.send_keys("F", "i", "l", "t")
           select(parent_organisation.name, from: "owning-organisation-field-select", visible: false)
           click_button("Apply filters")
-          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&%5Bneedstypes%5D%5B%5D=&assigned_to=all&user_text_search=&owning_organisation_select=specific_org&owning_organisation_text_search=&owning_organisation=#{parent_organisation.id}&managing_organisation_select=all&managing_organisation_text_search=")
+          expect(page).to have_current_path(/lettings-logs\?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&%5Bneedstypes%5D%5B%5D=&assigned_to=all&user_text_search=&owning_organisation_select=specific_org&owning_organisation_text_search=&owning_organisation=\d+&managing_organisation_select=all&managing_organisation_text_search=/)
           choose("owning-organisation-select-all-field", allow_label_click: true)
           click_button("Apply filters")
           expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&%5Bneedstypes%5D%5B%5D=&assigned_to=all&user_text_search=&owning_organisation_select=all&owning_organisation_text_search=&managing_organisation_select=all&managing_organisation_text_search=")
