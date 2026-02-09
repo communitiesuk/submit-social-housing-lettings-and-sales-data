@@ -49,5 +49,5 @@ class Form::Lettings::Questions::Waityear < ::Form::Question
     }.freeze
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 76, 2024 => 75, 2025 => 75, 2026 => 74 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 76, 2024 => 75, 2025 => 75, 2026 => 82 }.freeze
 end

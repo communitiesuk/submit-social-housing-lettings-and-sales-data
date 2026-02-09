@@ -14,5 +14,5 @@ class Form::Lettings::Questions::PreviousLaKnown < ::Form::Question
 
   ANSWER_OPTIONS = { "1" => { "value" => "Yes" }, "0" => { "value" => "No" } }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 81, 2024 => 80, 2025 => 80, 2026 => 79 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 81, 2024 => 80, 2025 => 80, 2026 => 87 }.freeze
 end

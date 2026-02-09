@@ -25,5 +25,5 @@ class Form::Lettings::Questions::Tshortfall < ::Form::Question
     @strip_commas = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 100, 2024 => 99, 2025 => 97, 2026 => 96 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 100, 2024 => 99, 2025 => 97, 2026 => 104 }.freeze
 end

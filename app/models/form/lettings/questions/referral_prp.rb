@@ -22,5 +22,5 @@ class Form::Lettings::Questions::ReferralPrp < ::Form::Question
     }.freeze
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2025 => 84, 2026 => 83 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2025 => 84, 2026 => 91 }.freeze
 end

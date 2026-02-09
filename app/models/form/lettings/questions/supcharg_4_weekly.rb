@@ -16,5 +16,5 @@ class Form::Lettings::Questions::Supcharg4Weekly < ::Form::Question
     @strip_commas = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 98, 2024 => 97, 2025 => 95, 2026 => 94 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 98, 2024 => 97, 2025 => 95, 2026 => 102 }.freeze
 end

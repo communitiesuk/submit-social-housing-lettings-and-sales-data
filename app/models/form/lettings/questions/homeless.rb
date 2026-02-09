@@ -13,5 +13,5 @@ class Form::Lettings::Questions::Homeless < ::Form::Question
     "1" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 79, 2024 => 78, 2025 => 78, 2026 => 77 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 79, 2024 => 78, 2025 => 78, 2026 => 85 }.freeze
 end

@@ -27,5 +27,5 @@ class Form::Lettings::Questions::ConditionEffects < ::Form::Question
     "illness_type_10" => { "value" => "Other" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 74, 2024 => 73, 2025 => 73, 2026 => 72 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 74, 2024 => 73, 2025 => 73, 2026 => 80 }.freeze
 end

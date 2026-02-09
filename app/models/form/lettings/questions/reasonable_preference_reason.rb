@@ -17,5 +17,5 @@ class Form::Lettings::Questions::ReasonablePreferenceReason < ::Form::Question
     "rp_dontknow" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 83, 2024 => 82, 2025 => 82, 2026 => 81 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 83, 2024 => 82, 2025 => 82, 2026 => 89 }.freeze
 end

@@ -10,5 +10,5 @@ class Form::Lettings::Questions::HouseholdCharge < ::Form::Question
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 91, 2024 => 90, 2025 => 90, 2026 => 89 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 91, 2024 => 90, 2025 => 90, 2026 => 97 }.freeze
 end

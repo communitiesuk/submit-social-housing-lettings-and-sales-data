@@ -15,5 +15,5 @@ class Form::Lettings::Questions::PregOcc < ::Form::Question
     "3" => { "value" => "Tenant prefers not to say" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 69, 2024 => 68, 2025 => 68, 2026 => 67 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 69, 2024 => 68, 2025 => 68, 2026 => 75 }.freeze
 end

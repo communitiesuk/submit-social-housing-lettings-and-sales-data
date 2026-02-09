@@ -22,5 +22,5 @@ class Form::Lettings::Questions::PreviousTenureRenewal < ::Form::Question
     "6" => { "value" => "Other supported housing" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 78, 2024 => 77, 2025 => 77, 2026 => 76 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 78, 2024 => 77, 2025 => 77, 2026 => 84 }.freeze
 end

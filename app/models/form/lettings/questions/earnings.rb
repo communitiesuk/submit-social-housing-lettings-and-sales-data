@@ -19,5 +19,5 @@ class Form::Lettings::Questions::Earnings < ::Form::Question
     @strip_commas = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 88, 2024 => 87, 2025 => 87, 2026 => 86 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 88, 2024 => 87, 2025 => 87, 2026 => 94 }.freeze
 end

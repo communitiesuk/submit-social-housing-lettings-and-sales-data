@@ -15,5 +15,5 @@ class Form::Lettings::Questions::Reasonpref < ::Form::Question
     "3" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 82, 2024 => 81, 2025 => 81, 2026 => 80 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 82, 2024 => 81, 2025 => 81, 2026 => 88 }.freeze
 end

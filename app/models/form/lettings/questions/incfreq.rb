@@ -16,5 +16,5 @@ class Form::Lettings::Questions::Incfreq < ::Form::Question
     "3" => { "value" => "Yearly" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 87, 2024 => 86, 2025 => 86, 2026 => 85 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 87, 2024 => 86, 2025 => 86, 2026 => 93 }.freeze
 end
