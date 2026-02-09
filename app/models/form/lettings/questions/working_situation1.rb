@@ -40,5 +40,5 @@ class Form::Lettings::Questions::WorkingSituation1 < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 37, 2024 => 36, 2025 => 36, 2026 => 35 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 37, 2024 => 36, 2025 => 36, 2026 => 36 }.freeze
 end

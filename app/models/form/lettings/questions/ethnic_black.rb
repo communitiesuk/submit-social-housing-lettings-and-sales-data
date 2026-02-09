@@ -21,5 +21,5 @@ class Form::Lettings::Questions::EthnicBlack < ::Form::Question
     },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 35, 2024 => 34, 2025 => 34, 2026 => 33 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 35, 2024 => 34, 2025 => 34, 2026 => 34 }.freeze
 end

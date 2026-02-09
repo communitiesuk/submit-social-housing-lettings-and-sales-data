@@ -18,5 +18,5 @@ class Form::Lettings::Questions::EthnicGroup < ::Form::Question
     "17" => { "value" => "Tenant prefers not to say" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 34, 2024 => 33, 2025 => 33, 2026 => 32 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 34, 2024 => 33, 2025 => 33, 2026 => 33 }.freeze
 end
