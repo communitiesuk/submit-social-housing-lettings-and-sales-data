@@ -19,16 +19,16 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
   end
 
   context "with person 2" do
-    it "has correct questions" do
-      expect(page.questions.map(&:id)).to eq(%w[relat2])
-    end
-
     it "has the correct id" do
       expect(page.id).to eq("person_2_lead_partner")
     end
 
     context "with start year < 2026", metadata: { year: 25 } do
       let(:person_question_count) { 4 }
+
+      it "has correct questions" do
+        expect(page.questions.map(&:id)).to eq(%w[relat2])
+      end
 
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
@@ -40,6 +40,10 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
     context "with start year >= 2026", metadata: { year: 26 } do
       let(:start_year_2026_or_later?) { true }
       let(:person_question_count) { 5 }
+
+      it "has correct questions" do
+        expect(page.questions.map(&:id)).to eq(%w[relat2])
+      end
 
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
@@ -61,16 +65,16 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
   context "with person 3" do
     let(:person_index) { 3 }
 
-    it "has correct questions" do
-      expect(page.questions.map(&:id)).to eq(%w[relat3])
-    end
-
     it "has the correct id" do
       expect(page.id).to eq("person_3_lead_partner")
     end
 
     context "with start year < 2026", metadata: { year: 25 } do
       let(:person_question_count) { 4 }
+
+      it "has correct questions" do
+        expect(page.questions.map(&:id)).to eq(%w[relat3])
+      end
 
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
@@ -82,6 +86,10 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
     context "with start year >= 2026", metadata: { year: 26 } do
       let(:start_year_2026_or_later?) { true }
       let(:person_question_count) { 5 }
+
+      it "has correct questions" do
+        expect(page.questions.map(&:id)).to eq(%w[relat3])
+      end
 
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
@@ -98,6 +106,62 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
               "details_known_3" => 0,
               "age3" => nil,
               "relat2" => { "operator" => "!=", "operand" => "P" },
+            },
+          ],
+        )
+      end
+    end
+  end
+
+  context "with person 4" do
+    let(:person_index) { 4 }
+
+    it "has the correct id" do
+      expect(page.id).to eq("person_4_lead_partner")
+    end
+
+    context "with start year < 2026", metadata: { year: 25 } do
+      before do
+        allow(form).to receive(:start_year_2026_or_later?).and_return(false)
+      end
+
+      it "has correct questions" do
+        expect(page.questions.map(&:id)).to eq(%w[relat4])
+      end
+
+      it "has correct depends_on" do
+        expect(page.depends_on).to eq(
+          [{ "details_known_4" => 0 }],
+        )
+      end
+    end
+
+    context "with start year >= 2026", metadata: { year: 26 } do
+      before do
+        allow(form).to receive(:start_year_2026_or_later?).and_return(true)
+      end
+
+      it "has correct questions" do
+        expect(page.questions.map(&:id)).to eq(%w[relat4])
+      end
+
+      it "has correct depends_on" do
+        expect(page.depends_on).to eq(
+          [
+            {
+              "details_known_4" => 0,
+              "age4" => {
+                "operator" => ">=",
+                "operand" => 16,
+              },
+              "relat2" => { "operator" => "!=", "operand" => "P" },
+              "relat3" => { "operator" => "!=", "operand" => "P" },
+            },
+            {
+              "details_known_4" => 0,
+              "age4" => nil,
+              "relat2" => { "operator" => "!=", "operand" => "P" },
+              "relat3" => { "operator" => "!=", "operand" => "P" },
             },
           ],
         )
