@@ -552,7 +552,7 @@ class LettingsLog < Log
   def is_prevten_general_needs?
     return false unless prevten
 
-    ![30, 31, 32, 33, 35, 38, 6].include?(prevten)
+    ![30, 31, 32, 33, 35, 38, 40, 6].include?(prevten)
   end
 
   def owning_organisation_name
