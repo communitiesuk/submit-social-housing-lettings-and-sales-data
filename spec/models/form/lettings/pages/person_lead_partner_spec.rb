@@ -5,7 +5,8 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
 
   let(:page_definition) { nil }
   let(:start_year_2026_or_later?) { false }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2026_or_later?: start_year_2026_or_later?) }
+  let(:person_question_count) { 5 }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2026_or_later?: start_year_2026_or_later?, person_question_count:) }
   let(:subsection) { instance_double(Form::Subsection, form:) }
   let(:person_index) { 2 }
 
@@ -27,6 +28,8 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
     end
 
     context "with start year < 2026", metadata: { year: 25 } do
+      let(:person_question_count) { 4 }
+
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
           [{ "details_known_2" => 0 }],
@@ -36,6 +39,7 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
 
     context "with start year >= 2026", metadata: { year: 26 } do
       let(:start_year_2026_or_later?) { true }
+      let(:person_question_count) { 5 }
 
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
@@ -66,9 +70,7 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
     end
 
     context "with start year < 2026", metadata: { year: 25 } do
-      before do
-        allow(form).to receive(:start_year_2026_or_later?).and_return(false)
-      end
+      let(:person_question_count) { 4 }
 
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
@@ -78,9 +80,8 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
     end
 
     context "with start year >= 2026", metadata: { year: 26 } do
-      before do
-        allow(form).to receive(:start_year_2026_or_later?).and_return(true)
-      end
+      let(:start_year_2026_or_later?) { true }
+      let(:person_question_count) { 5 }
 
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
