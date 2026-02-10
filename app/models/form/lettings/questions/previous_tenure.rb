@@ -5,7 +5,13 @@ class Form::Lettings::Questions::PreviousTenure < ::Form::Question
     @copy_key = "lettings.household_situation.prevten.not_renewal"
     @type = "radio"
     @check_answers_card_number = 0
-    @answer_options = form.start_year_2025_or_later? ? ANSWER_OPTIONS_2025 : ANSWER_OPTIONS
+    @answer_options = if form.start_year_2026_or_later?
+                        ANSWER_OPTIONS_2026_OR_LATER
+                      elsif form.start_date.year == 2025
+                        ANSWER_OPTIONS_2025
+                      else
+                        ANSWER_OPTIONS
+                      end
     @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
@@ -43,6 +49,36 @@ class Form::Lettings::Questions::PreviousTenure < ::Form::Question
     "32" => { "value" => "Fixed-term private registered provider (PRP) general needs tenancy" },
     "31" => { "value" => "Lifetime local authority general needs tenancy" },
     "33" => { "value" => "Lifetime private registered provider (PRP) general needs tenancy" },
+    "35" => { "value" => "Extra care housing" },
+    "38" => { "value" => "Older people’s housing for tenants with low support needs" },
+    "6" => { "value" => "Other supported housing" },
+    "3" => { "value" => "Private sector tenancy" },
+    "27" => { "value" => "Owner occupation (low-cost home ownership)" },
+    "26" => { "value" => "Owner occupation (private)" },
+    "28" => { "value" => "Living with friends or family (long-term)" },
+    "39" => { "value" => "Sofa surfing (moving regularly between family or friends, no permanent bed)" },
+    "14" => { "value" => "Bed and breakfast" },
+    "7" => { "value" => "Direct access hostel" },
+    "10" => { "value" => "Hospital" },
+    "29" => { "value" => "Prison or approved probation hostel" },
+    "19" => { "value" => "Rough sleeping" },
+    "18" => { "value" => "Any other temporary accommodation" },
+    "13" => { "value" => "Children’s home or foster care" },
+    "24" => { "value" => "Home Office Asylum Support" },
+    "37" => { "value" => "Host family or similar refugee accommodation" },
+    "23" => { "value" => "Mobile home or caravan" },
+    "21" => { "value" => "Refuge" },
+    "9" => { "value" => "Residential care home" },
+    "4" => { "value" => "Tied housing or rented with job" },
+    "25" => { "value" => "Any other accommodation" },
+  }.freeze
+
+  ANSWER_OPTIONS_2026_OR_LATER = {
+    "30" => { "value" => "Fixed-term local authority general needs tenancy" },
+    "32" => { "value" => "Fixed-term private registered provider (PRP) general needs tenancy" },
+    "31" => { "value" => "Lifetime local authority general needs tenancy" },
+    "33" => { "value" => "Lifetime private registered provider (PRP) general needs tenancy" },
+    "40" => { "value" => "Other general needs" },
     "35" => { "value" => "Extra care housing" },
     "38" => { "value" => "Older people’s housing for tenants with low support needs" },
     "6" => { "value" => "Other supported housing" },
