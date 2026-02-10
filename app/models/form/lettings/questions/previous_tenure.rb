@@ -6,7 +6,7 @@ class Form::Lettings::Questions::PreviousTenure < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 0
     @answer_options = if form.start_year_2026_or_later?
-                        ANSWER_OPTIONS_2026
+                        ANSWER_OPTIONS_2026_OR_LATER
                       elsif form.start_year_2025_or_later?
                         ANSWER_OPTIONS_2025
                       else
@@ -73,7 +73,7 @@ class Form::Lettings::Questions::PreviousTenure < ::Form::Question
     "25" => { "value" => "Any other accommodation" },
   }.freeze
 
-  ANSWER_OPTIONS_2026 = {
+  ANSWER_OPTIONS_2026_OR_LATER = {
     "30" => { "value" => "Fixed-term local authority general needs tenancy" },
     "32" => { "value" => "Fixed-term private registered provider (PRP) general needs tenancy" },
     "31" => { "value" => "Lifetime local authority general needs tenancy" },
