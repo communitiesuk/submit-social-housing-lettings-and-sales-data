@@ -5,7 +5,7 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
     @type = "radio"
     @copy_key = "lettings.household_situation.reason.#{page.id}.reason"
     @check_answers_card_number = 0
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @conditional_for = {
       "reasonother" => [
         20,

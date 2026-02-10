@@ -3,7 +3,7 @@ class Form::Lettings::Questions::Rsnvac < ::Form::Question
     super
     @id = "rsnvac"
     @type = "radio"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   def answer_options

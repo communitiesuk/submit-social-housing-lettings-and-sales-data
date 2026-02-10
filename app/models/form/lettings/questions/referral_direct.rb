@@ -5,7 +5,7 @@ class Form::Lettings::Questions::ReferralDirect < ::Form::Question
     @copy_key = "lettings.household_situation.referral.direct"
     @type = "radio"
     @check_answers_card_number = 0
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   def answer_options

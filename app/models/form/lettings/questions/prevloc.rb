@@ -6,7 +6,7 @@ class Form::Lettings::Questions::Prevloc < ::Form::Question
     @type = "select"
     @inferred_check_answers_value = [{ "condition" => { "previous_la_known" => 0 }, "value" => "Not known" }]
     @check_answers_card_number = 0
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 

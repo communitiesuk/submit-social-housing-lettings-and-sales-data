@@ -5,7 +5,7 @@ class Form::Lettings::Questions::La < ::Form::Question
     @type = "select"
     @check_answers_card_number = nil
     @hint_text = ""
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 

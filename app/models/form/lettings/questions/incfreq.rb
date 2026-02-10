@@ -7,7 +7,7 @@ class Form::Lettings::Questions::Incfreq < ::Form::Question
     @check_answers_card_number = 0
     @answer_options = ANSWER_OPTIONS
     @hidden_in_check_answers = true
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {

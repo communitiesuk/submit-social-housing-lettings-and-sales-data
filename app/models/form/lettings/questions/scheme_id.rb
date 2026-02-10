@@ -5,7 +5,7 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
     @answer_options = answer_options
     @top_guidance_partial = "finding_scheme"
     @bottom_guidance_partial = "scheme_selection"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] if form.start_date.present?
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR) if form.start_date.present?
     @inferred_answers = {
       "location.name": {
         "scheme_has_multiple_locations?": false,

@@ -6,7 +6,7 @@ class Form::Lettings::Questions::NationalityAllGroup < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 1
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @conditional_for = { "nationality_all" => [12] }
     @hidden_in_check_answers = { "depends_on" => [{ "nationality_all_group" => 12 }] }
   end

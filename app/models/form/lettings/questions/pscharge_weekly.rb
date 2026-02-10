@@ -12,7 +12,7 @@ class Form::Lettings::Questions::PschargeWeekly < ::Form::Question
     @result_field = "tcharge"
     @prefix = "£"
     @suffix = " every week"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @strip_commas = true
   end
 

@@ -6,7 +6,7 @@ class Form::Lettings::Questions::Majorrepairs < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "mrcdate" => [1] }
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = { "1" => { "value" => "Yes" }, "0" => { "value" => "No" } }.freeze

@@ -6,7 +6,7 @@ class Form::Lettings::Questions::NetIncomeKnown < ::Form::Question
     @check_answers_card_number = 0
     @top_guidance_partial = "what_counts_as_income"
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {

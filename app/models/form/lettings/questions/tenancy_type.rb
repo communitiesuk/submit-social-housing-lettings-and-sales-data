@@ -6,7 +6,7 @@ class Form::Lettings::Questions::TenancyType < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 0
     @conditional_for = { "tenancyother" => [3] }
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   def answer_options

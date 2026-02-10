@@ -18,7 +18,7 @@ class Form::Lettings::Questions::PostcodeForFullAddress < ::Form::Question
     }
     @plain_label = true
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @hide_question_number_on_page = true
     @bottom_guidance_partial = "address_fallback"
   end

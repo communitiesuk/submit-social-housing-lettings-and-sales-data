@@ -7,7 +7,7 @@ class Form::Lettings::Questions::Beds < ::Form::Question
     @max = 12
     @min = 1
     @step = 1
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   def derived?(log)

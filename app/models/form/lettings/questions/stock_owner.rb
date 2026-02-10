@@ -4,7 +4,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     @id = "owning_organisation_id"
     @derived = true
     @type = "select"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] if form.start_date.present?
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR) if form.start_date.present?
   end
 
   def answer_options(log = nil, user = nil)

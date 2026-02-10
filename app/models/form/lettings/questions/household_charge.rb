@@ -5,7 +5,7 @@ class Form::Lettings::Questions::HouseholdCharge < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 0
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze

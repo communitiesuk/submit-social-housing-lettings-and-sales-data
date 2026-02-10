@@ -6,7 +6,7 @@ class Form::Lettings::Questions::NationalityAll < ::Form::Question
     @type = "select"
     @check_answers_card_number = 1
     @answer_options = GlobalConstants::COUNTRIES_ANSWER_OPTIONS
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   def answer_label(log, _current_user = nil)

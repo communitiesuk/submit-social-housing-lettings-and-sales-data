@@ -5,7 +5,7 @@ class Form::Lettings::Questions::Declaration < ::Form::Question
     @type = "checkbox"
     @check_answers_card_number = 0 unless form.start_year_2024_or_later?
     @top_guidance_partial = "privacy_notice_tenant"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   def answer_options

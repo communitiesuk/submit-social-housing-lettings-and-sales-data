@@ -5,7 +5,7 @@ class Form::Lettings::Questions::Uprn < ::Form::Question
     @copy_key = "lettings.property_information.uprn.uprn"
     @type = "text"
     @width = 10
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @inferred_check_answers_value = [
       {
         "condition" => { "uprn_known" => 0 },

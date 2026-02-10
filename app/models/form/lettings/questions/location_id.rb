@@ -10,7 +10,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
         "needstype": 2,
       },
     }
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] if form.start_date.present?
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR) if form.start_date.present?
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
     @top_guidance_partial = "finding_location"
   end

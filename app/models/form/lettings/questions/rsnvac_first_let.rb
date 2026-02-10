@@ -4,7 +4,7 @@ class Form::Lettings::Questions::RsnvacFirstLet < ::Form::Question
     @id = "rsnvac"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {

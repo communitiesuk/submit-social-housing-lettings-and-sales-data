@@ -3,7 +3,7 @@ class Form::Lettings::Questions::Sheltered < ::Form::Question
     super
     @id = "sheltered"
     @type = "radio"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   def answer_options
