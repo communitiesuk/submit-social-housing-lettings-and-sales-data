@@ -309,14 +309,15 @@ private
   end
 
   def infer_only_partner!(partner_number)
-    other_partner_numbers = partner_numbers.reject { |x| x == partner_number }
-    other_partner_numbers.each { |i| self["relat#{i}"] = "X" }
-
     return unless hhmemb
 
-    unanswered_partner_questions = (2..hhmemb).select { |i| public_send("relat#{i}").nil? }
+    (2..hhmemb).each do |i|
+      next if i == partner_number
 
-    unanswered_partner_questions.each { |i| self["relat#{i}"] = "X" }
+      if ["P", nil].include?(public_send("relat#{i}"))
+        self["relat#{i}"] = "X"
+      end
+    end
   end
 
   def reset_partner_fields!
