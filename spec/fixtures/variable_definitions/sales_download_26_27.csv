@@ -279,9 +279,9 @@ has_mscharge,Does the property have any monthly leasehold charges?
 mscharge,What are the total monthly leasehold charges for the property?
 discount,What was the percentage discount?
 grant,What was the amount of any loan, grant, discount or subsidy given?
-sexrab1,What was buyer 1's sex at birth?,,,
-sexrab2,What was buyer/person 2's sex at birth?,,,
-sexrab3,What was person 3's sex at birth?,,,
-sexrab4,What was person 4's sex at birth?,,,
-sexrab5,What was person 5's sex at birth?,,,
-sexrab6,What was person 6's sex at birth?,,,
+sexrab1,What was buyer 1's sex at birth?
+sexrab2,What was buyer/person 2's sex at birth?
+sexrab3,What was person 3's sex at birth?
+sexrab4,What was person 4's sex at birth?
+sexrab5,What was person 5's sex at birth?
+sexrab6,What was person 6's sex at birth?
