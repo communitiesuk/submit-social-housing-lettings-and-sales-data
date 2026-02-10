@@ -70,7 +70,7 @@ class BulkUpload::SalesLogToCsv
     when 2025
       (1..121).to_a
     when 2026
-      (1..BulkUpload::Lettings::Year2026::CsvParser::FIELDS).to_a
+      (1..BulkUpload::Sales::Year2026::CsvParser::FIELDS).to_a
     else
       raise NotImplementedError "No mapping function implemented for year #{year}"
     end
