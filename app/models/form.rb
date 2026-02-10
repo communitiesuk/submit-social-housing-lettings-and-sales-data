@@ -359,7 +359,7 @@ class Form
   end
 
   def person_question_count
-    if form.start_year_2026_or_later?
+    if start_year_2026_or_later?
       5
     else
       4
