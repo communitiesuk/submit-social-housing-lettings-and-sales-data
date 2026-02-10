@@ -67,12 +67,6 @@ class Form::Lettings::Questions::PersonWorkingSituation < ::Form::Question
                              31
                            end
 
-    person_question_count = if form.start_year_2026_or_later?
-                              5
-                            else
-                              4
-                            end
-
-    base_question_number + (person_question_count * @person_index)
+    base_question_number + (form.person_question_count * @person_index)
   end
 end

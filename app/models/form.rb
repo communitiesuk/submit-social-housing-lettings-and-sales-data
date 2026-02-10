@@ -357,4 +357,12 @@ class Form
   def start_year_2026_or_later?
     start_date && start_date.year >= 2026
   end
+
+  def person_question_count
+    if form.start_year_2026_or_later?
+      5
+    else
+      4
+    end
+  end
 end

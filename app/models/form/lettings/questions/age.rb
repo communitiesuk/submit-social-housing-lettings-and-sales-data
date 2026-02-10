@@ -29,13 +29,7 @@ class Form::Lettings::Questions::Age < ::Form::Question
                              27
                            end
 
-    person_question_count = if form.start_year_2026_or_later?
-                              5
-                            else
-                              4
-                            end
-
-    base_question_number + (person_question_count * @person_index)
+    base_question_number + (form.person_question_count * @person_index)
   end
 
   def hint_text
