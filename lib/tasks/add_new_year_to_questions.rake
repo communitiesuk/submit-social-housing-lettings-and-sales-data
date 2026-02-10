@@ -52,4 +52,3 @@ task :add_new_year_to_questions, %i[new_year log_type] => :environment do |_task
   puts "changed #{changed.length}"
   changed.each { |p| puts p }
 end
-
