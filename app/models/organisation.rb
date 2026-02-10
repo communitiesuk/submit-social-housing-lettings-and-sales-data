@@ -74,6 +74,7 @@ class Organisation < ApplicationRecord
   before_save :clear_group_member_fields_if_not_group_member
 
   alias_method :la?, :LA?
+  alias_method :prp?, :PRP?
 
   validates :name, presence: { message: I18n.t("validations.organisation.name_missing") }
   validates :name, uniqueness: { case_sensitive: false, message: I18n.t("validations.organisation.name_not_unique") }

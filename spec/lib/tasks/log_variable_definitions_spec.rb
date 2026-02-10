@@ -14,7 +14,7 @@ RSpec.describe "log_variable_definitions" do
     end
 
     it "adds CsvVariableDefinition records from each file in the specified directory" do
-      expect { task.invoke(path) }.to change(CsvVariableDefinition, :count).by(417)
+      expect { task.invoke(path) }.to change(CsvVariableDefinition, :count).by(420)
     end
 
     it "handles an empty directory without errors" do
@@ -34,7 +34,7 @@ RSpec.describe "log_variable_definitions" do
       task.invoke(path)
       second_run_count = CsvVariableDefinition.count
 
-      expect(first_run_count).to eq(initial_count + 417)
+      expect(first_run_count).to eq(initial_count + 420)
       expect(second_run_count).to eq(first_run_count)
     end
   end
