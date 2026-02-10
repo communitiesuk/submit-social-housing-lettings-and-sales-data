@@ -59,7 +59,7 @@ FactoryBot.define do
       tenancycode { Faker::Name.initials(number: 10) }
       age1_known { 0 }
       age1 { Faker::Number.within(range: 25..45) }
-      sexrab1 { %w[F M X R].sample }
+      sexrab1 { %w[F M R].sample }
       sex1 { %w[F M X R].sample }
       ethnic_group { 0 }
       ethnic { 2 }
@@ -71,7 +71,7 @@ FactoryBot.define do
       age2_known { 0 }
       details_known_2 { 0 }
       age2 { Faker::Number.within(range: 25..45) }
-      sexrab2 { %w[F M X R].sample }
+      sexrab2 { %w[F M R].sample }
       sex2 { %w[F M X R].sample }
       ecstat2 { 6 }
       homeless { 1 }
