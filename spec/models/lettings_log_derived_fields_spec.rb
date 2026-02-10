@@ -1589,7 +1589,7 @@ RSpec.describe LettingsLog, type: :model do
     end
   end
 
-  describe "#infer_at_most_one_relationship!" do
+  describe "At most one relationships inferences" do
     context "when 2025", metadata: { year: 25 } do
       before do
         Timecop.freeze(Time.zone.local(2025, 5, 10))
@@ -1602,25 +1602,44 @@ RSpec.describe LettingsLog, type: :model do
       end
 
       context "when there are no existing relationships" do
-        let(:log) { create(:lettings_log, :completed, relat2: "X", relat3: "X", relat4: "R") }
+        # `relat2` is "P" by default when creating a lettings log from the factory, so we explicitly set it to `nil`.
+        let(:log) { create(:lettings_log, :completed, hhmemb: 6, relat2: nil, relat3: "X", relat4: "X", relat5: "R") }
 
         it "does not infer no to any relationship answers when a new relationship is added" do
-          log.relat2 = "P"
-          expect { log.set_derived_fields! }.to not_change(log, :relat3)
-          expect { log.set_derived_fields! }.to not_change(log, :relat4)
-          expect { log.set_derived_fields! }.to not_change(log, :relat5)
+          log.relat4 = "P"
+          expect { log.set_derived_fields! }
+            .to not_change(log, :relat2)
+            .and not_change(log, :relat3)
+            .and not_change(log, :relat5)
+            .and not_change(log, :relat6)
+            .and not_change(log, :relat7)
+            .and not_change(log, :relat8)
         end
       end
 
       context "when there is an existing relationship" do
-        let(:log) { create(:lettings_log, :completed, relat2: "X", relat3: "P", relat4: "R", relat5: "X") }
+        let(:log) { create(:lettings_log, :completed, hhmemb: 6, relat2: "X", relat3: "P", relat4: "R", relat5: "X") }
 
         it "does not infer no to any relationship answers when a new relationship is added" do
           log.relat2 = "P"
-          expect { log.set_derived_fields! }.to not_change(log, :relat3)
-          expect { log.set_derived_fields! }.to not_change(log, :relat4)
-          expect { log.set_derived_fields! }.to not_change(log, :relat5)
-          expect { log.set_derived_fields! }.to not_change(log, :relat6)
+          expect { log.set_derived_fields! }
+            .to not_change(log, :relat3)
+            .and not_change(log, :relat4)
+            .and not_change(log, :relat5)
+            .and not_change(log, :relat6)
+            .and not_change(log, :relat7)
+            .and not_change(log, :relat8)
+        end
+
+        it "does not reset any answers when the relationship is removed" do
+          log.relat3 = "X"
+          expect { log.set_derived_fields! }
+            .to not_change(log, :relat2)
+            .and not_change(log, :relat4)
+            .and not_change(log, :relat5)
+            .and not_change(log, :relat6)
+            .and not_change(log, :relat7)
+            .and not_change(log, :relat8)
         end
       end
 
@@ -1628,16 +1647,17 @@ RSpec.describe LettingsLog, type: :model do
         let(:log) { create(:lettings_log, :completed, relat2: "X", relat3: "X", relat4: "R", relat5: "X") }
 
         before do
-          log.relat3 = "P"
           log.relat2 = "P"
+          log.relat3 = "P"
         end
 
         it "does not infer no to any relationship answers" do
-          expect { log.set_derived_fields! }.to not_change(log, :relat2)
-          expect { log.set_derived_fields! }.to not_change(log, :relat3)
-          expect { log.set_derived_fields! }.to not_change(log, :relat4)
-          expect { log.set_derived_fields! }.to not_change(log, :relat5)
-          expect { log.set_derived_fields! }.to not_change(log, :relat6)
+          expect { log.set_derived_fields! }
+            .to not_change(log, :relat4)
+            .and not_change(log, :relat5)
+            .and not_change(log, :relat6)
+            .and not_change(log, :relat7)
+            .and not_change(log, :relat8)
         end
       end
     end
@@ -1654,46 +1674,66 @@ RSpec.describe LettingsLog, type: :model do
       end
 
       context "when there are no existing relationships" do
-        let(:log) { create(:lettings_log, :completed, relat2: "X", relat3: "X", relat4: "R") }
+        # `relat2` is "P" by default when creating a lettings log from the factory, so we explicitly set it to `nil`.
+        let(:log) { create(:lettings_log, :completed, hhmemb: 6, relat2: nil, relat3: "X", relat4: "X", relat5: "R") }
 
         context "and a new relationship is added" do
           before do
-            log.relat2 = "P"
+            log.relat4 = "P"
           end
 
           it "infers no to unanswered questions" do
-            expect { log.set_derived_fields! }.to change(log, :relat5).to "X"
+            expect { log.set_derived_fields! }
+              .to change(log, :relat2).to("X")
+              .and change(log, :relat6).to("X")
+          end
+
+          it "does not change relationship answers for people not in the household" do
+            expect { log.set_derived_fields! }
+              .to not_change(log, :relat7)
+              .and not_change(log, :relat8)
           end
 
           it "does not change relationship answers of no or prefer not to say" do
-            expect { log.set_derived_fields! }.to not_change(log, :relat3)
-            expect { log.set_derived_fields! }.to not_change(log, :relat4)
+            expect { log.set_derived_fields! }
+              .to not_change(log, :relat3)
+              .and not_change(log, :relat5)
           end
         end
 
         it "does not change other relationship values if no is changed to prefer not to say" do
-          log.relat2 = "R"
-          expect { log.set_derived_fields! }.to not_change(log, :relat3)
-          expect { log.set_derived_fields! }.to not_change(log, :relat4)
+          log.relat4 = "R"
+          expect { log.set_derived_fields! }
+            .to not_change(log, :relat2)
+            .and not_change(log, :relat3)
+            .and not_change(log, :relat5)
+            .and not_change(log, :relat6)
+            .and not_change(log, :relat7)
+            .and not_change(log, :relat8)
         end
 
         it "does not change other relationship values if prefer not to say is changed to no" do
-          log.relat4 = "X"
-          expect { log.set_derived_fields! }.to not_change(log, :relat2)
-          expect { log.set_derived_fields! }.to not_change(log, :relat3)
+          log.relat5 = "X"
+          expect { log.set_derived_fields! }
+            .to not_change(log, :relat2)
+            .and not_change(log, :relat3)
+            .and not_change(log, :relat4)
+            .and not_change(log, :relat6)
+            .and not_change(log, :relat7)
+            .and not_change(log, :relat8)
         end
       end
 
       context "when there is an existing relationship" do
-        let(:log) { create(:lettings_log, :completed, relat2: "X", relat3: "P", relat4: "R", relat5: "X") }
+        let(:log) { create(:lettings_log, :completed, hhmemb: 6, relat2: "X", relat3: "P", relat4: "R", relat5: "X") }
 
-        context "and a new relationship is added" do
+        context "and a new relationship is added to an earlier person than the existing one" do
           before do
-            log.relat6 = nil
+            log.relat6 = nil # This is necessary because `log.set_derived_fields!` runs when the log is created from the factory, which sets `relat6` to "X".
             log.relat2 = "P"
           end
 
-          it "infers no to the previous relationship" do
+          it "infers no to the existing relationship" do
             expect { log.set_derived_fields! }.to change(log, :relat3).to "X"
           end
 
@@ -1701,18 +1741,59 @@ RSpec.describe LettingsLog, type: :model do
             expect { log.set_derived_fields! }.to change(log, :relat6).to "X"
           end
 
+          it "does not change relationship answers for people not in the household" do
+            expect { log.set_derived_fields! }
+              .to not_change(log, :relat7)
+              .and not_change(log, :relat8)
+          end
+
           it "does not change relationship answers of no or prefer not to say" do
-            expect { log.set_derived_fields! }.to not_change(log, :relat5)
-            expect { log.set_derived_fields! }.to not_change(log, :relat4)
+            expect { log.set_derived_fields! }
+              .to not_change(log, :relat5)
+              .and not_change(log, :relat4)
           end
         end
 
-        it "does not change other relationship values if the partner is removed" do
-          log.relat3 = "X"
-          expect { log.set_derived_fields! }.to not_change(log, :relat2)
-          expect { log.set_derived_fields! }.to not_change(log, :relat4)
-          expect { log.set_derived_fields! }.to not_change(log, :relat5)
-          expect { log.set_derived_fields! }.to not_change(log, :relat6)
+        it "does not change other relationship values if no is changed to prefer not to say" do
+          log.relat2 = "R"
+          expect { log.set_derived_fields! }
+            .to not_change(log, :relat3)
+            .and not_change(log, :relat4)
+            .and not_change(log, :relat5)
+            .and not_change(log, :relat6)
+            .and not_change(log, :relat7)
+            .and not_change(log, :relat8)
+        end
+
+        it "does not change other relationship values if prefer not to say is changed to no" do
+          log.relat4 = "X"
+          expect { log.set_derived_fields! }
+            .to not_change(log, :relat2)
+            .and not_change(log, :relat3)
+            .and not_change(log, :relat5)
+            .and not_change(log, :relat6)
+            .and not_change(log, :relat7)
+            .and not_change(log, :relat8)
+        end
+
+        context "and the relationship is removed" do
+          before do
+            log.relat3 = "X"
+          end
+
+          it "does not reset answers of no that come before the removed relationship to nil" do
+            expect { log.set_derived_fields! }.to not_change(log, :relat2)
+          end
+
+          it "resets answers of no that come after the removed relationship to nil, regardless of whether they were inferred or not" do
+            expect { log.set_derived_fields! }
+              .to change(log, :relat5).to(nil) # `relat5` was set to "X" explicitly.
+              .and change(log, :relat6).to(nil) # `relat6` was inferred as "X" when we created the log from the factory.
+          end
+
+          it "does not reset answers of prefer not to say" do
+            expect { log.set_derived_fields! }.to not_change(log, :relat4)
+          end
         end
       end
 
@@ -1720,22 +1801,30 @@ RSpec.describe LettingsLog, type: :model do
         let(:log) { create(:lettings_log, :completed, hhmemb: 6, relat2: "X", relat3: "X", relat4: "R", relat5: "X") }
 
         before do
-          log.relat3 = "P"
           log.relat2 = "P"
+          log.relat3 = "P"
         end
 
         it "keeps the lower numbered relationship and infers the higher numbered one to false" do
-          expect { log.set_derived_fields! }.to change(log, :relat3).to "X"
-          expect { log.set_derived_fields! }.to not_change(log, :relat2)
+          expect { log.set_derived_fields! }
+            .to not_change(log, :relat2)
+            .and change(log, :relat3).to("X")
         end
 
         it "infers no to unanswered questions" do
           expect { log.set_derived_fields! }.to change(log, :relat6).to "X"
         end
 
+        it "does not change relationship answers for people not in the household" do
+          expect { log.set_derived_fields! }
+            .to not_change(log, :relat7)
+            .and not_change(log, :relat8)
+        end
+
         it "does not change relationship answers of no or prefer not to say" do
-          expect { log.set_derived_fields! }.to not_change(log, :relat5)
-          expect { log.set_derived_fields! }.to not_change(log, :relat4)
+          expect { log.set_derived_fields! }
+            .to not_change(log, :relat5)
+            .and not_change(log, :relat4)
         end
       end
     end

@@ -248,13 +248,16 @@ private
       self.beds = nil
     end
     if form.start_year_2026_or_later?
-      (2..8).each do |i|
+      person_count = hhmemb || 8
+      (2..person_count).each do |i|
         if send("relat#{i}_changed?") && send("relat#{i}_was") == "P"
-          (i + 1..8).each do |j|
+          ((i + 1)..person_count).each do |j|
             if self["relat#{j}"] == "X"
               self["relat#{j}"] = nil
             end
           end
+        else
+          next
         end
       end
     end
@@ -320,7 +323,10 @@ private
     other_partner_numbers = partner_numbers.reject { |x| x == partner_number }
     other_partner_numbers.each { |i| self["relat#{i}"] = "X" }
 
-    unanswered_partner_questions = (2..8).select { |i| public_send("relat#{i}").nil? }
+    return unless hhmemb
+
+    unanswered_partner_questions = (2..hhmemb).select { |i| public_send("relat#{i}").nil? }
+
     unanswered_partner_questions.each { |i| self["relat#{i}"] = "X" }
   end
 
