@@ -1,11 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Pages::NeedsType, type: :model do
+  include CollectionTimeHelper
+
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2026_or_later?: false)) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: current_collection_start_date, start_year_2026_or_later?: true)) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
