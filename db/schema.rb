@@ -84,7 +84,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_28_121417) do
     t.datetime "last_accessed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.check_constraint "log_type::text = ANY (ARRAY['lettings'::character varying::text, 'sales'::character varying::text])", name: "log_type_check"
+    t.check_constraint "log_type::text = ANY (ARRAY['lettings'::character varying, 'sales'::character varying]::text[])", name: "log_type_check"
     t.check_constraint "year >= 2000 AND year <= 2099", name: "year_check"
   end
 
