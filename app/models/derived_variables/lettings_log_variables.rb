@@ -322,14 +322,12 @@ private
   def reset_partner_fields!
     person_count = hhmemb || 8
     (2..person_count).each do |i|
-      if send("relat#{i}_changed?") && send("relat#{i}_was") == "P"
-        ((i + 1)..person_count).each do |j|
-          if self["relat#{j}"] == "X"
-            self["relat#{j}"] = nil
-          end
+      next unless send("relat#{i}_changed?") && send("relat#{i}_was") == "P"
+
+      ((i + 1)..person_count).each do |j|
+        if self["relat#{j}"] == "X"
+          self["relat#{j}"] = nil
         end
-      else
-        next
       end
     end
   end
