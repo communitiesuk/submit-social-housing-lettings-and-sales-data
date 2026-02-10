@@ -29,7 +29,7 @@ class Form::Lettings::Questions::RentType < ::Form::Question
     "6" => { "value" => "Specified accommodation - exempt accommodation, managed properties, refuges and local authority hostels" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 6, 2024 => 8, 2025 => 8, 2026 => 9 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 6, 2024 => 8, 2025 => 8, 2026 => 8 }.freeze
 
   def answer_options
     form.start_year_2025_or_later? ? ANSWER_OPTIONS_2025 : ANSWER_OPTIONS
