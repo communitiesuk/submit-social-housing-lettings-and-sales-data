@@ -375,6 +375,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_28_121417) do
     t.bigint "created_by_id"
     t.boolean "manual_address_entry_selected", default: false
     t.integer "referral_type"
+    t.integer "working_situation_illness_check"
     t.index ["assigned_to_id"], name: "index_lettings_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
