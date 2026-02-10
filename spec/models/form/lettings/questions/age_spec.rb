@@ -1,10 +1,14 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Questions::Age, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(nil, question_definition, page, person_index:) }
 
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 4), start_year_2024_or_later?: false))) }
+  let(:start_year_2026_or_later?) { false }
+  let(:start_year) { current_collection_start_year }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: collection_start_date_for_year(start_year), start_year_2024_or_later?: true, start_year_2026_or_later?: start_year_2026_or_later?))) }
   let(:person_index) { 2 }
 
   it "has correct page" do
@@ -48,6 +52,23 @@ RSpec.describe Form::Lettings::Questions::Age, type: :model do
     it "has the correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(2)
     end
+
+    context "with year 2025", metadata: { year: 25 } do
+      let(:start_year) { 2025 }
+
+      it "has the correct question number" do
+        expect(question.question_number).to eq(38)
+      end
+    end
+
+    context "with year 2026", metadata: { year: 26 } do
+      let(:start_year_2026_or_later?) { true }
+      let(:start_year) { 2026 }
+
+      it "has the correct question number" do
+        expect(question.question_number).to eq(37)
+      end
+    end
   end
 
   context "with person 3" do
@@ -68,6 +89,23 @@ RSpec.describe Form::Lettings::Questions::Age, type: :model do
 
     it "has the correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(3)
+    end
+
+    context "with year 2025", metadata: { year: 25 } do
+      let(:start_year) { 2025 }
+
+      it "has the correct question number" do
+        expect(question.question_number).to eq(42)
+      end
+    end
+
+    context "with year 2026", metadata: { year: 26 } do
+      let(:start_year_2026_or_later?) { true }
+      let(:start_year) { 2026 }
+
+      it "has the correct question number" do
+        expect(question.question_number).to eq(42)
+      end
     end
   end
 end
