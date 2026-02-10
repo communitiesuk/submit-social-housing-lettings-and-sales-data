@@ -7,7 +7,7 @@ class Form::Lettings::Questions::PreviousTenure < ::Form::Question
     @check_answers_card_number = 0
     @answer_options = if form.start_year_2026_or_later?
                         ANSWER_OPTIONS_2026_OR_LATER
-                      elsif form.start_year_2025_or_later?
+                      elsif form.start_date.year == 2025
                         ANSWER_OPTIONS_2025
                       else
                         ANSWER_OPTIONS
