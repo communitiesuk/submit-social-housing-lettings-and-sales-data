@@ -75,6 +75,10 @@ module DerivedVariables::LettingsLogVariables
       self.beds = nil
     end
 
+    if form.start_year_2026_or_later?
+      infer_at_most_one_relationship!
+    end
+
     clear_child_constraints_for_age_changes!
     child_under_16_constraints!
 
@@ -243,6 +247,9 @@ private
     if form.start_year_2024_or_later? && (unittype_gn_changed? && unittype_gn_was == 2)
       self.beds = nil
     end
+    if form.start_year_2026_or_later?
+      reset_partner_fields!
+    end
   end
 
   def get_totelder
@@ -292,6 +299,37 @@ private
       # since the user can also input 'No' for relat there are cases when we don't want to clear this (changing age from 50 to 55 for example)
       # note if age is changed from 10 to 15 we will clear it but the inference will set it back immediately after, see child_under_16_constraints!
       self["relat#{idx}"] = nil if self["relat#{idx}"] == "X" && age_changed_from_below_16(idx) && form.start_year_2026_or_later?
+    end
+  end
+
+  def infer_at_most_one_relationship!
+    if partner_numbers.any?
+      infer_only_partner!(partner_numbers.first)
+    end
+  end
+
+  def infer_only_partner!(partner_number)
+    return unless hhmemb
+
+    (2..hhmemb).each do |i|
+      next if i == partner_number
+
+      if ["P", nil].include?(public_send("relat#{i}"))
+        self["relat#{i}"] = "X"
+      end
+    end
+  end
+
+  def reset_partner_fields!
+    person_count = hhmemb || 8
+    (2..person_count).each do |i|
+      next unless send("relat#{i}_changed?") && send("relat#{i}_was") == "P"
+
+      ((i + 1)..person_count).each do |j|
+        if self["relat#{j}"] == "X"
+          self["relat#{j}"] = nil
+        end
+      end
     end
   end
 
