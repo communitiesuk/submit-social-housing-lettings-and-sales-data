@@ -5,8 +5,17 @@ RSpec.describe Form::Sales::Questions::Prevown, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
+  let(:page) { instance_double(Form::Page) }
+  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form) }
   let(:joint_purchase) { false }
+
+  before do
+    allow(form).to receive(:start_year_2026_or_later?).and_return(true)
+    allow(form).to receive(:start_date).and_return(Time.zone.local(2023, 4, 1))
+    allow(page).to receive(:subsection).and_return(subsection)
+    allow(subsection).to receive(:form).and_return(form)
+  end
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -22,6 +31,26 @@ RSpec.describe Form::Sales::Questions::Prevown, type: :model do
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
+  end
+
+  context "when in 2025", { year: 25 } do
+    before do
+      allow(form).to receive(:start_year_2026_or_later?).and_return(false)
+    end
+
+    it "does not have a check_answers_card_title" do
+      expect(question.check_answers_card_title).to be_nil
+    end
+  end
+
+  context "when in 2026", { year: 26 } do
+    before do
+      allow(form).to receive(:start_year_2026_or_later?).and_return(true)
+    end
+
+    it "has check_answers_card_title set to 'All buyers'" do
+      expect(question.check_answers_card_title).to eq("All buyers")
+    end
   end
 
   it "has the correct answer_options" do
