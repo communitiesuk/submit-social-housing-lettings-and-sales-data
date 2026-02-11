@@ -5,17 +5,8 @@ RSpec.describe Form::Sales::Questions::Prevown, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page) }
-  let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
   let(:joint_purchase) { false }
-
-  before do
-    allow(form).to receive(:start_year_2026_or_later?).and_return(true)
-    allow(form).to receive(:start_date).and_return(Time.zone.local(2023, 4, 1))
-    allow(page).to receive(:subsection).and_return(subsection)
-    allow(subsection).to receive(:form).and_return(form)
-  end
 
   it "has correct page" do
     expect(question.page).to eq(page)
