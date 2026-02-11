@@ -33,26 +33,6 @@ RSpec.describe Form::Sales::Questions::Prevown, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
-  context "when in 2025", { year: 25 } do
-    before do
-      allow(form).to receive(:start_year_2026_or_later?).and_return(false)
-    end
-
-    it "does not have a check_answers_card_title" do
-      expect(question.check_answers_card_title).to be_nil
-    end
-  end
-
-  context "when in 2026", { year: 26 } do
-    before do
-      allow(form).to receive(:start_year_2026_or_later?).and_return(true)
-    end
-
-    it "has check_answers_card_title set to 'All buyers'" do
-      expect(question.check_answers_card_title).to eq("All buyers")
-    end
-  end
-
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
       "1" => { "value" => "Yes" },

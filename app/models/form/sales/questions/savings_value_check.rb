@@ -19,6 +19,5 @@ class Form::Sales::Questions::SavingsValueCheck < ::Form::Question
       ],
     }
     @check_answers_card_number = 0 unless form.start_year_2026_or_later?
-    @check_answers_card_title = "All buyers" if form.start_year_2026_or_later?
   end
 end

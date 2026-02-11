@@ -4,7 +4,6 @@ class Form::Sales::Questions::Prevshared < ::Form::Question
     @id = "prevshared"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @check_answers_card_title = "All buyers" if form.start_year_2026_or_later?
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 

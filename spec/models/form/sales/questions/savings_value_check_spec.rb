@@ -39,10 +39,6 @@ RSpec.describe Form::Sales::Questions::SavingsValueCheck, type: :model do
     it "has check_answers_card_number set to 0" do
       expect(question.check_answers_card_number).to eq(0)
     end
-
-    it "does not have a check_answers_card_title" do
-      expect(question.check_answers_card_title).to be_nil
-    end
   end
 
   context "when in 2026", { year: 26 } do
@@ -52,10 +48,6 @@ RSpec.describe Form::Sales::Questions::SavingsValueCheck, type: :model do
 
     it "does not have a check_answers_card_number" do
       expect(question.check_answers_card_number).to be_nil
-    end
-
-    it "has check_answers_card_title set to 'All buyers'" do
-      expect(question.check_answers_card_title).to eq("All buyers")
     end
   end
 

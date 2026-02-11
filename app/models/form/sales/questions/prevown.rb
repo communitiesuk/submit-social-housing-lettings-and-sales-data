@@ -5,7 +5,6 @@ class Form::Sales::Questions::Prevown < ::Form::Question
     @copy_key = "sales.income_benefits_and_savings.prevown.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @check_answers_card_title = "All buyers" if form.start_year_2026_or_later?
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 

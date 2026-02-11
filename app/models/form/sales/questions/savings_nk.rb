@@ -5,7 +5,6 @@ class Form::Sales::Questions::SavingsNk < ::Form::Question
     @copy_key = "sales.income_benefits_and_savings.savings.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}.savingsnk"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @check_answers_card_title = "All buyers" if form.start_year_2026_or_later?
     @conditional_for = {
       "savings" => [0],
     }
