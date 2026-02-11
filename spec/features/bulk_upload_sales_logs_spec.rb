@@ -23,6 +23,7 @@ RSpec.describe "Bulk upload sales log" do
   context "when during crossover period" do
     before do
       Timecop.freeze(2024, 5, 1)
+      Singleton.__init__(FormHandler)
     end
 
     after do
