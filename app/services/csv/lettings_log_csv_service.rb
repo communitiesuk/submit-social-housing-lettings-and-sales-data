@@ -359,7 +359,11 @@ module Csv
         log.public_send(attribute)&.iso8601
       elsif USER_DATE_FIELDS.include? attribute
         log.public_send(attribute)&.strftime("%F")
-      elsif PERSON_DETAILS.any? { |key, _value| key == attribute } && (person_details_not_known?(log, attribute) || age_not_known?(log, attribute) || value == PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_code"])
+      elsif PERSON_DETAILS.any? { |key, _value| key == attribute } &&
+          (
+            person_details_not_known?(log, attribute) || age_not_known?(log, attribute) ||
+            value == PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_code"]
+          )
         case @export_type
         when "codes"
           PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_code"]
