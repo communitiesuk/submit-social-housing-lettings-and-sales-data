@@ -199,7 +199,7 @@ RSpec.describe Validations::SoftValidations do
         record.age1 = 18
         record.sex1 = "M"
         record.age1_known = 0
-        expect(record.female_in_pregnant_household_in_soft_validation_range?).to be true
+        expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be true
       end
     end
 
@@ -210,7 +210,7 @@ RSpec.describe Validations::SoftValidations do
         record.preg_occ = 1
         record.hhmemb = 1
         record.age1_known = 0
-        expect(record.female_in_pregnant_household_in_soft_validation_range?).to be true
+        expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be true
       end
     end
 
@@ -221,7 +221,7 @@ RSpec.describe Validations::SoftValidations do
         record.preg_occ = 1
         record.hhmemb = 1
         expect(record.all_male_tenants_in_a_pregnant_household?).to be false
-        expect(record.female_in_pregnant_household_in_soft_validation_range?).to be false
+        expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be false
       end
     end
 
@@ -230,7 +230,7 @@ RSpec.describe Validations::SoftValidations do
         record.preg_occ = 1
         record.hhmemb = 2
         expect(record.all_male_tenants_in_a_pregnant_household?).to be false
-        expect(record.female_in_pregnant_household_in_soft_validation_range?).to be false
+        expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be false
       end
     end
 
@@ -244,7 +244,7 @@ RSpec.describe Validations::SoftValidations do
         end
         record.preg_occ = 1
         record.hhmemb = 9
-        expect(record.female_in_pregnant_household_in_soft_validation_range?).to be false
+        expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be false
       end
     end
   end

@@ -29,7 +29,7 @@ RSpec.describe Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPe
         [
           {
             "details_known_2" => 0,
-            "female_in_pregnant_household_in_soft_validation_range?" => true,
+            "non_males_in_pregnant_household_in_soft_validation_range?" => true,
           },
         ],
       )
@@ -62,7 +62,7 @@ RSpec.describe Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPe
         [
           {
             "details_known_3" => 0,
-            "female_in_pregnant_household_in_soft_validation_range?" => true,
+            "non_males_in_pregnant_household_in_soft_validation_range?" => true,
           },
         ],
       )
