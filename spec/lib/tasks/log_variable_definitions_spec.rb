@@ -6,6 +6,7 @@ RSpec.describe "log_variable_definitions" do
     subject(:task) { Rake::Task["data_import:add_variable_definitions"] }
 
     let(:path) { "spec/fixtures/variable_definitions" }
+    let(:total_variable_definitions_count) { 431 }
 
     before do
       Rake.application.rake_require("tasks/log_variable_definitions")
@@ -14,7 +15,7 @@ RSpec.describe "log_variable_definitions" do
     end
 
     it "adds CsvVariableDefinition records from each file in the specified directory" do
-      expect { task.invoke(path) }.to change(CsvVariableDefinition, :count).by(416)
+      expect { task.invoke(path) }.to change(CsvVariableDefinition, :count).by(total_variable_definitions_count)
     end
 
     it "handles an empty directory without errors" do
@@ -34,7 +35,7 @@ RSpec.describe "log_variable_definitions" do
       task.invoke(path)
       second_run_count = CsvVariableDefinition.count
 
-      expect(first_run_count).to eq(initial_count + 416)
+      expect(first_run_count).to eq(initial_count + total_variable_definitions_count)
       expect(second_run_count).to eq(first_run_count)
     end
   end
