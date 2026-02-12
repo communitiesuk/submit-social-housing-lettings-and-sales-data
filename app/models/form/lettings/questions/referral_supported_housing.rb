@@ -92,5 +92,5 @@ class Form::Lettings::Questions::ReferralSupportedHousing < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 85, 2024 => 84, 2025 => 84, 2026 => 91 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 85, 2024 => 84, 2025 => 84 }.freeze
 end
