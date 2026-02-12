@@ -72,6 +72,7 @@ totelder,Total number of elders in household (Sum of when AGE1-8 >= 60)
 totadult,Total number of adults in household
 age1,What is the lead tenant's age?
 retirement_value_check,The following soft validation was confirmed: You told us this person is aged %{age} years and retired. The minimum expected retirement age for %{gender} in England is %{age}.
+sexrab1,What was the lead tenant's sex at birth?
 ethnic_group,What is the lead tenant's ethnic group?
 ethnic,Which of these best describes the lead tenant's ethnic background?
 nationality_all,What is the lead tenant's nationality?
@@ -81,30 +82,37 @@ relat2,What is person 2's relationship to the lead tenant?
 partner_under_16_value_check,The following soft validation was confirmed: You said that [person X]'s relationship to lead tenant is partner, and that their age is [AGEX]. Are you sure this is correct?
 multiple_partners_value_check,The following soft validation was confirmed: You said that more than one person in the household is the partner of the lead tenant. Are you sure this is correct?
 age2,What is person 2's age?
+sexrab2,What was person 2's sex at birth?
 ecstat2,Which of these best describes person 2's working situation?
 details_known_3,Are the details of tenant 3 known?
 relat3,What is person 3's relationship to the lead tenant?
 age3,What is person 3's age?
+sexrab3,What was person 3's sex at birth?
 ecstat3,Which of these best describes person 3's working situation?
 details_known_4,Are the details of tenant 4 known?
 relat4,What is person 4's relationship to the lead tenant?
 age4,What is person 4's age?
+sexrab4,What was person 4's sex at birth?
 ecstat4,Which of these best describes person 4's working situation?
 details_known_5,Are the details of tenant 5 known?
 relat5,What is person 5's relationship to the lead tenant?
 age5,What is person 5's age?
+sexrab5,What was person 5's sex at birth?
 ecstat5,Which of these best describes person 5's working situation?
 details_known_6,Are the details of tenant 6 known?
 relat6,What is person 6's relationship to the lead tenant?
 age6,What is person 6's age?
+sexrab6,What was person 6's sex at birth?
 ecstat6,Which of these best describes person 6's working situation?
 details_known_7,Are the details of tenant 7 known?
 relat7,What is person 7's relationship to the lead tenant?
 age7,What is person 7's age?
+sexrab7,What was person 7's sex at birth?
 ecstat7,Which of these best describes person 7's working situation?
 details_known_8,Are the details of tenant 8 known?
 relat8,What is person 8's relationship to the lead tenant?
 age8,What is person 8's age?
+sexrab8,What was person 8's sex at birth?
 ecstat8,Which of these best describes person 8's working situation?
 armedforces,Does anybody in the household have links to the UK armed forces?
 leftreg,Is this person still serving in the UK armed forces?
@@ -210,11 +218,3 @@ location_mobility_type,What are the mobility standards for the majority of the u
 location_local_authority,What is the local authority of this postcode?
 location_startdate,When did the first property in this location become available under this scheme?
 working_situation_illness_check,The following soft validation was confirmed: You have said that at least one person's situation is 'Unable to work because of long-term sickness or disability'.
-sexrab1,What was the lead tenant's sex at birth?
-sexrab2,What was person 2's sex at birth?
-sexrab3,What was person 3's sex at birth?
-sexrab4,What was person 4's sex at birth?
-sexrab5,What was person 5's sex at birth?
-sexrab6,What was person 6's sex at birth?
-sexrab7,What was person 7's sex at birth?
-sexrab8,What was person 8's sex at birth?
