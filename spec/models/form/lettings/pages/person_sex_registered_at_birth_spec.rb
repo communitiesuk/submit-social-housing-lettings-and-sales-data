@@ -4,7 +4,7 @@ RSpec.describe Form::Lettings::Pages::PersonSexRegisteredAtBirth, type: :model d
   subject(:page) { described_class.new(page_id, page_definition, subsection, person_index:) }
 
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2026, 4, 1))) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2026, 4, 1), person_question_count: 5)) }
   let(:person_index) { 1 }
 
   let(:page_id) { "person_2_sex_registered_at_birth" }
