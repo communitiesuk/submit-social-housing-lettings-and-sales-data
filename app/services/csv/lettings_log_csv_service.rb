@@ -362,7 +362,7 @@ module Csv
       elsif PERSON_DETAILS.any? { |key, _value| key == attribute } &&
           (
             person_details_not_known?(log, attribute) || age_not_known?(log, attribute) ||
-            value == PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_code"]
+            log.public_send(attribute).to_s == PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_code"]
           )
         case @export_type
         when "codes"
@@ -396,7 +396,6 @@ module Csv
       return LABELS[attribute][value] if LABELS.key?(attribute)
       return conventional_yes_no_label(value) if CONVENTIONAL_YES_NO_ATTRIBUTES.include?(attribute)
       return "Yes" if YES_OR_BLANK_ATTRIBUTES.include?(attribute) && value == 1
-      return PERSON_DETAILS[attribute]["refused_label"] if PERSON_DETAILS.key?(attribute) && value == PERSON_DETAILS[attribute]["refused_code"]
 
       log.form
          .get_question(attribute, log)
