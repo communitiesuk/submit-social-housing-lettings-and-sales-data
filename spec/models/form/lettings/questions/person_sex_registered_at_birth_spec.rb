@@ -49,7 +49,7 @@ RSpec.describe Form::Lettings::Questions::PersonSexRegisteredAtBirth, type: :mod
     end
 
     it "has the correct inferred_check_answers_value" do
-      expect(question.inferred_check_answers_value).to be_nil
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "sexrab2" => "R" }, "value" => "Prefers not to say" }])
     end
 
     it "has the correct question number" do
@@ -70,7 +70,7 @@ RSpec.describe Form::Lettings::Questions::PersonSexRegisteredAtBirth, type: :mod
     end
 
     it "has the correct inferred_check_answers_value" do
-      expect(question.inferred_check_answers_value).to be_nil
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "sexrab3" => "R" }, "value" => "Prefers not to say" }])
     end
 
     it "has the correct question number" do
@@ -91,7 +91,7 @@ RSpec.describe Form::Lettings::Questions::PersonSexRegisteredAtBirth, type: :mod
     end
 
     it "has the correct inferred_check_answers_value" do
-      expect(question.inferred_check_answers_value).to be_nil
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "sexrab4" => "R" }, "value" => "Prefers not to say" }])
     end
 
     it "has the correct question number" do
@@ -112,7 +112,7 @@ RSpec.describe Form::Lettings::Questions::PersonSexRegisteredAtBirth, type: :mod
     end
 
     it "has the correct inferred_check_answers_value" do
-      expect(question.inferred_check_answers_value).to be_nil
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "sexrab5" => "R" }, "value" => "Prefers not to say" }])
     end
 
     it "has the correct question number" do
@@ -133,7 +133,7 @@ RSpec.describe Form::Lettings::Questions::PersonSexRegisteredAtBirth, type: :mod
     end
 
     it "has the correct inferred_check_answers_value" do
-      expect(question.inferred_check_answers_value).to be_nil
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "sexrab6" => "R" }, "value" => "Prefers not to say" }])
     end
 
     it "has the correct question number" do
@@ -154,7 +154,7 @@ RSpec.describe Form::Lettings::Questions::PersonSexRegisteredAtBirth, type: :mod
     end
 
     it "has the correct inferred_check_answers_value" do
-      expect(question.inferred_check_answers_value).to be_nil
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "sexrab7" => "R" }, "value" => "Prefers not to say" }])
     end
 
     it "has the correct question number" do
@@ -175,7 +175,7 @@ RSpec.describe Form::Lettings::Questions::PersonSexRegisteredAtBirth, type: :mod
     end
 
     it "has the correct inferred_check_answers_value" do
-      expect(question.inferred_check_answers_value).to be_nil
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "sexrab8" => "R" }, "value" => "Prefers not to say" }])
     end
 
     it "has the correct question number" do

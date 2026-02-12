@@ -6,6 +6,12 @@ class Form::Lettings::Questions::PersonSexRegisteredAtBirth < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @person_index = person_index
     @question_number = question_number
+    @inferred_check_answers_value = [{
+      "condition" => {
+        id => "R",
+      },
+      "value" => "Prefers not to say",
+    }]
   end
 
   ANSWER_OPTIONS = {
