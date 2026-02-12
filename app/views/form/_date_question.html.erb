@@ -6,7 +6,7 @@
           question_id: question.id,
           legend: { text: legend[:text], size: legend[:size], caption: caption(caption_text, page_header, conditional) },
           resource_type: @log.log_type,
-          hint: (question.hint_text.blank? ? "" : (question.hint_text.html_safe + "</br></br>".html_safe)) + "For example, #{question.example_date_formatted(@log).tr(' ', '/')}",
+          hint: (question.hint_text.blank? ? "" : (question.hint_text.html_safe + "</br></br>".html_safe)) + "For example, #{date_mid_collection_year_formatted(@log.startdate).tr(' ', '/')}",
           f:,
         } %>
 

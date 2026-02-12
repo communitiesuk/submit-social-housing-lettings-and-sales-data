@@ -1,6 +1,5 @@
 class Form::Question
   include FormattingHelper
-  include CollectionTimeHelper
 
   attr_accessor :id, :description, :questions, :disable_clearing_if_not_routed_or_dynamic_answer_options,
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
@@ -298,12 +297,6 @@ class Form::Question
 
   def answer_keys_without_dividers
     answer_options.keys.reject { |x| x.match(/divider/) }
-  end
-
-  def example_date_formatted(log)
-    if type == "date"
-      date_mid_collection_year_formatted(log.startdate)
-    end
   end
 
 private
