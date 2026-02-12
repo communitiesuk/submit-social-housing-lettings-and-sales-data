@@ -65,14 +65,13 @@ sheltered,Is this letting in sheltered accommodation?
 declaration,Has the tenant seen the MHCLG privacy notice?
 hhmemb,How many people live in the household at this letting?
 pregnancy_value_check,The following soft validation was confirmed: You told us somebody in the household is pregnant. You also told us there are no female tenants living at the property.
-refused,Where household characteristics have a 'Refused' option for some or all of: AGE1-AGE8, SEX1-SEX8, RELAT2-RELAT8, ECSTAT1-ECSTAT8
+refused,Where household characteristics have a 'Refused' option for some or all of: AGE1-AGE8, SEXRAB1-SEXRAB8, RELAT2-RELAT8, ECSTAT1-ECSTAT8
 hhtype,Type of household 1 = 1 elder; 2 = 2 adults, including elder(s); 3 = 1 adult; 4 = 2 adults; 5 = 1 adult & 1+ children; 6 = 2+ adults & 1+ children; 9 = Other
 totchild,Total number of dependent children in the household (Sum of when RELAT2-8 = C)
 totelder,Total number of elders in household (Sum of when AGE1-8 >= 60)
 totadult,Total number of adults in household
 age1,What is the lead tenant's age?
 retirement_value_check,The following soft validation was confirmed: You told us this person is aged %{age} years and retired. The minimum expected retirement age for %{gender} in England is %{age}.
-sex1,Which of these best describes the lead tenant's gender identity?
 ethnic_group,What is the lead tenant's ethnic group?
 ethnic,Which of these best describes the lead tenant's ethnic background?
 nationality_all,What is the lead tenant's nationality?
@@ -82,37 +81,30 @@ relat2,What is person 2's relationship to the lead tenant?
 partner_under_16_value_check,The following soft validation was confirmed: You said that [person X]'s relationship to lead tenant is partner, and that their age is [AGEX]. Are you sure this is correct?
 multiple_partners_value_check,The following soft validation was confirmed: You said that more than one person in the household is the partner of the lead tenant. Are you sure this is correct?
 age2,What is person 2's age?
-sex2,Which of these best describes person 2's gender identity?
 ecstat2,Which of these best describes person 2's working situation?
 details_known_3,Are the details of tenant 3 known?
 relat3,What is person 3's relationship to the lead tenant?
 age3,What is person 3's age?
-sex3,Which of these best describes person 3's gender identity?
 ecstat3,Which of these best describes person 3's working situation?
 details_known_4,Are the details of tenant 4 known?
 relat4,What is person 4's relationship to the lead tenant?
 age4,What is person 4's age?
-sex4,Which of these best describes person 4's gender identity?
 ecstat4,Which of these best describes person 4's working situation?
 details_known_5,Are the details of tenant 5 known?
 relat5,What is person 5's relationship to the lead tenant?
 age5,What is person 5's age?
-sex5,Which of these best describes person 5's gender identity?
 ecstat5,Which of these best describes person 5's working situation?
 details_known_6,Are the details of tenant 6 known?
 relat6,What is person 6's relationship to the lead tenant?
 age6,What is person 6's age?
-sex6,Which of these best describes person 6's gender identity?
 ecstat6,Which of these best describes person 6's working situation?
 details_known_7,Are the details of tenant 7 known?
 relat7,What is person 7's relationship to the lead tenant?
 age7,What is person 7's age?
-sex7,Which of these best describes person 7's gender identity?
 ecstat7,Which of these best describes person 7's working situation?
 details_known_8,Are the details of tenant 8 known?
 relat8,What is person 8's relationship to the lead tenant?
 age8,What is person 8's age?
-sex8,Which of these best describes person 8's gender identity?
 ecstat8,Which of these best describes person 8's working situation?
 armedforces,Does anybody in the household have links to the UK armed forces?
 leftreg,Is this person still serving in the UK armed forces?

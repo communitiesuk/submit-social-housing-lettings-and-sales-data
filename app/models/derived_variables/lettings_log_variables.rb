@@ -270,7 +270,7 @@ private
   end
 
   def get_refused
-    return 1 if details_unknown? || age_refused? || sex_refused? || relat_refused? || ecstat_refused?
+    return 1 if details_unknown? || age_refused? || sex_refused? || sexrab_refused? || relat_refused? || ecstat_refused?
 
     0
   end
