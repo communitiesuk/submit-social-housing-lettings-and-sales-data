@@ -135,6 +135,9 @@ module Csv
 
     PERSON_DETAILS = {}.tap { |hash|
       hash["age1"] = { "refused_code" => "-9", "refused_label" => "Not known", "age_known_field" => "age1_known" }
+      hash["sexrab1"] = { "refused_code" => "R", "refused_label" => "Prefers not to say" }
+      hash["sex1"] = { "refused_code" => "R", "refused_label" => "Prefers not to say" }
+      hash["ecstat1"] = { "refused_code" => "10", "refused_label" => "Prefers not to say" }
       (2..8).each do |i|
         hash["age#{i}"] = { "refused_code" => "-9", "refused_label" => "Not known", "details_known_field" => "details_known_#{i}", "age_known_field" => "age#{i}_known" }
         hash["sexrab#{i}"] = { "refused_code" => "R", "refused_label" => "Prefers not to say", "details_known_field" => "details_known_#{i}" }
@@ -356,7 +359,7 @@ module Csv
         log.public_send(attribute)&.iso8601
       elsif USER_DATE_FIELDS.include? attribute
         log.public_send(attribute)&.strftime("%F")
-      elsif PERSON_DETAILS.any? { |key, _value| key == attribute } && (person_details_not_known?(log, attribute) || age_not_known?(log, attribute))
+      elsif PERSON_DETAILS.any? { |key, _value| key == attribute } && (person_details_not_known?(log, attribute) || age_not_known?(log, attribute) || value == PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_code"])
         case @export_type
         when "codes"
           PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_code"]
@@ -389,6 +392,7 @@ module Csv
       return LABELS[attribute][value] if LABELS.key?(attribute)
       return conventional_yes_no_label(value) if CONVENTIONAL_YES_NO_ATTRIBUTES.include?(attribute)
       return "Yes" if YES_OR_BLANK_ATTRIBUTES.include?(attribute) && value == 1
+      return PERSON_DETAILS[attribute]["refused_label"] if PERSON_DETAILS.key?(attribute) && value == PERSON_DETAILS[attribute]["refused_code"]
 
       log.form
          .get_question(attribute, log)
