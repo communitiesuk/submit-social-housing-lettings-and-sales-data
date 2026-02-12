@@ -248,6 +248,15 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             field_4: "1",
 
             field_18: "12",
+
+            field_130: "F",
+            field_131: "M",
+            field_132: "R",
+            field_133: "F",
+            field_134: "M",
+            field_135: "R",
+            field_136: "F",
+            field_137: "M",
           }
         end
 
@@ -1910,7 +1919,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       let(:attributes) { { bulk_upload: } }
 
       before do
-        build(:lettings_log, owning_organisation: nil, startdate: nil, tenancycode: nil, location: nil, age1: nil, sex1: nil, ecstat1: nil, brent: nil, scharge: nil, pscharge: nil, supcharg: nil).save(validate: false)
+        build(:lettings_log, owning_organisation: nil, startdate: nil, tenancycode: nil, location: nil, age1: nil, sexrab1: nil, sex1: nil, ecstat1: nil, brent: nil, scharge: nil, pscharge: nil, supcharg: nil).save(validate: false)
       end
 
       it "does not add duplicate logs validation to the blank row" do
