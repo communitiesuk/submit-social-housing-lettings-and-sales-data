@@ -6,12 +6,6 @@ class Form::Lettings::Questions::PersonSexRegisteredAtBirth < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @person_index = person_index
     @question_number = question_number
-    @inferred_check_answers_value = [{
-      "condition" => {
-        id => "R",
-      },
-      "value" => "Prefers not to say",
-    }]
   end
 
   ANSWER_OPTIONS = {
@@ -25,5 +19,13 @@ class Form::Lettings::Questions::PersonSexRegisteredAtBirth < ::Form::Question
     base_question_number = 29
 
     base_question_number + (5 * @person_index)
+  end
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "R"
+
+    super
   end
 end

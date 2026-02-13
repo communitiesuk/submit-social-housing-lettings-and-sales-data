@@ -5,12 +5,6 @@ class Form::Lettings::Questions::LeadTenantSexRegisteredAtBirth < ::Form::Questi
     @type = "radio"
     @check_answers_card_number = 1
     @answer_options = ANSWER_OPTIONS
-    @inferred_check_answers_value = [{
-      "condition" => {
-        @id => "R",
-      },
-      "value" => "Prefers not to say",
-    }]
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
@@ -22,4 +16,12 @@ class Form::Lettings::Questions::LeadTenantSexRegisteredAtBirth < ::Form::Questi
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2026 => 31 }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "R"
+
+    super
+  end
 end
