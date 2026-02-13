@@ -143,6 +143,22 @@ class BulkUpload::Lettings::Year2026::RowParser
     field_135: "Person 6's sex, as registered at birth",
     field_136: "Person 7's sex, as registered at birth",
     field_137: "Person 8's sex, as registered at birth",
+    field_138: "Is the gender the lead tenant identifies with the same as their sex registered at birth?",
+    field_139: "If 'No', enter the lead tenant's gender identity",
+    field_140: "Is the gender person 2 identifies with the same as their sex registered at birth?",
+    field_141: "If 'No', enter person 2's gender identity",
+    field_142: "Is the gender person 3 identifies with the same as their sex registered at birth?",
+    field_143: "If 'No', enter person 3's gender identity",
+    field_144: "Is the gender person 4 identifies with the same as their sex registered at birth?",
+    field_145: "If 'No', enter person 4's gender identity",
+    field_146: "Is the gender person 5 identifies with the same as their sex registered at birth?",
+    field_147: "If 'No', enter person 5's gender identity",
+    field_148: "Is the gender person 6 identifies with the same as their sex registered at birth?",
+    field_149: "If 'No', enter person 6's gender identity",
+    field_150: "Is the gender person 7 identifies with the same as their sex registered at birth?",
+    field_151: "If 'No', enter person 7's gender identity",
+    field_152: "Is the gender person 8 identifies with the same as their sex registered at birth?",
+    field_153: "If 'No', enter person 8's gender identity",
   }.freeze
 
   RENT_TYPE_BU_MAPPING = {
@@ -300,6 +316,22 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_135, :string
   attribute :field_136, :string
   attribute :field_137, :string
+  attribute :field_138, :integer
+  attribute :field_139, :string
+  attribute :field_140, :integer
+  attribute :field_141, :string
+  attribute :field_142, :integer
+  attribute :field_143, :string
+  attribute :field_144, :integer
+  attribute :field_145, :string
+  attribute :field_146, :integer
+  attribute :field_147, :string
+  attribute :field_148, :integer
+  attribute :field_149, :string
+  attribute :field_150, :integer
+  attribute :field_151, :string
+  attribute :field_152, :integer
+  attribute :field_153, :string
 
   validate :validate_valid_radio_option, on: :before_log
 
@@ -1394,6 +1426,22 @@ private
     attributes["sexrab6"] = field_135
     attributes["sexrab7"] = field_136
     attributes["sexrab8"] = field_137
+    attributes["gender_same_as_sex1"] = field_138
+    attributes["gender_description1"] = field_139
+    attributes["gender_same_as_sex2"] = field_140
+    attributes["gender_description2"] = field_141
+    attributes["gender_same_as_sex3"] = field_142
+    attributes["gender_description3"] = field_143
+    attributes["gender_same_as_sex4"] = field_144
+    attributes["gender_description4"] = field_145
+    attributes["gender_same_as_sex5"] = field_146
+    attributes["gender_description5"] = field_147
+    attributes["gender_same_as_sex6"] = field_148
+    attributes["gender_description6"] = field_149
+    attributes["gender_same_as_sex7"] = field_150
+    attributes["gender_description7"] = field_151
+    attributes["gender_same_as_sex8"] = field_152
+    attributes["gender_description8"] = field_153
 
     attributes
   end
@@ -1501,31 +1549,31 @@ private
   end
 
   def person_2_present?
-    field_47.present? || field_48.present? || field_49.present? || field_131.present?
+    field_47.present? || field_48.present? || field_49.present? || field_131.present? || field_140.present? || field_141.present?
   end
 
   def person_3_present?
-    field_51.present? || field_52.present? || field_53.present? || field_132.present?
+    field_51.present? || field_52.present? || field_53.present? || field_132.present? || field_142.present? || field_143.present?
   end
 
   def person_4_present?
-    field_55.present? || field_56.present? || field_57.present? || field_133.present?
+    field_55.present? || field_56.present? || field_57.present? || field_133.present? || field_144.present? || field_145.present?
   end
 
   def person_5_present?
-    field_59.present? || field_60.present? || field_61.present? || field_134.present?
+    field_59.present? || field_60.present? || field_61.present? || field_134.present? || field_146.present? || field_147.present?
   end
 
   def person_6_present?
-    field_63.present? || field_64.present? || field_65.present? || field_135.present?
+    field_63.present? || field_64.present? || field_65.present? || field_135.present? || field_148.present? || field_149.present?
   end
 
   def person_7_present?
-    field_67.present? || field_68.present? || field_69.present? || field_136.present?
+    field_67.present? || field_68.present? || field_69.present? || field_136.present? || field_150.present? || field_151.present?
   end
 
   def person_8_present?
-    field_71.present? || field_72.present? || field_73.present? || field_137.present?
+    field_71.present? || field_72.present? || field_73.present? || field_137.present? || field_152.present? || field_153.present?
   end
 
   def leftreg
