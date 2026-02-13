@@ -6,7 +6,7 @@ task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, args|
   query = "SELECT \"versions\".* FROM \"versions\" WHERE \"versions\".\"item_type\" = 'LettingsLog' AND whodunnit is null AND ((object_changes like '%status:\n- 3\n- 1%') OR (object_changes like '%status:\n- 3\n- 2%'))"
   results = pg.execute(query)
 
-  duplicate_log_attributes = %w[owning_organisation_id tenancycode startdate age1_known age1 sex1 ecstat1 tcharge household_charge chcharge]
+  duplicate_log_attributes = %w[owning_organisation_id tenancycode startdate age1_known age1 sex1 sexrab1 ecstat1 tcharge household_charge chcharge]
 
   seen = [].to_set
 
@@ -47,8 +47,8 @@ task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, args|
                               .age1_answered
                               .tcharge_answered
                               .chcharge_answered
-                              .location_for_log_answered(log)
-                              .postcode_for_log_answered(log)
+                              .location_for_log_answered_as(log)
+                              .address_for_log_answered_as(log)
                               .where(log.slice(*duplicate_log_attributes))
 
       duplicate_count = duplicates.length

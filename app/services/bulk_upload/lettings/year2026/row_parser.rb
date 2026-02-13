@@ -552,13 +552,13 @@ class BulkUpload::Lettings::Year2026::RowParser
       "field_1",   # owning org
       "field_8",   # startdate
       "field_9",   # startdate
-      "field_10", # startdate
-      "field_13", # tenancycode
-      !general_needs? ? :field_6.to_s : nil, # location # TODO: CLDC-4119: remove location from hash
-      !supported_housing? ? "field_23" : nil,  # postcode # TODO: CLDC-4119: add postcode to hash for supported housing
-      !supported_housing? ? "field_24" : nil,  # postcode # TODO: CLDC-4119: add postcode to hash for supported housing
-      "field_42", # age1
-      "field_43",  # sex1
+      "field_10",  # startdate
+      "field_13",  # tenancycode
+      "field_18",  # uprn
+      "field_19",  # address_line1
+      "field_23",  # postcode first half
+      "field_24",  # postcode second half
+      "field_42",  # age1
       "field_130", # sexrab1
       "field_46",  # ecstat1
     )
@@ -709,12 +709,12 @@ private
       "startdate",
       "age1",
       "sexrab1",
-      "sex1",
       "ecstat1",
       "owning_organisation",
       "tcharge",
-      !supported_housing? ? "postcode_full" : nil, # TODO: CLDC-4119: add postcode to duplicate check fields for supported housing
-      !general_needs? ? "location" : nil, # TODO: CLDC-4119: remove location from duplicate check fields
+      "postcode_full",
+      "address_line1",
+      "uprn",
       "tenancycode",
       log.chcharge.present? ? "chcharge" : nil,
     ].compact
