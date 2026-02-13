@@ -6,7 +6,7 @@ RSpec.describe "log_variable_definitions" do
     subject(:task) { Rake::Task["data_import:add_variable_definitions"] }
 
     let(:path) { "spec/fixtures/variable_definitions" }
-    let(:total_variable_definitions_count) { 431 }
+    let(:total_variable_definitions_count) { 432 }
 
     before do
       Rake.application.rake_require("tasks/log_variable_definitions")

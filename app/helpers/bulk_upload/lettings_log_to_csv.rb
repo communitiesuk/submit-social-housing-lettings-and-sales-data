@@ -144,40 +144,40 @@ class BulkUpload::LettingsLogToCsv
 
       log.tenancylength,
       log.age1 || overrides[:age1],
-      log.sex1,
+      log.sexrab1,
       log.ethnic,
       log.nationality_all_group,
       log.ecstat1,
       relat_number(log.relat2),
       log.age2 || overrides[:age2],
-      log.sex2,
+      log.sexrab2,
       log.ecstat2, # 50
 
       relat_number(log.relat3),
       log.age3 || overrides[:age3],
-      log.sex3,
+      log.sexrab3,
       log.ecstat3,
       relat_number(log.relat4),
       log.age4 || overrides[:age4],
-      log.sex4,
+      log.sexrab4,
       log.ecstat4,
       relat_number(log.relat5),
       log.age5 || overrides[:age5], # 60
 
-      log.sex5,
+      log.sexrab5,
       log.ecstat5,
       relat_number(log.relat6),
       log.age6 || overrides[:age6],
-      log.sex6,
+      log.sexrab6,
       log.ecstat6,
       relat_number(log.relat7),
       log.age7 || overrides[:age7],
-      log.sex7,
+      log.sexrab7,
       log.ecstat7, # 70
 
       relat_number(log.relat8),
       log.age8 || overrides[:age8],
-      log.sex8,
+      log.sexrab8,
       log.ecstat8,
       log.armedforces,
       log.leftreg,
@@ -238,15 +238,7 @@ class BulkUpload::LettingsLogToCsv
       log.pscharge,
       log.supcharg,
       log.hbrentshortfall,
-      log.tshortfall,
-      log.sexrab1, # 130
-      log.sexrab2,
-      log.sexrab3,
-      log.sexrab4,
-      log.sexrab5,
-      log.sexrab6,
-      log.sexrab7,
-      log.sexrab8, # 137
+      log.tshortfall, # 129
     ]
   end
 
