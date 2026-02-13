@@ -7,12 +7,6 @@ class Form::Lettings::Questions::GenderSameAsSex < ::Form::Question
     @conditional_for = { "gender_description#{person_index}" => [2] }
     @person_index = person_index
     @question_number = question_number
-    @inferred_check_answers_value = [{
-      "condition" => {
-        @id => 2,
-      },
-      "value" => "No",
-    }]
   end
 
   def answer_options
@@ -30,5 +24,13 @@ class Form::Lettings::Questions::GenderSameAsSex < ::Form::Question
     base_question_number = 30
 
     base_question_number + (form.person_question_count * @person_index)
+  end
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == 3
+
+    super
   end
 end
