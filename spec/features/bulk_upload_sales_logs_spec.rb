@@ -1,7 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "Bulk upload sales log" do
+  include CollectionTimeHelper
+
   let(:user) { create(:user) }
+  let(:crossover_period) { nil }
 
   let(:stub_file_upload) do
     vcap_services = { "aws-s3-bucket" => {} }
@@ -17,17 +20,12 @@ RSpec.describe "Bulk upload sales log" do
   before do
     stub_file_upload
     sign_in user
+    allow(FormHandler.instance).to receive(:sales_in_crossover_period?).and_return(crossover_period)
   end
 
   # rubocop:disable RSpec/AnyInstance
   context "when during crossover period" do
-    before do
-      Timecop.freeze(2024, 5, 1)
-    end
-
-    after do
-      Timecop.return
-    end
+    let(:crossover_period) { true }
 
     it "shows journey with year option" do
       visit("/sales-logs")
@@ -38,15 +36,15 @@ RSpec.describe "Bulk upload sales log" do
       click_button("Continue")
 
       expect(page).to have_content("You must select a collection period to upload for")
-      choose("2024 to 2025")
+      choose("#{current_collection_start_year} to #{current_collection_end_year}")
       click_button("Continue")
 
       click_link("Back")
 
-      expect(page.find_field("form-year-2024-field")).to be_checked
+      expect(page.find_field("form-year-#{current_collection_start_year}-field")).to be_checked
       click_button("Continue")
 
-      expect(page).to have_content("Upload sales logs in bulk (2024 to 2025)")
+      expect(page).to have_content("Upload sales logs in bulk (#{current_collection_start_year} to #{current_collection_end_year})")
       click_button("Continue")
 
       expect(page).to have_content("Upload your file")
@@ -80,7 +78,7 @@ RSpec.describe "Bulk upload sales log" do
       expect(page).to have_content("Which year")
       click_button("Continue")
       click_button("Continue")
-      choose("2024 to 2025")
+      choose("#{current_collection_start_year} to #{current_collection_end_year}")
       click_button("Continue")
       click_button("Continue")
 
@@ -95,20 +93,14 @@ RSpec.describe "Bulk upload sales log" do
   # rubocop:enable RSpec/AnyInstance
 
   context "when not in crossover period" do
-    before do
-      Timecop.freeze(2025, 2, 1)
-    end
-
-    after do
-      Timecop.return
-    end
+    let(:crossover_period) { false }
 
     it "shows journey without year option" do
       visit("/sales-logs")
       expect(page).to have_link("Upload sales logs in bulk")
       click_link("Upload sales logs in bulk")
 
-      expect(page).to have_content("Upload sales logs in bulk (2024 to 2025)")
+      expect(page).to have_content("Upload sales logs in bulk (#{current_collection_start_year} to #{current_collection_end_year})")
       click_button("Continue")
 
       expect(page).to have_content("Upload your file")

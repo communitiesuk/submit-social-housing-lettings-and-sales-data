@@ -9,6 +9,7 @@ class Form::Lettings::Questions::Hhmemb < ::Form::Question
     @min = 1
     @step = 1
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @check_answers_card_title = "Household" if form.start_year_2026_or_later?
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 31, 2024 => 30 }.freeze
