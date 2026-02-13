@@ -7,6 +7,7 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
 
   let(:question_definition) { nil }
   let(:year) { nil }
+  let(:person_question_count) { 5 }
   let(:page) do
     instance_double(
       Form::Page,
@@ -17,6 +18,7 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
           start_date: year ? collection_start_date_for_year(year) : current_collection_start_date,
           start_year_2025_or_later?: year.nil? || year >= 2025,
           start_year_2026_or_later?: year.nil? || year >= 2026,
+          person_question_count:,
         ),
       ),
     )

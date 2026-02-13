@@ -4,7 +4,7 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     @id = "managing_organisation_id"
     @derived = true
     @type = "select"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR) if form.start_date.present?
   end
 
   def answer_options(log = nil, user = nil)
@@ -83,5 +83,5 @@ private
     true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 2 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 2, 2024 => 2, 2025 => 2, 2026 => 2 }.freeze
 end

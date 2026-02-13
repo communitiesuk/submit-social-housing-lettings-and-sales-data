@@ -18,6 +18,6 @@ class Form::Lettings::Questions::PersonSexRegisteredAtBirth < ::Form::Question
   def question_number
     base_question_number = 29
 
-    base_question_number + (5 * @person_index)
+    base_question_number + (form.person_question_count * @person_index)
   end
 end
