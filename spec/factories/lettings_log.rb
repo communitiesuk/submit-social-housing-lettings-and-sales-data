@@ -60,6 +60,7 @@ FactoryBot.define do
       age1_known { 0 }
       age1 { Faker::Number.within(range: 25..45) }
       sexrab1 { %w[F M R].sample }
+      sex1 { %w[F M X R].sample }
       ethnic_group { 0 }
       ethnic { 2 }
       national { 13 }
@@ -71,6 +72,7 @@ FactoryBot.define do
       details_known_2 { 0 }
       age2 { Faker::Number.within(range: 25..45) }
       sexrab2 { %w[F M R].sample }
+      sex2 { %w[F M X R].sample }
       ecstat2 { 6 }
       homeless { 1 }
       underoccupation_benefitcap { 0 }
