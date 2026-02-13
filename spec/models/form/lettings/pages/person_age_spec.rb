@@ -4,7 +4,7 @@ RSpec.describe Form::Lettings::Pages::PersonAge, type: :model do
   subject(:page) { described_class.new(nil, page_definition, subsection, person_index:) }
 
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2024_or_later?: false, start_year_2026_or_later?: false, person_question_count: 5)) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2024_or_later?: false, start_year_2026_or_later?: false, person_question_count: 4)) }
   let(:person_index) { 2 }
 
   it "has correct subsection" do

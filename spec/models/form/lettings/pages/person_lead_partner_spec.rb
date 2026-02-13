@@ -5,7 +5,7 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
 
   let(:page_definition) { nil }
   let(:start_year_2026_or_later?) { false }
-  let(:person_question_count) { 5 }
+  let(:person_question_count) { 4 }
   let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2026_or_later?: start_year_2026_or_later?, person_question_count:) }
   let(:subsection) { instance_double(Form::Subsection, form:) }
   let(:person_index) { 2 }

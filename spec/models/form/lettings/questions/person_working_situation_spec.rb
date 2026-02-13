@@ -4,8 +4,7 @@ RSpec.describe Form::Lettings::Questions::PersonWorkingSituation, type: :model d
   subject(:question) { described_class.new(nil, question_definition, page, person_index:) }
 
   let(:question_definition) { nil }
-  let(:person_question_count) { 5 }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2025, 4, 4), start_year_2026_or_later?: false, person_question_count:))) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2025, 4, 4), start_year_2026_or_later?: false, person_question_count: 4))) }
   let(:person_index) { 2 }
 
   before do
