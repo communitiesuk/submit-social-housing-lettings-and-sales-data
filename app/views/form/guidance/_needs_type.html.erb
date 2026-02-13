@@ -1,0 +1,5 @@
+<div class="govuk-body">
+  <%= govuk_details(summary_text: I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.needs_type.title")) do %>
+    <%= I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.needs_type.content").html_safe %>
+  <% end %>
+</div>
