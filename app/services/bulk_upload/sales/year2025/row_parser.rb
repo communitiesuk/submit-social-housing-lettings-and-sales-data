@@ -139,6 +139,29 @@ class BulkUpload::Sales::Year2025::RowParser
 
   ERROR_BASE_KEY = "validations.sales.2025.bulk_upload".freeze
 
+  CASE_INSENSITIVE_FIELDS = [
+    :field_28, # Age of buyer 1
+    :field_35, # Age of person 2
+    :field_43, # Age of person 3
+    :field_47, # Age of person 4
+    :field_51, # Age of person 5
+    :field_55, # Age of person 6
+
+    :field_29, # Gender identity of buyer 1
+    :field_36, # Gender identity of person 2
+    :field_44, # Gender identity of person 3
+    :field_48, # Gender identity of person 4
+    :field_52, # Gender identity of person 5
+    :field_56, # Gender identity of person 6
+
+    :field_58, # What was buyer 1’s previous tenure?
+    :field_64, # What was buyer 2’s previous tenure?
+
+    :field_75, # What is the total amount the buyers had in savings before they paid any deposit for the property?
+    :field_70, # What is buyer 1’s gross annual income?
+    :field_72, # What is buyer 2’s gross annual income?
+  ].freeze
+
   attribute :bulk_upload
   attribute :block_log_creation, :boolean, default: -> { false }
 
@@ -454,6 +477,8 @@ class BulkUpload::Sales::Year2025::RowParser
 
     return true if blank_row?
 
+    normalise_case_insensitive_fields
+
     super(:before_log)
     @before_errors = errors.dup
 
@@ -524,6 +549,13 @@ class BulkUpload::Sales::Year2025::RowParser
   end
 
 private
+
+  def normalise_case_insensitive_fields
+    CASE_INSENSITIVE_FIELDS.each do |field|
+      value = send(field)
+      send("#{field}=", value.upcase) if value.present?
+    end
+  end
 
   def prevtenbuy2
     case field_64

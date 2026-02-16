@@ -148,6 +148,26 @@ class BulkUpload::Lettings::Year2025::RowParser
 
   ERROR_BASE_KEY = "validations.lettings.2025.bulk_upload".freeze
 
+  CASE_INSENSITIVE_FIELDS = [
+    :field_42, # What is the lead tenant’s age?
+    :field_48, # What is person 2’s age?
+    :field_52, # What is person 3’s age?
+    :field_56, # What is person 4’s age?
+    :field_60, # What is person 5’s age?
+    :field_64, # What is person 6’s age?
+    :field_68, # What is person 7’s age?
+    :field_72, # What is person 8’s age?
+
+    :field_43, # Which of these best describes the lead tenant’s gender identity?
+    :field_49, # Which of these best describes person 2’s gender identity?
+    :field_53, # Which of these best describes person 3’s gender identity?
+    :field_57, # Which of these best describes person 4’s gender identity?
+    :field_61, # Which of these best describes person 5’s gender identity?
+    :field_65, # Which of these best describes person 6’s gender identity?
+    :field_69, # Which of these best describes person 7’s gender identity?
+    :field_73, # Which of these best describes person 8’s gender identity?
+  ].freeze
+
   attribute :bulk_upload
   attribute :block_log_creation, :boolean, default: -> { false }
 
@@ -459,6 +479,8 @@ class BulkUpload::Lettings::Year2025::RowParser
 
     return @valid = true if blank_row?
 
+    normalise_case_insensitive_fields
+
     super(:before_log)
     @before_errors = errors.dup
 
@@ -559,6 +581,13 @@ class BulkUpload::Lettings::Year2025::RowParser
   end
 
 private
+
+  def normalise_case_insensitive_fields
+    CASE_INSENSITIVE_FIELDS.each do |field|
+      value = send(field)
+      send("#{field}=", value.upcase) if value.present?
+    end
+  end
 
   def validate_valid_radio_option
     log.attributes.each do |question_id, _v|
