@@ -52,17 +52,34 @@ module Validations::PropertyValidations
     end
   end
 
+  def validate_property_and_location_postcodes_match(record)
+    return unless record.form.start_year_2026_or_later?
+
+    postcode = record.postcode_full
+    return unless postcode
+
+    location_postcode = record.location&.postcode
+    return unless location_postcode
+
+    if postcode != location_postcode
+      record.errors.add :location_id, I18n.t("validations.lettings.property.location_id.postcode_does_not_match_scheme_location_postcode")
+      record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.postcode_does_not_match_scheme_location_postcode")
+      record.errors.add :postcode_full, I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")
+    end
+  end
+
   # see also: this validation in sales/property_validations.rb
   def validate_la_in_england(record)
     return unless record.form.start_year_2025_or_later?
     return unless record.la
     return if record.la.in?(LocalAuthority.england.pluck(:code))
 
+    record.errors.add :la, I18n.t("validations.lettings.property.la.not_in_england")
+    record.errors.add :postcode_full, I18n.t("validations.lettings.property.postcode_full.not_in_england")
+    record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.not_in_england")
+    record.errors.add :uprn_selection, I18n.t("validations.lettings.property.uprn_selection.not_in_england")
+
     if record.is_general_needs?
-      record.errors.add :la, I18n.t("validations.lettings.property.la.not_in_england")
-      record.errors.add :postcode_full, I18n.t("validations.lettings.property.postcode_full.not_in_england")
-      record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.not_in_england")
-      record.errors.add :uprn_selection, I18n.t("validations.lettings.property.uprn_selection.not_in_england")
       if record.uprn.present?
         record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.address_not_in_england")
       else
@@ -87,16 +104,15 @@ module Validations::PropertyValidations
     # only compare end date if it exists
     return if record.startdate >= la.start_date && (la.end_date.nil? || record.startdate <= la.end_date)
 
-    if record.is_general_needs?
-      record.errors.add :la, I18n.t("validations.lettings.property.la.la_not_valid_for_date", la: la.name)
-      record.errors.add :postcode_full, I18n.t("validations.lettings.property.postcode_full.la_not_valid_for_date", la: la.name)
-      record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.la_not_valid_for_date", la: la.name)
-      record.errors.add :uprn_selection, I18n.t("validations.lettings.property.uprn_selection.la_not_valid_for_date", la: la.name)
-      record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: la.name)
-    elsif record.is_supported_housing?
+    record.errors.add :la, I18n.t("validations.lettings.property.la.la_not_valid_for_date", la: la.name)
+    record.errors.add :postcode_full, I18n.t("validations.lettings.property.postcode_full.la_not_valid_for_date", la: la.name)
+    record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.la_not_valid_for_date", la: la.name)
+    record.errors.add :uprn_selection, I18n.t("validations.lettings.property.uprn_selection.la_not_valid_for_date", la: la.name)
+    record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: la.name)
+
+    if record.is_supported_housing?
       record.errors.add :location_id, I18n.t("validations.lettings.property.location_id.la_not_valid_for_date", la: la.name)
       record.errors.add :scheme_id, I18n.t("validations.lettings.property.scheme_id.la_not_valid_for_date", la: la.name)
-      record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: la.name)
     end
   end
 end

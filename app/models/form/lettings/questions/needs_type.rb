@@ -5,6 +5,7 @@ class Form::Lettings::Questions::NeedsType < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?
+    @top_guidance_partial = "needs_type" if form.start_year_2026_or_later?
   end
 
   ANSWER_OPTIONS = {

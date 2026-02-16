@@ -137,3 +137,12 @@ en:
             question_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
             title_text: "No address found"
             informative_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
+
+          working_situation_illness_check:
+            page_header: ""
+            check_answer_label: "Working situation illness confirmation"
+            check_answer_prompt: "Confirm 'unable to work due to illness' working situation and long-term illness warning"
+            hint_text: ""
+            question_text: "Are you sure this is correct?"
+            title_text: "You have said that at least one person's situation is 'Unable to work because of long-term sickness or disability'."
+            informative_text: "You also told us there is no-one in the household with a long-lasting health condition."

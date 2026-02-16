@@ -185,19 +185,18 @@ class LettingsLog < Log
   end
 
   def la
-    if location
-      location.linked_local_authorities.active(form.start_date).first&.code || location.location_code
-    else
-      super
-    end
+    return super unless location
+    return super if form.start_year_2026_or_later? && super
+
+    location.linked_local_authorities.active(form.start_date).first&.code || location.location_code
   end
 
+  # TODO: CLDC-4119: Beware! This method may cause issues when testing supported housing log duplicate detection after postcode is added, as it can return `location.postcode` instead of the actual `postcode_full` stored on the log record (`super`). If this happens, investigate why it isn't returning `super`, as it should when `form.start_year_2026_or_later? && super`.
   def postcode_full
-    if location
-      location.postcode
-    else
-      super
-    end
+    return super unless location
+    return super if form.start_year_2026_or_later? && super
+
+    location.postcode
   end
 
   def postcode_full=(postcode)
@@ -553,7 +552,7 @@ class LettingsLog < Log
   def is_prevten_general_needs?
     return false unless prevten
 
-    ![30, 31, 32, 33, 35, 38, 6].include?(prevten)
+    ![30, 31, 32, 33, 35, 38, 40, 6].include?(prevten)
   end
 
   def owning_organisation_name
@@ -782,6 +781,10 @@ class LettingsLog < Log
 
   def changed_from_newbuild?
     rsnvac != 15 && rsnvac_was == 15
+  end
+
+  def is_address_asked?
+    form.start_year_2026_or_later? || !is_supported_housing?
   end
 
   def referral_is_from_local_authority_housing_register?

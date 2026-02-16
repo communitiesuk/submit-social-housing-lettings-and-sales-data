@@ -7,15 +7,13 @@ module Exports::LettingsLogExportConstants
     csv: 2,
   }.freeze
 
-  EXPORT_FIELDS = Set[
+  ALL_YEAR_EXPORT_FIELDS = Set[
     "armedforces",
     "beds",
     "benefits",
     "brent",
-    "builtype",
     "cap",
     "cbl",
-    "chcharge",
     "chr",
     "cligrp1",
     "cligrp2",
@@ -53,12 +51,10 @@ module Exports::LettingsLogExportConstants
     "mantype",
     "mobstand",
     "mrcdate",
-    "national",
     "needstype",
     "new_old",
     "newprop",
     "nocharge",
-    "offered",
     "owningorgid",
     "owningorgname",
     "period",
@@ -138,41 +134,49 @@ module Exports::LettingsLogExportConstants
     "location_status",
     "amended_by",
     "duplicate_set_id",
-    "accessible_register",
-    "nationality_all",
-    "bulk_upload_id",
-    "address_line1_as_entered",
-    "address_line2_as_entered",
-    "town_or_city_as_entered",
-    "county_as_entered",
-    "postcode_full_as_entered",
-    "la_as_entered",
-    "net_income_value_check",
-    "rent_value_check",
-    "scharge_value_check",
-    "pscharge_value_check",
-    "supcharg_value_check",
-    "carehome_charges_value_check",
     "assigned_to",
     "created_by",
   ]
 
   (1..8).each do |index|
-    EXPORT_FIELDS << "age#{index}"
-    EXPORT_FIELDS << "ecstat#{index}"
-    EXPORT_FIELDS << "sex#{index}"
+    ALL_YEAR_EXPORT_FIELDS << "age#{index}"
+    ALL_YEAR_EXPORT_FIELDS << "ecstat#{index}"
+    ALL_YEAR_EXPORT_FIELDS << "sex#{index}"
   end
   (2..8).each do |index|
-    EXPORT_FIELDS << "relat#{index}"
+    ALL_YEAR_EXPORT_FIELDS << "relat#{index}"
   end
   (1..10).each do |index|
-    EXPORT_FIELDS << "illness_type_#{index}"
+    ALL_YEAR_EXPORT_FIELDS << "illness_type_#{index}"
   end
   %w[a b c d e f g h].each do |letter|
-    EXPORT_FIELDS << "housingneeds_#{letter}"
+    ALL_YEAR_EXPORT_FIELDS << "housingneeds_#{letter}"
   end
 
-  POST_2024_EXPORT_FIELDS = Set[
+  YEAR_2021_EXPORT_FIELDS = Set[
+    "builtype",
+    "chcharge",
+    "national",
+    "offered",
+  ]
+
+  YEAR_2022_EXPORT_FIELDS = Set[
+    "builtype",
+    "chcharge",
+    "national",
+    "offered",
+  ]
+
+  YEAR_2023_EXPORT_FIELDS = Set[
+    "builtype",
+    "chcharge",
+    "national",
+    "offered",
+  ]
+
+  YEAR_2024_EXPORT_FIELDS = Set[
+    "builtype",
+    "chcharge",
     "accessible_register",
     "nationality_all",
     "bulk_upload_id",
@@ -190,17 +194,44 @@ module Exports::LettingsLogExportConstants
     "carehome_charges_value_check",
   ]
 
-  PRE_2024_EXPORT_FIELDS = Set[
-    "national",
-    "offered"
-]
-
-  PRE_2025_EXPORT_FIELDS = Set[
-    "carehome_charges_value_check",
-    "chcharge"
+  YEAR_2025_EXPORT_FIELDS = Set[
+    "builtype",
+    "accessible_register",
+    "nationality_all",
+    "bulk_upload_id",
+    "address_line1_as_entered",
+    "address_line2_as_entered",
+    "town_or_city_as_entered",
+    "county_as_entered",
+    "postcode_full_as_entered",
+    "la_as_entered",
+    "net_income_value_check",
+    "rent_value_check",
+    "scharge_value_check",
+    "pscharge_value_check",
+    "supcharg_value_check",
   ]
 
-  PRE_2026_EXPORT_FIELDS = Set[
-    "builtype"
+  YEAR_2026_EXPORT_FIELDS = Set[
+    "accessible_register",
+    "nationality_all",
+    "bulk_upload_id",
+    "address_line1_as_entered",
+    "address_line2_as_entered",
+    "town_or_city_as_entered",
+    "county_as_entered",
+    "postcode_full_as_entered",
+    "la_as_entered",
+    "net_income_value_check",
+    "rent_value_check",
+    "scharge_value_check",
+    "pscharge_value_check",
+    "supcharg_value_check",
   ]
+
+  (1..8).each do |index|
+    YEAR_2026_EXPORT_FIELDS << "sexrab#{index}"
+    YEAR_2026_EXPORT_FIELDS << "gender_same_as_sex#{index}"
+    YEAR_2026_EXPORT_FIELDS << "gender_description#{index}"
+  end
 end
