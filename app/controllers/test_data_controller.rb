@@ -13,8 +13,7 @@ class TestDataController < ApplicationController
   def create_next_year_test_lettings_log
     return render_not_found unless FeatureToggle.create_test_logs_enabled?
 
-    end_date_override = FeatureToggle.allow_future_form_use? ? nil : Time.zone.now + 14.days
-    log = FactoryBot.create(:lettings_log, :completed, assigned_to: current_user, ppostcode_full: "SW1A 1AA", manual_address_entry_selected: false, startdate: generate_different_date_within_collection_year(Time.zone.local(next_collection_start_year, 4, 1), end_date_override:))
+    log = FactoryBot.create(:lettings_log, :completed, assigned_to: current_user, ppostcode_full: "SW1A 1AA", manual_address_entry_selected: false, startdate: generate_different_date_within_collection_year(Time.zone.local(next_collection_start_year, 4, 1)))
     redirect_to lettings_log_path(log)
   end
 
@@ -28,8 +27,7 @@ class TestDataController < ApplicationController
   def create_next_year_setup_test_lettings_log
     return render_not_found unless FeatureToggle.create_test_logs_enabled?
 
-    end_date_override = FeatureToggle.allow_future_form_use? ? nil : Time.zone.now + 14.days
-    log = FactoryBot.create(:lettings_log, :setup_completed, assigned_to: current_user, manual_address_entry_selected: false, startdate: generate_different_date_within_collection_year(Time.zone.local(next_collection_start_year, 4, 1), end_date_override:))
+    log = FactoryBot.create(:lettings_log, :setup_completed, assigned_to: current_user, manual_address_entry_selected: false, startdate: generate_different_date_within_collection_year(Time.zone.local(next_collection_start_year, 4, 1)))
     redirect_to lettings_log_path(log)
   end
 
@@ -66,8 +64,7 @@ class TestDataController < ApplicationController
   def create_next_year_test_sales_log
     return render_not_found unless FeatureToggle.create_test_logs_enabled?
 
-    end_date_override = FeatureToggle.allow_future_form_use? ? nil : Time.zone.now + 14.days
-    log = FactoryBot.create(:sales_log, :completed, assigned_to: current_user, manual_address_entry_selected: false, saledate: generate_different_date_within_collection_year(Time.zone.local(next_collection_start_year, 4, 1), end_date_override:))
+    log = FactoryBot.create(:sales_log, :completed, assigned_to: current_user, manual_address_entry_selected: false, saledate: generate_different_date_within_collection_year(Time.zone.local(next_collection_start_year, 4, 1)))
     redirect_to sales_log_path(log)
   end
 
@@ -81,8 +78,7 @@ class TestDataController < ApplicationController
   def create_next_year_setup_test_sales_log
     return render_not_found unless FeatureToggle.create_test_logs_enabled?
 
-    end_date_override = FeatureToggle.allow_future_form_use? ? nil : Time.zone.now + 14.days
-    log = FactoryBot.create(:sales_log, :shared_ownership_setup_complete, assigned_to: current_user, manual_address_entry_selected: false, saledate: generate_different_date_within_collection_year(Time.zone.local(next_collection_start_year, 4, 1), end_date_override:))
+    log = FactoryBot.create(:sales_log, :shared_ownership_setup_complete, assigned_to: current_user, manual_address_entry_selected: false, saledate: generate_different_date_within_collection_year(Time.zone.local(next_collection_start_year, 4, 1)))
     redirect_to sales_log_path(log)
   end
 
