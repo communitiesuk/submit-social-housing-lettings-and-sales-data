@@ -1,5 +1,6 @@
 class CreateLogActionsComponent < ViewComponent::Base
   include Rails.application.routes.url_helpers
+  include CollectionTimeHelper
 
   attr_reader :bulk_upload, :user, :log_type
 
@@ -38,8 +39,24 @@ class CreateLogActionsComponent < ViewComponent::Base
     send("create_test_#{log_type}_log_path")
   end
 
+  def create_next_year_test_log_href
+    send("create_next_year_test_#{log_type}_log_path")
+  end
+
   def create_setup_test_log_href
     send("create_setup_test_#{log_type}_log_path")
+  end
+
+  def create_next_year_setup_test_log_href
+    send("create_next_year_setup_test_#{log_type}_log_path")
+  end
+
+  def current_collection_year_label
+    "#{current_collection_start_year - 2000}/#{current_collection_end_year - 2000}"
+  end
+
+  def next_collection_year_label
+    "#{next_collection_start_year - 2000}/#{next_collection_end_year - 2000}"
   end
 
   def create_test_bulk_upload_href(year)
