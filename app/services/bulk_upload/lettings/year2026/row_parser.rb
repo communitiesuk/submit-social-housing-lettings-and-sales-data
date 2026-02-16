@@ -993,11 +993,9 @@ private
       errors.add(:field_9, error_message) # startdate
       errors.add(:field_10, error_message) # startdate
       errors.add(:field_13, error_message) # tenancycode
-      errors.add(:field_6, error_message) if !general_needs? && :field_6.present? # location # TODO: CLDC-4119: remove location from error fields
-      errors.add(:field_5, error_message) if !general_needs? && :field_6.blank? # add to Scheme field as unclear whether log uses New or Old CORE ids
-      errors.add(:field_23, error_message) unless supported_housing? # postcode_full # TODO: CLDC-4119: add postcode to error fields for supported housing
-      errors.add(:field_24, error_message) unless supported_housing? # postcode_full # TODO: CLDC-4119: add postcode to error fields for supported housing
-      errors.add(:field_25, error_message) unless supported_housing? # la # TODO: CLDC-4119: add LA to error fields for supported housing
+      errors.add(:field_23, error_message) # postcode_full
+      errors.add(:field_24, error_message) # postcode_full
+      errors.add(:field_25, error_message) # la
       errors.add(:field_42, error_message) # age1
       errors.add(:field_130, error_message) # sexrab1
       errors.add(:field_43, error_message) # sex1
