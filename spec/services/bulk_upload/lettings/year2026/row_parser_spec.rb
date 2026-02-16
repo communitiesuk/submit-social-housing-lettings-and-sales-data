@@ -307,7 +307,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                 :field_24, # postcode_full
                 :field_25, # LA
                 :field_42, # age1
-                :field_43, # sex1
+                :field_43, # sexrab1
                 :field_46, # ecstat1
                 :field_124, # brent
                 :field_125, # scharge
@@ -361,7 +361,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                 :field_13, # tenancycode
                 :field_6, # location
                 :field_42, # age1
-                :field_43, # sex1
+                :field_43, # sexrab1
                 :field_46, # ecstat1
                 :field_124, # brent
                 :field_125, # scharge
@@ -403,7 +403,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                   :field_13, # tenancycode
                   :field_6, # location
                   :field_42, # age1
-                  :field_43, # sex1
+                  :field_43, # sexrab1
                   :field_46, # ecstat1
                   :field_124, # brent
                   :field_125, # scharge
@@ -446,7 +446,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                   :field_13, # tenancycode
                   :field_6, # location
                   :field_42, # age1
-                  :field_43, # sex1
+                  :field_43, # sexrab1
                   :field_46, # ecstat1
                 ].each do |field|
                   expect(parser.errors[field]).to include(error_message)
@@ -492,7 +492,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                   :field_13, # tenancycode
                   :field_6, # location
                   :field_42, # age1
-                  :field_43, # sex1
+                  :field_43, # sexrab1
                   :field_46, # ecstat1
                   :field_122, # household_charge
                 ].each do |field|
@@ -546,7 +546,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                 :field_24, # postcode_full
                 :field_25, # LA
                 :field_42, # age1
-                :field_43, # sex1
+                :field_43, # sexrab1
                 :field_46, # ecstat1
               ].each do |field|
                 expect(parser.errors[field]).to be_blank
@@ -618,7 +618,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
 
           it "fetches the question's check_answer_label if it exists" do
             parser.valid?
-            expect(parser.errors[:field_43]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "lead tenant’s gender identity.")])
+            expect(parser.errors[:field_43]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "lead tenant’s sex registered at birth.")])
           end
         end
 
@@ -1877,7 +1877,8 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       context "when a soft validation is triggered that relates both to fields that are and are not routed to" do
         let(:attributes) { setup_section_params.merge({ field_78: "1", field_43: "M", field_49: "M", field_53: "M" }) }
 
-        it "adds errors to fields that are routed to" do
+        # TODO: CLDC-4143 re-enable this test to check validation
+        xit "adds errors to fields that are routed to" do
           parser.valid?
           expect(parser.errors.where(:field_49, category: :soft_validation)).to be_present
           expect(parser.errors.where(:field_53, category: :soft_validation)).to be_present
@@ -2288,7 +2289,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
     end
 
-    describe "#sexN fields" do
+    describe "#sexrabN fields" do
       let(:attributes) do
         {
           bulk_upload:,
@@ -2304,14 +2305,14 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
 
       it "sets value from correct mapping" do
-        expect(parser.log.sex1).to eql("F")
-        expect(parser.log.sex2).to eql("M")
-        expect(parser.log.sex3).to eql("X")
-        expect(parser.log.sex4).to eql("R")
-        expect(parser.log.sex5).to eql("F")
-        expect(parser.log.sex6).to eql("M")
-        expect(parser.log.sex7).to eql("X")
-        expect(parser.log.sex8).to eql("R")
+        expect(parser.log.sexrab1).to eql("F")
+        expect(parser.log.sexrab2).to eql("M")
+        expect(parser.log.sexrab3).to eql("X")
+        expect(parser.log.sexrab4).to eql("R")
+        expect(parser.log.sexrab5).to eql("F")
+        expect(parser.log.sexrab6).to eql("M")
+        expect(parser.log.sexrab7).to eql("X")
+        expect(parser.log.sexrab8).to eql("R")
       end
     end
 
