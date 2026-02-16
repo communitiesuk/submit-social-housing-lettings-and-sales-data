@@ -35,6 +35,7 @@ FactoryBot.define do
       setup_completed
       status { 1 }
       tenancycode { "same tenancy code" }
+      address_line1 { "same address line 1" }
       postcode_full { "A1 1AA" }
       uprn_known { 0 }
       declaration { 1 }
