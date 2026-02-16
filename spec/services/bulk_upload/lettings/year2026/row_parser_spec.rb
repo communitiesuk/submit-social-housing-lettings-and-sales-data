@@ -225,9 +225,9 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             field_115: "2",
 
             field_116: "1",
-            field_130: "1",
-            field_131: "1",
-            field_132: "1",
+            field_154: "1",
+            field_155: "1",
+            field_156: "1",
 
             field_117: "1",
             field_118: "2",
@@ -251,6 +251,31 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             field_4: "1",
 
             field_18: "12",
+
+            field_130: "F",
+            field_131: "M",
+            field_132: "R",
+            field_133: "F",
+            field_134: "M",
+            field_135: "R",
+            field_136: "F",
+            field_137: "M",
+            field_138: "1",
+            field_139: "",
+            field_140: "2",
+            field_141: "identity",
+            field_142: "3",
+            field_143: "",
+            field_144: "1",
+            field_145: "",
+            field_146: "2",
+            field_147: "identity",
+            field_148: "3",
+            field_149: "",
+            field_150: "1",
+            field_151: "",
+            field_152: "2",
+            field_153: "identity",
           }
         end
 
@@ -1877,7 +1902,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       let(:attributes) { { bulk_upload: } }
 
       before do
-        build(:lettings_log, owning_organisation: nil, startdate: nil, tenancycode: nil, location: nil, age1: nil, sex1: nil, ecstat1: nil, brent: nil, scharge: nil, pscharge: nil, supcharg: nil).save(validate: false)
+        build(:lettings_log, owning_organisation: nil, startdate: nil, tenancycode: nil, location: nil, age1: nil, sexrab1: nil, sex1: nil, ecstat1: nil, brent: nil, scharge: nil, pscharge: nil, supcharg: nil).save(validate: false)
       end
 
       it "does not add duplicate logs validation to the blank row" do

@@ -35,7 +35,7 @@ en:
               reason:
                 check_answer_label: "Reason for leaving last settled home"
                 check_answer_prompt: ""
-                hint_text: "The tenant’s ‘last settled home’ is their last long-standing home. For tenants who were in temporary accommodation, sleeping rough or otherwise homeless, their last settled home is where they were living previously."
+                hint_text: "The tenant’s ‘last settled home’ is their last long-standing home. For tenants who were in temporary accommodation, sleeping rough or otherwise homeless, their last settled home is where they were living immediately before that period."
                 question_text: "What is the tenant’s main reason for the household leaving their last settled home?"
               reasonother:
                 check_answer_label: ""

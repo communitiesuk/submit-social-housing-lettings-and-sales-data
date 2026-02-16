@@ -1,4 +1,28 @@
 working_situation_illness_check,The following soft validation was confirmed: You have said that at least one person's situation is 'Unable to work because of long-term sickness or disability'.
+sexrab1,What was the lead tenant's sex at birth?
+sexrab2,What was person 2's sex at birth?
+sexrab3,What was person 3's sex at birth?
+sexrab4,What was person 4's sex at birth?
+sexrab5,What was person 5's sex at birth?
+sexrab6,What was person 6's sex at birth?
+sexrab7,What was person 7's sex at birth?
+sexrab8,What was person 8's sex at birth?
+gender_same_as_sex1,Is the gender the lead tenant identifies with the same as their sex registered at birth?
+gender_same_as_sex2,Is the gender person 2 identifies with the same as their sex registered at birth?
+gender_same_as_sex3,Is the gender person 3 identifies with the same as their sex registered at birth?
+gender_same_as_sex4,Is the gender person 4 identifies with the same as their sex registered at birth?
+gender_same_as_sex5,Is the gender person 5 identifies with the same as their sex registered at birth?
+gender_same_as_sex6,Is the gender person 6 identifies with the same as their sex registered at birth?
+gender_same_as_sex7,Is the gender person 7 identifies with the same as their sex registered at birth?
+gender_same_as_sex8,Is the gender person 8 identifies with the same as their sex registered at birth?
+gender_description1,If 'No', enter the lead tenant's gender identity
+gender_description2,If 'No', enter person 2's gender identity
+gender_description3,If 'No', enter person 3's gender identity
+gender_description4,If 'No', enter person 4's gender identity
+gender_description5,If 'No', enter person 5's gender identity
+gender_description6,If 'No', enter person 6's gender identity
+gender_description7,If 'No', enter person 7's gender identity
+gender_description8,If 'No', enter person 8's gender identity
 referral_register,What was the source of referral for this letting?
 referral_noms,What was the source of referral for this letting?
 referral_org,What was the source of referral for this letting?

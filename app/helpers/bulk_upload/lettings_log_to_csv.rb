@@ -92,8 +92,7 @@ class BulkUpload::LettingsLogToCsv
   end
 
   def default_2026_field_numbers
-    # TODO: CLDC-4162 Replace with actual field numbers when 2026 format is known
-    (1..132).to_a
+    (1..BulkUpload::Lettings::Year2026::CsvParser::FIELDS).to_a
   end
 
   def to_2026_row
@@ -240,9 +239,34 @@ class BulkUpload::LettingsLogToCsv
       log.supcharg,
       log.hbrentshortfall,
       log.tshortfall,
+
+      log.sexrab1, # 130
+      log.sexrab2,
+      log.sexrab3,
+      log.sexrab4,
+      log.sexrab5,
+      log.sexrab6,
+      log.sexrab7,
+      log.sexrab8,
+      log.gender_same_as_sex1,
+      log.gender_description1,
+      log.gender_same_as_sex2, # 140
+      log.gender_description2,
+      log.gender_same_as_sex3,
+      log.gender_description3,
+      log.gender_same_as_sex4,
+      log.gender_description4,
+      log.gender_same_as_sex5,
+      log.gender_description5,
+      log.gender_same_as_sex6,
+      log.gender_description6,
+      log.gender_same_as_sex7, # 150
+      log.gender_description7,
+      log.gender_same_as_sex8,
+      log.gender_description8,
       log.owning_organisation.prp? ? log.referral_register : nil,
       log.referral_noms,
-      log.referral_org, # 132
+      log.referral_org, # 156
     ]
   end
 
