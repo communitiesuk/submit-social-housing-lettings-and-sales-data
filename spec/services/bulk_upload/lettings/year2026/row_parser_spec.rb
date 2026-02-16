@@ -151,7 +151,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             field_15: "1",
 
             field_42: "42",
-            field_48: "41",
+            field_48: "R",
             field_52: "17",
             field_56: "18",
             field_60: "16",
@@ -567,6 +567,15 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
               ].each do |field|
                 expect(parser.errors[field]).to be_blank
               end
+            end
+          end
+
+          context "and case insensitive fields are set to lowercase" do
+            let(:case_insensitive_fields) { %w[field_42 field_48 field_52 field_56 field_60 field_64 field_68 field_72 field_130 field_131 field_132 field_133 field_134 field_135 field_136 field_137] }
+            let(:attributes) { valid_attributes.merge(case_insensitive_fields.each_with_object({}) { |field, h| h[field.to_sym] = valid_attributes[field.to_sym]&.downcase }) }
+
+            it "is still valid" do
+              expect(parser).to be_valid
             end
           end
         end
