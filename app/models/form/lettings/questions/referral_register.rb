@@ -6,8 +6,9 @@ class Form::Lettings::Questions::ReferralRegister < ::Form::Question
     @copy_key = "lettings.household_situation.referral.register"
     @type = "radio"
     @check_answers_card_number = 0
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @provider_type = provider_type
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
+    @question_number += 1 if @provider_type == :prp
   end
 
   def answer_options
@@ -51,5 +52,5 @@ class Form::Lettings::Questions::ReferralRegister < ::Form::Question
     log.is_renewal?
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2026 => 84 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2026 => 91 }.freeze
 end

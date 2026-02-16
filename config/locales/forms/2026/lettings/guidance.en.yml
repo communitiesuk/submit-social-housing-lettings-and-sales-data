@@ -67,3 +67,7 @@ en:
                 <li>Some properties may not be available yet e.g. new builds; you might need to enter them manually instead</li>
                 <li>For UPRN (Unique Property Reference Number), please enter the full value exactly</li>
               </ul>"
+
+          needs_type:
+            title: "What does each need type mean?"
+            content: "General needs housing includes both self-contained and shared housing without support or specific adaptations.<br><br>Supported housing is housing with special design facilities or features targeted at a specific client group requiring support, for example housing designed for older people, sheltered accommodation, extra care housing. It can include direct access hostels, group homes, and purpose-built self-contained housing. We do not require CORE logs for residential care or nursing homes."

@@ -497,7 +497,41 @@ RSpec.describe Exports::LettingsLogExportService do
       end
 
       context "and one lettings log is available for export" do
-        let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, startdate: Time.zone.local(2026, 4, 3), assigned_to: user, age1: 35, sex1: "F", age2: 32, sex2: "M", ppostcode_full: "A1 1AA", nationality_all_group: 13, propcode: "123", postcode_full: "SE2 6RT", tenancycode: "BZ737", voiddate: Time.zone.local(2021, 11, 3), mrcdate: Time.zone.local(2022, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4, creation_method: 2, bulk_upload_id: 1, address_line1_as_entered: "address line 1 as entered", address_line2_as_entered: "address line 2 as entered", town_or_city_as_entered: "town or city as entered", county_as_entered: "county as entered", postcode_full_as_entered: "AB1 2CD", la_as_entered: "la as entered", manual_address_entry_selected: false, uprn: "1", uprn_known: 1) }
+        let!(:lettings_log) do
+          FactoryBot.create(
+            :lettings_log,
+            :completed,
+            startdate: Time.zone.local(2026, 4, 3),
+            assigned_to: user,
+            age1: 35,
+            sexrab1: "F",
+            sex1: "F",
+            age2: 32,
+            sexrab2: "M",
+            sex2: "M",
+            ppostcode_full: "A1 1AA",
+            nationality_all_group: 13,
+            propcode: "123",
+            postcode_full: "SE2 6RT",
+            tenancycode: "BZ737",
+            voiddate: Time.zone.local(2021, 11, 3),
+            mrcdate: Time.zone.local(2022, 5, 5, 10, 36, 49),
+            tenancylength: 5,
+            underoccupation_benefitcap: 4,
+            creation_method: 2,
+            bulk_upload_id: 1,
+            address_line1_as_entered: "address line 1 as entered",
+            address_line2_as_entered: "address line 2 as entered",
+            town_or_city_as_entered: "town or city as entered",
+            county_as_entered: "county as entered",
+            postcode_full_as_entered: "AB1 2CD",
+            la_as_entered: "la as entered",
+            manual_address_entry_selected: false,
+            uprn: "1",
+            uprn_known: 1,
+            gender_description2: "Non-binary",
+          )
+        end
         let(:expected_zip_filename) { "core_2026_2027_apr_mar_f0001_inc0001.zip" }
         let(:expected_data_filename) { "core_2026_2027_apr_mar_f0001_inc0001_pt001.xml" }
         let(:xml_export_file) { File.open("spec/fixtures/exports/general_needs_log_26_27.xml", "r:UTF-8") }
@@ -510,7 +544,7 @@ RSpec.describe Exports::LettingsLogExportService do
             expect(entry.get_input_stream.read).to have_same_xml_contents_as(expected_content)
           end
 
-          export_service.export_xml_lettings_logs
+          export_service.export_xml_lettings_logs(collection_year: 2026)
         end
       end
     end

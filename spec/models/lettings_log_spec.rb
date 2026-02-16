@@ -590,6 +590,63 @@ RSpec.describe LettingsLog do
           end
         end
 
+        context "and the log has different LAs set on the location and the log itself" do
+          before do
+            location.update!(location_code: "E07000030")
+            Timecop.freeze(startdate)
+            Singleton.__init__(FormHandler)
+            lettings_log.update!(startdate:, la: "E09000002")
+            lettings_log.reload
+          end
+
+          after do
+            Timecop.unfreeze
+            Singleton.__init__(FormHandler)
+          end
+
+          context "with 25/26" do
+            let(:startdate) { Time.zone.local(2025, 4, 2) }
+
+            it "returns the LA from the location" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.la).to eq("E07000030")
+            end
+          end
+
+          context "with 26/27" do
+            let(:startdate) { Time.zone.local(2026, 4, 2) }
+
+            it "returns the LA from the log itself" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.la).to eq("E09000002")
+            end
+          end
+        end
+
+        context "and the log only has an LA set on the location" do
+          before do
+            location.update!(location_code: "E07000030")
+            Timecop.freeze(startdate)
+            Singleton.__init__(FormHandler)
+            lettings_log.update!(startdate:)
+            lettings_log.reload
+          end
+
+          after do
+            Timecop.unfreeze
+            Singleton.__init__(FormHandler)
+          end
+
+          context "with 26/27" do
+            let(:startdate) { Time.zone.local(2026, 4, 2) }
+
+            it "returns the LA from the location" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.la).to eq("E07000030")
+            end
+          end
+        end
+
         context "and the location no local authorities associated with the location_code" do
           before do
             Timecop.freeze(Time.zone.local(2022, 4, 2))
@@ -605,6 +662,66 @@ RSpec.describe LettingsLog do
             expect(location.location_code).to eq("E01231231")
             expect(lettings_log["location_id"]).to eq(location.id)
             expect(lettings_log.la).to eq("E01231231")
+          end
+        end
+
+        context "and the log has different postcodes set on the location and the log itself" do
+          before do
+            location.update!(postcode: "AA1 1AA")
+            Timecop.freeze(startdate)
+            Singleton.__init__(FormHandler)
+            lettings_log.update!(
+              startdate:,
+            )
+            lettings_log.reload
+            lettings_log.postcode_full = "BB2 2BB"
+          end
+
+          after do
+            Timecop.unfreeze
+            Singleton.__init__(FormHandler)
+          end
+
+          context "with 25/26" do
+            let(:startdate) { Time.zone.local(2025, 4, 2) }
+
+            it "returns the postcode from the location" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.postcode_full).to eq("AA1 1AA")
+            end
+          end
+
+          context "with 26/27" do
+            let(:startdate) { Time.zone.local(2026, 4, 2) }
+
+            it "returns the postcode from the log itself" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.postcode_full).to eq("BB2 2BB")
+            end
+          end
+        end
+
+        context "and the log only has a postcode set on the location" do
+          before do
+            location.update!(postcode: "AA1 1AA")
+            Timecop.freeze(startdate)
+            Singleton.__init__(FormHandler)
+            lettings_log.update!(startdate:)
+            lettings_log.reload
+          end
+
+          after do
+            Timecop.unfreeze
+            Singleton.__init__(FormHandler)
+          end
+
+          context "with 26/27" do
+            let(:startdate) { Time.zone.local(2026, 4, 2) }
+
+            it "returns the LA from the location" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.postcode_full).to eq("AA1 1AA")
+            end
           end
         end
       end

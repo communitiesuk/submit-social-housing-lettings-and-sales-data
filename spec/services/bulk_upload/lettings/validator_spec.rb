@@ -11,7 +11,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
   let(:user) { create(:user, organisation:) }
   let(:log) { build(:lettings_log, :completed, period: 2, assigned_to: user) }
   let(:log_to_csv) { BulkUpload::LettingsLogToCsv.new(log:) }
-  let(:bulk_upload) { create(:bulk_upload, user:, year:) }
+  let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year:) }
   let(:path) { file.path }
   let(:file) { Tempfile.new }
 
@@ -190,8 +190,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
           expect(error.tenant_code).to eql(log.tenancycode)
           expect(error.property_ref).to eql(log.propcode)
           expect(error.row).to eql("2")
-          expect(error.cell).to eql("DA2") # this may change when adding a new field as the cols are in a random order
-          expect(error.col).to eql("DA") # this may change when adding a new field as the cols are in a random order
+          expect(error.cell).to eql("EH2") # this may change when adding a new field as the cols are in a random order
+          expect(error.col).to eql("EH") # this may change when adding a new field as the cols are in a random order
         end
       end
     end
