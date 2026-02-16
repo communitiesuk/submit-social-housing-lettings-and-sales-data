@@ -55,16 +55,18 @@ module DuplicateLogsHelper
     duplicate_sets_count > 1 ? "Review these #{duplicate_sets_count} sets of logs" : "Review this #{duplicate_sets_count} set of logs"
   end
 
-  def duplicate_log_question_label(question)
-    if question.id == "uprn"
+  def duplicate_log_question_label(question, log)
+    if question.id == "uprn" && !log.form.start_year_2026_or_later?
       "Postcode (from UPRN)"
+    elsif question.id == "address_line1"
+      "#{question.question_number_string} - Address line 1"
     else
       get_question_label(question)
     end
   end
 
   def duplicate_log_answer_label(question, log)
-    if question.id == "uprn"
+    if question.id == "uprn" && !log.form.start_year_2026_or_later?
       postcode_question = log.form.get_question("postcode_full", log)
       get_answer_label(postcode_question, log)
     else
@@ -73,16 +75,26 @@ module DuplicateLogsHelper
   end
 
   def duplicate_log_extra_value(question, log)
-    if question.id == "uprn"
+    if log.form.start_year_2026_or_later?
+      case question.id
+      when "uprn"
+        value = [
+          log.address_line1,
+          log.postcode_full,
+        ].select(&:present?)
+
+        "\n\n#{value.join("\n")}"
+      else
+        question.get_extra_check_answer_value(log)
+      end
+    elsif question.id == "uprn" && !log.form.start_year_2026_or_later?
       postcode_question = log.form.get_question("postcode_full", log)
       postcode_question.get_extra_check_answer_value(log)
-    else
-      question.get_extra_check_answer_value(log)
     end
   end
 
   def duplicate_log_answer_label_present(question, log, current_user)
-    if question.id == "uprn"
+    if question.id == "uprn" && !log.form.start_year_2026_or_later?
       postcode_question = log.form.get_question("postcode_full", log)
       postcode_question.answer_label(log, current_user).present?
     else
@@ -91,7 +103,7 @@ module DuplicateLogsHelper
   end
 
   def duplicate_log_inferred_answers(question, log)
-    if question.id == "uprn"
+    if question.id == "uprn" && !log.form.start_year_2026_or_later?
       postcode_question = log.form.get_question("postcode_full", log)
       postcode_question.get_inferred_answers(log)
     else
