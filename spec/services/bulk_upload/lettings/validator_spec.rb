@@ -190,8 +190,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
           expect(error.tenant_code).to eql(log.tenancycode)
           expect(error.property_ref).to eql(log.propcode)
           expect(error.row).to eql("2")
-          expect(error.cell).to eql("CX2")
-          expect(error.col).to eql("CX")
+          expect(error.cell).to eql("DL2")
+          expect(error.col).to eql("DL")
         end
       end
     end

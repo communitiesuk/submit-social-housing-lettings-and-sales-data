@@ -244,5 +244,7 @@ module Exports::LettingsLogExportConstants
   ]
   (1..8).each do |index|
     YEAR_2026_EXPORT_FIELDS << "sexrab#{index}"
+    YEAR_2026_EXPORT_FIELDS << "gender_same_as_sex#{index}"
+    YEAR_2026_EXPORT_FIELDS << "gender_description#{index}"
   end
 end
