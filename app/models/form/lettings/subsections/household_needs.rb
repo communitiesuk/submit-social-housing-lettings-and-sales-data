@@ -17,6 +17,7 @@ class Form::Lettings::Subsections::HouseholdNeeds < ::Form::Subsection
       Form::Lettings::Pages::AccessNeedsExist.new("access_needs_exist", nil, self),
       Form::Lettings::Pages::TypeOfAccessNeeds.new(nil, nil, self),
       Form::Lettings::Pages::HealthConditions.new("health_conditions", nil, self),
+      (Form::Lettings::Pages::WorkingSituationIllnessCheck.new(nil, nil, self) if form.start_year_2026_or_later?),
       Form::Lettings::Pages::HealthConditionEffects.new(nil, nil, self),
     ].compact
   end

@@ -167,7 +167,7 @@ private
 
     column_count = rows.map(&:size).max
 
-    errors.add(:base, I18n.t("validations.sales.#{@bulk_upload.year}.bulk_upload.wrong_template.over_max_column_count")) if column_count > csv_parser.class::MAX_COLUMNS
+    errors.add(:base, I18n.t("validations.sales.#{@bulk_upload.year}.bulk_upload.wrong_template.over_max_column_count")) if column_count > csv_parser.class::FIELDS + 1
   end
 
   def validate_correct_template

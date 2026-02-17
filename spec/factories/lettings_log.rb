@@ -40,6 +40,7 @@ FactoryBot.define do
       declaration { 1 }
       age1_known { 0 }
       age1 { 18 }
+      sexrab1 { "M" }
       sex1 { "M" }
       hhmemb { 1 }
       ecstat1 { 0 }
@@ -58,7 +59,9 @@ FactoryBot.define do
       tenancycode { Faker::Name.initials(number: 10) }
       age1_known { 0 }
       age1 { Faker::Number.within(range: 25..45) }
+      sexrab1 { %w[F M R].sample }
       sex1 { %w[F M X R].sample }
+      gender_same_as_sex1 { 1 }
       ethnic_group { 0 }
       ethnic { 2 }
       national { 13 }
@@ -69,7 +72,10 @@ FactoryBot.define do
       age2_known { 0 }
       details_known_2 { 0 }
       age2 { Faker::Number.within(range: 25..45) }
+      sexrab2 { %w[F M R].sample }
       sex2 { %w[F M X R].sample }
+      gender_same_as_sex2 { 2 }
+      gender_description2 { Faker::Gender.type }
       ecstat2 { 6 }
       homeless { 1 }
       underoccupation_benefitcap { 0 }
