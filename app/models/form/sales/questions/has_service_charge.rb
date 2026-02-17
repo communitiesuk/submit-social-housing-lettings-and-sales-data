@@ -28,7 +28,7 @@ class Form::Sales::Questions::HasServiceCharge < ::Form::Question
     if @staircasing
       { 2026 => 0 }.freeze
     else
-      { 2025 => 88 }.freeze
+      { 2025 => 88, 2026 => 0 }.freeze
     end
   end
 end
