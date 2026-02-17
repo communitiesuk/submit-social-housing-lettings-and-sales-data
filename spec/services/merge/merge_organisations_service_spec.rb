@@ -546,9 +546,12 @@ RSpec.describe Merge::MergeOrganisationsService do
             merging_organisation.reload
             expect(absorbing_organisation.owned_lettings_logs.count).to eq(2)
             expect(absorbing_organisation.managed_lettings_logs.count).to eq(1)
-            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
-            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
-            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
+
+            absorbed_active_scheme = absorbing_organisation.owned_schemes.find_by(service_name: scheme.service_name)
+            absorbed_active_location = absorbed_active_scheme.locations.find_by(postcode: location.postcode)
+            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(absorbed_active_scheme)
+            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(absorbed_active_location)
+            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(absorbed_active_scheme)
             expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
           end
 
@@ -814,12 +817,12 @@ RSpec.describe Merge::MergeOrganisationsService do
               it "moves active schemes and locations to absorbing organisation" do
                 expect(absorbing_organisation.owned_schemes.count).to eq(2)
 
-                expect(absorbing_organisation.owned_schemes.first.locations.map(&:postcode)).to match_array([location, deactivated_location, location_without_startdate, location_with_past_startdate, location_with_future_startdate].map(&:postcode))
-                expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_without_startdate.postcode).startdate).to eq(Time.zone.yesterday)
-                expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_with_past_startdate.postcode).startdate).to eq(Time.zone.yesterday)
-                expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_with_future_startdate.postcode).startdate.to_date).to eq(Time.zone.today + 2.months)
                 absorbed_active_scheme = absorbing_organisation.owned_schemes.find_by(service_name: scheme.service_name)
                 absorbed_active_location = absorbed_active_scheme.locations.find_by(postcode: location.postcode)
+                expect(absorbed_active_scheme.locations.map(&:postcode)).to match_array([location, deactivated_location, location_without_startdate, location_with_past_startdate, location_with_future_startdate].map(&:postcode))
+                expect(absorbed_active_scheme.locations.find_by(postcode: location_without_startdate.postcode).startdate).to eq(Time.zone.yesterday)
+                expect(absorbed_active_scheme.locations.find_by(postcode: location_with_past_startdate.postcode).startdate).to eq(Time.zone.yesterday)
+                expect(absorbed_active_scheme.locations.find_by(postcode: location_with_future_startdate.postcode).startdate.to_date).to eq(Time.zone.today + 2.months)
                 expect(absorbed_active_scheme.service_name).to eq(scheme.service_name)
                 expect(absorbed_active_scheme.old_id).to be_nil
                 expect(absorbed_active_scheme.old_visible_id).to be_nil
@@ -1579,9 +1582,12 @@ RSpec.describe Merge::MergeOrganisationsService do
             owned_lettings_log_no_location.reload
             expect(new_absorbing_organisation.owned_lettings_logs.count).to eq(2)
             expect(new_absorbing_organisation.managed_lettings_logs.count).to eq(1)
-            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
-            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(new_absorbing_organisation.owned_schemes.first.locations.first)
-            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
+            new_absorbing_organisation_lettings_log = new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id)
+            new_absorbing_organisation_scheme = new_absorbing_organisation.owned_schemes.find_by(service_name: new_absorbing_organisation_lettings_log.scheme.service_name)
+            new_absorbing_organisation_location = new_absorbing_organisation_scheme.locations.find_by(name: new_absorbing_organisation_lettings_log.location.name)
+            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(new_absorbing_organisation_scheme)
+            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(new_absorbing_organisation_location)
+            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(new_absorbing_organisation_scheme)
             expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
           end
 

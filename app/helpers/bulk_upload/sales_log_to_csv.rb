@@ -70,8 +70,7 @@ class BulkUpload::SalesLogToCsv
     when 2025
       (1..121).to_a
     when 2026
-      # TODO: CLDC-4162: Replace with actual field numbers when 2026 format is known
-      (1..121).to_a
+      (1..BulkUpload::Sales::Year2026::CsvParser::FIELDS).to_a
     else
       raise NotImplementedError "No mapping function implemented for year #{year}"
     end
@@ -537,7 +536,144 @@ class BulkUpload::SalesLogToCsv
 
   def to_2026_row
     # TODO: CLDC-4162: Implement when 2026 template is available
-    to_2025_row
+    [
+      log.saledate&.day,
+      log.saledate&.month,
+      log.saledate&.strftime("%y"),
+      overrides[:organisation_id] || log.owning_organisation&.old_visible_id,
+      overrides[:managing_organisation_id] || log.managing_organisation&.old_visible_id,
+      log.assigned_to&.email,
+      log.purchid,
+      log.ownershipsch,
+      log.ownershipsch == 1 ? log.type : "", # field_9: "What is the type of shared ownership sale?",
+      log.staircase, # 10
+      log.ownershipsch == 2 ? log.type : "", # field_11: "What is the type of discounted ownership sale?",
+      log.jointpur,
+      log.jointmore,
+      log.noint,
+      log.privacynotice,
+
+      log.uprn,
+      log.address_line1&.tr(",", " "), # 20
+      log.address_line2&.tr(",", " "),
+      log.town_or_city&.tr(",", " "),
+      log.county&.tr(",", " "),
+      ((log.postcode_full || "").split(" ") || [""]).first,
+      ((log.postcode_full || "").split(" ") || [""]).last,
+      log.la,
+      log.proptype,
+      log.beds,
+      log.builtype,
+      log.wchair,
+
+      log.age1,
+      log.sex1,
+      log.ethnic, # 30
+      log.nationality_all_group,
+      log.ecstat1,
+      log.buy1livein,
+      { "P" => 1, "X" => 2, "R" => 3 }[log.relat2],
+      log.age2,
+      log.sex2,
+      log.ethnic_group2,
+      log.nationality_all_buyer2_group,
+      log.ecstat2,
+      log.buy2livein, # 40
+      log.hholdcount,
+
+      { "P" => 1, "X" => 2, "R" => 3 }[log.relat3],
+      log.age3,
+      log.sex3,
+      log.ecstat3,
+      { "P" => 1, "X" => 2, "R" => 3 }[log.relat4],
+      log.age4,
+      log.sex4,
+      log.ecstat4,
+      { "P" => 1, "X" => 2, "R" => 3 }[log.relat5], # 50
+      log.age5,
+      log.sex5,
+      log.ecstat5,
+      { "P" => 1, "X" => 2, "R" => 3 }[log.relat6],
+      log.age6,
+      log.sex6,
+      log.ecstat6,
+
+      log.prevten,
+      log.ppcodenk,
+      ((log.ppostcode_full || "").split(" ") || [""]).first, # 60
+      ((log.ppostcode_full || "").split(" ") || [""]).last,
+      log.prevloc,
+      log.buy2living,
+      log.prevtenbuy2,
+
+      log.hhregres,
+      log.hhregresstill,
+      log.armedforcesspouse,
+      log.disabled,
+      log.wheel,
+
+      log.income1, # 70
+      log.inc1mort,
+      log.income2,
+      log.inc2mort,
+      log.hb,
+      log.savings.present? || "R",
+      log.prevown,
+      log.prevshared,
+
+      log.resale,
+      log.proplen,
+      log.hodate&.day, # 80
+      log.hodate&.month,
+      log.hodate&.strftime("%y"),
+      log.frombeds,
+      log.fromprop,
+      log.socprevten,
+      log.value,
+      log.equity,
+      log.mortgageused,
+      log.mortgage,
+      log.mortlen, # 90
+      log.deposit,
+      log.cashdis,
+      log.mrent,
+      log.mscharge,
+      log.management_fee,
+
+      log.stairbought,
+      log.stairowned,
+      log.staircasesale,
+      log.firststair,
+      log.initialpurchase&.day, # 100
+      log.initialpurchase&.month,
+      log.initialpurchase&.strftime("%y"),
+      log.numstair,
+      log.lasttransaction&.day,
+      log.lasttransaction&.month,
+      log.lasttransaction&.strftime("%y"),
+      log.value,
+      log.equity,
+      log.mortgageused,
+      log.mrentprestaircasing, # 110
+      log.mrent,
+
+      log.proplen,
+      log.value,
+      log.grant,
+      log.discount,
+      log.mortgageused,
+      log.mortgage,
+      log.mortlen,
+      log.extrabor,
+      log.deposit, # 120
+      log.mscharge,
+      log.sexrab1,
+      log.sexrab2,
+      log.sexrab3,
+      log.sexrab4,
+      log.sexrab5,
+      log.sexrab6, # 127
+    ]
   end
 
   def custom_field_numbers_row(seed: nil, field_numbers: nil)
