@@ -154,7 +154,6 @@ class BulkUpload::Sales::Year2025::RowParser
     :field_52, # Gender identity of person 5
     :field_56, # Gender identity of person 6
 
-    :field_58, # What was buyer 1’s previous tenure?
     :field_64, # What was buyer 2’s previous tenure?
 
     :field_75, # What is the total amount the buyers had in savings before they paid any deposit for the property?

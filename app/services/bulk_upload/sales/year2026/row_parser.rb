@@ -161,7 +161,6 @@ class BulkUpload::Sales::Year2026::RowParser
     :field_126, # Person 5's sex, as registered at birth
     :field_127, # Person 6's sex, as registered at birth
 
-    :field_58, # What was buyer 1’s previous tenure?
     :field_64, # What was buyer 2’s previous tenure?
 
     :field_75, # What is the total amount the buyers had in savings before they paid any deposit for the property?
