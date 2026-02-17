@@ -1,8 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Validations::SoftValidations do
-  let(:organisation) { FactoryBot.build(:organisation, provider_type: "PRP", id: 123) }
-  let(:record) { FactoryBot.build(:lettings_log, owning_organisation: organisation) }
+  include CollectionTimeHelper
+
+  let(:organisation) { build(:organisation, provider_type: "PRP", id: 123) }
+  let(:start_year) { current_collection_start_year }
+  let(:record) { build(:lettings_log, owning_organisation: organisation, startdate: collection_start_date_for_year(start_year)) }
 
   describe "rent min max validations" do
     before do
@@ -153,98 +156,275 @@ RSpec.describe Validations::SoftValidations do
   end
 
   describe "pregnancy soft validations" do
-    context "when all tenants are male" do
-      it "shows the interruption screen" do
+    context "when 2025" do
+      let(:start_year) { 2025 }
+
+      context "when all tenants are male" do
+        it "shows the interruption screen" do
+          record.age1 = 43
+          record.sex1 = "M"
+          record.preg_occ = 1
+          record.hhmemb = 1
+          record.age1_known = 0
+          expect(record.all_male_tenants_in_a_pregnant_household?).to be true
+        end
+      end
+
+      context "when there all tenants are male and age of tenants is unknown" do
+        it "shows the interruption screen" do
+          record.sex1 = "M"
+          record.preg_occ = 1
+          record.hhmemb = 1
+          record.age1_known = 1
+          expect(record.all_male_tenants_in_a_pregnant_household?).to be true
+        end
+      end
+
+      context "when all tenants are male and household members are over 8" do
+        it "does not show the interruption screen" do
+          (1..8).each do |n|
+            record.send("sex#{n}=", "M")
+            record.send("age#{n}=", 30)
+            record.send("age#{n}_known=", 0)
+            record.send("details_known_#{n}=", 0) unless n == 1
+          end
+          record.preg_occ = 1
+          record.hhmemb = 9
+          expect(record.all_male_tenants_in_a_pregnant_household?).to be false
+        end
+      end
+
+      context "when female tenants are under 16" do
+        it "shows the interruption screen" do
+          record.age2 = 14
+          record.sex2 = "F"
+          record.preg_occ = 1
+          record.hhmemb = 2
+          record.details_known_2 = 0
+          record.age2_known = 0
+          record.age1 = 18
+          record.sex1 = "M"
+          record.age1_known = 0
+          expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be true
+        end
+      end
+
+      context "when female tenants are over 50" do
+        it "shows the interruption screen" do
+          record.age1 = 54
+          record.sex1 = "F"
+          record.preg_occ = 1
+          record.hhmemb = 1
+          record.age1_known = 0
+          expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be true
+        end
+      end
+
+      context "when non-binary tenants are under 16" do
+        it "does not show the interruption screen" do
+          record.age2 = 14
+          record.sex2 = "X"
+          record.preg_occ = 1
+          record.hhmemb = 2
+          record.details_known_2 = 0
+          record.age2_known = 0
+          record.age1 = 18
+          record.sex1 = "M"
+          record.age1_known = 0
+          expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be false
+        end
+      end
+
+      context "when non-binary tenants are over 50" do
+        it "does not show the interruption screen" do
+          record.age1 = 54
+          record.sex1 = "X"
+          record.preg_occ = 1
+          record.hhmemb = 1
+          record.age1_known = 0
+          expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be false
+        end
+      end
+
+      context "when female tenants are outside of soft validation ranges" do
+        it "does not show the interruption screen" do
+          record.age1 = 44
+          record.sex1 = "F"
+          record.preg_occ = 1
+          record.hhmemb = 1
+          expect(record.all_male_tenants_in_a_pregnant_household?).to be false
+          expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be false
+        end
+      end
+
+      context "when the information about the tenants is not given" do
+        it "does not show the interruption screen" do
+          record.preg_occ = 1
+          record.hhmemb = 2
+          expect(record.all_male_tenants_in_a_pregnant_household?).to be false
+          expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be false
+        end
+      end
+
+      context "when number of household members is over 8" do
+        it "does not show the interruption screen" do
+          (1..8).each do |n|
+            record.send("sex#{n}=", "F")
+            record.send("age#{n}=", 50)
+            record.send("age#{n}_known=", 0)
+            record.send("details_known_#{n}=", 0) unless n == 1
+          end
+          record.preg_occ = 1
+          record.hhmemb = 9
+          expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be false
+        end
+      end
+    end
+
+    context "when 2026" do
+      let(:start_year) { 2026 }
+
+      before do
         record.age1 = 43
-        record.sex1 = "M"
-        record.preg_occ = 1
-        record.hhmemb = 1
         record.age1_known = 0
-        expect(record.all_male_tenants_in_a_pregnant_household?).to be true
-      end
-    end
-
-    context "when there all tenants are male and age of tenants is unknown" do
-      it "shows the interruption screen" do
-        record.sex1 = "M"
         record.preg_occ = 1
         record.hhmemb = 1
-        record.age1_known = 1
-        expect(record.all_male_tenants_in_a_pregnant_household?).to be true
       end
-    end
 
-    context "when all tenants are male and household members are over 8" do
-      it "does not show the interruption screen" do
-        (1..8).each do |n|
-          record.send("sex#{n}=", "M")
-          record.send("age#{n}=", 30)
-          record.send("age#{n}_known=", 0)
-          record.send("details_known_#{n}=", 0) unless n == 1
+      context "when all tenants are male" do
+        before do
+          record.sexrab1 = "M"
+          record.gender_same_as_sex1 = 1
         end
-        record.preg_occ = 1
-        record.hhmemb = 9
-        expect(record.all_male_tenants_in_a_pregnant_household?).to be false
-      end
-    end
 
-    context "when female tenants are under 16" do
-      it "shows the interruption screen" do
-        record.age2 = 14
-        record.sex2 = "F"
-        record.preg_occ = 1
-        record.hhmemb = 2
-        record.details_known_2 = 0
-        record.age2_known = 0
-        record.age1 = 18
-        record.sex1 = "M"
-        record.age1_known = 0
-        expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be true
-      end
-    end
-
-    context "when female tenants are over 50" do
-      it "shows the interruption screen" do
-        record.age1 = 54
-        record.sex1 = "F"
-        record.preg_occ = 1
-        record.hhmemb = 1
-        record.age1_known = 0
-        expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be true
-      end
-    end
-
-    context "when female tenants are outside of soft validation ranges" do
-      it "does not show the interruption screen" do
-        record.age1 = 44
-        record.sex1 = "F"
-        record.preg_occ = 1
-        record.hhmemb = 1
-        expect(record.all_male_tenants_in_a_pregnant_household?).to be false
-        expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be false
-      end
-    end
-
-    context "when the information about the tenants is not given" do
-      it "does not show the interruption screen" do
-        record.preg_occ = 1
-        record.hhmemb = 2
-        expect(record.all_male_tenants_in_a_pregnant_household?).to be false
-        expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be false
-      end
-    end
-
-    context "when number of household members is over 8" do
-      it "does not show the interruption screen" do
-        (1..8).each do |n|
-          record.send("sex#{n}=", "F")
-          record.send("age#{n}=", 50)
-          record.send("age#{n}_known=", 0)
-          record.send("details_known_#{n}=", 0) unless n == 1
+        it "shows the interruption screen" do
+          expect(record.all_male_tenants_in_a_pregnant_household?).to be true
         end
-        record.preg_occ = 1
-        record.hhmemb = 9
-        expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be false
+      end
+
+      context "when there all tenants are male and age of tenants is unknown" do
+        before do
+          record.sexrab1 = "M"
+          record.gender_same_as_sex1 = 1
+          record.age1_known = 1
+        end
+
+        it "shows the interruption screen" do
+          expect(record.all_male_tenants_in_a_pregnant_household?).to be true
+        end
+      end
+
+      context "when all tenants are male and household members are over 8" do
+        before do
+          (1..8).each do |n|
+            record.send("sexrab#{n}=", "M")
+            record.send("gender_same_as_sex#{n}=", 1)
+            record.send("age#{n}=", 30)
+            record.send("age#{n}_known=", 0)
+            record.send("details_known_#{n}=", 0) unless n == 1
+          end
+          record.preg_occ = 1
+          record.hhmemb = 9
+        end
+
+        it "does not show the interruption screen" do
+          expect(record.all_male_tenants_in_a_pregnant_household?).to be false
+        end
+      end
+
+      context "when female tenants are under 16" do
+        before do
+          record.age1 = 12
+          record.sexrab1 = "F"
+          record.gender_same_as_sex1 = 1
+        end
+
+        it "shows the interruption screen" do
+          expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be true
+        end
+      end
+
+      context "when female tenants are over 50" do
+        before do
+          record.age1 = 60
+          record.sexrab1 = "F"
+          record.gender_same_as_sex1 = 1
+        end
+
+        it "shows the interruption screen" do
+          expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be true
+        end
+      end
+
+      context "when non binary tenants are under 16" do
+        before do
+          record.age1 = 12
+          record.sexrab1 = "M"
+          record.gender_same_as_sex1 = 2
+          record.gender_description1 = "Non-binary"
+        end
+
+        it "shows the interruption screen" do
+          expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be true
+        end
+      end
+
+      context "when non binary tenants are over 50" do
+        before do
+          record.age1 = 60
+          record.sexrab1 = "M"
+          record.gender_same_as_sex1 = 2
+          record.gender_description1 = "Non-binary"
+        end
+
+        it "shows the interruption screen" do
+          expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be true
+        end
+      end
+
+      context "when female tenants are outside of soft validation ranges" do
+        before do
+          record.age1 = 30
+          record.sexrab1 = "F"
+          record.gender_same_as_sex1 = 1
+        end
+
+        it "does not show the interruption screen" do
+          expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be false
+        end
+      end
+
+      context "when the information about the tenants is not given" do
+        before do
+          record.age1 = nil
+          record.age1_known = nil
+          record.sexrab1 = nil
+          record.gender_same_as_sex1 = nil
+          record.preg_occ = 1
+          record.hhmemb = 1
+        end
+
+        it "does not show the interruption screen" do
+          expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be false
+        end
+      end
+
+      context "when number of household members is over 8" do
+        before do
+          (1..8).each do |n|
+            record.send("sexrab#{n}=", "F")
+            record.send("gender_same_as_sex#{n}=", 1)
+            record.send("age#{n}=", 30)
+            record.send("age#{n}_known=", 0)
+            record.send("details_known_#{n}=", 0) unless n == 1
+          end
+          record.preg_occ = 1
+          record.hhmemb = 9
+        end
+
+        it "does not show the interruption screen" do
+          expect(record.non_males_in_pregnant_household_in_soft_validation_range?).to be false
+        end
       end
     end
   end
