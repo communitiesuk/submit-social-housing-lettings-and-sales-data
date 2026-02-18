@@ -10,7 +10,6 @@ RSpec.describe Form::Sales::Questions::HasServiceCharge, type: :model do
   let(:start_date) { Time.utc(2025, 5, 1) }
   let(:staircasing) { false }
 
-
   it "has correct page" do
     expect(question.page).to eq(page)
   end
@@ -89,5 +88,4 @@ RSpec.describe Form::Sales::Questions::HasServiceCharge, type: :model do
       end
     end
   end
-
 end
