@@ -28,7 +28,7 @@ class FeatureToggle
   end
 
   def self.create_test_logs_enabled?
-    Rails.env.development? || Rails.env.review?
+    Rails.env.development? || Rails.env.review? || Rails.env.staging?
   end
 
   def self.sales_export_enabled?
