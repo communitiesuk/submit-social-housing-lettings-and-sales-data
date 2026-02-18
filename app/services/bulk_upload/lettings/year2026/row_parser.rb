@@ -1087,7 +1087,7 @@ private
     return if renewal?
     return if referral_fields_valid?
 
-    %i[field_116 field_130 field_131 field_132].each do |field|
+    %i[field_116 field_154 field_155 field_156].each do |field|
       errors.add(field, I18n.t("#{ERROR_BASE_KEY}.referral.invalid_option"))
     end
   end
