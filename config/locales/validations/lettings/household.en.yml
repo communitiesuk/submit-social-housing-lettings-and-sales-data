@@ -98,8 +98,12 @@ en:
           internal_transfer: "Answer cannot be %{prevten} as this tenancy is an internal transfer."
           la_general_needs:
             internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as it’s an internal transfer and a private registered provider is on the tenancy agreement."
+          general_needs:
+            internal_transfer: "Answer cannot be %{prevten} as this tenancy is an internal transfer. Internal transfers are for existing social tenants only; your answer to where the household was immediately before this letting shows the tenant was not in the social sector immediately prior to this letting."
 
         referral:
           prevten_invalid: "Answer cannot be internal transfer as the household situation immediately before this letting was %{prevten}."
           la_general_needs:
             internal_transfer: "Answer cannot be internal transfer as it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting."
+          general_needs:
+            internal_transfer: "Answer cannot be internal transfer as the household situation immediately before this letting was %{prevten}. Internal transfers are for existing social tenants only; your answer to where the household was immediately before this letting shows the tenant was not in the social sector immediately prior to this letting."

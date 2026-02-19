@@ -1,3 +1,4 @@
+# removed in 2025
 class Form::Lettings::Pages::ReferralSupportedHousingPrp < ::Form::Page
   def initialize(id, hsh, subsection)
     super

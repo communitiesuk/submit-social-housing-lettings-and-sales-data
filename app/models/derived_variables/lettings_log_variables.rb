@@ -33,7 +33,7 @@ module DerivedVariables::LettingsLogVariables
 
   def set_derived_fields!
     clear_inapplicable_derived_values!
-    set_encoded_derived_values!(DEPENDENCIES)
+    set_encoded_derived_values!(dependencies)
 
     if rsnvac.present?
       self.newprop = has_first_let_vacancy_reason? ? 1 : 2
@@ -184,20 +184,15 @@ module DerivedVariables::LettingsLogVariables
 
 private
 
-  DEPENDENCIES = [
-    {
-      conditions: {
-        renewal: 1,
-      },
-      derived_values: {
-        referral: 1,
-        referral_type: 3,
-        waityear: 2,
-        offered: 0,
-        rsnvac: 14,
-        first_time_property_let_as_social_housing: 0,
-      },
-    },
+  def dependencies
+    if form.start_year_2026_or_later?
+      DEPENDENCIES_2026
+    else
+      DEPENDENCIES_2025_2024
+    end
+  end
+
+  COMMON_DEPENDENCIES = [
     {
       conditions: {
         net_income_known: 2,
@@ -224,8 +219,41 @@ private
     },
   ].freeze
 
+  DEPENDENCIES_2026 = [
+    {
+      conditions: {
+        renewal: 1,
+      },
+      derived_values: {
+        referral_register: 1,
+        waityear: 2,
+        offered: 0,
+        rsnvac: 14,
+        first_time_property_let_as_social_housing: 0,
+      },
+    },
+    *COMMON_DEPENDENCIES,
+  ].freeze
+
+  DEPENDENCIES_2025_2024 = [
+    {
+      conditions: {
+        renewal: 1,
+      },
+      derived_values: {
+        referral: 1,
+        referral_type: 3,
+        waityear: 2,
+        offered: 0,
+        rsnvac: 14,
+        first_time_property_let_as_social_housing: 0,
+      },
+    },
+    *COMMON_DEPENDENCIES,
+  ].freeze
+
   def clear_inapplicable_derived_values!
-    reset_invalidated_derived_values!(DEPENDENCIES)
+    reset_invalidated_derived_values!(dependencies)
     if (startdate_changed? || renewal_changed?) && (renewal_was == 1 && startdate_was&.between?(Time.zone.local(2021, 4, 1), Time.zone.local(2022, 3, 31)))
       self.underoccupation_benefitcap = nil
     end

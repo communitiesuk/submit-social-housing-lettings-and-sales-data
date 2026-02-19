@@ -162,7 +162,7 @@ module Validations::HouseholdValidations
     # 27 Owner occupation (low-cost home ownership)
     # 28 Living with Friends or Family
     # 29 Prison / Approved Probation Hostel
-    if record.is_internal_transfer? && [3, 4, 7, 10, 13, 14, 19, 23, 24, 25, 26, 27, 28, 29].include?(record.prevten)
+    if record.is_internal_transfer? && [3, 4, 7, 10, 13, 14, 19, 23, 24, 25, 26, 27, 28, 29].include?(record.prevten) && !record.form.start_year_2026_or_later?
       label = record.form.get_question("prevten", record).present? ? record.form.get_question("prevten", record).label_from_value(record.prevten) : ""
       record.errors.add :prevten, :internal_transfer_non_social_housing, message: I18n.t("validations.lettings.household.prevten.internal_transfer", prevten: label)
       record.errors.add :referral, :internal_transfer_non_social_housing, message: I18n.t("validations.lettings.household.referral.prevten_invalid", prevten: label)
@@ -172,7 +172,14 @@ module Validations::HouseholdValidations
   def validate_referral(record)
     return unless record.owning_organisation
 
-    if record.is_internal_transfer? && record.owning_organisation.provider_type == "PRP" && record.is_prevten_la_general_needs?
+    if record.form.start_year_2026_or_later?
+      if record.is_internal_transfer? && record.is_prevten_general_needs?
+        label = record.form.get_question("prevten", record).present? ? record.form.get_question("prevten", record).label_from_value(record.prevten) : ""
+        record.errors.add :prevten, message: I18n.t("validations.lettings.household.prevten.general_needs.internal_transfer", prevten: label)
+        record.errors.add :referral_register, message: I18n.t("validations.lettings.household.referral.general_needs.internal_transfer", prevten: label)
+        record.errors.add :referral_noms, message: I18n.t("validations.lettings.household.referral.general_needs.internal_transfer", prevten: label)
+      end
+    elsif record.is_internal_transfer? && record.owning_organisation.prp? && record.is_prevten_la_general_needs?
       record.errors.add :prevten, :internal_transfer_fixed_or_lifetime, message: I18n.t("validations.lettings.household.prevten.la_general_needs.internal_transfer")
       record.errors.add :referral, :internal_transfer_fixed_or_lifetime, message: I18n.t("validations.lettings.household.referral.la_general_needs.internal_transfer")
     end
