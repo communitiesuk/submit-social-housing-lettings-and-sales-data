@@ -249,7 +249,7 @@ module Csv
       return @attributes unless @user.support?
 
       mappings = SUPPORT_ATTRIBUTE_NAME_MAPPINGS
-      mappings = mappings.merge(SUPPORT_ATTRIBUTE_NAME_MAPPINGS_2025) if @year == 2025
+      mappings = mappings.merge(SUPPORT_ATTRIBUTE_NAME_MAPPINGS_2025) if @year >= 2025
 
       @attributes.map do |attribute|
         mappings[attribute] || attribute.upcase
@@ -300,7 +300,7 @@ module Csv
       mappings = case @year
                  when 2024
                    ATTRIBUTE_MAPPINGS.merge(ATTRIBUTE_MAPPINGS_2024)
-                 when 2025
+                 when (2025..)
                    ATTRIBUTE_MAPPINGS.merge(ATTRIBUTE_MAPPINGS_2024).merge(ATTRIBUTE_MAPPINGS_2025)
                  else
                    ATTRIBUTE_MAPPINGS
@@ -346,7 +346,7 @@ module Csv
         %w[id status duplicate_set_id created_at updated_at old_form_id collection_start_year creation_method is_dpo]
       when 2024
         %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo]
-      when 2025
+      when 2025, 2026
         %w[id status duplicate_set_id created_at created_by_id updated_at updated_by_id creation_method bulk_upload_id]
       else
         %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo]
