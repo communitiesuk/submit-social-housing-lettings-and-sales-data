@@ -993,12 +993,13 @@ private
       errors.add(:field_9, error_message) # startdate
       errors.add(:field_10, error_message) # startdate
       errors.add(:field_13, error_message) # tenancycode
+      errors.add(:field_18, error_message) # uprn
+      errors.add(:field_19, error_message) # address_line_1
       errors.add(:field_23, error_message) # postcode_full
       errors.add(:field_24, error_message) # postcode_full
       errors.add(:field_25, error_message) # la
       errors.add(:field_42, error_message) # age1
       errors.add(:field_130, error_message) # sexrab1
-      errors.add(:field_43, error_message) # sex1
       errors.add(:field_46, error_message) # ecstat1
       errors.add(:field_122, error_message) unless general_needs? # household_charge
       errors.add(:field_124, error_message) # brent
