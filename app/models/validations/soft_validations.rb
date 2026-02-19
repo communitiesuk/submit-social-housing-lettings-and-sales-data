@@ -283,7 +283,7 @@ private
     if form.start_year_2026_or_later?
       !person_is_male(person_number)
     else
-      # non male wording only came later, originally was specific to female gender
+      # the "non-male" wording was introduced in the 26/27 collection year, before that this behavior was limited to female gender only
       public_send("sex#{person_number}") == "F"
     end
   end
