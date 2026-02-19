@@ -41,7 +41,7 @@ task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, args|
       # This is the normal query for duplicates but without the check that the logs are visible (i.e. not deleted/pending)
       duplicates = LettingsLog.where.not(id: log.id)
                               .where.not(startdate: nil)
-                              .where.not(sex1: nil)
+                              .sex1_answered
                               .where.not(ecstat1: nil)
                               .where.not(needstype: nil)
                               .age1_answered

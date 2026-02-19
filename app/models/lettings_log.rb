@@ -98,11 +98,12 @@ class LettingsLog < Log
   }
   scope :location_answered, -> { where.not(location_id: nil).or(where(needstype: 1)).or(filter_by_year_or_later(2026)) }
   scope :postcode_answered, -> { where.not(postcode_full: nil).or(where(needstype: 2)) }
+  scope :sex1_answered, -> { where.not(sex1: nil).filter_by_year_or_earlier(2025).or(where.not(sexrab1: nil).filter_by_year_or_later(2026)) }
   scope :duplicate_logs, lambda { |log|
     visible
       .where.not(id: log.id)
       .where.not(startdate: nil)
-      .where.not(sex1: nil)
+      .sex1_answered
       .where.not(ecstat1: nil)
       .where.not(needstype: nil)
       .age1_answered
@@ -142,7 +143,7 @@ class LettingsLog < Log
       # separate function as location needs to be fully ignored in 2026
       .group(*DUPLICATE_LOG_ATTRIBUTES, :postcode_full, :uprn, :address_line1)
       .where.not(startdate: nil)
-      .where.not(sex1: nil)
+      .where.not(sexrab1: nil)
       .where.not(ecstat1: nil)
       .where.not(needstype: nil)
       .age1_answered
