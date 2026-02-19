@@ -288,6 +288,8 @@ private
   end
 
   def at_least_one_person_working_situation_is_illness?
+    return if hhmemb.present? && hhmemb > 8
+
     person_count = hhmemb || 8
 
     (1..person_count).any? { |n| public_send("ecstat#{n}") == 8 }
