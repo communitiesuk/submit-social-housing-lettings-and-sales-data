@@ -75,21 +75,16 @@ module DuplicateLogsHelper
   end
 
   def duplicate_log_extra_value(question, log)
-    if log.form.start_year_2026_or_later?
-      case question.id
-      when "uprn"
-        value = [
-          log.address_line1,
-          log.postcode_full,
-        ].select(&:present?)
-
-        "\n\n#{value.join("\n")}"
+    case question.id
+    when "uprn"
+      if log.form.start_year_2026_or_later?
+        "\n\n#{[log.address_line1, log.postcode_full].join("\n")}"
       else
-        question.get_extra_check_answer_value(log)
+        postcode_question = log.form.get_question("postcode_full", log)
+        postcode_question.get_extra_check_answer_value(log)
       end
-    elsif question.id == "uprn" && !log.form.start_year_2026_or_later?
-      postcode_question = log.form.get_question("postcode_full", log)
-      postcode_question.get_extra_check_answer_value(log)
+    else
+      question.get_extra_check_answer_value(log)
     end
   end
 
