@@ -63,7 +63,7 @@ en:
             page_header: ""
             check_answer_label: "Tenancy start date"
             check_answer_prompt: ""
-            hint_text: "The tenancy start date can be up to 14 days from today. If your tenancy starts more than 14 days into the future, please wait until you are within 14 days of the start date before submitting your log. <br><br>If you’re answering this question on 1 April, you can enter a tenancy start date up to and including 15 April."
+            hint_text: "The tenancy start date can be up to 14 days from today. If your tenancy starts more than 14 days into the future, please wait until you are within 14 days of the start date before submitting your log. <br><br>For example, if you’re answering this question on 1 April, you can enter a tenancy start date up to and including 15 April."
             example: "Enter the date in the format DD/MM/YYYY, for example %{example_date}."
             question_text: "What is the tenancy start date?"
 
