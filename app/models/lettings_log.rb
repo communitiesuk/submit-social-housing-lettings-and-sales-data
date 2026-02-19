@@ -89,8 +89,8 @@ class LettingsLog < Log
   scope :tcharge_answered, -> { where.not(tcharge: nil).or(where(household_charge: 1)).or(where(is_carehome: 1)) }
   scope :chcharge_answered, -> { where.not(chcharge: nil).or(where(is_carehome: [nil, 0])) }
   # once 2025 logs are removed this logic can be simplified
-  # pre 2025, match on location if supported, or address if general needs
-  # post 2026, match on address only
+  # 2025 and before, match on location if supported, or address if general needs
+  # 2026 and after, match on address only
   scope :location_for_log_answered_as, ->(log) { where(location_id: log.location_id).or(where(needstype: 1)).or(filter_by_year_or_later(2026)) }
   scope :address_for_log_answered_as, lambda { |log|
     where(postcode_full: log.postcode_full).where(address_line1: log.address_line1).where(uprn: log.uprn)
