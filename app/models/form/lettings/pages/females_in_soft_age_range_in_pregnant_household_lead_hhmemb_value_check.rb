@@ -19,10 +19,6 @@ class Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdLeadHhmembV
   end
 
   def interruption_screen_question_ids
-    if form.start_year_2026_or_later?
-      %w[preg_occ age1 sexrab1 gender_same_as_sex1 age2 sexrab2 gender_same_as_sex2 age3 sexrab3 gender_same_as_sex3 age4 sexrab4 gender_same_as_sex4 age5 sexrab5 gender_same_as_sex5 age6 sexrab6 gender_same_as_sex6 age7 sexrab7 gender_same_as_sex7 age8 sexrab8 gender_same_as_sex8]
-    else
-      %w[preg_occ sex1 sex2 sex3 sex4 sex5 sex6 sex7 sex8 age1 age2 age3 age4 age5 age6 age7 age8]
-    end
+    %w[preg_occ sex1 sex2 sex3 sex4 sex5 sex6 sex7 sex8 age1 age2 age3 age4 age5 age6 age7 age8]
   end
 end

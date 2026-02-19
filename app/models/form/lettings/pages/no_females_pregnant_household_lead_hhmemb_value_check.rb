@@ -19,10 +19,6 @@ class Form::Lettings::Pages::NoFemalesPregnantHouseholdLeadHhmembValueCheck < ::
   end
 
   def interruption_screen_question_ids
-    if form.start_year_2026_or_later?
-      %w[preg_occ sexrab1 gender_same_as_sex1 sexrab2 gender_same_as_sex2 sexrab3 gender_same_as_sex3 sexrab4 gender_same_as_sex4 sexrab5 gender_same_as_sex5 sexrab6 gender_same_as_sex6 sexrab7 gender_same_as_sex7 sexrab8 gender_same_as_sex8]
-    else
-      %w[preg_occ sex1 sex2 sex3 sex4 sex5 sex6 sex7 sex8]
-    end
+    %w[preg_occ sex1 sex2 sex3 sex4 sex5 sex6 sex7 sex8]
   end
 end

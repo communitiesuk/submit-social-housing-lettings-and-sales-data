@@ -75,6 +75,10 @@ module Validations::SoftValidations
     end
   end
 
+  def no_household_member_likely_to_be_pregnant?
+    all_male_tenants_in_a_pregnant_household? || non_males_in_pregnant_household_in_soft_validation_range?
+  end
+
   def all_male_tenants_in_a_pregnant_household?
     all_tenants_gender_information_completed? && all_male_tenants_in_the_household? && preg_occ == 1
   end
