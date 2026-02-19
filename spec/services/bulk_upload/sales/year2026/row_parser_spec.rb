@@ -118,6 +118,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       field_125: "M",
       field_126: "R",
       field_127: "R",
+      field_128: "1",
     }
   end
 
