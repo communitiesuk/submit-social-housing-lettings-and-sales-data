@@ -336,8 +336,7 @@ RSpec.describe Csv::LettingsLogCsvService do
           context "when the current user is a support user" do
             let(:user) { create(:user, :support, organisation:, email: "s.port@jeemayle.com") }
 
-            # TODO: CLDC-4191 Reinstate this test when we update log export
-            xit "exports the CSV with all values correct" do
+            it "exports the CSV with all values correct" do
               expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_26.csv")
               values_to_delete = %w[id]
               values_to_delete.each do |attribute|
@@ -351,8 +350,7 @@ RSpec.describe Csv::LettingsLogCsvService do
           context "when the current user is not a support user" do
             let(:user) { create(:user, :data_provider, organisation:, email: "choreographer@owtluk.com") }
 
-            # TODO: CLDC-4191 Reinstate this test when we update log export
-            xit "exports the CSV with all values correct" do
+            it "exports the CSV with all values correct" do
               expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_labels_26.csv")
               values_to_delete = %w[id]
               values_to_delete.each do |attribute|
@@ -370,8 +368,7 @@ RSpec.describe Csv::LettingsLogCsvService do
           context "when the current user is a support user" do
             let(:user) { create(:user, :support, organisation:, email: "s.port@jeemayle.com") }
 
-            # TODO: CLDC-4191 Reinstate this test when we update log export
-            xit "exports the CSV with all values correct" do
+            it "exports the CSV with all values correct" do
               expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_codes_26.csv")
               values_to_delete = %w[id]
               values_to_delete.each do |attribute|
@@ -385,8 +382,7 @@ RSpec.describe Csv::LettingsLogCsvService do
           context "when the current user is not a support user" do
             let(:user) { create(:user, :data_provider, organisation:, email: "choreographer@owtluk.com") }
 
-            # TODO: CLDC-4191 Reinstate this test when we update log export
-            xit "exports the CSV with all values correct" do
+            it "exports the CSV with all values correct" do
               expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_codes_26.csv")
               values_to_delete = %w[id]
               values_to_delete.each do |attribute|
