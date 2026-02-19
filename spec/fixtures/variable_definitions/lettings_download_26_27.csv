@@ -23,3 +23,6 @@ gender_description5,If 'No', enter person 5's gender identity
 gender_description6,If 'No', enter person 6's gender identity
 gender_description7,If 'No', enter person 7's gender identity
 gender_description8,If 'No', enter person 8's gender identity
+referral_register,What was the source of referral for this letting?
+referral_noms,What was the source of referral for this letting?
+referral_org,What was the source of referral for this letting?
