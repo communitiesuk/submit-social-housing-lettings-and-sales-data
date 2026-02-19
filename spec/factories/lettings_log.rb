@@ -37,7 +37,8 @@ FactoryBot.define do
       tenancycode { "same tenancy code" }
       address_line1 { "same address line 1" }
       postcode_full { "A1 1AA" }
-      uprn_known { 0 }
+      uprn_known { 1 }
+      uprn { "1234567890" }
       declaration { 1 }
       age1_known { 0 }
       age1 { 18 }
