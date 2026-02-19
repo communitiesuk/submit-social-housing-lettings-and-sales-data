@@ -6,7 +6,7 @@ class Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPersonValue
 
     @depends_on = [
       {
-        "non_males_in_pregnant_household_in_soft_validation_range?" => true,
+        "non_males_in_pregnant_household_not_in_pregnancy_range?" => true,
         "details_known_#{person_index}" => 0,
       },
     ]

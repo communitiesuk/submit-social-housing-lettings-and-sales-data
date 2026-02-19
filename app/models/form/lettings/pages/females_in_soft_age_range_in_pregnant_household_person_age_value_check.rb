@@ -5,7 +5,7 @@ class Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPersonAgeVa
     @copy_key = "lettings.soft_validations.pregnancy_value_check.females_in_soft_age_range_in_pregnant_household_value_check"
     @depends_on = [
       {
-        "non_males_in_pregnant_household_in_soft_validation_range?" => true,
+        "non_males_in_pregnant_household_not_in_pregnancy_range?" => true,
         "age#{person_index}_known" => 0,
       },
     ]
