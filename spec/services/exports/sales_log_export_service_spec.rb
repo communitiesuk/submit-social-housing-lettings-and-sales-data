@@ -365,6 +365,70 @@ RSpec.describe Exports::SalesLogExportService do
       end
     end
 
+    context "when exporting only 25/26 collection period" do
+      let(:start_time) { Time.zone.local(2025, 4, 1) }
+
+      before do
+        Timecop.freeze(start_time)
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.unfreeze
+        Singleton.__init__(FormHandler)
+      end
+
+      context "and one sales log is available for export" do
+        let!(:sales_log) { FactoryBot.create(:sales_log, :export) }
+        let(:expected_zip_filename) { "core_sales_2025_2026_apr_mar_f0001_inc0001.zip" }
+        let(:expected_data_filename) { "core_sales_2025_2026_apr_mar_f0001_inc0001_pt001.xml" }
+        let(:xml_export_file) { File.open("spec/fixtures/exports/sales_log_25_26.xml", "r:UTF-8") }
+
+        it "generates an XML export file with the expected content within the ZIP file" do
+          expected_content = replace_entity_ids(sales_log, xml_export_file.read)
+          expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+            entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
+            expect(entry).not_to be_nil
+            expect(entry.get_input_stream.read).to have_same_xml_contents_as(expected_content)
+          end
+
+          export_service.export_xml_sales_logs(full_update: true, collection_year: 2025)
+        end
+      end
+    end
+
+    context "when exporting only 26/27 collection period" do
+      let(:start_time) { Time.zone.local(2026, 4, 1) }
+
+      before do
+        Timecop.freeze(start_time)
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.unfreeze
+        Singleton.__init__(FormHandler)
+      end
+
+      context "and one sales log is available for export" do
+        let!(:sales_log) { FactoryBot.create(:sales_log, :export) }
+        let(:expected_zip_filename) { "core_sales_2026_2027_apr_mar_f0001_inc0001.zip" }
+        let(:expected_data_filename) { "core_sales_2026_2027_apr_mar_f0001_inc0001_pt001.xml" }
+        let(:xml_export_file) { File.open("spec/fixtures/exports/sales_log_26_27.xml", "r:UTF-8") }
+
+        it "generates an XML export file with the expected content within the ZIP file" do
+          expected_content = replace_entity_ids(sales_log, xml_export_file.read)
+          expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+            entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
+            expect(entry).not_to be_nil
+            expect(entry.get_input_stream.read).to have_same_xml_contents_as(expected_content)
+          end
+
+          export_service.export_xml_sales_logs(full_update: true, collection_year: 2026)
+        end
+      end
+    end
+
     context "when exporting various fees, correctly maps the values" do
       context "with discounted ownership and mscharge" do
         let!(:sales_log) { FactoryBot.create(:sales_log, :export, mscharge: 123) }

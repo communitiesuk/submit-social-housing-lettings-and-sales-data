@@ -294,6 +294,7 @@ FactoryBot.define do
       buy1livein { 1 }
       relat2 { "P" }
       proptype { 1 }
+      buildheightclass { 2 }
       age2_known { 0 }
       age2 { 33 }
       builtype { 1 }
