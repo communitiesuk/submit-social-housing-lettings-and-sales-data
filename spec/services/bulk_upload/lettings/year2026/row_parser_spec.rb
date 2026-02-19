@@ -225,9 +225,6 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             field_115: "2",
 
             field_116: "1",
-            field_154: "1",
-            field_155: "1",
-            field_156: "1",
 
             field_117: "1",
             field_118: "2",
@@ -651,12 +648,12 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
         end
 
         context "when an invalid value error has been added" do
-          let(:attributes) { setup_section_params.merge({ field_116: "100" }) }
+          let(:attributes) { setup_section_params.merge({ field_115: "100" }) }
 
           it "does not add an additional error" do
             parser.valid?
-            expect(parser.errors[:field_116].length).to eq(1)
-            expect(parser.errors[:field_116]).to include(match I18n.t("validations.lettings.2026.bulk_upload.invalid_option", question: ""))
+            expect(parser.errors[:field_115].length).to eq(1)
+            expect(parser.errors[:field_115]).to include(match I18n.t("validations.lettings.2026.bulk_upload.invalid_option", question: ""))
           end
         end
       end
@@ -1163,10 +1160,239 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
     end
 
-    # TODO: CLDC-4191: Add tests for the new referral fields
-    # describe "#field_116" do # referral
-    #
-    # end
+    describe "#field_116, field_154, field_155, field_156" do # referral
+      context "when org is LA" do
+        let(:owning_org) { create(:organisation, :la, :with_old_visible_id) }
+
+        let(:org_attributes) { { bulk_upload:, field_1: owning_org.old_visible_id } }
+
+        context "and not renewal" do
+          let(:renewal_attributes) { org_attributes.merge({ field_7: nil }) }
+
+          context "and field_116 is valid" do
+            let(:attributes) { renewal_attributes.merge({ field_116: 1 }) }
+
+            it "does not add an error" do
+              parser.valid?
+              expect(parser.errors[:field_116]).to be_blank
+              expect(parser.errors[:field_154]).to be_blank
+              expect(parser.errors[:field_155]).to be_blank
+              expect(parser.errors[:field_156]).to be_blank
+            end
+          end
+
+          context "and field_116 is invalid" do
+            let(:attributes) { renewal_attributes.merge({ field_116: 5 }) } # PRP option
+
+            it "adds errors to all referral fields" do
+              parser.valid?
+              expect(parser.errors[:field_116]).to be_present
+              expect(parser.errors[:field_154]).to be_present
+              expect(parser.errors[:field_155]).to be_present
+              expect(parser.errors[:field_156]).to be_present
+            end
+          end
+
+          context "and field_116 is blank" do
+            let(:attributes) { renewal_attributes.merge({ field_116: nil }) }
+
+            it "adds errors to all referral fields" do
+              parser.valid?
+              expect(parser.errors[:field_116]).to be_present
+              expect(parser.errors[:field_154]).to be_present
+              expect(parser.errors[:field_155]).to be_present
+              expect(parser.errors[:field_156]).to be_present
+            end
+          end
+
+          context "and other fields are given" do
+            let(:attributes) { renewal_attributes.merge({ field_116: 1, field_154: 5, field_155: 1, field_152: 1 }) }
+
+            it "adds errors to all referral fields" do
+              parser.valid?
+              expect(parser.errors[:field_116]).to be_present
+              expect(parser.errors[:field_154]).to be_present
+              expect(parser.errors[:field_155]).to be_present
+              expect(parser.errors[:field_156]).to be_present
+            end
+          end
+        end
+
+        context "and is renewal" do
+          let(:attributes) { org_attributes.merge({ field_7: 1, field_116: 1, field_154: 5, field_155: 1, field_156: 1 }) }
+
+          it "does not add an error for referral fields" do
+            parser.valid?
+            expect(parser.errors[:field_116]).to be_blank
+            expect(parser.errors[:field_154]).to be_blank
+            expect(parser.errors[:field_155]).to be_blank
+            expect(parser.errors[:field_156]).to be_blank
+          end
+        end
+      end
+
+      context "when org is PRP" do
+        let(:owning_org) { create(:organisation, :prp, :with_old_visible_id) }
+
+        let(:org_attributes) { { bulk_upload:, field_1: owning_org.old_visible_id } }
+
+        context "and not renewal" do
+          let(:renewal_attributes) { org_attributes.merge({ field_7: nil }) }
+
+          context "and field_154 is valid and does not expect an answer for field_155" do
+            let(:attributes) { renewal_attributes.merge({ field_154: 5 }) }
+
+            it "does not add an error" do
+              parser.valid?
+              expect(parser.errors[:field_116]).to be_blank
+              expect(parser.errors[:field_154]).to be_blank
+              expect(parser.errors[:field_155]).to be_blank
+              expect(parser.errors[:field_156]).to be_blank
+            end
+
+            context "and later fields are given" do
+              let(:attributes) { renewal_attributes.merge({ field_154: 5, field_155: 1, field_156: 1 }) }
+
+              it "adds errors to all referral fields" do
+                parser.valid?
+                expect(parser.errors[:field_116]).to be_present
+                expect(parser.errors[:field_154]).to be_present
+                expect(parser.errors[:field_155]).to be_present
+                expect(parser.errors[:field_156]).to be_present
+              end
+            end
+          end
+
+          context "and field_154 is invalid" do
+            let(:attributes) { renewal_attributes.merge({ field_154: 1 }) } # LA option
+
+            it "adds errors to all referral fields" do
+              parser.valid?
+              expect(parser.errors[:field_116]).to be_present
+              expect(parser.errors[:field_154]).to be_present
+              expect(parser.errors[:field_155]).to be_present
+              expect(parser.errors[:field_156]).to be_present
+            end
+          end
+
+          context "and field_154 is blank" do
+            let(:attributes) { renewal_attributes.merge({ field_154: nil }) }
+
+            it "adds errors to all referral fields" do
+              parser.valid?
+              expect(parser.errors[:field_116]).to be_present
+              expect(parser.errors[:field_154]).to be_present
+              expect(parser.errors[:field_155]).to be_present
+              expect(parser.errors[:field_156]).to be_present
+            end
+          end
+
+          context "and field_154 is valid and expects an answer for field_155" do
+            let(:field_154_attributes) { renewal_attributes.merge({ field_154: 6 }) }
+
+            context "and field_155 is valid and does not expect an answer for field_156" do
+              let(:attributes) { field_154_attributes.merge({ field_155: 2 }) }
+
+              it "does not add an error" do
+                parser.valid?
+                expect(parser.errors[:field_116]).to be_blank
+                expect(parser.errors[:field_154]).to be_blank
+                expect(parser.errors[:field_155]).to be_blank
+                expect(parser.errors[:field_156]).to be_blank
+              end
+
+              context "and later fields are given" do
+                let(:attributes) { field_154_attributes.merge({ field_155: 2, field_156: 1 }) }
+
+                it "adds errors to all referral fields" do
+                  parser.valid?
+                  expect(parser.errors[:field_116]).to be_present
+                  expect(parser.errors[:field_154]).to be_present
+                  expect(parser.errors[:field_155]).to be_present
+                  expect(parser.errors[:field_156]).to be_present
+                end
+              end
+            end
+
+            context "and field_155 is invalid" do
+              let(:attributes) { field_154_attributes.merge({ field_155: 5 }) } # needs field_154 to be 7
+
+              it "adds errors to all referral fields" do
+                parser.valid?
+                expect(parser.errors[:field_116]).to be_present
+                expect(parser.errors[:field_154]).to be_present
+                expect(parser.errors[:field_155]).to be_present
+                expect(parser.errors[:field_156]).to be_present
+              end
+            end
+
+            context "and field_155 is blank" do
+              let(:attributes) { field_154_attributes.merge({ field_155: nil }) }
+
+              it "adds errors to all referral fields" do
+                parser.valid?
+                expect(parser.errors[:field_116]).to be_present
+                expect(parser.errors[:field_154]).to be_present
+                expect(parser.errors[:field_155]).to be_present
+                expect(parser.errors[:field_156]).to be_present
+              end
+            end
+
+            context "and field_155 is valid and expects an answer for field_156" do
+              let(:field_155_attributes) { field_154_attributes.merge({ field_155: 1 }) }
+
+              context "and field_156 is valid" do
+                let(:attributes) { field_155_attributes.merge({ field_156: 1 }) }
+
+                it "does not add an error" do
+                  parser.valid?
+                  expect(parser.errors[:field_116]).to be_blank
+                  expect(parser.errors[:field_154]).to be_blank
+                  expect(parser.errors[:field_155]).to be_blank
+                  expect(parser.errors[:field_156]).to be_blank
+                end
+              end
+
+              context "and field_156 is invalid" do
+                let(:attributes) { field_155_attributes.merge({ field_156: 11 }) } # needs field_155 to be 7
+
+                it "adds errors to all referral fields" do
+                  parser.valid?
+                  expect(parser.errors[:field_116]).to be_present
+                  expect(parser.errors[:field_154]).to be_present
+                  expect(parser.errors[:field_155]).to be_present
+                  expect(parser.errors[:field_156]).to be_present
+                end
+              end
+
+              context "and field_156 is blank" do
+                let(:attributes) { field_155_attributes.merge({ field_156: nil }) }
+
+                it "adds errors to all referral fields" do
+                  parser.valid?
+                  expect(parser.errors[:field_116]).to be_present
+                  expect(parser.errors[:field_154]).to be_present
+                  expect(parser.errors[:field_155]).to be_present
+                  expect(parser.errors[:field_156]).to be_present
+                end
+              end
+            end
+          end
+        end
+
+        context "and is renewal" do
+          let(:attributes) { org_attributes.merge({ field_7: 1, field_116: 1, field_154: 5, field_155: 1, field_156: 1 }) }
+
+          it "does not add an error for referral fields" do
+            parser.valid?
+            expect(parser.errors[:field_116]).to be_blank
+            expect(parser.errors[:field_154]).to be_blank
+            expect(parser.errors[:field_155]).to be_blank
+            expect(parser.errors[:field_156]).to be_blank
+          end
+        end
+      end
+    end
 
     describe "fields 7, 8, 9 => startdate" do
       context "when any one of these fields is blank" do
