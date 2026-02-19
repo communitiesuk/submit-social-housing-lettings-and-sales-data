@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Pages::DepositValueCheck, type: :model do
 
   let(:page_id) { "deposit_value_check" }
   let(:page_definition) { nil }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2026_or_later?: false) }
   let(:subsection) { instance_double(Form::Subsection, form:) }
 
   it "has correct subsection" do

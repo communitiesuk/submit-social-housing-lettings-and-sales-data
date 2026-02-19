@@ -134,6 +134,31 @@ class BulkUpload::Lettings::Year2026::RowParser
     field_127: "What is the support charge?",
     field_128: "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
     field_129: "What do you expect the outstanding amount to be?",
+
+    field_130: "Lead tenant's sex, as registered at birth",
+    field_131: "Person 2's sex, as registered at birth",
+    field_132: "Person 3's sex, as registered at birth",
+    field_133: "Person 4's sex, as registered at birth",
+    field_134: "Person 5's sex, as registered at birth",
+    field_135: "Person 6's sex, as registered at birth",
+    field_136: "Person 7's sex, as registered at birth",
+    field_137: "Person 8's sex, as registered at birth",
+    field_138: "Is the gender the lead tenant identifies with the same as their sex registered at birth?",
+    field_139: "If 'No', enter the lead tenant's gender identity",
+    field_140: "Is the gender person 2 identifies with the same as their sex registered at birth?",
+    field_141: "If 'No', enter person 2's gender identity",
+    field_142: "Is the gender person 3 identifies with the same as their sex registered at birth?",
+    field_143: "If 'No', enter person 3's gender identity",
+    field_144: "Is the gender person 4 identifies with the same as their sex registered at birth?",
+    field_145: "If 'No', enter person 4's gender identity",
+    field_146: "Is the gender person 5 identifies with the same as their sex registered at birth?",
+    field_147: "If 'No', enter person 5's gender identity",
+    field_148: "Is the gender person 6 identifies with the same as their sex registered at birth?",
+    field_149: "If 'No', enter person 6's gender identity",
+    field_150: "Is the gender person 7 identifies with the same as their sex registered at birth?",
+    field_151: "If 'No', enter person 7's gender identity",
+    field_152: "Is the gender person 8 identifies with the same as their sex registered at birth?",
+    field_153: "If 'No', enter person 8's gender identity",
   }.freeze
 
   RENT_TYPE_BU_MAPPING = {
@@ -282,6 +307,31 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_127, :decimal
   attribute :field_128, :integer
   attribute :field_129, :decimal
+
+  attribute :field_130, :string
+  attribute :field_131, :string
+  attribute :field_132, :string
+  attribute :field_133, :string
+  attribute :field_134, :string
+  attribute :field_135, :string
+  attribute :field_136, :string
+  attribute :field_137, :string
+  attribute :field_138, :integer
+  attribute :field_139, :string
+  attribute :field_140, :integer
+  attribute :field_141, :string
+  attribute :field_142, :integer
+  attribute :field_143, :string
+  attribute :field_144, :integer
+  attribute :field_145, :string
+  attribute :field_146, :integer
+  attribute :field_147, :string
+  attribute :field_148, :integer
+  attribute :field_149, :string
+  attribute :field_150, :integer
+  attribute :field_151, :string
+  attribute :field_152, :integer
+  attribute :field_153, :string
 
   validate :validate_valid_radio_option, on: :before_log
 
@@ -438,8 +488,8 @@ class BulkUpload::Lettings::Year2026::RowParser
   validate :validate_assigned_to_when_support, on: :after_log
   validate :validate_all_charges_given, on: :after_log
 
-  validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log, unless: -> { supported_housing? }
-  validate :validate_address_fields, on: :after_log, unless: -> { supported_housing? }
+  validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log
+  validate :validate_address_fields, on: :after_log
 
   validate :validate_incomplete_soft_validations, on: :after_log
   validate :validate_nationality, on: :after_log
@@ -536,11 +586,12 @@ class BulkUpload::Lettings::Year2026::RowParser
       "field_9",   # startdate
       "field_10", # startdate
       "field_13", # tenancycode
-      !general_needs? ? :field_6.to_s : nil, # location
-      !supported_housing? ? "field_23" : nil,  # postcode
-      !supported_housing? ? "field_24" : nil,  # postcode
+      !general_needs? ? :field_6.to_s : nil, # location # TODO: CLDC-4119: remove location from hash
+      !supported_housing? ? "field_23" : nil,  # postcode # TODO: CLDC-4119: add postcode to hash for supported housing
+      !supported_housing? ? "field_24" : nil,  # postcode # TODO: CLDC-4119: add postcode to hash for supported housing
       "field_42", # age1
       "field_43",  # sex1
+      "field_130", # sexrab1
       "field_46",  # ecstat1
     )
     if [field_124, field_125, field_126, field_127].all?(&:present?)
@@ -689,12 +740,13 @@ private
     [
       "startdate",
       "age1",
+      "sexrab1",
       "sex1",
       "ecstat1",
       "owning_organisation",
       "tcharge",
-      !supported_housing? ? "postcode_full" : nil,
-      !general_needs? ? "location" : nil,
+      !supported_housing? ? "postcode_full" : nil, # TODO: CLDC-4119: add postcode to duplicate check fields for supported housing
+      !general_needs? ? "location" : nil, # TODO: CLDC-4119: remove location from duplicate check fields
       "tenancycode",
       log.chcharge.present? ? "chcharge" : nil,
     ].compact
@@ -973,12 +1025,13 @@ private
       errors.add(:field_9, error_message) # startdate
       errors.add(:field_10, error_message) # startdate
       errors.add(:field_13, error_message) # tenancycode
-      errors.add(:field_6, error_message) if !general_needs? && :field_6.present? # location
+      errors.add(:field_6, error_message) if !general_needs? && :field_6.present? # location # TODO: CLDC-4119: remove location from error fields
       errors.add(:field_5, error_message) if !general_needs? && :field_6.blank? # add to Scheme field as unclear whether log uses New or Old CORE ids
-      errors.add(:field_23, error_message) unless supported_housing? # postcode_full
-      errors.add(:field_24, error_message) unless supported_housing? # postcode_full
-      errors.add(:field_25, error_message) unless supported_housing? # la
+      errors.add(:field_23, error_message) unless supported_housing? # postcode_full # TODO: CLDC-4119: add postcode to error fields for supported housing
+      errors.add(:field_24, error_message) unless supported_housing? # postcode_full # TODO: CLDC-4119: add postcode to error fields for supported housing
+      errors.add(:field_25, error_message) unless supported_housing? # la # TODO: CLDC-4119: add LA to error fields for supported housing
       errors.add(:field_42, error_message) # age1
+      errors.add(:field_130, error_message) # sexrab1
       errors.add(:field_43, error_message) # sex1
       errors.add(:field_46, error_message) # ecstat1
       errors.add(:field_122, error_message) unless general_needs? # household_charge
@@ -1150,6 +1203,15 @@ private
       town_or_city: [:field_21],
       county: [:field_22],
       uprn_selection: [:field_19],
+
+      sexrab1: %i[field_130],
+      sexrab2: %i[field_131],
+      sexrab3: %i[field_132],
+      sexrab4: %i[field_133],
+      sexrab5: %i[field_134],
+      sexrab6: %i[field_135],
+      sexrab7: %i[field_136],
+      sexrab8: %i[field_137],
     }.compact
   end
 
@@ -1335,29 +1397,51 @@ private
 
     attributes["first_time_property_let_as_social_housing"] = first_time_property_let_as_social_housing
 
-    if general_needs?
-      attributes["uprn_known"] = field_18.present? ? 1 : 0
-      attributes["uprn_confirmed"] = 1 if field_18.present?
-      attributes["skip_update_uprn_confirmed"] = true
-      attributes["uprn"] = field_18
-      attributes["address_line1"] = field_19
-      attributes["address_line1_as_entered"] = field_19
-      attributes["address_line2"] = field_20
-      attributes["address_line2_as_entered"] = field_20
-      attributes["town_or_city"] = field_21
-      attributes["town_or_city_as_entered"] = field_21
-      attributes["county"] = field_22
-      attributes["county_as_entered"] = field_22
-      attributes["postcode_full"] = postcode_full
-      attributes["postcode_full_as_entered"] = postcode_full
-      attributes["postcode_known"] = postcode_known
-      attributes["la"] = field_25
-      attributes["la_as_entered"] = field_25
+    attributes["uprn_known"] = field_18.present? ? 1 : 0
+    attributes["uprn_confirmed"] = 1 if field_18.present?
+    attributes["skip_update_uprn_confirmed"] = true
+    attributes["uprn"] = field_18
+    attributes["address_line1"] = field_19
+    attributes["address_line1_as_entered"] = field_19
+    attributes["address_line2"] = field_20
+    attributes["address_line2_as_entered"] = field_20
+    attributes["town_or_city"] = field_21
+    attributes["town_or_city_as_entered"] = field_21
+    attributes["county"] = field_22
+    attributes["county_as_entered"] = field_22
+    attributes["postcode_full"] = postcode_full
+    attributes["postcode_full_as_entered"] = postcode_full
+    attributes["postcode_known"] = postcode_known
+    attributes["la"] = field_25
+    attributes["la_as_entered"] = field_25
+    attributes["address_line1_input"] = address_line1_input
+    attributes["postcode_full_input"] = postcode_full
+    attributes["select_best_address_match"] = true if field_18.blank?
 
-      attributes["address_line1_input"] = address_line1_input
-      attributes["postcode_full_input"] = postcode_full
-      attributes["select_best_address_match"] = true if field_18.blank?
-    end
+    attributes["sexrab1"] = field_130
+    attributes["sexrab2"] = field_131
+    attributes["sexrab3"] = field_132
+    attributes["sexrab4"] = field_133
+    attributes["sexrab5"] = field_134
+    attributes["sexrab6"] = field_135
+    attributes["sexrab7"] = field_136
+    attributes["sexrab8"] = field_137
+    attributes["gender_same_as_sex1"] = field_138
+    attributes["gender_description1"] = field_139
+    attributes["gender_same_as_sex2"] = field_140
+    attributes["gender_description2"] = field_141
+    attributes["gender_same_as_sex3"] = field_142
+    attributes["gender_description3"] = field_143
+    attributes["gender_same_as_sex4"] = field_144
+    attributes["gender_description4"] = field_145
+    attributes["gender_same_as_sex5"] = field_146
+    attributes["gender_description5"] = field_147
+    attributes["gender_same_as_sex6"] = field_148
+    attributes["gender_description6"] = field_149
+    attributes["gender_same_as_sex7"] = field_150
+    attributes["gender_description7"] = field_151
+    attributes["gender_same_as_sex8"] = field_152
+    attributes["gender_description8"] = field_153
 
     attributes
   end
@@ -1465,31 +1549,31 @@ private
   end
 
   def person_2_present?
-    field_47.present? || field_48.present? || field_49.present?
+    field_47.present? || field_48.present? || field_49.present? || field_131.present? || field_140.present? || field_141.present?
   end
 
   def person_3_present?
-    field_51.present? || field_52.present? || field_53.present?
+    field_51.present? || field_52.present? || field_53.present? || field_132.present? || field_142.present? || field_143.present?
   end
 
   def person_4_present?
-    field_55.present? || field_56.present? || field_57.present?
+    field_55.present? || field_56.present? || field_57.present? || field_133.present? || field_144.present? || field_145.present?
   end
 
   def person_5_present?
-    field_59.present? || field_60.present? || field_61.present?
+    field_59.present? || field_60.present? || field_61.present? || field_134.present? || field_146.present? || field_147.present?
   end
 
   def person_6_present?
-    field_63.present? || field_64.present? || field_65.present?
+    field_63.present? || field_64.present? || field_65.present? || field_135.present? || field_148.present? || field_149.present?
   end
 
   def person_7_present?
-    field_67.present? || field_68.present? || field_69.present?
+    field_67.present? || field_68.present? || field_69.present? || field_136.present? || field_150.present? || field_151.present?
   end
 
   def person_8_present?
-    field_71.present? || field_72.present? || field_73.present?
+    field_71.present? || field_72.present? || field_73.present? || field_137.present? || field_152.present? || field_153.present?
   end
 
   def leftreg

@@ -15,8 +15,8 @@ RSpec.describe BulkUpload::Sales::Year2026::CsvParser do
       file.write("Can be empty?\n")
       file.write("Type of letting the question applies to\n")
       file.write("Duplicate check field?\n")
-      file.write(BulkUpload::SalesLogToCsv.new(log:).default_field_numbers_row_for_year(2025))
-      file.write(BulkUpload::SalesLogToCsv.new(log:).to_year_csv_row(2025))
+      file.write(BulkUpload::SalesLogToCsv.new(log:).default_field_numbers_row_for_year(2026))
+      file.write(BulkUpload::SalesLogToCsv.new(log:).to_year_csv_row(2026))
       file.write("\n")
       file.rewind
     end
@@ -81,8 +81,8 @@ RSpec.describe BulkUpload::Sales::Year2026::CsvParser do
       file.write("Can be empty?\n")
       file.write("Type of letting the question applies to\n")
       file.write("Duplicate check field?\n")
-      file.write(BulkUpload::SalesLogToCsv.new(log:).default_field_numbers_row_for_year(2025, seed:))
-      file.write(BulkUpload::SalesLogToCsv.new(log:).to_year_csv_row(2025, seed:))
+      file.write(BulkUpload::SalesLogToCsv.new(log:).default_field_numbers_row_for_year(2026, seed:))
+      file.write(BulkUpload::SalesLogToCsv.new(log:).to_year_csv_row(2026, seed:))
       file.rewind
     end
 

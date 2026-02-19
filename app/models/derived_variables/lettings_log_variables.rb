@@ -86,7 +86,7 @@ module DerivedVariables::LettingsLogVariables
     end
 
     set_housingneeds_fields if housingneeds?
-    if form.start_year_2025_or_later? && is_general_needs?
+    if form.start_year_2026_or_later? || (form.start_year_2025_or_later? && is_general_needs?)
       if changed_to_newbuild? && uprn.nil?
         self.manual_address_entry_selected = true
       end
@@ -170,7 +170,14 @@ module DerivedVariables::LettingsLogVariables
     self.referral = 7 if referral_type == 6
     self.referral = 16 if referral_type == 7
 
-    reset_address_fields! if is_supported_housing?
+    if !form.start_year_2026_or_later? && is_supported_housing?
+      reset_address_fields!
+    elsif form.start_year_2026_or_later? && location_changed?
+      reset_address_fields!
+      self.la = nil
+    end
+
+    clear_gender_description_unless_gender_not_same_as_sex! if form.start_year_2026_or_later?
 
     set_checkbox_values!
   end
@@ -411,6 +418,18 @@ private
     return 1 if rent_type == 3
     return 2 if rent_type == 4
     return 3 if rent_type == 5
+  end
+
+  def clear_gender_description_unless_gender_not_same_as_sex!
+    # we do this as the gender same as sex page always contains the gender description box that's hidden
+    # default submit will send a "" for gender description. this ensure it's nil in this case
+    # as well as blanking it if the user writes it in mistakenly in bulk upload
+    (1..8).each do |person_index|
+      gender_same_as_sex = public_send("gender_same_as_sex#{person_index}")
+      if gender_same_as_sex.present? && gender_same_as_sex != 2
+        self["gender_description#{person_index}"] = nil
+      end
+    end
   end
 
   def set_checkbox_values!
