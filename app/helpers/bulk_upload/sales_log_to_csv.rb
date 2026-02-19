@@ -672,7 +672,8 @@ class BulkUpload::SalesLogToCsv
       log.sexrab3,
       log.sexrab4,
       log.sexrab5,
-      log.sexrab6, # 127
+      log.sexrab6,
+      log.buildheightclass, # 128
     ]
   end
 
