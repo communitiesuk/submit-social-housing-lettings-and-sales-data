@@ -23,6 +23,20 @@ en:
             hint_text: "This is the sex that was registered at birth. The next question will ask about the buyer's gender identity."
             question_text: "What was buyer 1's sex at birth?"
 
+          gender_same_as_sex1:
+            page_header: ""
+            check_answer_label: "Buyer 1's gender identity same as registered at birth"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Is the gender buyer 1 identifies with the same as their sex registered at birth?"
+
+          gender_description1:
+            page_header: ""
+            check_answer_label: "Gender identity description"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Enter gender identity"
+
           sex1:
             page_header: ""
             check_answer_label: "Buyer 1’s gender identity"
@@ -150,6 +164,20 @@ en:
               check_answer_prompt: ""
               hint_text: "This is the sex that was registered at birth. The next question will ask about the person's gender identity."
               question_text: "What was person 2's sex at birth?"
+
+          gender_same_as_sex2:
+            page_header: ""
+            check_answer_label: "Buyer/Person 2's gender identity same as registered at birth"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Is the gender buyer/person 2 identifies with the same as their sex registered at birth?"
+
+          gender_description2:
+            page_header: ""
+            check_answer_label: "Gender identity description"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Enter gender identity"
 
           sex2:
             buyer:
@@ -294,6 +322,20 @@ en:
             hint_text: "This is the sex that was registered at birth. The next question will ask about the person's gender identity."
             question_text: "What was person 3's sex at birth?"
 
+          gender_same_as_sex3:
+            page_header: ""
+            check_answer_label: "Person 3's gender identity same as registered at birth"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Is the gender person 3 identifies with the same as their sex registered at birth?"
+
+          gender_description3:
+            page_header: ""
+            check_answer_label: "Gender identity description"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Enter gender identity"
+
           sex3:
             page_header: ""
             check_answer_label: "Person 3’s gender identity"
@@ -341,6 +383,20 @@ en:
             check_answer_prompt: ""
             hint_text: "This is the sex that was registered at birth. The next question will ask about the person's gender identity."
             question_text: "What was person 4's sex at birth?"
+
+          gender_same_as_sex4:
+            page_header: ""
+            check_answer_label: "Person 4's gender identity same as registered at birth"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Is the gender person 4 identifies with the same as their sex registered at birth?"
+
+          gender_description4:
+            page_header: ""
+            check_answer_label: "Gender identity description"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Enter gender identity"
 
           sex4:
             page_header: ""
@@ -390,6 +446,20 @@ en:
             hint_text: "This is the sex that was registered at birth. The next question will ask about the person's gender identity."
             question_text: "What was person 5's sex at birth?"
 
+          gender_same_as_sex5:
+            page_header: ""
+            check_answer_label: "Person 5's gender identity same as registered at birth"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Is the gender person 5 identifies with the same as their sex registered at birth?"
+
+          gender_description5:
+            page_header: ""
+            check_answer_label: "Gender identity description"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Enter gender identity"
+
           sex5:
             page_header: ""
             check_answer_label: "Person 5’s gender identity"
@@ -437,6 +507,20 @@ en:
             check_answer_prompt: ""
             hint_text: "This is the sex that was registered at birth. The next question will ask about the person's gender identity."
             question_text: "What was person 6's sex at birth?"
+
+          gender_same_as_sex6:
+            page_header: ""
+            check_answer_label: "Person 6's gender identity same as registered at birth"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Is the gender person 6 identifies with the same as their sex registered at birth?"
+
+          gender_description6:
+            page_header: ""
+            check_answer_label: "Gender identity description"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Enter gender identity"
 
           sex6:
             page_header: ""
