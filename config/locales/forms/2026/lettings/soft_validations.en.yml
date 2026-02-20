@@ -64,7 +64,7 @@ en:
             hint_text: ""
             question_text: ""
             title_text: "You told us that the type of tenancy was %{tenancyother}."
-            informative_text: "Give the type of tenancy that the tenants rolls onto after any introductory or starter period."
+            informative_text: "We already know whether the tenancy is introductory or has a starter period from your previous answer. Your answer to the type of main tenancy question should be the type of tenancy that the tenant will roll onto after any introductory or starter period. Choose from the categories or write a description if no category is suitable."
           referral_value_check:
             page_header: ""
             check_answer_label: "Referral confirmation"
