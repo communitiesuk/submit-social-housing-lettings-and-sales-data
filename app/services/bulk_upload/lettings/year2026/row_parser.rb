@@ -1235,6 +1235,23 @@ private
       town_or_city: [:field_21],
       county: [:field_22],
       uprn_selection: [:field_19],
+
+      gender_same_as_sex1: %i[field_130],
+      gender_same_as_sex2: %i[field_131],
+      gender_same_as_sex3: %i[field_132],
+      gender_same_as_sex4: %i[field_133],
+      gender_same_as_sex5: %i[field_134],
+      gender_same_as_sex6: %i[field_135],
+      gender_same_as_sex7: %i[field_136],
+      gender_same_as_sex8: %i[field_137],
+      gender_description1: %i[field_138],
+      gender_description2: %i[field_139],
+      gender_description3: %i[field_140],
+      gender_description4: %i[field_141],
+      gender_description5: %i[field_142],
+      gender_description6: %i[field_143],
+      gender_description7: %i[field_144],
+      gender_description8: %i[field_145],
     }.compact
   end
 
