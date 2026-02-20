@@ -321,9 +321,9 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_144, :integer
   attribute :field_145, :string
 
-  attribute :field_154, :integer
-  attribute :field_155, :integer
-  attribute :field_156, :integer
+  attribute :field_146, :integer
+  attribute :field_147, :integer
+  attribute :field_148, :integer
 
   validate :validate_valid_radio_option, on: :before_log
 
@@ -1032,31 +1032,31 @@ private
 
   def field_referral_register_prp_valid?
     if owning_organisation&.prp?
-      [5, 6, 7, 8, 9].include?(field_154)
+      [5, 6, 7, 8, 9].include?(field_146)
     else
-      field_154.blank?
+      field_146.blank?
     end
   end
 
   def field_referral_noms_valid?
-    case field_154
+    case field_146
     when 6
-      [1, 2, 3, 4].include?(field_155)
+      [1, 2, 3, 4].include?(field_147)
     when 7
-      [5, 6, 7, 8].include?(field_155)
+      [5, 6, 7, 8].include?(field_147)
     else
-      field_155.blank?
+      field_147.blank?
     end
   end
 
   def field_referral_org_valid?
-    case field_155
+    case field_147
     when 1
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].include?(field_156)
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].include?(field_148)
     when 7
-      [11, 12, 13, 14, 15, 16, 17, 18, 19, 20].include?(field_156)
+      [11, 12, 13, 14, 15, 16, 17, 18, 19, 20].include?(field_148)
     else
-      field_156.blank?
+      field_148.blank?
     end
   end
 
@@ -1068,7 +1068,7 @@ private
     return if renewal?
     return if referral_fields_valid?
 
-    %i[field_116 field_154 field_155 field_156].each do |field|
+    %i[field_116 field_146 field_147 field_148].each do |field|
       errors.add(field, I18n.t("#{ERROR_BASE_KEY}.referral.invalid_option"))
     end
   end
@@ -1185,9 +1185,9 @@ private
       accessible_register: %i[field_115],
       letting_allocation: %i[field_112 field_113 field_114 field_115],
 
-      referral_register: %i[field_116 field_154],
-      referral_noms: %i[field_155],
-      referral_org: %i[field_156],
+      referral_register: %i[field_116 field_146],
+      referral_noms: %i[field_147],
+      referral_org: %i[field_148],
 
       net_income_known: %i[field_117],
       incfreq: %i[field_118],
@@ -1795,7 +1795,7 @@ private
     if owning_organisation.la?
       field_116
     else
-      field_154
+      field_146
     end
   end
 
@@ -1804,7 +1804,7 @@ private
     return unless referral_fields_valid?
 
     if owning_organisation.prp?
-      field_155
+      field_147
     end
   end
 
@@ -1813,7 +1813,7 @@ private
     return unless referral_fields_valid?
 
     if owning_organisation.prp?
-      field_156
+      field_148
     end
   end
 end
