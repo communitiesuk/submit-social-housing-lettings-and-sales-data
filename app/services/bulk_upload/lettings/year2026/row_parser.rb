@@ -136,22 +136,22 @@ class BulkUpload::Lettings::Year2026::RowParser
     field_129: "Was the letting made under the Common Housing Register (CHR)?",
     field_130: "Was the letting made under the Accessible Register?",
     field_131: "What was the source of referral for this letting? - LA properties",
-    field_132: "Do you know the household’s combined total income after tax?",
-    field_133: "How often does the household receive income?",
-    field_134: "How much income does the household have in total?",
-    field_135: "Is the tenant likely to be receiving any of these housing-related benefits?",
-    field_136: "How much of the household’s income is from Universal Credit, state pensions or benefits?",
-    field_137: "Does the household pay rent or other charges for the accommodation?",
-    field_138: "How often does the household pay rent and other charges?",
-    field_139: "What is the basic rent?",
-    field_140: "What is the service charge?",
-    field_141: "What is the personal service charge?",
-    field_142: "What is the support charge?",
-    field_143: "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
-    field_144: "What do you expect the outstanding amount to be?",
-    field_145: "What was the source of referral for this letting? - PRP properties part 1",
-    field_146: "What was the source of referral for this letting? - PRP properties part 2",
-    field_147: "What was the source of referral for this letting? - PRP properties part 3",
+    field_132: "What was the source of referral for this letting? - PRP properties part 1",
+    field_133: "What was the source of referral for this letting? - PRP properties part 2",
+    field_134: "What was the source of referral for this letting? - PRP properties part 3",
+    field_135: "Do you know the household’s combined total income after tax?",
+    field_136: "How often does the household receive income?",
+    field_137: "How much income does the household have in total?",
+    field_138: "Is the tenant likely to be receiving any of these housing-related benefits?",
+    field_139: "How much of the household’s income is from Universal Credit, state pensions or benefits?",
+    field_140: "Does the household pay rent or other charges for the accommodation?",
+    field_141: "How often does the household pay rent and other charges?",
+    field_142: "What is the basic rent?",
+    field_143: "What is the service charge?",
+    field_144: "What is the personal service charge?",
+    field_145: "What is the support charge?",
+    field_146: "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
+    field_147: "What do you expect the outstanding amount to be?",
   }.freeze
 
   RENT_TYPE_BU_MAPPING = {
@@ -287,19 +287,19 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_129, :integer
   attribute :field_130, :integer
   attribute :field_131, :integer
-  attribute :field_132, :integer
-  attribute :field_133, :integer
-  attribute :field_134, :decimal
   attribute :field_135, :integer
   attribute :field_136, :integer
-  attribute :field_137, :integer
+  attribute :field_137, :decimal
   attribute :field_138, :integer
-  attribute :field_139, :decimal
-  attribute :field_140, :decimal
-  attribute :field_141, :decimal
+  attribute :field_139, :integer
+  attribute :field_140, :integer
+  attribute :field_141, :integer
   attribute :field_142, :decimal
-  attribute :field_143, :integer
+  attribute :field_143, :decimal
   attribute :field_144, :decimal
+  attribute :field_145, :decimal
+  attribute :field_146, :integer
+  attribute :field_147, :decimal
 
   attribute :field_43, :string
   attribute :field_44, :string
@@ -318,9 +318,9 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_87, :integer
   attribute :field_88, :string
 
-  attribute :field_145, :integer
-  attribute :field_146, :integer
-  attribute :field_147, :integer
+  attribute :field_132, :integer
+  attribute :field_133, :integer
+  attribute :field_134, :integer
 
   validate :validate_valid_radio_option, on: :before_log
 
@@ -581,8 +581,8 @@ class BulkUpload::Lettings::Year2026::RowParser
       "field_42",  # sexrab1
       "field_47",  # ecstat1
     )
-    if [field_139, field_140, field_141, field_142].all?(&:present?)
-      hash.merge({ "tcharge" => [field_139, field_140, field_141, field_142].sum })
+    if [field_142, field_143, field_144, field_145].all?(&:present?)
+      hash.merge({ "tcharge" => [field_142, field_143, field_144, field_145].sum })
     else
       hash
     end
@@ -591,7 +591,7 @@ class BulkUpload::Lettings::Year2026::RowParser
   def add_duplicate_found_in_spreadsheet_errors
     spreadsheet_duplicate_hash.each_key do |field|
       if field == "tcharge"
-        %w[field_139 field_140 field_141 field_142].each do |sub_field|
+        %w[field_142 field_143 field_144 field_145].each do |sub_field|
           errors.add(sub_field, I18n.t("#{ERROR_BASE_KEY}.spreadsheet_dupe"), category: :setup)
         end
       else
@@ -965,13 +965,13 @@ private
   end
 
   def validate_all_charges_given
-    return if supported_housing? && field_139 == 1
+    return if supported_housing? && field_142 == 1
 
     blank_charge_fields, other_charge_fields = {
-      field_139: "basic rent",
-      field_140: "service charge",
-      field_141: "personal service charge",
-      field_142: "support charge",
+      field_142: "basic rent",
+      field_143: "service charge",
+      field_144: "personal service charge",
+      field_145: "support charge",
     }.partition { |field, _| public_send(field).blank? }.map(&:to_h)
 
     blank_charge_fields.each do |field, charge|
@@ -987,7 +987,7 @@ private
   end
 
   def all_charges_given?
-    field_139.present? && field_140.present? && field_141.present? && field_142.present?
+    field_142.present? && field_143.present? && field_144.present? && field_145.present?
   end
 
   def setup_question?(question)
@@ -1011,11 +1011,11 @@ private
       errors.add(:field_41, error_message) # age1
       errors.add(:field_42, error_message) # sexrab1
       errors.add(:field_47, error_message) # ecstat1
-      errors.add(:field_137, error_message) unless general_needs? # household_charge
-      errors.add(:field_139, error_message) # brent
-      errors.add(:field_140, error_message) # scharge
-      errors.add(:field_141, error_message) # pscharge
-      errors.add(:field_142, error_message) # chcharge
+      errors.add(:field_140, error_message) unless general_needs? # household_charge
+      errors.add(:field_142, error_message) # brent
+      errors.add(:field_143, error_message) # scharge
+      errors.add(:field_144, error_message) # pscharge
+      errors.add(:field_145, error_message) # chcharge
     end
   end
 
@@ -1029,31 +1029,31 @@ private
 
   def field_referral_register_prp_valid?
     if owning_organisation&.prp?
-      [5, 6, 7, 8, 9].include?(field_145)
+      [5, 6, 7, 8, 9].include?(field_132)
     else
-      field_145.blank?
+      field_132.blank?
     end
   end
 
   def field_referral_noms_valid?
-    case field_145
+    case field_132
     when 6
-      [1, 2, 3, 4].include?(field_146)
+      [1, 2, 3, 4].include?(field_133)
     when 7
-      [5, 6, 7, 8].include?(field_146)
+      [5, 6, 7, 8].include?(field_133)
     else
-      field_146.blank?
+      field_133.blank?
     end
   end
 
   def field_referral_org_valid?
-    case field_146
+    case field_133
     when 1
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].include?(field_147)
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].include?(field_134)
     when 7
-      [11, 12, 13, 14, 15, 16, 17, 18, 19, 20].include?(field_147)
+      [11, 12, 13, 14, 15, 16, 17, 18, 19, 20].include?(field_134)
     else
-      field_147.blank?
+      field_134.blank?
     end
   end
 
@@ -1065,7 +1065,7 @@ private
     return if renewal?
     return if referral_fields_valid?
 
-    %i[field_131 field_145 field_146 field_147].each do |field|
+    %i[field_131 field_132 field_133 field_134].each do |field|
       errors.add(field, I18n.t("#{ERROR_BASE_KEY}.referral.invalid_option"))
     end
   end
@@ -1181,25 +1181,25 @@ private
       accessible_register: %i[field_130],
       letting_allocation: %i[field_127 field_128 field_129 field_130],
 
-      referral_register: %i[field_131 field_145],
-      referral_noms: %i[field_146],
-      referral_org: %i[field_147],
+      referral_register: %i[field_131 field_132],
+      referral_noms: %i[field_133],
+      referral_org: %i[field_134],
 
-      net_income_known: %i[field_132],
-      incfreq: %i[field_133],
-      earnings: %i[field_134],
-      hb: %i[field_135],
-      benefits: %i[field_136],
+      net_income_known: %i[field_135],
+      incfreq: %i[field_136],
+      earnings: %i[field_137],
+      hb: %i[field_138],
+      benefits: %i[field_139],
 
-      period: %i[field_138],
-      brent: %i[field_139],
-      scharge: %i[field_140],
-      pscharge: %i[field_141],
-      supcharg: %i[field_142],
-      tcharge: %i[field_139 field_140 field_141 field_142],
-      household_charge: %i[field_137],
-      hbrentshortfall: %i[field_143],
-      tshortfall: %i[field_144],
+      period: %i[field_141],
+      brent: %i[field_142],
+      scharge: %i[field_143],
+      pscharge: %i[field_144],
+      supcharg: %i[field_145],
+      tcharge: %i[field_142 field_143 field_144 field_145],
+      household_charge: %i[field_140],
+      hbrentshortfall: %i[field_146],
+      tshortfall: %i[field_147],
 
       unitletas: %i[field_17],
       rsnvac: %i[field_16],
@@ -1390,19 +1390,19 @@ private
 
     attributes["net_income_known"] = net_income_known
     attributes["earnings"] = earnings
-    attributes["incfreq"] = field_133
-    attributes["hb"] = field_135
-    attributes["benefits"] = field_136
+    attributes["incfreq"] = field_136
+    attributes["hb"] = field_138
+    attributes["benefits"] = field_139
 
-    attributes["period"] = field_138
-    attributes["brent"] = field_139 if all_charges_given?
-    attributes["scharge"] = field_140 if all_charges_given?
-    attributes["pscharge"] = field_141 if all_charges_given?
-    attributes["supcharg"] = field_142 if all_charges_given?
-    attributes["household_charge"] = supported_housing? ? field_137 : nil
-    attributes["hbrentshortfall"] = field_143
+    attributes["period"] = field_141
+    attributes["brent"] = field_142 if all_charges_given?
+    attributes["scharge"] = field_143 if all_charges_given?
+    attributes["pscharge"] = field_144 if all_charges_given?
+    attributes["supcharg"] = field_145 if all_charges_given?
+    attributes["household_charge"] = supported_housing? ? field_140 : nil
+    attributes["hbrentshortfall"] = field_146
     attributes["tshortfall_known"] = tshortfall_known
-    attributes["tshortfall"] = field_144
+    attributes["tshortfall"] = field_147
 
     attributes["hhmemb"] = hhmemb
 
@@ -1697,7 +1697,7 @@ private
   end
 
   def net_income_known
-    case field_132
+    case field_135
     when 1
       0
     when 2
@@ -1708,11 +1708,11 @@ private
   end
 
   def earnings
-    field_134.round if field_134.present?
+    field_137.round if field_137.present?
   end
 
   def tshortfall_known
-    field_143 == 1 ? 0 : 1
+    field_146 == 1 ? 0 : 1
   end
 
   def hhmemb
@@ -1807,7 +1807,7 @@ private
     if owning_organisation.la?
       field_131
     else
-      field_145
+      field_132
     end
   end
 
@@ -1816,7 +1816,7 @@ private
     return unless referral_fields_valid?
 
     if owning_organisation.prp?
-      field_146
+      field_133
     end
   end
 
@@ -1825,7 +1825,7 @@ private
     return unless referral_fields_valid?
 
     if owning_organisation.prp?
-      field_147
+      field_134
     end
   end
 end

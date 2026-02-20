@@ -119,7 +119,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
 
       context "when calling the method multiple times" do
-        let(:attributes) { { bulk_upload:, field_144: 2 } }
+        let(:attributes) { { bulk_upload:, field_147: 2 } }
 
         it "does not add keep adding errors to the pile" do
           parser.valid?
@@ -225,19 +225,19 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
 
             field_131: "1",
 
-            field_132: "1",
-            field_133: "2",
-            field_134: "2300",
             field_135: "1",
-            field_136: "4",
+            field_136: "2",
+            field_137: "2300",
+            field_138: "1",
+            field_139: "4",
 
-            field_138: "4",
-            field_139: "1234.56",
-            field_140: "43.32",
-            field_141: "13.14",
-            field_142: "101.11",
-            field_143: "1",
-            field_144: "34.56",
+            field_141: "4",
+            field_142: "1234.56",
+            field_143: "43.32",
+            field_144: "13.14",
+            field_145: "101.11",
+            field_146: "1",
+            field_147: "34.56",
 
             field_16: "15",
             field_29: now.day.to_s,
@@ -316,10 +316,10 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                 :field_41, # age1
                 :field_42, # sexrab1
                 :field_47, # ecstat1
-                :field_139, # brent
-                :field_140, # scharge
-                :field_141, # pscharge
-                :field_142, # supcharg
+                :field_142, # brent
+                :field_143, # scharge
+                :field_144, # pscharge
+                :field_145, # supcharg
               ].each do |field|
                 expect(parser.errors[field]).to include(error_message)
               end
@@ -344,7 +344,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
           end
 
           context "when a supported housing log already exists in the db" do # TODO: CLDC-4119: Beware! The `postcode_full` method in the `LettingsLog` class may cause issues with these supported housing log duplicate detection tests after postcode is added. See comment on the `postcode_full` method for details.
-            let(:attributes) { valid_attributes.merge({ field_4: "2", field_5: "S#{scheme.id}", field_6: location.old_visible_id, field_35: 3, field_137: 0 }) }
+            let(:attributes) { valid_attributes.merge({ field_4: "2", field_5: "S#{scheme.id}", field_6: location.old_visible_id, field_35: 3, field_140: 0 }) }
 
             before do
               parser.log.save!
@@ -370,10 +370,10 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                 :field_41, # age1
                 :field_42, # sexrab1
                 :field_47, # ecstat1
-                :field_139, # brent
-                :field_140, # scharge
-                :field_141, # pscharge
-                :field_142, # supcharg
+                :field_142, # brent
+                :field_143, # scharge
+                :field_144, # pscharge
+                :field_145, # supcharg
               ].each do |field|
                 expect(parser.errors[field]).to include(error_message)
               end
@@ -412,10 +412,10 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                   :field_41, # age1
                   :field_42, # sexrab1
                   :field_47, # ecstat1
-                  :field_139, # brent
-                  :field_140, # scharge
-                  :field_141, # pscharge
-                  :field_142, # supcharg
+                  :field_142, # brent
+                  :field_143, # scharge
+                  :field_144, # pscharge
+                  :field_145, # supcharg
                 ].each do |field|
                   expect(parser.errors[field]).to include(error_message)
                 end
@@ -473,7 +473,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                                          field_11: "2",
                                          field_6: location.id,
                                          field_1: owning_org.old_visible_id,
-                                         field_137: 0,
+                                         field_140: 0,
                                          field_35: 4 })
               end
 
@@ -501,7 +501,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                   :field_41, # age1
                   :field_42, # sexrab1
                   :field_47, # ecstat1
-                  :field_137, # household_charge
+                  :field_140, # household_charge
                 ].each do |field|
                   expect(parser.errors[field]).to include(error_message)
                 end
@@ -517,8 +517,8 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             let(:attributes) do
               setup_section_params.merge({ field_5: nil,
                                            field_6: nil,
-                                           field_139: 300,
-                                           field_138: 1,
+                                           field_142: 300,
+                                           field_141: 1,
                                            field_28: 1,
                                            field_4: 1,
                                            field_11: "2",
@@ -608,13 +608,13 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
 
         context "when there is a :skip_bu_error error" do
           let(:managing_org) { create(:organisation, :with_old_visible_id, rent_periods: [4, 1]) }
-          let(:attributes) { valid_attributes.merge({ field_138: 3, field_142: 80 }) }
+          let(:attributes) { valid_attributes.merge({ field_141: 3, field_145: 80 }) }
 
           it "does not add that error" do
             parser.valid?
 
             expect(parser.log.errors.map(&:attribute).sort).to eql(%i[managing_organisation_id period])
-            expect(parser.errors.map(&:attribute)).to eql(%i[field_138])
+            expect(parser.errors.map(&:attribute)).to eql(%i[field_141])
           end
         end
       end
@@ -1151,7 +1151,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
     end
 
-    describe "#field_131, field_145, field_146, field_147" do # referral
+    describe "#field_131, field_132, field_133, field_134" do # referral
       context "when org is LA" do
         let(:owning_org) { create(:organisation, :la, :with_old_visible_id) }
 
@@ -1166,9 +1166,9 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             it "does not add an error" do
               parser.valid?
               expect(parser.errors[:field_131]).to be_blank
-              expect(parser.errors[:field_145]).to be_blank
-              expect(parser.errors[:field_146]).to be_blank
-              expect(parser.errors[:field_147]).to be_blank
+              expect(parser.errors[:field_132]).to be_blank
+              expect(parser.errors[:field_133]).to be_blank
+              expect(parser.errors[:field_134]).to be_blank
             end
           end
 
@@ -1178,9 +1178,9 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             it "adds errors to all referral fields" do
               parser.valid?
               expect(parser.errors[:field_131]).to be_present
-              expect(parser.errors[:field_145]).to be_present
-              expect(parser.errors[:field_146]).to be_present
-              expect(parser.errors[:field_147]).to be_present
+              expect(parser.errors[:field_132]).to be_present
+              expect(parser.errors[:field_133]).to be_present
+              expect(parser.errors[:field_134]).to be_present
             end
           end
 
@@ -1190,34 +1190,34 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             it "adds errors to all referral fields" do
               parser.valid?
               expect(parser.errors[:field_131]).to be_present
-              expect(parser.errors[:field_145]).to be_present
-              expect(parser.errors[:field_146]).to be_present
-              expect(parser.errors[:field_147]).to be_present
+              expect(parser.errors[:field_132]).to be_present
+              expect(parser.errors[:field_133]).to be_present
+              expect(parser.errors[:field_134]).to be_present
             end
           end
 
           context "and other fields are given" do
-            let(:attributes) { renewal_attributes.merge({ field_131: 1, field_145: 5, field_146: 1, field_87: 1 }) }
+            let(:attributes) { renewal_attributes.merge({ field_131: 1, field_132: 5, field_133: 1, field_87: 1 }) }
 
             it "adds errors to all referral fields" do
               parser.valid?
               expect(parser.errors[:field_131]).to be_present
-              expect(parser.errors[:field_145]).to be_present
-              expect(parser.errors[:field_146]).to be_present
-              expect(parser.errors[:field_147]).to be_present
+              expect(parser.errors[:field_132]).to be_present
+              expect(parser.errors[:field_133]).to be_present
+              expect(parser.errors[:field_134]).to be_present
             end
           end
         end
 
         context "and is renewal" do
-          let(:attributes) { org_attributes.merge({ field_7: 1, field_131: 1, field_145: 5, field_146: 1, field_147: 1 }) }
+          let(:attributes) { org_attributes.merge({ field_7: 1, field_131: 1, field_132: 5, field_133: 1, field_134: 1 }) }
 
           it "does not add an error for referral fields" do
             parser.valid?
             expect(parser.errors[:field_131]).to be_blank
-            expect(parser.errors[:field_145]).to be_blank
-            expect(parser.errors[:field_146]).to be_blank
-            expect(parser.errors[:field_147]).to be_blank
+            expect(parser.errors[:field_132]).to be_blank
+            expect(parser.errors[:field_133]).to be_blank
+            expect(parser.errors[:field_134]).to be_blank
           end
         end
       end
@@ -1230,141 +1230,141 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
         context "and not renewal" do
           let(:renewal_attributes) { org_attributes.merge({ field_7: nil }) }
 
-          context "and field_145 is valid and does not expect an answer for field_146" do
-            let(:attributes) { renewal_attributes.merge({ field_145: 5 }) }
+          context "and field_132 is valid and does not expect an answer for field_133" do
+            let(:attributes) { renewal_attributes.merge({ field_132: 5 }) }
 
             it "does not add an error" do
               parser.valid?
               expect(parser.errors[:field_131]).to be_blank
-              expect(parser.errors[:field_145]).to be_blank
-              expect(parser.errors[:field_146]).to be_blank
-              expect(parser.errors[:field_147]).to be_blank
+              expect(parser.errors[:field_132]).to be_blank
+              expect(parser.errors[:field_133]).to be_blank
+              expect(parser.errors[:field_134]).to be_blank
             end
 
             context "and later fields are given" do
-              let(:attributes) { renewal_attributes.merge({ field_145: 5, field_146: 1, field_147: 1 }) }
+              let(:attributes) { renewal_attributes.merge({ field_132: 5, field_133: 1, field_134: 1 }) }
 
               it "adds errors to all referral fields" do
                 parser.valid?
                 expect(parser.errors[:field_131]).to be_present
-                expect(parser.errors[:field_145]).to be_present
-                expect(parser.errors[:field_146]).to be_present
-                expect(parser.errors[:field_147]).to be_present
+                expect(parser.errors[:field_132]).to be_present
+                expect(parser.errors[:field_133]).to be_present
+                expect(parser.errors[:field_134]).to be_present
               end
             end
           end
 
-          context "and field_145 is invalid" do
-            let(:attributes) { renewal_attributes.merge({ field_145: 1 }) } # LA option
+          context "and field_132 is invalid" do
+            let(:attributes) { renewal_attributes.merge({ field_132: 1 }) } # LA option
 
             it "adds errors to all referral fields" do
               parser.valid?
               expect(parser.errors[:field_131]).to be_present
-              expect(parser.errors[:field_145]).to be_present
-              expect(parser.errors[:field_146]).to be_present
-              expect(parser.errors[:field_147]).to be_present
+              expect(parser.errors[:field_132]).to be_present
+              expect(parser.errors[:field_133]).to be_present
+              expect(parser.errors[:field_134]).to be_present
             end
           end
 
-          context "and field_145 is blank" do
-            let(:attributes) { renewal_attributes.merge({ field_145: nil }) }
+          context "and field_132 is blank" do
+            let(:attributes) { renewal_attributes.merge({ field_132: nil }) }
 
             it "adds errors to all referral fields" do
               parser.valid?
               expect(parser.errors[:field_131]).to be_present
-              expect(parser.errors[:field_145]).to be_present
-              expect(parser.errors[:field_146]).to be_present
-              expect(parser.errors[:field_147]).to be_present
+              expect(parser.errors[:field_132]).to be_present
+              expect(parser.errors[:field_133]).to be_present
+              expect(parser.errors[:field_134]).to be_present
             end
           end
 
-          context "and field_145 is valid and expects an answer for field_146" do
-            let(:field_146_attributes) { renewal_attributes.merge({ field_145: 6 }) }
+          context "and field_132 is valid and expects an answer for field_133" do
+            let(:field_146_attributes) { renewal_attributes.merge({ field_132: 6 }) }
 
-            context "and field_146 is valid and does not expect an answer for field_147" do
-              let(:attributes) { field_146_attributes.merge({ field_146: 2 }) }
+            context "and field_133 is valid and does not expect an answer for field_134" do
+              let(:attributes) { field_146_attributes.merge({ field_133: 2 }) }
 
               it "does not add an error" do
                 parser.valid?
                 expect(parser.errors[:field_131]).to be_blank
-                expect(parser.errors[:field_145]).to be_blank
-                expect(parser.errors[:field_146]).to be_blank
-                expect(parser.errors[:field_147]).to be_blank
+                expect(parser.errors[:field_132]).to be_blank
+                expect(parser.errors[:field_133]).to be_blank
+                expect(parser.errors[:field_134]).to be_blank
               end
 
               context "and later fields are given" do
-                let(:attributes) { field_146_attributes.merge({ field_146: 2, field_147: 1 }) }
+                let(:attributes) { field_146_attributes.merge({ field_133: 2, field_134: 1 }) }
 
                 it "adds errors to all referral fields" do
                   parser.valid?
                   expect(parser.errors[:field_131]).to be_present
-                  expect(parser.errors[:field_145]).to be_present
-                  expect(parser.errors[:field_146]).to be_present
-                  expect(parser.errors[:field_147]).to be_present
+                  expect(parser.errors[:field_132]).to be_present
+                  expect(parser.errors[:field_133]).to be_present
+                  expect(parser.errors[:field_134]).to be_present
                 end
               end
             end
 
-            context "and field_146 is invalid" do
-              let(:attributes) { field_146_attributes.merge({ field_146: 5 }) } # needs field_145 to be 7
+            context "and field_133 is invalid" do
+              let(:attributes) { field_146_attributes.merge({ field_133: 5 }) } # needs field_132 to be 7
 
               it "adds errors to all referral fields" do
                 parser.valid?
                 expect(parser.errors[:field_131]).to be_present
-                expect(parser.errors[:field_145]).to be_present
-                expect(parser.errors[:field_146]).to be_present
-                expect(parser.errors[:field_147]).to be_present
+                expect(parser.errors[:field_132]).to be_present
+                expect(parser.errors[:field_133]).to be_present
+                expect(parser.errors[:field_134]).to be_present
               end
             end
 
-            context "and field_146 is blank" do
-              let(:attributes) { field_146_attributes.merge({ field_146: nil }) }
+            context "and field_133 is blank" do
+              let(:attributes) { field_146_attributes.merge({ field_133: nil }) }
 
               it "adds errors to all referral fields" do
                 parser.valid?
                 expect(parser.errors[:field_131]).to be_present
-                expect(parser.errors[:field_145]).to be_present
-                expect(parser.errors[:field_146]).to be_present
-                expect(parser.errors[:field_147]).to be_present
+                expect(parser.errors[:field_132]).to be_present
+                expect(parser.errors[:field_133]).to be_present
+                expect(parser.errors[:field_134]).to be_present
               end
             end
 
-            context "and field_146 is valid and expects an answer for field_147" do
-              let(:field_147_attributes) { field_146_attributes.merge({ field_146: 1 }) }
+            context "and field_133 is valid and expects an answer for field_134" do
+              let(:field_147_attributes) { field_146_attributes.merge({ field_133: 1 }) }
 
-              context "and field_147 is valid" do
-                let(:attributes) { field_147_attributes.merge({ field_147: 1 }) }
+              context "and field_134 is valid" do
+                let(:attributes) { field_147_attributes.merge({ field_134: 1 }) }
 
                 it "does not add an error" do
                   parser.valid?
                   expect(parser.errors[:field_131]).to be_blank
-                  expect(parser.errors[:field_145]).to be_blank
-                  expect(parser.errors[:field_146]).to be_blank
-                  expect(parser.errors[:field_147]).to be_blank
+                  expect(parser.errors[:field_132]).to be_blank
+                  expect(parser.errors[:field_133]).to be_blank
+                  expect(parser.errors[:field_134]).to be_blank
                 end
               end
 
-              context "and field_147 is invalid" do
-                let(:attributes) { field_147_attributes.merge({ field_147: 11 }) } # needs field_146 to be 7
+              context "and field_134 is invalid" do
+                let(:attributes) { field_147_attributes.merge({ field_134: 11 }) } # needs field_133 to be 7
 
                 it "adds errors to all referral fields" do
                   parser.valid?
                   expect(parser.errors[:field_131]).to be_present
-                  expect(parser.errors[:field_145]).to be_present
-                  expect(parser.errors[:field_146]).to be_present
-                  expect(parser.errors[:field_147]).to be_present
+                  expect(parser.errors[:field_132]).to be_present
+                  expect(parser.errors[:field_133]).to be_present
+                  expect(parser.errors[:field_134]).to be_present
                 end
               end
 
-              context "and field_147 is blank" do
-                let(:attributes) { field_147_attributes.merge({ field_147: nil }) }
+              context "and field_134 is blank" do
+                let(:attributes) { field_147_attributes.merge({ field_134: nil }) }
 
                 it "adds errors to all referral fields" do
                   parser.valid?
                   expect(parser.errors[:field_131]).to be_present
-                  expect(parser.errors[:field_145]).to be_present
-                  expect(parser.errors[:field_146]).to be_present
-                  expect(parser.errors[:field_147]).to be_present
+                  expect(parser.errors[:field_132]).to be_present
+                  expect(parser.errors[:field_133]).to be_present
+                  expect(parser.errors[:field_134]).to be_present
                 end
               end
             end
@@ -1372,14 +1372,14 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
         end
 
         context "and is renewal" do
-          let(:attributes) { org_attributes.merge({ field_7: 1, field_131: 1, field_145: 5, field_146: 1, field_147: 1 }) }
+          let(:attributes) { org_attributes.merge({ field_7: 1, field_131: 1, field_132: 5, field_133: 1, field_134: 1 }) }
 
           it "does not add an error for referral fields" do
             parser.valid?
             expect(parser.errors[:field_131]).to be_blank
-            expect(parser.errors[:field_145]).to be_blank
-            expect(parser.errors[:field_146]).to be_blank
-            expect(parser.errors[:field_147]).to be_blank
+            expect(parser.errors[:field_132]).to be_blank
+            expect(parser.errors[:field_133]).to be_blank
+            expect(parser.errors[:field_134]).to be_blank
           end
         end
       end
@@ -2095,22 +2095,22 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
 
       context "when soft validation is triggered and not required" do
-        let(:attributes) { setup_section_params.merge({ field_139: 120, field_140: 120, field_141: 120, field_142: 120, field_138: 1, field_28: 1, field_4: 1, field_11: "2", field_25: "E09000008" }) }
+        let(:attributes) { setup_section_params.merge({ field_142: 120, field_143: 120, field_144: 120, field_145: 120, field_141: 1, field_28: 1, field_4: 1, field_11: "2", field_25: "E09000008" }) }
 
         it "adds an error to the relevant fields" do
           parser.valid?
-          expect(parser.errors.where(:field_139, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_142, category: :soft_validation)).to be_present
         end
 
         it "populates with correct error message" do
           parser.valid?
-          expect(parser.errors.where(:field_139, category: :soft_validation).count).to be(1)
-          expect(parser.errors.where(:field_139, category: :soft_validation).first.message).to eql("You told us the rent is £120.00 every week. This is higher than we would expect.")
+          expect(parser.errors.where(:field_142, category: :soft_validation).count).to be(1)
+          expect(parser.errors.where(:field_142, category: :soft_validation).first.message).to eql("You told us the rent is £120.00 every week. This is higher than we would expect.")
         end
       end
 
       context "when an invalid ecstat1 is given" do
-        let(:attributes) { setup_section_params.merge({ field_47: 11, field_134: 123, field_133: 1 }) }
+        let(:attributes) { setup_section_params.merge({ field_47: 11, field_137: 123, field_136: 1 }) }
 
         it "does not run net income soft validations validation" do
           parser.valid?
@@ -2573,7 +2573,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
 
     describe "#net_income_known" do
       context "when 1" do
-        let(:attributes) { { bulk_upload:, field_132: "1" } }
+        let(:attributes) { { bulk_upload:, field_135: "1" } }
 
         it "sets value from correct mapping" do
           expect(parser.log.net_income_known).to eq(0)
@@ -2581,7 +2581,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
 
       context "when 2" do
-        let(:attributes) { { bulk_upload:, field_132: "2" } }
+        let(:attributes) { { bulk_upload:, field_135: "2" } }
 
         it "sets value from correct mapping" do
           expect(parser.log.net_income_known).to eq(1)
@@ -2589,7 +2589,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
 
       context "when 3" do
-        let(:attributes) { { bulk_upload:, field_132: "3" } }
+        let(:attributes) { { bulk_upload:, field_135: "3" } }
 
         it "sets value from correct mapping" do
           expect(parser.log.net_income_known).to eq(2)
@@ -2681,7 +2681,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
     end
 
     describe "#earnings" do
-      let(:attributes) { { bulk_upload:, field_134: "104.50" } }
+      let(:attributes) { { bulk_upload:, field_137: "104.50" } }
 
       it "rounds to the nearest whole pound" do
         expect(parser.log.earnings).to eq(105)
@@ -2716,7 +2716,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
 
     describe "#household_charge" do
       context "when log is general needs" do
-        let(:attributes) { { bulk_upload:, field_4: 1, field_137: "1" } }
+        let(:attributes) { { bulk_upload:, field_4: 1, field_140: "1" } }
 
         it "sets correct value from mapping" do
           expect(parser.log.household_charge).to eq(nil)
@@ -2724,7 +2724,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
 
       context "when log is supported housing" do
-        let(:attributes) { { bulk_upload:, field_4: 2, field_137: "1" } }
+        let(:attributes) { { bulk_upload:, field_4: 2, field_140: "1" } }
 
         it "sets correct value from mapping" do
           expect(parser.log.household_charge).to eq(1)
@@ -2733,14 +2733,14 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
     end
 
     describe "#supcharg" do
-      let(:attributes) { setup_section_params.merge({ field_139: "330", field_140: "0", field_141: "0", field_142: "123.45" }) }
+      let(:attributes) { setup_section_params.merge({ field_142: "330", field_143: "0", field_144: "0", field_145: "123.45" }) }
 
       it "sets value given" do
         expect(parser.log.supcharg).to eq(123.45)
       end
 
       context "when other charges are not given" do
-        let(:attributes) { setup_section_params.merge({ field_142: "123.45", field_139: nil, field_140: nil, field_141: nil }) }
+        let(:attributes) { setup_section_params.merge({ field_145: "123.45", field_142: nil, field_143: nil, field_144: nil }) }
 
         it "does not set charges values" do
           parser.log.save!
@@ -2753,15 +2753,15 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
 
         it "adds an error to all missing charges" do
           parser.valid?
-          expect(parser.errors[:field_139]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.missing_charges", sentence_fragment: "basic rent")])
-          expect(parser.errors[:field_140]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.missing_charges", sentence_fragment: "service charge")])
-          expect(parser.errors[:field_141]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.missing_charges", sentence_fragment: "personal service charge")])
-          expect(parser.errors[:field_142]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.related_to_missing_charge")])
+          expect(parser.errors[:field_142]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.missing_charges", sentence_fragment: "basic rent")])
+          expect(parser.errors[:field_143]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.missing_charges", sentence_fragment: "service charge")])
+          expect(parser.errors[:field_144]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.missing_charges", sentence_fragment: "personal service charge")])
+          expect(parser.errors[:field_145]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.related_to_missing_charge")])
         end
       end
 
       context "when supscharg is not given" do
-        let(:attributes) { setup_section_params.merge({ field_138: 1, field_139: "350.45", field_140: "0", field_141: "0", field_142: nil }) }
+        let(:attributes) { setup_section_params.merge({ field_141: 1, field_142: "350.45", field_143: "0", field_144: "0", field_145: nil }) }
 
         it "does not set charges values" do
           parser.log.save!
@@ -2775,16 +2775,16 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
 
         it "adds an error to all charges" do
           parser.valid?
-          expect(parser.errors[:field_139]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.related_to_missing_charge")])
-          expect(parser.errors[:field_140]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.related_to_missing_charge")])
-          expect(parser.errors[:field_141]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.related_to_missing_charge")])
-          expect(parser.errors[:field_142]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.missing_charges", sentence_fragment: "support charge")])
+          expect(parser.errors[:field_142]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.related_to_missing_charge")])
+          expect(parser.errors[:field_143]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.related_to_missing_charge")])
+          expect(parser.errors[:field_144]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.related_to_missing_charge")])
+          expect(parser.errors[:field_145]).to eql([I18n.t("validations.lettings.2026.bulk_upload.charges.missing_charges", sentence_fragment: "support charge")])
         end
       end
     end
 
     describe "#pscharge" do
-      let(:attributes) { { bulk_upload:, field_139: "111.45", field_140: "0", field_141: "123.45", field_142: "0" } }
+      let(:attributes) { { bulk_upload:, field_142: "111.45", field_143: "0", field_144: "123.45", field_145: "0" } }
 
       it "sets value given" do
         expect(parser.log.pscharge).to eq(123.45)
@@ -2792,7 +2792,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
     end
 
     describe "#scharge" do
-      let(:attributes) { { bulk_upload:, field_139: "111.45", field_140: "123.45", field_141: "0", field_142: "0" } }
+      let(:attributes) { { bulk_upload:, field_142: "111.45", field_143: "123.45", field_144: "0", field_145: "0" } }
 
       it "sets value given" do
         expect(parser.log.scharge).to eq(123.45)
