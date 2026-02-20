@@ -140,7 +140,6 @@ module Exports::LettingsLogExportConstants
   (1..8).each do |index|
     ALL_YEAR_EXPORT_FIELDS << "age#{index}"
     ALL_YEAR_EXPORT_FIELDS << "ecstat#{index}"
-    ALL_YEAR_EXPORT_FIELDS << "sex#{index}"
   end
   (2..8).each do |index|
     ALL_YEAR_EXPORT_FIELDS << "relat#{index}"
@@ -159,6 +158,9 @@ module Exports::LettingsLogExportConstants
     "offered",
     "referral",
   ]
+  (1..8).each do |index|
+    YEAR_2021_EXPORT_FIELDS << "sex#{index}"
+  end
 
   YEAR_2022_EXPORT_FIELDS = Set[
     "builtype",
@@ -167,6 +169,9 @@ module Exports::LettingsLogExportConstants
     "offered",
     "referral",
   ]
+  (1..8).each do |index|
+    YEAR_2022_EXPORT_FIELDS << "sex#{index}"
+  end
 
   YEAR_2023_EXPORT_FIELDS = Set[
     "builtype",
@@ -175,6 +180,9 @@ module Exports::LettingsLogExportConstants
     "offered",
     "referral",
   ]
+  (1..8).each do |index|
+    YEAR_2023_EXPORT_FIELDS << "sex#{index}"
+  end
 
   YEAR_2024_EXPORT_FIELDS = Set[
     "builtype",
@@ -196,6 +204,9 @@ module Exports::LettingsLogExportConstants
     "carehome_charges_value_check",
     "referral",
   ]
+  (1..8).each do |index|
+    YEAR_2024_EXPORT_FIELDS << "sex#{index}"
+  end
 
   YEAR_2025_EXPORT_FIELDS = Set[
     "builtype",
@@ -215,6 +226,9 @@ module Exports::LettingsLogExportConstants
     "supcharg_value_check",
     "referral",
   ]
+  (1..8).each do |index|
+    YEAR_2025_EXPORT_FIELDS << "sex#{index}"
+  end
 
   YEAR_2026_EXPORT_FIELDS = Set[
     "accessible_register",
@@ -235,7 +249,6 @@ module Exports::LettingsLogExportConstants
     "referral_noms",
     "referral_org",
   ]
-
   (1..8).each do |index|
     YEAR_2026_EXPORT_FIELDS << "sexrab#{index}"
     YEAR_2026_EXPORT_FIELDS << "gender_same_as_sex#{index}"

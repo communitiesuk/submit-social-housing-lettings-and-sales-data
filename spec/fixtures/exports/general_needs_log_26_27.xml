@@ -5,7 +5,6 @@
     <tenancycode>BZ737</tenancycode>
     <age1>35</age1>
     <sexrab1>F</sexrab1>
-    <sex1>F</sex1>
     <gender_same_as_sex1>1</gender_same_as_sex1>
     <gender_description1/>
     <ethnic>2</ethnic>
@@ -14,43 +13,36 @@
     <hhmemb>2</hhmemb>
     <age2>32</age2>
     <sexrab2>M</sexrab2>
-    <sex2>M</sex2>
     <gender_same_as_sex2>2</gender_same_as_sex2>
     <gender_description2>Non-binary</gender_description2>
     <ecstat2>6</ecstat2>
     <age3/>
     <sexrab3/>
-    <sex3/>
     <gender_same_as_sex3/>
     <gender_description3/>
     <ecstat3/>
     <age4/>
     <sexrab4/>
-    <sex4/>
     <gender_same_as_sex4/>
     <gender_description4/>
     <ecstat4/>
     <age5/>
     <sexrab5/>
-    <sex5/>
     <gender_same_as_sex5/>
     <gender_description5/>
     <ecstat5/>
     <age6/>
     <sexrab6/>
-    <sex6/>
     <gender_same_as_sex6/>
     <gender_description6/>
     <ecstat6/>
     <age7/>
     <sexrab7/>
-    <sex7/>
     <gender_same_as_sex7/>
     <gender_description7/>
     <ecstat7/>
     <age8/>
     <sexrab8/>
-    <sex8/>
     <gender_same_as_sex8/>
     <gender_description8/>
     <ecstat8/>
