@@ -47,110 +47,108 @@ class BulkUpload::Lettings::Year2026::RowParser
     field_40: "What is the length of the fixed-term tenancy to the nearest year?",
     field_41: "What is the lead tenant’s age?",
     field_42: "Lead tenant's sex, as registered at birth",
-    field_43: "Which of these best describes the lead tenant’s ethnic background?",
-    field_44: "What is the lead tenant’s nationality?",
-    field_45: "Which of these best describes the lead tenant’s working situation?",
-    field_46: "Is person 2 the partner of the lead tenant?",
-    field_47: "What is person 2’s age?",
-    field_48: "Person 2's sex, as registered at birth",
-    field_49: "Which of these best describes person 2’s working situation?",
-    field_50: "Is person 3 the partner of the lead tenant?",
-    field_51: "What is person 3’s age?",
-    field_52: "Person 3's sex, as registered at birth",
-    field_53: "Which of these best describes person 3’s working situation?",
-    field_54: "Is person 4 the partner of the lead tenant?",
-    field_55: "What is person 4’s age?",
-    field_56: "Person 4's sex, as registered at birth",
-    field_57: "Which of these best describes person 4’s working situation?",
-    field_58: "Is person 5 the partner of the lead tenant?",
-    field_59: "What is person 5’s age?",
-    field_60: "Person 5's sex, as registered at birth",
-    field_61: "Which of these best describes person 5’s working situation?",
-    field_62: "Is person 6 the partner of the lead tenant?",
-    field_63: "What is person 6’s age?",
-    field_64: "Person 6's sex, as registered at birth",
-    field_65: "Which of these best describes person 6’s working situation?",
-    field_66: "Is person 7 the partner of the lead tenant?",
-    field_67: "What is person 7’s age?",
-    field_68: "Person 7's sex, as registered at birth",
-    field_69: "Which of these best describes person 7’s working situation?",
-    field_70: "Is person 8 the partner of the lead tenant?",
-    field_71: "What is person 8’s age?",
-    field_72: "Person 8's sex, as registered at birth",
-    field_73: "Which of these best describes person 8’s working situation?",
-    field_74: "Does anybody in the household have links to the UK armed forces?",
-    field_75: "Is this person still serving in the UK armed forces?",
-    field_76: "Was this person seriously injured or ill as a result of serving in the UK armed forces?",
-    field_77: "Is anybody in the household pregnant?",
-    field_78: "Does anybody in the household have any disabled access needs?",
-    field_79: "Does anybody in the household have any disabled access needs?",
-    field_80: "Does anybody in the household have any disabled access needs?",
-    field_81: "Does anybody in the household have any disabled access needs?",
-    field_82: "Does anybody in the household have any disabled access needs?",
-    field_83: "Does anybody in the household have any disabled access needs?",
-    field_84: "Does anybody in the household have a physical or mental health condition (or other illness) expected to last 12 months or more?",
-    field_85: "Does this person’s condition affect their dexterity?",
-    field_86: "Does this person’s condition affect their learning or understanding or concentrating?",
-    field_87: "Does this person’s condition affect their hearing?",
-    field_88: "Does this person’s condition affect their memory?",
-    field_89: "Does this person’s condition affect their mental health?",
-    field_90: "Does this person’s condition affect their mobility?",
-    field_91: "Does this person’s condition affect them socially or behaviourally?",
-    field_92: "Does this person’s condition affect their stamina or breathing or fatigue?",
-    field_93: "Does this person’s condition affect their vision?",
-    field_94: "Does this person’s condition affect them in another way?",
-    field_95: "How long has the household continuously lived in the local authority area of the new letting?",
-    field_96: "How long has the household been on the local authority waiting list for the new letting?",
-    field_97: "What is the tenant’s main reason for the household leaving their last settled home?",
-    field_98: "If 'Other', what was the main reason for leaving their last settled home?",
-    field_99: "Where was the household immediately before this letting?",
-    field_100: "Did the household experience homelessness immediately before this letting?",
-    field_101: "Do you know the postcode of the household’s last settled home?",
-    field_102: "What is the postcode of the household’s last settled home?",
-    field_103: "What is the postcode of the household’s last settled home?",
-    field_104: "What is the local authority of the household’s last settled home?",
-    field_105: "Was the household given 'reasonable preference' by the local authority?",
-    field_106: "Reasonable preference reason - They were homeless or about to lose their home (within 56 days)",
-    field_107: "Reasonable preference reason - They were living in insanitary, overcrowded or unsatisfactory housing",
-    field_108: "Reasonable preference reason - They needed to move on medical and welfare reasons (including disability)",
-    field_109: "Reasonable preference reason - They needed to move to avoid hardship to themselves or others",
-    field_110: "Reasonable preference reason - Don’t know",
-    field_111: "Was the letting made under the Choice-Based Lettings (CBL)?",
-    field_112: "Was the letting made under the Common Allocation Policy (CAP)?",
-    field_113: "Was the letting made under the Common Housing Register (CHR)?",
-    field_114: "Was the letting made under the Accessible Register?",
-    field_115: "What was the source of referral for this letting? - LA properties",
-    field_116: "Do you know the household’s combined total income after tax?",
-    field_117: "How often does the household receive income?",
-    field_118: "How much income does the household have in total?",
-    field_119: "Is the tenant likely to be receiving any of these housing-related benefits?",
-    field_120: "How much of the household’s income is from Universal Credit, state pensions or benefits?",
-    field_121: "Does the household pay rent or other charges for the accommodation?",
-    field_122: "How often does the household pay rent and other charges?",
-    field_123: "What is the basic rent?",
-    field_124: "What is the service charge?",
-    field_125: "What is the personal service charge?",
-    field_126: "What is the support charge?",
-    field_127: "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
-    field_128: "What do you expect the outstanding amount to be?",
-
-    field_129: "Is the gender the lead tenant identifies with the same as their sex registered at birth?",
-    field_130: "If 'No', enter the lead tenant's gender identity",
-    field_131: "Is the gender person 2 identifies with the same as their sex registered at birth?",
-    field_132: "If 'No', enter person 2's gender identity",
-    field_133: "Is the gender person 3 identifies with the same as their sex registered at birth?",
-    field_134: "If 'No', enter person 3's gender identity",
-    field_135: "Is the gender person 4 identifies with the same as their sex registered at birth?",
-    field_136: "If 'No', enter person 4's gender identity",
-    field_137: "Is the gender person 5 identifies with the same as their sex registered at birth?",
-    field_138: "If 'No', enter person 5's gender identity",
-    field_139: "Is the gender person 6 identifies with the same as their sex registered at birth?",
-    field_140: "If 'No', enter person 6's gender identity",
-    field_141: "Is the gender person 7 identifies with the same as their sex registered at birth?",
-    field_142: "If 'No', enter person 7's gender identity",
-    field_143: "Is the gender person 8 identifies with the same as their sex registered at birth?",
-    field_144: "If 'No', enter person 8's gender identity",
-
+    field_43: "Is the gender the lead tenant identifies with the same as their sex registered at birth?",
+    field_44: "If 'No', enter the lead tenant's gender identity",
+    field_45: "Which of these best describes the lead tenant’s ethnic background?",
+    field_46: "What is the lead tenant’s nationality?",
+    field_47: "Which of these best describes the lead tenant’s working situation?",
+    field_48: "Is person 2 the partner of the lead tenant?",
+    field_49: "What is person 2’s age?",
+    field_50: "Person 2's sex, as registered at birth",
+    field_51: "Is the gender person 2 identifies with the same as their sex registered at birth?",
+    field_52: "If 'No', enter person 2's gender identity",
+    field_53: "Which of these best describes person 2’s working situation?",
+    field_54: "Is person 3 the partner of the lead tenant?",
+    field_55: "What is person 3’s age?",
+    field_56: "Person 3's sex, as registered at birth",
+    field_57: "Is the gender person 3 identifies with the same as their sex registered at birth?",
+    field_58: "If 'No', enter person 3's gender identity",
+    field_59: "Which of these best describes person 3’s working situation?",
+    field_60: "Is person 4 the partner of the lead tenant?",
+    field_61: "What is person 4’s age?",
+    field_62: "Person 4's sex, as registered at birth",
+    field_63: "Is the gender person 4 identifies with the same as their sex registered at birth?",
+    field_64: "If 'No', enter person 4's gender identity",
+    field_65: "Which of these best describes person 4’s working situation?",
+    field_66: "Is person 5 the partner of the lead tenant?",
+    field_67: "What is person 5’s age?",
+    field_68: "Person 5's sex, as registered at birth",
+    field_69: "Is the gender person 5 identifies with the same as their sex registered at birth?",
+    field_70: "If 'No', enter person 5's gender identity",
+    field_71: "Which of these best describes person 5’s working situation?",
+    field_72: "Is person 6 the partner of the lead tenant?",
+    field_73: "What is person 6’s age?",
+    field_74: "Person 6's sex, as registered at birth",
+    field_75: "Is the gender person 6 identifies with the same as their sex registered at birth?",
+    field_76: "If 'No', enter person 6's gender identity",
+    field_77: "Which of these best describes person 6’s working situation?",
+    field_78: "Is person 7 the partner of the lead tenant?",
+    field_79: "What is person 7’s age?",
+    field_80: "Person 7's sex, as registered at birth",
+    field_81: "Is the gender person 7 identifies with the same as their sex registered at birth?",
+    field_82: "If 'No', enter person 7's gender identity",
+    field_83: "Which of these best describes person 7’s working situation?",
+    field_84: "Is person 8 the partner of the lead tenant?",
+    field_85: "What is person 8’s age?",
+    field_86: "Person 8's sex, as registered at birth",
+    field_87: "Is the gender person 8 identifies with the same as their sex registered at birth?",
+    field_88: "If 'No', enter person 8's gender identity",
+    field_89: "Which of these best describes person 8’s working situation?",
+    field_90: "Does anybody in the household have links to the UK armed forces?",
+    field_91: "Is this person still serving in the UK armed forces?",
+    field_92: "Was this person seriously injured or ill as a result of serving in the UK armed forces?",
+    field_93: "Is anybody in the household pregnant?",
+    field_94: "Does anybody in the household have any disabled access needs?",
+    field_95: "Does anybody in the household have any disabled access needs?",
+    field_96: "Does anybody in the household have any disabled access needs?",
+    field_97: "Does anybody in the household have any disabled access needs?",
+    field_98: "Does anybody in the household have any disabled access needs?",
+    field_99: "Does anybody in the household have any disabled access needs?",
+    field_100: "Does anybody in the household have a physical or mental health condition (or other illness) expected to last 12 months or more?",
+    field_101: "Does this person’s condition affect their dexterity?",
+    field_102: "Does this person’s condition affect their learning or understanding or concentrating?",
+    field_103: "Does this person’s condition affect their hearing?",
+    field_104: "Does this person’s condition affect their memory?",
+    field_105: "Does this person’s condition affect their mental health?",
+    field_106: "Does this person’s condition affect their mobility?",
+    field_107: "Does this person’s condition affect them socially or behaviourally?",
+    field_108: "Does this person’s condition affect their stamina or breathing or fatigue?",
+    field_109: "Does this person’s condition affect their vision?",
+    field_110: "Does this person’s condition affect them in another way?",
+    field_111: "How long has the household continuously lived in the local authority area of the new letting?",
+    field_112: "How long has the household been on the local authority waiting list for the new letting?",
+    field_113: "What is the tenant’s main reason for the household leaving their last settled home?",
+    field_114: "If 'Other', what was the main reason for leaving their last settled home?",
+    field_115: "Where was the household immediately before this letting?",
+    field_116: "Did the household experience homelessness immediately before this letting?",
+    field_117: "Do you know the postcode of the household’s last settled home?",
+    field_118: "What is the postcode of the household’s last settled home?",
+    field_119: "What is the postcode of the household’s last settled home?",
+    field_120: "What is the local authority of the household’s last settled home?",
+    field_121: "Was the household given 'reasonable preference' by the local authority?",
+    field_122: "Reasonable preference reason - They were homeless or about to lose their home (within 56 days)",
+    field_123: "Reasonable preference reason - They were living in insanitary, overcrowded or unsatisfactory housing",
+    field_124: "Reasonable preference reason - They needed to move on medical and welfare reasons (including disability)",
+    field_125: "Reasonable preference reason - They needed to move to avoid hardship to themselves or others",
+    field_126: "Reasonable preference reason - Don’t know",
+    field_127: "Was the letting made under the Choice-Based Lettings (CBL)?",
+    field_128: "Was the letting made under the Common Allocation Policy (CAP)?",
+    field_129: "Was the letting made under the Common Housing Register (CHR)?",
+    field_130: "Was the letting made under the Accessible Register?",
+    field_131: "What was the source of referral for this letting? - LA properties",
+    field_132: "Do you know the household’s combined total income after tax?",
+    field_133: "How often does the household receive income?",
+    field_134: "How much income does the household have in total?",
+    field_135: "Is the tenant likely to be receiving any of these housing-related benefits?",
+    field_136: "How much of the household’s income is from Universal Credit, state pensions or benefits?",
+    field_137: "Does the household pay rent or other charges for the accommodation?",
+    field_138: "How often does the household pay rent and other charges?",
+    field_139: "What is the basic rent?",
+    field_140: "What is the service charge?",
+    field_141: "What is the personal service charge?",
+    field_142: "What is the support charge?",
+    field_143: "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
+    field_144: "What do you expect the outstanding amount to be?",
     field_145: "What was the source of referral for this letting? - PRP properties part 1",
     field_146: "What was the source of referral for this letting? - PRP properties part 2",
     field_147: "What was the source of referral for this letting? - PRP properties part 3",
@@ -216,52 +214,36 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_15, :integer
   attribute :field_41, :string
   attribute :field_42, :string
-  attribute :field_43, :integer
-  attribute :field_44, :integer
   attribute :field_45, :integer
   attribute :field_46, :integer
-  attribute :field_47, :string
-  attribute :field_48, :string
-  attribute :field_49, :integer
-  attribute :field_50, :integer
-  attribute :field_51, :string
-  attribute :field_52, :string
+  attribute :field_47, :integer
+  attribute :field_48, :integer
+  attribute :field_49, :string
+  attribute :field_50, :string
   attribute :field_53, :integer
   attribute :field_54, :integer
   attribute :field_55, :string
   attribute :field_56, :string
-  attribute :field_57, :integer
-  attribute :field_58, :integer
-  attribute :field_59, :string
-  attribute :field_60, :string
-  attribute :field_61, :integer
-  attribute :field_62, :integer
-  attribute :field_63, :string
-  attribute :field_64, :string
+  attribute :field_59, :integer
+  attribute :field_60, :integer
+  attribute :field_61, :string
+  attribute :field_62, :string
   attribute :field_65, :integer
   attribute :field_66, :integer
   attribute :field_67, :string
   attribute :field_68, :string
-  attribute :field_69, :integer
-  attribute :field_70, :integer
-  attribute :field_71, :string
-  attribute :field_72, :string
-  attribute :field_73, :integer
-  attribute :field_74, :integer
-  attribute :field_75, :integer
-  attribute :field_76, :integer
+  attribute :field_71, :integer
+  attribute :field_72, :integer
+  attribute :field_73, :string
+  attribute :field_74, :string
   attribute :field_77, :integer
   attribute :field_78, :integer
-  attribute :field_79, :integer
-  attribute :field_80, :integer
-  attribute :field_81, :integer
-  attribute :field_82, :integer
+  attribute :field_79, :string
+  attribute :field_80, :string
   attribute :field_83, :integer
   attribute :field_84, :integer
-  attribute :field_85, :integer
-  attribute :field_86, :integer
-  attribute :field_87, :integer
-  attribute :field_88, :integer
+  attribute :field_85, :string
+  attribute :field_86, :string
   attribute :field_89, :integer
   attribute :field_90, :integer
   attribute :field_91, :integer
@@ -271,13 +253,13 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_95, :integer
   attribute :field_96, :integer
   attribute :field_97, :integer
-  attribute :field_98, :string
+  attribute :field_98, :integer
   attribute :field_99, :integer
   attribute :field_100, :integer
   attribute :field_101, :integer
-  attribute :field_102, :string
-  attribute :field_103, :string
-  attribute :field_104, :string
+  attribute :field_102, :integer
+  attribute :field_103, :integer
+  attribute :field_104, :integer
   attribute :field_105, :integer
   attribute :field_106, :integer
   attribute :field_107, :integer
@@ -287,38 +269,54 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_111, :integer
   attribute :field_112, :integer
   attribute :field_113, :integer
-  attribute :field_114, :integer
+  attribute :field_114, :string
   attribute :field_115, :integer
   attribute :field_116, :integer
   attribute :field_117, :integer
-  attribute :field_118, :decimal
-  attribute :field_119, :integer
-  attribute :field_120, :integer
+  attribute :field_118, :string
+  attribute :field_119, :string
+  attribute :field_120, :string
   attribute :field_121, :integer
   attribute :field_122, :integer
-  attribute :field_123, :decimal
-  attribute :field_124, :decimal
-  attribute :field_125, :decimal
-  attribute :field_126, :decimal
+  attribute :field_123, :integer
+  attribute :field_124, :integer
+  attribute :field_125, :integer
+  attribute :field_126, :integer
   attribute :field_127, :integer
-  attribute :field_128, :decimal
-
-  attribute :field_129, :string
-  attribute :field_130, :string
-  attribute :field_131, :string
-  attribute :field_132, :string
-  attribute :field_133, :string
-  attribute :field_134, :string
-  attribute :field_135, :string
-  attribute :field_136, :string
+  attribute :field_128, :integer
+  attribute :field_129, :integer
+  attribute :field_130, :integer
+  attribute :field_131, :integer
+  attribute :field_132, :integer
+  attribute :field_133, :integer
+  attribute :field_134, :decimal
+  attribute :field_135, :integer
+  attribute :field_136, :integer
   attribute :field_137, :integer
-  attribute :field_138, :string
-  attribute :field_139, :integer
-  attribute :field_140, :string
-  attribute :field_141, :integer
-  attribute :field_142, :string
+  attribute :field_138, :integer
+  attribute :field_139, :decimal
+  attribute :field_140, :decimal
+  attribute :field_141, :decimal
+  attribute :field_142, :decimal
   attribute :field_143, :integer
-  attribute :field_144, :string
+  attribute :field_144, :decimal
+
+  attribute :field_43, :string
+  attribute :field_44, :string
+  attribute :field_51, :string
+  attribute :field_52, :string
+  attribute :field_57, :string
+  attribute :field_58, :string
+  attribute :field_63, :string
+  attribute :field_64, :string
+  attribute :field_69, :integer
+  attribute :field_70, :string
+  attribute :field_75, :integer
+  attribute :field_76, :string
+  attribute :field_81, :integer
+  attribute :field_82, :string
+  attribute :field_87, :integer
+  attribute :field_88, :string
 
   attribute :field_145, :integer
   attribute :field_146, :integer
@@ -389,7 +387,7 @@ class BulkUpload::Lettings::Year2026::RowParser
             },
             on: :after_log
 
-  validates :field_111,
+  validates :field_127,
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)?"),
               category: :not_answered,
@@ -397,11 +395,11 @@ class BulkUpload::Lettings::Year2026::RowParser
             inclusion: {
               in: [1, 2],
               message: I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: "was the letting made under the Choice-Based Lettings (CBL)?"),
-              if: -> { field_111.present? },
+              if: -> { field_127.present? },
             },
             on: :after_log
 
-  validates :field_112,
+  validates :field_128,
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "was the letting made under the Common Allocation Policy (CAP)?"),
               category: :not_answered,
@@ -409,11 +407,11 @@ class BulkUpload::Lettings::Year2026::RowParser
             inclusion: {
               in: [1, 2],
               message: I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: "was the letting made under the Common Allocation Policy (CAP)?"),
-              if: -> { field_112.present? },
+              if: -> { field_128.present? },
             },
             on: :after_log
 
-  validates :field_113,
+  validates :field_129,
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "was the letting made under the Common Housing Register (CHR)?"),
               category: :not_answered,
@@ -421,11 +419,11 @@ class BulkUpload::Lettings::Year2026::RowParser
             inclusion: {
               in: [1, 2],
               message: I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: "was the letting made under the Common Housing Register (CHR)?"),
-              if: -> { field_113.present? },
+              if: -> { field_129.present? },
             },
             on: :after_log
 
-  validates :field_114,
+  validates :field_130,
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "was the letting made under the Accessible Register?"),
               category: :not_answered,
@@ -433,18 +431,18 @@ class BulkUpload::Lettings::Year2026::RowParser
             inclusion: {
               in: [1, 2],
               message: I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: "was the letting made under the Accessible Register?"),
-              if: -> { field_114.present? },
+              if: -> { field_130.present? },
             },
             on: :after_log
 
   validates :field_41, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 1) }, on: :after_log
-  validates :field_47, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 2) }, on: :after_log, if: proc { details_known?(2).zero? }
-  validates :field_51, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 3) }, on: :after_log, if: proc { details_known?(3).zero? }
-  validates :field_55, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 4) }, on: :after_log, if: proc { details_known?(4).zero? }
-  validates :field_59, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 5) }, on: :after_log, if: proc { details_known?(5).zero? }
-  validates :field_63, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 6) }, on: :after_log, if: proc { details_known?(6).zero? }
-  validates :field_67, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 7) }, on: :after_log, if: proc { details_known?(7).zero? }
-  validates :field_71, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 8) }, on: :after_log, if: proc { details_known?(8).zero? }
+  validates :field_49, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 2) }, on: :after_log, if: proc { details_known?(2).zero? }
+  validates :field_55, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 3) }, on: :after_log, if: proc { details_known?(3).zero? }
+  validates :field_61, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 4) }, on: :after_log, if: proc { details_known?(4).zero? }
+  validates :field_67, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 5) }, on: :after_log, if: proc { details_known?(5).zero? }
+  validates :field_73, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 6) }, on: :after_log, if: proc { details_known?(6).zero? }
+  validates :field_79, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 7) }, on: :after_log, if: proc { details_known?(7).zero? }
+  validates :field_85, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 8) }, on: :after_log, if: proc { details_known?(8).zero? }
 
   validate :validate_needs_type_present, on: :after_log
   validate :validate_data_types, on: :after_log
@@ -581,10 +579,10 @@ class BulkUpload::Lettings::Year2026::RowParser
       !supported_housing? ? "field_24" : nil,  # postcode # TODO: CLDC-4119: add postcode to hash for supported housing
       "field_41", # age1
       "field_42",  # sexrab1
-      "field_45",  # ecstat1
+      "field_47",  # ecstat1
     )
-    if [field_123, field_124, field_125, field_126].all?(&:present?)
-      hash.merge({ "tcharge" => [field_123, field_124, field_125, field_126].sum })
+    if [field_139, field_140, field_141, field_142].all?(&:present?)
+      hash.merge({ "tcharge" => [field_139, field_140, field_141, field_142].sum })
     else
       hash
     end
@@ -593,7 +591,7 @@ class BulkUpload::Lettings::Year2026::RowParser
   def add_duplicate_found_in_spreadsheet_errors
     spreadsheet_duplicate_hash.each_key do |field|
       if field == "tcharge"
-        %w[field_123 field_124 field_125 field_126].each do |sub_field|
+        %w[field_139 field_140 field_141 field_142].each do |sub_field|
           errors.add(sub_field, I18n.t("#{ERROR_BASE_KEY}.spreadsheet_dupe"), category: :setup)
         end
       else
@@ -702,14 +700,14 @@ private
   end
 
   def validate_nationality
-    if field_44.present? && !valid_nationality_options.include?(field_44.to_s)
-      errors.add(:field_44, I18n.t("#{ERROR_BASE_KEY}.nationality.invalid"))
+    if field_46.present? && !valid_nationality_options.include?(field_46.to_s)
+      errors.add(:field_46, I18n.t("#{ERROR_BASE_KEY}.nationality.invalid"))
     end
   end
 
   def validate_reasonpref_reason_values
     valid_reasonpref_reason_options = %w[0 1]
-    %w[field_106 field_107 field_108 field_109 field_110].each do |field|
+    %w[field_122 field_123 field_124 field_125 field_126].each do |field|
       next unless send(field).present? && !valid_reasonpref_reason_options.include?(send(field).to_s)
 
       question_text = QUESTIONS[field.to_sym]
@@ -720,9 +718,9 @@ private
 
   def validate_prevten_value_when_renewal
     return unless renewal?
-    return if field_99.blank? || [6, 30, 31, 32, 33, 34, 35, 38].include?(field_99)
+    return if field_115.blank? || [6, 30, 31, 32, 33, 34, 35, 38].include?(field_115)
 
-    errors.add(:field_99, I18n.t("#{ERROR_BASE_KEY}.prevten.invalid"))
+    errors.add(:field_115, I18n.t("#{ERROR_BASE_KEY}.prevten.invalid"))
   end
 
   def duplicate_check_fields
@@ -747,41 +745,41 @@ private
   end
 
   def validate_no_and_dont_know_disabled_needs_conjunction
-    if field_82 == 1 && field_83 == 1
-      errors.add(:field_82, I18n.t("#{ERROR_BASE_KEY}.housingneeds.no_and_dont_know_disabled_needs_conjunction"))
-      errors.add(:field_83, I18n.t("#{ERROR_BASE_KEY}.housingneeds.no_and_dont_know_disabled_needs_conjunction"))
+    if field_98 == 1 && field_99 == 1
+      errors.add(:field_98, I18n.t("#{ERROR_BASE_KEY}.housingneeds.no_and_dont_know_disabled_needs_conjunction"))
+      errors.add(:field_99, I18n.t("#{ERROR_BASE_KEY}.housingneeds.no_and_dont_know_disabled_needs_conjunction"))
     end
   end
 
   def validate_dont_know_disabled_needs_conjunction
-    if field_83 == 1 && [field_78, field_79, field_80, field_81].count(1).positive?
-      %i[field_83 field_78 field_79 field_80 field_81].each do |field|
+    if field_99 == 1 && [field_94, field_95, field_96, field_97].count(1).positive?
+      %i[field_99 field_94 field_95 field_96 field_97].each do |field|
         errors.add(field, I18n.t("#{ERROR_BASE_KEY}.housingneeds.dont_know_disabled_needs_conjunction")) if send(field) == 1
       end
     end
   end
 
   def validate_no_disabled_needs_conjunction
-    if field_82 == 1 && [field_78, field_79, field_80, field_81].count(1).positive?
-      %i[field_82 field_78 field_79 field_80 field_81].each do |field|
+    if field_98 == 1 && [field_94, field_95, field_96, field_97].count(1).positive?
+      %i[field_98 field_94 field_95 field_96 field_97].each do |field|
         errors.add(field, I18n.t("#{ERROR_BASE_KEY}.housingneeds.no_disabled_needs_conjunction")) if send(field) == 1
       end
     end
   end
 
   def validate_only_one_housing_needs_type
-    if [field_78, field_79, field_80].count(1) > 1
-      %i[field_78 field_79 field_80].each do |field|
+    if [field_94, field_95, field_96].count(1) > 1
+      %i[field_94 field_95 field_96].each do |field|
         errors.add(field, I18n.t("#{ERROR_BASE_KEY}.housingneeds_type.only_one_option_permitted")) if send(field) == 1
       end
     end
   end
 
   def validate_no_housing_needs_questions_answered
-    if [field_78, field_79, field_80, field_81, field_82, field_83].all?(&:blank?)
-      errors.add(:field_82, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "anybody with disabled access needs."))
-      errors.add(:field_81, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "other access needs."))
-      %i[field_78 field_79 field_80].each do |field|
+    if [field_94, field_95, field_96, field_97, field_98, field_99].all?(&:blank?)
+      errors.add(:field_98, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "anybody with disabled access needs."))
+      errors.add(:field_97, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "other access needs."))
+      %i[field_94 field_95 field_96].each do |field|
         errors.add(field, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "disabled access needs type."))
       end
     end
@@ -789,16 +787,16 @@ private
 
   def validate_reasonable_preference_dont_know
     if rp_dontknow_conflict?
-      errors.add(:field_110, I18n.t("#{ERROR_BASE_KEY}.reasonpref.conflict.dont_know"))
-      %i[field_106 field_107 field_108 field_109].each do |field|
+      errors.add(:field_126, I18n.t("#{ERROR_BASE_KEY}.reasonpref.conflict.dont_know"))
+      %i[field_122 field_123 field_124 field_125].each do |field|
         errors.add(field, I18n.t("#{ERROR_BASE_KEY}.reasonpref.conflict.other")) if send(field) == 1
       end
     end
   end
 
   def validate_reasonable_preference_homeless
-    reason_fields = %i[field_106 field_107 field_108 field_109 field_110]
-    if field_105 == 1 && reason_fields.all? { |field| attributes[field.to_s].blank? }
+    reason_fields = %i[field_122 field_123 field_124 field_125 field_126]
+    if field_121 == 1 && reason_fields.all? { |field| attributes[field.to_s].blank? }
       reason_fields.each do |field|
         errors.add(field, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "reason for reasonable preference."))
       end
@@ -806,7 +804,7 @@ private
   end
 
   def validate_condition_effects
-    illness_option_fields = %i[field_93 field_87 field_90 field_85 field_86 field_88 field_89 field_92 field_91 field_94]
+    illness_option_fields = %i[field_109 field_103 field_106 field_101 field_102 field_104 field_105 field_108 field_107 field_110]
     if household_no_illness?
       illness_option_fields.each do |field|
         if attributes[field.to_s] == 1
@@ -821,12 +819,12 @@ private
   end
 
   def household_no_illness?
-    field_84 != 1
+    field_100 != 1
   end
 
   def validate_leaving_reason_for_renewal
-    if renewal? && ![50, 51, 52, 53].include?(field_97)
-      errors.add(:field_97, I18n.t("#{ERROR_BASE_KEY}.reason.renewal_reason_needed"))
+    if renewal? && ![50, 51, 52, 53].include?(field_113)
+      errors.add(:field_113, I18n.t("#{ERROR_BASE_KEY}.reason.renewal_reason_needed"))
     end
   end
 
@@ -967,13 +965,13 @@ private
   end
 
   def validate_all_charges_given
-    return if supported_housing? && field_123 == 1
+    return if supported_housing? && field_139 == 1
 
     blank_charge_fields, other_charge_fields = {
-      field_123: "basic rent",
-      field_124: "service charge",
-      field_125: "personal service charge",
-      field_126: "support charge",
+      field_139: "basic rent",
+      field_140: "service charge",
+      field_141: "personal service charge",
+      field_142: "support charge",
     }.partition { |field, _| public_send(field).blank? }.map(&:to_h)
 
     blank_charge_fields.each do |field, charge|
@@ -989,7 +987,7 @@ private
   end
 
   def all_charges_given?
-    field_123.present? && field_124.present? && field_125.present? && field_126.present?
+    field_139.present? && field_140.present? && field_141.present? && field_142.present?
   end
 
   def setup_question?(question)
@@ -1012,20 +1010,20 @@ private
       errors.add(:field_25, error_message) unless supported_housing? # la # TODO: CLDC-4119: add LA to error fields for supported housing
       errors.add(:field_41, error_message) # age1
       errors.add(:field_42, error_message) # sexrab1
-      errors.add(:field_45, error_message) # ecstat1
-      errors.add(:field_121, error_message) unless general_needs? # household_charge
-      errors.add(:field_123, error_message) # brent
-      errors.add(:field_124, error_message) # scharge
-      errors.add(:field_125, error_message) # pscharge
-      errors.add(:field_126, error_message) # chcharge
+      errors.add(:field_47, error_message) # ecstat1
+      errors.add(:field_137, error_message) unless general_needs? # household_charge
+      errors.add(:field_139, error_message) # brent
+      errors.add(:field_140, error_message) # scharge
+      errors.add(:field_141, error_message) # pscharge
+      errors.add(:field_142, error_message) # chcharge
     end
   end
 
   def field_referral_register_la_valid?
     if owning_organisation&.la?
-      [1, 2, 3, 4].include?(field_115)
+      [1, 2, 3, 4].include?(field_131)
     else
-      field_115.blank?
+      field_131.blank?
     end
   end
 
@@ -1067,7 +1065,7 @@ private
     return if renewal?
     return if referral_fields_valid?
 
-    %i[field_115 field_145 field_146 field_147].each do |field|
+    %i[field_131 field_145 field_146 field_147].each do |field|
       errors.add(field, I18n.t("#{ERROR_BASE_KEY}.referral.invalid_option"))
     end
   end
@@ -1104,119 +1102,119 @@ private
 
       age1_known: %i[field_41],
       age1: %i[field_41],
-      age2_known: %i[field_47],
-      age2: %i[field_47],
-      age3_known: %i[field_51],
-      age3: %i[field_51],
-      age4_known: %i[field_55],
-      age4: %i[field_55],
-      age5_known: %i[field_59],
-      age5: %i[field_59],
-      age6_known: %i[field_63],
-      age6: %i[field_63],
-      age7_known: %i[field_67],
-      age7: %i[field_67],
-      age8_known: %i[field_71],
-      age8: %i[field_71],
+      age2_known: %i[field_49],
+      age2: %i[field_49],
+      age3_known: %i[field_55],
+      age3: %i[field_55],
+      age4_known: %i[field_61],
+      age4: %i[field_61],
+      age5_known: %i[field_67],
+      age5: %i[field_67],
+      age6_known: %i[field_73],
+      age6: %i[field_73],
+      age7_known: %i[field_79],
+      age7: %i[field_79],
+      age8_known: %i[field_85],
+      age8: %i[field_85],
 
       sexrab1: %i[field_42],
-      sexrab2: %i[field_48],
-      sexrab3: %i[field_52],
-      sexrab4: %i[field_56],
-      sexrab5: %i[field_60],
-      sexrab6: %i[field_64],
-      sexrab7: %i[field_68],
-      sexrab8: %i[field_72],
+      sexrab2: %i[field_50],
+      sexrab3: %i[field_56],
+      sexrab4: %i[field_62],
+      sexrab5: %i[field_68],
+      sexrab6: %i[field_74],
+      sexrab7: %i[field_80],
+      sexrab8: %i[field_86],
 
-      ethnic_group: %i[field_43],
-      ethnic: %i[field_43],
-      nationality_all: %i[field_44],
-      nationality_all_group: %i[field_44],
+      ethnic_group: %i[field_45],
+      ethnic: %i[field_45],
+      nationality_all: %i[field_46],
+      nationality_all_group: %i[field_46],
 
-      relat2: %i[field_46],
-      relat3: %i[field_50],
-      relat4: %i[field_54],
-      relat5: %i[field_58],
-      relat6: %i[field_62],
-      relat7: %i[field_66],
-      relat8: %i[field_70],
+      relat2: %i[field_48],
+      relat3: %i[field_54],
+      relat4: %i[field_60],
+      relat5: %i[field_66],
+      relat6: %i[field_72],
+      relat7: %i[field_78],
+      relat8: %i[field_84],
 
-      ecstat1: %i[field_45],
-      ecstat2: %i[field_49],
-      ecstat3: %i[field_53],
-      ecstat4: %i[field_57],
-      ecstat5: %i[field_61],
-      ecstat6: %i[field_65],
-      ecstat7: %i[field_69],
-      ecstat8: %i[field_73],
+      ecstat1: %i[field_47],
+      ecstat2: %i[field_53],
+      ecstat3: %i[field_59],
+      ecstat4: %i[field_65],
+      ecstat5: %i[field_71],
+      ecstat6: %i[field_77],
+      ecstat7: %i[field_83],
+      ecstat8: %i[field_89],
 
-      armedforces: %i[field_74],
-      leftreg: %i[field_75],
-      reservist: %i[field_76],
-      preg_occ: %i[field_77],
-      housingneeds: %i[field_77],
+      armedforces: %i[field_90],
+      leftreg: %i[field_91],
+      reservist: %i[field_92],
+      preg_occ: %i[field_93],
+      housingneeds: %i[field_93],
 
-      illness: %i[field_84],
+      illness: %i[field_100],
 
-      layear: %i[field_95],
-      waityear: %i[field_96],
-      reason: %i[field_97],
-      reasonother: %i[field_98],
-      prevten: %i[field_99],
-      homeless: %i[field_100],
+      layear: %i[field_111],
+      waityear: %i[field_112],
+      reason: %i[field_113],
+      reasonother: %i[field_114],
+      prevten: %i[field_115],
+      homeless: %i[field_116],
 
-      prevloc: %i[field_104],
-      previous_la_known: %i[field_104],
-      ppcodenk: %i[field_101],
-      ppostcode_full: %i[field_102 field_103],
+      prevloc: %i[field_120],
+      previous_la_known: %i[field_120],
+      ppcodenk: %i[field_117],
+      ppostcode_full: %i[field_118 field_119],
 
-      reasonpref: %i[field_105],
-      rp_homeless: %i[field_106],
-      rp_insan_unsat: %i[field_107],
-      rp_medwel: %i[field_108],
-      rp_hardship: %i[field_109],
-      rp_dontknow: %i[field_110],
+      reasonpref: %i[field_121],
+      rp_homeless: %i[field_122],
+      rp_insan_unsat: %i[field_123],
+      rp_medwel: %i[field_124],
+      rp_hardship: %i[field_125],
+      rp_dontknow: %i[field_126],
 
-      cbl: %i[field_111],
-      cap: %i[field_112],
-      chr: %i[field_113],
-      accessible_register: %i[field_114],
-      letting_allocation: %i[field_111 field_112 field_113 field_114],
+      cbl: %i[field_127],
+      cap: %i[field_128],
+      chr: %i[field_129],
+      accessible_register: %i[field_130],
+      letting_allocation: %i[field_127 field_128 field_129 field_130],
 
-      referral_register: %i[field_115 field_145],
+      referral_register: %i[field_131 field_145],
       referral_noms: %i[field_146],
       referral_org: %i[field_147],
 
-      net_income_known: %i[field_116],
-      incfreq: %i[field_117],
-      earnings: %i[field_118],
-      hb: %i[field_119],
-      benefits: %i[field_120],
+      net_income_known: %i[field_132],
+      incfreq: %i[field_133],
+      earnings: %i[field_134],
+      hb: %i[field_135],
+      benefits: %i[field_136],
 
-      period: %i[field_122],
-      brent: %i[field_123],
-      scharge: %i[field_124],
-      pscharge: %i[field_125],
-      supcharg: %i[field_126],
-      tcharge: %i[field_123 field_124 field_125 field_126],
-      household_charge: %i[field_121],
-      hbrentshortfall: %i[field_127],
-      tshortfall: %i[field_128],
+      period: %i[field_138],
+      brent: %i[field_139],
+      scharge: %i[field_140],
+      pscharge: %i[field_141],
+      supcharg: %i[field_142],
+      tcharge: %i[field_139 field_140 field_141 field_142],
+      household_charge: %i[field_137],
+      hbrentshortfall: %i[field_143],
+      tshortfall: %i[field_144],
 
       unitletas: %i[field_17],
       rsnvac: %i[field_16],
       sheltered: %i[field_35],
 
-      illness_type_1: %i[field_93],
-      illness_type_2: %i[field_87],
-      illness_type_3: %i[field_90],
-      illness_type_4: %i[field_85],
-      illness_type_5: %i[field_86],
-      illness_type_6: %i[field_88],
-      illness_type_7: %i[field_89],
-      illness_type_8: %i[field_92],
-      illness_type_9: %i[field_91],
-      illness_type_10: %i[field_94],
+      illness_type_1: %i[field_109],
+      illness_type_2: %i[field_103],
+      illness_type_3: %i[field_106],
+      illness_type_4: %i[field_101],
+      illness_type_5: %i[field_102],
+      illness_type_6: %i[field_104],
+      illness_type_7: %i[field_105],
+      illness_type_8: %i[field_108],
+      illness_type_9: %i[field_107],
+      illness_type_10: %i[field_110],
 
       irproduct_other: %i[field_12],
 
@@ -1234,22 +1232,22 @@ private
       county: [:field_22],
       uprn_selection: [:field_19],
 
-      gender_same_as_sex1: %i[field_129],
-      gender_same_as_sex2: %i[field_130],
-      gender_same_as_sex3: %i[field_131],
-      gender_same_as_sex4: %i[field_132],
-      gender_same_as_sex5: %i[field_133],
-      gender_same_as_sex6: %i[field_134],
-      gender_same_as_sex7: %i[field_135],
-      gender_same_as_sex8: %i[field_136],
-      gender_description1: %i[field_137],
-      gender_description2: %i[field_138],
-      gender_description3: %i[field_139],
-      gender_description4: %i[field_140],
-      gender_description5: %i[field_141],
-      gender_description6: %i[field_142],
-      gender_description7: %i[field_143],
-      gender_description8: %i[field_144],
+      gender_same_as_sex1: %i[field_43],
+      gender_same_as_sex2: %i[field_44],
+      gender_same_as_sex3: %i[field_51],
+      gender_same_as_sex4: %i[field_52],
+      gender_same_as_sex5: %i[field_57],
+      gender_same_as_sex6: %i[field_58],
+      gender_same_as_sex7: %i[field_63],
+      gender_same_as_sex8: %i[field_64],
+      gender_description1: %i[field_69],
+      gender_description2: %i[field_70],
+      gender_description3: %i[field_75],
+      gender_description4: %i[field_76],
+      gender_description5: %i[field_81],
+      gender_description6: %i[field_82],
+      gender_description7: %i[field_87],
+      gender_description8: %i[field_88],
     }.compact
   end
 
@@ -1290,56 +1288,56 @@ private
     attributes["age1"] = field_41 if attributes["age1_known"]&.zero? && field_41&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age2_known"] = age2_known?
-    attributes["age2"] = field_47 if attributes["age2_known"]&.zero? && field_47&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age2"] = field_49 if attributes["age2_known"]&.zero? && field_49&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age3_known"] = age3_known?
-    attributes["age3"] = field_51 if attributes["age3_known"]&.zero? && field_51&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age3"] = field_55 if attributes["age3_known"]&.zero? && field_55&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age4_known"] = age4_known?
-    attributes["age4"] = field_55 if attributes["age4_known"]&.zero? && field_55&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age4"] = field_61 if attributes["age4_known"]&.zero? && field_61&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age5_known"] = age5_known?
-    attributes["age5"] = field_59 if attributes["age5_known"]&.zero? && field_59&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age5"] = field_67 if attributes["age5_known"]&.zero? && field_67&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age6_known"] = age6_known?
-    attributes["age6"] = field_63 if attributes["age6_known"]&.zero? && field_63&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age6"] = field_73 if attributes["age6_known"]&.zero? && field_73&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age7_known"] = age7_known?
-    attributes["age7"] = field_67 if attributes["age7_known"]&.zero? && field_67&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age7"] = field_79 if attributes["age7_known"]&.zero? && field_79&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age8_known"] = age8_known?
-    attributes["age8"] = field_71 if attributes["age8_known"]&.zero? && field_71&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age8"] = field_85 if attributes["age8_known"]&.zero? && field_85&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["sexrab1"] = field_42
-    attributes["sexrab2"] = field_48
-    attributes["sexrab3"] = field_52
-    attributes["sexrab4"] = field_56
-    attributes["sexrab5"] = field_60
-    attributes["sexrab6"] = field_64
-    attributes["sexrab7"] = field_68
-    attributes["sexrab8"] = field_72
+    attributes["sexrab2"] = field_50
+    attributes["sexrab3"] = field_56
+    attributes["sexrab4"] = field_62
+    attributes["sexrab5"] = field_68
+    attributes["sexrab6"] = field_74
+    attributes["sexrab7"] = field_80
+    attributes["sexrab8"] = field_86
 
     attributes["ethnic_group"] = ethnic_group_from_ethnic
-    attributes["ethnic"] = field_43
-    attributes["nationality_all"] = field_44 if field_44.present? && valid_nationality_options.include?(field_44.to_s)
+    attributes["ethnic"] = field_45
+    attributes["nationality_all"] = field_46 if field_46.present? && valid_nationality_options.include?(field_46.to_s)
     attributes["nationality_all_group"] = nationality_group(attributes["nationality_all"])
 
-    attributes["relat2"] = relationship_from_input_value(field_46)
-    attributes["relat3"] = relationship_from_input_value(field_50)
-    attributes["relat4"] = relationship_from_input_value(field_54)
-    attributes["relat5"] = relationship_from_input_value(field_58)
-    attributes["relat6"] = relationship_from_input_value(field_62)
-    attributes["relat7"] = relationship_from_input_value(field_66)
-    attributes["relat8"] = relationship_from_input_value(field_70)
+    attributes["relat2"] = relationship_from_input_value(field_48)
+    attributes["relat3"] = relationship_from_input_value(field_54)
+    attributes["relat4"] = relationship_from_input_value(field_60)
+    attributes["relat5"] = relationship_from_input_value(field_66)
+    attributes["relat6"] = relationship_from_input_value(field_72)
+    attributes["relat7"] = relationship_from_input_value(field_78)
+    attributes["relat8"] = relationship_from_input_value(field_84)
 
-    attributes["ecstat1"] = field_45
-    attributes["ecstat2"] = field_49
-    attributes["ecstat3"] = field_53
-    attributes["ecstat4"] = field_57
-    attributes["ecstat5"] = field_61
-    attributes["ecstat6"] = field_65
-    attributes["ecstat7"] = field_69
-    attributes["ecstat8"] = field_73
+    attributes["ecstat1"] = field_47
+    attributes["ecstat2"] = field_53
+    attributes["ecstat3"] = field_59
+    attributes["ecstat4"] = field_65
+    attributes["ecstat5"] = field_71
+    attributes["ecstat6"] = field_77
+    attributes["ecstat7"] = field_83
+    attributes["ecstat8"] = field_89
 
     attributes["details_known_2"] = details_known?(2)
     attributes["details_known_3"] = details_known?(3)
@@ -1349,36 +1347,36 @@ private
     attributes["details_known_7"] = details_known?(7)
     attributes["details_known_8"] = details_known?(8)
 
-    attributes["armedforces"] = field_74
+    attributes["armedforces"] = field_90
     attributes["leftreg"] = leftreg
-    attributes["reservist"] = field_76
+    attributes["reservist"] = field_92
 
-    attributes["preg_occ"] = field_77
+    attributes["preg_occ"] = field_93
 
     attributes["housingneeds"] = housingneeds
     attributes["housingneeds_type"] = housingneeds_type
     attributes["housingneeds_other"] = housingneeds_other
 
-    attributes["illness"] = field_84
+    attributes["illness"] = field_100
 
-    attributes["layear"] = field_95
-    attributes["waityear"] = field_96
-    attributes["reason"] = field_97
-    attributes["reasonother"] = field_98 if reason_is_other?
-    attributes["prevten"] = field_99
-    attributes["homeless"] = field_100
+    attributes["layear"] = field_111
+    attributes["waityear"] = field_112
+    attributes["reason"] = field_113
+    attributes["reasonother"] = field_114 if reason_is_other?
+    attributes["prevten"] = field_115
+    attributes["homeless"] = field_116
 
     attributes["prevloc"] = prevloc
     attributes["previous_la_known"] = previous_la_known
     attributes["ppcodenk"] = ppcodenk
     attributes["ppostcode_full"] = ppostcode_full
 
-    attributes["reasonpref"] = field_105
-    attributes["rp_homeless"] = field_106 unless rp_dontknow_conflict?
-    attributes["rp_insan_unsat"] = field_107 unless rp_dontknow_conflict?
-    attributes["rp_medwel"] = field_108 unless rp_dontknow_conflict?
-    attributes["rp_hardship"] = field_109 unless rp_dontknow_conflict?
-    attributes["rp_dontknow"] = field_110 unless rp_dontknow_conflict?
+    attributes["reasonpref"] = field_121
+    attributes["rp_homeless"] = field_122 unless rp_dontknow_conflict?
+    attributes["rp_insan_unsat"] = field_123 unless rp_dontknow_conflict?
+    attributes["rp_medwel"] = field_124 unless rp_dontknow_conflict?
+    attributes["rp_hardship"] = field_125 unless rp_dontknow_conflict?
+    attributes["rp_dontknow"] = field_126 unless rp_dontknow_conflict?
 
     attributes["cbl"] = cbl
     attributes["chr"] = chr
@@ -1392,19 +1390,19 @@ private
 
     attributes["net_income_known"] = net_income_known
     attributes["earnings"] = earnings
-    attributes["incfreq"] = field_117
-    attributes["hb"] = field_119
-    attributes["benefits"] = field_120
+    attributes["incfreq"] = field_133
+    attributes["hb"] = field_135
+    attributes["benefits"] = field_136
 
-    attributes["period"] = field_122
-    attributes["brent"] = field_123 if all_charges_given?
-    attributes["scharge"] = field_124 if all_charges_given?
-    attributes["pscharge"] = field_125 if all_charges_given?
-    attributes["supcharg"] = field_126 if all_charges_given?
-    attributes["household_charge"] = supported_housing? ? field_121 : nil
-    attributes["hbrentshortfall"] = field_127
+    attributes["period"] = field_138
+    attributes["brent"] = field_139 if all_charges_given?
+    attributes["scharge"] = field_140 if all_charges_given?
+    attributes["pscharge"] = field_141 if all_charges_given?
+    attributes["supcharg"] = field_142 if all_charges_given?
+    attributes["household_charge"] = supported_housing? ? field_137 : nil
+    attributes["hbrentshortfall"] = field_143
     attributes["tshortfall_known"] = tshortfall_known
-    attributes["tshortfall"] = field_128
+    attributes["tshortfall"] = field_144
 
     attributes["hhmemb"] = hhmemb
 
@@ -1412,16 +1410,16 @@ private
     attributes["rsnvac"] = rsnvac
     attributes["sheltered"] = field_35
 
-    attributes["illness_type_1"] = field_93
-    attributes["illness_type_2"] = field_87
-    attributes["illness_type_3"] = field_90
-    attributes["illness_type_4"] = field_85
-    attributes["illness_type_5"] = field_86
-    attributes["illness_type_6"] = field_88
-    attributes["illness_type_7"] = field_89
-    attributes["illness_type_8"] = field_92
-    attributes["illness_type_9"] = field_91
-    attributes["illness_type_10"] = field_94
+    attributes["illness_type_1"] = field_109
+    attributes["illness_type_2"] = field_103
+    attributes["illness_type_3"] = field_106
+    attributes["illness_type_4"] = field_101
+    attributes["illness_type_5"] = field_102
+    attributes["illness_type_6"] = field_104
+    attributes["illness_type_7"] = field_105
+    attributes["illness_type_8"] = field_108
+    attributes["illness_type_9"] = field_107
+    attributes["illness_type_10"] = field_110
 
     attributes["irproduct_other"] = field_12 if RENT_TYPE_BU_MAPPING[field_11] == 5
 
@@ -1456,22 +1454,22 @@ private
     attributes["postcode_full_input"] = postcode_full
     attributes["select_best_address_match"] = true if field_18.blank?
 
-    attributes["gender_same_as_sex1"] = field_129
-    attributes["gender_description1"] = field_130
-    attributes["gender_same_as_sex2"] = field_131
-    attributes["gender_description2"] = field_132
-    attributes["gender_same_as_sex3"] = field_133
-    attributes["gender_description3"] = field_134
-    attributes["gender_same_as_sex4"] = field_135
-    attributes["gender_description4"] = field_136
-    attributes["gender_same_as_sex5"] = field_137
-    attributes["gender_description5"] = field_138
-    attributes["gender_same_as_sex6"] = field_139
-    attributes["gender_description6"] = field_140
-    attributes["gender_same_as_sex7"] = field_141
-    attributes["gender_description7"] = field_142
-    attributes["gender_same_as_sex8"] = field_143
-    attributes["gender_description8"] = field_144
+    attributes["gender_same_as_sex1"] = field_43
+    attributes["gender_description1"] = field_44
+    attributes["gender_same_as_sex2"] = field_51
+    attributes["gender_description2"] = field_52
+    attributes["gender_same_as_sex3"] = field_57
+    attributes["gender_description3"] = field_58
+    attributes["gender_same_as_sex4"] = field_63
+    attributes["gender_description4"] = field_64
+    attributes["gender_same_as_sex5"] = field_69
+    attributes["gender_description5"] = field_70
+    attributes["gender_same_as_sex6"] = field_75
+    attributes["gender_description6"] = field_76
+    attributes["gender_same_as_sex7"] = field_81
+    attributes["gender_description7"] = field_82
+    attributes["gender_same_as_sex8"] = field_87
+    attributes["gender_description8"] = field_88
 
     attributes
   end
@@ -1535,9 +1533,9 @@ private
   end
 
   def ethnic_group_from_ethnic
-    return nil if field_43.blank?
+    return nil if field_45.blank?
 
-    case field_43
+    case field_45
     when 1, 2, 3, 18, 20
       0
     when 4, 5, 6, 7
@@ -1560,13 +1558,13 @@ private
   end
 
   [
-    { person: 2, field: :field_47 },
-    { person: 3, field: :field_51 },
-    { person: 4, field: :field_55 },
-    { person: 5, field: :field_59 },
-    { person: 6, field: :field_63 },
-    { person: 7, field: :field_67 },
-    { person: 8, field: :field_71 },
+    { person: 2, field: :field_49 },
+    { person: 3, field: :field_55 },
+    { person: 4, field: :field_61 },
+    { person: 5, field: :field_67 },
+    { person: 6, field: :field_73 },
+    { person: 7, field: :field_79 },
+    { person: 8, field: :field_85 },
   ].each do |hash|
     define_method("age#{hash[:person]}_known?") do
       return 1 if public_send(hash[:field]) == "R"
@@ -1579,53 +1577,53 @@ private
   end
 
   def person_2_present?
-    field_46.present? || field_47.present? || field_48.present? || field_131.present? || field_132.present?
+    field_48.present? || field_49.present? || field_50.present? || field_51.present? || field_52.present?
   end
 
   def person_3_present?
-    field_50.present? || field_51.present? || field_52.present? || field_133.present? || field_134.present?
+    field_54.present? || field_55.present? || field_56.present? || field_57.present? || field_58.present?
   end
 
   def person_4_present?
-    field_54.present? || field_55.present? || field_56.present? || field_135.present? || field_136.present?
+    field_60.present? || field_61.present? || field_62.present? || field_63.present? || field_64.present?
   end
 
   def person_5_present?
-    field_58.present? || field_59.present? || field_60.present? || field_137.present? || field_138.present?
+    field_66.present? || field_67.present? || field_68.present? || field_69.present? || field_70.present?
   end
 
   def person_6_present?
-    field_62.present? || field_63.present? || field_64.present? || field_139.present? || field_140.present?
+    field_72.present? || field_73.present? || field_74.present? || field_75.present? || field_76.present?
   end
 
   def person_7_present?
-    field_66.present? || field_67.present? || field_68.present? || field_141.present? || field_142.present?
+    field_78.present? || field_79.present? || field_80.present? || field_81.present? || field_82.present?
   end
 
   def person_8_present?
-    field_70.present? || field_71.present? || field_72.present? || field_143.present? || field_144.present?
+    field_84.present? || field_85.present? || field_86.present? || field_87.present? || field_88.present?
   end
 
   def leftreg
-    field_75
+    field_91
   end
 
   def housingneeds
-    if field_82 == 1
+    if field_98 == 1
       2
-    elsif field_83 == 1
+    elsif field_99 == 1
       3
-    elsif field_82.blank? || field_82&.zero?
+    elsif field_98.blank? || field_98&.zero?
       1
     end
   end
 
   def housingneeds_type
-    if field_78 == 1
+    if field_94 == 1
       0
-    elsif field_79 == 1
+    elsif field_95 == 1
       1
-    elsif field_80 == 1
+    elsif field_96 == 1
       2
     else
       3
@@ -1633,12 +1631,12 @@ private
   end
 
   def housingneeds_other
-    return 1 if field_81 == 1
-    return 0 if [field_78, field_79, field_80].include?(1)
+    return 1 if field_97 == 1
+    return 0 if [field_94, field_95, field_96].include?(1)
   end
 
   def prevloc
-    field_104
+    field_120
   end
 
   def previous_la_known
@@ -1646,7 +1644,7 @@ private
   end
 
   def ppcodenk
-    case field_101
+    case field_117
     when 1
       0
     when 2
@@ -1655,11 +1653,11 @@ private
   end
 
   def ppostcode_full
-    "#{field_102} #{field_103}".strip.gsub(/\s+/, " ")
+    "#{field_118} #{field_119}".strip.gsub(/\s+/, " ")
   end
 
   def cbl
-    case field_111
+    case field_127
     when 2
       0
     when 1
@@ -1668,7 +1666,7 @@ private
   end
 
   def cap
-    case field_112
+    case field_128
     when 2
       0
     when 1
@@ -1677,7 +1675,7 @@ private
   end
 
   def chr
-    case field_113
+    case field_129
     when 2
       0
     when 1
@@ -1686,7 +1684,7 @@ private
   end
 
   def accessible_register
-    case field_114
+    case field_130
     when 2
       0
     when 1
@@ -1699,7 +1697,7 @@ private
   end
 
   def net_income_known
-    case field_116
+    case field_132
     when 1
       0
     when 2
@@ -1710,11 +1708,11 @@ private
   end
 
   def earnings
-    field_118.round if field_118.present?
+    field_134.round if field_134.present?
   end
 
   def tshortfall_known
-    field_127 == 1 ? 0 : 1
+    field_143 == 1 ? 0 : 1
   end
 
   def hhmemb
@@ -1769,7 +1767,7 @@ private
   end
 
   def reason_is_other?
-    field_97 == 20
+    field_113 == 20
   end
 
   def bulk_upload_organisation
@@ -1788,10 +1786,10 @@ private
   end
 
   def rp_dontknow_conflict?
-    other_reason_fields = %i[field_106 field_107 field_108 field_109]
-    if field_105 == 1
+    other_reason_fields = %i[field_122 field_123 field_124 field_125]
+    if field_121 == 1
       selected_reasons = other_reason_fields.select { |field| send(field) == 1 }
-      dont_know_selected = field_110 == 1
+      dont_know_selected = field_126 == 1
 
       return true if selected_reasons.any? && dont_know_selected
     end
@@ -1807,7 +1805,7 @@ private
     return unless referral_fields_valid?
 
     if owning_organisation.la?
-      field_115
+      field_131
     else
       field_145
     end
