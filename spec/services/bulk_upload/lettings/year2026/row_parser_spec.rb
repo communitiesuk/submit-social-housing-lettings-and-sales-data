@@ -323,7 +323,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                 :field_24, # postcode_full
                 :field_25, # LA
                 :field_42, # age1
-                :field_43, # sex1
+                :field_130, # sexrab1
                 :field_46, # ecstat1
                 :field_124, # brent
                 :field_125, # scharge
@@ -334,6 +334,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
               end
 
               expect(parser.errors[:field_6]).not_to include(error_message)
+              expect(parser.errors[:field_43]).not_to include(error_message)
             end
           end
 
@@ -381,7 +382,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                 :field_24, # postcode_full
                 :field_25, # la
                 :field_42, # age1
-                :field_43, # sex1
+                :field_130, # sexrab1
                 :field_46, # ecstat1
                 :field_124, # brent
                 :field_125, # scharge
@@ -392,6 +393,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
               end
 
               expect(parser.errors[:field_6]).not_to include(error_message)
+              expect(parser.errors[:field_43]).not_to include(error_message)
             end
           end
 
