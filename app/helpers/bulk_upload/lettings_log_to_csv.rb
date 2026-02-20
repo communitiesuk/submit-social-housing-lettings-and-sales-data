@@ -224,7 +224,7 @@ class BulkUpload::LettingsLogToCsv
       chr,
       cap,
       accessible_register,
-      log.referral,
+      log.owning_organisation.la? ? log.referral_register : nil,
       net_income_known,
       log.incfreq,
       log.earnings,
@@ -255,7 +255,10 @@ class BulkUpload::LettingsLogToCsv
       log.gender_same_as_sex7,
       log.gender_description7,
       log.gender_same_as_sex8,
-      log.gender_description8, # 145
+      log.gender_description8,
+      log.owning_organisation.prp? ? log.referral_register : nil,
+      log.referral_noms,
+      log.referral_org, # 148
     ]
   end
 

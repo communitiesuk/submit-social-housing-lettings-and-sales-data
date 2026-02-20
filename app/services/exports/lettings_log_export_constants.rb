@@ -77,7 +77,6 @@ module Exports::LettingsLogExportConstants
     "reason",
     "reasonother",
     "reasonpref",
-    "referral",
     "refused",
     "reghome",
     "renttype",
@@ -157,6 +156,7 @@ module Exports::LettingsLogExportConstants
     "chcharge",
     "national",
     "offered",
+    "referral",
   ]
   (1..8).each do |index|
     YEAR_2021_EXPORT_FIELDS << "sex#{index}"
@@ -167,6 +167,7 @@ module Exports::LettingsLogExportConstants
     "chcharge",
     "national",
     "offered",
+    "referral",
   ]
   (1..8).each do |index|
     YEAR_2022_EXPORT_FIELDS << "sex#{index}"
@@ -177,6 +178,7 @@ module Exports::LettingsLogExportConstants
     "chcharge",
     "national",
     "offered",
+    "referral",
   ]
   (1..8).each do |index|
     YEAR_2023_EXPORT_FIELDS << "sex#{index}"
@@ -200,6 +202,7 @@ module Exports::LettingsLogExportConstants
     "pscharge_value_check",
     "supcharg_value_check",
     "carehome_charges_value_check",
+    "referral",
   ]
   (1..8).each do |index|
     YEAR_2024_EXPORT_FIELDS << "sex#{index}"
@@ -221,6 +224,7 @@ module Exports::LettingsLogExportConstants
     "scharge_value_check",
     "pscharge_value_check",
     "supcharg_value_check",
+    "referral",
   ]
   (1..8).each do |index|
     YEAR_2025_EXPORT_FIELDS << "sex#{index}"
@@ -241,6 +245,9 @@ module Exports::LettingsLogExportConstants
     "scharge_value_check",
     "pscharge_value_check",
     "supcharg_value_check",
+    "referral_register",
+    "referral_noms",
+    "referral_org",
   ]
   (1..8).each do |index|
     YEAR_2026_EXPORT_FIELDS << "sexrab#{index}"

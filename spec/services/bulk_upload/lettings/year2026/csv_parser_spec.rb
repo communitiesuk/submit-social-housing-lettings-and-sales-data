@@ -244,10 +244,10 @@ RSpec.describe BulkUpload::Lettings::Year2026::CsvParser do
       end
 
       it "returns correct column" do
-        expect(service.column_for_field("field_5")).to eql("M")
-        expect(service.column_for_field("field_22")).to eql("BA")
-        expect(service.column_for_field("field_26")).to eql("BT")
-        expect(service.column_for_field("field_25")).to eql("C")
+        expect(service.column_for_field("field_5")).to eql("AI")
+        expect(service.column_for_field("field_22")).to eql("BR")
+        expect(service.column_for_field("field_26")).to eql("CG")
+        expect(service.column_for_field("field_25")).to eql("E")
       end
     end
   end

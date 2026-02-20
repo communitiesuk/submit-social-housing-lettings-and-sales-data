@@ -115,7 +115,9 @@
     <totelder>0</totelder>
     <totadult>2</totadult>
     <nocharge/>
-    <referral>2</referral>
+    <referral_register>1</referral_register>
+    <referral_noms/>
+    <referral_org/>
     <brent>200.0</brent>
     <scharge>50.0</scharge>
     <pscharge>40.0</pscharge>
