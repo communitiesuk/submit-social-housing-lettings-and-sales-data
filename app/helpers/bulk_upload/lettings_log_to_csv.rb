@@ -128,9 +128,9 @@ class BulkUpload::LettingsLogToCsv
       log.unittype_gn,
       log.wchair,
       log.beds,
-      log.voiddate&.day, # 30
+      log.voiddate&.day,
 
-      log.voiddate&.month,
+      log.voiddate&.month, # 30
       log.voiddate&.strftime("%y"),
       log.mrcdate&.day,
       log.mrcdate&.month,
@@ -139,9 +139,9 @@ class BulkUpload::LettingsLogToCsv
       log.joint,
       log.startertenancy,
       log.tenancy,
-      log.tenancyother, # 40
+      log.tenancyother,
 
-      log.tenancylength,
+      log.tenancylength, # 40
       log.age1 || overrides[:age1],
       log.sexrab1,
       log.gender_same_as_sex1,
@@ -151,10 +151,10 @@ class BulkUpload::LettingsLogToCsv
       log.ecstat1,
       relat_number(log.relat2),
       log.age2 || overrides[:age2],
-      log.sexrab2,
+      log.sexrab2, # 50
       log.gender_same_as_sex2,
       log.gender_description2,
-      log.ecstat2, # 50
+      log.ecstat2,
 
       relat_number(log.relat3),
       log.age3 || overrides[:age3],
@@ -162,31 +162,31 @@ class BulkUpload::LettingsLogToCsv
       log.gender_same_as_sex3,
       log.gender_description3,
       log.ecstat3,
-      relat_number(log.relat4),
+      relat_number(log.relat4), # 60
       log.age4 || overrides[:age4],
       log.sexrab4,
       log.gender_same_as_sex4,
       log.gender_description4,
       log.ecstat4,
       relat_number(log.relat5),
-      log.age5 || overrides[:age5], # 60
+      log.age5 || overrides[:age5],
 
       log.sexrab5,
       log.gender_same_as_sex5,
-      log.gender_description5,
+      log.gender_description5, # 70
       log.ecstat5,
       relat_number(log.relat6),
       log.age6 || overrides[:age6],
       log.sexrab6,
-      log.gender_same_as_sex6, # 140
+      log.gender_same_as_sex6,
       log.gender_description6,
       log.ecstat6,
       relat_number(log.relat7),
       log.age7 || overrides[:age7],
-      log.sexrab7,
+      log.sexrab7, # 80
       log.gender_same_as_sex7,
       log.gender_description7,
-      log.ecstat7, # 70
+      log.ecstat7,
 
       relat_number(log.relat8),
       log.age8 || overrides[:age8],
@@ -194,18 +194,18 @@ class BulkUpload::LettingsLogToCsv
       log.gender_same_as_sex8,
       log.gender_description8,
       log.ecstat8,
-      log.armedforces,
+      log.armedforces, # 90
       log.leftreg,
       log.reservist,
       log.preg_occ,
       log.housingneeds_a,
-      log.housingneeds_b, # 80
+      log.housingneeds_b,
 
       log.housingneeds_c,
       log.housingneeds_f,
       log.housingneeds_g,
       log.housingneeds_h,
-      overrides[:illness] || log.illness,
+      overrides[:illness] || log.illness, # 100
       log.illness_type_1,
       log.illness_type_2,
       log.illness_type_3,
@@ -216,40 +216,40 @@ class BulkUpload::LettingsLogToCsv
       log.illness_type_7,
       log.illness_type_8,
       log.illness_type_9,
-      log.illness_type_10,
+      log.illness_type_10, # 110
       log.layear,
       log.waityear,
       log.reason,
       log.reasonother,
-      log.prevten, # 100
+      log.prevten,
 
       homeless,
       previous_postcode_known,
       ((log.ppostcode_full || "").split(" ") || [""]).first,
       ((log.ppostcode_full || "").split(" ") || [""]).last,
-      log.prevloc,
+      log.prevloc, # 120
       log.reasonpref,
       log.rp_homeless,
       log.rp_insan_unsat,
       log.rp_medwel,
-      log.rp_hardship, # 110
+      log.rp_hardship,
 
       log.rp_dontknow,
       cbl,
       chr,
       cap,
-      accessible_register,
+      accessible_register, # 130
       log.owning_organisation.la? ? log.referral_register : nil,
       log.owning_organisation.prp? ? log.referral_register : nil,
       log.referral_noms,
-      log.referral_org, # 148
+      log.referral_org,
       net_income_known,
       log.incfreq,
       log.earnings,
-      log.hb, # 120
+      log.hb,
 
       log.benefits,
-      log.household_charge,
+      log.household_charge, # 140
       log.period,
       log.brent,
       log.scharge,
