@@ -52,44 +52,44 @@ class BulkUpload::Lettings::Year2026::RowParser
     field_45: "Which of these best describes the lead tenant’s ethnic background?",
     field_46: "What is the lead tenant’s nationality?",
     field_47: "Which of these best describes the lead tenant’s working situation?",
-    field_48: "Is person 2 the partner of the lead tenant?",
-    field_49: "What is person 2’s age?",
+    field_48: "What is person 2’s age?",
+    field_49: "Is person 2 the partner of the lead tenant?",
     field_50: "Person 2's sex, as registered at birth",
     field_51: "Is the gender person 2 identifies with the same as their sex registered at birth?",
     field_52: "If 'No', enter person 2's gender identity",
     field_53: "Which of these best describes person 2’s working situation?",
-    field_54: "Is person 3 the partner of the lead tenant?",
-    field_55: "What is person 3’s age?",
+    field_54: "What is person 3’s age?",
+    field_55: "Is person 3 the partner of the lead tenant?",
     field_56: "Person 3's sex, as registered at birth",
     field_57: "Is the gender person 3 identifies with the same as their sex registered at birth?",
     field_58: "If 'No', enter person 3's gender identity",
     field_59: "Which of these best describes person 3’s working situation?",
-    field_60: "Is person 4 the partner of the lead tenant?",
-    field_61: "What is person 4’s age?",
+    field_60: "What is person 4’s age?",
+    field_61: "Is person 4 the partner of the lead tenant?",
     field_62: "Person 4's sex, as registered at birth",
     field_63: "Is the gender person 4 identifies with the same as their sex registered at birth?",
     field_64: "If 'No', enter person 4's gender identity",
     field_65: "Which of these best describes person 4’s working situation?",
-    field_66: "Is person 5 the partner of the lead tenant?",
-    field_67: "What is person 5’s age?",
+    field_66: "What is person 5’s age?",
+    field_67: "Is person 5 the partner of the lead tenant?",
     field_68: "Person 5's sex, as registered at birth",
     field_69: "Is the gender person 5 identifies with the same as their sex registered at birth?",
     field_70: "If 'No', enter person 5's gender identity",
     field_71: "Which of these best describes person 5’s working situation?",
-    field_72: "Is person 6 the partner of the lead tenant?",
-    field_73: "What is person 6’s age?",
+    field_72: "What is person 6’s age?",
+    field_73: "Is person 6 the partner of the lead tenant?",
     field_74: "Person 6's sex, as registered at birth",
     field_75: "Is the gender person 6 identifies with the same as their sex registered at birth?",
     field_76: "If 'No', enter person 6's gender identity",
     field_77: "Which of these best describes person 6’s working situation?",
-    field_78: "Is person 7 the partner of the lead tenant?",
-    field_79: "What is person 7’s age?",
+    field_78: "What is person 7’s age?",
+    field_79: "Is person 7 the partner of the lead tenant?",
     field_80: "Person 7's sex, as registered at birth",
     field_81: "Is the gender person 7 identifies with the same as their sex registered at birth?",
     field_82: "If 'No', enter person 7's gender identity",
     field_83: "Which of these best describes person 7’s working situation?",
-    field_84: "Is person 8 the partner of the lead tenant?",
-    field_85: "What is person 8’s age?",
+    field_84: "What is person 8’s age?",
+    field_85: "Is person 8 the partner of the lead tenant?",
     field_86: "Person 8's sex, as registered at birth",
     field_87: "Is the gender person 8 identifies with the same as their sex registered at birth?",
     field_88: "If 'No', enter person 8's gender identity",
@@ -217,32 +217,32 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_45, :integer
   attribute :field_46, :integer
   attribute :field_47, :integer
-  attribute :field_48, :integer
-  attribute :field_49, :string
+  attribute :field_49, :integer
+  attribute :field_48, :string
   attribute :field_50, :string
   attribute :field_53, :integer
-  attribute :field_54, :integer
-  attribute :field_55, :string
+  attribute :field_55, :integer
+  attribute :field_54, :string
   attribute :field_56, :string
   attribute :field_59, :integer
-  attribute :field_60, :integer
-  attribute :field_61, :string
+  attribute :field_61, :integer
+  attribute :field_60, :string
   attribute :field_62, :string
   attribute :field_65, :integer
-  attribute :field_66, :integer
-  attribute :field_67, :string
+  attribute :field_67, :integer
+  attribute :field_66, :string
   attribute :field_68, :string
   attribute :field_71, :integer
-  attribute :field_72, :integer
-  attribute :field_73, :string
+  attribute :field_73, :integer
+  attribute :field_72, :string
   attribute :field_74, :string
   attribute :field_77, :integer
-  attribute :field_78, :integer
-  attribute :field_79, :string
+  attribute :field_79, :integer
+  attribute :field_78, :string
   attribute :field_80, :string
   attribute :field_83, :integer
-  attribute :field_84, :integer
-  attribute :field_85, :string
+  attribute :field_85, :integer
+  attribute :field_84, :string
   attribute :field_86, :string
   attribute :field_89, :integer
   attribute :field_90, :integer
@@ -436,13 +436,13 @@ class BulkUpload::Lettings::Year2026::RowParser
             on: :after_log
 
   validates :field_41, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 1) }, on: :after_log
-  validates :field_49, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 2) }, on: :after_log, if: proc { details_known?(2).zero? }
-  validates :field_55, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 3) }, on: :after_log, if: proc { details_known?(3).zero? }
-  validates :field_61, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 4) }, on: :after_log, if: proc { details_known?(4).zero? }
-  validates :field_67, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 5) }, on: :after_log, if: proc { details_known?(5).zero? }
-  validates :field_73, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 6) }, on: :after_log, if: proc { details_known?(6).zero? }
-  validates :field_79, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 7) }, on: :after_log, if: proc { details_known?(7).zero? }
-  validates :field_85, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 8) }, on: :after_log, if: proc { details_known?(8).zero? }
+  validates :field_48, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 2) }, on: :after_log, if: proc { details_known?(2).zero? }
+  validates :field_54, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 3) }, on: :after_log, if: proc { details_known?(3).zero? }
+  validates :field_60, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 4) }, on: :after_log, if: proc { details_known?(4).zero? }
+  validates :field_66, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 5) }, on: :after_log, if: proc { details_known?(5).zero? }
+  validates :field_72, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 6) }, on: :after_log, if: proc { details_known?(6).zero? }
+  validates :field_78, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 7) }, on: :after_log, if: proc { details_known?(7).zero? }
+  validates :field_84, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 8) }, on: :after_log, if: proc { details_known?(8).zero? }
 
   validate :validate_needs_type_present, on: :after_log
   validate :validate_data_types, on: :after_log
@@ -1102,20 +1102,20 @@ private
 
       age1_known: %i[field_41],
       age1: %i[field_41],
-      age2_known: %i[field_49],
-      age2: %i[field_49],
-      age3_known: %i[field_55],
-      age3: %i[field_55],
-      age4_known: %i[field_61],
-      age4: %i[field_61],
-      age5_known: %i[field_67],
-      age5: %i[field_67],
-      age6_known: %i[field_73],
-      age6: %i[field_73],
-      age7_known: %i[field_79],
-      age7: %i[field_79],
-      age8_known: %i[field_85],
-      age8: %i[field_85],
+      age2_known: %i[field_48],
+      age2: %i[field_48],
+      age3_known: %i[field_54],
+      age3: %i[field_54],
+      age4_known: %i[field_60],
+      age4: %i[field_60],
+      age5_known: %i[field_66],
+      age5: %i[field_66],
+      age6_known: %i[field_72],
+      age6: %i[field_72],
+      age7_known: %i[field_78],
+      age7: %i[field_78],
+      age8_known: %i[field_84],
+      age8: %i[field_84],
 
       sexrab1: %i[field_42],
       sexrab2: %i[field_50],
@@ -1131,13 +1131,13 @@ private
       nationality_all: %i[field_46],
       nationality_all_group: %i[field_46],
 
-      relat2: %i[field_48],
-      relat3: %i[field_54],
-      relat4: %i[field_60],
-      relat5: %i[field_66],
-      relat6: %i[field_72],
-      relat7: %i[field_78],
-      relat8: %i[field_84],
+      relat2: %i[field_49],
+      relat3: %i[field_55],
+      relat4: %i[field_61],
+      relat5: %i[field_67],
+      relat6: %i[field_73],
+      relat7: %i[field_79],
+      relat8: %i[field_85],
 
       ecstat1: %i[field_47],
       ecstat2: %i[field_53],
@@ -1288,25 +1288,25 @@ private
     attributes["age1"] = field_41 if attributes["age1_known"]&.zero? && field_41&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age2_known"] = age2_known?
-    attributes["age2"] = field_49 if attributes["age2_known"]&.zero? && field_49&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age2"] = field_48 if attributes["age2_known"]&.zero? && field_48&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age3_known"] = age3_known?
-    attributes["age3"] = field_55 if attributes["age3_known"]&.zero? && field_55&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age3"] = field_54 if attributes["age3_known"]&.zero? && field_54&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age4_known"] = age4_known?
-    attributes["age4"] = field_61 if attributes["age4_known"]&.zero? && field_61&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age4"] = field_60 if attributes["age4_known"]&.zero? && field_60&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age5_known"] = age5_known?
-    attributes["age5"] = field_67 if attributes["age5_known"]&.zero? && field_67&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age5"] = field_66 if attributes["age5_known"]&.zero? && field_66&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age6_known"] = age6_known?
-    attributes["age6"] = field_73 if attributes["age6_known"]&.zero? && field_73&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age6"] = field_72 if attributes["age6_known"]&.zero? && field_72&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age7_known"] = age7_known?
-    attributes["age7"] = field_79 if attributes["age7_known"]&.zero? && field_79&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age7"] = field_78 if attributes["age7_known"]&.zero? && field_78&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age8_known"] = age8_known?
-    attributes["age8"] = field_85 if attributes["age8_known"]&.zero? && field_85&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age8"] = field_84 if attributes["age8_known"]&.zero? && field_84&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["sexrab1"] = field_42
     attributes["sexrab2"] = field_50
@@ -1322,13 +1322,13 @@ private
     attributes["nationality_all"] = field_46 if field_46.present? && valid_nationality_options.include?(field_46.to_s)
     attributes["nationality_all_group"] = nationality_group(attributes["nationality_all"])
 
-    attributes["relat2"] = relationship_from_input_value(field_48)
-    attributes["relat3"] = relationship_from_input_value(field_54)
-    attributes["relat4"] = relationship_from_input_value(field_60)
-    attributes["relat5"] = relationship_from_input_value(field_66)
-    attributes["relat6"] = relationship_from_input_value(field_72)
-    attributes["relat7"] = relationship_from_input_value(field_78)
-    attributes["relat8"] = relationship_from_input_value(field_84)
+    attributes["relat2"] = relationship_from_input_value(field_49)
+    attributes["relat3"] = relationship_from_input_value(field_55)
+    attributes["relat4"] = relationship_from_input_value(field_61)
+    attributes["relat5"] = relationship_from_input_value(field_67)
+    attributes["relat6"] = relationship_from_input_value(field_73)
+    attributes["relat7"] = relationship_from_input_value(field_79)
+    attributes["relat8"] = relationship_from_input_value(field_85)
 
     attributes["ecstat1"] = field_47
     attributes["ecstat2"] = field_53
@@ -1558,13 +1558,13 @@ private
   end
 
   [
-    { person: 2, field: :field_49 },
-    { person: 3, field: :field_55 },
-    { person: 4, field: :field_61 },
-    { person: 5, field: :field_67 },
-    { person: 6, field: :field_73 },
-    { person: 7, field: :field_79 },
-    { person: 8, field: :field_85 },
+    { person: 2, field: :field_48 },
+    { person: 3, field: :field_54 },
+    { person: 4, field: :field_60 },
+    { person: 5, field: :field_66 },
+    { person: 6, field: :field_72 },
+    { person: 7, field: :field_78 },
+    { person: 8, field: :field_84 },
   ].each do |hash|
     define_method("age#{hash[:person]}_known?") do
       return 1 if public_send(hash[:field]) == "R"
@@ -1577,31 +1577,31 @@ private
   end
 
   def person_2_present?
-    field_48.present? || field_49.present? || field_50.present? || field_51.present? || field_52.present?
+    field_49.present? || field_48.present? || field_50.present? || field_51.present? || field_52.present?
   end
 
   def person_3_present?
-    field_54.present? || field_55.present? || field_56.present? || field_57.present? || field_58.present?
+    field_55.present? || field_54.present? || field_56.present? || field_57.present? || field_58.present?
   end
 
   def person_4_present?
-    field_60.present? || field_61.present? || field_62.present? || field_63.present? || field_64.present?
+    field_61.present? || field_60.present? || field_62.present? || field_63.present? || field_64.present?
   end
 
   def person_5_present?
-    field_66.present? || field_67.present? || field_68.present? || field_69.present? || field_70.present?
+    field_67.present? || field_66.present? || field_68.present? || field_69.present? || field_70.present?
   end
 
   def person_6_present?
-    field_72.present? || field_73.present? || field_74.present? || field_75.present? || field_76.present?
+    field_73.present? || field_72.present? || field_74.present? || field_75.present? || field_76.present?
   end
 
   def person_7_present?
-    field_78.present? || field_79.present? || field_80.present? || field_81.present? || field_82.present?
+    field_79.present? || field_78.present? || field_80.present? || field_81.present? || field_82.present?
   end
 
   def person_8_present?
-    field_84.present? || field_85.present? || field_86.present? || field_87.present? || field_88.present?
+    field_85.present? || field_84.present? || field_86.present? || field_87.present? || field_88.present?
   end
 
   def leftreg

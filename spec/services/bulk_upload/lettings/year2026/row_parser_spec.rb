@@ -150,13 +150,13 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             field_15: "1",
 
             field_41: "42",
-            field_49: "41",
-            field_55: "17",
-            field_61: "18",
-            field_67: "16",
-            field_73: "14",
-            field_79: "12",
-            field_85: "20",
+            field_48: "41",
+            field_54: "17",
+            field_60: "18",
+            field_66: "16",
+            field_72: "14",
+            field_78: "12",
+            field_84: "20",
 
             field_42: "F",
             field_50: "M",
@@ -170,13 +170,13 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             field_45: "17",
             field_46: "826",
 
-            field_48: "1",
-            field_54: "2",
-            field_60: "2",
-            field_66: "3",
-            field_72: "2",
-            field_78: "2",
-            field_84: "2",
+            field_49: "1",
+            field_55: "2",
+            field_61: "2",
+            field_67: "3",
+            field_73: "2",
+            field_79: "2",
+            field_85: "2",
 
             field_47: "1",
             field_53: "2",
@@ -1958,13 +1958,13 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
     end
 
-    describe "#field_49" do # age2
+    describe "#field_48" do # age2
       context "when null but gender given" do
-        let(:attributes) { setup_section_params.merge({ field_49: "", field_50: "F" }) }
+        let(:attributes) { setup_section_params.merge({ field_48: "", field_50: "F" }) }
 
         it "returns an error" do
           parser.valid?
-          expect(parser.errors[:field_49]).to be_present
+          expect(parser.errors[:field_48]).to be_present
         end
       end
     end
@@ -2231,14 +2231,14 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
     end
 
     [
-      %w[age1_known details_known_1 age1 field_41 field_48 field_50],
-      %w[age2_known details_known_2 age2 field_49 field_48 field_50],
-      %w[age3_known details_known_3 age3 field_55 field_54 field_56],
-      %w[age4_known details_known_4 age4 field_61 field_60 field_62],
-      %w[age5_known details_known_5 age5 field_67 field_66 field_68],
-      %w[age6_known details_known_6 age6 field_73 field_72 field_74],
-      %w[age7_known details_known_7 age7 field_79 field_78 field_80],
-      %w[age8_known details_known_8 age8 field_85 field_84 field_86],
+      %w[age1_known details_known_1 age1 field_41 field_49 field_50],
+      %w[age2_known details_known_2 age2 field_48 field_49 field_50],
+      %w[age3_known details_known_3 age3 field_54 field_55 field_56],
+      %w[age4_known details_known_4 age4 field_60 field_61 field_62],
+      %w[age5_known details_known_5 age5 field_66 field_67 field_68],
+      %w[age6_known details_known_6 age6 field_72 field_73 field_74],
+      %w[age7_known details_known_7 age7 field_78 field_79 field_80],
+      %w[age8_known details_known_8 age8 field_84 field_85 field_86],
     ].each do |known, details_known, age, field, relationship, gender|
       describe "##{known} and ##{age}" do
         context "when #{field} is blank" do
@@ -2550,13 +2550,13 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       let(:attributes) do
         {
           bulk_upload:,
-          field_48: "1",
-          field_54: "2",
-          field_60: "2",
-          field_66: "3",
-          field_72: "1",
-          field_78: "2",
-          field_84: "2",
+          field_49: "1",
+          field_55: "2",
+          field_61: "2",
+          field_67: "3",
+          field_73: "1",
+          field_79: "2",
+          field_85: "2",
         }
       end
 
@@ -3049,7 +3049,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
 
         it "does not add any housingneeds errors" do
           parser.valid?
-          expect(parser.errors[:field_60]).to be_blank
+          expect(parser.errors[:field_61]).to be_blank
           expect(parser.errors[:field_94]).to be_blank
           expect(parser.errors[:field_95]).to be_blank
           expect(parser.errors[:field_96]).to be_blank
