@@ -18,6 +18,7 @@ RSpec.describe Form::Lettings::Subsections::TenancyInformation, type: :model do
     before do
       allow(form).to receive(:start_year_2024_or_later?).and_return(true)
       allow(form).to receive(:start_year_2025_or_later?).and_return(false)
+      allow(form).to receive(:start_year_2026_or_later?).and_return(false)
     end
 
     context "when 2023" do
@@ -26,6 +27,7 @@ RSpec.describe Form::Lettings::Subsections::TenancyInformation, type: :model do
       before do
         allow(form).to receive(:start_year_2024_or_later?).and_return(false)
         allow(form).to receive(:start_year_2025_or_later?).and_return(false)
+        allow(form).to receive(:start_year_2026_or_later?).and_return(false)
       end
 
       it "has correct pages" do
@@ -41,6 +43,7 @@ RSpec.describe Form::Lettings::Subsections::TenancyInformation, type: :model do
       before do
         allow(form).to receive(:start_year_2024_or_later?).and_return(true)
         allow(form).to receive(:start_year_2025_or_later?).and_return(false)
+        allow(form).to receive(:start_year_2026_or_later?).and_return(false)
       end
 
       it "has correct pages" do
@@ -56,11 +59,28 @@ RSpec.describe Form::Lettings::Subsections::TenancyInformation, type: :model do
       before do
         allow(form).to receive(:start_year_2024_or_later?).and_return(true)
         allow(form).to receive(:start_year_2025_or_later?).and_return(true)
+        allow(form).to receive(:start_year_2026_or_later?).and_return(false)
       end
 
       it "has correct pages" do
         expect(tenancy_information.pages.map(&:id)).to eq(
           %w[joint starter_tenancy tenancy_type starter_tenancy_type tenancy_length tenancy_length_affordable_rent tenancy_length_intermediate_rent tenancy_length_periodic],
+        )
+      end
+    end
+
+    context "when 2026" do
+      let(:start_date) { Time.utc(2026, 2, 8) }
+
+      before do
+        allow(form).to receive(:start_year_2024_or_later?).and_return(true)
+        allow(form).to receive(:start_year_2025_or_later?).and_return(true)
+        allow(form).to receive(:start_year_2026_or_later?).and_return(true)
+      end
+
+      it "has correct pages" do
+        expect(tenancy_information.pages.map(&:id)).to eq(
+          %w[joint starter_tenancy tenancy_type starter_tenancy_type tenancyother_value_check tenancy_length tenancy_length_affordable_rent tenancy_length_intermediate_rent tenancy_length_periodic],
         )
       end
     end

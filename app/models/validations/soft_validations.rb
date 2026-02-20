@@ -208,6 +208,16 @@ module Validations::SoftValidations
     PHRASES_LIKELY_TO_INDICATE_EXISTING_REASON_CATEGORY_REGEX.match?(reasonother)
   end
 
+  PHRASES_LIKELY_TO_INDICATE_INTRODUCTORY_OR_STARTER_PERIOD = %w[introductory intro starter].freeze
+
+  PHRASES_LIKELY_TO_INDICATE_INTRODUCTORY_OR_STARTER_PERIOD_REGEX = Regexp.union(
+    PHRASES_LIKELY_TO_INDICATE_INTRODUCTORY_OR_STARTER_PERIOD.map { |phrase| Regexp.new("\\b[^[:alpha]]*#{phrase}[^[:alpha:]]*\\b", Regexp::IGNORECASE) },
+  )
+
+  def tenancyother_might_be_introductory_or_starter_period?
+    PHRASES_LIKELY_TO_INDICATE_INTRODUCTORY_OR_STARTER_PERIOD_REGEX.match?(tenancyother)
+  end
+
   def multiple_partners?
     return unless hhmemb
 

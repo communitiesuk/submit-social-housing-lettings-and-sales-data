@@ -1355,6 +1355,44 @@ RSpec.describe Validations::SoftValidations do
     end
   end
 
+  describe "tenancyother_might_be_introductory_or_starter_period?" do
+    it "returns true if tenancyother is exactly in the 'likely introductory/starter period' list" do
+      record.tenancyother = "introductory"
+
+      expect(record).to be_tenancyother_might_be_introductory_or_starter_period
+    end
+
+    it "returns true if any word of tenancyother is exactly in the 'likely introductory/starter period' list" do
+      record.tenancyother = "a starter tenancy"
+
+      expect(record).to be_tenancyother_might_be_introductory_or_starter_period
+    end
+
+    it "is not case sensitive when matching" do
+      record.tenancyother = "Intro"
+
+      expect(record).to be_tenancyother_might_be_introductory_or_starter_period
+    end
+
+    it "returns false if no part of tenancyother is in the 'likely introductory/starter period' list" do
+      record.tenancyother = "other"
+
+      expect(record).not_to be_tenancyother_might_be_introductory_or_starter_period
+    end
+
+    it "returns false if match to the 'likely introductory/starter period' list is only part of a word" do
+      record.tenancyother = "wasintroductory"
+
+      expect(record).not_to be_tenancyother_might_be_introductory_or_starter_period
+    end
+
+    it "ignores neighbouring non-alphabet for matching" do
+      record.tenancyother = "1starter."
+
+      expect(record).to be_tenancyother_might_be_introductory_or_starter_period
+    end
+  end
+
   describe "at_least_one_working_situation_is_sickness_and_household_sickness_is_no" do
     it "returns true if one person has working situation as illness and household sickness is no" do
       record.illness = 2

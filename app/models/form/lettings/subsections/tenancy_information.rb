@@ -12,6 +12,7 @@ class Form::Lettings::Subsections::TenancyInformation < ::Form::Subsection
       Form::Lettings::Pages::StarterTenancy.new("starter_tenancy", nil, self),
       Form::Lettings::Pages::TenancyType.new(nil, nil, self),
       Form::Lettings::Pages::StarterTenancyType.new(nil, nil, self),
+      (Form::Lettings::Pages::TenancyotherValueCheck.new(nil, nil, self) if form.start_year_2026_or_later?),
       Form::Lettings::Pages::TenancyLength.new(nil, nil, self),
       Form::Lettings::Pages::TenancyLengthAffordableRent.new(nil, nil, self),
       Form::Lettings::Pages::TenancyLengthIntermediateRent.new(nil, nil, self),
