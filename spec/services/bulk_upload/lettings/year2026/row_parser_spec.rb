@@ -2088,9 +2088,9 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
 
         it "does not add errors to fields that are not routed to" do
           parser.valid?
-          expect(parser.errors.where(:field_157, category: :soft_validation)).not_to be_present
+          expect(parser.errors.where(:field_47, category: :soft_validation)).not_to be_present
           expect(parser.errors.where(:field_136, category: :soft_validation)).not_to be_present
-          expect(parser.errors.where(:field_161, category: :soft_validation)).not_to be_present
+          expect(parser.errors.where(:field_61, category: :soft_validation)).not_to be_present
           expect(parser.errors.where(:field_138, category: :soft_validation)).not_to be_present
         end
       end
