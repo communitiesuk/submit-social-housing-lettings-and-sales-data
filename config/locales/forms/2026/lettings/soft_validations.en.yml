@@ -65,8 +65,6 @@ en:
             question_text: ""
             title_text: "You told us that the type of tenancy was %{tenancyother}."
             informative_text: "Give the type of tenancy that the tenants rolls onto after any introductory or starter period."
-
-
           referral_value_check:
             page_header: ""
             check_answer_label: "Referral confirmation"
