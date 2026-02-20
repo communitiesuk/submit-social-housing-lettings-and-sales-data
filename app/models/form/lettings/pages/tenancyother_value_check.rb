@@ -19,6 +19,6 @@ class Form::Lettings::Pages::TenancyotherValueCheck < ::Form::Page
   end
 
   def interruption_screen_question_ids
-    %w[tenancy tenancyother]
+    %w[startertenancy tenancy tenancyother]
   end
 end
