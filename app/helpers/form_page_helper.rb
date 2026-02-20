@@ -1,4 +1,6 @@
 module FormPageHelper
+  include CollectionTimeHelper
+
   def action_href(log, page_id, referrer = "check_answers")
     send("#{log.log_type}_#{page_id}_path", log, referrer:)
   end
@@ -45,5 +47,12 @@ module FormPageHelper
     else
       page.skip_href(log) || send(log.form.next_page_redirect_path(page, log, current_user, ignore_answered: true), log)
     end
+  end
+
+  def date_hint(question, log)
+    [
+      question.hint_text.presence,
+      question.date_example_override(log) || "For example, #{date_mid_collection_year_formatted(log.startdate).tr(' ', '/')}",
+    ].compact.join("<br><br>").html_safe
   end
 end

@@ -299,6 +299,11 @@ class Form::Question
     answer_options.keys.reject { |x| x.match(/divider/) }
   end
 
+  # used by date questions that need bespoke formatting for the example date
+  def date_example_override(_log)
+    nil
+  end
+
 private
 
   def selected_answer_option_is_derived?(log)
