@@ -4,7 +4,7 @@ class Form::Lettings::Questions::NeedsType < ::Form::Question
     @id = "needstype"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR) if form.start_date.present?
     @top_guidance_partial = "needs_type" if form.start_year_2026_or_later?
   end
 
@@ -13,5 +13,5 @@ class Form::Lettings::Questions::NeedsType < ::Form::Question
     "2" => { "value" => "Supported housing" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 3 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 3, 2024 => 3, 2025 => 3, 2026 => 3 }.freeze
 end

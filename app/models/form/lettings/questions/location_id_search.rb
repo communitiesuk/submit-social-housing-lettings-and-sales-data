@@ -10,7 +10,7 @@ class Form::Lettings::Questions::LocationIdSearch < ::Form::Question
         "needstype": 2,
       },
     }
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR) if form.start_date.present?
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
     @top_guidance_partial = "finding_location"
   end
@@ -50,5 +50,5 @@ private
     false
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 10, 2024 => 5 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 10, 2024 => 5, 2025 => 5, 2026 => 5 }.freeze
 end

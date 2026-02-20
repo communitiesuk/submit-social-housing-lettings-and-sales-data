@@ -5,7 +5,7 @@ class Form::Lettings::Questions::Leftreg < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 0
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {
@@ -16,5 +16,5 @@ class Form::Lettings::Questions::Leftreg < ::Form::Question
     "3" => { "value" => "Person prefers not to say" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 67, 2024 => 66 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 67, 2024 => 66, 2025 => 66, 2026 => 73 }.freeze
 end

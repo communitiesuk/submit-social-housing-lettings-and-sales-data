@@ -346,7 +346,6 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           age_lead_tenant_over_retirement_value_check
           lead_tenant_sex_registered_at_birth
           lead_tenant_gender_same_as_sex
-          lead_tenant_gender_identity
           no_household_member_likely_to_be_pregnant_lead_check
           gender_lead_tenant_over_retirement_value_check
           lead_tenant_ethnic_group
@@ -369,7 +368,6 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           age_2_over_retirement_value_check
           person_2_sex_registered_at_birth
           person_2_gender_same_as_sex
-          person_2_gender_identity
           no_household_member_likely_to_be_pregnant_person_2_check
           gender_2_over_retirement_value_check
           person_2_working_situation
@@ -385,7 +383,6 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           age_3_over_retirement_value_check
           person_3_sex_registered_at_birth
           person_3_gender_same_as_sex
-          person_3_gender_identity
           no_household_member_likely_to_be_pregnant_person_3_check
           gender_3_over_retirement_value_check
           person_3_working_situation
@@ -401,7 +398,6 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           age_4_over_retirement_value_check
           person_4_sex_registered_at_birth
           person_4_gender_same_as_sex
-          person_4_gender_identity
           no_household_member_likely_to_be_pregnant_person_4_check
           gender_4_over_retirement_value_check
           person_4_working_situation
@@ -417,7 +413,6 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           age_5_over_retirement_value_check
           person_5_sex_registered_at_birth
           person_5_gender_same_as_sex
-          person_5_gender_identity
           no_household_member_likely_to_be_pregnant_person_5_check
           gender_5_over_retirement_value_check
           person_5_working_situation
@@ -433,7 +428,6 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           age_6_over_retirement_value_check
           person_6_sex_registered_at_birth
           person_6_gender_same_as_sex
-          person_6_gender_identity
           no_household_member_likely_to_be_pregnant_person_6_check
           gender_6_over_retirement_value_check
           person_6_working_situation
@@ -449,7 +443,6 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           age_7_over_retirement_value_check
           person_7_sex_registered_at_birth
           person_7_gender_same_as_sex
-          person_7_gender_identity
           no_household_member_likely_to_be_pregnant_person_7_check
           gender_7_over_retirement_value_check
           person_7_working_situation
@@ -465,7 +458,6 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           age_8_over_retirement_value_check
           person_8_sex_registered_at_birth
           person_8_gender_same_as_sex
-          person_8_gender_identity
           no_household_member_likely_to_be_pregnant_person_8_check
           gender_8_over_retirement_value_check
           person_8_working_situation

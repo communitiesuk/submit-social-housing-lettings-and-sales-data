@@ -4,7 +4,7 @@ class Form::Lettings::Questions::PreviousLetType < ::Form::Question
     @id = "unitletas"
     @type = "radio"
     @answer_options = answer_options
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {
@@ -41,7 +41,7 @@ class Form::Lettings::Questions::PreviousLetType < ::Form::Question
     "3" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 16, 2024 => 17, 2025 => 14 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 16, 2024 => 17, 2025 => 14, 2026 => 14 }.freeze
 
   def answer_options
     return ANSWER_OPTIONS_AFTER_2025 if form.start_year_2025_or_later?

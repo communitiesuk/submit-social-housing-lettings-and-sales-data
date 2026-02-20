@@ -6,7 +6,7 @@ class Form::Lettings::Questions::Prevloc < ::Form::Question
     @type = "select"
     @inferred_check_answers_value = [{ "condition" => { "previous_la_known" => 0 }, "value" => "Not known" }]
     @check_answers_card_number = 0
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
@@ -14,5 +14,5 @@ class Form::Lettings::Questions::Prevloc < ::Form::Question
     { "" => "Select an option" }.merge(LocalAuthority.active(form.start_date).map { |la| [la.code, la.name] }.to_h)
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 81, 2024 => 80 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 81, 2024 => 80, 2025 => 80, 2026 => 87 }.freeze
 end
