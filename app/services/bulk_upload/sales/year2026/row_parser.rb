@@ -142,6 +142,19 @@ class BulkUpload::Sales::Year2026::RowParser
     field_125: "Person 4's sex, as registered at birth",
     field_126: "Person 5's sex, as registered at birth",
     field_127: "Person 6's sex, as registered at birth",
+
+    field_128: "Is the gender buyer 1 identifies with the same as their sex registered at birth?",
+    field_129: "If 'No', enter buyer 1's gender identity",
+    field_130: "Is the gender buyer/person 2 identifies with the same as their sex registered at birth?",
+    field_131: "If 'No', enter buyer/person 2's gender identity",
+    field_132: "Is the gender person 3 identifies with the same as their sex registered at birth?",
+    field_133: "If 'No', enter person 3's gender identity",
+    field_134: "Is the gender person 4 identifies with the same as their sex registered at birth?",
+    field_135: "If 'No', enter person 4's gender identity",
+    field_136: "Is the gender person 5 identifies with the same as their sex registered at birth?",
+    field_137: "If 'No', enter person 5's gender identity",
+    field_138: "Is the gender person 6 identifies with the same as their sex registered at birth?",
+    field_139: "If 'No', enter person 6's gender identity",
   }.freeze
 
   ERROR_BASE_KEY = "validations.sales.2026.bulk_upload".freeze
@@ -288,6 +301,19 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_125, :string
   attribute :field_126, :string
   attribute :field_127, :string
+
+  attribute :field_128, :integer
+  attribute :field_129, :string
+  attribute :field_130, :integer
+  attribute :field_131, :string
+  attribute :field_132, :integer
+  attribute :field_133, :string
+  attribute :field_134, :integer
+  attribute :field_135, :string
+  attribute :field_136, :integer
+  attribute :field_137, :string
+  attribute :field_138, :integer
+  attribute :field_139, :string
 
   validates :field_1,
             presence: {
@@ -801,6 +827,19 @@ private
       sexrab4: %i[field_125],
       sexrab5: %i[field_126],
       sexrab6: %i[field_127],
+
+      gender_same_as_sex1: %i[field_128],
+      gender_description1: %i[field_129],
+      gender_same_as_sex2: %i[field_130],
+      gender_description2: %i[field_131],
+      gender_same_as_sex3: %i[field_132],
+      gender_description3: %i[field_133],
+      gender_same_as_sex4: %i[field_134],
+      gender_description4: %i[field_135],
+      gender_same_as_sex5: %i[field_136],
+      gender_description5: %i[field_137],
+      gender_same_as_sex6: %i[field_138],
+      gender_description6: %i[field_139],
     }
   end
 
@@ -842,6 +881,19 @@ private
     attributes["sexrab4"] = field_125
     attributes["sexrab5"] = field_126
     attributes["sexrab6"] = field_127
+
+    attributes["gender_same_as_sex1"] = field_128
+    attributes["gender_description1"] = field_129
+    attributes["gender_same_as_sex2"] = field_130
+    attributes["gender_description2"] = field_131
+    attributes["gender_same_as_sex3"] = field_132
+    attributes["gender_description3"] = field_133
+    attributes["gender_same_as_sex4"] = field_134
+    attributes["gender_description4"] = field_135
+    attributes["gender_same_as_sex5"] = field_136
+    attributes["gender_description5"] = field_137
+    attributes["gender_same_as_sex6"] = field_138
+    attributes["gender_description6"] = field_139
 
     attributes["relat2"] = relationship_from_is_partner(field_34)
     attributes["relat3"] = relationship_from_is_partner(field_42)

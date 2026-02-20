@@ -150,5 +150,7 @@ module Exports::SalesLogExportConstants
 
   (1..6).each do |index|
     YEAR_2026_EXPORT_FIELDS << "SEXRAB#{index}"
+    YEAR_2026_EXPORT_FIELDS << "GENDER_SAME_AS_SEX#{index}"
+    YEAR_2026_EXPORT_FIELDS << "GENDER_DESCRIPTION#{index}"
   end
 end
