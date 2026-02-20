@@ -298,6 +298,20 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           expect(questions.map(&:id).size).to eq(0)
           expect(questions.map(&:id)).to eql([])
         end
+
+        context "and case insensitive fields are set to lowercase" do
+          let(:case_insensitive_fields) { %w[field_122 field_123 field_124 field_125 field_126 field_127] }
+          let(:case_insensitive_integer_fields_with_r_option) { %w[field_28 field_35 field_43 field_47 field_51 field_55 field_64 field_75 field_70 field_72] }
+          let(:attributes) do
+            valid_attributes
+              .merge(case_insensitive_fields.each_with_object({}) { |field, h| h[field.to_sym] = valid_attributes[field.to_sym]&.downcase })
+              .merge(case_insensitive_integer_fields_with_r_option.each_with_object({}) { |field, h| h[field.to_sym] = "r" })
+          end
+
+          it "is still valid" do
+            expect(parser).to be_valid
+          end
+        end
       end
 
       describe "#validate_nulls" do

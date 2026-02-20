@@ -569,6 +569,20 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
               end
             end
           end
+
+          context "and case insensitive fields are set to lowercase" do
+            let(:case_insensitive_fields) { %w[field_130 field_131 field_132 field_133 field_134 field_135 field_136 field_137] }
+            let(:case_insensitive_integer_fields_with_r_option) { %w[field_42 field_48 field_52 field_56 field_60 field_64 field_68 field_72] }
+            let(:attributes) do
+              valid_attributes
+                .merge(case_insensitive_fields.each_with_object({}) { |field, h| h[field.to_sym] = valid_attributes[field.to_sym]&.downcase })
+                .merge(case_insensitive_integer_fields_with_r_option.each_with_object({}) { |field, h| h[field.to_sym] = "r" })
+            end
+
+            it "is still valid" do
+              expect(parser).to be_valid
+            end
+          end
         end
 
         context "when valid row with valid decimal (integer) field_11" do
