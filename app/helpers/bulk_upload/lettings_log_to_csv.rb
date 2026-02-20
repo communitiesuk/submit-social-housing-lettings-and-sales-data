@@ -239,8 +239,8 @@ class BulkUpload::LettingsLogToCsv
       log.supcharg,
       log.hbrentshortfall,
       log.tshortfall,
-
       log.gender_same_as_sex1, # 130
+
       log.gender_description1,
       log.gender_same_as_sex2,
       log.gender_description2,
@@ -251,6 +251,7 @@ class BulkUpload::LettingsLogToCsv
       log.gender_same_as_sex5,
       log.gender_description5,
       log.gender_same_as_sex6, # 140
+
       log.gender_description6,
       log.gender_same_as_sex7,
       log.gender_description7,
