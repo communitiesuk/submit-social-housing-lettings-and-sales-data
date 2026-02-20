@@ -126,7 +126,6 @@ class BulkUpload::LettingsLogToCsv
       ((log.postcode_full || "").split(" ") || [""]).last,
       log.la,
       log.unittype_gn,
-      log.builtype,
       log.wchair,
       log.beds,
       log.voiddate&.day, # 30
