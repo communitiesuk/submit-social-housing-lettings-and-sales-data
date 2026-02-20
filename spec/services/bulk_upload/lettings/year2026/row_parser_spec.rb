@@ -1959,18 +1959,22 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
 
       context "when a soft validation is triggered that relates both to fields that are and are not routed to" do
-        let(:attributes) { setup_section_params.merge({ field_78: "1", field_43: "M", field_49: "M", field_53: "M" }) }
+        let(:attributes) { setup_section_params.merge({ field_78: "1", field_130: "M", field_131: "M", field_132: "M", field_138: 1, field_140: 1, field_142: 1 }) }
 
         it "adds errors to fields that are routed to" do
           parser.valid?
-          expect(parser.errors.where(:field_49, category: :soft_validation)).to be_present
-          expect(parser.errors.where(:field_53, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_130, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_138, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_131, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_140, category: :soft_validation)).to be_present
         end
 
         it "does not add errors to fields that are not routed to" do
           parser.valid?
-          expect(parser.errors.where(:field_57, category: :soft_validation)).not_to be_present
-          expect(parser.errors.where(:field_61, category: :soft_validation)).not_to be_present
+          expect(parser.errors.where(:field_133, category: :soft_validation)).not_to be_present
+          expect(parser.errors.where(:field_144, category: :soft_validation)).not_to be_present
+          expect(parser.errors.where(:field_134, category: :soft_validation)).not_to be_present
+          expect(parser.errors.where(:field_146, category: :soft_validation)).not_to be_present
         end
       end
 

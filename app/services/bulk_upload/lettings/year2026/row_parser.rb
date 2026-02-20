@@ -1262,6 +1262,22 @@ private
       sexrab6: %i[field_135],
       sexrab7: %i[field_136],
       sexrab8: %i[field_137],
+      gender_same_as_sex1: %i[field_138],
+      gender_same_as_sex2: %i[field_140],
+      gender_same_as_sex3: %i[field_142],
+      gender_same_as_sex4: %i[field_144],
+      gender_same_as_sex5: %i[field_146],
+      gender_same_as_sex6: %i[field_148],
+      gender_same_as_sex7: %i[field_150],
+      gender_same_as_sex8: %i[field_152],
+      gender_description1: %i[field_139],
+      gender_description2: %i[field_141],
+      gender_description3: %i[field_143],
+      gender_description4: %i[field_145],
+      gender_description5: %i[field_147],
+      gender_description6: %i[field_149],
+      gender_description7: %i[field_151],
+      gender_description8: %i[field_153],
     }.compact
   end
 

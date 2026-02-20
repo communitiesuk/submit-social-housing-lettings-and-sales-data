@@ -53,8 +53,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdNeeds, type: :model do
           armed_forces_serving
           armed_forces_injured
           pregnant
-          no_females_pregnant_household_value_check
-          females_in_soft_age_range_in_pregnant_household_value_check
+          no_household_member_likely_to_be_pregnant_check
           access_needs_exist
           type_of_access_needs
           health_conditions
