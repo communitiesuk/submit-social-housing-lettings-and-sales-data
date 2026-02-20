@@ -1,3 +1,5 @@
+# added in 2025
+# removed in 2026
 class Form::Lettings::Questions::ReferralType < ::Form::Question
   def initialize(id, hsh, page)
     super

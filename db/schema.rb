@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_01_28_121417) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_04_100051) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -384,6 +384,25 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_28_121417) do
     t.string "sexrab6"
     t.string "sexrab7"
     t.string "sexrab8"
+    t.integer "gender_same_as_sex1"
+    t.integer "gender_same_as_sex2"
+    t.integer "gender_same_as_sex3"
+    t.integer "gender_same_as_sex4"
+    t.integer "gender_same_as_sex5"
+    t.integer "gender_same_as_sex6"
+    t.integer "gender_same_as_sex7"
+    t.integer "gender_same_as_sex8"
+    t.string "gender_description1"
+    t.string "gender_description2"
+    t.string "gender_description3"
+    t.string "gender_description4"
+    t.string "gender_description5"
+    t.string "gender_description6"
+    t.string "gender_description7"
+    t.string "gender_description8"
+    t.integer "referral_register"
+    t.integer "referral_noms"
+    t.integer "referral_org"
     t.index ["assigned_to_id"], name: "index_lettings_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"

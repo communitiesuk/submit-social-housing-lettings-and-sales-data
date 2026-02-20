@@ -75,30 +75,16 @@ module Validations::SoftValidations
     end
   end
 
+  def no_household_member_likely_to_be_pregnant?
+    all_male_tenants_in_a_pregnant_household? || non_males_in_pregnant_household_not_in_pregnancy_range?
+  end
+
   def all_male_tenants_in_a_pregnant_household?
-    all_male_tenants_in_the_household? && all_tenants_gender_information_completed? && preg_occ == 1
+    all_tenants_gender_information_completed? && all_male_tenants_in_the_household? && preg_occ == 1
   end
 
-  def female_in_pregnant_household_in_soft_validation_range?
-    all_tenants_age_and_gender_information_completed? && females_in_the_household? && !females_in_age_range(16, 50) && preg_occ == 1
-  end
-
-  def all_tenants_age_and_gender_information_completed?
-    return false if hhmemb.present? && hhmemb > 8
-
-    person_count = hhmemb || 8
-
-    (1..person_count).all? do |n|
-      public_send("sex#{n}").present? && public_send("age#{n}").present? && details_known_or_lead_tenant?(n) && public_send("age#{n}_known").present? && public_send("age#{n}_known").zero?
-    end
-  end
-
-  def all_tenants_gender_information_completed?
-    person_count = hhmemb || 8
-
-    (1..person_count).all? do |n|
-      public_send("sex#{n}").present? && details_known_or_lead_tenant?(n)
-    end
+  def non_males_in_pregnant_household_not_in_pregnancy_range?
+    all_tenants_age_and_gender_information_completed? && non_males_in_the_household? && !any_non_male_in_expected_pregnancy_age_range(16, 50) && preg_occ == 1
   end
 
   TWO_YEARS_IN_DAYS = 730
@@ -221,25 +207,54 @@ module Validations::SoftValidations
 
 private
 
+  def all_tenants_age_and_gender_information_completed?
+    return false if hhmemb.present? && hhmemb > 8
+    return false unless all_tenants_gender_information_completed?
+
+    person_count = hhmemb || 8
+
+    (1..person_count).all? do |n|
+      public_send("age#{n}").present? && public_send("age#{n}_known").present? && public_send("age#{n}_known").zero?
+    end
+  end
+
+  def all_tenants_gender_information_completed?
+    return false if hhmemb.present? && hhmemb > 8
+
+    person_count = hhmemb || 8
+
+    (1..person_count).all? do |n|
+      tenant_gender_information_completed?(n)
+    end
+  end
+
+  def tenant_gender_information_completed?(tenant_number)
+    if form.start_year_2026_or_later?
+      public_send("sexrab#{tenant_number}").present? && public_send("gender_same_as_sex#{tenant_number}").present? && details_known_or_lead_tenant?(tenant_number)
+    else
+      public_send("sex#{tenant_number}").present? && details_known_or_lead_tenant?(tenant_number)
+    end
+  end
+
   def details_known_or_lead_tenant?(tenant_number)
     return true if tenant_number == 1
 
     public_send("details_known_#{tenant_number}").zero?
   end
 
-  def females_in_age_range(min, max)
+  def any_non_male_in_expected_pregnancy_age_range(min, max)
     person_count = hhmemb || 8
 
     (1..person_count).any? do |n|
-      public_send("sex#{n}") == "F" && public_send("age#{n}").present? && public_send("age#{n}").between?(min, max)
+      person_in_expected_pregnancy_age_range(n, min, max) && person_is_non_male(n)
     end
   end
 
-  def females_in_the_household?
+  def non_males_in_the_household?
     person_count = hhmemb || 8
 
     (1..person_count).any? do |n|
-      public_send("sex#{n}") == "F" || public_send("sex#{n}").nil?
+      person_is_non_male(n)
     end
   end
 
@@ -249,8 +264,34 @@ private
     person_count = hhmemb || 8
 
     (1..person_count).all? do |n|
-      public_send("sex#{n}") == "M"
+      person_is_male(n)
     end
+  end
+
+  def person_is_male(person_number)
+    if form.start_year_2026_or_later?
+      sexrab = public_send("sexrab#{person_number}")
+      gender_same_as_sex = public_send("gender_same_as_sex#{person_number}")
+
+      sexrab == "M" && gender_same_as_sex == 1
+    else
+      public_send("sex#{person_number}") == "M"
+    end
+  end
+
+  def person_is_non_male(person_number)
+    if form.start_year_2026_or_later?
+      !person_is_male(person_number)
+    else
+      # the "non-male" wording was introduced in the 26/27 collection year, before that this behavior was limited to female gender only
+      public_send("sex#{person_number}") == "F"
+    end
+  end
+
+  def person_in_expected_pregnancy_age_range(person_number, min, max)
+    age = public_send("age#{person_number}")
+
+    age.between?(min, max)
   end
 
   def tenant_is_retired?(economic_status)

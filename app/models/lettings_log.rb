@@ -35,6 +35,7 @@ class LettingsLog < Log
   before_validation :set_derived_fields!
   before_validation :process_uprn_change!, if: :should_process_uprn_change?
   before_validation :process_address_change!, if: :should_process_address_change?
+  before_validation :reset_referral_register!, if: :should_reset_referral_register?
 
   belongs_to :scheme, optional: true
   belongs_to :location, optional: true
@@ -376,8 +377,12 @@ class LettingsLog < Log
   end
 
   def is_internal_transfer?
-    # 1: Internal Transfer
-    referral == 1
+    if form.start_year_2026_or_later?
+      referral_register == 2 || (referral_register == 6 && referral_noms == 3) || (referral_register == 7 && referral_noms == 5)
+    else
+      # 1: Internal Transfer
+      referral == 1
+    end
   end
 
   def is_from_prp_only_housing_register_or_waiting_list?
@@ -544,6 +549,12 @@ class LettingsLog < Log
     [30, 31].any?(prevten)
   end
 
+  def is_prevten_general_needs?
+    return false unless prevten
+
+    ![30, 31, 32, 33, 35, 38, 40, 6].include?(prevten)
+  end
+
   def owning_organisation_name
     owning_organisation&.name
   end
@@ -676,7 +687,7 @@ class LettingsLog < Log
   end
 
   def has_any_person_details?(person_index)
-    ["sex#{person_index}", "relat#{person_index}", "ecstat#{person_index}"].any? { |field| public_send(field).present? } || public_send("age#{person_index}_known") == 1
+    ["sex#{person_index}", "sexrab#{person_index}", "relat#{person_index}", "ecstat#{person_index}"].any? { |field| public_send(field).present? } || public_send("age#{person_index}_known") == 1
   end
 
   def details_not_known_for_person?(person_index)
@@ -774,6 +785,22 @@ class LettingsLog < Log
 
   def is_address_asked?
     form.start_year_2026_or_later? || !is_supported_housing?
+  end
+
+  def referral_is_from_local_authority_housing_register?
+    referral_register == 6
+  end
+
+  def referral_is_from_housing_register?
+    referral_register == 7
+  end
+
+  def referral_is_nominated_by_local_authority?
+    referral_is_from_local_authority_housing_register? && referral_noms == 1
+  end
+
+  def referral_is_directly_referred?
+    referral_is_from_housing_register? && referral_noms == 7
   end
 
 private
@@ -884,6 +911,10 @@ private
     [sex1, sex2, sex3, sex4, sex5, sex6, sex7, sex8].any?("R")
   end
 
+  def sexrab_refused?
+    [sexrab1, sexrab2, sexrab3, sexrab4, sexrab5, sexrab6, sexrab7, sexrab8].any?("R")
+  end
+
   def relat_refused?
     [relat2, relat3, relat4, relat5, relat6, relat7, relat8].any?("R")
   end
@@ -946,5 +977,17 @@ private
     else
       uprn_selection_changed? || startdate_changed?
     end
+  end
+
+  def reset_referral_register!
+    self.referral_register = nil
+  end
+
+  def should_reset_referral_register?
+    return unless owning_organisation_id_changed? && owning_organisation_id && owning_organisation_id_was
+
+    old_owning_organisation = Organisation.find(owning_organisation_id_was)
+
+    old_owning_organisation.provider_type != owning_organisation.provider_type
   end
 end

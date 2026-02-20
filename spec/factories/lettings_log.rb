@@ -61,6 +61,7 @@ FactoryBot.define do
       age1 { Faker::Number.within(range: 25..45) }
       sexrab1 { %w[F M R].sample }
       sex1 { %w[F M X R].sample }
+      gender_same_as_sex1 { 1 }
       ethnic_group { 0 }
       ethnic { 2 }
       national { 13 }
@@ -73,6 +74,8 @@ FactoryBot.define do
       age2 { Faker::Number.within(range: 25..45) }
       sexrab2 { %w[F M R].sample }
       sex2 { %w[F M X R].sample }
+      gender_same_as_sex2 { 2 }
+      gender_description2 { Faker::Gender.type }
       ecstat2 { 6 }
       homeless { 1 }
       underoccupation_benefitcap { 0 }
@@ -165,6 +168,9 @@ FactoryBot.define do
       first_time_property_let_as_social_housing { 0 }
       referral_type { 1 }
       referral { 2 }
+      referral_register { 1 }
+      referral_noms { 1 }
+      referral_org { 1 }
       uprn_known { 0 }
       joint { 3 }
       address_line1 { "Address line 1" }

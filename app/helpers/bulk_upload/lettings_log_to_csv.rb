@@ -144,40 +144,40 @@ class BulkUpload::LettingsLogToCsv
 
       log.tenancylength,
       log.age1 || overrides[:age1],
-      log.sex1,
+      log.sexrab1,
       log.ethnic,
       log.nationality_all_group,
       log.ecstat1,
       relat_number(log.relat2),
       log.age2 || overrides[:age2],
-      log.sex2,
+      log.sexrab2,
       log.ecstat2, # 50
 
       relat_number(log.relat3),
       log.age3 || overrides[:age3],
-      log.sex3,
+      log.sexrab3,
       log.ecstat3,
       relat_number(log.relat4),
       log.age4 || overrides[:age4],
-      log.sex4,
+      log.sexrab4,
       log.ecstat4,
       relat_number(log.relat5),
       log.age5 || overrides[:age5], # 60
 
-      log.sex5,
+      log.sexrab5,
       log.ecstat5,
       relat_number(log.relat6),
       log.age6 || overrides[:age6],
-      log.sex6,
+      log.sexrab6,
       log.ecstat6,
       relat_number(log.relat7),
       log.age7 || overrides[:age7],
-      log.sex7,
+      log.sexrab7,
       log.ecstat7, # 70
 
       relat_number(log.relat8),
       log.age8 || overrides[:age8],
-      log.sex8,
+      log.sexrab8,
       log.ecstat8,
       log.armedforces,
       log.leftreg,
@@ -224,7 +224,7 @@ class BulkUpload::LettingsLogToCsv
       chr,
       cap,
       accessible_register,
-      log.referral,
+      log.owning_organisation.la? ? log.referral_register : nil,
       net_income_known,
       log.incfreq,
       log.earnings,
@@ -239,14 +239,27 @@ class BulkUpload::LettingsLogToCsv
       log.supcharg,
       log.hbrentshortfall,
       log.tshortfall,
-      log.sexrab1, # 130
-      log.sexrab2,
-      log.sexrab3,
-      log.sexrab4,
-      log.sexrab5,
-      log.sexrab6,
-      log.sexrab7,
-      log.sexrab8, # 137
+      log.gender_same_as_sex1, # 130
+
+      log.gender_description1,
+      log.gender_same_as_sex2,
+      log.gender_description2,
+      log.gender_same_as_sex3,
+      log.gender_description3,
+      log.gender_same_as_sex4,
+      log.gender_description4,
+      log.gender_same_as_sex5,
+      log.gender_description5,
+      log.gender_same_as_sex6, # 140
+
+      log.gender_description6,
+      log.gender_same_as_sex7,
+      log.gender_description7,
+      log.gender_same_as_sex8,
+      log.gender_description8,
+      log.owning_organisation.prp? ? log.referral_register : nil,
+      log.referral_noms,
+      log.referral_org, # 148
     ]
   end
 
