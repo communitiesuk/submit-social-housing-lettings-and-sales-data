@@ -419,6 +419,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           age_1_old_persons_shared_ownership_joint_purchase_value_check
           age_1_old_persons_shared_ownership_value_check
           buyer_1_sex_registered_at_birth
+          buyer_1_gender_same_as_sex
           buyer_1_gender_identity
           buyer_1_ethnic_group
           buyer_1_ethnic_background_black
@@ -440,6 +441,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           age_2_buyer_retirement_value_check
           age_2_buyer_not_retired_value_check
           buyer_2_sex_registered_at_birth
+          buyer_2_gender_same_as_sex
           buyer_2_gender_identity
           buyer_2_ethnic_group
           buyer_2_ethnic_background_black
@@ -465,6 +467,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           age_2_not_retired_value_check
           age_2_partner_under_16_value_check
           person_2_sex_registered_at_birth
+          person_2_gender_same_as_sex
           person_2_gender_identity
           person_2_working_situation
           working_situation_2_retirement_value_check
@@ -478,6 +481,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           age_3_not_retired_value_check
           age_3_partner_under_16_value_check
           person_3_sex_registered_at_birth
+          person_3_gender_same_as_sex
           person_3_gender_identity
           person_3_working_situation
           working_situation_3_retirement_value_check
@@ -491,6 +495,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           age_4_not_retired_value_check
           age_4_partner_under_16_value_check
           person_4_sex_registered_at_birth
+          person_4_gender_same_as_sex
           person_4_gender_identity
           person_4_working_situation
           working_situation_4_retirement_value_check
@@ -504,6 +509,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           age_5_not_retired_value_check
           age_5_partner_under_16_value_check
           person_5_sex_registered_at_birth
+          person_5_gender_same_as_sex
           person_5_gender_identity
           person_5_working_situation
           working_situation_5_retirement_value_check
@@ -517,6 +523,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           age_6_not_retired_value_check
           age_6_partner_under_16_value_check
           person_6_sex_registered_at_birth
+          person_6_gender_same_as_sex
           person_6_gender_identity
           person_6_working_situation
           working_situation_6_retirement_value_check
