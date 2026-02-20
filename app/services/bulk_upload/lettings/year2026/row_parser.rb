@@ -304,13 +304,13 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_128, :integer
   attribute :field_129, :decimal
 
-  attribute :field_130, :string
+  attribute :field_130, :integer
   attribute :field_131, :string
-  attribute :field_132, :string
+  attribute :field_132, :integer
   attribute :field_133, :string
-  attribute :field_134, :string
+  attribute :field_134, :integer
   attribute :field_135, :string
-  attribute :field_136, :string
+  attribute :field_136, :integer
   attribute :field_137, :string
   attribute :field_138, :integer
   attribute :field_139, :string
