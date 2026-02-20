@@ -21,6 +21,7 @@ class LettingsLog < Log
   include Validations::DateValidations
   include Validations::FinancialValidations
   include MoneyFormattingHelper
+  include CollectionTimeHelper
 
   has_paper_trail
 
@@ -42,6 +43,8 @@ class LettingsLog < Log
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
 
   scope :filter_by_year, ->(year) { where(startdate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
+  scope :filter_by_year_or_later, ->(year) { where("lettings_logs.startdate >= ?", Time.zone.local(year.to_i, 4, 1)) }
+  scope :filter_by_year_or_earlier, ->(year) { where("lettings_logs.startdate < ?", Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :filter_by_years_or_nil, lambda { |years, _user = nil|
     first_year = years.shift
     query = filter_by_year(first_year)
@@ -86,13 +89,36 @@ class LettingsLog < Log
   scope :age1_answered, -> { where.not(age1: nil).or(where(age1_known: 1)) }
   scope :tcharge_answered, -> { where.not(tcharge: nil).or(where(household_charge: 1)).or(where(is_carehome: 1)) }
   scope :chcharge_answered, -> { where.not(chcharge: nil).or(where(is_carehome: [nil, 0])) }
-  scope :location_for_log_answered, ->(log) { where(location_id: log.location_id).or(where(needstype: 1)) }
-  scope :postcode_for_log_answered, ->(log) { where(postcode_full: log.postcode_full).or(where(needstype: 2)) }
-  scope :location_answered, -> { where.not(location_id: nil).or(where(needstype: 1)) }
+  # once 2025 logs are removed this logic can be simplified
+  # 2025 and before, match on location if supported, or address if general needs
+  # 2026 and after, match on address only
+  scope :location_for_log_answered_as, ->(log) { where(location_id: log.location_id).or(where(needstype: 1)).or(filter_by_year_or_later(2026)) }
+  scope :address_for_log_answered_as, lambda { |log|
+    where(postcode_full: log.postcode_full).where(address_line1: log.address_line1).where(uprn: log.uprn)
+      .or(filter_by_year_or_earlier(2025).where(needstype: 2))
+  }
+  scope :location_answered, -> { where.not(location_id: nil).or(where(needstype: 1)).or(filter_by_year_or_later(2026)) }
   scope :postcode_answered, -> { where.not(postcode_full: nil).or(where(needstype: 2)) }
+  scope :sex1_answered, -> { where.not(sex1: nil).filter_by_year_or_earlier(2025).or(where.not(sexrab1: nil).filter_by_year_or_later(2026)) }
   scope :duplicate_logs, lambda { |log|
     visible
       .where.not(id: log.id)
+      .where.not(startdate: nil)
+      .sex1_answered
+      .where.not(ecstat1: nil)
+      .where.not(needstype: nil)
+      .age1_answered
+      .tcharge_answered
+      .chcharge_answered
+      .location_for_log_answered_as(log)
+      .address_for_log_answered_as(log)
+      .where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
+  }
+
+  scope :duplicate_sets_2025_and_earlier, lambda { |assigned_to_id = nil|
+    scope = visible
+      .filter_by_year_or_earlier(2025)
+      .group(*DUPLICATE_LOG_ATTRIBUTES, :postcode_full, :location_id, :uprn, :address_line1)
       .where.not(startdate: nil)
       .where.not(sex1: nil)
       .where.not(ecstat1: nil)
@@ -100,31 +126,44 @@ class LettingsLog < Log
       .age1_answered
       .tcharge_answered
       .chcharge_answered
-      .location_for_log_answered(log)
-      .postcode_for_log_answered(log)
-      .where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
-  }
-
-  scope :duplicate_sets, lambda { |assigned_to_id = nil|
-    scope = visible
-    .group(*DUPLICATE_LOG_ATTRIBUTES, :postcode_full, :location_id)
-    .where.not(startdate: nil)
-    .where.not(sex1: nil)
-    .where.not(ecstat1: nil)
-    .where.not(needstype: nil)
-    .age1_answered
-    .tcharge_answered
-    .chcharge_answered
-    .location_answered
-    .postcode_answered
-    .having(
-      "COUNT(*) > 1",
-    )
+      .location_answered
+      .postcode_answered
+      .having(
+        "COUNT(*) > 1",
+      )
 
     if assigned_to_id
       scope = scope.having("MAX(CASE WHEN assigned_to_id = ? THEN 1 ELSE 0 END) >= 1", assigned_to_id)
     end
     scope.pluck("ARRAY_AGG(id)")
+  }
+
+  scope :duplicate_sets_2026_and_later, lambda { |assigned_to_id = nil|
+    scope = visible
+      .filter_by_year_or_later(2026)
+      # separate function as location needs to be fully ignored in 2026
+      .group(*DUPLICATE_LOG_ATTRIBUTES, :postcode_full, :uprn, :address_line1)
+      .where.not(startdate: nil)
+      .where.not(sexrab1: nil)
+      .where.not(ecstat1: nil)
+      .where.not(needstype: nil)
+      .age1_answered
+      .tcharge_answered
+      .chcharge_answered
+      .location_answered
+      .postcode_answered
+      .having(
+        "COUNT(*) > 1",
+      )
+
+    if assigned_to_id
+      scope = scope.having("MAX(CASE WHEN assigned_to_id = ? THEN 1 ELSE 0 END) >= 1", assigned_to_id)
+    end
+    scope.pluck("ARRAY_AGG(id)")
+  }
+
+  scope :duplicate_sets, lambda { |assigned_to_id = nil|
+    duplicate_sets_2025_and_earlier(assigned_to_id) + duplicate_sets_2026_and_later(assigned_to_id)
   }
 
   scope :with_illness_without_type, lambda {
@@ -151,7 +190,7 @@ class LettingsLog < Log
   HAS_BENEFITS_OPTIONS = [1, 6, 8, 7].freeze
   NUM_OF_WEEKS_FROM_PERIOD = { 2 => 26, 3 => 13, 4 => 12, 5 => 50, 6 => 49, 7 => 48, 8 => 47, 9 => 46, 11 => 51, 1 => 52, 10 => 53 }.freeze
   SUFFIX_FROM_PERIOD = { 2 => "every 2 weeks", 3 => "every 4 weeks", 4 => "every month" }.freeze
-  DUPLICATE_LOG_ATTRIBUTES = %w[owning_organisation_id tenancycode startdate age1_known age1 sex1 ecstat1 tcharge household_charge chcharge].freeze
+  DUPLICATE_LOG_ATTRIBUTES = %w[owning_organisation_id tenancycode startdate age1_known age1 sex1 sexrab1 ecstat1 tcharge household_charge chcharge].freeze
   RENT_TYPE = {
     social_rent: 0,
     affordable_rent: 1,
@@ -191,7 +230,6 @@ class LettingsLog < Log
     location.linked_local_authorities.active(form.start_date).first&.code || location.location_code
   end
 
-  # TODO: CLDC-4119: Beware! This method may cause issues when testing supported housing log duplicate detection after postcode is added, as it can return `location.postcode` instead of the actual `postcode_full` stored on the log record (`super`). If this happens, investigate why it isn't returning `super`, as it should when `form.start_year_2026_or_later? && super`.
   def postcode_full
     return super unless location
     return super if form.start_year_2026_or_later? && super
@@ -698,11 +736,13 @@ class LettingsLog < Log
     ["owning_organisation_id",
      "startdate",
      "tenancycode",
-     uprn.blank? ? "postcode_full" : "uprn",
+     form.start_year_2026_or_later? ? "address_line1" : nil,
+     "postcode_full",
+     "uprn",
      "scheme_id",
-     "location_id",
+     form.start_year_2026_or_later? ? nil : "location_id",
      "age1",
-     "sex1",
+     form.start_year_2026_or_later? ? "sexrab1" : "sex1",
      "ecstat1",
      household_charge == 1 ? "household_charge" : nil,
      "tcharge",
