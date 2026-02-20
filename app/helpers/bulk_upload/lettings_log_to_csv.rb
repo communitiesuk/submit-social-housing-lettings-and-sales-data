@@ -224,7 +224,7 @@ class BulkUpload::LettingsLogToCsv
       chr,
       cap,
       accessible_register,
-      log.referral,
+      log.owning_organisation.la? ? log.referral_register : nil,
       net_income_known,
       log.incfreq,
       log.earnings,
@@ -239,6 +239,7 @@ class BulkUpload::LettingsLogToCsv
       log.supcharg,
       log.hbrentshortfall,
       log.tshortfall,
+
       log.sexrab1, # 130
       log.sexrab2,
       log.sexrab3,
@@ -246,7 +247,26 @@ class BulkUpload::LettingsLogToCsv
       log.sexrab5,
       log.sexrab6,
       log.sexrab7,
-      log.sexrab8, # 137
+      log.sexrab8,
+      log.gender_same_as_sex1,
+      log.gender_description1,
+      log.gender_same_as_sex2, # 140
+      log.gender_description2,
+      log.gender_same_as_sex3,
+      log.gender_description3,
+      log.gender_same_as_sex4,
+      log.gender_description4,
+      log.gender_same_as_sex5,
+      log.gender_description5,
+      log.gender_same_as_sex6,
+      log.gender_description6,
+      log.gender_same_as_sex7, # 150
+      log.gender_description7,
+      log.gender_same_as_sex8,
+      log.gender_description8,
+      log.owning_organisation.prp? ? log.referral_register : nil,
+      log.referral_noms,
+      log.referral_org, # 156
     ]
   end
 

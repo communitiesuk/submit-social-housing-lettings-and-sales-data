@@ -20,4 +20,12 @@ class Form::Lettings::Questions::PersonSexRegisteredAtBirth < ::Form::Question
 
     base_question_number + (5 * @person_index)
   end
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "R"
+
+    super
+  end
 end
