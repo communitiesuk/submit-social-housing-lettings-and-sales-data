@@ -468,5 +468,43 @@ RSpec.describe Csv::SalesLogCsvService do
         end
       end
     end
+
+    context "and the requested form is 2026" do
+      let(:year) { 2026 }
+      let(:now) { Time.zone.local(2026, 5, 1) }
+      let(:fixed_time) { Time.zone.local(2026, 5, 1) }
+
+      before do
+        log.update!(nationality_all: 36, manual_address_entry_selected: false, uprn: "1", uprn_known: 1, buildheightclass: 2)
+      end
+
+      context "and exporting with labels" do
+        let(:service) { described_class.new(user:, export_type: "labels", year:) }
+
+        it "exports the CSV with all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_non_support_labels_26.csv")
+          values_to_delete = %w[id owning_organisation_id managing_organisation_id assigned_to_id updated_by_id]
+          values_to_delete.each do |attribute|
+            index = attribute_line.index(attribute)
+            content_line[index] = nil
+          end
+          expect(csv[1..]).to eq expected_content[1..] # Skip the first line as it contains the definitions
+        end
+      end
+
+      context "and exporting with codes" do
+        let(:service) { described_class.new(user:, export_type: "codes", year:) }
+
+        it "exports the CSV with all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_non_support_codes_26.csv")
+          values_to_delete = %w[id owning_organisation_id managing_organisation_id assigned_to_id updated_by_id]
+          values_to_delete.each do |attribute|
+            index = attribute_line.index(attribute)
+            content_line[index] = nil
+          end
+          expect(csv[1..]).to eq expected_content[1..] # Skip the first line as it contains the definitions
+        end
+      end
+    end
   end
 end
