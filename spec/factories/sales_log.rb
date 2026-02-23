@@ -133,12 +133,17 @@ FactoryBot.define do
       prevshared { 2 }
       sexrab3 { %w[F M R].sample }
       sex3 { %w[F M X R].sample }
+      gender_same_as_sex3 { 1 }
       sexrab4 { %w[F M R].sample }
       sex4 { %w[F M X R].sample }
+      gender_same_as_sex4 { 2 }
+      gender_description4 { Faker::Gender.type }
       sexrab5 { %w[F M R].sample }
       sex5 { %w[F M X R].sample }
+      gender_same_as_sex5 { 3 }
       sexrab6 { %w[F M R].sample }
       sex6 { %w[F M X R].sample }
+      gender_same_as_sex6 { 3 }
       mortgage { 20_000 }
       ecstat3 { 9 }
       ecstat4 { 3 }
