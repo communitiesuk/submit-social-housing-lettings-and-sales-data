@@ -687,7 +687,7 @@ class LettingsLog < Log
   end
 
   def has_any_person_details?(person_index)
-    ["sex#{person_index}", "relat#{person_index}", "ecstat#{person_index}"].any? { |field| public_send(field).present? } || public_send("age#{person_index}_known") == 1
+    ["sex#{person_index}", "sexrab#{person_index}", "relat#{person_index}", "ecstat#{person_index}"].any? { |field| public_send(field).present? } || public_send("age#{person_index}_known") == 1
   end
 
   def details_not_known_for_person?(person_index)
@@ -909,6 +909,10 @@ private
 
   def sex_refused?
     [sex1, sex2, sex3, sex4, sex5, sex6, sex7, sex8].any?("R")
+  end
+
+  def sexrab_refused?
+    [sexrab1, sexrab2, sexrab3, sexrab4, sexrab5, sexrab6, sexrab7, sexrab8].any?("R")
   end
 
   def relat_refused?
