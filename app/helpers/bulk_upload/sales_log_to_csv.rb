@@ -666,13 +666,27 @@ class BulkUpload::SalesLogToCsv
       log.mortlen,
       log.extrabor,
       log.deposit, # 120
+
       log.mscharge,
       log.sexrab1,
       log.sexrab2,
       log.sexrab3,
       log.sexrab4,
       log.sexrab5,
-      log.sexrab6, # 127
+      log.sexrab6,
+      log.gender_same_as_sex1,
+      log.gender_description1,
+      log.gender_same_as_sex2, # 130
+
+      log.gender_description2,
+      log.gender_same_as_sex3,
+      log.gender_description3,
+      log.gender_same_as_sex4,
+      log.gender_description4,
+      log.gender_same_as_sex5,
+      log.gender_description5,
+      log.gender_same_as_sex6,
+      log.gender_description6, # 139
     ]
   end
 
