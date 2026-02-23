@@ -12,14 +12,14 @@ en:
               question_text: "Are you sure this is correct?"
               title_text: "You told us somebody in the household is pregnant."
               informative_text: "You also told us that all the tenants living at the property are male."
-            females_in_soft_age_range_in_pregnant_household_value_check:
+            no_household_member_likely_to_be_pregnant_check:
               page_header: ""
               check_answer_label: "Pregnancy confirmation"
               check_answer_prompt: "Confirm pregnancy status"
               hint_text: ""
               question_text: "Are you sure this is correct?"
               title_text: "You told us somebody in the household is pregnant."
-              informative_text: "You also told us that any female tenants living at the property are in the following age ranges:<ul class=\"govuk-body-l app-panel--interruption\"><li>under 16 years old</li><li>over 50 years old</li></ul>"
+              informative_text: "Your answers for the age, sex and gender of each household member suggest there is no household member who is likely to be pregnant."
 
           no_retirement_value_check:
             page_header: ""
