@@ -11,7 +11,7 @@ class Form::Sales::Pages::PersonKnown < Form::Sales::Pages::Person
     ]
   end
 
-  def depends_o
+  def depends_on
     if @person_index == 2
       [{ "not_joint_purchase?" => true,
          "hholdcount" => {
