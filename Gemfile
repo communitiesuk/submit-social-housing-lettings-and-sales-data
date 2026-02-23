@@ -95,7 +95,7 @@ group :development do
   # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
   gem "erb_lint", require: false
   gem "rack-mini-profiler", "~> 3.3.0"
-  gem "rubocop-govuk", "4.3.0", require: false
+  gem "rubocop-govuk", "5.2.0", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false
 end
