@@ -888,7 +888,7 @@ private
 
     attributes["gender_same_as_sex1"] = field_129
     attributes["gender_description1"] = field_130
-    attributes["gender_same_as_sex2"] = field_132
+    attributes["gender_same_as_sex2"] = field_131
     attributes["gender_description2"] = field_132
     attributes["gender_same_as_sex3"] = field_133
     attributes["gender_description3"] = field_134
