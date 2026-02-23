@@ -367,7 +367,7 @@ private
     inferred_answer["value"] if inferred_answer.present?
   end
 
-  # every year currently visible should be specified.
+  # every year currently visible should have an explicit question number specified.
   # however, form_handler.rb will still initialise the next form even if its not visible.
   # so we have a fallback to the latest year for these future years so all question have a question number.
   def get_question_number_from_hash(hash)

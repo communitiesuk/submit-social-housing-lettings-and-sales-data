@@ -4,7 +4,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     @id = "owning_organisation_id"
     @derived = true
     @type = "select"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR) if form.start_date.present?
   end
 
   def answer_options(log = nil, user = nil)
@@ -86,5 +86,5 @@ private
     "#{name} (inactive as of #{merge_date.to_fs(:govuk_date)})"
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 1 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 1, 2024 => 1, 2025 => 1, 2026 => 1 }.freeze
 end

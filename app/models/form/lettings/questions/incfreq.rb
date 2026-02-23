@@ -7,7 +7,7 @@ class Form::Lettings::Questions::Incfreq < ::Form::Question
     @check_answers_card_number = 0
     @answer_options = ANSWER_OPTIONS
     @hidden_in_check_answers = true
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {
@@ -16,5 +16,5 @@ class Form::Lettings::Questions::Incfreq < ::Form::Question
     "3" => { "value" => "Yearly" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 87, 2024 => 86 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 87, 2024 => 86, 2025 => 86, 2026 => 94 }.freeze
 end
