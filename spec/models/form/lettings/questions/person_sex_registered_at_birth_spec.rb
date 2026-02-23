@@ -8,7 +8,7 @@ RSpec.describe Form::Lettings::Questions::PersonSexRegisteredAtBirth, type: :mod
   let(:page) { instance_double(Form::Page) }
   let(:person_index) { 2 }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2026, 4, 1)) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2026, 4, 1), person_question_count: 5) }
 
   before do
     allow(page).to receive(:subsection).and_return(subsection)

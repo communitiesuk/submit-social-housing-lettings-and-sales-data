@@ -5,7 +5,7 @@ class Form::Lettings::Questions::Uprn < ::Form::Question
     @copy_key = "lettings.property_information.uprn.uprn"
     @type = "text"
     @width = 10
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @inferred_check_answers_value = [
       {
         "condition" => { "uprn_known" => 0 },
@@ -35,5 +35,5 @@ class Form::Lettings::Questions::Uprn < ::Form::Question
     "\n\n#{value.join("\n")}"
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 11, 2024 => 12, 2025 => 16 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 11, 2024 => 12, 2025 => 16, 2026 => 16 }.freeze
 end
