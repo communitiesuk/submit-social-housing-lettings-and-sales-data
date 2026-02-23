@@ -21,17 +21,22 @@ RSpec.describe Csv::SalesLogCsvService do
       purchid: nil,
       hholdcount: 3,
       age1: 30,
+      sexrab1: "F",
       sex1: "X",
       age2: 35,
+      sexrab2: "M",
       sex2: "X",
+      sexrab3: "F",
       sex3: "X",
       age4_known: 1,
+      sexrab4: "R",
       sex4: "X",
       details_known_5: 2,
       age6_known: nil,
       age6: nil,
       ecstat6: nil,
       relat6: nil,
+      sexrab6: nil,
       sex6: nil,
       town_or_city: "Town or city",
       address_line1_as_entered: "address line 1 as entered",
@@ -193,6 +198,21 @@ RSpec.describe Csv::SalesLogCsvService do
       expect(la_label_value).to eq "Westminster"
     end
 
+    context "when the requested form is 2023" do
+      let(:now) { Time.zone.local(2024, 1, 1) }
+      let(:year) { 2023 }
+
+      it "exports the CSV with the 2023 ordering and all values correct" do
+        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_23.csv")
+        values_to_delete = %w[ID]
+        values_to_delete.each do |attribute|
+          index = attribute_line.index(attribute)
+          content_line[index] = nil
+        end
+        expect(csv).to eq expected_content
+      end
+    end
+
     context "when the requested form is 2024" do
       let(:now) { Time.zone.local(2024, 5, 1) }
       let(:year) { 2024 }
@@ -233,18 +253,23 @@ RSpec.describe Csv::SalesLogCsvService do
       end
     end
 
-    context "when the requested form is 2023" do
-      let(:now) { Time.zone.local(2024, 1, 1) }
-      let(:year) { 2023 }
+    context "when the requested form is 2026" do
+      let(:now) { Time.zone.local(2026, 5, 1) }
+      let(:year) { 2026 }
+      let(:fixed_time) { Time.zone.local(2026, 5, 1) }
 
-      it "exports the CSV with the 2023 ordering and all values correct" do
-        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_23.csv")
-        values_to_delete = %w[ID]
+      before do
+        log.update!(nationality_all: 36, manual_address_entry_selected: false, uprn: "1", uprn_known: 1, buildheightclass: 2)
+      end
+
+      it "exports the CSV with the 2026 ordering and all values correct" do
+        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_26.csv")
+        values_to_delete = %w[ID OWNINGORGID MANINGORGID CREATEDBYID USERNAMEID AMENDEDBYID]
         values_to_delete.each do |attribute|
           index = attribute_line.index(attribute)
           content_line[index] = nil
         end
-        expect(csv).to eq expected_content
+        expect(csv[1..]).to eq expected_content[1..] # Skip the first line as it contains the definitions
       end
     end
 
@@ -301,23 +326,18 @@ RSpec.describe Csv::SalesLogCsvService do
       expect(la_label_value).to eq "Westminster"
     end
 
-    context "when the requested form is 2025" do
-      let(:now) { Time.zone.local(2025, 5, 1) }
-      let(:fixed_time) { Time.zone.local(2025, 5, 1) }
-      let(:year) { 2025 }
-
-      before do
-        log.update!(manual_address_entry_selected: false, uprn: "1", uprn_known: 1)
-      end
+    context "when the requested form is 2023" do
+      let(:now) { Time.zone.local(2024, 1, 1) }
+      let(:year) { 2023 }
 
       it "exports the CSV with all values correct" do
-        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_codes_25.csv")
-        values_to_delete = %w[ID OWNINGORGID MANINGORGID CREATEDBYID USERNAMEID AMENDEDBYID]
+        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_codes_23.csv")
+        values_to_delete = %w[ID]
         values_to_delete.each do |attribute|
           index = attribute_line.index(attribute)
           content_line[index] = nil
         end
-        expect(csv[1..]).to eq expected_content[1..] # Skip the first line as it contains the definitions
+        expect(csv).to eq expected_content
       end
     end
 
@@ -341,18 +361,43 @@ RSpec.describe Csv::SalesLogCsvService do
       end
     end
 
-    context "when the requested form is 2023" do
-      let(:now) { Time.zone.local(2024, 1, 1) }
-      let(:year) { 2023 }
+    context "when the requested form is 2025" do
+      let(:now) { Time.zone.local(2025, 5, 1) }
+      let(:fixed_time) { Time.zone.local(2025, 5, 1) }
+      let(:year) { 2025 }
+
+      before do
+        log.update!(manual_address_entry_selected: false, uprn: "1", uprn_known: 1)
+      end
 
       it "exports the CSV with all values correct" do
-        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_codes_23.csv")
-        values_to_delete = %w[ID]
+        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_codes_25.csv")
+        values_to_delete = %w[ID OWNINGORGID MANINGORGID CREATEDBYID USERNAMEID AMENDEDBYID]
         values_to_delete.each do |attribute|
           index = attribute_line.index(attribute)
           content_line[index] = nil
         end
-        expect(csv).to eq expected_content
+        expect(csv[1..]).to eq expected_content[1..] # Skip the first line as it contains the definitions
+      end
+    end
+
+    context "when the requested form is 2026" do
+      let(:now) { Time.zone.local(2026, 5, 1) }
+      let(:fixed_time) { Time.zone.local(2026, 5, 1) }
+      let(:year) { 2026 }
+
+      before do
+        log.update!(manual_address_entry_selected: false, uprn: "1", uprn_known: 1, buildheightclass: 2)
+      end
+
+      it "exports the CSV with all values correct" do
+        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_codes_26.csv")
+        values_to_delete = %w[ID OWNINGORGID MANINGORGID CREATEDBYID USERNAMEID AMENDEDBYID]
+        values_to_delete.each do |attribute|
+          index = attribute_line.index(attribute)
+          content_line[index] = nil
+        end
+        expect(csv[1..]).to eq expected_content[1..] # Skip the first line as it contains the definitions
       end
     end
 

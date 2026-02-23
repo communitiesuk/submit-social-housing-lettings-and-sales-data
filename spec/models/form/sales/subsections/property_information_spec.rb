@@ -16,6 +16,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
     before do
       allow(form).to receive(:start_year_2024_or_later?).and_return(false)
       allow(form).to receive(:start_year_2025_or_later?).and_return(false)
+      allow(form).to receive(:start_year_2026_or_later?).and_return(false)
     end
 
     context "when 2023" do
@@ -50,6 +51,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
       before do
         allow(form).to receive(:start_year_2024_or_later?).and_return(true)
         allow(form).to receive(:start_year_2025_or_later?).and_return(false)
+        allow(form).to receive(:start_year_2026_or_later?).and_return(false)
       end
 
       it "has correct pages" do
@@ -80,6 +82,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
       before do
         allow(form).to receive(:start_year_2024_or_later?).and_return(true)
         allow(form).to receive(:start_year_2025_or_later?).and_return(true)
+        allow(form).to receive(:start_year_2026_or_later?).and_return(false)
       end
 
       it "has correct pages" do
@@ -93,6 +96,38 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
             local_authority_combined_income_max_value_check
             about_price_la_value_check
             property_unit_type
+            property_number_of_bedrooms
+            about_price_bedrooms_value_check
+            monthly_charges_property_type_value_check
+            percentage_discount_proptype_value_check
+            property_building_type
+            property_wheelchair_accessible
+          ],
+        )
+      end
+    end
+
+    context "when 2026" do
+      let(:start_date) { Time.utc(2026, 2, 8) }
+
+      before do
+        allow(form).to receive(:start_year_2024_or_later?).and_return(true)
+        allow(form).to receive(:start_year_2025_or_later?).and_return(true)
+        allow(form).to receive(:start_year_2026_or_later?).and_return(true)
+      end
+
+      it "has correct pages" do
+        expect(property_information.pages.map(&:id)).to eq(
+          %w[
+            address_search
+            address
+            property_local_authority
+            local_authority_buyer_1_income_max_value_check
+            local_authority_buyer_2_income_max_value_check
+            local_authority_combined_income_max_value_check
+            about_price_la_value_check
+            property_unit_type
+            building_height_class
             property_number_of_bedrooms
             about_price_bedrooms_value_check
             monthly_charges_property_type_value_check
