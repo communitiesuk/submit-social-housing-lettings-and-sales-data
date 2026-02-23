@@ -86,6 +86,7 @@ FactoryBot.define do
       age1 { Faker::Number.within(range: 27..45) }
       sexrab1 { %w[F M R].sample }
       sex1 { %w[F M X R].sample }
+      gender_same_as_sex1 { 1 }
       national { 18 }
       buy1livein { 1 }
       relat2 { "P" }
@@ -97,6 +98,8 @@ FactoryBot.define do
       ethnic_group { 17 }
       sexrab2 {  %w[F M R].sample }
       sex2 { "X" }
+      gender_same_as_sex2 { 2 }
+      gender_description2 { Faker::Gender.type }
       buy2livein { "1" }
       ecstat1 { "1" }
       ecstat2 { "1" }
