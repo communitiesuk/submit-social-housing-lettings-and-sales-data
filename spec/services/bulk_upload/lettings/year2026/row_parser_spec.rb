@@ -1690,7 +1690,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
 
         it "adds a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_7, category: :setup).map(&:message)).to include(I18n.t("validations.lettings.2026.bulk_upload.invalid_option", question: "is this letting a renewal?"))
+          expect(parser.errors.where(:field_7, category: :setup).map(&:message)).to include(I18n.t("validations.lettings.2026.bulk_upload.invalid_option", question: "is this letting a renewal of social housing to the same tenant in the same property?"))
         end
       end
     end
