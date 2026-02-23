@@ -47,37 +47,37 @@ class BulkUpload::Lettings::Year2026::RowParser
     field_40: "If 'Other', what is the type of tenancy?",
     field_41: "What is the length of the fixed-term tenancy to the nearest year?",
     field_42: "What is the lead tenant’s age?",
-    field_43: "Which of these best describes the lead tenant’s gender identity?",
+    field_43: "Lead tenant's sex, as registered at birth",
     field_44: "Which of these best describes the lead tenant’s ethnic background?",
     field_45: "What is the lead tenant’s nationality?",
     field_46: "Which of these best describes the lead tenant’s working situation?",
     field_47: "Is person 2 the partner of the lead tenant?",
     field_48: "What is person 2’s age?",
-    field_49: "Which of these best describes person 2’s gender identity?",
+    field_49: "Person 2's sex, as registered at birth",
     field_50: "Which of these best describes person 2’s working situation?",
     field_51: "Is person 3 the partner of the lead tenant?",
     field_52: "What is person 3’s age?",
-    field_53: "Which of these best describes person 3’s gender identity?",
+    field_53: "Person 3's sex, as registered at birth",
     field_54: "Which of these best describes person 3’s working situation?",
     field_55: "Is person 4 the partner of the lead tenant?",
     field_56: "What is person 4’s age?",
-    field_57: "Which of these best describes person 4’s gender identity?",
+    field_57: "Person 4's sex, as registered at birth",
     field_58: "Which of these best describes person 4’s working situation?",
     field_59: "Is person 5 the partner of the lead tenant?",
     field_60: "What is person 5’s age?",
-    field_61: "Which of these best describes person 5’s gender identity?",
+    field_61: "Person 5's sex, as registered at birth",
     field_62: "Which of these best describes person 5’s working situation?",
     field_63: "Is person 6 the partner of the lead tenant?",
     field_64: "What is person 6’s age?",
-    field_65: "Which of these best describes person 6’s gender identity?",
+    field_65: "Person 6's sex, as registered at birth",
     field_66: "Which of these best describes person 6’s working situation?",
     field_67: "Is person 7 the partner of the lead tenant?",
     field_68: "What is person 7’s age?",
-    field_69: "Which of these best describes person 7’s gender identity?",
+    field_69: "Person 7's sex, as registered at birth",
     field_70: "Which of these best describes person 7’s working situation?",
     field_71: "Is person 8 the partner of the lead tenant?",
     field_72: "What is person 8’s age?",
-    field_73: "Which of these best describes person 8’s gender identity?",
+    field_73: "Person 8's sex, as registered at birth",
     field_74: "Which of these best describes person 8’s working situation?",
     field_75: "Does anybody in the household have links to the UK armed forces?",
     field_76: "Is this person still serving in the UK armed forces?",
@@ -135,34 +135,26 @@ class BulkUpload::Lettings::Year2026::RowParser
     field_128: "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
     field_129: "What do you expect the outstanding amount to be?",
 
-    field_130: "Lead tenant's sex, as registered at birth",
-    field_131: "Person 2's sex, as registered at birth",
-    field_132: "Person 3's sex, as registered at birth",
-    field_133: "Person 4's sex, as registered at birth",
-    field_134: "Person 5's sex, as registered at birth",
-    field_135: "Person 6's sex, as registered at birth",
-    field_136: "Person 7's sex, as registered at birth",
-    field_137: "Person 8's sex, as registered at birth",
-    field_138: "Is the gender the lead tenant identifies with the same as their sex registered at birth?",
-    field_139: "If 'No', enter the lead tenant's gender identity",
-    field_140: "Is the gender person 2 identifies with the same as their sex registered at birth?",
-    field_141: "If 'No', enter person 2's gender identity",
-    field_142: "Is the gender person 3 identifies with the same as their sex registered at birth?",
-    field_143: "If 'No', enter person 3's gender identity",
-    field_144: "Is the gender person 4 identifies with the same as their sex registered at birth?",
-    field_145: "If 'No', enter person 4's gender identity",
-    field_146: "Is the gender person 5 identifies with the same as their sex registered at birth?",
-    field_147: "If 'No', enter person 5's gender identity",
-    field_148: "Is the gender person 6 identifies with the same as their sex registered at birth?",
-    field_149: "If 'No', enter person 6's gender identity",
-    field_150: "Is the gender person 7 identifies with the same as their sex registered at birth?",
-    field_151: "If 'No', enter person 7's gender identity",
-    field_152: "Is the gender person 8 identifies with the same as their sex registered at birth?",
-    field_153: "If 'No', enter person 8's gender identity",
+    field_130: "Is the gender the lead tenant identifies with the same as their sex registered at birth?",
+    field_131: "If 'No', enter the lead tenant's gender identity",
+    field_132: "Is the gender person 2 identifies with the same as their sex registered at birth?",
+    field_133: "If 'No', enter person 2's gender identity",
+    field_134: "Is the gender person 3 identifies with the same as their sex registered at birth?",
+    field_135: "If 'No', enter person 3's gender identity",
+    field_136: "Is the gender person 4 identifies with the same as their sex registered at birth?",
+    field_137: "If 'No', enter person 4's gender identity",
+    field_138: "Is the gender person 5 identifies with the same as their sex registered at birth?",
+    field_139: "If 'No', enter person 5's gender identity",
+    field_140: "Is the gender person 6 identifies with the same as their sex registered at birth?",
+    field_141: "If 'No', enter person 6's gender identity",
+    field_142: "Is the gender person 7 identifies with the same as their sex registered at birth?",
+    field_143: "If 'No', enter person 7's gender identity",
+    field_144: "Is the gender person 8 identifies with the same as their sex registered at birth?",
+    field_145: "If 'No', enter person 8's gender identity",
 
-    field_154: "What was the source of referral for this letting? - PRP properties part 1",
-    field_155: "What was the source of referral for this letting? - PRP properties part 2",
-    field_156: "What was the source of referral for this letting? - PRP properties part 3",
+    field_146: "What was the source of referral for this letting? - PRP properties part 1",
+    field_147: "What was the source of referral for this letting? - PRP properties part 2",
+    field_148: "What was the source of referral for this letting? - PRP properties part 3",
   }.freeze
 
   RENT_TYPE_BU_MAPPING = {
@@ -312,13 +304,13 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_128, :integer
   attribute :field_129, :decimal
 
-  attribute :field_130, :string
+  attribute :field_130, :integer
   attribute :field_131, :string
-  attribute :field_132, :string
+  attribute :field_132, :integer
   attribute :field_133, :string
-  attribute :field_134, :string
+  attribute :field_134, :integer
   attribute :field_135, :string
-  attribute :field_136, :string
+  attribute :field_136, :integer
   attribute :field_137, :string
   attribute :field_138, :integer
   attribute :field_139, :string
@@ -328,18 +320,10 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_143, :string
   attribute :field_144, :integer
   attribute :field_145, :string
-  attribute :field_146, :integer
-  attribute :field_147, :string
-  attribute :field_148, :integer
-  attribute :field_149, :string
-  attribute :field_150, :integer
-  attribute :field_151, :string
-  attribute :field_152, :integer
-  attribute :field_153, :string
 
-  attribute :field_154, :integer
-  attribute :field_155, :integer
-  attribute :field_156, :integer
+  attribute :field_146, :integer
+  attribute :field_147, :integer
+  attribute :field_148, :integer
 
   validate :validate_valid_radio_option, on: :before_log
 
@@ -597,8 +581,7 @@ class BulkUpload::Lettings::Year2026::RowParser
       !supported_housing? ? "field_23" : nil,  # postcode # TODO: CLDC-4119: add postcode to hash for supported housing
       !supported_housing? ? "field_24" : nil,  # postcode # TODO: CLDC-4119: add postcode to hash for supported housing
       "field_42", # age1
-      "field_43",  # sex1
-      "field_130", # sexrab1
+      "field_43",  # sexrab1
       "field_46",  # ecstat1
     )
     if [field_124, field_125, field_126, field_127].all?(&:present?)
@@ -748,7 +731,6 @@ private
       "startdate",
       "age1",
       "sexrab1",
-      "sex1",
       "ecstat1",
       "owning_organisation",
       "tcharge",
@@ -1030,8 +1012,7 @@ private
       errors.add(:field_24, error_message) unless supported_housing? # postcode_full # TODO: CLDC-4119: add postcode to error fields for supported housing
       errors.add(:field_25, error_message) unless supported_housing? # la # TODO: CLDC-4119: add LA to error fields for supported housing
       errors.add(:field_42, error_message) # age1
-      errors.add(:field_130, error_message) # sexrab1
-      errors.add(:field_43, error_message) # sex1
+      errors.add(:field_43, error_message) # sexrab1
       errors.add(:field_46, error_message) # ecstat1
       errors.add(:field_122, error_message) unless general_needs? # household_charge
       errors.add(:field_124, error_message) # brent
@@ -1051,31 +1032,31 @@ private
 
   def field_referral_register_prp_valid?
     if owning_organisation&.prp?
-      [5, 6, 7, 8, 9].include?(field_154)
+      [5, 6, 7, 8, 9].include?(field_146)
     else
-      field_154.blank?
+      field_146.blank?
     end
   end
 
   def field_referral_noms_valid?
-    case field_154
+    case field_146
     when 6
-      [1, 2, 3, 4].include?(field_155)
+      [1, 2, 3, 4].include?(field_147)
     when 7
-      [5, 6, 7, 8].include?(field_155)
+      [5, 6, 7, 8].include?(field_147)
     else
-      field_155.blank?
+      field_147.blank?
     end
   end
 
   def field_referral_org_valid?
-    case field_155
+    case field_147
     when 1
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].include?(field_156)
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].include?(field_148)
     when 7
-      [11, 12, 13, 14, 15, 16, 17, 18, 19, 20].include?(field_156)
+      [11, 12, 13, 14, 15, 16, 17, 18, 19, 20].include?(field_148)
     else
-      field_156.blank?
+      field_148.blank?
     end
   end
 
@@ -1087,7 +1068,7 @@ private
     return if renewal?
     return if referral_fields_valid?
 
-    %i[field_116 field_154 field_155 field_156].each do |field|
+    %i[field_116 field_146 field_147 field_148].each do |field|
       errors.add(field, I18n.t("#{ERROR_BASE_KEY}.referral.invalid_option"))
     end
   end
@@ -1140,14 +1121,14 @@ private
       age8_known: %i[field_72],
       age8: %i[field_72],
 
-      sex1: %i[field_43],
-      sex2: %i[field_49],
-      sex3: %i[field_53],
-      sex4: %i[field_57],
-      sex5: %i[field_61],
-      sex6: %i[field_65],
-      sex7: %i[field_69],
-      sex8: %i[field_73],
+      sexrab1: %i[field_43],
+      sexrab2: %i[field_49],
+      sexrab3: %i[field_53],
+      sexrab4: %i[field_57],
+      sexrab5: %i[field_61],
+      sexrab6: %i[field_65],
+      sexrab7: %i[field_69],
+      sexrab8: %i[field_73],
 
       ethnic_group: %i[field_44],
       ethnic: %i[field_44],
@@ -1204,9 +1185,9 @@ private
       accessible_register: %i[field_115],
       letting_allocation: %i[field_112 field_113 field_114 field_115],
 
-      referral_register: %i[field_116 field_154],
-      referral_noms: %i[field_155],
-      referral_org: %i[field_156],
+      referral_register: %i[field_116 field_146],
+      referral_noms: %i[field_147],
+      referral_org: %i[field_148],
 
       net_income_known: %i[field_117],
       incfreq: %i[field_118],
@@ -1255,30 +1236,22 @@ private
       county: [:field_22],
       uprn_selection: [:field_19],
 
-      sexrab1: %i[field_130],
-      sexrab2: %i[field_131],
-      sexrab3: %i[field_132],
-      sexrab4: %i[field_133],
-      sexrab5: %i[field_134],
-      sexrab6: %i[field_135],
-      sexrab7: %i[field_136],
-      sexrab8: %i[field_137],
-      gender_same_as_sex1: %i[field_138],
-      gender_same_as_sex2: %i[field_140],
-      gender_same_as_sex3: %i[field_142],
-      gender_same_as_sex4: %i[field_144],
-      gender_same_as_sex5: %i[field_146],
-      gender_same_as_sex6: %i[field_148],
-      gender_same_as_sex7: %i[field_150],
-      gender_same_as_sex8: %i[field_152],
-      gender_description1: %i[field_139],
-      gender_description2: %i[field_141],
-      gender_description3: %i[field_143],
-      gender_description4: %i[field_145],
-      gender_description5: %i[field_147],
-      gender_description6: %i[field_149],
-      gender_description7: %i[field_151],
-      gender_description8: %i[field_153],
+      gender_same_as_sex1: %i[field_130],
+      gender_same_as_sex2: %i[field_132],
+      gender_same_as_sex3: %i[field_134],
+      gender_same_as_sex4: %i[field_136],
+      gender_same_as_sex5: %i[field_138],
+      gender_same_as_sex6: %i[field_140],
+      gender_same_as_sex7: %i[field_142],
+      gender_same_as_sex8: %i[field_144],
+      gender_description1: %i[field_131],
+      gender_description2: %i[field_133],
+      gender_description3: %i[field_135],
+      gender_description4: %i[field_137],
+      gender_description5: %i[field_139],
+      gender_description6: %i[field_141],
+      gender_description7: %i[field_143],
+      gender_description8: %i[field_145],
     }.compact
   end
 
@@ -1340,14 +1313,14 @@ private
     attributes["age8_known"] = age8_known?
     attributes["age8"] = field_72 if attributes["age8_known"]&.zero? && field_72&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["sex1"] = field_43
-    attributes["sex2"] = field_49
-    attributes["sex3"] = field_53
-    attributes["sex4"] = field_57
-    attributes["sex5"] = field_61
-    attributes["sex6"] = field_65
-    attributes["sex7"] = field_69
-    attributes["sex8"] = field_73
+    attributes["sexrab1"] = field_43
+    attributes["sexrab2"] = field_49
+    attributes["sexrab3"] = field_53
+    attributes["sexrab4"] = field_57
+    attributes["sexrab5"] = field_61
+    attributes["sexrab6"] = field_65
+    attributes["sexrab7"] = field_69
+    attributes["sexrab8"] = field_73
 
     attributes["ethnic_group"] = ethnic_group_from_ethnic
     attributes["ethnic"] = field_44
@@ -1486,30 +1459,22 @@ private
     attributes["postcode_full_input"] = postcode_full
     attributes["select_best_address_match"] = true if field_18.blank?
 
-    attributes["sexrab1"] = field_130
-    attributes["sexrab2"] = field_131
-    attributes["sexrab3"] = field_132
-    attributes["sexrab4"] = field_133
-    attributes["sexrab5"] = field_134
-    attributes["sexrab6"] = field_135
-    attributes["sexrab7"] = field_136
-    attributes["sexrab8"] = field_137
-    attributes["gender_same_as_sex1"] = field_138
-    attributes["gender_description1"] = field_139
-    attributes["gender_same_as_sex2"] = field_140
-    attributes["gender_description2"] = field_141
-    attributes["gender_same_as_sex3"] = field_142
-    attributes["gender_description3"] = field_143
-    attributes["gender_same_as_sex4"] = field_144
-    attributes["gender_description4"] = field_145
-    attributes["gender_same_as_sex5"] = field_146
-    attributes["gender_description5"] = field_147
-    attributes["gender_same_as_sex6"] = field_148
-    attributes["gender_description6"] = field_149
-    attributes["gender_same_as_sex7"] = field_150
-    attributes["gender_description7"] = field_151
-    attributes["gender_same_as_sex8"] = field_152
-    attributes["gender_description8"] = field_153
+    attributes["gender_same_as_sex1"] = field_130
+    attributes["gender_description1"] = field_131
+    attributes["gender_same_as_sex2"] = field_132
+    attributes["gender_description2"] = field_133
+    attributes["gender_same_as_sex3"] = field_134
+    attributes["gender_description3"] = field_135
+    attributes["gender_same_as_sex4"] = field_136
+    attributes["gender_description4"] = field_137
+    attributes["gender_same_as_sex5"] = field_138
+    attributes["gender_description5"] = field_139
+    attributes["gender_same_as_sex6"] = field_140
+    attributes["gender_description6"] = field_141
+    attributes["gender_same_as_sex7"] = field_142
+    attributes["gender_description7"] = field_143
+    attributes["gender_same_as_sex8"] = field_144
+    attributes["gender_description8"] = field_145
 
     attributes
   end
@@ -1617,31 +1582,31 @@ private
   end
 
   def person_2_present?
-    field_47.present? || field_48.present? || field_49.present? || field_131.present? || field_140.present? || field_141.present?
+    field_47.present? || field_48.present? || field_49.present? || field_132.present? || field_133.present?
   end
 
   def person_3_present?
-    field_51.present? || field_52.present? || field_53.present? || field_132.present? || field_142.present? || field_143.present?
+    field_51.present? || field_52.present? || field_53.present? || field_134.present? || field_135.present?
   end
 
   def person_4_present?
-    field_55.present? || field_56.present? || field_57.present? || field_133.present? || field_144.present? || field_145.present?
+    field_55.present? || field_56.present? || field_57.present? || field_136.present? || field_137.present?
   end
 
   def person_5_present?
-    field_59.present? || field_60.present? || field_61.present? || field_134.present? || field_146.present? || field_147.present?
+    field_59.present? || field_60.present? || field_61.present? || field_138.present? || field_139.present?
   end
 
   def person_6_present?
-    field_63.present? || field_64.present? || field_65.present? || field_135.present? || field_148.present? || field_149.present?
+    field_63.present? || field_64.present? || field_65.present? || field_140.present? || field_141.present?
   end
 
   def person_7_present?
-    field_67.present? || field_68.present? || field_69.present? || field_136.present? || field_150.present? || field_151.present?
+    field_67.present? || field_68.present? || field_69.present? || field_142.present? || field_143.present?
   end
 
   def person_8_present?
-    field_71.present? || field_72.present? || field_73.present? || field_137.present? || field_152.present? || field_153.present?
+    field_71.present? || field_72.present? || field_73.present? || field_144.present? || field_145.present?
   end
 
   def leftreg
@@ -1847,7 +1812,7 @@ private
     if owning_organisation.la?
       field_116
     else
-      field_154
+      field_146
     end
   end
 
@@ -1856,7 +1821,7 @@ private
     return unless referral_fields_valid?
 
     if owning_organisation.prp?
-      field_155
+      field_147
     end
   end
 
@@ -1865,7 +1830,7 @@ private
     return unless referral_fields_valid?
 
     if owning_organisation.prp?
-      field_156
+      field_148
     end
   end
 end

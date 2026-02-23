@@ -299,6 +299,11 @@ class Form::Question
     answer_options.keys.reject { |x| x.match(/divider/) }
   end
 
+  # used by date questions that need bespoke formatting for the example date
+  def date_example_override(_log)
+    nil
+  end
+
 private
 
   def selected_answer_option_is_derived?(log)
@@ -441,6 +446,14 @@ private
     sex6: %w[R],
     sex7: %w[R],
     sex8: %w[R],
+    sexrab1: %w[R],
+    sexrab2: %w[R],
+    sexrab3: %w[R],
+    sexrab4: %w[R],
+    sexrab5: %w[R],
+    sexrab6: %w[R],
+    sexrab7: %w[R],
+    sexrab8: %w[R],
     relat2: [3],
     relat3: [3],
     relat4: [3],
