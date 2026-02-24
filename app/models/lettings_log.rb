@@ -450,9 +450,9 @@ class LettingsLog < Log
   end
 
   def is_another_person_partner?(person_index)
-    (2..8).reject { |i| i == person_index }.any? do |i|
-      public_send("relat#{i}") == "P"
-    end
+    partner_numbers.delete(person_index)
+
+    !partner_numbers.empty?
   end
 
   def age_changed_from_below_16(person_index)

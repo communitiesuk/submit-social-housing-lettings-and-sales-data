@@ -32,7 +32,7 @@ RSpec.describe Form, type: :model do
           .and_return(true)
       end
 
-      it "returns the page after next given the previous" do
+      it "returns the page after next, given the previous" do
         puts next_page.skip_page_in_form_flow?(lettings_log)
         expect(form.next_page_id(previous_page_id, lettings_log, user)).to eq("person_1_working_situation")
       end
