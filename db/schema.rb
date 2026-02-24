@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_12_091506) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_24_141705) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -822,6 +822,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_12_091506) do
     t.string "sexrab4"
     t.string "sexrab5"
     t.string "sexrab6"
+    t.integer "mortgage_length_known"
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
