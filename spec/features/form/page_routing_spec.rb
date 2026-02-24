@@ -285,7 +285,7 @@ RSpec.describe "Form Page Routing" do
         click_button("Save and continue")
 
         expect(page).to have_current_path("/lettings-logs/#{id}/income-amount")
-        expect(page).to have_button("See all related answers")
+        expect(page).to have_link("See all related answers")
       end
     end
   end
