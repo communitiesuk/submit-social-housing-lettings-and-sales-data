@@ -2349,5 +2349,23 @@ RSpec.describe LettingsLog do
       end
     end
   end
+
+  describe "#is_another_person_partner?" do
+    context "when no other person is the partner of the lead tenant" do
+      let(:log) { create(:lettings_log, :completed, hhmemb: 4, relat2: "X", relat3: "R") }
+
+      it "returns false" do
+        expect(log.is_another_person_partner?(4)).to be false
+      end
+    end
+
+    context "when another person is the partner of the lead tenant" do
+      let(:log) { create(:lettings_log, :completed, hhmemb: 4, relat2: "X", relat3: "P") }
+
+      it "returns true" do
+        expect(log.is_another_person_partner?(4)).to be true
+      end
+    end
+  end
 end
 # rubocop:enable RSpec/MessageChain

@@ -9,6 +9,8 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
   let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2026_or_later?: start_year_2026_or_later?, person_question_count:) }
   let(:subsection) { instance_double(Form::Subsection, form:) }
   let(:person_index) { 2 }
+  let(:is_another_person_partner?) { false }
+  let(:log) { instance_double(LettingsLog, is_another_person_partner?: is_another_person_partner?) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -18,18 +20,56 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
     expect(page.description).to be_nil
   end
 
+  describe "#skip_page_in_form_flow?" do
+    context "with start year < 2026", metadata: { year: 25 } do
+      context "when no other person is the partner of the lead tenant" do
+        let(:is_another_person_partner?) { false }
+
+        it "returns false" do
+          expect(page.skip_page_in_form_flow?(log)).to be false
+        end
+      end
+
+      context "when another person is the partner of the lead tenant" do
+        let(:is_another_person_partner?) { true }
+
+        it "returns false" do
+          expect(page.skip_page_in_form_flow?(log)).to be false
+        end
+      end
+    end
+
+    context "with start year >= 2026", metadata: { year: 26 } do
+      let(:start_year_2026_or_later?) { true }
+
+      context "when no other person is the partner of the lead tenant" do
+        let(:is_another_person_partner?) { false }
+
+        it "returns false" do
+          expect(page.skip_page_in_form_flow?(log)).to be false
+        end
+      end
+
+      context "when another person is the partner of the lead tenant" do
+        let(:is_another_person_partner?) { true }
+
+        it "returns true" do
+          expect(page.skip_page_in_form_flow?(log)).to be true
+        end
+      end
+    end
+  end
+
   context "with person 2" do
+    it "has correct questions" do
+      expect(page.questions.map(&:id)).to eq(%w[relat2])
+    end
+
     it "has the correct id" do
       expect(page.id).to eq("person_2_lead_partner")
     end
 
     context "with start year < 2026", metadata: { year: 25 } do
-      let(:person_question_count) { 4 }
-
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(%w[relat2])
-      end
-
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
           [{ "details_known_2" => 0 }],
@@ -39,11 +79,6 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
 
     context "with start year >= 2026", metadata: { year: 26 } do
       let(:start_year_2026_or_later?) { true }
-      let(:person_question_count) { 5 }
-
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(%w[relat2])
-      end
 
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
@@ -65,17 +100,15 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
   context "with person 3" do
     let(:person_index) { 3 }
 
+    it "has correct questions" do
+      expect(page.questions.map(&:id)).to eq(%w[relat3])
+    end
+
     it "has the correct id" do
       expect(page.id).to eq("person_3_lead_partner")
     end
 
     context "with start year < 2026", metadata: { year: 25 } do
-      let(:person_question_count) { 4 }
-
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(%w[relat3])
-      end
-
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
           [{ "details_known_3" => 0 }],
@@ -85,11 +118,6 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
 
     context "with start year >= 2026", metadata: { year: 26 } do
       let(:start_year_2026_or_later?) { true }
-      let(:person_question_count) { 5 }
-
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(%w[relat3])
-      end
 
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
@@ -100,69 +128,8 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
                 "operator" => ">=",
                 "operand" => 16,
               },
-              "relat2" => { "operator" => "!=", "operand" => "P" },
             },
-            {
-              "details_known_3" => 0,
-              "age3" => nil,
-              "relat2" => { "operator" => "!=", "operand" => "P" },
-            },
-          ],
-        )
-      end
-    end
-  end
-
-  context "with person 4" do
-    let(:person_index) { 4 }
-
-    it "has the correct id" do
-      expect(page.id).to eq("person_4_lead_partner")
-    end
-
-    context "with start year < 2026", metadata: { year: 25 } do
-      before do
-        allow(form).to receive(:start_year_2026_or_later?).and_return(false)
-      end
-
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(%w[relat4])
-      end
-
-      it "has correct depends_on" do
-        expect(page.depends_on).to eq(
-          [{ "details_known_4" => 0 }],
-        )
-      end
-    end
-
-    context "with start year >= 2026", metadata: { year: 26 } do
-      before do
-        allow(form).to receive(:start_year_2026_or_later?).and_return(true)
-      end
-
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(%w[relat4])
-      end
-
-      it "has correct depends_on" do
-        expect(page.depends_on).to eq(
-          [
-            {
-              "details_known_4" => 0,
-              "age4" => {
-                "operator" => ">=",
-                "operand" => 16,
-              },
-              "relat2" => { "operator" => "!=", "operand" => "P" },
-              "relat3" => { "operator" => "!=", "operand" => "P" },
-            },
-            {
-              "details_known_4" => 0,
-              "age4" => nil,
-              "relat2" => { "operator" => "!=", "operand" => "P" },
-              "relat3" => { "operator" => "!=", "operand" => "P" },
-            },
+            { "details_known_3" => 0, "age3" => nil },
           ],
         )
       end

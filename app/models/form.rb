@@ -325,7 +325,7 @@ class Form
           operator = value["operator"]
           operand = value["operand"]
 
-          if operator == "!=" # This branch is needed as `nil` does not behave as expected with the default logic (`nil&.send("!=", operand)` => `nil` i.e., `false`).
+          if operator == "!=" # This branch is needed as `nil` does not behave as expected with the default logic (`nil&.send("!=", nil)` => `nil` i.e., `false`).
             log[question] != operand
           else
             log[question]&.send(operator, operand)
