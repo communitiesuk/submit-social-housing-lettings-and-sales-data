@@ -454,6 +454,7 @@ class BulkUpload::Sales::Year2026::RowParser
 
   validate :validate_nationality, on: :after_log
   validate :validate_buyer_2_nationality, on: :after_log
+  validate :validate_mortlen_field_if_buyer_not_interviewed, on: :after_log
 
   validate :validate_nulls, on: :after_log
 
@@ -948,7 +949,7 @@ private
 
     attributes["hb"] = field_74
 
-    attributes["mortlen"] = mortlen
+    attributes["mortlen"] = mortlen != "R" ? mortlen : nil
     attributes["mortgage_length_known"] = mortgage_length_known
 
     attributes["proplen"] = proplen if proplen&.positive?
@@ -1169,25 +1170,15 @@ private
   end
 
   def mortlen
-    value = if shared_ownership?
-              field_90
-            elsif discounted_ownership?
-              field_118
-            end
+    return field_90 if shared_ownership?
 
-    return nil if value == "R"
-
-    value
+    field_118 if discounted_ownership?
   end
 
   def mortgage_length_known
-    value = if shared_ownership?
-              field_90
-            elsif discounted_ownership?
-              field_118
-            end
+    return nil if field_14 == 1
 
-    if value == "R"
+    if mortlen == "R"
       1
     else
       0
@@ -1561,14 +1552,10 @@ private
     %w[0] + GlobalConstants::COUNTRIES_ANSWER_OPTIONS.keys # 0 is "Prefers not to say"
   end
 
-  def validate_relat_fields
-    %i[field_34 field_42 field_46 field_50 field_54].each do |field|
-      value = send(field)
-      next if value.blank?
-
-      unless (1..3).cover?(value)
-        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: format_ending(QUESTIONS[field])))
-      end
+  def validate_mortlen_field_if_buyer_not_interviewed
+    if field_14 == 1 && mortlen == "R"
+      errors.add(:field_90, I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid_for_not_interviewed")) if shared_ownership?
+      errors.add(:field_118, I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid_for_not_interviewed")) if discounted_ownership?
     end
   end
 
