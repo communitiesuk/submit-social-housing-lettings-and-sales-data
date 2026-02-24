@@ -297,13 +297,13 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.4)
-    nokogiri (1.18.9-arm64-darwin)
+    nokogiri (1.19.1-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.18.9-x86_64-darwin)
+    nokogiri (1.19.1-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.18.9-x86_64-linux-gnu)
+    nokogiri (1.19.1-x86_64-linux-gnu)
       racc (~> 1.4)
-    nokogiri (1.18.9-x86_64-linux-musl)
+    nokogiri (1.19.1-x86_64-linux-musl)
       racc (~> 1.4)
     notifications-ruby-client (6.0.0)
       jwt (>= 1.5, < 3)
@@ -352,7 +352,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (3.1.18)
+    rack (3.1.20)
     rack-attack (6.7.0)
       rack (>= 1.0, < 4)
     rack-mini-profiler (3.3.1)
@@ -593,7 +593,7 @@ DEPENDENCIES
   json-schema
   listen (~> 3.3)
   method_source (~> 1.1)
-  nokogiri (~> 1.18.9)
+  nokogiri (~> 1.19.1)
   notifications-ruby-client
   overcommit (>= 0.37.0)
   paper_trail (~> 15.2)
@@ -605,7 +605,7 @@ DEPENDENCIES
   pry-byebug
   puma (~> 6.4)
   pundit
-  rack (>= 2.2.6.3)
+  rack (~> 3.1.20)
   rack-attack
   rack-mini-profiler (~> 3.3.0)
   rails (~> 7.2.2)

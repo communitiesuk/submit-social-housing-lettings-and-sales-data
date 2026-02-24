@@ -51,7 +51,7 @@ gem "paper_trail-globalid"
 gem "pundit"
 
 # Request rate limiting
-gem "rack", ">= 2.2.6.3"
+gem "rack", "~> 3.1.20"
 gem "rack-attack"
 gem "redis", "~> 4.8"
 # Receive exceptions and configure alerts
@@ -72,7 +72,7 @@ gem "sidekiq-cron"
 gem "unread"
 
 # Pinning versions to address vulnerabilities
-gem "nokogiri", "~> 1.18.9"
+gem "nokogiri", "~> 1.19.1"
 gem "thor", "~> 1.4.0"
 
 group :development, :test do
