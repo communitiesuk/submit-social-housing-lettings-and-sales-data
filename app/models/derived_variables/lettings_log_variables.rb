@@ -277,9 +277,6 @@ private
     if form.start_year_2024_or_later? && unittype_gn_changed? && unittype_gn_was == 2
       self.beds = nil
     end
-    if form.start_year_2026_or_later?
-      reset_partner_fields!
-    end
   end
 
   def get_totelder
@@ -333,7 +330,10 @@ private
   end
 
   def infer_at_most_one_relationship!
-    if partner_numbers.any?
+    new_partner_numbers = partner_numbers.select { |i| public_send("relat#{i}_changed?") }
+    if new_partner_numbers.any?
+      infer_only_partner!(new_partner_numbers.first)
+    elsif partner_numbers.any?
       infer_only_partner!(partner_numbers.first)
     end
   end
@@ -346,19 +346,6 @@ private
 
       if ["P", nil].include?(public_send("relat#{i}"))
         self["relat#{i}"] = "X"
-      end
-    end
-  end
-
-  def reset_partner_fields!
-    person_count = hhmemb || 8
-    (2..person_count).each do |i|
-      next unless send("relat#{i}_changed?") && send("relat#{i}_was") == "P"
-
-      ((i + 1)..person_count).each do |j|
-        if self["relat#{j}"] == "X"
-          self["relat#{j}"] = nil
-        end
       end
     end
   end

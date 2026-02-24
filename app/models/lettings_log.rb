@@ -445,16 +445,12 @@ class LettingsLog < Log
     unittype_gn_changed? && unittype_gn_was == 2
   end
 
-  def is_partner_inferred?(person_index)
-    is_person_under_16(person_index) || is_an_earlier_person_partner(person_index)
-  end
-
   def is_person_under_16(person_index)
     public_send("age#{person_index}") && public_send("age#{person_index}") < 16
   end
 
-  def is_an_earlier_person_partner(person_index)
-    (2...person_index).any? do |i|
+  def is_another_person_partner?(person_index)
+    (2..8).reject { |i| i == person_index }.any? do |i|
       public_send("relat#{i}") == "P"
     end
   end

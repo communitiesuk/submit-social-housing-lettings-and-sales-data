@@ -108,7 +108,8 @@ class Form
 
     return :check_answers if next_page.nil?
     return next_page.id if next_page.routed_to?(log, current_user) &&
-      (!ignore_answered || next_page.has_unanswered_questions?(log))
+      (!ignore_answered || next_page.has_unanswered_questions?(log)) &&
+      !next_page.skip_page_in_form_flow?(log)
 
     next_page_id(next_page, log, current_user, ignore_answered:)
   end

@@ -36,14 +36,6 @@ class Form::Lettings::Questions::PersonPartner < ::Form::Question
   end
 
   def derived?(log)
-    form.start_year_2026_or_later? && log.is_partner_inferred?(@person_index)
-  end
-
-  def hidden_in_check_answers?(log, _current_user = nil)
-    if form.start_year_2026_or_later?
-      log.is_an_earlier_person_partner(@person_index)
-    else
-      false
-    end
+    form.start_year_2026_or_later? && log.is_person_under_16(@person_index)
   end
 end

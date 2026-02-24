@@ -18,14 +18,18 @@ class Form::Lettings::Pages::PersonLeadPartner < ::Form::Page
             "operator" => ">=",
             "operand" => 16,
           },
-          **(2...@person_index).map { |i| ["relat#{i}", { "operator" => "!=", "operand" => "P" }] }.to_h,
         },
-        { "details_known_#{@person_index}" => 0,
+        {
+          "details_known_#{@person_index}" => 0,
           "age#{@person_index}" => nil,
-          **(2...@person_index).map { |i| ["relat#{i}", { "operator" => "!=", "operand" => "P" }] }.to_h },
+        },
       ]
     else
       [{ "details_known_#{@person_index}" => 0 }]
     end
+  end
+
+  def skip_page_in_form_flow?(log)
+    log.is_another_person_partner?(@person_index)
   end
 end
