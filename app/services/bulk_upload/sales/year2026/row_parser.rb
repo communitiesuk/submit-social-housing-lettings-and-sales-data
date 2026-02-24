@@ -47,7 +47,7 @@ class BulkUpload::Sales::Year2026::RowParser
     field_38: "What is buyer 2’s nationality?",
     field_39: "What is buyer 2 or person 2’s working situation?",
     field_40: "Will buyer 2 live in the property?",
-    field_41: "Besides the buyers, how many people will live in the property?",
+    field_41: "In total, how many people live in the property?",
 
     field_42: "Is person 3 the partner of buyer 1?",
     field_43: "Age of person 3",
