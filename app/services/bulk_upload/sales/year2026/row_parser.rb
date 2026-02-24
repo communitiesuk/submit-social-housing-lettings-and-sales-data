@@ -247,7 +247,7 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_87, :decimal
   attribute :field_88, :integer
   attribute :field_89, :decimal
-  attribute :field_90, :integer
+  attribute :field_90, :string
   attribute :field_91, :decimal
   attribute :field_92, :decimal
   attribute :field_93, :decimal
@@ -277,7 +277,7 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_115, :decimal
   attribute :field_116, :integer
   attribute :field_117, :decimal
-  attribute :field_118, :integer
+  attribute :field_118, :string
   attribute :field_119, :integer
   attribute :field_120, :decimal
   attribute :field_121, :decimal
@@ -415,6 +415,22 @@ class BulkUpload::Sales::Year2026::RowParser
               allow_blank: true,
             },
             on: :before_log
+
+  validates :field_90,
+            if: :shared_ownership?,
+            format: {
+              with: /\A(\d+|R)\z/,
+              message: I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid"),
+            },
+            on: :after_log
+
+  validates :field_118,
+            if: :discounted_ownership?,
+            format: {
+              with: /\A(\d+|R)\z/,
+              message: I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid"),
+            },
+            on: :after_log
 
   validate :validate_buyer1_economic_status, on: :before_log
   validate :validate_buyer2_economic_status, on: :before_log
@@ -755,6 +771,7 @@ private
 
       hb: %i[field_74],
       mortlen: mortlen_fields,
+      mortgage_length_known: mortlen_fields,
       proplen: proplen_fields,
 
       jointmore: %i[field_13],
@@ -932,6 +949,7 @@ private
     attributes["hb"] = field_74
 
     attributes["mortlen"] = mortlen
+    attributes["mortgage_length_known"] = mortgage_length_known
 
     attributes["proplen"] = proplen if proplen&.positive?
     attributes["proplen_asked"] = attributes["proplen"].present? ? 0 : 1
@@ -1151,9 +1169,29 @@ private
   end
 
   def mortlen
-    return field_90 if shared_ownership?
+    value = if shared_ownership?
+              field_90
+            elsif discounted_ownership?
+              field_118
+            end
 
-    field_118 if discounted_ownership?
+    return nil if value == "R"
+
+    value
+  end
+
+  def mortgage_length_known
+    value = if shared_ownership?
+              field_90
+            elsif discounted_ownership?
+              field_118
+            end
+
+    if value == "R"
+      1
+    else
+      0
+    end
   end
 
   def proplen

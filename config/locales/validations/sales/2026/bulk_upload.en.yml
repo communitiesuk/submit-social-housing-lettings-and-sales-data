@@ -44,3 +44,5 @@ en:
             not_answered: "Enter either the UPRN or the full address."
           nationality:
             invalid: "Select a valid nationality."
+          mortlen:
+            invalid: "Mortgage length must be a number or the letter R"
