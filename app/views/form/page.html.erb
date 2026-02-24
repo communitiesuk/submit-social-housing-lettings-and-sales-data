@@ -76,8 +76,9 @@
       <% end %>
 
       <% if @pages_with_errors_count > 1 %>
+        <%= f.submit submit_button_text(@page, request.query_parameters["referrer"]), class: "govuk-visually-hidden", tabindex: -1, "aria-hidden": true %>
         <div class="govuk-button-group">
-          <%= govuk_link_to "See all related answers", send("#{@log.log_type}_#{@page.id}_path", @log, check_errors: true, related_question_ids: @related_question_ids) %>
+          <%= f.submit "See all related answers", name: "check_errors", class: "govuk-body govuk-link submit-button-link" %>
         </div>
       <% end %>
 
