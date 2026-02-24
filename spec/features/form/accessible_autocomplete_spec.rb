@@ -25,38 +25,38 @@ RSpec.describe "Accessible Autocomplete" do
       visit("/lettings-logs/#{lettings_log.id}/previous-local-authority")
     end
 
-    it "allows type ahead filtering", js: true do
+    it "allows type ahead filtering", :js do
       find("#lettings-log-prevloc-field").click.native.send_keys("T", "h", "a", "n", :down, :enter)
       expect(find("#lettings-log-prevloc-field").value).to eq("Thanet")
     end
 
-    it "ignores punctuation", js: true do
+    it "ignores punctuation", :js do
       find("#lettings-log-prevloc-field").click.native.send_keys("T", "h", "a", "'", "n", :down, :enter)
       expect(find("#lettings-log-prevloc-field").value).to eq("Thanet")
     end
 
-    it "ignores stop words", js: true do
+    it "ignores stop words", :js do
       find("#lettings-log-prevloc-field").click.native.send_keys("t", "h", "e", " ", "W", "e", "s", "t", "m", :down, :enter)
       expect(find("#lettings-log-prevloc-field").value).to eq("Westmorland and Furness")
     end
 
-    it "does not perform an exact match", js: true do
+    it "does not perform an exact match", :js do
       find("#lettings-log-prevloc-field").click.native.send_keys("K", "i", "n", "g", "s", "t", "o", "n", " ", "T", "h", "a", "m", "e", "s", :down, :enter)
       expect(find("#lettings-log-prevloc-field").value).to eq("Kingston upon Thames")
     end
 
-    it "maintains enhancement state across back navigation", js: true do
+    it "maintains enhancement state across back navigation", :js do
       find("#lettings-log-prevloc-field").click.native.send_keys("T", "h", "a", "n", :down, :enter)
       click_button("Save and continue")
       page.go_back
       expect(page).to have_selector("input", class: "autocomplete__input", count: 1)
     end
 
-    it "displays the placeholder text", js: true do
+    it "displays the placeholder text", :js do
       expect(find("#lettings-log-prevloc-field")["placeholder"]).to eq("Start typing to search")
     end
 
-    context "and multiple schemes with same names", js: true do
+    context "and multiple schemes with same names", :js do
       let(:lettings_log) { FactoryBot.create(:lettings_log, :sh, assigned_to: user) }
       let!(:schemes) { FactoryBot.create_list(:scheme, 2, owning_organisation_id: user.organisation_id, service_name: "Scheme", primary_client_group: "O", secondary_client_group: "O") }
 
@@ -98,18 +98,18 @@ RSpec.describe "Accessible Autocomplete" do
       visit("/lettings-logs/#{lettings_log.id}/scheme")
     end
 
-    it "can match on synonyms", js: true do
+    it "can match on synonyms", :js do
       find("#lettings-log-scheme-id-field").click.native.send_keys("w", "6", :down, :enter)
       expect(find("#lettings-log-scheme-id-field").value).to include(scheme.service_name)
     end
 
-    it "displays appended text next to the options", js: true do
+    it "displays appended text next to the options", :js do
       find("#lettings-log-scheme-id-field").click.native.send_keys("w", "6", :down, :enter)
       expect(find(".autocomplete__option", visible: :hidden, text: scheme.service_name)).to be_present
       expect(find("span", visible: :hidden, text: "2 completed locations, 1 incomplete location")).to be_present
     end
 
-    it "displays hint text under the options", js: true do
+    it "displays hint text under the options", :js do
       find("#lettings-log-scheme-id-field").click.native.send_keys("w", "6", :down, :enter)
       expect(find(".autocomplete__option__hint", visible: :hidden, text: /Young people at risk, Young people leaving care/)).to be_present
     end

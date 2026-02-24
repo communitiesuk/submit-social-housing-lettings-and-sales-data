@@ -30,3 +30,6 @@ Rails/UnknownEnv:
     - development
     - test
     - review
+
+RSpec/IndexedLet:
+  Enabled: false

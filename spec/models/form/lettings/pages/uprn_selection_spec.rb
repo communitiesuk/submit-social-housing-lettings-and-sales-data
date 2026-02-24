@@ -25,7 +25,7 @@ RSpec.describe Form::Lettings::Pages::UprnSelection, type: :model do
   end
 
   it "has the correct skip text" do
-    "Search for address again"
+    expect(page.skip_text).to eq("Search for address again")
   end
 
   it "has the correct skip_href" do

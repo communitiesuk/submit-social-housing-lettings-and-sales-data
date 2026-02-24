@@ -31,6 +31,6 @@ RSpec.describe Form::Sales::Questions::Resale, type: :model do
   end
 
   it "has correct conditional for" do
-    expect(question.conditional_for).to eq(nil)
+    expect(question.conditional_for).to be_nil
   end
 end

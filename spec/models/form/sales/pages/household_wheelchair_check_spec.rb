@@ -29,7 +29,7 @@ RSpec.describe Form::Sales::Pages::HouseholdWheelchairCheck, type: :model do
   end
 
   it "is interruption screen page" do
-    expect(page.interruption_screen?).to eq(true)
+    expect(page.interruption_screen?).to be(true)
   end
 
   it "is has correct interruption_screen_question_ids" do

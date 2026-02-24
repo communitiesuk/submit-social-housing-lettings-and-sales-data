@@ -24,6 +24,6 @@ RSpec.describe Form::Lettings::Sections::Household, type: :model do
   end
 
   it "has the correct description" do
-    expect(household.description).to be nil
+    expect(household.description).to be_nil
   end
 end

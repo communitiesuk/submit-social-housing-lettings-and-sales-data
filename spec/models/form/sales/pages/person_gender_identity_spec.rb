@@ -17,7 +17,7 @@ RSpec.describe Form::Sales::Pages::PersonGenderIdentity, type: :model do
     expect(page.description).to be_nil
   end
 
-  context "with person 2  " do
+  context "with person 2" do
     let(:person_index) { 2 }
     let(:page_id) { "person_2_gender_identity" }
 

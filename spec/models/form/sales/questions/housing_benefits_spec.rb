@@ -11,8 +11,7 @@ RSpec.describe Form::Sales::Questions::HousingBenefits, type: :model do
   let(:joint_purchase) { false }
 
   before do
-    allow(form).to receive(:start_year_2026_or_later?).and_return(true)
-    allow(form).to receive(:start_date).and_return(Time.zone.local(2023, 4, 1))
+    allow(form).to receive_messages(start_year_2026_or_later?: true, start_date: Time.zone.local(2023, 4, 1))
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
   end

@@ -21,8 +21,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
 
     context "when 2022" do
       before do
-        allow(form).to receive(:start_date).and_return(Time.zone.local(2022, 2, 8))
-        allow(form).to receive(:start_year_2024_or_later?).and_return(false)
+        allow(form).to receive_messages(start_date: Time.zone.local(2022, 2, 8), start_year_2024_or_later?: false)
       end
 
       it "has correct pages" do
@@ -49,9 +48,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
 
     context "when 2023" do
       before do
-        allow(form).to receive(:start_date).and_return(Time.zone.local(2023, 2, 8))
-
-        allow(form).to receive(:start_year_2024_or_later?).and_return(false)
+        allow(form).to receive_messages(start_date: Time.zone.local(2023, 2, 8), start_year_2024_or_later?: false)
       end
 
       it "has correct pages" do
@@ -79,8 +76,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
 
     context "when 2024" do
       before do
-        allow(form).to receive(:start_date).and_return(Time.zone.local(2024, 2, 8))
-        allow(form).to receive(:start_year_2024_or_later?).and_return(true)
+        allow(form).to receive_messages(start_date: Time.zone.local(2024, 2, 8), start_year_2024_or_later?: true)
       end
 
       it "has correct pages" do
@@ -129,7 +125,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
     let(:log) { FactoryBot.build(:sales_log, ownershipsch: 3) }
 
     it "is displayed in tasklist" do
-      expect(outright_sale.displayed_in_tasklist?(log)).to eq(true)
+      expect(outright_sale.displayed_in_tasklist?(log)).to be(true)
     end
   end
 
@@ -137,7 +133,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
     let(:log) { FactoryBot.build(:sales_log, ownershipsch: 2) }
 
     it "is displayed in tasklist" do
-      expect(outright_sale.displayed_in_tasklist?(log)).to eq(false)
+      expect(outright_sale.displayed_in_tasklist?(log)).to be(false)
     end
   end
 end

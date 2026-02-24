@@ -47,7 +47,7 @@ namespace :generate_sales_documentation do
     row_parser_class = "BulkUpload::Sales::Year#{form_year}::RowParser".constantize
     client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
     all_validation_methods = row_parser_class.private_instance_methods.select { |method| method.starts_with?("validate_") }
-    all_helper_methods = row_parser_class.private_instance_methods(false) +  row_parser_class.instance_methods(false) - all_validation_methods
+    all_helper_methods = row_parser_class.private_instance_methods(false) + row_parser_class.instance_methods(false) - all_validation_methods
     field_mapping_for_errors = row_parser_class.new.send("field_mapping_for_errors")
 
     DocumentationGenerator.new.describe_bu_validations(client, form, row_parser_class, all_validation_methods, all_helper_methods, field_mapping_for_errors, "sales")
