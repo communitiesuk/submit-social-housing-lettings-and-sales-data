@@ -77,7 +77,7 @@
 
       <% if @pages_with_errors_count > 1 %>
         <div class="govuk-button-group">
-          <%= f.submit "See all related answers", class: "govuk-body govuk-link submit-button-link" %>
+          <%= govuk_link_to "See all related answers", send("#{@log.log_type}_#{@page.id}_path", @log, check_errors: true, related_question_ids: @related_question_ids) %>
         </div>
       <% end %>
 
