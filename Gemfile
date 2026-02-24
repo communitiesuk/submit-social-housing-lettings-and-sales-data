@@ -75,6 +75,9 @@ gem "unread"
 gem "nokogiri", "~> 1.19.1"
 gem "thor", "~> 1.4.0"
 
+# Pinning until activesupport is updated to v8.1.2
+gem "connection_pool", "~> 2.5"
+
 group :development, :test do
   # Check gems for known vulnerabilities
   gem "bundler-audit"

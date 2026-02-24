@@ -152,7 +152,7 @@ GEM
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     concurrent-ruby (1.3.6)
-    connection_pool (3.0.2)
+    connection_pool (2.5.3)
     crack (1.0.0)
       bigdecimal
       rexml
@@ -581,6 +581,7 @@ DEPENDENCIES
   capybara
   capybara-lockstep
   capybara-screenshot
+  connection_pool (~> 2.5)
   cssbundling-rails
   devise
   devise_two_factor_authentication
