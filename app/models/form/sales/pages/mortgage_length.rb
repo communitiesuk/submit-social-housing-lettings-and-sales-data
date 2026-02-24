@@ -9,7 +9,8 @@ class Form::Sales::Pages::MortgageLength < ::Form::Page
 
   def questions
     @questions ||= [
+      (Form::Sales::Questions::MortgageLengthKnown.new(nil, nil, self, ownershipsch: @ownershipsch) if form.start_year_2026_or_later?),
       Form::Sales::Questions::MortgageLength.new(nil, nil, self, ownershipsch: @ownershipsch),
-    ]
+    ].compact
   end
 end
