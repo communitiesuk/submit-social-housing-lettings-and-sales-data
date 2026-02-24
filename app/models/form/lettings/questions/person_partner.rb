@@ -7,7 +7,6 @@ class Form::Lettings::Questions::PersonPartner < ::Form::Question
     @answer_options = answer_options
     @person_index = person_index
     @question_number = question_number
-    @disable_clearing_if_not_routed_or_dynamic_answer_options = form.start_year_2026_or_later?
   end
 
   def answer_options

@@ -47,22 +47,6 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
     expect(question.hidden_in_check_answers).to be_nil
   end
 
-  context "and in 2025", metadata: { year: 25 } do
-    let(:year) { 2025 }
-
-    it "has the correct disable_clearing_if_not_routed_or_dynamic_answer_options value" do
-      expect(question.disable_clearing_if_not_routed_or_dynamic_answer_options).to eq(false)
-    end
-  end
-
-  context "and in 2026", metadata: { year: 26 } do
-    let(:year) { 2026 }
-
-    it "has the correct disable_clearing_if_not_routed_or_dynamic_answer_options value" do
-      expect(question.disable_clearing_if_not_routed_or_dynamic_answer_options).to eq(true)
-    end
-  end
-
   context "with person 2" do
     it "has the correct id" do
       expect(question.id).to eq("relat2")
