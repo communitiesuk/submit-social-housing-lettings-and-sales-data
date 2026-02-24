@@ -298,7 +298,7 @@ RSpec.describe Validations::SoftValidations do
         end
 
         it "shows the interruption screen" do
-          expect(record.all_male_tenants_in_a_pregnant_household?).to be true
+          expect(record.no_household_member_likely_to_be_pregnant?).to be true
         end
       end
 
@@ -310,7 +310,7 @@ RSpec.describe Validations::SoftValidations do
         end
 
         it "shows the interruption screen" do
-          expect(record.all_male_tenants_in_a_pregnant_household?).to be true
+          expect(record.no_household_member_likely_to_be_pregnant?).to be true
         end
       end
 
@@ -328,11 +328,23 @@ RSpec.describe Validations::SoftValidations do
         end
 
         it "does not show the interruption screen" do
-          expect(record.all_male_tenants_in_a_pregnant_household?).to be false
+          expect(record.no_household_member_likely_to_be_pregnant?).to be false
         end
       end
 
       context "when female tenants are under 16" do
+        before do
+          record.age1 = 15
+          record.sexrab1 = "F"
+          record.gender_same_as_sex1 = 1
+        end
+
+        it "does not show the interruption screen" do
+          expect(record.no_household_member_likely_to_be_pregnant?).to be false
+        end
+      end
+
+      context "when female tenants are under 13" do
         before do
           record.age1 = 12
           record.sexrab1 = "F"
@@ -340,11 +352,23 @@ RSpec.describe Validations::SoftValidations do
         end
 
         it "shows the interruption screen" do
-          expect(record.non_males_in_pregnant_household_not_in_pregnancy_range?).to be true
+          expect(record.no_household_member_likely_to_be_pregnant?).to be true
         end
       end
 
       context "when female tenants are over 50" do
+        before do
+          record.age1 = 51
+          record.sexrab1 = "F"
+          record.gender_same_as_sex1 = 1
+        end
+
+        it "does not show the interruption screen" do
+          expect(record.no_household_member_likely_to_be_pregnant?).to be false
+        end
+      end
+
+      context "when female tenants are over 55" do
         before do
           record.age1 = 60
           record.sexrab1 = "F"
@@ -352,7 +376,7 @@ RSpec.describe Validations::SoftValidations do
         end
 
         it "shows the interruption screen" do
-          expect(record.non_males_in_pregnant_household_not_in_pregnancy_range?).to be true
+          expect(record.no_household_member_likely_to_be_pregnant?).to be true
         end
       end
 
@@ -365,7 +389,7 @@ RSpec.describe Validations::SoftValidations do
         end
 
         it "shows the interruption screen" do
-          expect(record.non_males_in_pregnant_household_not_in_pregnancy_range?).to be true
+          expect(record.no_household_member_likely_to_be_pregnant?).to be true
         end
       end
 
@@ -378,7 +402,7 @@ RSpec.describe Validations::SoftValidations do
         end
 
         it "shows the interruption screen" do
-          expect(record.non_males_in_pregnant_household_not_in_pregnancy_range?).to be true
+          expect(record.no_household_member_likely_to_be_pregnant?).to be true
         end
       end
 
@@ -390,7 +414,7 @@ RSpec.describe Validations::SoftValidations do
         end
 
         it "does not show the interruption screen" do
-          expect(record.non_males_in_pregnant_household_not_in_pregnancy_range?).to be false
+          expect(record.no_household_member_likely_to_be_pregnant?).to be false
         end
       end
 
@@ -405,7 +429,7 @@ RSpec.describe Validations::SoftValidations do
         end
 
         it "does not show the interruption screen" do
-          expect(record.non_males_in_pregnant_household_not_in_pregnancy_range?).to be false
+          expect(record.no_household_member_likely_to_be_pregnant?).to be false
         end
       end
 
@@ -423,7 +447,7 @@ RSpec.describe Validations::SoftValidations do
         end
 
         it "does not show the interruption screen" do
-          expect(record.non_males_in_pregnant_household_not_in_pregnancy_range?).to be false
+          expect(record.no_household_member_likely_to_be_pregnant?).to be false
         end
       end
     end
