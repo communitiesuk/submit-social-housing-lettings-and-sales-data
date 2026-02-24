@@ -105,8 +105,8 @@ private
 
   def add_range_error(record, question)
     field = question.check_answer_label || question.id
-    min = [question.prefix, number_with_delimiter(question.min, delimiter: ","), question.suffix].join("") if question.min
-    max = [question.prefix, number_with_delimiter(question.max, delimiter: ","), question.suffix].join("") if question.max
+    min = [question.prefix, number_with_delimiter(question.min, delimiter: ","), question.suffix_label(record)].join("") if question.min
+    max = [question.prefix, number_with_delimiter(question.max, delimiter: ","), question.suffix_label(record)].join("") if question.max
 
     if min && max
       record.errors.add question.id.to_sym, :outside_the_range, message: I18n.t("validations.shared.numeric.within_range", field:, min:, max:)
