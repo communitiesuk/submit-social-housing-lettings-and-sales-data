@@ -14,6 +14,17 @@ FactoryBot.define do
       end
     end
 
+    after(:build) do |log|
+      if log.hhmemb
+        (2..log.hhmemb).each do |i|
+          setter = "details_known_#{i}="
+          getter = "details_known_#{i}"
+
+          log.public_send(setter, 0) if log.public_send(getter).nil?
+        end
+      end
+    end
+
     trait :setup_completed do
       startdate_today
       renewal { 0 }
