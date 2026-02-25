@@ -278,6 +278,19 @@ en:
               hint_text: ""
               question_text: "Enter the total monthly charge"
 
+          servicecharges_changed:
+            page_header: ""
+            has_service_charges_changed:
+              check_answer_label: "Service charge will change"
+              check_answer_prompt: "Tell us if the service charge will change"
+              hint_text: "This includes any charges for day-to-day maintenance and repairs, building insurance, and any contributions to a sinking or reserved fund. It does not include estate management fees."
+              question_text: "Will the service charge change after this staircasing transaction takes place?"
+            new_service_charges:
+              check_answer_label: "New monthly service charges"
+              check_answer_prompt: ""
+              hint_text: ""
+              question_text: "Yes, enter monthly amount:"
+
           purchase_price:
             discounted_ownership:
               page_header: "About the price of the property"
