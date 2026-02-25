@@ -283,7 +283,7 @@ RSpec.describe "Form Page Routing" do
           ]
           lettings_log.relat2 = "X"
 
-          expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+          expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to be(true)
         end
 
         it "returns false if both values are non-nil and the same" do
@@ -297,7 +297,7 @@ RSpec.describe "Form Page Routing" do
           ]
           lettings_log.relat2 = "P"
 
-          expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(false)
+          expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to be(false)
         end
 
         it "returns true if the being tested is nil and the operand is non-nil" do
@@ -311,7 +311,7 @@ RSpec.describe "Form Page Routing" do
           ]
           lettings_log.relat2 = nil
 
-          expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+          expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to be(true)
         end
 
         it "returns true if the being tested is non-nil and the operand is nil" do
@@ -325,7 +325,7 @@ RSpec.describe "Form Page Routing" do
           ]
           lettings_log.relat2 = "P"
 
-          expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+          expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to be(true)
         end
 
         it "returns false if both values are nil" do
@@ -339,7 +339,7 @@ RSpec.describe "Form Page Routing" do
           ]
           lettings_log.relat2 = nil
 
-          expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(false)
+          expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to be(false)
         end
       end
     end
