@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_12_091506) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_25_162121) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -376,6 +376,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_12_091506) do
     t.boolean "manual_address_entry_selected", default: false
     t.integer "referral_type"
     t.integer "working_situation_illness_check"
+    t.integer "referral_register"
+    t.integer "referral_noms"
+    t.integer "referral_org"
     t.string "sexrab1"
     t.string "sexrab2"
     t.string "sexrab3"
@@ -400,16 +403,15 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_12_091506) do
     t.string "gender_description6"
     t.string "gender_description7"
     t.string "gender_description8"
-    t.integer "referral_register"
-    t.integer "referral_noms"
-    t.integer "referral_org"
     t.integer "tenancyother_value_check"
     t.index ["assigned_to_id"], name: "index_lettings_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
+    t.index ["managing_organisation_id", "id"], name: "index_lettings_logs_on_managing_org_and_id_desc", order: { id: :desc }
     t.index ["managing_organisation_id"], name: "index_lettings_logs_on_managing_organisation_id"
     t.index ["old_id"], name: "index_lettings_logs_on_old_id", unique: true
+    t.index ["owning_organisation_id", "id"], name: "index_lettings_logs_on_owning_org_and_id_desc", order: { id: :desc }
     t.index ["owning_organisation_id"], name: "index_lettings_logs_on_owning_organisation_id"
     t.index ["scheme_id"], name: "index_lettings_logs_on_scheme_id"
     t.index ["updated_by_id"], name: "index_lettings_logs_on_updated_by_id"
@@ -822,11 +824,15 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_12_091506) do
     t.string "sexrab4"
     t.string "sexrab5"
     t.string "sexrab6"
+    t.integer "hasservicechargeschanged"
+    t.decimal "newservicecharges", precision: 10, scale: 2
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
+    t.index ["managing_organisation_id", "id"], name: "index_sales_logs_on_managing_org_and_id_desc", order: { id: :desc }
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["old_id"], name: "index_sales_logs_on_old_id", unique: true
+    t.index ["owning_organisation_id", "id"], name: "index_sales_logs_on_owning_org_and_id_desc", order: { id: :desc }
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
     t.index ["updated_by_id"], name: "index_sales_logs_on_updated_by_id"
   end
