@@ -15,7 +15,7 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
   end
 
   it "has the correct description" do
-    expect(page.description).to be nil
+    expect(page.description).to be_nil
   end
 
   context "with person 2" do

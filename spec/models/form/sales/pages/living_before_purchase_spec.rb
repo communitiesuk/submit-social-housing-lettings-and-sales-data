@@ -34,7 +34,7 @@ RSpec.describe Form::Sales::Pages::LivingBeforePurchase, type: :model do
   end
 
   it "has the correct id" do
-    expect(page.id).to eq(nil)
+    expect(page.id).to be_nil
   end
 
   it "has the correct description" do
@@ -50,17 +50,17 @@ RSpec.describe Form::Sales::Pages::LivingBeforePurchase, type: :model do
 
         it "routes to the page when joint purchase is true" do
           log = build(:sales_log, jointpur: 1)
-          expect(page.routed_to?(log, nil)).to eq(true)
+          expect(page.routed_to?(log, nil)).to be(true)
         end
 
         it "does not route to the page when joint purchase is false" do
           log = build(:sales_log, jointpur: 2)
-          expect(page.routed_to?(log, nil)).to eq(false)
+          expect(page.routed_to?(log, nil)).to be(false)
         end
 
         it "does not route to the page when joint purchase is missing" do
           log = build(:sales_log, jointpur: nil)
-          expect(page.routed_to?(log, nil)).to eq(false)
+          expect(page.routed_to?(log, nil)).to be(false)
         end
       end
 
@@ -69,17 +69,17 @@ RSpec.describe Form::Sales::Pages::LivingBeforePurchase, type: :model do
 
         it "routes to the page when joint purchase is false" do
           log = build(:sales_log, jointpur: 2)
-          expect(page.routed_to?(log, nil)).to eq(true)
+          expect(page.routed_to?(log, nil)).to be(true)
         end
 
         it "does not route to the page when joint purchase is true" do
           log = build(:sales_log, jointpur: 1)
-          expect(page.routed_to?(log, nil)).to eq(false)
+          expect(page.routed_to?(log, nil)).to be(false)
         end
 
         it "routes to the page when joint purchase is missing" do
           log = build(:sales_log, jointpur: nil)
-          expect(page.routed_to?(log, nil)).to eq(true)
+          expect(page.routed_to?(log, nil)).to be(true)
         end
       end
     end
@@ -91,12 +91,12 @@ RSpec.describe Form::Sales::Pages::LivingBeforePurchase, type: :model do
 
       it "routes to the page when resale is 2" do
         log = build(:sales_log, jointpur: 1, resale: 2)
-        expect(page.routed_to?(log, nil)).to eq(true)
+        expect(page.routed_to?(log, nil)).to be(true)
       end
 
       it "does not route to the page when resale is not 2" do
         log = build(:sales_log, jointpur: 1, resale: nil, ownershipsch: 1)
-        expect(page.routed_to?(log, nil)).to eq(false)
+        expect(page.routed_to?(log, nil)).to be(false)
       end
     end
   end

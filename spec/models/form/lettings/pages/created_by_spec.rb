@@ -12,25 +12,25 @@ RSpec.describe Form::Lettings::Pages::CreatedBy, type: :model do
   describe "#routed_to?" do
     context "when nil" do
       it "is not shown" do
-        expect(page.routed_to?(nil, nil)).to eq(false)
+        expect(page.routed_to?(nil, nil)).to be(false)
       end
     end
 
     context "when support" do
       it "is shown" do
-        expect(page.routed_to?(nil, build(:user, :support))).to eq(true)
+        expect(page.routed_to?(nil, build(:user, :support))).to be(true)
       end
     end
 
     context "when data coordinator" do
       it "is shown" do
-        expect(page.routed_to?(nil, build(:user, :data_coordinator))).to eq(true)
+        expect(page.routed_to?(nil, build(:user, :data_coordinator))).to be(true)
       end
     end
 
     context "when data provider" do
       it "is not shown" do
-        expect(page.routed_to?(nil, build(:user))).to eq(false)
+        expect(page.routed_to?(nil, build(:user))).to be(false)
       end
     end
   end
@@ -52,6 +52,6 @@ RSpec.describe Form::Lettings::Pages::CreatedBy, type: :model do
   end
 
   it "has the correct depends_on" do
-    expect(page.depends_on).to be nil
+    expect(page.depends_on).to be_nil
   end
 end

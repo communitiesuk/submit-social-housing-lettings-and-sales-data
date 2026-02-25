@@ -50,9 +50,7 @@ RSpec.describe Csv::LettingsLogCsvService do
       before do
         allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
         allow(form_handler_mock).to receive(:form_name_from_start_year)
-        allow(form_handler_mock).to receive(:get_form).and_return(lettings_form)
-        allow(form_handler_mock).to receive(:ordered_questions_for_year).and_return(lettings_form.questions)
-        allow(form_handler_mock).to receive(:lettings_in_crossover_period?).and_return(true)
+        allow(form_handler_mock).to receive_messages(get_form: lettings_form, ordered_questions_for_year: lettings_form.questions, lettings_in_crossover_period?: true)
       end
 
       it "calls the form handler to get all questions for the specified year" do

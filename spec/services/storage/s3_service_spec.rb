@@ -7,9 +7,8 @@ RSpec.describe Storage::S3Service do
   let(:aws_credentials) { instance_double(Aws::ECSCredentials) }
 
   before do
-    allow(env_config_service).to receive(:s3_config_present?).and_return(true)
     allow(Aws::ECSCredentials).to receive(:new).and_return(aws_credentials)
-    allow(env_config_service).to receive(:s3_buckets).and_return({ "instance_1": { "credentials": {
+    allow(env_config_service).to receive_messages(s3_config_present?: true, s3_buckets: { "instance_1": { "credentials": {
       "aws_access_key_id": "key_id",
       "aws_region": "eu-west-2",
       "aws_secret_access_key": "secret",

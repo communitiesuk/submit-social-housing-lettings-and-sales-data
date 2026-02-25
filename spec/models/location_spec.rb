@@ -24,7 +24,7 @@ RSpec.describe Location, type: :model do
       location.postcode = "M1 1AE"
       location.save!
       expect(location.location_code).to eq("E08000003")
-      expect(location.is_la_inferred).to eq(true)
+      expect(location.is_la_inferred).to be(true)
     end
 
     it "infers and returns the list of local authorities" do
@@ -42,9 +42,9 @@ RSpec.describe Location, type: :model do
 
       it "does not set the local authority" do
         location.update!(postcode: "CA10 1AA", location_code: nil, location_admin_district: nil)
-        expect(location.location_code).to eq(nil)
+        expect(location.location_code).to be_nil
         expect(location.linked_local_authorities.count).to eq(0)
-        expect(location.is_la_inferred).to eq(false)
+        expect(location.is_la_inferred).to be(false)
       end
     end
 
@@ -935,7 +935,7 @@ RSpec.describe Location, type: :model do
     let(:location) { FactoryBot.build(:location, startdate: Time.zone.today - 2.months) }
 
     context "when location is not confirmed" do
-      it "returns incomplete " do
+      it "returns incomplete" do
         location.confirmed = false
         expect(location.status).to eq(:incomplete)
       end
