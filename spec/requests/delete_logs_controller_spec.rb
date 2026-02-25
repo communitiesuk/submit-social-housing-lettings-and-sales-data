@@ -40,7 +40,7 @@ RSpec.describe "DeleteLogs", type: :request do
       table_body_rows = page.find_all("tbody tr")
       expect(table_body_rows.count).to be 2
       ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
-      expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
+      expect(ids_in_table).to contain_exactly(log_1.id.to_s, log_2.id.to_s)
     end
 
     it "checks all checkboxes by default" do
@@ -89,7 +89,7 @@ RSpec.describe "DeleteLogs", type: :request do
       table_body_rows = page.find_all("tbody tr")
       expect(table_body_rows.count).to be 2
       ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
-      expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
+      expect(ids_in_table).to contain_exactly(log_1.id.to_s, log_2.id.to_s)
     end
 
     it "only checks the selected checkboxes when selected_ids provided" do
@@ -219,10 +219,10 @@ RSpec.describe "DeleteLogs", type: :request do
         delete delete_logs_lettings_logs_path, params: params
         log_1.reload
         expect(log_1.status).to eq "deleted"
-        expect(log_1.discarded_at).not_to be nil
+        expect(log_1.discarded_at).not_to be_nil
         log_2.reload
         expect(log_2.status).to eq "deleted"
-        expect(log_2.discarded_at).not_to be nil
+        expect(log_2.discarded_at).not_to be_nil
       end
 
       it "redirects to the lettings log index and displays a notice that the logs have been deleted" do
@@ -242,9 +242,9 @@ RSpec.describe "DeleteLogs", type: :request do
         expect(response).to have_http_status(:unauthorized)
         log_1.reload
         expect(log_1.status).to eq "deleted"
-        expect(log_1.discarded_at).not_to be nil
+        expect(log_1.discarded_at).not_to be_nil
         log_2.reload
-        expect(log_2.discarded_at).to be nil
+        expect(log_2.discarded_at).to be_nil
       end
     end
 
@@ -258,17 +258,17 @@ RSpec.describe "DeleteLogs", type: :request do
           delete delete_logs_lettings_logs_path, params: params
           log_1.reload
           expect(log_1.status).to eq "deleted"
-          expect(log_1.discarded_at).not_to be nil
+          expect(log_1.discarded_at).not_to be_nil
           expect(log_1.duplicates.count).to eq(0)
-          expect(log_1.duplicate_set_id).to be nil
+          expect(log_1.duplicate_set_id).to be_nil
           log_2.reload
           expect(log_2.status).to eq "deleted"
-          expect(log_2.discarded_at).not_to be nil
+          expect(log_2.discarded_at).not_to be_nil
           expect(log_2.duplicates.count).to eq(0)
-          expect(log_2.duplicate_set_id).to be nil
+          expect(log_2.duplicate_set_id).to be_nil
           log_3.reload
           expect(log_3.duplicates.count).to eq(0)
-          expect(log_3.duplicate_set_id).to be nil
+          expect(log_3.duplicate_set_id).to be_nil
         end
       end
 
@@ -282,14 +282,14 @@ RSpec.describe "DeleteLogs", type: :request do
           delete delete_logs_lettings_logs_path, params: params
           log_1.reload
           expect(log_1.status).to eq "deleted"
-          expect(log_1.discarded_at).not_to be nil
+          expect(log_1.discarded_at).not_to be_nil
           expect(log_1.duplicates.count).to eq(0)
-          expect(log_1.duplicate_set_id).to be nil
+          expect(log_1.duplicate_set_id).to be_nil
           log_2.reload
           log_3.reload
           expect(log_2.duplicates.count).to eq(1)
           expect(log_3.duplicates.count).to eq(1)
-          expect(log_3.duplicate_set_id).not_to be nil
+          expect(log_3.duplicate_set_id).not_to be_nil
           expect(log_3.duplicate_set_id).to eq(log_2.duplicate_set_id)
         end
       end
@@ -327,7 +327,7 @@ RSpec.describe "DeleteLogs", type: :request do
       table_body_rows = page.find_all("tbody tr")
       expect(table_body_rows.count).to be 2
       ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
-      expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
+      expect(ids_in_table).to contain_exactly(log_1.id.to_s, log_2.id.to_s)
     end
 
     it "checks all checkboxes by default" do
@@ -376,7 +376,7 @@ RSpec.describe "DeleteLogs", type: :request do
       table_body_rows = page.find_all("tbody tr")
       expect(table_body_rows.count).to be 2
       ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
-      expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
+      expect(ids_in_table).to contain_exactly(log_1.id.to_s, log_2.id.to_s)
     end
 
     it "only checks the selected checkboxes when selected_ids provided" do
@@ -506,10 +506,10 @@ RSpec.describe "DeleteLogs", type: :request do
         delete delete_logs_sales_logs_path, params: params
         log_1.reload
         expect(log_1.status).to eq "deleted"
-        expect(log_1.discarded_at).not_to be nil
+        expect(log_1.discarded_at).not_to be_nil
         log_2.reload
         expect(log_2.status).to eq "deleted"
-        expect(log_2.discarded_at).not_to be nil
+        expect(log_2.discarded_at).not_to be_nil
       end
 
       it "redirects to the sales log index and displays a notice that the logs have been deleted" do
@@ -529,9 +529,9 @@ RSpec.describe "DeleteLogs", type: :request do
         expect(response).to have_http_status(:unauthorized)
         log_1.reload
         expect(log_1.status).to eq "deleted"
-        expect(log_1.discarded_at).not_to be nil
+        expect(log_1.discarded_at).not_to be_nil
         log_2.reload
-        expect(log_2.discarded_at).to be nil
+        expect(log_2.discarded_at).to be_nil
       end
     end
 
@@ -545,17 +545,17 @@ RSpec.describe "DeleteLogs", type: :request do
           delete delete_logs_sales_logs_path, params: params
           log_1.reload
           expect(log_1.status).to eq "deleted"
-          expect(log_1.discarded_at).not_to be nil
+          expect(log_1.discarded_at).not_to be_nil
           expect(log_1.duplicates.count).to eq(0)
-          expect(log_1.duplicate_set_id).to be nil
+          expect(log_1.duplicate_set_id).to be_nil
           log_2.reload
           expect(log_2.status).to eq "deleted"
-          expect(log_2.discarded_at).not_to be nil
+          expect(log_2.discarded_at).not_to be_nil
           expect(log_2.duplicates.count).to eq(0)
-          expect(log_2.duplicate_set_id).to be nil
+          expect(log_2.duplicate_set_id).to be_nil
           log_3.reload
           expect(log_3.duplicates.count).to eq(0)
-          expect(log_3.duplicate_set_id).to be nil
+          expect(log_3.duplicate_set_id).to be_nil
         end
       end
 
@@ -569,14 +569,14 @@ RSpec.describe "DeleteLogs", type: :request do
           delete delete_logs_sales_logs_path, params: params
           log_1.reload
           expect(log_1.status).to eq "deleted"
-          expect(log_1.discarded_at).not_to be nil
+          expect(log_1.discarded_at).not_to be_nil
           expect(log_1.duplicates.count).to eq(0)
-          expect(log_1.duplicate_set_id).to be nil
+          expect(log_1.duplicate_set_id).to be_nil
           log_2.reload
           log_3.reload
           expect(log_2.duplicates.count).to eq(1)
           expect(log_3.duplicates.count).to eq(1)
-          expect(log_3.duplicate_set_id).not_to be nil
+          expect(log_3.duplicate_set_id).not_to be_nil
           expect(log_3.duplicate_set_id).to eq(log_2.duplicate_set_id)
         end
       end
@@ -618,7 +618,7 @@ RSpec.describe "DeleteLogs", type: :request do
         table_body_rows = page.find_all("tbody tr")
         expect(table_body_rows.count).to be 2
         ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
-        expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
+        expect(ids_in_table).to contain_exactly(log_1.id.to_s, log_2.id.to_s)
       end
 
       it "checks all checkboxes by default" do
@@ -667,7 +667,7 @@ RSpec.describe "DeleteLogs", type: :request do
         table_body_rows = page.find_all("tbody tr")
         expect(table_body_rows.count).to be 2
         ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
-        expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
+        expect(ids_in_table).to contain_exactly(log_1.id.to_s, log_2.id.to_s)
       end
 
       it "only checks the selected checkboxes when selected_ids provided" do
@@ -798,10 +798,10 @@ RSpec.describe "DeleteLogs", type: :request do
       it "deletes the logs provided" do
         log_1.reload
         expect(log_1.status).to eq "deleted"
-        expect(log_1.discarded_at).not_to be nil
+        expect(log_1.discarded_at).not_to be_nil
         log_2.reload
         expect(log_2.status).to eq "deleted"
-        expect(log_2.discarded_at).not_to be nil
+        expect(log_2.discarded_at).not_to be_nil
       end
 
       it "redirects to the lettings log index for that organisation and displays a notice that the logs have been deleted" do
@@ -843,7 +843,7 @@ RSpec.describe "DeleteLogs", type: :request do
         table_body_rows = page.find_all("tbody tr")
         expect(table_body_rows.count).to be 2
         ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
-        expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
+        expect(ids_in_table).to contain_exactly(log_1.id.to_s, log_2.id.to_s)
       end
 
       it "checks all checkboxes by default" do
@@ -892,7 +892,7 @@ RSpec.describe "DeleteLogs", type: :request do
         table_body_rows = page.find_all("tbody tr")
         expect(table_body_rows.count).to be 2
         ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
-        expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
+        expect(ids_in_table).to contain_exactly(log_1.id.to_s, log_2.id.to_s)
       end
 
       it "only checks the selected checkboxes when selected_ids provided" do
@@ -1023,10 +1023,10 @@ RSpec.describe "DeleteLogs", type: :request do
       it "deletes the logs provided" do
         log_1.reload
         expect(log_1.status).to eq "deleted"
-        expect(log_1.discarded_at).not_to be nil
+        expect(log_1.discarded_at).not_to be_nil
         log_2.reload
         expect(log_2.status).to eq "deleted"
-        expect(log_2.discarded_at).not_to be nil
+        expect(log_2.discarded_at).not_to be_nil
       end
 
       it "redirects to the sales log index for that organisation and displays a notice that the logs have been deleted" do

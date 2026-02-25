@@ -254,7 +254,7 @@ private
 
   def clear_inapplicable_derived_values!
     reset_invalidated_derived_values!(dependencies)
-    if (startdate_changed? || renewal_changed?) && (renewal_was == 1 && startdate_was&.between?(Time.zone.local(2021, 4, 1), Time.zone.local(2022, 3, 31)))
+    if (startdate_changed? || renewal_changed?) && renewal_was == 1 && startdate_was&.between?(Time.zone.local(2021, 4, 1), Time.zone.local(2022, 3, 31))
       self.underoccupation_benefitcap = nil
     end
     if renewal_changed? && renewal_was == 1
@@ -270,7 +270,7 @@ private
       self.wchair = nil
       self.location_id = nil
     end
-    if form.start_year_2024_or_later? && (unittype_gn_changed? && unittype_gn_was == 2)
+    if form.start_year_2024_or_later? && unittype_gn_changed? && unittype_gn_was == 2
       self.beds = nil
     end
   end
@@ -439,13 +439,15 @@ private
 
   def get_lar
     return 1 if rent_type == 2
-    return 2 if rent_type == 1
+
+    2 if rent_type == 1
   end
 
   def get_irproduct
     return 1 if rent_type == 3
     return 2 if rent_type == 4
-    return 3 if rent_type == 5
+
+    3 if rent_type == 5
   end
 
   def clear_gender_description_unless_gender_not_same_as_sex!

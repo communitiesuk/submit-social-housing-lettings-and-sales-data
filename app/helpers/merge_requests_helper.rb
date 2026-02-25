@@ -101,13 +101,13 @@ module MergeRequestsHelper
     attribute = page if attribute.nil?
     return nil unless value_exists?(merge_request, attribute)
 
-    unless merge_request.status == "request_merged" || merge_request.status == "processing"
+    unless %w[request_merged processing].include?(merge_request.status)
       { text: merge_request_action_text(merge_request, attribute), href: send("#{page}_merge_request_path", merge_request, referrer: "check_answers"), visually_hidden_text: page.humanize }
     end
   end
 
   def merge_outcome_action(merge_request, page)
-    unless merge_request.status == "request_merged" || merge_request.status == "processing"
+    unless %w[request_merged processing].include?(merge_request.status)
       { text: "View", href: send("#{page}_merge_request_path", merge_request), visually_hidden_text: page.humanize }
     end
   end

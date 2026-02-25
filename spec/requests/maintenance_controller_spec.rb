@@ -89,8 +89,7 @@ RSpec.describe MaintenanceController, type: :request do
 
   describe "when both the service_moved? and service_unavailable? feature toggles are on" do
     before do
-      allow(FeatureToggle).to receive(:service_moved?).and_return(true)
-      allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
+      allow(FeatureToggle).to receive_messages(service_moved?: true, service_unavailable?: true)
     end
 
     context "when a user visits a page other than the service moved page" do

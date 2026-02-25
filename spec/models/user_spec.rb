@@ -56,7 +56,7 @@ RSpec.describe User, type: :model do
       end
 
       it "has lettings logs through their organisation" do
-        expect(user.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log])
+        expect(user.lettings_logs.to_a).to contain_exactly(owned_lettings_log, managed_lettings_log)
       end
 
       context "when the user's organisation has absorbed another" do
@@ -76,7 +76,7 @@ RSpec.describe User, type: :model do
         end
 
         it "has lettings logs through both their organisation and absorbed organisation" do
-          expect(user.reload.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log, absorbed_org_owned_lettings_log, absorbed_org_managed_lettings_log])
+          expect(user.reload.lettings_logs.to_a).to contain_exactly(owned_lettings_log, managed_lettings_log, absorbed_org_owned_lettings_log, absorbed_org_managed_lettings_log)
         end
       end
     end
@@ -203,7 +203,7 @@ RSpec.describe User, type: :model do
       end
 
       it "has access to logs from all organisations" do
-        expect(user.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log, other_orgs_log])
+        expect(user.lettings_logs.to_a).to contain_exactly(owned_lettings_log, managed_lettings_log, other_orgs_log)
       end
 
       it "requires 2FA" do
@@ -222,7 +222,7 @@ RSpec.describe User, type: :model do
         expect(user.logs_filters).to match_array(%w[years status needstypes salestypes assigned_to user owning_organisation managing_organisation bulk_upload_id managing_organisation_text_search owning_organisation_text_search user_text_search])
       end
 
-      it "can filter bulk uploads by year, uploaded_by and uploading_organisation " do
+      it "can filter bulk uploads by year, uploaded_by and uploading_organisation" do
         expect(user.bulk_uploads_filters).to match_array(%w[user years uploaded_by uploading_organisation user_text_search uploading_organisation_text_search])
       end
 
@@ -247,8 +247,7 @@ RSpec.describe User, type: :model do
       let(:user) { create(:user, :support) }
 
       before do
-        allow(Rails.env).to receive(:development?).and_return(false)
-        allow(Rails.env).to receive(:review?).and_return(true)
+        allow(Rails.env).to receive_messages(development?: false, review?: true)
       end
 
       it "does not require 2FA" do
@@ -566,13 +565,13 @@ RSpec.describe User, type: :model do
       it "owned lettings logs are not deleted as a result" do
         expect { user.destroy! }
           .to change(described_class, :count).by(-1)
-          .and change(LettingsLog, :count).by(0)
+          .and not_change(LettingsLog, :count)
       end
 
       it "owned sales logs are not deleted as a result" do
         expect { user.destroy! }
           .to change(described_class, :count).by(-1)
-          .and change(SalesLog, :count).by(0)
+          .and not_change(SalesLog, :count)
       end
     end
   end

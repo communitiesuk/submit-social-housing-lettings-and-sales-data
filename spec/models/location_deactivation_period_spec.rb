@@ -9,8 +9,7 @@ RSpec.describe LocationDeactivationPeriod do
 
   describe "#validate" do
     before do
-      allow(FormHandler.instance).to receive(:previous_collection_start_date).and_return(previous_collection_start_date)
-      allow(FormHandler.instance).to receive(:current_collection_start_date).and_return(current_collection_start_date)
+      allow(FormHandler.instance).to receive_messages(previous_collection_start_date: previous_collection_start_date, current_collection_start_date: current_collection_start_date)
     end
 
     context "when not in a crossover period" do

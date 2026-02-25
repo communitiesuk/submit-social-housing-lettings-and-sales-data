@@ -1,5 +1,5 @@
 class Form::Subsection
-  attr_accessor :id, :label, :section, :pages, :depends_on, :form
+  attr_accessor :id, :label, :section, :pages, :depends_on
 
   def initialize(id, hsh, section)
     @id = id

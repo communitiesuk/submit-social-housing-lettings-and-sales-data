@@ -9,7 +9,7 @@ RSpec.describe "Bulk upload lettings log" do
 
   let(:stub_file_upload) do
     vcap_services = { "aws-s3-bucket" => {} }
-    mock_storage_service = instance_double("S3Service")
+    mock_storage_service = instance_double(Storage::S3Service)
 
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return(vcap_services.to_json)
@@ -76,7 +76,7 @@ RSpec.describe "Bulk upload lettings log" do
     end
 
     it "shows file to large error" do
-      stub_const("Forms::BulkUploadForm::UploadYourFile::MAX_FILE_SIZE", 1.bytes)
+      stub_const("Forms::BulkUploadForm::UploadYourFile::MAX_FILE_SIZE", 1.byte)
       visit("/lettings-logs")
 
       click_link("Upload lettings logs in bulk")

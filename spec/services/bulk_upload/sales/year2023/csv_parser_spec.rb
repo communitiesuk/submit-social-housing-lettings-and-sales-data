@@ -113,7 +113,7 @@ RSpec.describe BulkUpload::Sales::Year2023::CsvParser do
     end
   end
 
-  describe "#column_for_field", aggregate_failures: true do
+  describe "#column_for_field", :aggregate_failures do
     context "when headers present" do
       before do
         file.write("Question\n")

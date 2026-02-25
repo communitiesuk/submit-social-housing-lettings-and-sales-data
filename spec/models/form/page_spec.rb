@@ -37,8 +37,7 @@ RSpec.describe Form::Page, type: :model do
 
     context "and translation is present" do
       before do
-        allow(I18n).to receive(:t).and_return("page header copy")
-        allow(I18n).to receive(:exists?).and_return(true)
+        allow(I18n).to receive_messages(t: "page header copy", exists?: true)
       end
 
       it "uses header from translations" do

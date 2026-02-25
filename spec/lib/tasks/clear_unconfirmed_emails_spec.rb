@@ -18,7 +18,7 @@ RSpec.describe "clear_unconfirmed_emails" do
         it "clears unconfirmed_email" do
           task.invoke
 
-          expect(user.reload.unconfirmed_email).to eq(nil)
+          expect(user.reload.unconfirmed_email).to be_nil
         end
       end
 
@@ -28,7 +28,7 @@ RSpec.describe "clear_unconfirmed_emails" do
         it "does not clear unconfirmed_email" do
           task.invoke
 
-          expect(user.reload.unconfirmed_email).not_to eq(nil)
+          expect(user.reload.unconfirmed_email).not_to be_nil
         end
       end
     end

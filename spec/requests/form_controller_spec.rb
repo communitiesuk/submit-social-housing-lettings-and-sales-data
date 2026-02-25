@@ -31,10 +31,8 @@ RSpec.describe FormController, type: :request do
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
-    allow(fake_2021_2022_form).to receive(:new_logs_end_date).and_return(Time.zone.today + 1.day)
-    allow(fake_2021_2022_form).to receive(:edit_end_date).and_return(Time.zone.today + 2.months)
-    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
-    allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
+    allow(fake_2021_2022_form).to receive_messages(new_logs_end_date: Time.zone.today + 1.day, edit_end_date: Time.zone.today + 2.months)
+    allow(FormHandler.instance).to receive_messages(current_lettings_form: fake_2021_2022_form, lettings_in_crossover_period?: true)
   end
 
   context "when a user is not signed in" do
@@ -108,7 +106,7 @@ RSpec.describe FormController, type: :request do
         expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/assigned-to")
         follow_redirect!
         lettings_log.reload
-        expect(lettings_log.assigned_to).to eq(nil)
+        expect(lettings_log.assigned_to).to be_nil
       end
     end
 
@@ -842,7 +840,7 @@ RSpec.describe FormController, type: :request do
             it "only updates answers that apply to the page being submitted" do
               lettings_log.reload
               expect(lettings_log.age1).to eq(answer)
-              expect(lettings_log.age2).to be nil
+              expect(lettings_log.age2).to be_nil
             end
 
             it "tracks who updated the record" do
@@ -1724,8 +1722,7 @@ RSpec.describe FormController, type: :request do
           before do
             completed_lettings_log.update!(ecstat1: 1, earnings: 130, hhmemb: 1, benefits: 4) # we're not routing to that page, so it gets cleared?
             allow(completed_lettings_log).to receive(:net_income_soft_validation_triggered?).and_return(true)
-            allow(completed_lettings_log.form).to receive(:new_logs_end_date).and_return(Time.zone.today + 1.day)
-            allow(completed_lettings_log.form).to receive(:edit_end_date).and_return(Time.zone.today + 2.months)
+            allow(completed_lettings_log.form).to receive_messages(new_logs_end_date: Time.zone.today + 1.day, edit_end_date: Time.zone.today + 2.months)
             post "/lettings-logs/#{completed_lettings_log.id}/net-income-value-check", params: interrupt_params, headers: headers.merge({ "HTTP_REFERER" => referrer })
           end
 
