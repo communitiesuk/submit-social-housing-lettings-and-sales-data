@@ -29,7 +29,7 @@ RSpec.describe "Form Page Routing" do
       Singleton.__init__(FormHandler)
     end
 
-    it "can route the user to a different page based on their answer on the current page", js: true do
+    it "can route the user to a different page based on their answer on the current page", :js do
       visit("/lettings-logs/#{id}/conditional-question")
       # using a question name that is already in the db to avoid
       # having to add a new column to the db for this test
@@ -43,7 +43,7 @@ RSpec.describe "Form Page Routing" do
       expect(page).to have_current_path("/lettings-logs/#{id}/conditional-question-no-page")
     end
 
-    it "can route based on multiple conditions", js: true do
+    it "can route based on multiple conditions", :js do
       visit("/lettings-logs/#{id}/person-1-gender")
       choose("lettings-log-sex1-f-field", allow_label_click: true)
       click_button("Save and continue")
@@ -57,7 +57,7 @@ RSpec.describe "Form Page Routing" do
       expect(page).to have_current_path("/lettings-logs/#{id}/conditional-question/check-answers")
     end
 
-    context "when the answers are inferred", js: true do
+    context "when the answers are inferred", :js do
       it "shows question if the answer could not be inferred" do
         visit("/lettings-logs/#{id}/property-postcode")
         fill_in("lettings-log-postcode-full-field", with: "PO5 3TE")
@@ -119,7 +119,7 @@ RSpec.describe "Form Page Routing" do
         click_button("Save and continue")
 
         expect(page).to have_current_path("/lettings-logs/#{id}/tenancy-start-date")
-        expect(find_field("lettings_log[startdate]").value).to eq(nil)
+        expect(find_field("lettings_log[startdate]").value).to be_nil
       end
 
       it "does not show see all related answers link if only 1 field has an error" do
@@ -170,21 +170,21 @@ RSpec.describe "Form Page Routing" do
     it "returns true if there is no depends_on" do
       depends_on = nil
 
-      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to be(true)
     end
 
     it "returns true if the depends_on is met" do
       depends_on = [{ "armedforces" => 1 }]
       lettings_log.armedforces = 1
 
-      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to be(true)
     end
 
     it "returns false if the depends_on is not met" do
       depends_on = [{ "armedforces" => 1 }]
       lettings_log.armedforces = 0
 
-      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(false)
+      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to be(false)
     end
 
     it "returns true if a complex depends_on is met" do
@@ -192,7 +192,7 @@ RSpec.describe "Form Page Routing" do
       lettings_log.is_la_inferred = false
       lettings_log.needstype = 1
 
-      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to be(true)
     end
 
     it "returns false if any part of a complex depends_on is not met" do
@@ -200,7 +200,7 @@ RSpec.describe "Form Page Routing" do
       lettings_log.is_la_inferred = false
       lettings_log.needstype = 2
 
-      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(false)
+      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to be(false)
     end
 
     it "returns true if the first of multiple depends_ons are met" do
@@ -208,7 +208,7 @@ RSpec.describe "Form Page Routing" do
       lettings_log.is_la_inferred = false
       lettings_log.needstype = 2
 
-      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to be(true)
     end
 
     it "returns true if the last of multiple depends_ons are met" do
@@ -216,7 +216,7 @@ RSpec.describe "Form Page Routing" do
       lettings_log.is_la_inferred = true
       lettings_log.needstype = 1
 
-      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to be(true)
     end
 
     context "with operator-based depends_ons" do
@@ -234,7 +234,7 @@ RSpec.describe "Form Page Routing" do
         lettings_log.details_known_2 = 0
         lettings_log.age2 = 16
 
-        expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+        expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to be(true)
       end
 
       it "returns false if an operator-based depends_on is not met" do
@@ -251,7 +251,7 @@ RSpec.describe "Form Page Routing" do
         lettings_log.details_known_2 = 0
         lettings_log.age2 = 15
 
-        expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(false)
+        expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to be(false)
       end
 
       it "returns true if an operator-based depends_on is met on an inequality threshold" do
@@ -268,7 +268,7 @@ RSpec.describe "Form Page Routing" do
         lettings_log.details_known_2 = 0
         lettings_log.age2 = 15
 
-        expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+        expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to be(true)
       end
     end
   end

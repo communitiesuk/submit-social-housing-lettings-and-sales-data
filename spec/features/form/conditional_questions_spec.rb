@@ -47,7 +47,7 @@ RSpec.describe "Form Conditional Questions" do
       expect(page).not_to have_selector("#armed_forces_injured_div")
     end
 
-    it "shows conditional questions if the required answer is selected and hides it again when a different answer option is selected", js: true do
+    it "shows conditional questions if the required answer is selected and hides it again when a different answer option is selected", :js do
       visit("/lettings-logs/#{id}/armed-forces")
       # Something about our styling makes the selenium webdriver think the actual radio buttons are not visible so we allow label click here
       choose("lettings-log-armedforces-1-field", allow_label_click: true)
@@ -59,7 +59,7 @@ RSpec.describe "Form Conditional Questions" do
     end
   end
 
-  context "when a conditional question has a saved answer", js: true do
+  context "when a conditional question has a saved answer", :js do
     before do
       allow(sales_log.form).to receive(:new_logs_end_date).and_return(Time.zone.today + 1.day)
       allow(lettings_log.form).to receive(:new_logs_end_date).and_return(Time.zone.today + 1.day)
@@ -96,7 +96,7 @@ RSpec.describe "Form Conditional Questions" do
       FormHandler.instance.use_real_forms!
     end
 
-    it "shows conditional questions if the required answer is selected and hides it again when a different answer option is selected", js: true do
+    it "shows conditional questions if the required answer is selected and hides it again when a different answer option is selected", :js do
       visit("/lettings-logs/#{id}/lead-tenant-age")
       choose("lettings-log-age1-known-0-field", allow_label_click: true)
       fill_in("lettings-log-age1-field", with: "200")

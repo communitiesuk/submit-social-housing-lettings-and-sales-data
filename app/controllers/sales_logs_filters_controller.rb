@@ -53,8 +53,6 @@ class SalesLogsFiltersController < ApplicationController
   end
 end
 
-private
-
 def sales_session_filters
   params["years"] = [params["years"]] if params["years"].present?
   sales_filter_manager.session_filters

@@ -23,6 +23,6 @@ module Exports::OrganisationExportConstants
    "dpo_email",
    "profit_status",
    "group",
-   "status"
+   "status",
   ]
 end

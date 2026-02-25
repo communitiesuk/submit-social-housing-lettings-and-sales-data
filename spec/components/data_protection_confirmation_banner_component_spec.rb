@@ -13,7 +13,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
     let(:organisation) { nil }
 
     it "does not display banner" do
-      expect(component.display_banner?).to eq(false)
+      expect(component.display_banner?).to be(false)
       expect(render.content).to be_empty
     end
   end
@@ -24,7 +24,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
     end
 
     it "displays the banner" do
-      expect(component.display_banner?).to eq(true)
+      expect(component.display_banner?).to be(true)
       expect(render).to have_link(
         "Contact helpdesk to assign a data protection officer",
         href: "https://mhclgdigital.atlassian.net/servicedesk/customer/portal/6/group/11",
@@ -41,7 +41,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
         let!(:dpo) { create(:user, :data_protection_officer, organisation:, with_dsa: false) }
 
         it "displays the banner and shows DPOs" do
-          expect(component.display_banner?).to eq(true)
+          expect(component.display_banner?).to be(true)
           expect(render.css("a")).to be_empty
           expect(render).to have_selector("p", text: "Your data protection officer must accept the Data Sharing Agreement on CORE before you can create any logs.")
           expect(render).to have_selector("p", text: "You can ask: #{dpo.name}")
@@ -53,7 +53,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
         let(:user) { create(:user, :data_protection_officer, organisation:, with_dsa: false) }
 
         it "displays the banner and asks to sign" do
-          expect(component.display_banner?).to eq(true)
+          expect(component.display_banner?).to be(true)
           expect(render).to have_link(
             "Read the Data Sharing Agreement",
             href: "/organisations/#{organisation.id}/data-sharing-agreement",
@@ -71,7 +71,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
         end
 
         it "displays the banner and asks to sign" do
-          expect(component.display_banner?).to eq(true)
+          expect(component.display_banner?).to be(true)
           expect(render).to have_link(
             "Read the Data Sharing Agreement",
             href: "/organisations/#{organisation.id}/data-sharing-agreement",
@@ -83,7 +83,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
 
     context "when org has a signed data sharing agremeent" do
       it "does not display banner" do
-        expect(component.display_banner?).to eq(false)
+        expect(component.display_banner?).to be(false)
         expect(render.content).to be_empty
       end
 
@@ -99,7 +99,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
           end
 
           it "does not display banner" do
-            expect(component.display_banner?).to eq(false)
+            expect(component.display_banner?).to be(false)
             expect(render.content).to be_empty
           end
         end
@@ -111,7 +111,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
           end
 
           it "displays the banner and asks to create stock owners" do
-            expect(component.display_banner?).to eq(true)
+            expect(component.display_banner?).to be(true)
             expect(render).to have_link(
               "View or add stock owners",
               href: "/organisations/#{organisation.id}/stock-owners",
@@ -128,7 +128,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
       end
 
       it "displays the banner" do
-        expect(component.display_banner?).to eq(true)
+        expect(component.display_banner?).to be(true)
         expect(render).to have_link(
           "Contact helpdesk to assign a data protection officer",
           href: "https://mhclgdigital.atlassian.net/servicedesk/customer/portal/6/group/11",
@@ -145,7 +145,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
           let!(:dpo) { create(:user, :data_protection_officer, organisation:, with_dsa: false) }
 
           it "displays the banner and shows DPOs" do
-            expect(component.display_banner?).to eq(true)
+            expect(component.display_banner?).to be(true)
             expect(render.css("a")).to be_empty
             expect(render).to have_selector("p", text: "Your data protection officer must accept the Data Sharing Agreement on CORE before you can create any logs.")
             expect(render).to have_selector("p", text: "You can ask: #{dpo.name}")
@@ -158,7 +158,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
             end
 
             it "displays the banner and shows DPOs" do
-              expect(component.display_banner?).to eq(true)
+              expect(component.display_banner?).to be(true)
               expect(render.css("a")).to be_empty
               expect(render).to have_selector("p", text: "Your data protection officer must accept the Data Sharing Agreement on CORE before you can create any logs.")
               expect(render).to have_selector("p", text: "You can ask: #{dpo.name}")
@@ -171,7 +171,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
           let(:user) { create(:user, :data_protection_officer, organisation:, with_dsa: false) }
 
           it "displays the banner and asks to sign" do
-            expect(component.display_banner?).to eq(true)
+            expect(component.display_banner?).to be(true)
             expect(render).to have_link(
               "Read the Data Sharing Agreement",
               href: "/organisations/#{organisation.id}/data-sharing-agreement",
@@ -186,7 +186,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
             end
 
             it "displays the banner and asks to sign" do
-              expect(component.display_banner?).to eq(true)
+              expect(component.display_banner?).to be(true)
               expect(render).to have_link(
                 "Read the Data Sharing Agreement",
                 href: "/organisations/#{organisation.id}/data-sharing-agreement",
@@ -199,7 +199,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
 
       context "when org has a signed data sharing agremeent" do
         it "does not display banner" do
-          expect(component.display_banner?).to eq(false)
+          expect(component.display_banner?).to be(false)
           expect(render.content).to be_empty
         end
       end

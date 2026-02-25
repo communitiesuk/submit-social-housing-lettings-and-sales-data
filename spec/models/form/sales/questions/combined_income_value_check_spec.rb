@@ -24,7 +24,7 @@ RSpec.describe Form::Sales::Questions::CombinedIncomeValueCheck, type: :model do
   end
 
   it "has a correct check_answers_card_number" do
-    expect(question.check_answers_card_number).to eq(nil)
+    expect(question.check_answers_card_number).to be_nil
   end
 
   it "has the correct answer_options" do

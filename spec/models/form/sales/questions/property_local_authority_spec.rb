@@ -655,7 +655,7 @@ RSpec.describe Form::Sales::Questions::PropertyLocalAuthority, type: :model do
       let(:log) { build(:sales_log, saledate: Time.zone.parse("2022-07-01")) }
 
       it "returns false" do
-        expect(question.hidden_in_check_answers?(log)).to eq(false)
+        expect(question.hidden_in_check_answers?(log)).to be(false)
       end
     end
 
@@ -663,7 +663,7 @@ RSpec.describe Form::Sales::Questions::PropertyLocalAuthority, type: :model do
       let(:log) { build(:sales_log, saledate: Time.zone.parse("2023-07-01")) }
 
       it "returns true" do
-        expect(question.hidden_in_check_answers?(log)).to eq(false)
+        expect(question.hidden_in_check_answers?(log)).to be(false)
       end
     end
 
@@ -675,7 +675,7 @@ RSpec.describe Form::Sales::Questions::PropertyLocalAuthority, type: :model do
       end
 
       it "returns true" do
-        expect(question.hidden_in_check_answers?(log)).to eq(true)
+        expect(question.hidden_in_check_answers?(log)).to be(true)
       end
     end
   end

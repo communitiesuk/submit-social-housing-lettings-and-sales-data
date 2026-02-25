@@ -31,10 +31,10 @@ RSpec.describe "set_export_collection_years" do
         expect(updated_lettings_export.year).to eq(2023)
 
         expect(organisations_export.reload.collection).to eq("organisations")
-        expect(organisations_export.year).to eq(nil)
+        expect(organisations_export.year).to be_nil
 
         expect(users_export.reload.collection).to eq("users")
-        expect(users_export.year).to eq(nil)
+        expect(users_export.year).to be_nil
       end
     end
   end

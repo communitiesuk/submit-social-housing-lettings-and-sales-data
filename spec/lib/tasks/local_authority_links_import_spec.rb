@@ -32,7 +32,7 @@ RSpec.describe "data_import" do
       context "when a record already exists with a matching ids" do
         it "does not create a new link" do
           task.invoke(local_authority_links_file_path)
-          expect { task.invoke(local_authority_links_file_path) }.to change(LocalAuthorityLink, :count).by(0)
+          expect { task.invoke(local_authority_links_file_path) }.not_to change(LocalAuthorityLink, :count)
         end
       end
     end

@@ -28,14 +28,14 @@
           key,
           label: { text: options["value"] },
           hint: { text: options["hint"] },
-          link_errors: index.zero? ? true : nil,
+          link_errors: index.zero? || nil,
           **stimulus_html_attributes(question) %>
       <% else %>
         <%= f.govuk_radio_button question.id.to_sym,
           key,
           label: { text: options["value"] },
           hint: { text: options["hint"] },
-          link_errors: index.zero? ? true : nil,
+          link_errors: index.zero? || nil,
           **stimulus_html_attributes(question) do %>
             <%= render partial: "#{conditional_question.type}_question", locals: {
               question: conditional_question,

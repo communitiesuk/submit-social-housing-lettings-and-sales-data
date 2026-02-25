@@ -30,7 +30,7 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
     context "when a mortgage is used" do
       let(:mortgageused) { 1 }
 
-      it "is not marked as derived " do
+      it "is not marked as derived" do
         expect(question.derived?(log)).to be false
       end
     end
@@ -38,7 +38,7 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
     context "when a mortgage is not used" do
       let(:mortgageused) { 2 }
 
-      it "is marked as derived " do
+      it "is marked as derived" do
         expect(question.derived?(log)).to be true
       end
     end
@@ -46,7 +46,7 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
     context "when the mortgage use is unknown" do
       let(:mortgageused) { 3 }
 
-      it "is marked as derived " do
+      it "is marked as derived" do
         expect(question.derived?(log)).to be true
       end
     end

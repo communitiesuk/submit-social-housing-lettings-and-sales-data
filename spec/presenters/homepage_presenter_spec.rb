@@ -68,7 +68,7 @@ RSpec.describe HomepagePresenter do
           presenter.last_year_in_progress_sales_data,
           presenter.last_year_completed_sales_data,
         ]
-        expect(sales_data).to all be nil
+        expect(sales_data).to all be_nil
       end
     end
 
@@ -82,7 +82,7 @@ RSpec.describe HomepagePresenter do
           presenter.last_year_in_progress_sales_data,
           presenter.last_year_completed_sales_data,
         ]
-        expect(sales_data).to all be nil
+        expect(sales_data).to all be_nil
       end
     end
   end
@@ -127,7 +127,7 @@ RSpec.describe HomepagePresenter do
           presenter.last_year_in_progress_lettings_data,
           presenter.last_year_in_progress_sales_data,
         ]
-        expect(last_year_in_progress_data).to all be nil
+        expect(last_year_in_progress_data).to all be_nil
       end
     end
   end

@@ -531,8 +531,8 @@ RSpec.describe MergeRequestsController, type: :request do
 
           it "updates has_helpdesk_ticket and clears helpdesk_ticket" do
             request
-            expect(merge_request.reload.has_helpdesk_ticket).to eq(false)
-            expect(merge_request.helpdesk_ticket).to eq(nil)
+            expect(merge_request.reload.has_helpdesk_ticket).to be(false)
+            expect(merge_request.helpdesk_ticket).to be_nil
           end
         end
 
@@ -547,7 +547,7 @@ RSpec.describe MergeRequestsController, type: :request do
 
           it "updates has_helpdesk_ticket and clears helpdesk_ticket" do
             request
-            expect(merge_request.reload.has_helpdesk_ticket).to eq(true)
+            expect(merge_request.reload.has_helpdesk_ticket).to be(true)
             expect(merge_request.helpdesk_ticket).to eq("321")
           end
         end

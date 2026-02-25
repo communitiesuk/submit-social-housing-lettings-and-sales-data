@@ -26,7 +26,7 @@ RSpec.describe Form::Sales::Pages::CreatedBy, type: :model do
   end
 
   it "has the correct depends_on" do
-    expect(page.depends_on).to be nil
+    expect(page.depends_on).to be_nil
   end
 
   context "when the current user is a support user" do

@@ -55,7 +55,7 @@ RSpec.describe Form::Lettings::Questions::UprnConfirmation, type: :model do
       let(:log) { build(:lettings_log, uprn_known: 0, uprn_confirmed: nil) }
 
       it "returns true" do
-        expect(question.hidden_in_check_answers?(log)).to eq(true)
+        expect(question.hidden_in_check_answers?(log)).to be(true)
       end
     end
 
@@ -63,7 +63,7 @@ RSpec.describe Form::Lettings::Questions::UprnConfirmation, type: :model do
       let(:log) { build(:lettings_log, :completed, uprn_known: 1, uprn: 1, uprn_confirmed: nil) }
 
       it "returns false" do
-        expect(question.hidden_in_check_answers?(log)).to eq(false)
+        expect(question.hidden_in_check_answers?(log)).to be(false)
       end
     end
 
@@ -73,7 +73,7 @@ RSpec.describe Form::Lettings::Questions::UprnConfirmation, type: :model do
       it "returns true" do
         log.uprn_known = 1
         log.uprn_confirmed = 1
-        expect(question.hidden_in_check_answers?(log)).to eq(true)
+        expect(question.hidden_in_check_answers?(log)).to be(true)
       end
     end
   end
