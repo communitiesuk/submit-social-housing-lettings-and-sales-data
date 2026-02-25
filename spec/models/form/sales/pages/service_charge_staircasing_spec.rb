@@ -12,7 +12,7 @@ RSpec.describe Form::Sales::Pages::ServiceChargeStaircasing, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[has_mscharge mscharge])
+    expect(page.questions.map(&:id)).to be(%w[has_mscharge mscharge])
   end
 
   it "has the correct id" do
