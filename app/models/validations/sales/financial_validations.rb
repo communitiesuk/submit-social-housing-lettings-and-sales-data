@@ -139,6 +139,24 @@ module Validations::Sales::FinancialValidations
     end
   end
 
+  def validate_newservicecharges(record)
+    return unless record.newservicecharges
+
+    if record.newservicecharges.negative?
+      record.errors.add :newservicecharges, I18n.t("validations.sales.financial.newservicecharges.negative")
+    elsif record.newservicecharges > 9999.99
+      record.errors.add :newservicecharges, I18n.t("validations.sales.financial.newservicecharges.over_max")
+    end
+  end
+
+  def validate_newservicecharges_different_from_mscharge(record)
+    return unless record.hasservicechargeschanged == 1 && record.newservicecharges && record.mscharge
+
+    if record.newservicecharges == record.mscharge
+      record.errors.add :newservicecharges, I18n.t("validations.sales.financial.newservicecharges.same_as_previous")
+    end
+  end
+
 private
 
   def is_relationship_child?(relationship)

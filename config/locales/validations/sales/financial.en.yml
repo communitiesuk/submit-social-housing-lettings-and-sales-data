@@ -49,6 +49,11 @@ en:
           monthly_leasehold_charges:
             not_zero: "Monthly leasehold charges cannot be £0 if the property has monthly charges."
 
+        newservicecharges:
+          negative: "Service charge cannot be negative."
+          over_max: "Service charge cannot be higher than £9,999.99."
+          same_as_previous: "You said that the service charge will change and you entered the same amount as the previous question. If the service charge will not change, answer 'No'."
+
         resale:
           equity_over_max: "The maximum initial equity stake is %{max_equity}%."
 
