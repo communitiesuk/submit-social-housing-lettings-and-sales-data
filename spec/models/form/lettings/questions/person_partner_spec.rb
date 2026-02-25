@@ -56,39 +56,49 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
       expect(question.check_answers_card_number).to eq(2)
     end
 
-    context "with person 2 age < 16" do
-      let(:log) { build(:lettings_log, age2: 10) }
+    context "and in 2025", metadata: { year: 25 } do
+      let(:year) { 2025 }
+      let(:person_question_count) { 4 }
 
-      context "and in 2025", metadata: { year: 25 } do
-        let(:year) { 2025 }
+      it "has the correct question number" do
+        expect(question.question_number).to eq(37)
+      end
+
+      context "with person 2 age < 16" do
+        let(:log) { build(:lettings_log, age2: 10) }
 
         it "is not marked as derived" do
           expect(question.derived?(log)).to be false
         end
       end
 
-      context "and in 2026", metadata: { year: 26 } do
-        let(:year) { 2026 }
+      context "with person 2 age >= 16" do
+        let(:log) { build(:lettings_log, age2: 20) }
+
+        it "is not marked as derived" do
+          expect(question.derived?(log)).to be false
+        end
+      end
+    end
+
+    context "and in 2026", metadata: { year: 26 } do
+      let(:year) { 2026 }
+      let(:person_question_count) { 5 }
+
+      it "has the correct question number" do
+        expect(question.question_number).to eq(38)
+      end
+
+      context "with person 2 age < 16" do
+        let(:log) { build(:lettings_log, age2: 10) }
 
         it "is marked as derived" do
           expect(question.derived?(log)).to be true
         end
       end
-    end
 
-    context "with person 2 age >= 16" do
-      let(:log) { build(:lettings_log, age2: 20) }
-
-      context "and in 2025", metadata: { year: 25 } do
-        let(:year) { 2025 }
-
-        it "is not marked as derived" do
-          expect(question.derived?(log)).to be false
-        end
-      end
-
-      context "and in 2026", metadata: { year: 26 } do
-        let(:year) { 2026 }
+      context "with person 2 age >= 16" do
+        let(:log) { build(:lettings_log, age2: 20) }
 
         it "is not marked as derived" do
           expect(question.derived?(log)).to be false
