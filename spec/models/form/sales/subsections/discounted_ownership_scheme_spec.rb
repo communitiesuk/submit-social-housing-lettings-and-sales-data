@@ -76,7 +76,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
     let(:log) { FactoryBot.build(:sales_log, ownershipsch: 2) }
 
     it "is displayed in tasklist" do
-      expect(discounted_ownership_scheme.displayed_in_tasklist?(log)).to eq(true)
+      expect(discounted_ownership_scheme.displayed_in_tasklist?(log)).to be(true)
     end
   end
 
@@ -84,7 +84,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
     let(:log) { FactoryBot.build(:sales_log, ownershipsch: 1) }
 
     it "is displayed in tasklist" do
-      expect(discounted_ownership_scheme.displayed_in_tasklist?(log)).to eq(false)
+      expect(discounted_ownership_scheme.displayed_in_tasklist?(log)).to be(false)
     end
   end
 

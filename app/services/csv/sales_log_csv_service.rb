@@ -408,7 +408,8 @@ module Csv
 
     def label_if_boolean_value(value)
       return "Yes" if value == true
-      return "No" if value == false
+
+      "No" if value == false
     end
   end
 end

@@ -5,7 +5,7 @@ class CsvDownloadsController < ApplicationController
     @csv_download = CsvDownload.find(params[:id])
     authorize @csv_download
 
-    return render "errors/download_link_expired" if @csv_download.expired?
+    render "errors/download_link_expired" if @csv_download.expired?
   end
 
   def download

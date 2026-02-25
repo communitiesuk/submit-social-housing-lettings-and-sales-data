@@ -29,7 +29,7 @@ RSpec.describe Form::Sales::Questions::StaircaseOwned, type: :model do
   end
 
   it "has the correct inferred check answers value" do
-    expect(question.inferred_check_answers_value).to eq(nil)
+    expect(question.inferred_check_answers_value).to be_nil
   end
 
   it "has correct suffix" do

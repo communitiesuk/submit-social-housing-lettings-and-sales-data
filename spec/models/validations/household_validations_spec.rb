@@ -434,7 +434,7 @@ RSpec.describe Validations::HouseholdValidations do
         .to include(match I18n.t("validations.lettings.household.condition_effects.no_choices"))
     end
 
-    it "expects that an illness can be selected if answer to anyone in household with health condition is yes " do
+    it "expects that an illness can be selected if answer to anyone in household with health condition is yes" do
       record.illness = 1
       record.illness_type_1 = 1
       record.illness_type_2 = 1

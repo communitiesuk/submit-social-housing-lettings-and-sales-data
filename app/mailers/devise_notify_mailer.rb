@@ -92,8 +92,7 @@ class DeviseNotifyMailer < Devise::Mailer
 
   def email_changed?(record)
     (
-      record.confirmable_template == User::CONFIRMABLE_TEMPLATE_ID && (
-        record.unconfirmed_email.present? && record.unconfirmed_email != record.email)
+      record.confirmable_template == User::CONFIRMABLE_TEMPLATE_ID && record.unconfirmed_email.present? && record.unconfirmed_email != record.email
     ) || (
       record.versions.last.changeset.key?("unconfirmed_email") &&
       record.confirmed?

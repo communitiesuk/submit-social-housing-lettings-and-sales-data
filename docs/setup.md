@@ -70,8 +70,8 @@ We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage NodeJS version
 4. Install Ruby and Bundler
 
    ```bash
-   rbenv install 3.1.6
-   rbenv global 3.1.6
+   rbenv install 3.4.4
+   rbenv global 3.4.4
    source ~/.bashrc
    gem install bundler
    ```

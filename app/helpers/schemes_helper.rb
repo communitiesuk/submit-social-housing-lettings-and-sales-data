@@ -12,7 +12,8 @@ module SchemesHelper
 
   def toggle_scheme_link(scheme)
     return govuk_button_link_to "Deactivate this scheme", scheme_new_deactivation_path(scheme), warning: true if scheme.active? || scheme.deactivates_in_a_long_time?
-    return govuk_button_link_to "Reactivate this scheme", scheme_new_reactivation_path(scheme) if scheme.deactivated? || scheme.deactivating_soon?
+
+    govuk_button_link_to "Reactivate this scheme", scheme_new_reactivation_path(scheme) if scheme.deactivated? || scheme.deactivating_soon?
   end
 
   def delete_scheme_link(scheme)

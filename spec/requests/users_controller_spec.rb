@@ -440,7 +440,7 @@ RSpec.describe UsersController, type: :request do
         get "/users/search", headers:, params: { query: "test_name" }
         result = JSON.parse(response.body)
         expect(result.count).to eq(2)
-        expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s])
+        expect(result.keys).to contain_exactly(org_user.id.to_s, managing_user.id.to_s)
       end
     end
 
@@ -1250,7 +1250,7 @@ RSpec.describe UsersController, type: :request do
         get "/users/search", headers:, params: { query: "test_name" }
         result = JSON.parse(response.body)
         expect(result.count).to eq(2)
-        expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s])
+        expect(result.keys).to contain_exactly(org_user.id.to_s, managing_user.id.to_s)
       end
     end
 
@@ -2419,7 +2419,7 @@ RSpec.describe UsersController, type: :request do
       it "deletes the user" do
         other_user.reload
         expect(other_user.status).to eq(:deleted)
-        expect(other_user.discarded_at).not_to be nil
+        expect(other_user.discarded_at).not_to be_nil
       end
 
       it "redirects to the users list and displays a notice that the user has been deleted" do
@@ -2448,7 +2448,7 @@ RSpec.describe UsersController, type: :request do
         get "/users/search", headers:, params: { query: "test_name" }
         result = JSON.parse(response.body)
         expect(result.count).to eq(4)
-        expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s, owner_user.id.to_s, other_user.id.to_s])
+        expect(result.keys).to contain_exactly(org_user.id.to_s, managing_user.id.to_s, owner_user.id.to_s, other_user.id.to_s)
       end
     end
 

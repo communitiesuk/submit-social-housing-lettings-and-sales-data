@@ -33,7 +33,7 @@ RSpec.describe Form::Sales::Questions::UprnSelection, type: :model do
   end
 
   it "has the correct question_number" do
-    expect(question.question_number).to eq(nil)
+    expect(question.question_number).to be_nil
   end
 
   it "has the correct type" do
@@ -71,7 +71,7 @@ RSpec.describe Form::Sales::Questions::UprnSelection, type: :model do
       stub_request(:get, /api\.os\.uk/)
         .to_return(status: 200, body: '{"results": {"0": "address_0", "1": "address_1", "2": "address_2"}}', headers: {})
 
-      expect(question.hidden_in_check_answers?(log)).to eq(false)
+      expect(question.hidden_in_check_answers?(log)).to be(false)
     end
   end
 
@@ -84,7 +84,7 @@ RSpec.describe Form::Sales::Questions::UprnSelection, type: :model do
       stub_request(:get, /api\.os\.uk/)
         .to_return(status: 200, body: "", headers: {})
 
-      expect(question.hidden_in_check_answers?(log)).to eq(true)
+      expect(question.hidden_in_check_answers?(log)).to be(true)
     end
   end
 

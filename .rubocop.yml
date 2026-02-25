@@ -1,5 +1,7 @@
 require:
   - rubocop-performance
+
+plugins:
   - rubocop-rails
   - rubocop-rspec
 
@@ -28,3 +30,6 @@ Rails/UnknownEnv:
     - development
     - test
     - review
+
+RSpec/IndexedLet:
+  Enabled: false

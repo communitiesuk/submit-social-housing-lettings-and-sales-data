@@ -16,7 +16,7 @@
           hint: { text: option["hint"] },
           checked: @log[key] == 1,
           exclusive: after_divider,
-          link_errors: index.zero? ? true : nil,
+          link_errors: index.zero? || nil,
           **stimulus_html_attributes(question) %>
       <% end %>
     <% end %>

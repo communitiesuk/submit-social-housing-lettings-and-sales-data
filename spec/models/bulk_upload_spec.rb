@@ -64,13 +64,13 @@ RSpec.describe BulkUpload, type: :model do
 
     describe ".lettings" do
       it "returns only lettings bulk uploads" do
-        expect(described_class.lettings).to match_array([lettings_bulk_upload_1, lettings_bulk_upload_2])
+        expect(described_class.lettings).to contain_exactly(lettings_bulk_upload_1, lettings_bulk_upload_2)
       end
     end
 
     describe ".sales" do
       it "returns only sales bulk uploads" do
-        expect(described_class.sales).to match_array([sales_bulk_upload_1, sales_bulk_upload_2])
+        expect(described_class.sales).to contain_exactly(sales_bulk_upload_1, sales_bulk_upload_2)
       end
     end
 

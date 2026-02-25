@@ -9,8 +9,7 @@ RSpec.describe Form::Lettings::Questions::Waityear, type: :model do
   let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
 
   before do
-    allow(form).to receive(:start_year_2024_or_later?).and_return(false)
-    allow(form).to receive(:start_year_2025_or_later?).and_return(false)
+    allow(form).to receive_messages(start_year_2024_or_later?: false, start_year_2025_or_later?: false)
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
   end
