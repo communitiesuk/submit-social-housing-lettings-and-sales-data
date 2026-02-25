@@ -247,7 +247,7 @@ RSpec.describe Form, type: :model do
           it "the value of this attribute is cleared" do
             log.renewal = 1
             log.form.reset_not_routed_questions_and_invalid_answers(log)
-            expect(log.prevten).to be nil
+            expect(log.prevten).to be_nil
           end
         end
       end
@@ -271,7 +271,7 @@ RSpec.describe Form, type: :model do
 
           it "the value of this attribute is cleared" do
             log.update!(startdate: Time.zone.local(2023, 1, 1))
-            expect(log.sheltered).to be nil
+            expect(log.sheltered).to be_nil
           end
         end
       end
@@ -310,7 +310,7 @@ RSpec.describe Form, type: :model do
           expect(log.value).to eq initial_value
           log.ownershipsch = 2
           log.form.reset_not_routed_questions_and_invalid_answers(log)
-          expect(log.value).to be nil
+          expect(log.value).to be_nil
         end
       end
     end
@@ -322,9 +322,9 @@ RSpec.describe Form, type: :model do
         expect(log.rp_homeless).to be 1
         log.reasonpref = 2
         log.form.reset_not_routed_questions_and_invalid_answers(log)
-        expect(log.rp_homeless).to be nil
-        expect(log.rp_medwel).to be nil
-        expect(log.rp_hardship).to be nil
+        expect(log.rp_homeless).to be_nil
+        expect(log.rp_medwel).to be_nil
+        expect(log.rp_hardship).to be_nil
       end
     end
 
@@ -341,12 +341,12 @@ RSpec.describe Form, type: :model do
         expect(log.ecstat2).to be 6
 
         log.update!(hhmemb: 1)
-        expect(log.details_known_2).to be nil
-        expect(log.sex2).to be nil
-        expect(log.relat2).to be nil
-        expect(log.age2_known).to be nil
-        expect(log.age2).to be nil
-        expect(log.ecstat2).to be nil
+        expect(log.details_known_2).to be_nil
+        expect(log.sex2).to be_nil
+        expect(log.relat2).to be_nil
+        expect(log.age2_known).to be_nil
+        expect(log.age2).to be_nil
+        expect(log.ecstat2).to be_nil
       end
     end
 
@@ -354,10 +354,10 @@ RSpec.describe Form, type: :model do
       let(:log) { FactoryBot.create(:sales_log, :outright_sale_setup_complete, value: 200_000) }
 
       it "the value of this attribute is not cleared" do
-        expect(log.deposit).to be nil
+        expect(log.deposit).to be_nil
         log.update!(mortgageused: 2)
         expect(log.form.questions.any? { |q| q.id == "deposit" && q.page.routed_to?(log, nil) }).to be false
-        expect(log.deposit).not_to be nil
+        expect(log.deposit).not_to be_nil
       end
     end
 
@@ -370,7 +370,7 @@ RSpec.describe Form, type: :model do
         expect(log.form.questions.find { |q| q.id == "location_id" }.answer_options.keys).to be_empty
         log.location_id = location.id
         log.form.reset_not_routed_questions_and_invalid_answers(log)
-        expect(log.location_id).not_to be nil
+        expect(log.location_id).not_to be_nil
       end
     end
   end
@@ -391,7 +391,7 @@ RSpec.describe Form, type: :model do
       expect(form.new_logs_end_date).to eq(Time.zone.parse("2023-11-20"))
       expect(form.edit_end_date).to eq(Time.zone.parse("2023-11-20"))
       expect(form.submission_deadline).to eq(Time.zone.parse("2023-06-09"))
-      expect(form.unresolved_log_redirect_page_id).to eq(nil)
+      expect(form.unresolved_log_redirect_page_id).to be_nil
     end
 
     it "can correctly define sections in the sales form" do

@@ -71,7 +71,7 @@ class SchemePolicy
 
   def delete?
     return false unless user.support?
-    return false unless scheme.status == :incomplete || scheme.status == :deactivated
+    return false unless %i[incomplete deactivated].include?(scheme.status)
 
     !has_any_logs_in_editable_collection_period
   end

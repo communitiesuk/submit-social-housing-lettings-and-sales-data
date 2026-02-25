@@ -104,8 +104,7 @@ RSpec.describe Csv::SalesLogCsvService do
     before do
       allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
       allow(form_handler_mock).to receive(:form_name_from_start_year)
-      allow(form_handler_mock).to receive(:get_form).and_return(sales_form)
-      allow(form_handler_mock).to receive(:ordered_questions_for_year).and_return(sales_form.questions)
+      allow(form_handler_mock).to receive_messages(get_form: sales_form, ordered_questions_for_year: sales_form.questions)
     end
 
     it "calls the form handler to get all questions in order when initialized" do

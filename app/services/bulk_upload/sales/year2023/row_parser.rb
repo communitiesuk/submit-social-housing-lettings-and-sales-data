@@ -915,7 +915,7 @@ private
     attributes["mortlen"] = mortlen
 
     attributes["proplen"] = proplen if proplen&.positive?
-    attributes["proplen_asked"] = attributes["proplen"]&.present? ? 0 : 1
+    attributes["proplen_asked"] = attributes["proplen"].present? ? 0 : 1
     attributes["jointmore"] = field_15
     attributes["staircase"] = field_87
     attributes["privacynotice"] = field_29
@@ -992,7 +992,8 @@ private
   ].each do |hash|
     define_method("age#{hash[:person]}_known?") do
       return 1 if public_send(hash[:field]) == "R"
-      return 0 if send("person_#{hash[:person]}_present?")
+
+      0 if send("person_#{hash[:person]}_present?")
     end
   end
 
@@ -1050,72 +1051,84 @@ private
   def sale_type
     return field_8 if shared_ownership?
     return field_9 if discounted_ownership?
-    return field_10 if outright_sale?
+
+    field_10 if outright_sale?
   end
 
   def value
     return field_103 if shared_ownership?
     return field_116 if discounted_ownership?
-    return field_127 if outright_sale?
+
+    field_127 if outright_sale?
   end
 
   def mortgage
     return field_106 if shared_ownership?
     return field_120 if discounted_ownership?
-    return field_129 if outright_sale?
+
+    field_129 if outright_sale?
   end
 
   def extrabor
     return field_110 if shared_ownership?
     return field_124 if discounted_ownership?
-    return field_133 if outright_sale?
+
+    field_133 if outright_sale?
   end
 
   def deposit
     return field_111 if shared_ownership?
     return field_125 if discounted_ownership?
-    return field_134 if outright_sale?
+
+    field_134 if outright_sale?
   end
 
   def mscharge
     return field_114 if shared_ownership?
     return field_126 if discounted_ownership?
-    return field_135 if outright_sale?
+
+    field_135 if outright_sale?
   end
 
   def mortgagelender
     return field_107 if shared_ownership?
     return field_121 if discounted_ownership?
-    return field_130 if outright_sale?
+
+    field_130 if outright_sale?
   end
 
   def mortgagelenderother
     return field_108 if shared_ownership?
     return field_122 if discounted_ownership?
-    return field_131 if outright_sale?
+
+    field_131 if outright_sale?
   end
 
   def mortlen
     return field_109 if shared_ownership?
     return field_123 if discounted_ownership?
-    return field_132 if outright_sale?
+
+    field_132 if outright_sale?
   end
 
   def proplen
     return field_86 if shared_ownership?
-    return field_115 if discounted_ownership?
+
+    field_115 if discounted_ownership?
   end
 
   def mortgageused
     return field_105 if shared_ownership?
     return field_119 if discounted_ownership?
-    return field_128 if outright_sale?
+
+    field_128 if outright_sale?
   end
 
   def mortgageused_field
     return :field_105 if shared_ownership?
     return :field_119 if discounted_ownership?
-    return :field_128 if outright_sale?
+
+    :field_128 if outright_sale?
   end
 
   def owning_organisation
@@ -1263,7 +1276,7 @@ private
   end
 
   def validate_valid_radio_option
-    log.attributes.each do |question_id, _v|
+    log.attributes.each_key do |question_id|
       question = log.form.get_question(question_id, log)
 
       next if question_id == "type"

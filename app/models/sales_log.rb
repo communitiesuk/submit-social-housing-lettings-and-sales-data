@@ -533,7 +533,7 @@ class SalesLog < Log
   end
 
   def is_not_staircasing?
-    staircase == 2 || staircase == 3
+    [2, 3].include?(staircase)
   end
 
   def stairowned_100?

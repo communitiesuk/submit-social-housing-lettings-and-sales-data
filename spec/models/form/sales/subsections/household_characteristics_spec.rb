@@ -18,10 +18,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
 
   context "with 2023/24 form" do
     before do
-      allow(form).to receive(:start_date).and_return(Time.zone.local(2023, 4, 1))
-      allow(form).to receive(:start_year_2024_or_later?).and_return(false)
-      allow(form).to receive(:start_year_2025_or_later?).and_return(false)
-      allow(form).to receive(:start_year_2026_or_later?).and_return(false)
+      allow(form).to receive_messages(start_date: Time.zone.local(2023, 4, 1), start_year_2024_or_later?: false, start_year_2025_or_later?: false, start_year_2026_or_later?: false)
     end
 
     it "has correct pages" do
@@ -128,10 +125,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
 
   context "with 2024/25 form" do
     before do
-      allow(form).to receive(:start_date).and_return(Time.zone.local(2024, 4, 1))
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-      allow(form).to receive(:start_year_2025_or_later?).and_return(false)
-      allow(form).to receive(:start_year_2026_or_later?).and_return(false)
+      allow(form).to receive_messages(start_date: Time.zone.local(2024, 4, 1), start_year_2024_or_later?: true, start_year_2025_or_later?: false, start_year_2026_or_later?: false)
     end
 
     it "has correct depends on" do
@@ -142,7 +136,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
       let(:log) { FactoryBot.build(:sales_log, ownershipsch: 3, companybuy: 1) }
 
       it "is not displayed in tasklist" do
-        expect(household_characteristics.displayed_in_tasklist?(log)).to eq(false)
+        expect(household_characteristics.displayed_in_tasklist?(log)).to be(false)
       end
     end
 
@@ -150,7 +144,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
       let(:log) { FactoryBot.build(:sales_log, ownershipsch: 3, companybuy: 2) }
 
       it "is displayed in tasklist" do
-        expect(household_characteristics.displayed_in_tasklist?(log)).to eq(true)
+        expect(household_characteristics.displayed_in_tasklist?(log)).to be(true)
       end
     end
 
@@ -283,10 +277,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
 
   context "with 2025/26 form" do
     before do
-      allow(form).to receive(:start_date).and_return(Time.zone.local(2025, 4, 1))
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-      allow(form).to receive(:start_year_2025_or_later?).and_return(true)
-      allow(form).to receive(:start_year_2026_or_later?).and_return(false)
+      allow(form).to receive_messages(start_date: Time.zone.local(2025, 4, 1), start_year_2024_or_later?: true, start_year_2025_or_later?: true, start_year_2026_or_later?: false)
     end
 
     it "has correct pages" do
@@ -404,10 +395,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
 
   context "with 2026/27 form" do
     before do
-      allow(form).to receive(:start_date).and_return(Time.zone.local(2026, 4, 1))
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-      allow(form).to receive(:start_year_2025_or_later?).and_return(true)
-      allow(form).to receive(:start_year_2026_or_later?).and_return(true)
+      allow(form).to receive_messages(start_date: Time.zone.local(2026, 4, 1), start_year_2024_or_later?: true, start_year_2025_or_later?: true, start_year_2026_or_later?: true)
     end
 
     it "has correct pages" do

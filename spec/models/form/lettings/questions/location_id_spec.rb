@@ -175,8 +175,8 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
     end
 
     it "is at the top" do
-      expect(question.top_guidance?).to eq(true)
-      expect(question.bottom_guidance?).to eq(false)
+      expect(question.top_guidance?).to be(true)
+      expect(question.bottom_guidance?).to be(false)
     end
   end
 end

@@ -101,7 +101,7 @@ RSpec.describe "form/page" do
   end
 
   context "with a question containing extra guidance" do
-    let(:expected_guidance) { /#{I18n.t("forms.2021.lettings.guidance.what_counts_as_income.content")}/ }
+    let(:expected_guidance) { /#{I18n.t('forms.2021.lettings.guidance.what_counts_as_income.content')}/ }
 
     context "with radio type" do
       let(:question_attributes) { { type: "radio", answer_options: { "1": "A", "2": "B" } } }

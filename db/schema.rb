@@ -403,6 +403,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_20_141000) do
     t.integer "referral_register"
     t.integer "referral_noms"
     t.integer "referral_org"
+    t.integer "tenancyother_value_check"
     t.index ["assigned_to_id"], name: "index_lettings_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"

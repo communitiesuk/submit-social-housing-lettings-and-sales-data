@@ -9,7 +9,7 @@ private
       previously_in_derived_state = dependency[:conditions].all? { |attribute, value| send("#{attribute}_was") == value }
       next unless previously_in_derived_state
 
-      dependency[:derived_values].each do |derived_attribute, _derived_value|
+      dependency[:derived_values].each_key do |derived_attribute|
         Rails.logger.debug("Cleared derived #{derived_attribute} value")
         send("#{derived_attribute}=", nil)
       end

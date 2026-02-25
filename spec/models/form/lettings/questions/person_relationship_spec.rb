@@ -28,11 +28,11 @@ RSpec.describe Form::Lettings::Questions::PersonRelationship, type: :model do
   end
 
   it "has correct conditional for" do
-    expect(question.conditional_for).to be nil
+    expect(question.conditional_for).to be_nil
   end
 
   it "has the correct hidden_in_check_answers" do
-    expect(question.hidden_in_check_answers).to be nil
+    expect(question.hidden_in_check_answers).to be_nil
   end
 
   context "with person 2" do

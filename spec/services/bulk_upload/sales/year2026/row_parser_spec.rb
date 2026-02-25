@@ -291,7 +291,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           expect(parser).to be_valid
         end
 
-        it "instantiates a log with everything completed", aggregate_failures: true do
+        it "instantiates a log with everything completed", :aggregate_failures do
           parser.valid?
 
           questions = parser.send(:questions).reject do |q|
@@ -1445,7 +1445,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       end
 
       it "does not add duplicate logs validation to the blank row" do
-        expect(parser.log_already_exists?).to eq(false)
+        expect(parser.log_already_exists?).to be(false)
       end
     end
   end
@@ -1639,8 +1639,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
         it "is correctly set" do
           parser.valid?
-          expect(parser.log.nationality_all).to be(nil)
-          expect(parser.log.nationality_all_group).to be(nil)
+          expect(parser.log.nationality_all).to be_nil
+          expect(parser.log.nationality_all_group).to be_nil
           expect(parser.errors["field_31"]).to include(I18n.t("validations.sales.2026.bulk_upload.nationality.invalid"))
         end
       end
@@ -1724,8 +1724,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
         it "is correctly set" do
           parser.valid?
-          expect(parser.log.nationality_all_buyer2).to be(nil)
-          expect(parser.log.nationality_all_buyer2_group).to be(nil)
+          expect(parser.log.nationality_all_buyer2).to be_nil
+          expect(parser.log.nationality_all_buyer2_group).to be_nil
           expect(parser.errors["field_38"]).to include(I18n.t("validations.sales.2026.bulk_upload.nationality.invalid"))
         end
       end

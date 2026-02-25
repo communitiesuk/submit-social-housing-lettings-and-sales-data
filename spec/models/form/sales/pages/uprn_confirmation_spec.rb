@@ -32,13 +32,13 @@ RSpec.describe Form::Sales::Pages::UprnConfirmation, type: :model do
   end
 
   describe "has correct routed_to?" do
-    context "when uprn present && uprn_known == 1 " do
+    context "when uprn present && uprn_known == 1" do
       let(:log) { build(:sales_log) }
 
       it "returns true" do
         log.uprn_known = 1
         log.uprn = "123456789"
-        expect(page.routed_to?(log)).to eq(true)
+        expect(page.routed_to?(log)).to be(true)
       end
     end
 
@@ -46,7 +46,7 @@ RSpec.describe Form::Sales::Pages::UprnConfirmation, type: :model do
       let(:log) { build(:sales_log, uprn_known: 1, uprn: nil) }
 
       it "returns false" do
-        expect(page.routed_to?(log)).to eq(false)
+        expect(page.routed_to?(log)).to be(false)
       end
     end
 
@@ -54,7 +54,7 @@ RSpec.describe Form::Sales::Pages::UprnConfirmation, type: :model do
       let(:log) { build(:sales_log, uprn_known: 0, uprn: "123456789") }
 
       it "returns false" do
-        expect(page.routed_to?(log)).to eq(false)
+        expect(page.routed_to?(log)).to be(false)
       end
     end
   end

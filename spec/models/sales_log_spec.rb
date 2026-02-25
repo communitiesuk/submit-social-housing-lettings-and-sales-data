@@ -536,22 +536,22 @@ RSpec.describe SalesLog, type: :model do
       )
     end
 
-    def check_property_postcode_fields
+    def expect_property_postcode_fields_to_match_example_postcode
       check_postcode_fields("postcode_full")
     end
 
     it "correctly formats previous postcode" do
       address_sales_log.update!(postcode_full: "M1 1AE")
-      check_property_postcode_fields
+      expect_property_postcode_fields_to_match_example_postcode
 
       address_sales_log.update!(postcode_full: "m1 1ae")
-      check_property_postcode_fields
+      expect_property_postcode_fields_to_match_example_postcode
 
       address_sales_log.update!(postcode_full: "m11Ae")
-      check_property_postcode_fields
+      expect_property_postcode_fields_to_match_example_postcode
 
       address_sales_log.update!(postcode_full: "m11ae")
-      check_property_postcode_fields
+      expect_property_postcode_fields_to_match_example_postcode
     end
 
     it "correctly infers la" do
@@ -648,21 +648,21 @@ RSpec.describe SalesLog, type: :model do
 
     it "errors if the property postcode is emptied" do
       expect { address_sales_log.update!({ postcode_full: "" }) }
-        .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
+        .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t('validations.postcode')}/)
     end
 
     it "errors if the property postcode is not valid" do
       expect { address_sales_log.update!({ postcode_full: "invalid_postcode" }) }
-        .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
+        .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t('validations.postcode')}/)
     end
 
     it "correctly resets all fields if property postcode not known" do
       address_sales_log.update!({ pcodenk: 1 })
 
       record_from_db = described_class.find(address_sales_log.id)
-      expect(record_from_db["postcode_full"]).to eq(nil)
-      expect(address_sales_log.la).to eq(nil)
-      expect(record_from_db["la"]).to eq(nil)
+      expect(record_from_db["postcode_full"]).to be_nil
+      expect(address_sales_log.la).to be_nil
+      expect(record_from_db["la"]).to be_nil
     end
 
     it "changes the LA if property postcode changes from not known to known and provided" do
@@ -670,7 +670,7 @@ RSpec.describe SalesLog, type: :model do
       address_sales_log.update!({ la: "E09000033" })
 
       record_from_db = described_class.find(address_sales_log.id)
-      expect(record_from_db["postcode_full"]).to eq(nil)
+      expect(record_from_db["postcode_full"]).to be_nil
       expect(address_sales_log.la).to eq("E09000033")
       expect(record_from_db["la"]).to eq("E09000033")
 
@@ -775,6 +775,8 @@ RSpec.describe SalesLog, type: :model do
 
       address_sales_log.update!(ppostcode_full: "m11ae")
       previous_postcode_fields
+
+      expect(address_sales_log.ppostcode_full).to eq("M1 1AE")
     end
 
     it "correctly infers prevloc" do
@@ -785,21 +787,21 @@ RSpec.describe SalesLog, type: :model do
 
     it "errors if the previous postcode is emptied" do
       expect { address_sales_log.update!({ ppostcode_full: "" }) }
-        .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
+        .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t('validations.postcode')}/)
     end
 
     it "errors if the previous postcode is not valid" do
       expect { address_sales_log.update!({ ppostcode_full: "invalid_postcode" }) }
-        .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
+        .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t('validations.postcode')}/)
     end
 
     it "correctly resets all fields if previous postcode not known" do
       address_sales_log.update!({ ppcodenk: 1 })
 
       record_from_db = described_class.find(address_sales_log.id)
-      expect(record_from_db["ppostcode_full"]).to eq(nil)
-      expect(address_sales_log.prevloc).to eq(nil)
-      expect(record_from_db["prevloc"]).to eq(nil)
+      expect(record_from_db["ppostcode_full"]).to be_nil
+      expect(address_sales_log.prevloc).to be_nil
+      expect(record_from_db["prevloc"]).to be_nil
     end
   end
 
@@ -866,7 +868,7 @@ RSpec.describe SalesLog, type: :model do
       let(:saledate) { nil }
 
       it "returns false" do
-        expect(log.collection_period_open?).to eq(true)
+        expect(log.collection_period_open?).to be(true)
       end
     end
 
@@ -879,7 +881,7 @@ RSpec.describe SalesLog, type: :model do
       end
 
       it "returns true" do
-        expect(log.collection_period_open?).to eq(false)
+        expect(log.collection_period_open?).to be(false)
       end
     end
 
@@ -891,7 +893,7 @@ RSpec.describe SalesLog, type: :model do
       end
 
       it "returns true" do
-        expect(log.collection_period_open?).to eq(true)
+        expect(log.collection_period_open?).to be(true)
       end
     end
 
@@ -903,7 +905,7 @@ RSpec.describe SalesLog, type: :model do
       end
 
       it "returns false" do
-        expect(log.collection_period_open?).to eq(false)
+        expect(log.collection_period_open?).to be(false)
       end
     end
   end
@@ -1014,8 +1016,8 @@ RSpec.describe SalesLog, type: :model do
       expect(sales_log.reload.la).to eq("E08000003")
 
       sales_log.update!(saledate: date_after_end_date)
-      expect(sales_log.reload.la).to eq(nil)
-      expect(sales_log.reload.is_la_inferred).to eq(false)
+      expect(sales_log.reload.la).to be_nil
+      expect(sales_log.reload.is_la_inferred).to be(false)
     end
   end
 

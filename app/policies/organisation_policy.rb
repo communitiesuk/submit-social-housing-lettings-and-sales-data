@@ -20,7 +20,7 @@ class OrganisationPolicy
 
   def delete?
     return false unless user.support?
-    return false unless organisation.status == :deactivated || organisation.status == :merged
+    return false unless %i[deactivated merged].include?(organisation.status)
 
     !has_any_logs_in_editable_collection_period
   end
