@@ -124,26 +124,26 @@ class BulkUpload::Sales::Year2026::RowParser
     field_109: "Was a mortgage used for this staircasing transaction?",
     field_110: "What was the basic monthly rent prior to staircasing?",
     field_111: "What is the basic monthly rent after staircasing?",
-    field_112: "Will the service charge change after this staircasing transaction takes place?",
-    field_113: "What is the new monthly service charge after staircasing?",
+    field_112: "How long have the buyers been living in the property before the purchase? - Discounted ownership",
+    field_113: "What was the full purchase price?",
+    field_114: "What was the amount of any loan, grant, discount or subsidy given?",
+    field_115: "What was the percentage discount?",
+    field_116: "Was a mortgage used for the purchase of this property? - Discounted ownership",
+    field_117: "What is the mortgage amount?",
+    field_118: "What is the length of the mortgage in years? - Discounted ownership",
+    field_119: "Does this include any extra borrowing?",
+    field_120: "How much was the cash deposit paid on the property?",
+    field_121: "What are the total monthly leasehold charges for the property?",
 
-    field_114: "How long have the buyers been living in the property before the purchase? - Discounted ownership",
-    field_115: "What was the full purchase price?",
-    field_116: "What was the amount of any loan, grant, discount or subsidy given?",
-    field_117: "What was the percentage discount?",
-    field_118: "Was a mortgage used for the purchase of this property? - Discounted ownership",
-    field_119: "What is the mortgage amount?",
-    field_120: "What is the length of the mortgage in years? - Discounted ownership",
-    field_121: "Does this include any extra borrowing?",
-    field_122: "How much was the cash deposit paid on the property?",
-    field_123: "What are the total monthly leasehold charges for the property?",
+    field_122: "Buyer 1's sex, as registered at birth",
+    field_123: "Buyer/Person 2's sex, as registered at birth",
+    field_124: "Person 3's sex, as registered at birth",
+    field_125: "Person 4's sex, as registered at birth",
+    field_126: "Person 5's sex, as registered at birth",
+    field_127: "Person 6's sex, as registered at birth",
 
-    field_124: "Buyer 1's sex, as registered at birth",
-    field_125: "Buyer/Person 2's sex, as registered at birth",
-    field_126: "Person 3's sex, as registered at birth",
-    field_127: "Person 4's sex, as registered at birth",
-    field_128: "Person 5's sex, as registered at birth",
-    field_129: "Person 6's sex, as registered at birth",
+    field_128: "Will the service charge change after this staircasing transaction takes place?",
+    field_129: "What is the new monthly service charge after staircasing?",
   }.freeze
 
   ERROR_BASE_KEY = "validations.sales.2026.bulk_upload".freeze
@@ -280,18 +280,19 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_116, :integer
   attribute :field_117, :decimal
   attribute :field_118, :integer
-  attribute :field_119, :decimal
-  attribute :field_120, :integer
-  attribute :field_121, :integer
-  attribute :field_122, :decimal
-  attribute :field_123, :decimal
+  attribute :field_119, :integer
+  attribute :field_120, :decimal
+  attribute :field_121, :decimal
 
+  attribute :field_122, :string
+  attribute :field_123, :string
   attribute :field_124, :string
   attribute :field_125, :string
   attribute :field_126, :string
   attribute :field_127, :string
-  attribute :field_128, :string
-  attribute :field_129, :string
+
+  attribute :field_128, :integer
+  attribute :field_129, :decimal
 
   validates :field_1,
             presence: {
@@ -748,8 +749,8 @@ private
 
       has_mscharge: mscharge_fields,
       mscharge: mscharge_fields,
-      grant: %i[field_116],
-      discount: %i[field_117],
+      grant: %i[field_114],
+      discount: %i[field_115],
       owning_organisation_id: %i[field_4],
       managing_organisation_id: [:field_5],
       assigned_to: %i[field_6],
@@ -799,15 +800,15 @@ private
       lasttransaction: %i[field_104 field_105 field_106],
       initialpurchase: %i[field_100 field_101 field_102],
 
-      hasservicechargeschanged: %i[field_112],
-      newservicecharges: %i[field_113],
+      sexrab1: %i[field_122],
+      sexrab2: %i[field_123],
+      sexrab3: %i[field_124],
+      sexrab4: %i[field_125],
+      sexrab5: %i[field_126],
+      sexrab6: %i[field_127],
 
-      sexrab1: %i[field_124],
-      sexrab2: %i[field_125],
-      sexrab3: %i[field_126],
-      sexrab4: %i[field_127],
-      sexrab5: %i[field_128],
-      sexrab6: %i[field_129],
+      hasservicechargeschanged: %i[field_128],
+      newservicecharges: %i[field_129],
     }
   end
 
@@ -843,15 +844,15 @@ private
     attributes["sex5"] = field_52
     attributes["sex6"] = field_56
 
-    attributes["hasservicechargeschanged"] = field_112
-    attributes["newservicecharges"] = field_113
+    attributes["sexrab1"] = field_122
+    attributes["sexrab2"] = field_123
+    attributes["sexrab3"] = field_124
+    attributes["sexrab4"] = field_125
+    attributes["sexrab5"] = field_126
+    attributes["sexrab6"] = field_127
 
-    attributes["sexrab1"] = field_124
-    attributes["sexrab2"] = field_125
-    attributes["sexrab3"] = field_126
-    attributes["sexrab4"] = field_127
-    attributes["sexrab5"] = field_128
-    attributes["sexrab6"] = field_129
+    attributes["hasservicechargeschanged"] = field_128
+    attributes["newservicecharges"] = field_129
 
     attributes["relat2"] = relationship_from_is_partner(field_34)
     attributes["relat3"] = relationship_from_is_partner(field_42)
@@ -928,8 +929,8 @@ private
     attributes["mrent"] = mrent
     attributes["mscharge"] = mscharge if mscharge&.positive?
     attributes["has_mscharge"] = attributes["mscharge"].present? ? 1 : 0
-    attributes["grant"] = field_116
-    attributes["discount"] = field_117
+    attributes["grant"] = field_114
+    attributes["discount"] = field_115
 
     attributes["owning_organisation"] = owning_organisation
     attributes["managing_organisation"] = managing_organisation
