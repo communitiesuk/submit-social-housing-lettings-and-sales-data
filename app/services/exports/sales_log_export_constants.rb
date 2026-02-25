@@ -134,6 +134,8 @@ module Exports::SalesLogExportConstants
     "STAIRINITIALDAY",
     "HASSERVICECHARGES",
     "SERVICECHARGES",
+    "HASSERVICECHARGESCHANGED",
+    "NEWSERVICECHARGES",
   ]
 
   (1..6).each do |index|
