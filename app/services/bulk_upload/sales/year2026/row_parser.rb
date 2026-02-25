@@ -366,7 +366,7 @@ class BulkUpload::Sales::Year2026::RowParser
 
   validates :field_11,
             inclusion: {
-              in: [8, 9, 14, 21, 22, 27, 29],
+              in: [8, 9, 14, 21, 22, 29],
               if: proc { field_11.present? },
               category: :setup,
               question: QUESTIONS[:field_11].downcase,
@@ -656,7 +656,7 @@ private
   end
 
   def rtb_like_sale_type?
-    [9, 14, 27, 29].include?(field_11)
+    [9, 14, 29].include?(field_11)
   end
 
   def field_mapping_for_errors
