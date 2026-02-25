@@ -67,7 +67,7 @@ module DataSharingAgreementHelper
       "12.2. For #{@org_name}: Name: #{@dpo_name}, Postal Address: #{@org_address}, E-mail address: #{@dpo_email}, Telephone number: #{@org_phone}"
     end
   end
-# rubocop:enable Rails/HelperInstanceVariable
+  # rubocop:enable Rails/HelperInstanceVariable
 
 private
 

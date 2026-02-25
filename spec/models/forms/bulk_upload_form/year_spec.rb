@@ -8,9 +8,7 @@ RSpec.describe Forms::BulkUploadForm::Year do
 
     describe "#options" do
       before do
-        allow(FormHandler.instance).to receive(:lettings_forms).and_return({ "current_lettings" => instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) })
-        allow(FormHandler.instance).to receive(:previous_lettings_form).and_return(instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))
-        allow(FormHandler.instance).to receive(:next_lettings_form).and_return(instance_double(Form, start_date: Time.zone.local(2025, 4, 1)))
+        allow(FormHandler.instance).to receive_messages(lettings_forms: { "current_lettings" => instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }, previous_lettings_form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)), next_lettings_form: instance_double(Form, start_date: Time.zone.local(2025, 4, 1)))
       end
 
       context "when in a crossover period" do
@@ -54,9 +52,7 @@ RSpec.describe Forms::BulkUploadForm::Year do
 
     describe "#options" do
       before do
-        allow(FormHandler.instance).to receive(:sales_forms).and_return({ "current_sales" => instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) })
-        allow(FormHandler.instance).to receive(:previous_sales_form).and_return(instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))
-        allow(FormHandler.instance).to receive(:next_sales_form).and_return(instance_double(Form, start_date: Time.zone.local(2025, 4, 1)))
+        allow(FormHandler.instance).to receive_messages(sales_forms: { "current_sales" => instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }, previous_sales_form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)), next_sales_form: instance_double(Form, start_date: Time.zone.local(2025, 4, 1)))
       end
 
       context "when in a crossover period" do

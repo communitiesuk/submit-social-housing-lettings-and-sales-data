@@ -144,7 +144,7 @@ module Validations::Sales::SoftValidations
 
   def grant_outside_common_range?
     return unless grant && type && saledate
-    return if form.start_year_2024_or_later? && (type == 21 || type == 8)
+    return if form.start_year_2024_or_later? && [21, 8].include?(type)
 
     !grant.between?(9_000, 16_000)
   end

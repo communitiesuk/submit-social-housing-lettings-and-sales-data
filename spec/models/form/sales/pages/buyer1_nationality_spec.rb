@@ -42,7 +42,7 @@ RSpec.describe Form::Sales::Pages::Buyer1Nationality, type: :model do
         let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0, staircase: 2) }
 
         it "routes to the page" do
-          expect(page.routed_to?(log, nil)).to eq(true)
+          expect(page.routed_to?(log, nil)).to be(true)
         end
       end
 
@@ -50,7 +50,7 @@ RSpec.describe Form::Sales::Pages::Buyer1Nationality, type: :model do
         let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 1, staircase: 2) }
 
         it "routes to the page" do
-          expect(page.routed_to?(log, nil)).to eq(true)
+          expect(page.routed_to?(log, nil)).to be(true)
         end
       end
 
@@ -66,7 +66,7 @@ RSpec.describe Form::Sales::Pages::Buyer1Nationality, type: :model do
         let(:log) { build(:sales_log, privacynotice: nil, jointpur: 1, noint: 1, staircase: 2) }
 
         it "routes to the page" do
-          expect(page.routed_to?(log, nil)).to eq(true)
+          expect(page.routed_to?(log, nil)).to be(true)
         end
       end
     end
@@ -84,7 +84,7 @@ RSpec.describe Form::Sales::Pages::Buyer1Nationality, type: :model do
         let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0, staircase: 2) }
 
         it "routes to the page" do
-          expect(page.routed_to?(log, nil)).to eq(true)
+          expect(page.routed_to?(log, nil)).to be(true)
         end
       end
 

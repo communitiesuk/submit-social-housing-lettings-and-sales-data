@@ -27,6 +27,6 @@ RSpec.describe Form::Lettings::Questions::NoAddressFound, type: :model do
   end
 
   it "has the correct hidden_in_check_answers" do
-    expect(question.hidden_in_check_answers).to eq(true)
+    expect(question.hidden_in_check_answers).to be(true)
   end
 end

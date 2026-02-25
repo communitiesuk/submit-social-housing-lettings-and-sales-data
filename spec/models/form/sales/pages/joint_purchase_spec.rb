@@ -10,8 +10,7 @@ RSpec.describe Form::Sales::Pages::JointPurchase, type: :model do
     let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1))) }
 
     before do
-      allow(subsection.form).to receive(:start_year_2024_or_later?).and_return(true)
-      allow(subsection.form).to receive(:start_year_2025_or_later?).and_return(false)
+      allow(subsection.form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: false)
     end
 
     it "has correct subsection" do
@@ -43,8 +42,7 @@ RSpec.describe Form::Sales::Pages::JointPurchase, type: :model do
     let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2025, 4, 1))) }
 
     before do
-      allow(subsection.form).to receive(:start_year_2024_or_later?).and_return(true)
-      allow(subsection.form).to receive(:start_year_2025_or_later?).and_return(true)
+      allow(subsection.form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true)
     end
 
     it "has correct depends_on" do

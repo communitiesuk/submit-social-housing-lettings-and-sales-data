@@ -17,8 +17,7 @@ RSpec.describe "seeding process", type: task do
     Rake.application.rake_require("tasks/rent_ranges")
     Rake::Task.define_task(:environment)
 
-    allow(Rails.env).to receive(:test?).and_return(false)
-    allow(Rails.env).to receive(:review?).and_return(true)
+    allow(Rails.env).to receive_messages(test?: false, review?: true)
   end
 
   # Doing this in one test should save ~2 minutes

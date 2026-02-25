@@ -60,7 +60,7 @@ RSpec.describe "validations" do
     end
   end
 
-  describe "date validation", js: true do
+  describe "date validation", :js do
     def fill_in_date(lettings_log_id, question, day, month, year, path)
       visit("/lettings-logs/#{lettings_log_id}/#{path}")
       fill_in("lettings_log[#{question}]", with: [day, month, year].join("/"))

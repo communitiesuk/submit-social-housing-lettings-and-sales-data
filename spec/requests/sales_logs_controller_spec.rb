@@ -93,7 +93,7 @@ RSpec.describe SalesLogsController, type: :request do
         it "validates sales log parameters" do
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_content)
-          expect(json_response["errors"]).to match_array([["beds", ["Number of bedrooms must be 1 if the property is a bedsit."]], ["proptype", ["Answer cannot be 'Bedsit' if the property has 2 or more bedrooms."]]])
+          expect(json_response["errors"]).to contain_exactly(["beds", ["Number of bedrooms must be 1 if the property is a bedsit."]], ["proptype", ["Answer cannot be 'Bedsit' if the property has 2 or more bedrooms."]])
         end
       end
     end
@@ -129,7 +129,7 @@ RSpec.describe SalesLogsController, type: :request do
           it "sets the stock-owning org as nil" do
             created_id = response.location.match(/[0-9]+/)[0]
             sales_log = SalesLog.find_by(id: created_id)
-            expect(sales_log.owning_organisation).to eq(nil)
+            expect(sales_log.owning_organisation).to be_nil
           end
         end
 
@@ -844,8 +844,8 @@ RSpec.describe SalesLogsController, type: :request do
 
       it "does not have a button for creating lettings logs" do
         get "/sales-logs", headers:, params: {}
-        page.assert_selector(".govuk-button", text: "Create a new sales log", count: 1)
-        page.assert_selector(".govuk-button", text: "Create a new lettings log", count: 0)
+        expect(page).to have_selector(".govuk-button", text: "Create a new sales log", count: 1)
+        expect(page).not_to have_selector(".govuk-button", text: "Create a new lettings log")
       end
     end
 

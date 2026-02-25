@@ -23,10 +23,16 @@ class Form::Lettings::Questions::AgeKnown < ::Form::Question
     base_question_number = case form.start_date.year
                            when 2023
                              31
-                           else
+                           when 2024
                              30
+                           when 2025
+                             30
+                           when 2026
+                             27
+                           else
+                             27
                            end
 
-    base_question_number + (4 * @person_index)
+    base_question_number + (form.person_question_count * @person_index)
   end
 end

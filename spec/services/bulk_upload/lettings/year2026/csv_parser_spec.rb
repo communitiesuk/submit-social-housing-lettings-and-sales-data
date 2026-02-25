@@ -196,7 +196,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::CsvParser do
     end
   end
 
-  describe "#column_for_field", aggregate_failures: true do
+  describe "#column_for_field", :aggregate_failures do
     context "when with headers using default ordering" do
       before do
         file.write("Question\n")
@@ -244,10 +244,10 @@ RSpec.describe BulkUpload::Lettings::Year2026::CsvParser do
       end
 
       it "returns correct column" do
-        expect(service.column_for_field("field_5")).to eql("AG")
-        expect(service.column_for_field("field_22")).to eql("BO")
-        expect(service.column_for_field("field_26")).to eql("CD")
-        expect(service.column_for_field("field_25")).to eql("E")
+        expect(service.column_for_field("field_5")).to eql("AA")
+        expect(service.column_for_field("field_22")).to eql("BK")
+        expect(service.column_for_field("field_26")).to eql("BZ")
+        expect(service.column_for_field("field_25")).to eql("S")
       end
     end
   end

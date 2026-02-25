@@ -17,8 +17,8 @@ RSpec.describe TasklistHelper do
     end
 
     describe "get sections count" do
-      let(:completed_subsection) { instance_double("Subsection", status: :completed, displayed_in_tasklist?: true, applicable_questions: [{ id: "question" }]) }
-      let(:incomplete_subsection) { instance_double("Subsection", status: :not_started, displayed_in_tasklist?: true, applicable_questions: []) }
+      let(:completed_subsection) { instance_double(Form::Subsection, status: :completed, displayed_in_tasklist?: true, applicable_questions: [{ id: "question" }]) }
+      let(:incomplete_subsection) { instance_double(Form::Subsection, status: :not_started, displayed_in_tasklist?: true, applicable_questions: []) }
 
       context "with an empty lettings log" do
         before do
@@ -79,8 +79,8 @@ RSpec.describe TasklistHelper do
   describe "with sales" do
     let(:empty_sales_log) { build(:sales_log, owning_organisation: nil) }
     let(:completed_sales_log) { build(:sales_log, :completed) }
-    let(:completed_subsection) { instance_double("Subsection", status: :completed, displayed_in_tasklist?: true, applicable_questions: [{ id: "question" }]) }
-    let(:incomplete_subsection) { instance_double("Subsection", status: :not_started, displayed_in_tasklist?: true, applicable_questions: []) }
+    let(:completed_subsection) { instance_double(Form::Subsection, status: :completed, displayed_in_tasklist?: true, applicable_questions: [{ id: "question" }]) }
+    let(:incomplete_subsection) { instance_double(Form::Subsection, status: :not_started, displayed_in_tasklist?: true, applicable_questions: []) }
 
     describe "get sections count" do
       context "with an empty sales log" do

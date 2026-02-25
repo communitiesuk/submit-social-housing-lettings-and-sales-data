@@ -13,8 +13,7 @@ RSpec.describe Form::Sales::Pages::BuyerLive, type: :model do
     let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
 
     before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-      allow(form).to receive(:start_year_2025_or_later?).and_return(false)
+      allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: false)
       allow(subsection).to receive(:form).and_return(form)
     end
 
@@ -45,8 +44,7 @@ RSpec.describe Form::Sales::Pages::BuyerLive, type: :model do
     let(:form) { instance_double(Form, start_date: Time.zone.local(2025, 4, 1)) }
 
     before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-      allow(form).to receive(:start_year_2025_or_later?).and_return(true)
+      allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true)
       allow(subsection).to receive(:form).and_return(form)
     end
 

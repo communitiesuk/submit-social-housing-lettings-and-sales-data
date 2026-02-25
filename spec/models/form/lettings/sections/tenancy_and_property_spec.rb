@@ -24,6 +24,6 @@ RSpec.describe Form::Lettings::Sections::TenancyAndProperty, type: :model do
   end
 
   it "has the correct description" do
-    expect(tenancy_and_property.description).to be nil
+    expect(tenancy_and_property.description).to be_nil
   end
 end

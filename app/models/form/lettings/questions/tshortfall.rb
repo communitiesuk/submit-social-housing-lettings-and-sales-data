@@ -21,9 +21,9 @@ class Form::Lettings::Questions::Tshortfall < ::Form::Question
       { "label" => " every week for 52 weeks", "depends_on" => { "period" => 1 } },
       { "label" => " every week for 53 weeks", "depends_on" => { "period" => 10 } },
     ]
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @strip_commas = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 100, 2024 => 99, 2025 => 97 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 100, 2024 => 99, 2025 => 97, 2026 => 105 }.freeze
 end
