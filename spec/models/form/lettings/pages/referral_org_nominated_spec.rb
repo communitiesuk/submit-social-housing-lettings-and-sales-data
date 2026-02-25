@@ -34,7 +34,7 @@ RSpec.describe Form::Lettings::Pages::ReferralOrgNominated, type: :model do
   end
 
   it "has the correct depends_on" do
-    expect(page.depends_on).to be nil
+    expect(page.depends_on).to be_nil
   end
 
   context "and log owning organisation is not prp" do

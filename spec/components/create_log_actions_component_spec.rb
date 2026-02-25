@@ -14,7 +14,7 @@ RSpec.describe CreateLogActionsComponent, type: :component do
     let(:bulk_upload) { true }
 
     it "does not render actions" do
-      expect(component.display_actions?).to eq(false)
+      expect(component.display_actions?).to be(false)
     end
   end
 
@@ -25,7 +25,7 @@ RSpec.describe CreateLogActionsComponent, type: :component do
       let(:user) { create(:user, :support) }
 
       it "renders actions" do
-        expect(component.display_actions?).to eq(true)
+        expect(component.display_actions?).to be(true)
       end
 
       it "returns create button copy" do
@@ -60,7 +60,7 @@ RSpec.describe CreateLogActionsComponent, type: :component do
         let(:log_type) { "sales" }
 
         it "renders actions" do
-          expect(component.display_actions?).to eq(true)
+          expect(component.display_actions?).to be(true)
         end
 
         it "returns create button copy" do
@@ -97,7 +97,7 @@ RSpec.describe CreateLogActionsComponent, type: :component do
         let(:user) { create(:user) }
 
         it "renders actions" do
-          expect(component.display_actions?).to eq(true)
+          expect(component.display_actions?).to be(true)
         end
 
         it "returns create button copy" do
@@ -122,7 +122,7 @@ RSpec.describe CreateLogActionsComponent, type: :component do
           let(:log_type) { "sales" }
 
           it "renders actions" do
-            expect(component.display_actions?).to eq(true)
+            expect(component.display_actions?).to be(true)
           end
 
           it "returns create button copy" do
@@ -147,7 +147,7 @@ RSpec.describe CreateLogActionsComponent, type: :component do
             end
 
             it "renders actions" do
-              expect(component.display_actions?).to eq(true)
+              expect(component.display_actions?).to be(true)
             end
           end
 
@@ -159,7 +159,7 @@ RSpec.describe CreateLogActionsComponent, type: :component do
             end
 
             it "renders actions" do
-              expect(component.display_actions?).to eq(false)
+              expect(component.display_actions?).to be(false)
             end
           end
 
@@ -170,7 +170,7 @@ RSpec.describe CreateLogActionsComponent, type: :component do
             end
 
             it "does not render actions" do
-              expect(component.display_actions?).to eq(false)
+              expect(component.display_actions?).to be(false)
             end
           end
         end

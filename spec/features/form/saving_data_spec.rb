@@ -62,7 +62,7 @@ RSpec.describe "Form Saving Data" do
     end
   end
 
-  it "updates total value of the rent", js: true do
+  it "updates total value of the rent", :js do
     visit("/lettings-logs/#{id}/rent")
 
     fill_in("lettings-log-brent-field", with: 3.02)

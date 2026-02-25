@@ -23,6 +23,7 @@ class Form::Sales::Pages::Deposit < ::Form::Page
   def copy_key
     return "sales.sale_information.deposit.shared_ownership" if @ownershipsch == 1
     return "sales.sale_information.deposit.discounted_ownership" if @ownershipsch == 2
-    return "sales.sale_information.deposit.outright_sale" if @ownershipsch == 3
+
+    "sales.sale_information.deposit.outright_sale" if @ownershipsch == 3
   end
 end

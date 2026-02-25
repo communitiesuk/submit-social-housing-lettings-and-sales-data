@@ -29,6 +29,6 @@ RSpec.describe Form::Sales::Pages::Buyer2IncomeDiscountedMaxValueCheck, type: :m
   end
 
   it "is interruption screen page" do
-    expect(page.interruption_screen?).to eq(true)
+    expect(page.interruption_screen?).to be(true)
   end
 end

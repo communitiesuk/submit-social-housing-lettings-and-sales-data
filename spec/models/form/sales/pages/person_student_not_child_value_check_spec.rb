@@ -19,7 +19,7 @@ RSpec.describe Form::Sales::Pages::PersonStudentNotChildValueCheck, type: :model
   end
 
   it "is interruption screen page" do
-    expect(page.interruption_screen?).to eq(true)
+    expect(page.interruption_screen?).to be(true)
   end
 
   it "has correct title_text" do

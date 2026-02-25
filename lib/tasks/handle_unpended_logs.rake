@@ -62,13 +62,13 @@ task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, args|
       visible_duplicates = duplicates.where(status: %w[in_progress completed])
       deleted_duplicates = duplicates.where(status: %w[deleted])
 
-      if visible_duplicates.length.zero? && deleted_duplicates.any? { |dup| dup.discarded_at > result["created_at"] }
+      if visible_duplicates.empty? && deleted_duplicates.any? { |dup| dup.discarded_at > result["created_at"] }
         seen.add(id)
         csv << [id, log.collection_start_year, log.status, log.owning_organisation_name, log.assigned_to_id, log.assigned_to.email, "Leave", "Log has no visible duplicates and at least one duplicate has been deleted since being affected"]
         next
       end
 
-      if visible_duplicates.length.zero?
+      if visible_duplicates.empty?
         seen.add(id)
         csv << [id, log.collection_start_year, log.status, log.owning_organisation_name, log.assigned_to_id, log.assigned_to.email, "Leave", "Log has no visible duplicates"]
         next
