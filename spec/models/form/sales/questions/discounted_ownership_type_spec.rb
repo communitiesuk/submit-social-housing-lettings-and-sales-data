@@ -25,16 +25,35 @@ RSpec.describe Form::Sales::Questions::DiscountedOwnershipType, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
-  it "has the correct answer_options" do
-    expect(question.answer_options).to eq({
-      "8" => { "value" => "Right to Acquire (RTA)" },
-      "14" => { "value" => "Preserved Right to Buy (PRTB)" },
-      "27" => { "value" => "Voluntary Right to Buy (VRTB)" },
-      "9" => { "value" => "Right to Buy (RTB)" },
-      "29" => { "value" => "Rent to Buy - Full Ownership" },
-      "21" => { "value" => "Social HomeBuy for outright purchase" },
-      "22" => { "value" => "Any other equity loan scheme" },
-    })
+  context "when form is for 2025 or earlier" do
+    let(:start_date) { Time.zone.local(2025, 4, 1) }
+
+    it "has the correct answer_options including option 27" do
+      expect(question.answer_options).to eq({
+        "8" => { "value" => "Right to Acquire (RTA)" },
+        "14" => { "value" => "Preserved Right to Buy (PRTB)" },
+        "27" => { "value" => "Voluntary Right to Buy (VRTB)" },
+        "9" => { "value" => "Right to Buy (RTB)" },
+        "29" => { "value" => "Rent to Buy - Full Ownership" },
+        "21" => { "value" => "Social HomeBuy for outright purchase" },
+        "22" => { "value" => "Any other equity loan scheme" },
+      })
+    end
+  end
+
+  context "when form is for 2026 or later" do
+    let(:start_date) { Time.zone.local(2026, 4, 1) }
+
+    it "has the correct answer_options without option 27" do
+      expect(question.answer_options).to eq({
+        "8" => { "value" => "Right to Acquire (RTA)" },
+        "14" => { "value" => "Preserved Right to Buy (PRTB)" },
+        "9" => { "value" => "Right to Buy (RTB)" },
+        "29" => { "value" => "Rent to Buy - Full Ownership" },
+        "21" => { "value" => "Social HomeBuy for outright purchase" },
+        "22" => { "value" => "Any other equity loan scheme" },
+      })
+    end
   end
 
   describe "partial guidance" do
