@@ -13,32 +13,32 @@ RSpec.describe AddressSearchController, type: :request do
 
       it "correctly sets address fields" do
         sales_log.reload
-        expect(sales_log.manual_address_entry_selected).to eq(false)
-        expect(sales_log.uprn_known).to eq(nil)
-        expect(sales_log.uprn).to eq(nil)
-        expect(sales_log.uprn_confirmed).to eq(nil)
-        expect(sales_log.uprn_selection).to eq(nil)
-        expect(sales_log.pcodenk).to eq(nil)
-        expect(sales_log.postcode_full).to eq(nil)
-        expect(sales_log.address_line1).to eq(nil)
-        expect(sales_log.address_line2).to eq(nil)
-        expect(sales_log.town_or_city).to eq(nil)
-        expect(sales_log.la).to eq(nil)
+        expect(sales_log.manual_address_entry_selected).to be(false)
+        expect(sales_log.uprn_known).to be_nil
+        expect(sales_log.uprn).to be_nil
+        expect(sales_log.uprn_confirmed).to be_nil
+        expect(sales_log.uprn_selection).to be_nil
+        expect(sales_log.pcodenk).to be_nil
+        expect(sales_log.postcode_full).to be_nil
+        expect(sales_log.address_line1).to be_nil
+        expect(sales_log.address_line2).to be_nil
+        expect(sales_log.town_or_city).to be_nil
+        expect(sales_log.la).to be_nil
 
         get address_manual_input_path(log_type: "sales_log", log_id: sales_log.id)
 
         sales_log.reload
-        expect(sales_log.manual_address_entry_selected).to eq(true)
+        expect(sales_log.manual_address_entry_selected).to be(true)
         expect(sales_log.uprn_known).to eq(0)
-        expect(sales_log.uprn).to eq(nil)
-        expect(sales_log.uprn_confirmed).to eq(nil)
-        expect(sales_log.uprn_selection).to eq(nil)
-        expect(sales_log.pcodenk).to eq(nil)
-        expect(sales_log.postcode_full).to eq(nil)
-        expect(sales_log.address_line1).to eq(nil)
-        expect(sales_log.address_line2).to eq(nil)
-        expect(sales_log.town_or_city).to eq(nil)
-        expect(sales_log.la).to eq(nil)
+        expect(sales_log.uprn).to be_nil
+        expect(sales_log.uprn_confirmed).to be_nil
+        expect(sales_log.uprn_selection).to be_nil
+        expect(sales_log.pcodenk).to be_nil
+        expect(sales_log.postcode_full).to be_nil
+        expect(sales_log.address_line1).to be_nil
+        expect(sales_log.address_line2).to be_nil
+        expect(sales_log.town_or_city).to be_nil
+        expect(sales_log.la).to be_nil
       end
     end
 
@@ -54,24 +54,24 @@ RSpec.describe AddressSearchController, type: :request do
         expect(lettings_log.postcode_known).to eq(1)
         expect(lettings_log.postcode_full).to eq("SW1A 1AA")
         expect(lettings_log.address_line1).to eq("The Mall, City Of Westminster")
-        expect(lettings_log.address_line2).to eq(nil)
+        expect(lettings_log.address_line2).to be_nil
         expect(lettings_log.town_or_city).to eq("London")
         expect(lettings_log.la).to eq("E09000033")
 
         get address_manual_input_path(log_type: "lettings_log", log_id: lettings_log.id)
 
         lettings_log.reload
-        expect(lettings_log.manual_address_entry_selected).to eq(true)
+        expect(lettings_log.manual_address_entry_selected).to be(true)
         expect(lettings_log.uprn_known).to eq(0)
-        expect(lettings_log.uprn).to eq(nil)
-        expect(lettings_log.uprn_confirmed).to eq(nil)
-        expect(lettings_log.uprn_selection).to eq(nil)
-        expect(lettings_log.postcode_known).to eq(nil)
-        expect(lettings_log.postcode_full).to eq(nil)
-        expect(lettings_log.address_line1).to eq(nil)
-        expect(lettings_log.address_line2).to eq(nil)
-        expect(lettings_log.town_or_city).to eq(nil)
-        expect(lettings_log.la).to eq(nil)
+        expect(lettings_log.uprn).to be_nil
+        expect(lettings_log.uprn_confirmed).to be_nil
+        expect(lettings_log.uprn_selection).to be_nil
+        expect(lettings_log.postcode_known).to be_nil
+        expect(lettings_log.postcode_full).to be_nil
+        expect(lettings_log.address_line1).to be_nil
+        expect(lettings_log.address_line2).to be_nil
+        expect(lettings_log.town_or_city).to be_nil
+        expect(lettings_log.la).to be_nil
       end
     end
   end
@@ -82,32 +82,32 @@ RSpec.describe AddressSearchController, type: :request do
 
       it "correctly sets address fields" do
         lettings_log.reload
-        expect(lettings_log.manual_address_entry_selected).to eq(true)
+        expect(lettings_log.manual_address_entry_selected).to be(true)
         expect(lettings_log.uprn_known).to eq(0)
-        expect(lettings_log.uprn).to eq(nil)
-        expect(lettings_log.uprn_confirmed).to eq(nil)
-        expect(lettings_log.uprn_selection).to eq(nil)
-        expect(lettings_log.postcode_known).to eq(nil)
-        expect(lettings_log.postcode_full).to eq(nil)
-        expect(lettings_log.address_line1).to eq(nil)
-        expect(lettings_log.address_line2).to eq(nil)
-        expect(lettings_log.town_or_city).to eq(nil)
-        expect(lettings_log.la).to eq(nil)
+        expect(lettings_log.uprn).to be_nil
+        expect(lettings_log.uprn_confirmed).to be_nil
+        expect(lettings_log.uprn_selection).to be_nil
+        expect(lettings_log.postcode_known).to be_nil
+        expect(lettings_log.postcode_full).to be_nil
+        expect(lettings_log.address_line1).to be_nil
+        expect(lettings_log.address_line2).to be_nil
+        expect(lettings_log.town_or_city).to be_nil
+        expect(lettings_log.la).to be_nil
 
         get address_search_input_path(log_type: "lettings_log", log_id: lettings_log.id)
 
         lettings_log.reload
-        expect(lettings_log.manual_address_entry_selected).to eq(false)
-        expect(lettings_log.uprn_known).to eq(nil)
-        expect(lettings_log.uprn).to eq(nil)
-        expect(lettings_log.uprn_confirmed).to eq(nil)
-        expect(lettings_log.uprn_selection).to eq(nil)
-        expect(lettings_log.postcode_known).to eq(nil)
-        expect(lettings_log.postcode_full).to eq(nil)
-        expect(lettings_log.address_line1).to eq(nil)
-        expect(lettings_log.address_line2).to eq(nil)
-        expect(lettings_log.town_or_city).to eq(nil)
-        expect(lettings_log.la).to eq(nil)
+        expect(lettings_log.manual_address_entry_selected).to be(false)
+        expect(lettings_log.uprn_known).to be_nil
+        expect(lettings_log.uprn).to be_nil
+        expect(lettings_log.uprn_confirmed).to be_nil
+        expect(lettings_log.uprn_selection).to be_nil
+        expect(lettings_log.postcode_known).to be_nil
+        expect(lettings_log.postcode_full).to be_nil
+        expect(lettings_log.address_line1).to be_nil
+        expect(lettings_log.address_line2).to be_nil
+        expect(lettings_log.town_or_city).to be_nil
+        expect(lettings_log.la).to be_nil
       end
     end
 
@@ -116,32 +116,32 @@ RSpec.describe AddressSearchController, type: :request do
 
       it "correctly sets address fields" do
         sales_log.reload
-        expect(sales_log.manual_address_entry_selected).to eq(true)
+        expect(sales_log.manual_address_entry_selected).to be(true)
         expect(sales_log.uprn_known).to eq(0)
-        expect(sales_log.uprn).to eq(nil)
-        expect(sales_log.uprn_confirmed).to eq(nil)
-        expect(sales_log.uprn_selection).to eq(nil)
+        expect(sales_log.uprn).to be_nil
+        expect(sales_log.uprn_confirmed).to be_nil
+        expect(sales_log.uprn_selection).to be_nil
         expect(sales_log.pcodenk).to eq(0)
         expect(sales_log.postcode_full).to eq("SW1A 1AA")
         expect(sales_log.address_line1).to eq("Address line 1")
-        expect(sales_log.address_line2).to eq(nil)
+        expect(sales_log.address_line2).to be_nil
         expect(sales_log.town_or_city).to eq("Test Town")
         expect(sales_log.la).to eq("E09000033")
 
         get address_search_input_path(log_type: "sales_log", log_id: sales_log.id)
 
         sales_log.reload
-        expect(sales_log.manual_address_entry_selected).to eq(false)
-        expect(sales_log.uprn_known).to eq(nil)
-        expect(sales_log.uprn).to eq(nil)
-        expect(sales_log.uprn_confirmed).to eq(nil)
-        expect(sales_log.uprn_selection).to eq(nil)
-        expect(sales_log.pcodenk).to eq(nil)
-        expect(sales_log.postcode_full).to eq(nil)
-        expect(sales_log.address_line1).to eq(nil)
-        expect(sales_log.address_line2).to eq(nil)
-        expect(sales_log.town_or_city).to eq(nil)
-        expect(sales_log.la).to eq(nil)
+        expect(sales_log.manual_address_entry_selected).to be(false)
+        expect(sales_log.uprn_known).to be_nil
+        expect(sales_log.uprn).to be_nil
+        expect(sales_log.uprn_confirmed).to be_nil
+        expect(sales_log.uprn_selection).to be_nil
+        expect(sales_log.pcodenk).to be_nil
+        expect(sales_log.postcode_full).to be_nil
+        expect(sales_log.address_line1).to be_nil
+        expect(sales_log.address_line2).to be_nil
+        expect(sales_log.town_or_city).to be_nil
+        expect(sales_log.la).to be_nil
       end
     end
 

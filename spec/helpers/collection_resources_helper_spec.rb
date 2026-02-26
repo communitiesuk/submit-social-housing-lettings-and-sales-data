@@ -62,7 +62,7 @@ RSpec.describe CollectionResourcesHelper do
         let(:current_date) { Time.zone.local(2025, 2, 1) }
 
         it "returns current and next years" do
-          expect(editable_collection_resource_years).to match_array([2024, 2025])
+          expect(editable_collection_resource_years).to contain_exactly(2024, 2025)
         end
       end
 

@@ -57,7 +57,7 @@ RSpec.describe "bulk_update" do
                     3,
                     service_name: "Test name",
                     sensitive: 1,
-                    registered_under_care_act: 4,
+                    registered_under_care_act: 5,
                     support_type: 4,
                     scheme_type: 7,
                     arrangement_type: "D",
@@ -123,7 +123,7 @@ RSpec.describe "bulk_update" do
         schemes[1].reload
         expect(schemes[1].service_name).to eq("Test name")
         expect(schemes[1].sensitive).to eq("Yes")
-        expect(schemes[1].registered_under_care_act).to eq("Yes – registered care home providing nursing care")
+        expect(schemes[1].registered_under_care_act).to eq("Yes")
         expect(schemes[1].support_type).to eq("High level")
         expect(schemes[1].scheme_type).to eq("Housing for older people")
         expect(schemes[1].arrangement_type).to eq("The same organisation that owns the housing stock")
@@ -141,7 +141,7 @@ RSpec.describe "bulk_update" do
         schemes[2].reload
         expect(schemes[2].service_name).to eq("Test name")
         expect(schemes[2].sensitive).to eq("Yes")
-        expect(schemes[2].registered_under_care_act).to eq("Yes – registered care home providing nursing care")
+        expect(schemes[2].registered_under_care_act).to eq("Yes")
         expect(schemes[2].support_type).to eq("High level")
         expect(schemes[2].scheme_type).to eq("Housing for older people")
         expect(schemes[2].arrangement_type).to eq("The same organisation that owns the housing stock")
@@ -188,19 +188,19 @@ RSpec.describe "bulk_update" do
         task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
 
         lettings_log.reload
-        expect(lettings_log.values_updated_at).not_to eq(nil)
+        expect(lettings_log.values_updated_at).not_to be_nil
 
         lettings_log_2.reload
-        expect(lettings_log_2.values_updated_at).to eq(nil)
+        expect(lettings_log_2.values_updated_at).to be_nil
 
         lettings_log_3.reload
-        expect(lettings_log_3.values_updated_at).to eq(nil)
+        expect(lettings_log_3.values_updated_at).to be_nil
 
         lettings_log_4.reload
-        expect(lettings_log_4.values_updated_at).not_to eq(nil)
+        expect(lettings_log_4.values_updated_at).not_to be_nil
 
         lettings_log_5.reload
-        expect(lettings_log_5.values_updated_at).to eq(nil)
+        expect(lettings_log_5.values_updated_at).to be_nil
       end
 
       it "logs the progress of the update" do
@@ -407,19 +407,19 @@ RSpec.describe "bulk_update" do
         task.invoke(original_locations_csv_path, updated_locations_csv_path)
 
         lettings_log.reload
-        expect(lettings_log.values_updated_at).not_to eq(nil)
+        expect(lettings_log.values_updated_at).not_to be_nil
 
         lettings_log_2.reload
-        expect(lettings_log_2.values_updated_at).to eq(nil)
+        expect(lettings_log_2.values_updated_at).to be_nil
 
         lettings_log_3.reload
-        expect(lettings_log_3.values_updated_at).to eq(nil)
+        expect(lettings_log_3.values_updated_at).to be_nil
 
         lettings_log_4.reload
-        expect(lettings_log_4.values_updated_at).not_to eq(nil)
+        expect(lettings_log_4.values_updated_at).not_to be_nil
 
         lettings_log_5.reload
-        expect(lettings_log_5.values_updated_at).to eq(nil)
+        expect(lettings_log_5.values_updated_at).to be_nil
       end
 
       it "logs the progress of the update" do
@@ -588,7 +588,7 @@ RSpec.describe "bulk_update" do
             task.invoke(original_locations_csv_path, updated_locations_csv_path)
             lettings_log.reload
             expect(lettings_log.status).to eq("in_progress")
-            expect(lettings_log.rent_value_check).to eq(nil)
+            expect(lettings_log.rent_value_check).to be_nil
             expect(lettings_log.brent).to eq(100)
             expect(lettings_log.scharge).to eq(50)
             expect(lettings_log.pscharge).to eq(50)

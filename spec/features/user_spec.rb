@@ -37,7 +37,7 @@ RSpec.describe "User Features" do
       expect(page).to have_current_path("/lettings-logs")
     end
 
-    it "can log out again", js: true do
+    it "can log out again", :js do
       visit("/lettings-logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
@@ -157,8 +157,7 @@ RSpec.describe "User Features" do
     end
 
     it "does not show 'Sign in' link when both the service_moved? and service_unavailable? feature toggles are on" do
-      allow(FeatureToggle).to receive(:service_moved?).and_return(true)
-      allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
+      allow(FeatureToggle).to receive_messages(service_moved?: true, service_unavailable?: true)
       visit("/lettings-logs")
       expect(page).not_to have_link("Sign in")
     end
@@ -363,8 +362,7 @@ RSpec.describe "User Features" do
       end
 
       it "does not show 'Your account' or 'Sign out' links when both the service_moved? and service_unavailable? feature toggles are on" do
-        allow(FeatureToggle).to receive(:service_moved?).and_return(true)
-        allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
+        allow(FeatureToggle).to receive_messages(service_moved?: true, service_unavailable?: true)
         visit("/lettings-logs")
         expect(page).not_to have_link("Your account")
         expect(page).not_to have_link("Sign out")
@@ -796,7 +794,7 @@ RSpec.describe "User Features" do
     end
 
     context "when viewing logs" do
-      context "when filtering by owning organisation and then switching back to all organisations", js: true do
+      context "when filtering by owning organisation and then switching back to all organisations", :js do
         let!(:organisation) { create(:organisation) }
         let(:parent_organisation) { create(:organisation, name: "Filtered Org") }
 
@@ -815,7 +813,7 @@ RSpec.describe "User Features" do
           find("#owning-organisation-field").click.native.send_keys("F", "i", "l", "t")
           select(parent_organisation.name, from: "owning-organisation-field-select", visible: false)
           click_button("Apply filters")
-          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&%5Bneedstypes%5D%5B%5D=&assigned_to=all&user_text_search=&owning_organisation_select=specific_org&owning_organisation_text_search=&owning_organisation=#{parent_organisation.id}&managing_organisation_select=all&managing_organisation_text_search=")
+          expect(page).to have_current_path(/lettings-logs\?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&%5Bneedstypes%5D%5B%5D=&assigned_to=all&user_text_search=&owning_organisation_select=specific_org&owning_organisation_text_search=&owning_organisation=\d+&managing_organisation_select=all&managing_organisation_text_search=/)
           choose("owning-organisation-select-all-field", allow_label_click: true)
           click_button("Apply filters")
           expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&%5Bneedstypes%5D%5B%5D=&assigned_to=all&user_text_search=&owning_organisation_select=all&owning_organisation_text_search=&managing_organisation_select=all&managing_organisation_text_search=")

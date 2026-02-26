@@ -36,7 +36,7 @@ RSpec.describe Form::Sales::Pages::LaNominations, type: :model do
 
     it "has correct routed to" do
       log.staircase = 1
-      expect(page.routed_to?(log, nil)).to eq(true)
+      expect(page.routed_to?(log, nil)).to be(true)
     end
   end
 
@@ -45,22 +45,22 @@ RSpec.describe Form::Sales::Pages::LaNominations, type: :model do
 
     it "has correct routed to when staircase is yes" do
       log.staircase = 1
-      expect(page.routed_to?(log, nil)).to eq(false)
+      expect(page.routed_to?(log, nil)).to be(false)
     end
 
     it "has correct routed to when staircase is nil" do
       log.staircase = nil
-      expect(page.routed_to?(log, nil)).to eq(true)
+      expect(page.routed_to?(log, nil)).to be(true)
     end
 
     it "has correct routed to when staircase is no" do
       log.staircase = 2
-      expect(page.routed_to?(log, nil)).to eq(true)
+      expect(page.routed_to?(log, nil)).to be(true)
     end
 
     it "has correct routed to when staircase is don't know" do
       log.staircase = 3
-      expect(page.routed_to?(log, nil)).to eq(true)
+      expect(page.routed_to?(log, nil)).to be(true)
     end
   end
 end

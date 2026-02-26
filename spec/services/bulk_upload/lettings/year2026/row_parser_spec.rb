@@ -12,7 +12,10 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
   let(:owning_org) { create(:organisation, :with_old_visible_id) }
   let(:managing_org) { create(:organisation, :with_old_visible_id, rent_periods: [4, 1]) }
   let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
-  let(:location) { create(:location, :with_old_visible_id, scheme:) }
+  let(:postcode_first_part) { "AA1".freeze }
+  let(:postcode_second_part) { "1AA".freeze }
+  let(:postcode) { "#{postcode_first_part} #{postcode_second_part}" }
+  let(:location) { create(:location, :with_old_visible_id, scheme:, postcode:) }
 
   let(:setup_section_params) do
     {
@@ -88,7 +91,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
 
       stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
-        .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.9, BUILDING_NAME: "result address line 1", POST_TOWN: "result town or city", POSTCODE: "AA1 1AA", UPRN: "12345" } }] }.to_json, headers: {})
+        .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.9, BUILDING_NAME: "result address line 1", POST_TOWN: "result town or city", POSTCODE: postcode, UPRN: "12345" } }] }.to_json, headers: {})
 
       stub_request(:get, /api\.os\.uk\/search\/places\/v1\/uprn/)
         .to_return(status: 200, body: '{"status":200,"results":[{"DPA":{
@@ -101,7 +104,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       "DEPENDENT_THOROUGHFARE_NAME": "data",
       "THOROUGHFARE_NAME": "thing",
       "POST_TOWN": "London",
-      "POSTCODE": "SE2 6RT"
+      "POSTCODE": "' + postcode + '"
 
          }}]}', headers: {})
     end
@@ -197,7 +200,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             field_82: "1",
             field_83: "0",
 
-            field_85: "2",
+            field_85: "3",
 
             field_96: "11",
             field_97: "2",
@@ -221,7 +224,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             field_114: "2",
             field_115: "2",
 
-            field_116: "2",
+            field_116: "1",
 
             field_117: "1",
             field_118: "2",
@@ -245,6 +248,23 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             field_4: "1",
 
             field_18: "12",
+
+            field_130: "1",
+            field_131: "",
+            field_132: "2",
+            field_133: "identity",
+            field_134: "3",
+            field_135: "",
+            field_136: "1",
+            field_137: "",
+            field_138: "2",
+            field_139: "identity",
+            field_140: "3",
+            field_141: "",
+            field_142: "1",
+            field_143: "",
+            field_144: "2",
+            field_145: "identity",
           }
         end
 
@@ -259,7 +279,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             expect(parser).to be_valid
           end
 
-          it "instantiates a log with everything completed", aggregate_failures: true do
+          it "instantiates a log with everything completed", :aggregate_failures do
             parser.valid?
 
             questions = parser.send(:questions).reject do |q|
@@ -293,9 +313,9 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                 :field_13, # tenancycode
                 :field_23, # postcode_full
                 :field_24, # postcode_full
-                :field_25, # postcode_full
+                :field_25, # LA
                 :field_42, # age1
-                :field_43, # sex1
+                :field_43, # sexrab1
                 :field_46, # ecstat1
                 :field_124, # brent
                 :field_125, # scharge
@@ -324,7 +344,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             end
           end
 
-          context "when a supported housing log already exists in the db" do
+          context "when a supported housing log already exists in the db" do # TODO: CLDC-4119: Beware! The `postcode_full` method in the `LettingsLog` class may cause issues with these supported housing log duplicate detection tests after postcode is added. See comment on the `postcode_full` method for details.
             let(:attributes) { valid_attributes.merge({ field_4: "2", field_5: "S#{scheme.id}", field_6: location.old_visible_id, field_36: 3, field_122: 0 }) }
 
             before do
@@ -349,7 +369,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                 :field_13, # tenancycode
                 :field_6, # location
                 :field_42, # age1
-                :field_43, # sex1
+                :field_43, # sexrab1
                 :field_46, # ecstat1
                 :field_124, # brent
                 :field_125, # scharge
@@ -391,7 +411,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                   :field_13, # tenancycode
                   :field_6, # location
                   :field_42, # age1
-                  :field_43, # sex1
+                  :field_43, # sexrab1
                   :field_46, # ecstat1
                   :field_124, # brent
                   :field_125, # scharge
@@ -434,7 +454,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                   :field_13, # tenancycode
                   :field_6, # location
                   :field_42, # age1
-                  :field_43, # sex1
+                  :field_43, # sexrab1
                   :field_46, # ecstat1
                 ].each do |field|
                   expect(parser.errors[field]).to include(error_message)
@@ -480,7 +500,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                   :field_13, # tenancycode
                   :field_6, # location
                   :field_42, # age1
-                  :field_43, # sex1
+                  :field_43, # sexrab1
                   :field_46, # ecstat1
                   :field_122, # household_charge
                 ].each do |field|
@@ -534,7 +554,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                 :field_24, # postcode_full
                 :field_25, # LA
                 :field_42, # age1
-                :field_43, # sex1
+                :field_43, # sexrab1
                 :field_46, # ecstat1
               ].each do |field|
                 expect(parser.errors[field]).to be_blank
@@ -606,7 +626,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
 
           it "fetches the question's check_answer_label if it exists" do
             parser.valid?
-            expect(parser.errors[:field_43]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "lead tenant’s gender identity.")])
+            expect(parser.errors[:field_43]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "lead tenant’s sex registered at birth.")])
           end
         end
 
@@ -620,12 +640,12 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
         end
 
         context "when an invalid value error has been added" do
-          let(:attributes) { setup_section_params.merge({ field_116: "100" }) }
+          let(:attributes) { setup_section_params.merge({ field_115: "100" }) }
 
           it "does not add an additional error" do
             parser.valid?
-            expect(parser.errors[:field_116].length).to eq(1)
-            expect(parser.errors[:field_116]).to include(match I18n.t("validations.lettings.2026.bulk_upload.invalid_option", question: ""))
+            expect(parser.errors[:field_115].length).to eq(1)
+            expect(parser.errors[:field_115]).to include(match I18n.t("validations.lettings.2026.bulk_upload.invalid_option", question: ""))
           end
         end
       end
@@ -1132,43 +1152,236 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
     end
 
-    describe "#field_116" do # referral
-      context "when 3 ie PRP nominated by LA and owning org is LA" do
-        let(:attributes) { { bulk_upload:, field_116: "3", field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
+    describe "#field_116, field_146, field_147, field_148" do # referral
+      context "when org is LA" do
+        let(:owning_org) { create(:organisation, :la, :with_old_visible_id) }
 
-        it "is not permitted" do
-          parser.valid?
-          expect(parser.errors[:field_116]).to be_present
+        let(:org_attributes) { { bulk_upload:, field_1: owning_org.old_visible_id } }
+
+        context "and not renewal" do
+          let(:renewal_attributes) { org_attributes.merge({ field_7: nil }) }
+
+          context "and field_116 is valid" do
+            let(:attributes) { renewal_attributes.merge({ field_116: 1 }) }
+
+            it "does not add an error" do
+              parser.valid?
+              expect(parser.errors[:field_116]).to be_blank
+              expect(parser.errors[:field_146]).to be_blank
+              expect(parser.errors[:field_147]).to be_blank
+              expect(parser.errors[:field_148]).to be_blank
+            end
+          end
+
+          context "and field_116 is invalid" do
+            let(:attributes) { renewal_attributes.merge({ field_116: 5 }) } # PRP option
+
+            it "adds errors to all referral fields" do
+              parser.valid?
+              expect(parser.errors[:field_116]).to be_present
+              expect(parser.errors[:field_146]).to be_present
+              expect(parser.errors[:field_147]).to be_present
+              expect(parser.errors[:field_148]).to be_present
+            end
+          end
+
+          context "and field_116 is blank" do
+            let(:attributes) { renewal_attributes.merge({ field_116: nil }) }
+
+            it "adds errors to all referral fields" do
+              parser.valid?
+              expect(parser.errors[:field_116]).to be_present
+              expect(parser.errors[:field_146]).to be_present
+              expect(parser.errors[:field_147]).to be_present
+              expect(parser.errors[:field_148]).to be_present
+            end
+          end
+
+          context "and other fields are given" do
+            let(:attributes) { renewal_attributes.merge({ field_116: 1, field_146: 5, field_147: 1, field_144: 1 }) }
+
+            it "adds errors to all referral fields" do
+              parser.valid?
+              expect(parser.errors[:field_116]).to be_present
+              expect(parser.errors[:field_146]).to be_present
+              expect(parser.errors[:field_147]).to be_present
+              expect(parser.errors[:field_148]).to be_present
+            end
+          end
+        end
+
+        context "and is renewal" do
+          let(:attributes) { org_attributes.merge({ field_7: 1, field_116: 1, field_146: 5, field_147: 1, field_148: 1 }) }
+
+          it "does not add an error for referral fields" do
+            parser.valid?
+            expect(parser.errors[:field_116]).to be_blank
+            expect(parser.errors[:field_146]).to be_blank
+            expect(parser.errors[:field_147]).to be_blank
+            expect(parser.errors[:field_148]).to be_blank
+          end
         end
       end
 
-      context "when 4 ie referred by LA and is general needs and owning org is LA" do
-        let(:attributes) { { bulk_upload:, field_116: "4", field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "1" } }
-
-        it "is not permitted" do
-          parser.valid?
-          expect(parser.errors[:field_116]).to be_present
-        end
-      end
-
-      context "when 4 ie referred by LA and is general needs and owning org is PRP" do
+      context "when org is PRP" do
         let(:owning_org) { create(:organisation, :prp, :with_old_visible_id) }
 
-        let(:attributes) { { bulk_upload:, field_116: "4", field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
+        let(:org_attributes) { { bulk_upload:, field_1: owning_org.old_visible_id } }
 
-        it "is permitted" do
-          parser.valid?
-          expect(parser.errors[:field_116]).to be_blank
+        context "and not renewal" do
+          let(:renewal_attributes) { org_attributes.merge({ field_7: nil }) }
+
+          context "and field_146 is valid and does not expect an answer for field_147" do
+            let(:attributes) { renewal_attributes.merge({ field_146: 5 }) }
+
+            it "does not add an error" do
+              parser.valid?
+              expect(parser.errors[:field_116]).to be_blank
+              expect(parser.errors[:field_146]).to be_blank
+              expect(parser.errors[:field_147]).to be_blank
+              expect(parser.errors[:field_148]).to be_blank
+            end
+
+            context "and later fields are given" do
+              let(:attributes) { renewal_attributes.merge({ field_146: 5, field_147: 1, field_148: 1 }) }
+
+              it "adds errors to all referral fields" do
+                parser.valid?
+                expect(parser.errors[:field_116]).to be_present
+                expect(parser.errors[:field_146]).to be_present
+                expect(parser.errors[:field_147]).to be_present
+                expect(parser.errors[:field_148]).to be_present
+              end
+            end
+          end
+
+          context "and field_146 is invalid" do
+            let(:attributes) { renewal_attributes.merge({ field_146: 1 }) } # LA option
+
+            it "adds errors to all referral fields" do
+              parser.valid?
+              expect(parser.errors[:field_116]).to be_present
+              expect(parser.errors[:field_146]).to be_present
+              expect(parser.errors[:field_147]).to be_present
+              expect(parser.errors[:field_148]).to be_present
+            end
+          end
+
+          context "and field_146 is blank" do
+            let(:attributes) { renewal_attributes.merge({ field_146: nil }) }
+
+            it "adds errors to all referral fields" do
+              parser.valid?
+              expect(parser.errors[:field_116]).to be_present
+              expect(parser.errors[:field_146]).to be_present
+              expect(parser.errors[:field_147]).to be_present
+              expect(parser.errors[:field_148]).to be_present
+            end
+          end
+
+          context "and field_146 is valid and expects an answer for field_147" do
+            let(:field_146_attributes) { renewal_attributes.merge({ field_146: 6 }) }
+
+            context "and field_147 is valid and does not expect an answer for field_148" do
+              let(:attributes) { field_146_attributes.merge({ field_147: 2 }) }
+
+              it "does not add an error" do
+                parser.valid?
+                expect(parser.errors[:field_116]).to be_blank
+                expect(parser.errors[:field_146]).to be_blank
+                expect(parser.errors[:field_147]).to be_blank
+                expect(parser.errors[:field_148]).to be_blank
+              end
+
+              context "and later fields are given" do
+                let(:attributes) { field_146_attributes.merge({ field_147: 2, field_148: 1 }) }
+
+                it "adds errors to all referral fields" do
+                  parser.valid?
+                  expect(parser.errors[:field_116]).to be_present
+                  expect(parser.errors[:field_146]).to be_present
+                  expect(parser.errors[:field_147]).to be_present
+                  expect(parser.errors[:field_148]).to be_present
+                end
+              end
+            end
+
+            context "and field_147 is invalid" do
+              let(:attributes) { field_146_attributes.merge({ field_147: 5 }) } # needs field_146 to be 7
+
+              it "adds errors to all referral fields" do
+                parser.valid?
+                expect(parser.errors[:field_116]).to be_present
+                expect(parser.errors[:field_146]).to be_present
+                expect(parser.errors[:field_147]).to be_present
+                expect(parser.errors[:field_148]).to be_present
+              end
+            end
+
+            context "and field_147 is blank" do
+              let(:attributes) { field_146_attributes.merge({ field_147: nil }) }
+
+              it "adds errors to all referral fields" do
+                parser.valid?
+                expect(parser.errors[:field_116]).to be_present
+                expect(parser.errors[:field_146]).to be_present
+                expect(parser.errors[:field_147]).to be_present
+                expect(parser.errors[:field_148]).to be_present
+              end
+            end
+
+            context "and field_147 is valid and expects an answer for field_148" do
+              let(:field_147_attributes) { field_146_attributes.merge({ field_147: 1 }) }
+
+              context "and field_148 is valid" do
+                let(:attributes) { field_147_attributes.merge({ field_148: 1 }) }
+
+                it "does not add an error" do
+                  parser.valid?
+                  expect(parser.errors[:field_116]).to be_blank
+                  expect(parser.errors[:field_146]).to be_blank
+                  expect(parser.errors[:field_147]).to be_blank
+                  expect(parser.errors[:field_148]).to be_blank
+                end
+              end
+
+              context "and field_148 is invalid" do
+                let(:attributes) { field_147_attributes.merge({ field_148: 11 }) } # needs field_147 to be 7
+
+                it "adds errors to all referral fields" do
+                  parser.valid?
+                  expect(parser.errors[:field_116]).to be_present
+                  expect(parser.errors[:field_146]).to be_present
+                  expect(parser.errors[:field_147]).to be_present
+                  expect(parser.errors[:field_148]).to be_present
+                end
+              end
+
+              context "and field_148 is blank" do
+                let(:attributes) { field_147_attributes.merge({ field_148: nil }) }
+
+                it "adds errors to all referral fields" do
+                  parser.valid?
+                  expect(parser.errors[:field_116]).to be_present
+                  expect(parser.errors[:field_146]).to be_present
+                  expect(parser.errors[:field_147]).to be_present
+                  expect(parser.errors[:field_148]).to be_present
+                end
+              end
+            end
+          end
         end
-      end
 
-      context "when 4 ie referred by LA and is not general needs" do
-        let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
-        let(:attributes) { { bulk_upload:, field_116: "4", field_4: "2" } }
+        context "and is renewal" do
+          let(:attributes) { org_attributes.merge({ field_7: 1, field_116: 1, field_146: 5, field_147: 1, field_148: 1 }) }
 
-        it "is permitted" do
-          parser.valid?
-          expect(parser.errors[:field_116]).to be_blank
+          it "does not add an error for referral fields" do
+            parser.valid?
+            expect(parser.errors[:field_116]).to be_blank
+            expect(parser.errors[:field_146]).to be_blank
+            expect(parser.errors[:field_147]).to be_blank
+            expect(parser.errors[:field_148]).to be_blank
+          end
         end
       end
     end
@@ -1484,91 +1697,22 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
     end
 
     describe "UPRN and address fields" do
-      context "with a general needs log" do
-        context "when a valid UPRN is given" do
-          context "and address fields are not given" do
-            let(:attributes) { setup_section_params.merge({ field_4: 1, field_18: "123456789012" }) }
-
-            it "does not add errors" do
-              parser.valid?
-              %i[field_18 field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
-                expect(parser.errors[field]).to be_empty
-              end
-            end
-          end
-        end
-
-        context "when an invalid UPRN is given" do
-          context "and address fields are not given" do
-            let(:attributes) { setup_section_params.merge({ field_4: 1, field_18: "1234567890123" }) }
-
-            it "adds an appropriate error to the UPRN field" do
-              parser.valid?
-              expect(parser.errors[:field_18]).to eql(["UPRN must be 12 digits or less."])
-            end
-
-            it "adds errors to missing key address fields" do
-              parser.valid?
-              expect(parser.errors[:field_19]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "address line 1.")])
-              expect(parser.errors[:field_21]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "town or city.")])
-              expect(parser.errors[:field_23]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "part 1 of postcode.")])
-              expect(parser.errors[:field_24]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "part 2 of postcode.")])
-            end
+      %i[
+        general_needs
+        supported_housing
+      ].each do |needs_type|
+        context "with a #{needs_type.to_s.tr('_', ' ')} log" do
+          let(:base_attributes) do
+            setup_section_params.merge({
+              field_4: needs_type == :supported_housing ? 2 : 1,
+              field_5: needs_type == :supported_housing ? "S#{scheme.id}" : nil,
+              field_6: needs_type == :supported_housing ? location.old_visible_id : nil,
+            }.compact)
           end
 
-          context "and address fields are given" do
-            let(:attributes) { setup_section_params.merge({ field_4: 1, field_18: "1234567890123", field_19: "address line 1", field_21: "town or city", field_23: "AA1", field_24: "1AA" }) }
-
-            it "adds an error to the UPRN field only" do
-              parser.valid?
-              expect(parser.errors[:field_18]).to eql(["UPRN must be 12 digits or less."])
-              %i[field_19 field_21 field_23 field_24].each do |field|
-                expect(parser.errors[field]).to be_empty
-              end
-            end
-
-            it "does not do an address search" do
-              parser.valid?
-              expect(a_request(:any, /api\.os\.uk\/search\/places\/v1\/find/)).not_to have_been_made
-            end
-          end
-        end
-
-        context "when no UPRN is given" do
-          context "and no address fields are given" do
-            let(:attributes) { setup_section_params.merge({ field_4: 1 }) }
-
-            it "adds appropriate errors to UPRN and key address fields" do
-              parser.valid?
-              expect(parser.errors[:field_18]).to eql([I18n.t("validations.lettings.2026.bulk_upload.address.not_answered")])
-              expect(parser.errors[:field_19]).to eql([I18n.t("validations.lettings.2026.bulk_upload.address.not_answered")])
-              expect(parser.errors[:field_21]).to eql([I18n.t("validations.lettings.2026.bulk_upload.address.not_answered")])
-              expect(parser.errors[:field_23]).to eql([I18n.t("validations.lettings.2026.bulk_upload.address.not_answered")])
-              expect(parser.errors[:field_24]).to eql([I18n.t("validations.lettings.2026.bulk_upload.address.not_answered")])
-            end
-          end
-
-          context "and some key address field is missing" do
-            let(:attributes) { setup_section_params.merge({ field_4: 1, field_21: "town or city", field_23: "AA1", field_24: "1AA" }) }
-
-            it "adds errors to UPRN and the missing key address field" do
-              parser.valid?
-              expect(parser.errors[:field_18]).to eql([I18n.t("validations.lettings.2026.bulk_upload.address.not_answered")])
-              expect(parser.errors[:field_19]).to eql([I18n.t("validations.lettings.2026.bulk_upload.address.not_answered")])
-              expect(parser.errors[:field_21]).to be_empty
-              expect(parser.errors[:field_23]).to be_empty
-              expect(parser.errors[:field_24]).to be_empty
-            end
-          end
-
-          context "and all key address fields are present" do
-            let(:attributes) { setup_section_params.merge({ field_4: 1, field_18: nil, field_19: "address line 1", field_21: "town or city", field_23: "AA1", field_24: "1AA" }) }
-
-            context "and an address can be found with a high enough match rating" do
-              before do
-                stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
-                  .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.7, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "AA1 1AA", UPRN: "1" } }] }.to_json, headers: {})
-              end
+          context "when a valid UPRN is given" do
+            context "and address fields are not given" do
+              let(:attributes) { base_attributes.merge({ field_18: "123456789012" }) }
 
               it "does not add errors" do
                 parser.valid?
@@ -1577,90 +1721,227 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                 end
               end
 
-              it "does not set manual address input" do
-                parser.valid?
-                expect(parser.log.manual_address_entry_selected).to be_falsey
-              end
-            end
+              if needs_type == :supported_housing
+                context "and the postcode associated with the UPRN does not match the postcode associated with the location" do
+                  before do
+                    stub_request(:get, /api\.os\.uk\/search\/places\/v1\/uprn/)
+                      .to_return(status: 200, body: '{"status":200,"results":[{"DPA":{
+                        "PO_BOX_NUMBER": "fake",
+                        "ORGANISATION_NAME": "org",
+                        "DEPARTMENT_NAME": "name",
+                        "SUB_BUILDING_NAME": "building",
+                        "BUILDING_NAME": "name",
+                        "BUILDING_NUMBER": "number",
+                        "DEPENDENT_THOROUGHFARE_NAME": "data",
+                        "THOROUGHFARE_NAME": "thing",
+                        "POST_TOWN": "London",
+                        "POSTCODE": "BB2 2BB"
+                       }}]}', headers: {})
+                  end
 
-            context "when no address can be found" do
-              before do
-                stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
-                  .to_return(status: 200, body: { results: [] }.to_json, headers: {})
-              end
-
-              it "does not add errors" do
-                parser.valid?
-                %i[field_18 field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
-                  expect(parser.errors[field]).to be_empty
+                  it "adds an appropriate error to the UPRN and location fields" do
+                    parser.valid?
+                    expect(parser.errors[:field_18]).to eql([I18n.t("validations.lettings.property.uprn.postcode_does_not_match_scheme_location_postcode")])
+                    expect(parser.errors[:field_6]).to eql([I18n.t("validations.lettings.property.location_id.postcode_does_not_match_scheme_location_postcode")])
+                  end
                 end
-              end
-
-              it "sets manual address input" do
-                parser.valid?
-                expect(parser.log.manual_address_entry_selected).to be_truthy
-                expect(parser.log.address_line1).to eq("address line 1")
-                expect(parser.log.town_or_city).to eq("town or city")
-                expect(parser.log.postcode_full).to eq("AA1 1AA")
-              end
-            end
-
-            context "when a single address with not a high enough match rating is returned" do
-              before do
-                stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
-                  .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.6, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "AA1 1AA", UPRN: "1" } }] }.to_json, headers: {})
-              end
-
-              it "does not add errors" do
-                parser.valid?
-                %i[field_18 field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
-                  expect(parser.errors[field]).to be_empty
-                end
-              end
-
-              it "sets manual address input" do
-                parser.valid?
-                expect(parser.log.manual_address_entry_selected).to be_truthy
-                expect(parser.log.address_line1).to eq("address line 1")
-                expect(parser.log.town_or_city).to eq("town or city")
-                expect(parser.log.postcode_full).to eq("AA1 1AA")
-              end
-            end
-
-            context "when no addresses have a high enough match rating" do
-              before do
-                stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
-                  .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.6, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "AA1 1AA", UPRN: "1" } }, { DPA: { MATCH: 0.8, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "BB2 2BB", UPRN: "2" } }] }.to_json, headers: {})
-              end
-
-              it "does not add errors" do
-                parser.valid?
-                %i[field_18 field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
-                  expect(parser.errors[field]).to be_empty
-                end
-              end
-
-              it "sets manual address input" do
-                parser.valid?
-                expect(parser.log.manual_address_entry_selected).to be_truthy
-                expect(parser.log.manual_address_entry_selected).to be_truthy
-                expect(parser.log.address_line1).to eq("address line 1")
-                expect(parser.log.town_or_city).to eq("town or city")
-                expect(parser.log.postcode_full).to eq("AA1 1AA")
               end
             end
           end
-        end
-      end
 
-      context "with a supported housing log" do
-        context "when neither UPRN nor address fields are provided" do
-          let(:attributes) { setup_section_params.merge({ field_4: 2, field_5: "S#{scheme.id}", field_6: location.old_visible_id, field_18: nil, field_19: nil, field_21: nil, field_23: nil, field_24: nil }) }
+          context "when an invalid UPRN is given" do
+            context "and address fields are not given" do
+              let(:attributes) { base_attributes.merge({ field_18: "1234567890123" }) }
 
-          it "does not add missing field errors" do
-            parser.valid?
-            %i[field_18 field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
-              expect(parser.errors[field]).to be_empty
+              it "adds an appropriate error to the UPRN field" do
+                parser.valid?
+                expect(parser.errors[:field_18]).to eql(["UPRN must be 12 digits or less."])
+              end
+
+              it "adds errors to missing key address fields" do
+                parser.valid?
+                expect(parser.errors[:field_19]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "address line 1.")])
+                expect(parser.errors[:field_21]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "town or city.")])
+                expect(parser.errors[:field_23]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "part 1 of postcode.")])
+                expect(parser.errors[:field_24]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "part 2 of postcode.")])
+              end
+            end
+
+            context "and address fields are given" do
+              let(:attributes) { base_attributes.merge({ field_18: "1234567890123", field_19: "address line 1", field_21: "town or city", field_23: postcode_first_part, field_24: postcode_second_part }) }
+
+              it "adds an error to the UPRN field only" do
+                parser.valid?
+                expect(parser.errors[:field_18]).to eql(["UPRN must be 12 digits or less."])
+                %i[field_19 field_21 field_23 field_24].each do |field|
+                  expect(parser.errors[field]).to be_empty
+                end
+              end
+
+              it "does not do an address search" do
+                parser.valid?
+                expect(a_request(:any, /api\.os\.uk\/search\/places\/v1\/find/)).not_to have_been_made
+              end
+            end
+          end
+
+          context "when no UPRN is given" do
+            context "and no address fields are given" do
+              let(:attributes) { base_attributes.merge({ field_4: 1 }) }
+
+              it "adds appropriate errors to UPRN and key address fields" do
+                parser.valid?
+                expect(parser.errors[:field_18]).to eql([I18n.t("validations.lettings.2026.bulk_upload.address.not_answered")])
+                expect(parser.errors[:field_19]).to eql([I18n.t("validations.lettings.2026.bulk_upload.address.not_answered")])
+                expect(parser.errors[:field_21]).to eql([I18n.t("validations.lettings.2026.bulk_upload.address.not_answered")])
+                expect(parser.errors[:field_23]).to eql([I18n.t("validations.lettings.2026.bulk_upload.address.not_answered")])
+                expect(parser.errors[:field_24]).to eql([I18n.t("validations.lettings.2026.bulk_upload.address.not_answered")])
+              end
+            end
+
+            context "and some key address field is missing" do
+              let(:attributes) { base_attributes.merge({ field_21: "town or city", field_23: postcode_first_part, field_24: postcode_second_part }) }
+
+              it "adds errors to UPRN and the missing key address field" do
+                parser.valid?
+                expect(parser.errors[:field_18]).to eql([I18n.t("validations.lettings.2026.bulk_upload.address.not_answered")])
+                expect(parser.errors[:field_19]).to eql([I18n.t("validations.lettings.2026.bulk_upload.address.not_answered")])
+                expect(parser.errors[:field_21]).to be_empty
+                expect(parser.errors[:field_23]).to be_empty
+                expect(parser.errors[:field_24]).to be_empty
+              end
+            end
+
+            context "and all key address fields are present" do
+              let(:attributes) { base_attributes.merge({ field_18: nil, field_19: "address line 1", field_21: "town or city", field_23: postcode_first_part, field_24: postcode_second_part }) }
+
+              context "and an address can be found with a high enough match rating" do
+                before do
+                  stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
+                    .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.7, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: postcode, UPRN: "1" } }] }.to_json, headers: {})
+                end
+
+                it "does not add errors" do
+                  parser.valid?
+                  %i[field_18 field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
+                    expect(parser.errors[field]).to be_empty
+                  end
+                end
+
+                it "does not set manual address input" do
+                  parser.valid?
+                  expect(parser.log.manual_address_entry_selected).to be_falsey
+                end
+              end
+
+              context "when no address can be found" do
+                before do
+                  stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
+                    .to_return(status: 200, body: { results: [] }.to_json, headers: {})
+                end
+
+                it "does not add errors" do
+                  parser.valid?
+                  %i[field_18 field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
+                    expect(parser.errors[field]).to be_empty
+                  end
+                end
+
+                it "sets manual address input" do
+                  parser.valid?
+                  expect(parser.log.manual_address_entry_selected).to be_truthy
+                  expect(parser.log.address_line1).to eq("address line 1")
+                  expect(parser.log.town_or_city).to eq("town or city")
+                  expect(parser.log.postcode_full).to eq(postcode)
+                end
+
+                if needs_type == :supported_housing
+                  context "and the postcode entered manually does not match the postcode associated with the location" do
+                    let(:attributes) { base_attributes.merge({ field_18: nil, field_19: "address line 1", field_21: "town or city", field_23: "BB2", field_24: "2BB" }) }
+
+                    it "adds appropriate errors to the postcode, LA and location fields" do
+                      parser.valid?
+                      expect(parser.errors[:field_23]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
+                      expect(parser.errors[:field_24]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
+                      expect(parser.errors[:field_25]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
+                      expect(parser.errors[:field_6]).to eql([I18n.t("validations.lettings.property.location_id.postcode_does_not_match_scheme_location_postcode")])
+                    end
+                  end
+                end
+              end
+
+              context "when a single address with not a high enough match rating is returned" do
+                before do
+                  stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
+                    .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.6, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: postcode, UPRN: "1" } }] }.to_json, headers: {})
+                end
+
+                it "does not add errors" do
+                  parser.valid?
+                  %i[field_18 field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
+                    expect(parser.errors[field]).to be_empty
+                  end
+                end
+
+                it "sets manual address input" do
+                  parser.valid?
+                  expect(parser.log.manual_address_entry_selected).to be_truthy
+                  expect(parser.log.address_line1).to eq("address line 1")
+                  expect(parser.log.town_or_city).to eq("town or city")
+                  expect(parser.log.postcode_full).to eq(postcode)
+                end
+
+                if needs_type == :supported_housing
+                  context "and the postcode entered manually does not match the postcode associated with the location" do
+                    let(:attributes) { base_attributes.merge({ field_18: nil, field_19: "address line 1", field_21: "town or city", field_23: "BB2", field_24: "2BB" }) }
+
+                    it "adds appropriate errors to the postcode, LA and location fields" do
+                      parser.valid?
+                      expect(parser.errors[:field_23]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
+                      expect(parser.errors[:field_24]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
+                      expect(parser.errors[:field_25]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
+                      expect(parser.errors[:field_6]).to eql([I18n.t("validations.lettings.property.location_id.postcode_does_not_match_scheme_location_postcode")])
+                    end
+                  end
+                end
+              end
+
+              context "when no addresses have a high enough match rating" do
+                before do
+                  stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
+                    .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.6, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: postcode, UPRN: "1" } }, { DPA: { MATCH: 0.8, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "BB2 2BB", UPRN: "2" } }] }.to_json, headers: {})
+                end
+
+                it "does not add errors" do
+                  parser.valid?
+                  %i[field_18 field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
+                    expect(parser.errors[field]).to be_empty
+                  end
+                end
+
+                it "sets manual address input" do
+                  parser.valid?
+                  expect(parser.log.manual_address_entry_selected).to be_truthy
+                  expect(parser.log.manual_address_entry_selected).to be_truthy
+                  expect(parser.log.address_line1).to eq("address line 1")
+                  expect(parser.log.town_or_city).to eq("town or city")
+                  expect(parser.log.postcode_full).to eq(postcode)
+                end
+
+                if needs_type == :supported_housing
+                  context "and the postcode entered manually does not match the postcode associated with the location" do
+                    let(:attributes) { base_attributes.merge({ field_18: nil, field_19: "address line 1", field_21: "town or city", field_23: "BB2", field_24: "2BB" }) }
+
+                    it "adds appropriate errors to the postcode, LA and location fields" do
+                      parser.valid?
+                      expect(parser.errors[:field_23]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
+                      expect(parser.errors[:field_24]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
+                      expect(parser.errors[:field_25]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
+                      expect(parser.errors[:field_6]).to eql([I18n.t("validations.lettings.property.location_id.postcode_does_not_match_scheme_location_postcode")])
+                    end
+                  end
+                end
+              end
             end
           end
         end
@@ -1766,8 +2047,8 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
         let(:attributes) { setup_section_params.merge({ field_45: "123123" }) }
 
         it "is correctly set" do
-          expect(parser.log.nationality_all).to be(nil)
-          expect(parser.log.nationality_all_group).to be(nil)
+          expect(parser.log.nationality_all).to be_nil
+          expect(parser.log.nationality_all_group).to be_nil
         end
 
         it "adds an error to field_45" do
@@ -1795,18 +2076,22 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
 
       context "when a soft validation is triggered that relates both to fields that are and are not routed to" do
-        let(:attributes) { setup_section_params.merge({ field_78: "1", field_43: "M", field_49: "M", field_53: "M" }) }
+        let(:attributes) { setup_section_params.merge({ field_78: "1", field_43: "M", field_49: "M", field_53: "M", field_130: 1, field_132: 1, field_134: 1 }) }
 
         it "adds errors to fields that are routed to" do
           parser.valid?
+          expect(parser.errors.where(:field_43, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_130, category: :soft_validation)).to be_present
           expect(parser.errors.where(:field_49, category: :soft_validation)).to be_present
-          expect(parser.errors.where(:field_53, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_132, category: :soft_validation)).to be_present
         end
 
         it "does not add errors to fields that are not routed to" do
           parser.valid?
           expect(parser.errors.where(:field_57, category: :soft_validation)).not_to be_present
+          expect(parser.errors.where(:field_136, category: :soft_validation)).not_to be_present
           expect(parser.errors.where(:field_61, category: :soft_validation)).not_to be_present
+          expect(parser.errors.where(:field_138, category: :soft_validation)).not_to be_present
         end
       end
 
@@ -1839,11 +2124,11 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       let(:attributes) { { bulk_upload: } }
 
       before do
-        build(:lettings_log, owning_organisation: nil, startdate: nil, tenancycode: nil, location: nil, age1: nil, sex1: nil, ecstat1: nil, brent: nil, scharge: nil, pscharge: nil, supcharg: nil).save(validate: false)
+        build(:lettings_log, owning_organisation: nil, startdate: nil, tenancycode: nil, location: nil, age1: nil, sexrab1: nil, sex1: nil, ecstat1: nil, brent: nil, scharge: nil, pscharge: nil, supcharg: nil).save(validate: false)
       end
 
       it "does not add duplicate logs validation to the blank row" do
-        expect(parser.log_already_exists?).to eq(false)
+        expect(parser.log_already_exists?).to be(false)
       end
     end
   end
@@ -1869,87 +2154,79 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
     end
 
-    describe "#uprn" do
-      let(:attributes) { { bulk_upload:, field_4: 1, field_18: "12" } }
+    describe "address-related fields" do
+      %i[
+        general_needs
+        supported_housing
+      ].each do |needs_type|
+        context "with a #{needs_type.to_s.tr('_', ' ')} log" do
+          let(:base_attributes) do
+            {
+              bulk_upload:,
+              field_4: needs_type == :supported_housing ? 2 : 1,
+              field_5: needs_type == :supported_housing ? "S#{scheme.id}" : nil,
+              field_6: needs_type == :supported_housing ? location.old_visible_id : nil,
+            }.compact
+          end
 
-      it "sets to given value" do
-        expect(parser.log.uprn).to eql("12")
-      end
-    end
+          describe "#uprn" do
+            let(:attributes) { base_attributes.merge({ field_18: "12" }) }
 
-    describe "#uprn_known" do
-      context "when uprn specified" do
-        let(:attributes) { { bulk_upload:, field_4: 1, field_18: "12" } }
+            it "sets to given value" do
+              expect(parser.log.uprn).to eql("12")
+            end
+          end
 
-        it "sets to 1" do
-          expect(parser.log.uprn_known).to be(1)
-          expect(parser.log.uprn_confirmed).to be(1)
-        end
-      end
+          describe "#uprn_known" do
+            context "when uprn specified" do
+              let(:attributes) { base_attributes.merge({ field_18: "12" }) }
 
-      context "when uprn blank" do
-        let(:attributes) { { bulk_upload:, field_4: 1, field_18: "" } }
+              it "sets to 1" do
+                expect(parser.log.uprn_known).to be(1)
+                expect(parser.log.uprn_confirmed).to be(1)
+              end
+            end
 
-        it "sets to 0" do
-          expect(parser.log.uprn_known).to be(0)
-        end
-      end
-    end
+            context "when uprn blank" do
+              let(:attributes) { base_attributes.merge({ field_18: "" }) }
 
-    describe "#address_line1" do
-      let(:attributes) { { bulk_upload:, field_4: 1, field_19: "123 Sesame Street" } }
+              it "sets to 0" do
+                expect(parser.log.uprn_known).to be(0)
+              end
+            end
+          end
 
-      it "sets to given value" do
-        expect(parser.log.address_line1).to eql("123 Sesame Street")
-      end
-    end
+          describe "#address_line1" do
+            let(:attributes) { base_attributes.merge({ field_19: "123 Sesame Street" }) }
 
-    describe "#address_line2" do
-      let(:attributes) { { bulk_upload:, field_4: 1, field_20: "Cookie Town" } }
+            it "sets to given value" do
+              expect(parser.log.address_line1).to eql("123 Sesame Street")
+            end
+          end
 
-      it "sets to given value" do
-        expect(parser.log.address_line2).to eql("Cookie Town")
-      end
-    end
+          describe "#address_line2" do
+            let(:attributes) { base_attributes.merge({ field_20: "Cookie Town" }) }
 
-    describe "#town_or_city" do
-      let(:attributes) { { bulk_upload:, field_4: 1, field_21: "London" } }
+            it "sets to given value" do
+              expect(parser.log.address_line2).to eql("Cookie Town")
+            end
+          end
 
-      it "sets to given value" do
-        expect(parser.log.town_or_city).to eql("London")
-      end
-    end
+          describe "#town_or_city" do
+            let(:attributes) { base_attributes.merge({ field_21: "London" }) }
 
-    describe "#county" do
-      let(:attributes) { { bulk_upload:, field_4: 1, field_22: "Greater London" } }
+            it "sets to given value" do
+              expect(parser.log.town_or_city).to eql("London")
+            end
+          end
 
-      it "sets to given value" do
-        expect(parser.log.county).to eql("Greater London")
-      end
-    end
+          describe "#county" do
+            let(:attributes) { base_attributes.merge({ field_22: "Greater London" }) }
 
-    describe "address related fields for supported housing logs" do
-      context "when address data is provided for a supported housing log" do
-        let(:attributes) { { bulk_upload:, field_4: 2, field_18: nil, field_19: "Flat 1", field_20: "Example Place", field_21: "London", field_22: "Greater London", field_23: "SW1A", field_24: "1AA" } }
-
-        it "is not set on the log" do
-          expect(parser.log.uprn).to be_nil
-          expect(parser.log.uprn_known).to be_nil
-          expect(parser.log.address_line1).to be_nil
-          expect(parser.log.address_line1_as_entered).to be_nil
-          expect(parser.log.address_line2).to be_nil
-          expect(parser.log.address_line2_as_entered).to be_nil
-          expect(parser.log.town_or_city).to be_nil
-          expect(parser.log.town_or_city_as_entered).to be_nil
-          expect(parser.log.county).to be_nil
-          expect(parser.log.county_as_entered).to be_nil
-          expect(parser.log.postcode_full).to be_nil
-          expect(parser.log.postcode_full_as_entered).to be_nil
-          expect(parser.log.la).to be_nil
-          expect(parser.log.la_as_entered).to be_nil
-          expect(parser.log.address_line1_input).to be_nil
-          expect(parser.log.postcode_full_input).to be_nil
-          expect(parser.log.select_best_address_match).to be_nil
+            it "sets to given value" do
+              expect(parser.log.county).to eql("Greater London")
+            end
+          end
         end
       end
     end
@@ -2216,7 +2493,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
     end
 
-    describe "#sexN fields" do
+    describe "#sexrabN fields" do
       let(:attributes) do
         {
           bulk_upload:,
@@ -2232,14 +2509,14 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
 
       it "sets value from correct mapping" do
-        expect(parser.log.sex1).to eql("F")
-        expect(parser.log.sex2).to eql("M")
-        expect(parser.log.sex3).to eql("X")
-        expect(parser.log.sex4).to eql("R")
-        expect(parser.log.sex5).to eql("F")
-        expect(parser.log.sex6).to eql("M")
-        expect(parser.log.sex7).to eql("X")
-        expect(parser.log.sex8).to eql("R")
+        expect(parser.log.sexrab1).to eql("F")
+        expect(parser.log.sexrab2).to eql("M")
+        expect(parser.log.sexrab3).to eql("X")
+        expect(parser.log.sexrab4).to eql("R")
+        expect(parser.log.sexrab5).to eql("F")
+        expect(parser.log.sexrab6).to eql("M")
+        expect(parser.log.sexrab7).to eql("X")
+        expect(parser.log.sexrab8).to eql("R")
       end
     end
 
@@ -2258,7 +2535,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
         }
       end
 
-      it "sets value from correct mapping", aggregate_failures: true do
+      it "sets value from correct mapping", :aggregate_failures do
         expect(parser.log.ecstat1).to eq(1)
         expect(parser.log.ecstat2).to eq(2)
         expect(parser.log.ecstat3).to eq(6)
@@ -2284,7 +2561,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
         }
       end
 
-      it "sets value from correct mapping", aggregate_failures: true do
+      it "sets value from correct mapping", :aggregate_failures do
         expect(parser.log.relat2).to eq("P")
         expect(parser.log.relat3).to eq("X")
         expect(parser.log.relat4).to eq("X")
@@ -2443,7 +2720,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
         let(:attributes) { { bulk_upload:, field_4: 1, field_122: "1" } }
 
         it "sets correct value from mapping" do
-          expect(parser.log.household_charge).to eq(nil)
+          expect(parser.log.household_charge).to be_nil
         end
       end
 

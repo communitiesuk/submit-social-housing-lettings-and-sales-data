@@ -5,7 +5,8 @@ RSpec.describe Form::Lettings::Questions::NeedsType, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
+  let(:start_year_2026_or_later?) { false }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2026_or_later?: start_year_2026_or_later?))) }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -28,5 +29,19 @@ RSpec.describe Form::Lettings::Questions::NeedsType, type: :model do
       "1" => { "value" => "General needs" },
       "2" => { "value" => "Supported housing" },
     })
+  end
+
+  context "when 2025 logs", metadata: { year: 25 } do
+    it "has no top guidance partial" do
+      expect(question.top_guidance_partial).to be_nil
+    end
+  end
+
+  context "when 2026 logs", metadata: { year: 26 } do
+    let(:start_year_2026_or_later?) { true }
+
+    it "has correct guidance partial" do
+      expect(question.top_guidance_partial).to eq("needs_type")
+    end
   end
 end

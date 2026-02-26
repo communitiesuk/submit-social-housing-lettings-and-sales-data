@@ -237,10 +237,10 @@ RSpec.describe Validations::PropertyValidations do
           expect(log.errors["scheme_id"]).to include(I18n.t("validations.lettings.property.scheme_id.not_in_england"))
           expect(log.errors["location_id"]).to include(I18n.t("validations.lettings.property.location_id.not_in_england"))
           expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.location_not_in_england"))
-          expect(log.errors["la"]).to be_empty
-          expect(log.errors["postcode_full"]).to be_empty
-          expect(log.errors["uprn"]).to be_empty
-          expect(log.errors["uprn_selection"]).to be_empty
+          expect(log.errors["la"]).to include(I18n.t("validations.lettings.property.la.not_in_england"))
+          expect(log.errors["postcode_full"]).to include(I18n.t("validations.lettings.property.postcode_full.not_in_england"))
+          expect(log.errors["uprn"]).to include(I18n.t("validations.lettings.property.uprn.not_in_england"))
+          expect(log.errors["uprn_selection"]).to include(I18n.t("validations.lettings.property.uprn_selection.not_in_england"))
         end
       end
 
@@ -342,10 +342,10 @@ RSpec.describe Validations::PropertyValidations do
             expect(log.errors["scheme_id"]).to include(I18n.t("validations.lettings.property.scheme_id.la_not_valid_for_date", la: local_authority_inactive.name))
             expect(log.errors["location_id"]).to include(I18n.t("validations.lettings.property.location_id.la_not_valid_for_date", la: local_authority_inactive.name))
             expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: local_authority_inactive.name))
-            expect(log.errors["la"]).to be_empty
-            expect(log.errors["postcode_full"]).to be_empty
-            expect(log.errors["uprn"]).to be_empty
-            expect(log.errors["uprn_selection"]).to be_empty
+            expect(log.errors["la"]).to include(I18n.t("validations.lettings.property.la.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["postcode_full"]).to include(I18n.t("validations.lettings.property.postcode_full.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["uprn"]).to include(I18n.t("validations.lettings.property.uprn.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["uprn_selection"]).to include(I18n.t("validations.lettings.property.uprn_selection.la_not_valid_for_date", la: local_authority_inactive.name))
           end
         end
 

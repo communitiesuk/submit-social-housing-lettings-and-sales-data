@@ -33,7 +33,7 @@ module DerivedVariables::LettingsLogVariables
 
   def set_derived_fields!
     clear_inapplicable_derived_values!
-    set_encoded_derived_values!(DEPENDENCIES)
+    set_encoded_derived_values!(dependencies)
 
     if rsnvac.present?
       self.newprop = has_first_let_vacancy_reason? ? 1 : 2
@@ -86,7 +86,7 @@ module DerivedVariables::LettingsLogVariables
     end
 
     set_housingneeds_fields if housingneeds?
-    if form.start_year_2025_or_later? && is_general_needs?
+    if form.start_year_2026_or_later? || (form.start_year_2025_or_later? && is_general_needs?)
       if changed_to_newbuild? && uprn.nil?
         self.manual_address_entry_selected = true
       end
@@ -170,27 +170,29 @@ module DerivedVariables::LettingsLogVariables
     self.referral = 7 if referral_type == 6
     self.referral = 16 if referral_type == 7
 
-    reset_address_fields! if is_supported_housing?
+    if !form.start_year_2026_or_later? && is_supported_housing?
+      reset_address_fields!
+    elsif form.start_year_2026_or_later? && location_changed?
+      reset_address_fields!
+      self.la = nil
+    end
+
+    clear_gender_description_unless_gender_not_same_as_sex! if form.start_year_2026_or_later?
 
     set_checkbox_values!
   end
 
 private
 
-  DEPENDENCIES = [
-    {
-      conditions: {
-        renewal: 1,
-      },
-      derived_values: {
-        referral: 1,
-        referral_type: 3,
-        waityear: 2,
-        offered: 0,
-        rsnvac: 14,
-        first_time_property_let_as_social_housing: 0,
-      },
-    },
+  def dependencies
+    if form.start_year_2026_or_later?
+      DEPENDENCIES_2026
+    else
+      DEPENDENCIES_2025_2024
+    end
+  end
+
+  COMMON_DEPENDENCIES = [
     {
       conditions: {
         net_income_known: 2,
@@ -217,9 +219,42 @@ private
     },
   ].freeze
 
+  DEPENDENCIES_2026 = [
+    {
+      conditions: {
+        renewal: 1,
+      },
+      derived_values: {
+        referral_register: 1,
+        waityear: 2,
+        offered: 0,
+        rsnvac: 14,
+        first_time_property_let_as_social_housing: 0,
+      },
+    },
+    *COMMON_DEPENDENCIES,
+  ].freeze
+
+  DEPENDENCIES_2025_2024 = [
+    {
+      conditions: {
+        renewal: 1,
+      },
+      derived_values: {
+        referral: 1,
+        referral_type: 3,
+        waityear: 2,
+        offered: 0,
+        rsnvac: 14,
+        first_time_property_let_as_social_housing: 0,
+      },
+    },
+    *COMMON_DEPENDENCIES,
+  ].freeze
+
   def clear_inapplicable_derived_values!
-    reset_invalidated_derived_values!(DEPENDENCIES)
-    if (startdate_changed? || renewal_changed?) && (renewal_was == 1 && startdate_was&.between?(Time.zone.local(2021, 4, 1), Time.zone.local(2022, 3, 31)))
+    reset_invalidated_derived_values!(dependencies)
+    if (startdate_changed? || renewal_changed?) && renewal_was == 1 && startdate_was&.between?(Time.zone.local(2021, 4, 1), Time.zone.local(2022, 3, 31))
       self.underoccupation_benefitcap = nil
     end
     if renewal_changed? && renewal_was == 1
@@ -235,7 +270,7 @@ private
       self.wchair = nil
       self.location_id = nil
     end
-    if form.start_year_2024_or_later? && (unittype_gn_changed? && unittype_gn_was == 2)
+    if form.start_year_2024_or_later? && unittype_gn_changed? && unittype_gn_was == 2
       self.beds = nil
     end
   end
@@ -265,7 +300,7 @@ private
   end
 
   def get_refused
-    return 1 if details_unknown? || age_refused? || sex_refused? || relat_refused? || ecstat_refused?
+    return 1 if details_unknown? || age_refused? || sex_refused? || sexrab_refused? || relat_refused? || ecstat_refused?
 
     0
   end
@@ -404,13 +439,27 @@ private
 
   def get_lar
     return 1 if rent_type == 2
-    return 2 if rent_type == 1
+
+    2 if rent_type == 1
   end
 
   def get_irproduct
     return 1 if rent_type == 3
     return 2 if rent_type == 4
-    return 3 if rent_type == 5
+
+    3 if rent_type == 5
+  end
+
+  def clear_gender_description_unless_gender_not_same_as_sex!
+    # we do this as the gender same as sex page always contains the gender description box that's hidden
+    # default submit will send a "" for gender description. this ensure it's nil in this case
+    # as well as blanking it if the user writes it in mistakenly in bulk upload
+    (1..8).each do |person_index|
+      gender_same_as_sex = public_send("gender_same_as_sex#{person_index}")
+      if gender_same_as_sex.present? && gender_same_as_sex != 2
+        self["gender_description#{person_index}"] = nil
+      end
+    end
   end
 
   def set_checkbox_values!

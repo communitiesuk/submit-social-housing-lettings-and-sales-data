@@ -5,9 +5,8 @@ RSpec.describe Merge::MergeOrganisationsService do
     before do
       Timecop.freeze(Time.zone.local(2024, 3, 1))
       Singleton.__init__(FormHandler)
-      mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
-      allow(MergeCompletionMailer).to receive(:send_merged_organisation_success_mail).and_return(mail_double)
-      allow(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).and_return(mail_double)
+      mail_double = instance_double(ActionMailer::MessageDelivery, deliver_later: nil)
+      allow(MergeCompletionMailer).to receive_messages(send_merged_organisation_success_mail: mail_double, send_absorbing_organisation_success_mail: mail_double)
     end
 
     after do
@@ -51,11 +50,12 @@ RSpec.describe Merge::MergeOrganisationsService do
         merge_organisations_service.call
 
         absorbing_organisation.reload
-        expect(absorbing_organisation.holds_own_stock).to eq(true)
+        expect(absorbing_organisation.holds_own_stock).to be(true)
       end
 
       it "rolls back if there's an error" do
         allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+        allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
         allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
         allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
         expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -63,9 +63,9 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         absorbing_organisation.reload
         merging_organisation.reload
-        expect(absorbing_organisation.holds_own_stock).to eq(false)
-        expect(merging_organisation.merge_date).to eq(nil)
-        expect(merging_organisation.absorbing_organisation_id).to eq(nil)
+        expect(absorbing_organisation.holds_own_stock).to be(false)
+        expect(merging_organisation.merge_date).to be_nil
+        expect(merging_organisation.absorbing_organisation_id).to be_nil
         expect(merging_organisation_user.organisation).to eq(merging_organisation)
       end
 
@@ -100,6 +100,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         it "rolls back if there's an error" do
           allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
           allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
           allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -137,6 +138,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         it "rolls back if there's an error" do
           allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
           allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
           allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -546,14 +548,18 @@ RSpec.describe Merge::MergeOrganisationsService do
             merging_organisation.reload
             expect(absorbing_organisation.owned_lettings_logs.count).to eq(2)
             expect(absorbing_organisation.managed_lettings_logs.count).to eq(1)
-            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
-            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
-            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
-            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
+
+            absorbed_active_scheme = absorbing_organisation.owned_schemes.find_by(service_name: scheme.service_name)
+            absorbed_active_location = absorbed_active_scheme.locations.find_by(postcode: location.postcode)
+            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(absorbed_active_scheme)
+            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(absorbed_active_location)
+            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(absorbed_active_scheme)
+            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to be_nil
           end
 
           it "rolls back if there's an error" do
             allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+            allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
             allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
             allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
             expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -587,6 +593,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         it "rolls back if there's an error" do
           allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
           allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
           allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -649,6 +656,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
           it "rolls back if there's an error" do
             allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+            allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
             allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
             allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
             expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -685,6 +693,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
           it "rolls back if there's an error" do
             allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+            allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
             allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
             allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
             expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -814,12 +823,12 @@ RSpec.describe Merge::MergeOrganisationsService do
               it "moves active schemes and locations to absorbing organisation" do
                 expect(absorbing_organisation.owned_schemes.count).to eq(2)
 
-                expect(absorbing_organisation.owned_schemes.first.locations.map(&:postcode)).to match_array([location, deactivated_location, location_without_startdate, location_with_past_startdate, location_with_future_startdate].map(&:postcode))
-                expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_without_startdate.postcode).startdate).to eq(Time.zone.yesterday)
-                expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_with_past_startdate.postcode).startdate).to eq(Time.zone.yesterday)
-                expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_with_future_startdate.postcode).startdate.to_date).to eq(Time.zone.today + 2.months)
                 absorbed_active_scheme = absorbing_organisation.owned_schemes.find_by(service_name: scheme.service_name)
                 absorbed_active_location = absorbed_active_scheme.locations.find_by(postcode: location.postcode)
+                expect(absorbed_active_scheme.locations.map(&:postcode)).to match_array([location, deactivated_location, location_without_startdate, location_with_past_startdate, location_with_future_startdate].map(&:postcode))
+                expect(absorbed_active_scheme.locations.find_by(postcode: location_without_startdate.postcode).startdate).to eq(Time.zone.yesterday)
+                expect(absorbed_active_scheme.locations.find_by(postcode: location_with_past_startdate.postcode).startdate).to eq(Time.zone.yesterday)
+                expect(absorbed_active_scheme.locations.find_by(postcode: location_with_future_startdate.postcode).startdate.to_date).to eq(Time.zone.today + 2.months)
                 expect(absorbed_active_scheme.service_name).to eq(scheme.service_name)
                 expect(absorbed_active_scheme.old_id).to be_nil
                 expect(absorbed_active_scheme.old_visible_id).to be_nil
@@ -869,11 +878,12 @@ RSpec.describe Merge::MergeOrganisationsService do
             expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
             expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
             expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
-            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
+            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to be_nil
           end
 
           it "rolls back if there's an error" do
             allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+            allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
             allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
             allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
             expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -988,11 +998,12 @@ RSpec.describe Merge::MergeOrganisationsService do
         merge_organisations_service.call
 
         absorbing_organisation.reload
-        expect(absorbing_organisation.holds_own_stock).to eq(true)
+        expect(absorbing_organisation.holds_own_stock).to be(true)
       end
 
       it "rolls back if there's an error" do
         allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+        allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
         allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
         allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
         expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1000,9 +1011,9 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         absorbing_organisation.reload
         merging_organisation.reload
-        expect(absorbing_organisation.holds_own_stock).to eq(false)
-        expect(merging_organisation.merge_date).to eq(nil)
-        expect(merging_organisation.absorbing_organisation_id).to eq(nil)
+        expect(absorbing_organisation.holds_own_stock).to be(false)
+        expect(merging_organisation.merge_date).to be_nil
+        expect(merging_organisation.absorbing_organisation_id).to be_nil
         expect(merging_organisation_user.organisation).to eq(merging_organisation)
       end
 
@@ -1118,6 +1129,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         it "rolls back if there's an error" do
           allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
           allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
           allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1183,11 +1195,12 @@ RSpec.describe Merge::MergeOrganisationsService do
         merge_organisations_service.call
 
         new_absorbing_organisation.reload
-        expect(new_absorbing_organisation.holds_own_stock).to eq(true)
+        expect(new_absorbing_organisation.holds_own_stock).to be(true)
       end
 
       it "rolls back if there's an error" do
         allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+        allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
         allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
         allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
         expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1195,9 +1208,9 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         new_absorbing_organisation.reload
         merging_organisation.reload
-        expect(new_absorbing_organisation.holds_own_stock).to eq(false)
-        expect(merging_organisation.merge_date).to eq(nil)
-        expect(merging_organisation.absorbing_organisation_id).to eq(nil)
+        expect(new_absorbing_organisation.holds_own_stock).to be(false)
+        expect(merging_organisation.merge_date).to be_nil
+        expect(merging_organisation.absorbing_organisation_id).to be_nil
         expect(merging_organisation_user.organisation).to eq(merging_organisation)
       end
 
@@ -1232,6 +1245,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         it "rolls back if there's an error" do
           allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
           allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
           allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1269,6 +1283,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         it "rolls back if there's an error" do
           allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
           allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
           allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1369,11 +1384,12 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(new_absorbing_organisation.owned_schemes.find_by(service_name: scheme.service_name))
           expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(new_absorbing_organisation.owned_schemes.find_by(service_name: scheme.service_name).locations.first)
           expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(new_absorbing_organisation.owned_schemes.find_by(service_name: scheme.service_name))
-          expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
+          expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to be_nil
         end
 
         it "rolls back if there's an error" do
           allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
           allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
           allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1406,6 +1422,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         it "rolls back if there's an error" do
           allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
           allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
           allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1445,6 +1462,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
           it "rolls back if there's an error" do
             allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+            allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
             allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
             allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
             expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1481,6 +1499,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
           it "rolls back if there's an error" do
             allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+            allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
             allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
             allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
             expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1579,14 +1598,18 @@ RSpec.describe Merge::MergeOrganisationsService do
             owned_lettings_log_no_location.reload
             expect(new_absorbing_organisation.owned_lettings_logs.count).to eq(2)
             expect(new_absorbing_organisation.managed_lettings_logs.count).to eq(1)
-            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
-            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(new_absorbing_organisation.owned_schemes.first.locations.first)
-            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
-            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
+            new_absorbing_organisation_lettings_log = new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id)
+            new_absorbing_organisation_scheme = new_absorbing_organisation.owned_schemes.find_by(service_name: new_absorbing_organisation_lettings_log.scheme.service_name)
+            new_absorbing_organisation_location = new_absorbing_organisation_scheme.locations.find_by(name: new_absorbing_organisation_lettings_log.location.name)
+            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(new_absorbing_organisation_scheme)
+            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(new_absorbing_organisation_location)
+            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(new_absorbing_organisation_scheme)
+            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to be_nil
           end
 
           it "rolls back if there's an error" do
             allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+            allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
             allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
             allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
             expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1672,11 +1695,12 @@ RSpec.describe Merge::MergeOrganisationsService do
         merge_organisations_service.call
 
         new_absorbing_organisation.reload
-        expect(new_absorbing_organisation.holds_own_stock).to eq(true)
+        expect(new_absorbing_organisation.holds_own_stock).to be(true)
       end
 
       it "rolls back if there's an error" do
         allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+        allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
         allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
         allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
         expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1684,9 +1708,9 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         new_absorbing_organisation.reload
         merging_organisation.reload
-        expect(new_absorbing_organisation.holds_own_stock).to eq(false)
-        expect(merging_organisation.merge_date).to eq(nil)
-        expect(merging_organisation.absorbing_organisation_id).to eq(nil)
+        expect(new_absorbing_organisation.holds_own_stock).to be(false)
+        expect(merging_organisation.merge_date).to be_nil
+        expect(merging_organisation.absorbing_organisation_id).to be_nil
         expect(merging_organisation_user.organisation).to eq(merging_organisation)
       end
 
@@ -1719,6 +1743,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         it "rolls back if there's an error" do
           allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation.id).and_return(merging_organisation)
           allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
           allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")

@@ -6,7 +6,7 @@ class Form::Question
                 :conditional_for, :readonly, :answer_options, :page,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
                 :top_guidance_partial, :bottom_guidance_partial, :prefix, :suffix,
-                :requires_js, :fields_added, :derived, :check_answers_card_number,
+                :requires_js, :fields_added, :derived, :check_answers_card_number, :check_answers_card_title,
                 :unresolved_hint_text, :question_number, :hide_question_number_on_page,
                 :plain_label, :error_label, :strip_commas
 
@@ -299,6 +299,11 @@ class Form::Question
     answer_options.keys.reject { |x| x.match(/divider/) }
   end
 
+  # used by date questions that need bespoke formatting for the example date
+  def date_example_override(_log)
+    nil
+  end
+
 private
 
   def selected_answer_option_is_derived?(log)
@@ -360,6 +365,13 @@ private
 
     inferred_answer = inferred_check_answers_value.find { |inferred_value| log[inferred_value["condition"].keys.first] == inferred_value["condition"].values.first }
     inferred_answer["value"] if inferred_answer.present?
+  end
+
+  # every year currently visible should have an explicit question number specified.
+  # however, form_handler.rb will still initialise the next form even if its not visible.
+  # so we have a fallback to the latest year for these future years so all question have a question number.
+  def get_question_number_from_hash(hash)
+    hash[form.start_date.year] || hash[hash.keys.max]
   end
 
   RADIO_YES_VALUE = {
@@ -434,6 +446,14 @@ private
     sex6: %w[R],
     sex7: %w[R],
     sex8: %w[R],
+    sexrab1: %w[R],
+    sexrab2: %w[R],
+    sexrab3: %w[R],
+    sexrab4: %w[R],
+    sexrab5: %w[R],
+    sexrab6: %w[R],
+    sexrab7: %w[R],
+    sexrab8: %w[R],
     relat2: [3],
     relat3: [3],
     relat4: [3],

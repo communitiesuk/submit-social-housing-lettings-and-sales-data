@@ -83,7 +83,7 @@ RSpec.describe LettingsLogsController, type: :request do
         it "validates lettings log parameters" do
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_content)
-          expect(json_response["errors"]).to match_array([["age1", [I18n.t("validations.shared.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120)]]])
+          expect(json_response["errors"]).to contain_exactly(["age1", [I18n.t("validations.shared.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120)]])
         end
       end
 
@@ -151,8 +151,8 @@ RSpec.describe LettingsLogsController, type: :request do
           it "sets the managing org and stock-owning org as nil" do
             created_id = response.location.match(/[0-9]+/)[0]
             lettings_log = LettingsLog.find_by(id: created_id)
-            expect(lettings_log.owning_organisation).to eq(nil)
-            expect(lettings_log.managing_organisation).to eq(nil)
+            expect(lettings_log.owning_organisation).to be_nil
+            expect(lettings_log.managing_organisation).to be_nil
           end
 
           it "sets created_by to current user" do
@@ -200,7 +200,7 @@ RSpec.describe LettingsLogsController, type: :request do
             it "sets the managing org as the user's org but the stock-owning org as nil" do
               created_id = response.location.match(/[0-9]+/)[0]
               lettings_log = LettingsLog.find_by(id: created_id)
-              expect(lettings_log.owning_organisation).to eq(nil)
+              expect(lettings_log.owning_organisation).to be_nil
               expect(lettings_log.managing_organisation.name).to eq("User org")
             end
           end
@@ -249,8 +249,8 @@ RSpec.describe LettingsLogsController, type: :request do
 
         it "does not have a button for creating sales logs" do
           get lettings_logs_path, headers:, params: {}
-          page.assert_selector(".govuk-button", text: "Create a new sales log", count: 0)
-          page.assert_selector(".govuk-button", text: "Create a new lettings log", count: 1)
+          expect(page).to have_selector(".govuk-button", text: "Create a new lettings log", count: 1)
+          expect(page).not_to have_selector(".govuk-button", text: "Create a new sales log")
         end
 
         context "and the state of filters and search is such that display_delete_logs returns true" do
@@ -1258,7 +1258,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
             it "marks the log as resolved" do
               lettings_log.reload
-              expect(lettings_log.unresolved).to eq(false)
+              expect(lettings_log.unresolved).to be(false)
             end
 
             it "displays a success banner" do

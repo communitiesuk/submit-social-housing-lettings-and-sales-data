@@ -1,8 +1,8 @@
 <% if applicable_questions.first %>
   <div class="govuk-summary-card govuk-!-margin-bottom-6">
-    <% if applicable_questions.first.check_answers_card_number != 0 && applicable_questions.first.check_answers_card_number.present? %>
+    <% if check_answers_card_label(applicable_questions.first).present? %>
       <div class="govuk-summary-card__title-wrapper">
-        <h3 class="govuk-summary-card__title"><%= check_answers_card_title(applicable_questions.first) %></h3>
+        <h3 class="govuk-summary-card__title"><%= check_answers_card_label(applicable_questions.first) %></h3>
       </div>
     <% end %>
 

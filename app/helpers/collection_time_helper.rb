@@ -16,10 +16,13 @@ module CollectionTimeHelper
     Time.zone.local(collection_start_year_for_date(date), 4, 1)
   end
 
-  def date_mid_collection_year_formatted(date)
+  def date_mid_collection_year(date)
     relevant_year = date.nil? ? current_collection_start_year : collection_start_year_for_date(date)
-    example_date = Date.new(relevant_year, 9, 13)
-    example_date.to_formatted_s(:govuk_date_number_month)
+    Date.new(relevant_year, 9, 13)
+  end
+
+  def date_mid_collection_year_formatted(date)
+    date_mid_collection_year(date).to_formatted_s(:govuk_date_number_month)
   end
 
   def current_collection_start_date
@@ -50,8 +53,16 @@ module CollectionTimeHelper
     next_collection_start_year + 1
   end
 
+  def next_collection_start_date
+    current_collection_start_date + 1.year
+  end
+
   def previous_collection_start_year
     current_collection_start_year - 1
+  end
+
+  def previous_collection_end_year
+    current_collection_end_year - 1
   end
 
   def previous_collection_start_date
@@ -60,6 +71,10 @@ module CollectionTimeHelper
 
   def archived_collection_start_year
     current_collection_start_year - 2
+  end
+
+  def archived_collection_end_year
+    current_collection_end_year - 2
   end
 
   def previous_collection_new_logs_end_date

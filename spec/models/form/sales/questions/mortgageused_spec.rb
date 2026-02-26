@@ -17,8 +17,7 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
     let(:ownershipsch) { 1 }
 
     before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return true
-      allow(form).to receive(:start_year_2025_or_later?).and_return false
+      allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: false)
     end
 
     it "has the correct answer_options" do
@@ -99,8 +98,7 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
     let(:saledate) { Time.zone.local(2025, 5, 1) }
 
     before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return true
-      allow(form).to receive(:start_year_2025_or_later?).and_return true
+      allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true)
     end
 
     context "when it is a discounted ownership sale" do
@@ -121,7 +119,7 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
       context "and it is a staircasing transaction" do
         let(:staircase) { 1 }
 
-        it "does  show the don't know option" do
+        it "does show the don't know option" do
           expect_the_question_to_show_dont_know
         end
 

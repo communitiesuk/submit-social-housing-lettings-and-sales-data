@@ -22,7 +22,10 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
     [question.question_number_string, question.check_answer_label.to_s.presence || question.header.to_s].compact.join(" - ")
   end
 
-  def check_answers_card_title(question)
+  def check_answers_card_label(question)
+    return question.check_answers_card_title if question.check_answers_card_title.present?
+    return unless question.check_answers_card_number.present? && question.check_answers_card_number != 0
+
     return "Lead tenant" if question.form.type == "lettings" && question.check_answers_card_number == 1
     return "Buyer #{question.check_answers_card_number}" if question.check_answers_card_number <= number_of_buyers
 

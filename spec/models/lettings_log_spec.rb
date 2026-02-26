@@ -316,22 +316,22 @@ RSpec.describe LettingsLog do
         })
       end
 
-      def check_property_postcode_fields
+      def expect_property_postcode_fields_to_match_example_postcode
         check_postcode_fields("postcode_full")
       end
 
       it "correctly formats previous postcode" do
         address_lettings_log.update!(postcode_full: "M1 1AE")
-        check_property_postcode_fields
+        expect_property_postcode_fields_to_match_example_postcode
 
         address_lettings_log.update!(postcode_full: "m1 1ae")
-        check_property_postcode_fields
+        expect_property_postcode_fields_to_match_example_postcode
 
         address_lettings_log.update!(postcode_full: "m11Ae")
-        check_property_postcode_fields
+        expect_property_postcode_fields_to_match_example_postcode
 
         address_lettings_log.update!(postcode_full: "m11ae")
-        check_property_postcode_fields
+        expect_property_postcode_fields_to_match_example_postcode
       end
 
       it "correctly infers la" do
@@ -342,21 +342,21 @@ RSpec.describe LettingsLog do
 
       it "errors if the property postcode is emptied" do
         expect { address_lettings_log.update!({ postcode_full: "" }) }
-          .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
+          .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t('validations.postcode')}/)
       end
 
       it "errors if the property postcode is not valid" do
         expect { address_lettings_log.update!({ postcode_full: "invalid_postcode" }) }
-          .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
+          .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t('validations.postcode')}/)
       end
 
       it "correctly resets all fields if property postcode not known" do
         address_lettings_log.update!({ postcode_known: 0 })
 
         record_from_db = described_class.find(address_lettings_log.id)
-        expect(record_from_db["postcode_full"]).to eq(nil)
-        expect(address_lettings_log.la).to eq(nil)
-        expect(record_from_db["la"]).to eq(nil)
+        expect(record_from_db["postcode_full"]).to be_nil
+        expect(address_lettings_log.la).to be_nil
+        expect(record_from_db["la"]).to be_nil
       end
 
       it "changes the LA if property postcode changes from not known to known and provided" do
@@ -364,7 +364,7 @@ RSpec.describe LettingsLog do
         address_lettings_log.update!({ la: "E09000033" })
 
         record_from_db = described_class.find(address_lettings_log.id)
-        expect(record_from_db["postcode_full"]).to eq(nil)
+        expect(record_from_db["postcode_full"]).to be_nil
         expect(address_lettings_log.la).to eq("E09000033")
         expect(record_from_db["la"]).to eq("E09000033")
 
@@ -429,6 +429,8 @@ RSpec.describe LettingsLog do
 
         address_lettings_log.update!(ppostcode_full: "m11ae")
         previous_postcode_fields
+
+        expect(address_lettings_log.ppostcode_full).to eq("M1 1AE")
       end
 
       it "correctly infers prevloc" do
@@ -439,21 +441,21 @@ RSpec.describe LettingsLog do
 
       it "errors if the previous postcode is emptied" do
         expect { address_lettings_log.update!({ ppostcode_full: "" }) }
-          .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
+          .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t('validations.postcode')}/)
       end
 
       it "errors if the previous postcode is not valid" do
         expect { address_lettings_log.update!({ ppostcode_full: "invalid_postcode" }) }
-          .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
+          .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t('validations.postcode')}/)
       end
 
       it "correctly resets all fields if previous postcode not known" do
         address_lettings_log.update!({ ppcodenk: 1 })
 
         record_from_db = described_class.find(address_lettings_log.id)
-        expect(record_from_db["ppostcode_full"]).to eq(nil)
-        expect(address_lettings_log.prevloc).to eq(nil)
-        expect(record_from_db["prevloc"]).to eq(nil)
+        expect(record_from_db["ppostcode_full"]).to be_nil
+        expect(address_lettings_log.prevloc).to be_nil
+        expect(record_from_db["prevloc"]).to be_nil
       end
 
       it "correctly resets la if la is not known" do
@@ -465,8 +467,8 @@ RSpec.describe LettingsLog do
 
         address_lettings_log.update!({ previous_la_known: 0 })
         record_from_db = described_class.find(address_lettings_log.id)
-        expect(address_lettings_log.prevloc).to eq(nil)
-        expect(record_from_db["prevloc"]).to eq(nil)
+        expect(address_lettings_log.prevloc).to be_nil
+        expect(record_from_db["prevloc"]).to be_nil
       end
 
       it "changes the prevloc if previous postcode changes from not known to known and provided" do
@@ -474,7 +476,7 @@ RSpec.describe LettingsLog do
         address_lettings_log.update!({ previous_la_known: 1, prevloc: "E09000033" })
 
         record_from_db = described_class.find(address_lettings_log.id)
-        expect(record_from_db["ppostcode_full"]).to eq(nil)
+        expect(record_from_db["ppostcode_full"]).to be_nil
         expect(address_lettings_log.prevloc).to eq("E09000033")
         expect(record_from_db["prevloc"]).to eq("E09000033")
 
@@ -590,6 +592,63 @@ RSpec.describe LettingsLog do
           end
         end
 
+        context "and the log has different LAs set on the location and the log itself" do
+          before do
+            location.update!(location_code: "E07000030")
+            Timecop.freeze(startdate)
+            Singleton.__init__(FormHandler)
+            lettings_log.update!(startdate:, la: "E09000002")
+            lettings_log.reload
+          end
+
+          after do
+            Timecop.unfreeze
+            Singleton.__init__(FormHandler)
+          end
+
+          context "with 25/26" do
+            let(:startdate) { Time.zone.local(2025, 4, 2) }
+
+            it "returns the LA from the location" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.la).to eq("E07000030")
+            end
+          end
+
+          context "with 26/27" do
+            let(:startdate) { Time.zone.local(2026, 4, 2) }
+
+            it "returns the LA from the log itself" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.la).to eq("E09000002")
+            end
+          end
+        end
+
+        context "and the log only has an LA set on the location" do
+          before do
+            location.update!(location_code: "E07000030")
+            Timecop.freeze(startdate)
+            Singleton.__init__(FormHandler)
+            lettings_log.update!(startdate:)
+            lettings_log.reload
+          end
+
+          after do
+            Timecop.unfreeze
+            Singleton.__init__(FormHandler)
+          end
+
+          context "with 26/27" do
+            let(:startdate) { Time.zone.local(2026, 4, 2) }
+
+            it "returns the LA from the location" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.la).to eq("E07000030")
+            end
+          end
+        end
+
         context "and the location no local authorities associated with the location_code" do
           before do
             Timecop.freeze(Time.zone.local(2022, 4, 2))
@@ -605,6 +664,66 @@ RSpec.describe LettingsLog do
             expect(location.location_code).to eq("E01231231")
             expect(lettings_log["location_id"]).to eq(location.id)
             expect(lettings_log.la).to eq("E01231231")
+          end
+        end
+
+        context "and the log has different postcodes set on the location and the log itself" do
+          before do
+            location.update!(postcode: "AA1 1AA")
+            Timecop.freeze(startdate)
+            Singleton.__init__(FormHandler)
+            lettings_log.update!(
+              startdate:,
+            )
+            lettings_log.reload
+            lettings_log.postcode_full = "BB2 2BB"
+          end
+
+          after do
+            Timecop.unfreeze
+            Singleton.__init__(FormHandler)
+          end
+
+          context "with 25/26" do
+            let(:startdate) { Time.zone.local(2025, 4, 2) }
+
+            it "returns the postcode from the location" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.postcode_full).to eq("AA1 1AA")
+            end
+          end
+
+          context "with 26/27" do
+            let(:startdate) { Time.zone.local(2026, 4, 2) }
+
+            it "returns the postcode from the log itself" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.postcode_full).to eq("BB2 2BB")
+            end
+          end
+        end
+
+        context "and the log only has a postcode set on the location" do
+          before do
+            location.update!(postcode: "AA1 1AA")
+            Timecop.freeze(startdate)
+            Singleton.__init__(FormHandler)
+            lettings_log.update!(startdate:)
+            lettings_log.reload
+          end
+
+          after do
+            Timecop.unfreeze
+            Singleton.__init__(FormHandler)
+          end
+
+          context "with 26/27" do
+            let(:startdate) { Time.zone.local(2026, 4, 2) }
+
+            it "returns the LA from the location" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.postcode_full).to eq("AA1 1AA")
+            end
           end
         end
       end
@@ -766,7 +885,7 @@ RSpec.describe LettingsLog do
 
         lettings_log.update!({ rent_type: 3 })
         record_from_db = described_class.find(lettings_log.id)
-        expect(record_from_db["lar"]).to eq(nil)
+        expect(record_from_db["lar"]).to be_nil
       end
 
       it "derives irproduct as rent_to_buy (1) if rent_type is rent_to_buy (3)" do
@@ -794,7 +913,7 @@ RSpec.describe LettingsLog do
 
         lettings_log.update!({ rent_type: 2 })
         record_from_db = described_class.find(lettings_log.id)
-        expect(record_from_db["irproduct"]).to eq(nil)
+        expect(record_from_db["irproduct"]).to be_nil
       end
     end
 
@@ -845,8 +964,8 @@ RSpec.describe LettingsLog do
         expect(lettings_log.reload.la).to eq("E08000003")
 
         lettings_log.update!(startdate: Time.zone.tomorrow)
-        expect(lettings_log.reload.la).to eq(nil)
-        expect(lettings_log.reload.is_la_inferred).to eq(false)
+        expect(lettings_log.reload.la).to be_nil
+        expect(lettings_log.reload.is_la_inferred).to be(false)
       end
     end
 
@@ -877,17 +996,17 @@ RSpec.describe LettingsLog do
         end
 
         it "keeps the manually entered address" do
-          expect(address_lettings_log.manual_address_entry_selected).to eq(true)
-          expect(address_lettings_log.uprn_selection).to eq(nil)
+          expect(address_lettings_log.manual_address_entry_selected).to be(true)
+          expect(address_lettings_log.uprn_selection).to be_nil
           expect(address_lettings_log.uprn_known).to eq(0)
-          expect(address_lettings_log.uprn).to eq(nil)
+          expect(address_lettings_log.uprn).to be_nil
           expect(address_lettings_log.address_line1).to eq("Address line 1")
           expect(address_lettings_log.address_line2).to eq("Address line 2")
           expect(address_lettings_log.town_or_city).to eq("Town")
           expect(address_lettings_log.postcode_full).to eq("AA1 1AA")
 
           address_lettings_log.update!(rsnvac: 16)
-          expect(address_lettings_log.manual_address_entry_selected).to eq(true)
+          expect(address_lettings_log.manual_address_entry_selected).to be(true)
           expect(address_lettings_log.address_line1).to eq("Address line 1")
           expect(address_lettings_log.address_line2).to eq("Address line 2")
           expect(address_lettings_log.town_or_city).to eq("Town")
@@ -911,19 +1030,19 @@ RSpec.describe LettingsLog do
         end
 
         it "routes to the uprn question" do
-          expect(address_lettings_log.manual_address_entry_selected).to eq(true)
-          expect(address_lettings_log.uprn_selection).to eq(nil)
+          expect(address_lettings_log.manual_address_entry_selected).to be(true)
+          expect(address_lettings_log.uprn_selection).to be_nil
           expect(address_lettings_log.uprn_known).to eq(0)
-          expect(address_lettings_log.uprn).to eq(nil)
-          expect(address_lettings_log.address_line1).to eq(nil)
-          expect(address_lettings_log.address_line2).to eq(nil)
-          expect(address_lettings_log.town_or_city).to eq(nil)
-          expect(address_lettings_log.postcode_full).to eq(nil)
+          expect(address_lettings_log.uprn).to be_nil
+          expect(address_lettings_log.address_line1).to be_nil
+          expect(address_lettings_log.address_line2).to be_nil
+          expect(address_lettings_log.town_or_city).to be_nil
+          expect(address_lettings_log.postcode_full).to be_nil
 
           address_lettings_log.update!(rsnvac: 16)
-          expect(address_lettings_log.manual_address_entry_selected).to eq(false)
-          expect(address_lettings_log.uprn_selection).to eq(nil)
-          expect(address_lettings_log.uprn_known).to eq(nil)
+          expect(address_lettings_log.manual_address_entry_selected).to be(false)
+          expect(address_lettings_log.uprn_selection).to be_nil
+          expect(address_lettings_log.uprn_known).to be_nil
         end
       end
     end
@@ -955,14 +1074,14 @@ RSpec.describe LettingsLog do
         end
 
         it "keeps the uprn" do
-          expect(address_lettings_log.manual_address_entry_selected).to eq(false)
+          expect(address_lettings_log.manual_address_entry_selected).to be(false)
           expect(address_lettings_log.uprn).to eq("1")
           expect(address_lettings_log.address_line1).to eq("1, Test Street")
           expect(address_lettings_log.town_or_city).to eq("Test Town")
           expect(address_lettings_log.postcode_full).to eq("AA1 1AA")
 
           address_lettings_log.update!(rsnvac: 15)
-          expect(address_lettings_log.manual_address_entry_selected).to eq(false)
+          expect(address_lettings_log.manual_address_entry_selected).to be(false)
           expect(address_lettings_log.address_line1).to eq("1, Test Street")
           expect(address_lettings_log.town_or_city).to eq("Test Town")
           expect(address_lettings_log.postcode_full).to eq("AA1 1AA")
@@ -989,14 +1108,14 @@ RSpec.describe LettingsLog do
         end
 
         it "keeps the manually entered address" do
-          expect(address_lettings_log.manual_address_entry_selected).to eq(true)
+          expect(address_lettings_log.manual_address_entry_selected).to be(true)
           expect(address_lettings_log.address_line1).to eq("Address line 1")
           expect(address_lettings_log.address_line2).to eq("Address line 2")
           expect(address_lettings_log.town_or_city).to eq("Town")
           expect(address_lettings_log.postcode_full).to eq("AA1 1AA")
 
           address_lettings_log.update!(rsnvac: 15)
-          expect(address_lettings_log.manual_address_entry_selected).to eq(true)
+          expect(address_lettings_log.manual_address_entry_selected).to be(true)
           expect(address_lettings_log.address_line1).to eq("Address line 1")
           expect(address_lettings_log.address_line2).to eq("Address line 2")
           expect(address_lettings_log.town_or_city).to eq("Town")
@@ -1020,17 +1139,17 @@ RSpec.describe LettingsLog do
         end
 
         it "routes to the manual address questions" do
-          expect(address_lettings_log.manual_address_entry_selected).to eq(false)
-          expect(address_lettings_log.uprn_selection).to eq(nil)
-          expect(address_lettings_log.address_line1).to eq(nil)
-          expect(address_lettings_log.address_line2).to eq(nil)
-          expect(address_lettings_log.town_or_city).to eq(nil)
-          expect(address_lettings_log.postcode_full).to eq(nil)
+          expect(address_lettings_log.manual_address_entry_selected).to be(false)
+          expect(address_lettings_log.uprn_selection).to be_nil
+          expect(address_lettings_log.address_line1).to be_nil
+          expect(address_lettings_log.address_line2).to be_nil
+          expect(address_lettings_log.town_or_city).to be_nil
+          expect(address_lettings_log.postcode_full).to be_nil
 
           address_lettings_log.update!(rsnvac: 15)
-          expect(address_lettings_log.manual_address_entry_selected).to eq(true)
-          expect(address_lettings_log.uprn_selection).to eq(nil)
-          expect(address_lettings_log.uprn).to eq(nil)
+          expect(address_lettings_log.manual_address_entry_selected).to be(true)
+          expect(address_lettings_log.uprn_selection).to be_nil
+          expect(address_lettings_log.uprn).to be_nil
           expect(address_lettings_log.uprn_known).to eq(0)
         end
       end
@@ -1136,7 +1255,7 @@ RSpec.describe LettingsLog do
         lettings_log.update!({ cbl: 1 })
         lettings_log.update!({ preg_occ: 1 })
 
-        expect(lettings_log.cbl).to eq(nil)
+        expect(lettings_log.cbl).to be_nil
       end
     end
 
@@ -1185,8 +1304,8 @@ RSpec.describe LettingsLog do
         it "clears the scheme and location values" do
           lettings_log.update!(owning_organisation: organisation_2)
           lettings_log.reload
-          expect(lettings_log.scheme).to be nil
-          expect(lettings_log.location).to be nil
+          expect(lettings_log.scheme).to be_nil
+          expect(lettings_log.location).to be_nil
         end
       end
 
@@ -1214,12 +1333,12 @@ RSpec.describe LettingsLog do
           lettings_log.update!(startdate: Time.zone.yesterday)
           lettings_log.reload
           expect(lettings_log.startdate).to eq(Time.zone.yesterday)
-          expect(lettings_log.voiddate).to eq(nil)
+          expect(lettings_log.voiddate).to be_nil
         end
 
         it "does not impact other validations" do
           expect { lettings_log.update!(startdate: Time.zone.yesterday, referral: 8, rsnvac: 9) }
-            .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.lettings.property.rsnvac.referral_invalid")}/)
+            .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t('validations.lettings.property.rsnvac.referral_invalid')}/)
         end
       end
 
@@ -1228,7 +1347,7 @@ RSpec.describe LettingsLog do
           lettings_log.update!(startdate: Time.zone.yesterday)
           lettings_log.reload
           expect(lettings_log.startdate).to eq(Time.zone.yesterday)
-          expect(lettings_log.mrcdate).to eq(nil)
+          expect(lettings_log.mrcdate).to be_nil
         end
       end
 
@@ -1246,16 +1365,16 @@ RSpec.describe LettingsLog do
           lettings_log.update!(location:, scheme:)
           lettings_log.reload
           expect(lettings_log.location).to eq(location)
-          expect(lettings_log.brent).to eq(nil)
-          expect(lettings_log.scharge).to eq(nil)
-          expect(lettings_log.pscharge).to eq(nil)
-          expect(lettings_log.supcharg).to eq(nil)
-          expect(lettings_log.tcharge).to eq(nil)
+          expect(lettings_log.brent).to be_nil
+          expect(lettings_log.scharge).to be_nil
+          expect(lettings_log.pscharge).to be_nil
+          expect(lettings_log.supcharg).to be_nil
+          expect(lettings_log.tcharge).to be_nil
         end
 
         it "does not impact other validations" do
           expect { lettings_log.update!(startdate: Time.zone.yesterday, referral: 8, rsnvac: 9) }
-            .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.lettings.property.rsnvac.referral_invalid")}/)
+            .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t('validations.lettings.property.rsnvac.referral_invalid')}/)
         end
       end
     end
@@ -2073,7 +2192,7 @@ RSpec.describe LettingsLog do
       let(:startdate) { nil }
 
       it "returns false" do
-        expect(log.collection_period_open?).to eq(true)
+        expect(log.collection_period_open?).to be(true)
       end
     end
 
@@ -2086,7 +2205,7 @@ RSpec.describe LettingsLog do
       end
 
       it "returns true" do
-        expect(log.collection_period_open?).to eq(false)
+        expect(log.collection_period_open?).to be(false)
       end
     end
 
@@ -2098,7 +2217,7 @@ RSpec.describe LettingsLog do
       end
 
       it "returns true" do
-        expect(log.collection_period_open?).to eq(true)
+        expect(log.collection_period_open?).to be(true)
       end
     end
 
@@ -2110,7 +2229,7 @@ RSpec.describe LettingsLog do
       end
 
       it "returns false" do
-        expect(log.collection_period_open?).to eq(false)
+        expect(log.collection_period_open?).to be(false)
       end
     end
   end

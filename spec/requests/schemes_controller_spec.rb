@@ -395,7 +395,7 @@ RSpec.describe SchemesController, type: :request do
           end
         end
 
-        xcontext "when on the second page" do
+        context "when on the second page" do
           before do
             get "/schemes?page=2"
           end
@@ -1003,12 +1003,12 @@ RSpec.describe SchemesController, type: :request do
           expect(Scheme.last.scheme_type).to eq("Foyer")
           expect(Scheme.last.sensitive).to eq("Yes")
           expect(Scheme.last.registered_under_care_act).to eq("No")
-          expect(Scheme.last.id).not_to eq(nil)
-          expect(Scheme.last.has_other_client_group).to eq(nil)
-          expect(Scheme.last.primary_client_group).to eq(nil)
-          expect(Scheme.last.secondary_client_group).to eq(nil)
-          expect(Scheme.last.support_type).to eq(nil)
-          expect(Scheme.last.intended_stay).to eq(nil)
+          expect(Scheme.last.id).not_to be_nil
+          expect(Scheme.last.has_other_client_group).to be_nil
+          expect(Scheme.last.primary_client_group).to be_nil
+          expect(Scheme.last.secondary_client_group).to be_nil
+          expect(Scheme.last.support_type).to be_nil
+          expect(Scheme.last.intended_stay).to be_nil
           expect(Scheme.last.id_to_display).to match(/S*/)
         end
 
@@ -1037,12 +1037,12 @@ RSpec.describe SchemesController, type: :request do
             expect(Scheme.last.scheme_type).to eq("Foyer")
             expect(Scheme.last.sensitive).to eq("Yes")
             expect(Scheme.last.registered_under_care_act).to eq("No")
-            expect(Scheme.last.id).not_to eq(nil)
-            expect(Scheme.last.has_other_client_group).to eq(nil)
-            expect(Scheme.last.primary_client_group).to eq(nil)
-            expect(Scheme.last.secondary_client_group).to eq(nil)
-            expect(Scheme.last.support_type).to eq(nil)
-            expect(Scheme.last.intended_stay).to eq(nil)
+            expect(Scheme.last.id).not_to be_nil
+            expect(Scheme.last.has_other_client_group).to be_nil
+            expect(Scheme.last.primary_client_group).to be_nil
+            expect(Scheme.last.secondary_client_group).to be_nil
+            expect(Scheme.last.support_type).to be_nil
+            expect(Scheme.last.intended_stay).to be_nil
             expect(Scheme.last.id_to_display).to match(/S*/)
           end
         end
@@ -1130,12 +1130,12 @@ RSpec.describe SchemesController, type: :request do
           expect(Scheme.last.scheme_type).to eq("Foyer")
           expect(Scheme.last.sensitive).to eq("Yes")
           expect(Scheme.last.registered_under_care_act).to eq("No")
-          expect(Scheme.last.id).not_to eq(nil)
-          expect(Scheme.last.has_other_client_group).to eq(nil)
-          expect(Scheme.last.primary_client_group).to eq(nil)
-          expect(Scheme.last.secondary_client_group).to eq(nil)
-          expect(Scheme.last.support_type).to eq(nil)
-          expect(Scheme.last.intended_stay).to eq(nil)
+          expect(Scheme.last.id).not_to be_nil
+          expect(Scheme.last.has_other_client_group).to be_nil
+          expect(Scheme.last.primary_client_group).to be_nil
+          expect(Scheme.last.secondary_client_group).to be_nil
+          expect(Scheme.last.support_type).to be_nil
+          expect(Scheme.last.intended_stay).to be_nil
           expect(Scheme.last.id_to_display).to match(/S*/)
         end
 
@@ -1164,12 +1164,12 @@ RSpec.describe SchemesController, type: :request do
             expect(Scheme.last.scheme_type).to eq("Foyer")
             expect(Scheme.last.sensitive).to eq("Yes")
             expect(Scheme.last.registered_under_care_act).to eq("No")
-            expect(Scheme.last.id).not_to eq(nil)
-            expect(Scheme.last.has_other_client_group).to eq(nil)
-            expect(Scheme.last.primary_client_group).to eq(nil)
-            expect(Scheme.last.secondary_client_group).to eq(nil)
-            expect(Scheme.last.support_type).to eq(nil)
-            expect(Scheme.last.intended_stay).to eq(nil)
+            expect(Scheme.last.id).not_to be_nil
+            expect(Scheme.last.has_other_client_group).to be_nil
+            expect(Scheme.last.primary_client_group).to be_nil
+            expect(Scheme.last.secondary_client_group).to be_nil
+            expect(Scheme.last.support_type).to be_nil
+            expect(Scheme.last.intended_stay).to be_nil
             expect(Scheme.last.id_to_display).to match(/S*/)
           end
         end
@@ -1264,12 +1264,12 @@ RSpec.describe SchemesController, type: :request do
         expect(Scheme.last.scheme_type).to eq("Foyer")
         expect(Scheme.last.sensitive).to eq("Yes")
         expect(Scheme.last.registered_under_care_act).to eq("No")
-        expect(Scheme.last.id).not_to eq(nil)
-        expect(Scheme.last.has_other_client_group).to eq(nil)
-        expect(Scheme.last.primary_client_group).to eq(nil)
-        expect(Scheme.last.secondary_client_group).to eq(nil)
-        expect(Scheme.last.support_type).to eq(nil)
-        expect(Scheme.last.intended_stay).to eq(nil)
+        expect(Scheme.last.id).not_to be_nil
+        expect(Scheme.last.has_other_client_group).to be_nil
+        expect(Scheme.last.primary_client_group).to be_nil
+        expect(Scheme.last.secondary_client_group).to be_nil
+        expect(Scheme.last.support_type).to be_nil
+        expect(Scheme.last.intended_stay).to be_nil
         expect(Scheme.last.id_to_display).to match(/S*/)
       end
 
@@ -1297,12 +1297,12 @@ RSpec.describe SchemesController, type: :request do
           expect(Scheme.last.scheme_type).to eq("Foyer")
           expect(Scheme.last.sensitive).to eq("Yes")
           expect(Scheme.last.registered_under_care_act).to eq("No")
-          expect(Scheme.last.id).not_to eq(nil)
-          expect(Scheme.last.has_other_client_group).to eq(nil)
-          expect(Scheme.last.primary_client_group).to eq(nil)
-          expect(Scheme.last.secondary_client_group).to eq(nil)
-          expect(Scheme.last.support_type).to eq(nil)
-          expect(Scheme.last.intended_stay).to eq(nil)
+          expect(Scheme.last.id).not_to be_nil
+          expect(Scheme.last.has_other_client_group).to be_nil
+          expect(Scheme.last.primary_client_group).to be_nil
+          expect(Scheme.last.secondary_client_group).to be_nil
+          expect(Scheme.last.support_type).to be_nil
+          expect(Scheme.last.intended_stay).to be_nil
           expect(Scheme.last.id_to_display).to match(/S*/)
         end
       end
@@ -1384,7 +1384,7 @@ RSpec.describe SchemesController, type: :request do
         let(:params) { { scheme: { page: "check-answers" } } }
 
         it "is not confirmed" do
-          expect(scheme_to_update.confirmed).to eq(nil)
+          expect(scheme_to_update.confirmed).to be_nil
         end
 
         context "when confirming finished scheme" do
@@ -1395,7 +1395,7 @@ RSpec.describe SchemesController, type: :request do
           end
 
           it "confirms scheme" do
-            expect(scheme_to_update.confirmed).to eq(true)
+            expect(scheme_to_update.confirmed).to be(true)
           end
         end
       end
@@ -1693,7 +1693,7 @@ RSpec.describe SchemesController, type: :request do
         let(:params) { { scheme: { page: "check-answers" } } }
 
         it "is not confirmed" do
-          expect(scheme_to_update.confirmed).to eq(nil)
+          expect(scheme_to_update.confirmed).to be_nil
         end
 
         context "when confirming finished scheme" do
@@ -1704,7 +1704,7 @@ RSpec.describe SchemesController, type: :request do
           end
 
           it "confirms scheme" do
-            expect(scheme_to_update.confirmed).to eq(true)
+            expect(scheme_to_update.confirmed).to be(true)
           end
         end
       end
@@ -1761,13 +1761,13 @@ RSpec.describe SchemesController, type: :request do
           let(:params) { { scheme: { page: "check-answers", confirmed: "true" } } }
 
           it "marks the scheme as confirmed" do
-            expect(scheme_to_update.reload.confirmed?).to eq(true)
+            expect(scheme_to_update.reload.confirmed?).to be(true)
           end
 
           it "marks all the scheme locations as confirmed given they are complete" do
-            expect(scheme_to_update.locations.count > 0).to eq(true)
+            expect(scheme_to_update.locations.count > 0).to be(true)
             scheme_to_update.locations.each do |location|
-              expect(location.confirmed?).to eq(true)
+              expect(location.confirmed?).to be(true)
             end
           end
         end
@@ -2812,14 +2812,14 @@ RSpec.describe SchemesController, type: :request do
             expect(lettings_log.scheme).to eq(scheme)
             expect(lettings_log.scheme).to eq(scheme)
             lettings_log.reload
-            expect(lettings_log.scheme).to eq(nil)
-            expect(lettings_log.scheme).to eq(nil)
+            expect(lettings_log.scheme).to be_nil
+            expect(lettings_log.scheme).to be_nil
           end
 
           it "marks log as needing attention" do
-            expect(lettings_log.unresolved).to eq(nil)
+            expect(lettings_log.unresolved).to be_nil
             lettings_log.reload
-            expect(lettings_log.unresolved).to eq(true)
+            expect(lettings_log.unresolved).to be(true)
           end
 
           it "sends deactivation emails" do
@@ -2844,9 +2844,9 @@ RSpec.describe SchemesController, type: :request do
           end
 
           it "does not mark log as needing attention" do
-            expect(lettings_log.unresolved).to eq(nil)
+            expect(lettings_log.unresolved).to be_nil
             lettings_log.reload
-            expect(lettings_log.unresolved).to eq(nil)
+            expect(lettings_log.unresolved).to be_nil
           end
         end
 
@@ -2869,13 +2869,13 @@ RSpec.describe SchemesController, type: :request do
           it "clears the scheme answer" do
             expect(lettings_log.scheme).to eq(scheme)
             lettings_log.reload
-            expect(lettings_log.scheme).to eq(nil)
+            expect(lettings_log.scheme).to be_nil
           end
 
           it "marks log as needing attention" do
-            expect(lettings_log.unresolved).to eq(nil)
+            expect(lettings_log.unresolved).to be_nil
             lettings_log.reload
-            expect(lettings_log.unresolved).to eq(true)
+            expect(lettings_log.unresolved).to be(true)
           end
         end
 
@@ -2897,13 +2897,13 @@ RSpec.describe SchemesController, type: :request do
           it "clears the scheme answer" do
             expect(lettings_log.scheme).to eq(scheme)
             lettings_log.reload
-            expect(lettings_log.scheme).to eq(nil)
+            expect(lettings_log.scheme).to be_nil
           end
 
           it "marks log as needing attention" do
-            expect(lettings_log.unresolved).to eq(nil)
+            expect(lettings_log.unresolved).to be_nil
             lettings_log.reload
-            expect(lettings_log.unresolved).to eq(true)
+            expect(lettings_log.unresolved).to be(true)
           end
         end
 
@@ -3338,14 +3338,14 @@ RSpec.describe SchemesController, type: :request do
         it "deletes the scheme" do
           scheme.reload
           expect(scheme.status).to eq(:deleted)
-          expect(scheme.discarded_at).not_to be nil
+          expect(scheme.discarded_at).not_to be_nil
         end
 
         it "deletes associated locations" do
           locations.each do |location|
             location.reload
             expect(location.status).to eq(:deleted)
-            expect(location.discarded_at).not_to be nil
+            expect(location.discarded_at).not_to be_nil
           end
         end
 

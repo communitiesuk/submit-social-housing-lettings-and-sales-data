@@ -12,7 +12,7 @@ RSpec.describe Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPe
   end
 
   it "has the correct description" do
-    expect(page.description).to be nil
+    expect(page.description).to be_nil
   end
 
   it "has correct questions" do
@@ -29,7 +29,7 @@ RSpec.describe Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPe
         [
           {
             "age2_known" => 0,
-            "female_in_pregnant_household_in_soft_validation_range?" => true,
+            "non_males_in_pregnant_household_not_in_pregnancy_range?" => true,
           },
         ],
       )
@@ -62,7 +62,7 @@ RSpec.describe Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPe
         [
           {
             "age3_known" => 0,
-            "female_in_pregnant_household_in_soft_validation_range?" => true,
+            "non_males_in_pregnant_household_not_in_pregnancy_range?" => true,
           },
         ],
       )

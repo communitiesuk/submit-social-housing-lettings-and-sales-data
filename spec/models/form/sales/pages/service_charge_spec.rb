@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Pages::ServiceCharge, type: :model do
   end
 
   it "has the correct id" do
-    expect(page.id).to eq(nil)
+    expect(page.id).to be_nil
   end
 
   it "has the correct description" do

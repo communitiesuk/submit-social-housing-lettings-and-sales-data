@@ -53,7 +53,7 @@ RSpec.describe Form::Sales::Questions::UprnConfirmation, type: :model do
       let(:log) { build(:sales_log, uprn_known: 0, uprn_confirmed: nil) }
 
       it "returns true" do
-        expect(question.hidden_in_check_answers?(log)).to eq(true)
+        expect(question.hidden_in_check_answers?(log)).to be(true)
       end
     end
 
@@ -64,7 +64,7 @@ RSpec.describe Form::Sales::Questions::UprnConfirmation, type: :model do
         log.uprn_known = 1
         log.uprn = "12345"
         log.uprn_confirmed = nil
-        expect(question.hidden_in_check_answers?(log)).to eq(false)
+        expect(question.hidden_in_check_answers?(log)).to be(false)
       end
     end
 
@@ -72,7 +72,7 @@ RSpec.describe Form::Sales::Questions::UprnConfirmation, type: :model do
       let(:log) { build(:sales_log, uprn_known: 1, uprn: "12345", uprn_confirmed: 1) }
 
       it "returns true" do
-        expect(question.hidden_in_check_answers?(log)).to eq(true)
+        expect(question.hidden_in_check_answers?(log)).to be(true)
       end
     end
   end

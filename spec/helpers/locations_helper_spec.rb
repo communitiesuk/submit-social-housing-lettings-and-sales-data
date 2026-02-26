@@ -59,6 +59,7 @@ RSpec.describe LocationsHelper do
     before do
       allow(Time).to receive(:now).and_return(today)
       allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
+      Singleton.__init__(FormHandler)
     end
 
     it "returns one active period without to date" do
