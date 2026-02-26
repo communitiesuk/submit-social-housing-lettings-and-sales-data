@@ -1122,7 +1122,7 @@ private
 
   def value
     return field_86 if shared_ownership_initial_purchase?
-    return field_115 if discounted_ownership?
+    return field_113 if discounted_ownership?
 
     field_107 if staircasing?
   end
@@ -1170,7 +1170,7 @@ private
   def proplen
     return field_79 if shared_ownership?
 
-    field_114 if discounted_ownership?
+    field_112 if discounted_ownership?
   end
 
   def mortgageused
@@ -1182,10 +1182,10 @@ private
 
   def value_fields
     return [:field_86] if shared_ownership_initial_purchase?
-    return [:field_115] if discounted_ownership?
+    return [:field_113] if discounted_ownership?
     return [:field_107] if staircasing?
 
-    %i[field_86 field_115 field_107]
+    %i[field_86 field_113 field_107]
   end
 
   def equity_fields
@@ -1238,9 +1238,9 @@ private
 
   def proplen_fields
     return [:field_79] if shared_ownership?
-    return [:field_114] if discounted_ownership?
+    return [:field_112] if discounted_ownership?
 
-    %i[field_79 field_114]
+    %i[field_79 field_112]
   end
 
   def mortgageused_fields
