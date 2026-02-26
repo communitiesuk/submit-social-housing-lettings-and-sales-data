@@ -134,8 +134,6 @@ module Exports::SalesLogExportConstants
     "STAIRINITIALDAY",
     "HASSERVICECHARGES",
     "SERVICECHARGES",
-    "HASSERVICECHARGESCHANGED",
-    "NEWSERVICECHARGES",
   ]
 
   (1..6).each do |index|
@@ -148,7 +146,10 @@ module Exports::SalesLogExportConstants
     ALL_YEAR_EXPORT_FIELDS << "RELAT#{index}"
   end
 
-  YEAR_2026_EXPORT_FIELDS = Set[]
+  YEAR_2026_EXPORT_FIELDS = Set[
+    "HASSERVICECHARGESCHANGED",
+    "NEWSERVICECHARGES",
+  ]
 
   (1..6).each do |index|
     YEAR_2026_EXPORT_FIELDS << "SEXRAB#{index}"
