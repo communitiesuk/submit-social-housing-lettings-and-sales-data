@@ -2,8 +2,7 @@ require "rails_helper"
 
 RSpec.describe "logs/_create_for_org_actions.html.erb" do
   before do
-    allow(view).to receive(:current_user).and_return(user)
-    allow(view).to receive(:current_page?).and_return(true)
+    allow(view).to receive_messages(current_user: user, current_page?: true)
     assign(:organisation, user.organisation)
   end
 

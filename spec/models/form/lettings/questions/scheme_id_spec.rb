@@ -64,8 +64,7 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
       let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json") }
 
       before do
-        allow(lettings_log).to receive(:scheme_has_multiple_locations?).and_return(false)
-        allow(lettings_log).to receive(:form).and_return(real_2022_2023_form)
+        allow(lettings_log).to receive_messages(scheme_has_multiple_locations?: false, form: real_2022_2023_form)
       end
 
       it "returns the postcode" do
@@ -147,9 +146,9 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
         end
         answers.each do |answer|
           if answer.resource == "Select an option"
-            expect(question.answer_selected?(lettings_log, answer)).to eq(true)
+            expect(question.answer_selected?(lettings_log, answer)).to be(true)
           else
-            expect(question.answer_selected?(lettings_log, answer)).to eq(false)
+            expect(question.answer_selected?(lettings_log, answer)).to be(false)
           end
         end
       end
@@ -167,9 +166,9 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
         end
         answers.each do |answer|
           if answer.id.to_i == scheme.id
-            expect(question.answer_selected?(lettings_log, answer)).to eq(true)
+            expect(question.answer_selected?(lettings_log, answer)).to be(true)
           else
-            expect(question.answer_selected?(lettings_log, answer)).to eq(false)
+            expect(question.answer_selected?(lettings_log, answer)).to be(false)
           end
         end
       end

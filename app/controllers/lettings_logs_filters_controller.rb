@@ -52,8 +52,6 @@ class LettingsLogsFiltersController < ApplicationController
   end
 end
 
-private
-
 def lettings_session_filters
   params["years"] = [params["years"]] if params["years"].present?
   lettings_filter_manager.session_filters

@@ -600,7 +600,7 @@ class BulkUpload::Lettings::Year2026::RowParser
 private
 
   def validate_valid_radio_option
-    log.attributes.each do |question_id, _v|
+    log.attributes.each_key do |question_id|
       question = log.form.get_question(question_id, log)
 
       next unless question&.type == "radio"
@@ -1566,7 +1566,8 @@ private
   ].each do |hash|
     define_method("age#{hash[:person]}_known?") do
       return 1 if public_send(hash[:field]) == "R"
-      return 0 if send("person_#{hash[:person]}_present?")
+
+      0 if send("person_#{hash[:person]}_present?")
     end
   end
 
@@ -1630,7 +1631,8 @@ private
 
   def housingneeds_other
     return 1 if field_97 == 1
-    return 0 if [field_94, field_95, field_96].include?(1)
+
+    0 if [field_94, field_95, field_96].include?(1)
   end
 
   def prevloc
@@ -1706,7 +1708,7 @@ private
   end
 
   def earnings
-    field_137.round if field_137.present?
+    field_137.presence&.round
   end
 
   def tshortfall_known

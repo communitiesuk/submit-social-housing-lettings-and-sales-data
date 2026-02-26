@@ -610,7 +610,7 @@ RSpec.describe LocationsController, type: :request do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/local-authority", params:
         end
 
-        it "adds local authority to location " do
+        it "adds local authority to location" do
           expect(Location.last.location_admin_district).to eq("Adur")
           expect(Location.last.location_code).to eq("E07000223")
         end
@@ -655,7 +655,7 @@ RSpec.describe LocationsController, type: :request do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/local-authority", params:
         end
 
-        it "adds local authority to location " do
+        it "adds local authority to location" do
           expect(Location.last.location_admin_district).to eq("Adur")
           expect(Location.last.location_code).to eq("E07000223")
         end
@@ -1174,7 +1174,7 @@ RSpec.describe LocationsController, type: :request do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
         end
 
-        it "adds startdate correctly " do
+        it "adds startdate correctly" do
           expect(Location.last.startdate).to eq(Time.zone.local(2022, 1, 2))
         end
 
@@ -1248,7 +1248,7 @@ RSpec.describe LocationsController, type: :request do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
         end
 
-        it "adds startdate correctly " do
+        it "adds startdate correctly" do
           expect(Location.last.startdate).to eq(Time.zone.local(2022, 1, 2))
         end
 
@@ -1328,7 +1328,7 @@ RSpec.describe LocationsController, type: :request do
 
         context "when location is complete" do
           it "confirms location" do
-            expect(Location.last.confirmed).to eq(true)
+            expect(Location.last.confirmed).to be(true)
           end
 
           it "redirects correctly and displays success banner" do
@@ -1342,7 +1342,7 @@ RSpec.describe LocationsController, type: :request do
           let(:location) { create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1), postcode: nil) }
 
           it "does not confirm location" do
-            expect(Location.last.confirmed).to eq(false)
+            expect(Location.last.confirmed).to be(false)
           end
 
           it "redirects correctly and does not display success banner" do
@@ -1362,7 +1362,7 @@ RSpec.describe LocationsController, type: :request do
           it "does not display local authority row" do
             location.reload
             follow_redirect!
-            expect(location.is_la_inferred).to eq(true)
+            expect(location.is_la_inferred).to be(true)
             expect(location.location_admin_district).to eq("Westminster")
             expect(page).not_to have_content("Local authority")
             expect(page).to have_content("Westminster")
@@ -1379,7 +1379,7 @@ RSpec.describe LocationsController, type: :request do
           it "displays local authority row" do
             location.reload
             get "/schemes/#{scheme.id}/locations/#{location.id}/check-answers"
-            expect(location.is_la_inferred).to eq(false)
+            expect(location.is_la_inferred).to be(false)
             expect(page).to have_content("Local authority")
           end
         end
@@ -1438,7 +1438,7 @@ RSpec.describe LocationsController, type: :request do
 
         context "when location is complete" do
           it "confirms location" do
-            expect(Location.last.confirmed).to eq(true)
+            expect(Location.last.confirmed).to be(true)
           end
 
           it "redirects correctly and displays success banner" do
@@ -1452,7 +1452,7 @@ RSpec.describe LocationsController, type: :request do
           let(:location) { create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1), postcode: nil) }
 
           it "does not confirm location" do
-            expect(Location.last.confirmed).to eq(false)
+            expect(Location.last.confirmed).to be(false)
           end
 
           it "redirects correctly and does not display success banner" do
@@ -1611,14 +1611,14 @@ RSpec.describe LocationsController, type: :request do
             expect(lettings_log.location).to eq(location)
             expect(lettings_log.scheme).to eq(scheme)
             lettings_log.reload
-            expect(lettings_log.location).to eq(nil)
-            expect(lettings_log.scheme).to eq(nil)
+            expect(lettings_log.location).to be_nil
+            expect(lettings_log.scheme).to be_nil
           end
 
           it "marks log as needing attention" do
-            expect(lettings_log.unresolved).to eq(nil)
+            expect(lettings_log.unresolved).to be_nil
             lettings_log.reload
-            expect(lettings_log.unresolved).to eq(true)
+            expect(lettings_log.unresolved).to be(true)
           end
 
           it "sends deactivation emails" do
@@ -1660,9 +1660,9 @@ RSpec.describe LocationsController, type: :request do
           end
 
           it "does not mark log as needing attention" do
-            expect(lettings_log.unresolved).to eq(nil)
+            expect(lettings_log.unresolved).to be_nil
             lettings_log.reload
-            expect(lettings_log.unresolved).to eq(nil)
+            expect(lettings_log.unresolved).to be_nil
           end
         end
 
@@ -1686,14 +1686,14 @@ RSpec.describe LocationsController, type: :request do
             expect(lettings_log.location).to eq(location)
             expect(lettings_log.scheme).to eq(scheme)
             lettings_log.reload
-            expect(lettings_log.location).to eq(nil)
-            expect(lettings_log.scheme).to eq(nil)
+            expect(lettings_log.location).to be_nil
+            expect(lettings_log.scheme).to be_nil
           end
 
           it "marks log as needing attention" do
-            expect(lettings_log.unresolved).to eq(nil)
+            expect(lettings_log.unresolved).to be_nil
             lettings_log.reload
-            expect(lettings_log.unresolved).to eq(true)
+            expect(lettings_log.unresolved).to be(true)
           end
         end
       end
@@ -2322,7 +2322,7 @@ RSpec.describe LocationsController, type: :request do
         it "deletes the location" do
           location.reload
           expect(location.status).to eq(:deleted)
-          expect(location.discarded_at).not_to be nil
+          expect(location.discarded_at).not_to be_nil
         end
 
         it "redirects to the scheme locations list and displays a notice that the location has been deleted" do

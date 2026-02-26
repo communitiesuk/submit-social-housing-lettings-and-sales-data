@@ -296,7 +296,7 @@ RSpec.describe CheckErrorsController, type: :request do
           expect(page).to have_content("Make sure these answers are correct")
           expect(page).to have_link(lettings_log.form.get_question("hhmemb", lettings_log).check_answer_prompt, href: "/lettings-logs/#{lettings_log.id}/household-members?referrer=check_answers_new_answer", class: "govuk-link govuk-link--no-visited-state")
           expect(page).to have_link("Enter total number of household members")
-          expect(lettings_log.reload.earnings).to eq(nil)
+          expect(lettings_log.reload.earnings).to be_nil
         end
       end
 
@@ -320,10 +320,10 @@ RSpec.describe CheckErrorsController, type: :request do
         end
 
         it "clears related previous location fields" do
-          expect(lettings_log.reload.prevloc).to eq(nil)
-          expect(lettings_log.reload.previous_la_known).to eq(nil)
-          expect(lettings_log.reload.ppostcode_full).to eq(nil)
-          expect(lettings_log.reload.ppcodenk).to eq(nil)
+          expect(lettings_log.reload.prevloc).to be_nil
+          expect(lettings_log.reload.previous_la_known).to be_nil
+          expect(lettings_log.reload.ppostcode_full).to be_nil
+          expect(lettings_log.reload.ppcodenk).to be_nil
         end
       end
 
@@ -351,7 +351,7 @@ RSpec.describe CheckErrorsController, type: :request do
           expect(page).to have_content("Make sure these answers are correct")
           expect(page).to have_link(sales_log.form.get_question("income1", sales_log).check_answer_prompt, href: "/sales-logs/#{sales_log.id}/buyer-1-income?referrer=check_answers_new_answer", class: "govuk-link govuk-link--no-visited-state")
           expect(page).to have_link("Enter buyer 1’s gross annual income")
-          expect(sales_log.reload.income1).to eq(nil)
+          expect(sales_log.reload.income1).to be_nil
         end
       end
     end
@@ -442,9 +442,9 @@ RSpec.describe CheckErrorsController, type: :request do
           expect(page).to have_content("Make sure these answers are correct")
           expect(page).to have_link(lettings_log.form.get_question("hhmemb", lettings_log).check_answer_prompt, href: "/lettings-logs/#{lettings_log.id}/household-members?referrer=check_answers_new_answer", class: "govuk-link govuk-link--no-visited-state")
           expect(page.all(:button, value: "Clear").count).to eq(0)
-          expect(lettings_log.reload.earnings).to eq(nil)
-          expect(lettings_log.reload.incfreq).to eq(nil)
-          expect(lettings_log.reload.hhmemb).to eq(nil)
+          expect(lettings_log.reload.earnings).to be_nil
+          expect(lettings_log.reload.incfreq).to be_nil
+          expect(lettings_log.reload.hhmemb).to be_nil
         end
       end
 
@@ -472,9 +472,9 @@ RSpec.describe CheckErrorsController, type: :request do
           expect(page).to have_content("Make sure these answers are correct")
           expect(page).to have_link(sales_log.form.get_question("income1", sales_log).check_answer_prompt, href: "/sales-logs/#{sales_log.id}/buyer-1-income?referrer=check_answers_new_answer", class: "govuk-link govuk-link--no-visited-state")
           expect(page.all(:button, value: "Clear").count).to eq(0)
-          expect(sales_log.reload.income1).to eq(nil)
-          expect(sales_log.reload.la).to eq(nil)
-          expect(sales_log.reload.ownershipsch).not_to eq(nil)
+          expect(sales_log.reload.income1).to be_nil
+          expect(sales_log.reload.la).to be_nil
+          expect(sales_log.reload.ownershipsch).not_to be_nil
         end
       end
     end

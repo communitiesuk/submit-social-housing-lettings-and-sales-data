@@ -278,7 +278,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             expect(parser).to be_valid
           end
 
-          it "instantiates a log with everything completed", aggregate_failures: true do
+          it "instantiates a log with everything completed", :aggregate_failures do
             parser.valid?
 
             questions = parser.send(:questions).reject do |q|
@@ -2046,8 +2046,8 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
         let(:attributes) { setup_section_params.merge({ field_46: "123123" }) }
 
         it "is correctly set" do
-          expect(parser.log.nationality_all).to be(nil)
-          expect(parser.log.nationality_all_group).to be(nil)
+          expect(parser.log.nationality_all).to be_nil
+          expect(parser.log.nationality_all_group).to be_nil
         end
 
         it "adds an error to field_46" do
@@ -2127,7 +2127,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
 
       it "does not add duplicate logs validation to the blank row" do
-        expect(parser.log_already_exists?).to eq(false)
+        expect(parser.log_already_exists?).to be(false)
       end
     end
   end
@@ -2534,7 +2534,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
         }
       end
 
-      it "sets value from correct mapping", aggregate_failures: true do
+      it "sets value from correct mapping", :aggregate_failures do
         expect(parser.log.ecstat1).to eq(1)
         expect(parser.log.ecstat2).to eq(2)
         expect(parser.log.ecstat3).to eq(6)
@@ -2560,7 +2560,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
         }
       end
 
-      it "sets value from correct mapping", aggregate_failures: true do
+      it "sets value from correct mapping", :aggregate_failures do
         expect(parser.log.relat2).to eq("P")
         expect(parser.log.relat3).to eq("X")
         expect(parser.log.relat4).to eq("X")
@@ -2719,7 +2719,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
         let(:attributes) { { bulk_upload:, field_4: 1, field_140: "1" } }
 
         it "sets correct value from mapping" do
-          expect(parser.log.household_charge).to eq(nil)
+          expect(parser.log.household_charge).to be_nil
         end
       end
 

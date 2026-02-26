@@ -138,7 +138,7 @@ RSpec.describe Organisation, type: :model do
 
       context "when the org does not use all rent periods" do
         it "#rent_periods returns the correct ids" do
-          expect(organisation.rent_periods).to match_array([4, 2, 1])
+          expect(organisation.rent_periods).to contain_exactly(4, 2, 1)
         end
 
         it "#rent_period_labels returns the correct labels in order" do
@@ -162,7 +162,7 @@ RSpec.describe Organisation, type: :model do
         end
 
         it "#rent_periods returns the correct ids" do
-          expect(organisation.rent_periods).to match_array([4, 2, 1, 3])
+          expect(organisation.rent_periods).to contain_exactly(4, 2, 1, 3)
         end
 
         it "#rent_period_labels returns All" do
@@ -207,7 +207,7 @@ RSpec.describe Organisation, type: :model do
       end
 
       it "has lettings logs" do
-        expect(organisation.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log])
+        expect(organisation.lettings_logs.to_a).to contain_exactly(owned_lettings_log, managed_lettings_log)
       end
     end
   end

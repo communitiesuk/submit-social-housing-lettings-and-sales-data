@@ -21,7 +21,7 @@ RSpec.describe Form::Sales::Questions::AddressLine1ForAddressMatcher, type: :mod
   end
 
   it "has the correct question_number" do
-    expect(question.question_number).to eq(nil)
+    expect(question.question_number).to be_nil
   end
 
   it "has the correct type" do
@@ -45,6 +45,6 @@ RSpec.describe Form::Sales::Questions::AddressLine1ForAddressMatcher, type: :mod
   end
 
   it "has the correct disable_clearing_if_not_routed_or_dynamic_answer_options value" do
-    expect(question.disable_clearing_if_not_routed_or_dynamic_answer_options).to eq(true)
+    expect(question.disable_clearing_if_not_routed_or_dynamic_answer_options).to be(true)
   end
 end

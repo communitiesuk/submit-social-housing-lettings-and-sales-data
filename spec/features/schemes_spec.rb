@@ -297,7 +297,7 @@ RSpec.describe "Schemes scheme Features" do
 
                   it "displays all schemes after I clear the search results" do
                     click_link("Clear search")
-                    Location.all.each do |location|
+                    Location.all.find_each do |location|
                       expect(page).to have_content(location.name)
                     end
                   end
@@ -953,7 +953,7 @@ RSpec.describe "Schemes scheme Features" do
 
                   it "displays all schemes after I clear the search results" do
                     click_link("Clear search")
-                    Location.all.each do |location|
+                    Location.all.find_each do |location|
                       expect(page).to have_content(location.name)
                     end
                   end

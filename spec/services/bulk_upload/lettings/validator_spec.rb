@@ -301,7 +301,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
         file.close
       end
 
-      it "will not create logs" do
+      it "does not create logs" do
         validator.call
         expect(validator.block_log_creation_reason).to eq("setup_errors")
       end

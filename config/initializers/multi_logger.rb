@@ -4,13 +4,9 @@ class MultiLogger
     @file_logger = file_logger
   end
 
-  def info(data)
-    @rails_logger.info(data)
-  end
+  delegate :info, to: :@rails_logger
 
-  def warn(data)
-    @rails_logger.warn(data)
-  end
+  delegate :warn, to: :@rails_logger
 
   def error(data)
     @rails_logger.error(data)

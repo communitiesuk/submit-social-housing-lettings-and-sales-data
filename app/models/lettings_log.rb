@@ -482,7 +482,7 @@ class LettingsLog < Log
   def is_london_rent?
     # 2: London Affordable Rent
     # 4: London Living Rent
-    rent_type == 2 || rent_type == 4
+    [2, 4].include?(rent_type)
   end
 
   def previous_tenancy_was_foster_care?
@@ -714,7 +714,7 @@ class LettingsLog < Log
   end
 
   def affordable_or_social_rent?
-    renttype == 1 || renttype == 2
+    [1, 2].include?(renttype)
   end
 
   def no_or_unknown_other_housing_needs?
@@ -931,7 +931,7 @@ private
     num_of_weeks = NUM_OF_WEEKS_FROM_PERIOD[period]
     return "" unless value && num_of_weeks
 
-    format_as_currency((value * 52 / num_of_weeks))
+    format_as_currency(value * 52 / num_of_weeks)
   end
 
   def fully_wheelchair_accessible?

@@ -57,6 +57,23 @@ en:
             title_text: "You told us that the tenant’s main reason for leaving their last settled home was %{reasonother}."
             informative_text: "The reason you have entered looks very similar to one of the existing response categories. Please check the categories and select the appropriate one. If the existing categories are not suitable, please confirm here to move onto the next question."
 
+          tenancyother_value_check:
+            page_header: ""
+            check_answer_label: "Tenancy other confirmation"
+            check_answer_prompt: "Confirm tenancy type"
+            hint_text: ""
+            question_text: ""
+            title_text: "You told us that the type of tenancy was %{tenancyother}."
+            informative_text: "We already know whether the tenancy is introductory or has a starter period from your previous answer. Your answer to the type of main tenancy question should be the type of tenancy that the tenant will roll onto after any introductory or starter period. Choose from the categories or write a description if no category is suitable."
+          referral_value_check:
+            page_header: ""
+            check_answer_label: "Referral confirmation"
+            check_answer_prompt: "Confirm referral type"
+            hint_text: ""
+            question_text: "Are you sure?"
+            title_text: "Are you sure?"
+            informative_text: "This is a general needs log, and this referral type is for supported housing."
+
           net_income_value_check:
             page_header: ""
             check_answer_label: "Net income confirmation"

@@ -24,6 +24,6 @@ RSpec.describe Form::Sales::Pages::BuyersOrganisations, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to be nil
+    expect(page.depends_on).to be_nil
   end
 end

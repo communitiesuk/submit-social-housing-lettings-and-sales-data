@@ -2,12 +2,10 @@ class BulkUpload::LettingsLogToCsv
   attr_reader :log, :line_ending, :col_offset, :overrides
 
   def initialize(log:, line_ending: "\n", col_offset: 1, overrides: {})
-    # rubocop:disable Rails/HelperInstanceVariable
     @log = log
     @line_ending = line_ending
     @col_offset = col_offset
     @overrides = overrides
-    # rubocop:enable Rails/HelperInstanceVariable
   end
 
   def row_prefix

@@ -93,7 +93,7 @@ class DocumentationGenerator
 
     interruption_screen_pages = form.pages.select { |page| page.questions.first.type == "interruption_screen" }
     interruption_screen_pages_grouped_by_question = interruption_screen_pages.group_by { |page| page.questions.first.id }
-    interruption_screen_pages_grouped_by_question.each do |_question_id, pages|
+    interruption_screen_pages_grouped_by_question.each_value do |pages|
       pages.map do |page|
         save_soft_validation(form, page, validation_descriptions, log_type)
       end
