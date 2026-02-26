@@ -76,7 +76,7 @@
       <% end %>
 
       <% if @pages_with_errors_count > 1 %>
-        <%# Hidden form submit ensures pressing Enter triggers "Save and continue" rather than "See all related answers" as the user would expect %>
+        <%# Hidden form submit ensures pressing Enter triggers "Save and continue" as the user would expect rather than "See all related answers"%>
         <%= f.submit submit_button_text(@page, request.query_parameters["referrer"]), class: "govuk-visually-hidden", tabindex: -1, "aria-hidden": true %>
         <div class="govuk-button-group">
           <%= f.submit "See all related answers", name: "check_errors", class: "govuk-body govuk-link submit-button-link" %>
