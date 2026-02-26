@@ -16,4 +16,12 @@ class Form::Sales::Questions::SexRegisteredAtBirth1 < ::Form::Question
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2026 => 0 }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "R"
+
+    super
+  end
 end

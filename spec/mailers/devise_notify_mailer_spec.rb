@@ -9,9 +9,7 @@ RSpec.describe DeviseNotifyMailer do
     let(:password) { "password" }
     let(:role) { "data_coordinator" }
     let(:bad_request_error) do
-      # rubocop:disable RSpec/VerifiedDoubles
       Notifications::Client::BadRequestError.new(double(code: 200, body: ""))
-      # rubocop:enable RSpec/VerifiedDoubles
     end
 
     before do
@@ -22,8 +20,7 @@ RSpec.describe DeviseNotifyMailer do
 
     context "when the rails environment is staging" do
       before do
-        allow(Rails.env).to receive(:test?).and_return(false)
-        allow(Rails.env).to receive(:staging?).and_return(true)
+        allow(Rails.env).to receive_messages(test?: false, staging?: true)
       end
 
       context "when the email domain is not in the allowlist" do

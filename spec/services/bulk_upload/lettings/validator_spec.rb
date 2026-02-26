@@ -172,8 +172,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
           expect(error.tenant_code).to eql(log.tenancycode)
           expect(error.property_ref).to eql(log.propcode)
           expect(error.row).to eql("2")
-          expect(error.cell).to eql("CX2")
-          expect(error.col).to eql("CX")
+          expect(error.cell).to eql("CX2") # this may change when adding a new field as the cols are in a random order
+          expect(error.col).to eql("CX") # this may change when adding a new field as the cols are in a random order
         end
       end
 
@@ -190,8 +190,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
           expect(error.tenant_code).to eql(log.tenancycode)
           expect(error.property_ref).to eql(log.propcode)
           expect(error.row).to eql("2")
-          expect(error.cell).to eql("EF2")
-          expect(error.col).to eql("EF")
+          expect(error.cell).to eql("EA2") # this may change when adding a new field as the cols are in a random order
+          expect(error.col).to eql("EA") # this may change when adding a new field as the cols are in a random order
         end
       end
     end
@@ -301,7 +301,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
         file.close
       end
 
-      it "will not create logs" do
+      it "does not create logs" do
         validator.call
         expect(validator.block_log_creation_reason).to eq("setup_errors")
       end

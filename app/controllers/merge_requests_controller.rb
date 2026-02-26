@@ -105,7 +105,7 @@ private
     answer_options = { "" => "Select an option" }
 
     if current_user.support?
-      Organisation.all.each do |organisation|
+      Organisation.all.find_each do |organisation|
         date = @merge_request.merge_date || Time.zone.today
         answer_options[organisation.id] = organisation.name(date:)
       end

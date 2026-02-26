@@ -70,10 +70,10 @@ RSpec.describe Forms::DeleteLogsForm do
     create(:lettings_log)
 
     expect(FilterManager).to receive(:filter_logs) { |arg1, arg2, arg3, arg4, arg5|
-      expect(arg1).to contain_exactly(*visible_logs)
+      expect(arg1).to match_array(visible_logs)
       expect(arg2).to eq search_term
       expect(arg3).to eq log_filters
-      expect(arg4).to be nil
+      expect(arg4).to be_nil
       expect(arg5).to be current_user
     }.and_return visible_logs
     delete_logs_form

@@ -14,18 +14,14 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
     let(:form) { instance_double(Form, start_date:) }
 
     before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-      allow(form).to receive(:start_year_2025_or_later?).and_return(true)
-      allow(form).to receive(:start_year_2026_or_later?).and_return(true)
+      allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true, start_year_2026_or_later?: true)
     end
 
     context "when 2024" do
       let(:start_date) { Time.utc(2024, 4, 8) }
 
       before do
-        allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-        allow(form).to receive(:start_year_2025_or_later?).and_return(false)
-        allow(form).to receive(:start_year_2026_or_later?).and_return(false)
+        allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: false, start_year_2026_or_later?: false)
       end
 
       it "has correct pages" do
@@ -56,7 +52,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
         let(:log) { FactoryBot.build(:lettings_log, needstype: 2, renewal: 1) }
 
         it "is not displayed in tasklist" do
-          expect(property_information.displayed_in_tasklist?(log)).to eq(false)
+          expect(property_information.displayed_in_tasklist?(log)).to be(false)
         end
       end
     end
@@ -65,9 +61,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
       let(:start_date) { Time.utc(2025, 4, 8) }
 
       before do
-        allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-        allow(form).to receive(:start_year_2025_or_later?).and_return(true)
-        allow(form).to receive(:start_year_2026_or_later?).and_return(false)
+        allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true, start_year_2026_or_later?: false)
       end
 
       it "has correct pages" do
@@ -99,7 +93,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
         let(:log) { FactoryBot.build(:lettings_log, needstype: 2, renewal: 1) }
 
         it "is displayed in tasklist" do
-          expect(property_information.displayed_in_tasklist?(log)).to eq(true)
+          expect(property_information.displayed_in_tasklist?(log)).to be(true)
         end
       end
     end
@@ -108,9 +102,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
       let(:start_date) { Time.utc(2026, 4, 8) }
 
       before do
-        allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-        allow(form).to receive(:start_year_2025_or_later?).and_return(true)
-        allow(form).to receive(:start_year_2026_or_later?).and_return(true)
+        allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true, start_year_2026_or_later?: true)
       end
 
       it "has correct pages" do

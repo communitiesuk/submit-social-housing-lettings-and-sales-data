@@ -240,7 +240,9 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             expect(parser).to be_valid
           end
 
-          xit "instantiates a log with everything completed", aggregate_failures: true do
+          it "instantiates a log with everything completed", :aggregate_failures do
+            skip "Doesn't seem to work. The 2023 parser isn't used any more so not worth fixing"
+
             questions = parser.send(:questions).reject do |q|
               parser.send(:log).optional_fields.include?(q.id) || q.completed?(parser.send(:log))
             end
@@ -2298,7 +2300,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         }
       end
 
-      it "sets value from correct mapping", aggregate_failures: true do
+      it "sets value from correct mapping", :aggregate_failures do
         expect(parser.log.ecstat1).to eq(1)
         expect(parser.log.ecstat2).to eq(2)
         expect(parser.log.ecstat3).to eq(6)
@@ -2324,7 +2326,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         }
       end
 
-      it "sets value from correct mapping", aggregate_failures: true do
+      it "sets value from correct mapping", :aggregate_failures do
         expect(parser.log.relat2).to eq("P")
         expect(parser.log.relat3).to eq("C")
         expect(parser.log.relat4).to eq("X")
@@ -2473,7 +2475,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         let(:attributes) { { bulk_upload:, field_4: 1, field_125: "1" } }
 
         it "sets correct value from mapping" do
-          expect(parser.log.household_charge).to eq(nil)
+          expect(parser.log.household_charge).to be_nil
         end
       end
 

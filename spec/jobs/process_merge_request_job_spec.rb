@@ -31,7 +31,7 @@ describe ProcessMergeRequestJob do
       let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: organisation, merge_date: Time.zone.local(2022, 3, 3), existing_absorbing_organisation: false) }
 
       it "calls the merge organisations service with correct arguments" do
-        expect(Merge::MergeOrganisationsService).to receive(:new).with(absorbing_organisation_id: organisation.id, merging_organisation_ids: match_array([merging_organisation.id, other_merging_organisation.id]), merge_date: Time.zone.local(2022, 3, 3), absorbing_organisation_active_from_merge_date: true)
+        expect(Merge::MergeOrganisationsService).to receive(:new).with(absorbing_organisation_id: organisation.id, merging_organisation_ids: contain_exactly(merging_organisation.id, other_merging_organisation.id), merge_date: Time.zone.local(2022, 3, 3), absorbing_organisation_active_from_merge_date: true)
 
         job.perform(merge_request:)
         expect(merge_request.reload.status).to eq("request_merged")
@@ -53,7 +53,7 @@ describe ProcessMergeRequestJob do
 
       merge_request.reload
       expect(merge_request.last_failed_attempt).to be_within(10.seconds).of(Time.zone.now)
-      expect(merge_request.processing).to eq(false)
+      expect(merge_request.processing).to be(false)
       expect(merge_request.total_users).to be_nil
       expect(merge_request.total_schemes).to be_nil
       expect(merge_request.total_managing_agents).to be_nil

@@ -22,17 +22,17 @@ RSpec.describe "Address Search" do
       visit("/sales-logs/#{sales_log.id}/address-search")
     end
 
-    it "allows searching by a UPRN", js: true do
+    it "allows searching by a UPRN", :js do
       find("#sales-log-uprn-field").click.native.send_keys("1", "0", "0", "3", "3", "5", "4", "4", "6", "1", "4", :down)
       expect(find("#sales-log-uprn-field").value).to eq("10033544614")
     end
 
-    it "allows searching by address", js: true do
+    it "allows searching by address", :js do
       find("#sales-log-uprn-field").click.native.send_keys("S", "W", "1", "5", :down, :enter)
       expect(find("#sales-log-uprn-field").value).to eq("SW15")
     end
 
-    it "displays the placeholder text", js: true do
+    it "displays the placeholder text", :js do
       expect(find("#sales-log-uprn-field")["placeholder"]).to eq("Start typing to search")
     end
 

@@ -17,7 +17,7 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
   end
 
   it "applicable questions doesn't return questions that are hidden in check answers" do
-    expect(component.applicable_questions.map(&:id).include?("retirement_value_check")).to eq(false)
+    expect(component.applicable_questions.map(&:id).include?("retirement_value_check")).to be(false)
   end
 
   it "has the correct answer label for a question" do
@@ -45,7 +45,7 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
   context "when log was not created via a bulk upload and has an unanswered question" do
     let(:log) { create(:lettings_log, :in_progress) }
 
-    it "displays normal copy with muted colour " do
+    it "displays normal copy with muted colour" do
       expect(rendered).to have_link(log.form.get_question("sex1", log).check_answer_prompt, href: "/lettings-logs/#{log.id}/lead-tenant-gender-identity?referrer=check_answers_new_answer", class: "govuk-link govuk-link--no-visited-state")
     end
   end

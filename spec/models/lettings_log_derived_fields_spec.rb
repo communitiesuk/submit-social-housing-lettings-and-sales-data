@@ -96,7 +96,7 @@ RSpec.describe LettingsLog, type: :model do
 
       log.set_derived_fields!
 
-      expect(log.vacdays).to be nil
+      expect(log.vacdays).to be_nil
     end
 
     it "does not derive vacdays if startdate is blank" do
@@ -106,7 +106,7 @@ RSpec.describe LettingsLog, type: :model do
 
       log.set_derived_fields!
 
-      expect(log.vacdays).to be nil
+      expect(log.vacdays).to be_nil
     end
   end
 
@@ -983,7 +983,7 @@ RSpec.describe LettingsLog, type: :model do
     it "when any charge field is set all blank charge fields are set to 0, non-blank fields are left the same" do
       log.set_derived_fields!
       %i[brent scharge pscharge supcharg].each do |field|
-        expect(log[field]).to be nil
+        expect(log[field]).to be_nil
       end
 
       brent_val = 111
@@ -1146,14 +1146,14 @@ RSpec.describe LettingsLog, type: :model do
           log.needstype = 2
           log.set_derived_fields!
 
-          expect(log.prevten).to be nil
+          expect(log.prevten).to be_nil
         end
 
         it "clears prevten if renewal is update to no" do
           log.renewal = 0
           log.set_derived_fields!
 
-          expect(log.prevten).to be nil
+          expect(log.prevten).to be_nil
         end
       end
 
@@ -1174,14 +1174,14 @@ RSpec.describe LettingsLog, type: :model do
           log.needstype = 2
           log.set_derived_fields!
 
-          expect(log.prevten).to be nil
+          expect(log.prevten).to be_nil
         end
 
         it "clears prevten if renewal is update to no" do
           log.renewal = 0
           log.set_derived_fields!
 
-          expect(log.prevten).to be nil
+          expect(log.prevten).to be_nil
         end
       end
     end
@@ -1281,7 +1281,7 @@ RSpec.describe LettingsLog, type: :model do
         end
       end
 
-      context "when rent_type is Specified accommodation " do
+      context "when rent_type is Specified accommodation" do
         let(:rent_type) { 6 }
         let(:expected_unitletas) { 9 }
 
