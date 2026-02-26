@@ -175,6 +175,8 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_2, :string
   attribute :field_3, :string
   attribute :field_4, :integer
+  attribute :field_5, :string
+  attribute :field_6, :string
   attribute :field_7, :integer
   attribute :field_8, :integer
   attribute :field_9, :integer
@@ -183,8 +185,9 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_12, :string
   attribute :field_13, :string
   attribute :field_14, :string
-  attribute :field_5, :string
-  attribute :field_6, :string
+  attribute :field_15, :integer
+  attribute :field_16, :integer
+  attribute :field_17, :integer
   attribute :field_18, :string
   attribute :field_19, :string
   attribute :field_20, :string
@@ -193,10 +196,7 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_23, :string
   attribute :field_24, :string
   attribute :field_25, :string
-  attribute :field_17, :integer
-  attribute :field_16, :integer
   attribute :field_26, :integer
-  attribute :field_27, :integer
   attribute :field_27, :integer
   attribute :field_28, :integer
   attribute :field_29, :integer
@@ -205,45 +205,60 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_32, :integer
   attribute :field_33, :integer
   attribute :field_34, :integer
+  attribute :field_35, :integer
   attribute :field_36, :integer
   attribute :field_37, :integer
   attribute :field_38, :integer
   attribute :field_39, :string
   attribute :field_40, :integer
-  attribute :field_35, :integer
-  attribute :field_15, :integer
   attribute :field_41, :string
   attribute :field_42, :string
+  attribute :field_43, :string
+  attribute :field_44, :string
   attribute :field_45, :integer
   attribute :field_46, :integer
   attribute :field_47, :integer
-  attribute :field_49, :integer
   attribute :field_48, :string
+  attribute :field_49, :integer
   attribute :field_50, :string
+  attribute :field_51, :string
+  attribute :field_52, :string
   attribute :field_53, :integer
-  attribute :field_55, :integer
   attribute :field_54, :string
+  attribute :field_55, :integer
   attribute :field_56, :string
+  attribute :field_57, :string
+  attribute :field_58, :string
   attribute :field_59, :integer
-  attribute :field_61, :integer
   attribute :field_60, :string
+  attribute :field_61, :integer
   attribute :field_62, :string
+  attribute :field_63, :string
+  attribute :field_64, :string
   attribute :field_65, :integer
-  attribute :field_67, :integer
   attribute :field_66, :string
+  attribute :field_67, :integer
   attribute :field_68, :string
+  attribute :field_69, :integer
+  attribute :field_70, :string
   attribute :field_71, :integer
-  attribute :field_73, :integer
   attribute :field_72, :string
+  attribute :field_73, :integer
   attribute :field_74, :string
+  attribute :field_75, :integer
+  attribute :field_76, :string
   attribute :field_77, :integer
-  attribute :field_79, :integer
   attribute :field_78, :string
+  attribute :field_79, :integer
   attribute :field_80, :string
+  attribute :field_81, :integer
+  attribute :field_82, :string
   attribute :field_83, :integer
-  attribute :field_85, :integer
   attribute :field_84, :string
+  attribute :field_85, :integer
   attribute :field_86, :string
+  attribute :field_87, :integer
+  attribute :field_88, :string
   attribute :field_89, :integer
   attribute :field_90, :integer
   attribute :field_91, :integer
@@ -287,6 +302,9 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_129, :integer
   attribute :field_130, :integer
   attribute :field_131, :integer
+  attribute :field_132, :integer
+  attribute :field_133, :integer
+  attribute :field_134, :integer
   attribute :field_135, :integer
   attribute :field_136, :integer
   attribute :field_137, :decimal
@@ -300,27 +318,6 @@ class BulkUpload::Lettings::Year2026::RowParser
   attribute :field_145, :decimal
   attribute :field_146, :integer
   attribute :field_147, :decimal
-
-  attribute :field_43, :string
-  attribute :field_44, :string
-  attribute :field_51, :string
-  attribute :field_52, :string
-  attribute :field_57, :string
-  attribute :field_58, :string
-  attribute :field_63, :string
-  attribute :field_64, :string
-  attribute :field_69, :integer
-  attribute :field_70, :string
-  attribute :field_75, :integer
-  attribute :field_76, :string
-  attribute :field_81, :integer
-  attribute :field_82, :string
-  attribute :field_87, :integer
-  attribute :field_88, :string
-
-  attribute :field_132, :integer
-  attribute :field_133, :integer
-  attribute :field_134, :integer
 
   validate :validate_valid_radio_option, on: :before_log
 
