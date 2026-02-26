@@ -49,6 +49,6 @@ RSpec.describe Form::Sales::Questions::HasServiceChargesChanged, type: :model do
   end
 
   it "has the correct question number" do
-      expect(question.question_number).to eq(0)
+    expect(question.question_number).to eq(0)
   end
 end
