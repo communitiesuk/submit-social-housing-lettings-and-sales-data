@@ -22,7 +22,7 @@ RSpec.describe Form::Sales::Pages::MortgageValueCheck, type: :model do
   end
 
   it "is interruption screen page" do
-    expect(page.interruption_screen?).to eq(true)
+    expect(page.interruption_screen?).to be(true)
   end
 
   it "has correct depends_on" do

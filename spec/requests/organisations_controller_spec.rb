@@ -919,7 +919,7 @@ RSpec.describe OrganisationsController, type: :request do
           get "/organisations/search", headers:, params: { query: "test organisation" }
           result = JSON.parse(response.body)
           expect(result.count).to eq(3)
-          expect(result.keys).to match_array([user.organisation.id.to_s, parent_organisation.id.to_s, child_organisation.id.to_s])
+          expect(result.keys).to contain_exactly(user.organisation.id.to_s, parent_organisation.id.to_s, child_organisation.id.to_s)
         end
       end
     end
@@ -1822,8 +1822,8 @@ RSpec.describe OrganisationsController, type: :request do
 
           it "deactivates associated users" do
             user_to_update.reload
-            expect(user_to_update.active).to eq(false)
-            expect(user_to_update.reactivate_with_organisation).to eq(true)
+            expect(user_to_update.active).to be(false)
+            expect(user_to_update.reactivate_with_organisation).to be(true)
           end
         end
 
@@ -1857,9 +1857,9 @@ RSpec.describe OrganisationsController, type: :request do
           it "reactivates users deactivated with organisation" do
             user_to_reactivate.reload
             user_not_to_reactivate.reload
-            expect(user_to_reactivate.active).to eq(true)
-            expect(user_to_reactivate.reactivate_with_organisation).to eq(false)
-            expect(user_not_to_reactivate.active).to eq(false)
+            expect(user_to_reactivate.active).to be(true)
+            expect(user_to_reactivate.reactivate_with_organisation).to be(false)
+            expect(user_not_to_reactivate.active).to be(false)
           end
 
           it "sends invitation emails" do
@@ -2008,13 +2008,13 @@ RSpec.describe OrganisationsController, type: :request do
         it "deletes the organisation and related resources" do
           organisation.reload
           expect(organisation.status).to eq(:deleted)
-          expect(organisation.discarded_at).not_to be nil
+          expect(organisation.discarded_at).not_to be_nil
           expect(location.reload.status).to eq(:deleted)
-          expect(location.discarded_at).not_to be nil
+          expect(location.discarded_at).not_to be_nil
           expect(scheme.reload.status).to eq(:deleted)
-          expect(scheme.discarded_at).not_to be nil
+          expect(scheme.discarded_at).not_to be_nil
           expect(org_user.reload.status).to eq(:deleted)
-          expect(org_user.discarded_at).not_to be nil
+          expect(org_user.discarded_at).not_to be_nil
         end
 
         it "redirects to the organisations list and displays a notice that the organisation has been deleted" do
@@ -2059,7 +2059,7 @@ RSpec.describe OrganisationsController, type: :request do
             get lettings_logs_organisation_path(organisation)
           end
 
-          it "does not show the delete logs button " do
+          it "does not show the delete logs button" do
             expect(page).not_to have_link "Delete logs"
           end
 
@@ -2294,7 +2294,7 @@ RSpec.describe OrganisationsController, type: :request do
           get "/organisations/search", headers:, params: { query: "test organisation" }
           result = JSON.parse(response.body)
           expect(result.count).to eq(4)
-          expect(result.keys).to match_array([user.organisation.id.to_s, parent_organisation.id.to_s, child_organisation.id.to_s, other_organisation.id.to_s])
+          expect(result.keys).to contain_exactly(user.organisation.id.to_s, parent_organisation.id.to_s, child_organisation.id.to_s, other_organisation.id.to_s)
         end
       end
     end

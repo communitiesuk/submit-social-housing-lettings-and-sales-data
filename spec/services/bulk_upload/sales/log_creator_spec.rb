@@ -18,10 +18,7 @@ RSpec.describe BulkUpload::Sales::LogCreator do
   before do
     allow("BulkUpload::Sales::Year#{year}::CsvParser".constantize).to receive(:new).and_return(csv_parser)
     allow(csv_parser).to receive(:row_parsers).and_return([row_parser])
-    allow(row_parser).to receive(:log).and_return(log)
-    allow(row_parser).to receive(:bulk_upload=).and_return(true)
-    allow(row_parser).to receive(:valid?).and_return(true)
-    allow(row_parser).to receive(:blank_row?).and_return(false)
+    allow(row_parser).to receive_messages(log: log, 'bulk_upload=': true, valid?: true, blank_row?: false)
   end
 
   it "creates a parser for the correct year" do
@@ -165,7 +162,7 @@ RSpec.describe BulkUpload::Sales::LogCreator do
         log = SalesLog.last
         expect(log.age1).to be(30)
         expect(log.ecstat1).to be(5)
-        expect(log.retirement_value_check).to be(nil)
+        expect(log.retirement_value_check).to be_nil
       end
     end
   end

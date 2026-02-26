@@ -44,7 +44,8 @@ module QuestionViewHelper
   def select_option_name(value)
     return value.service_name if value.respond_to?(:service_name)
     return value["name"] if value.is_a?(Hash) && value["name"].present?
-    return value["postcode"] if value.is_a?(Location)
+
+    value["postcode"] if value.is_a?(Location)
   end
 
 private

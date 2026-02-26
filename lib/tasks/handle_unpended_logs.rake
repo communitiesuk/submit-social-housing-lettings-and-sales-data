@@ -6,7 +6,7 @@ task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, args|
   query = "SELECT \"versions\".* FROM \"versions\" WHERE \"versions\".\"item_type\" = 'LettingsLog' AND whodunnit is null AND ((object_changes like '%status:\n- 3\n- 1%') OR (object_changes like '%status:\n- 3\n- 2%'))"
   results = pg.execute(query)
 
-  duplicate_log_attributes = %w[owning_organisation_id tenancycode startdate age1_known age1 sex1 ecstat1 tcharge household_charge chcharge]
+  duplicate_log_attributes = %w[owning_organisation_id tenancycode startdate age1_known age1 sex1 sexrab1 ecstat1 tcharge household_charge chcharge]
 
   seen = [].to_set
 
@@ -41,14 +41,14 @@ task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, args|
       # This is the normal query for duplicates but without the check that the logs are visible (i.e. not deleted/pending)
       duplicates = LettingsLog.where.not(id: log.id)
                               .where.not(startdate: nil)
-                              .where.not(sex1: nil)
+                              .sex1_answered
                               .where.not(ecstat1: nil)
                               .where.not(needstype: nil)
                               .age1_answered
                               .tcharge_answered
                               .chcharge_answered
-                              .location_for_log_answered(log)
-                              .postcode_for_log_answered(log)
+                              .location_for_log_answered_as(log)
+                              .address_for_log_answered_as(log)
                               .where(log.slice(*duplicate_log_attributes))
 
       duplicate_count = duplicates.length
@@ -62,13 +62,13 @@ task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, args|
       visible_duplicates = duplicates.where(status: %w[in_progress completed])
       deleted_duplicates = duplicates.where(status: %w[deleted])
 
-      if visible_duplicates.length.zero? && deleted_duplicates.any? { |dup| dup.discarded_at > result["created_at"] }
+      if visible_duplicates.empty? && deleted_duplicates.any? { |dup| dup.discarded_at > result["created_at"] }
         seen.add(id)
         csv << [id, log.collection_start_year, log.status, log.owning_organisation_name, log.assigned_to_id, log.assigned_to.email, "Leave", "Log has no visible duplicates and at least one duplicate has been deleted since being affected"]
         next
       end
 
-      if visible_duplicates.length.zero?
+      if visible_duplicates.empty?
         seen.add(id)
         csv << [id, log.collection_start_year, log.status, log.owning_organisation_name, log.assigned_to_id, log.assigned_to.email, "Leave", "Log has no visible duplicates"]
         next

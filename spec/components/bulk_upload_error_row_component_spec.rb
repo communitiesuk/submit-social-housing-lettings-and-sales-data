@@ -46,7 +46,7 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
     end
 
     context "when the bulk upload is for 2024" do
-      context "with  a lettings bulk upload" do
+      context "with a lettings bulk upload" do
         let(:bulk_upload) { build(:bulk_upload, :lettings, year: 2024) }
         let(:field) { :field_130 }
 

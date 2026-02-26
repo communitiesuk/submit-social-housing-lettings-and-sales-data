@@ -51,8 +51,8 @@ RSpec.describe Form::Sales::Questions::OutrightOwnershipType, type: :model do
       end
 
       it "is at the top" do
-        expect(question.top_guidance?).to eq(true)
-        expect(question.bottom_guidance?).to eq(false)
+        expect(question.top_guidance?).to be(true)
+        expect(question.bottom_guidance?).to be(false)
       end
     end
 
@@ -60,11 +60,11 @@ RSpec.describe Form::Sales::Questions::OutrightOwnershipType, type: :model do
       let(:start_date) { Time.zone.local(2022, 4, 8) }
 
       it "does not display a top guidance partial" do
-        expect(question.top_guidance_partial).to eq(nil)
+        expect(question.top_guidance_partial).to be_nil
       end
 
       it "does not display a bottom guidance partial" do
-        expect(question.bottom_guidance_partial).to eq(nil)
+        expect(question.bottom_guidance_partial).to be_nil
       end
     end
   end

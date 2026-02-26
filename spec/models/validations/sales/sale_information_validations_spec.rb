@@ -976,7 +976,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
     let(:saledate) { current_collection_start_date }
 
-    context "when MORTGAGE + DEPOSIT does not equal VALUE * EQUITY/100 " do
+    context "when MORTGAGE + DEPOSIT does not equal VALUE * EQUITY/100" do
       context "and it is not a staircase transaction" do
         before do
           record.staircase = 2
@@ -1076,7 +1076,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         record.mortgageused = 2
       end
 
-      context "when DEPOSIT does not equal VALUE * EQUITY/100 " do
+      context "when DEPOSIT does not equal VALUE * EQUITY/100" do
         context "and it is not a staircase transaction" do
           before do
             record.staircase = 2

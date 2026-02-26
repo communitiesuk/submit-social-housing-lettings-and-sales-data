@@ -32,7 +32,7 @@ class LocationPolicy
 
   def delete?
     return false unless user.support?
-    return false unless location.status == :incomplete || location.status == :deactivated
+    return false unless %i[incomplete deactivated].include?(location.status)
 
     !has_any_logs_in_editable_collection_period
   end

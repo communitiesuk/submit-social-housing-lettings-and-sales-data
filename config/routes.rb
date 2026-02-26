@@ -301,7 +301,7 @@ Rails.application.routes.draw do
       get "review", to: "form#review"
     end
 
-    FormHandler.instance.lettings_forms.each do |_key, form|
+    FormHandler.instance.lettings_forms.each_value do |form|
       form.pages.map do |page|
         get page.id.to_s.dasherize, to: "form#show_page"
         post page.id.to_s.dasherize, to: "form#submit_form"
@@ -377,7 +377,7 @@ Rails.application.routes.draw do
       get "review", to: "form#review"
     end
 
-    FormHandler.instance.sales_forms.each do |_key, form|
+    FormHandler.instance.sales_forms.each_value do |form|
       form.pages.map do |page|
         get page.id.to_s.dasherize, to: "form#show_page"
         post page.id.to_s.dasherize, to: "form#submit_form"

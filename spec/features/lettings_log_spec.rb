@@ -398,7 +398,7 @@ RSpec.describe "Lettings Log Features" do
       rows = page.find_all "tbody tr"
       expect(rows.count).to be 2
       id_to_delete, id_to_keep = rows.map { |row| row.first("td").text.to_i }
-      expect([id_to_delete, id_to_keep]).to match_array [lettings_log_1.id, lettings_log_2.id]
+      expect([id_to_delete, id_to_keep]).to contain_exactly(lettings_log_1.id, lettings_log_2.id)
       check "forms-delete-logs-form-selected-ids-#{id_to_delete}-field"
       uncheck "forms-delete-logs-form-selected-ids-#{id_to_keep}-field"
       click_button "Continue"
@@ -413,13 +413,13 @@ RSpec.describe "Lettings Log Features" do
       expect(page.find("article.app-log-summary h2").text).to eq "Log #{id_to_keep}"
       deleted_log = LettingsLog.find(id_to_delete)
       expect(deleted_log.status).to eq "deleted"
-      expect(deleted_log.discarded_at).not_to be nil
+      expect(deleted_log.discarded_at).not_to be_nil
     end
 
     context "when visiting the bulk uploads page" do
       let(:bulk_upload_errors) { create_list(:bulk_upload_error, 2, category: nil) }
       let(:bulk_upload) { create(:bulk_upload, :lettings, user: support_user, bulk_upload_errors:, total_logs_count: 10) }
-      let(:mock_storage_service) { instance_double("S3Service") }
+      let(:mock_storage_service) { instance_double(Storage::S3Service) }
 
       before do
         allow(Storage::S3Service).to receive(:new).and_return(mock_storage_service)

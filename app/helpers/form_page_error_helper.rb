@@ -5,7 +5,7 @@ module FormPageErrorHelper
   end
 
   def remove_duplicate_page_errors(lettings_log)
-    lettings_log.errors.group_by(&:message).each do |_, errors|
+    lettings_log.errors.group_by(&:message).each_value do |errors|
       next if errors.size == 1
 
       errors.shift

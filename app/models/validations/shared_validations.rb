@@ -56,11 +56,11 @@ module Validations::SharedValidations
 
       next unless incorrect_accuracy
 
-      case question.step
-      when 0.01 then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_hundredth", field:)
-      when 0.1 then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_tenth", field:)
-      when 1 then record.errors.add question.id.to_sym, :not_integer, message: I18n.t("validations.shared.numeric.whole_number", field:)
-      when 10 then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_ten", field:)
+      case question.step.to_d
+      when BigDecimal("0.01") then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_hundredth", field:)
+      when BigDecimal("0.1") then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_tenth", field:)
+      when BigDecimal("1") then record.errors.add question.id.to_sym, :not_integer, message: I18n.t("validations.shared.numeric.whole_number", field:)
+      when BigDecimal("10") then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_ten", field:)
       else
         record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_step", field:, step: question.step)
       end
