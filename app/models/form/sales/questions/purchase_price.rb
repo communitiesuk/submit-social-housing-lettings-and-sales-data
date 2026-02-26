@@ -30,6 +30,7 @@ class Form::Sales::Questions::PurchasePrice < ::Form::Question
 
   def top_guidance_partial
     return "financial_calculations_discounted_ownership" if @ownership_sch == 2
-    return "financial_calculations_outright_sale" if @ownership_sch == 3
+
+    "financial_calculations_outright_sale" if @ownership_sch == 3
   end
 end

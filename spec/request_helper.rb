@@ -100,8 +100,8 @@ module RequestHelper
     template = Addressable::Template.new "https://api.os.uk/search/places/v1/find?key=OS_DATA_KEY&maxresults=10&minmatch=0.4&query={+address_query}"
     WebMock.stub_request(:get, template)
       .to_return do |request|
-      address = request.uri.query_values["query"].split(",")
-      { status: 200, body: { results: [{ DPA: { MATCH: 0.9, BUILDING_NAME: "result #{address[0]}", POST_TOWN: "result town or city", POSTCODE: address[1], UPRN: "1" } }] }.to_json, headers: {} }
+        address = request.uri.query_values["query"].split(",")
+        { status: 200, body: { results: [{ DPA: { MATCH: 0.9, BUILDING_NAME: "result #{address[0]}", POST_TOWN: "result town or city", POSTCODE: address[1], UPRN: "1" } }] }.to_json, headers: {} }
     end
   end
 

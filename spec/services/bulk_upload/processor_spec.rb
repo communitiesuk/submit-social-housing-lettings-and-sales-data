@@ -72,7 +72,7 @@ RSpec.describe BulkUpload::Processor do
       end
 
       it "sends failure email" do
-        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+        mail_double = instance_double(ActionMailer::MessageDelivery, deliver_later: nil)
 
         allow(BulkUploadMailer).to receive(:send_bulk_upload_failed_service_error_mail).and_return(mail_double)
 
@@ -107,7 +107,7 @@ RSpec.describe BulkUpload::Processor do
       end
 
       it "sends failure email" do
-        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+        mail_double = instance_double(ActionMailer::MessageDelivery, deliver_later: nil)
 
         allow(BulkUploadMailer).to receive(:send_bulk_upload_failed_service_error_mail).and_return(mail_double)
 
@@ -138,7 +138,7 @@ RSpec.describe BulkUpload::Processor do
       end
 
       it "sends setup failure email" do
-        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+        mail_double = instance_double(ActionMailer::MessageDelivery, deliver_later: nil)
 
         allow(BulkUploadMailer).to receive(:send_bulk_upload_failed_file_setup_error_mail).and_return(mail_double)
 
@@ -155,7 +155,7 @@ RSpec.describe BulkUpload::Processor do
       end
 
       it "sends success email" do
-        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+        mail_double = instance_double(ActionMailer::MessageDelivery, deliver_later: nil)
 
         allow(BulkUploadMailer).to receive(:send_bulk_upload_complete_mail).and_return(mail_double)
 
@@ -170,8 +170,7 @@ RSpec.describe BulkUpload::Processor do
       let(:log) { build(:lettings_log, :setup_completed, assigned_to: user) }
 
       before do
-        allow(mock_validator).to receive(:block_log_creation_reason).and_return(nil)
-        allow(mock_validator).to receive(:soft_validation_errors_only?).and_return(false)
+        allow(mock_validator).to receive_messages(block_log_creation_reason: nil, soft_validation_errors_only?: false)
         allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
       end
 
@@ -180,7 +179,7 @@ RSpec.describe BulkUpload::Processor do
       end
 
       it "sends how_to_fix_upload_mail" do
-        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+        mail_double = instance_double(ActionMailer::MessageDelivery, deliver_later: nil)
 
         allow(BulkUploadMailer).to receive(:send_how_to_fix_upload_mail).and_return(mail_double)
 
@@ -203,8 +202,7 @@ RSpec.describe BulkUpload::Processor do
 
     context "when a bulk upload has logs with only soft validations triggered" do
       before do
-        allow(mock_validator).to receive(:block_log_creation_reason).and_return(nil)
-        allow(mock_validator).to receive(:soft_validation_errors_only?).and_return(true)
+        allow(mock_validator).to receive_messages(block_log_creation_reason: nil, soft_validation_errors_only?: true)
         allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
       end
 
@@ -213,10 +211,9 @@ RSpec.describe BulkUpload::Processor do
       end
 
       it "sends check_soft_validations_mail" do
-        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+        mail_double = instance_double(ActionMailer::MessageDelivery, deliver_later: nil)
 
-        allow(BulkUploadMailer).to receive(:send_check_soft_validations_mail).and_return(mail_double)
-        allow(BulkUploadMailer).to receive(:send_how_to_fix_upload_mail).and_return(mail_double)
+        allow(BulkUploadMailer).to receive_messages(send_check_soft_validations_mail: mail_double, send_how_to_fix_upload_mail: mail_double)
 
         processor.call
 
@@ -249,7 +246,7 @@ RSpec.describe BulkUpload::Processor do
       end
 
       it "sends correct_and_upload_again_mail" do
-        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+        mail_double = instance_double(ActionMailer::MessageDelivery, deliver_later: nil)
 
         allow(BulkUploadMailer).to receive(:send_correct_and_upload_again_mail).and_return(mail_double)
 
@@ -273,7 +270,7 @@ RSpec.describe BulkUpload::Processor do
       end
 
       it "sends correct_and_upload_again_mail" do
-        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+        mail_double = instance_double(ActionMailer::MessageDelivery, deliver_later: nil)
 
         allow(BulkUploadMailer).to receive(:send_correct_duplicates_and_upload_again_mail).and_return(mail_double)
 

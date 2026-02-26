@@ -73,7 +73,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
     let(:log) { FactoryBot.build(:sales_log, ownershipsch: 1, staircase: 2) }
 
     it "is displayed in tasklist" do
-      expect(shared_ownership_initial_purchase.displayed_in_tasklist?(log)).to eq(true)
+      expect(shared_ownership_initial_purchase.displayed_in_tasklist?(log)).to be(true)
     end
   end
 
@@ -81,7 +81,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
     let(:log) { FactoryBot.build(:sales_log, ownershipsch: 2, staircase: 2) }
 
     it "is displayed in tasklist" do
-      expect(shared_ownership_initial_purchase.displayed_in_tasklist?(log)).to eq(false)
+      expect(shared_ownership_initial_purchase.displayed_in_tasklist?(log)).to be(false)
     end
   end
 
@@ -89,7 +89,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
     let(:log) { FactoryBot.build(:sales_log, ownershipsch: 1, staircase: 1) }
 
     it "is displayed in tasklist" do
-      expect(shared_ownership_initial_purchase.displayed_in_tasklist?(log)).to eq(false)
+      expect(shared_ownership_initial_purchase.displayed_in_tasklist?(log)).to be(false)
     end
   end
 end

@@ -32,7 +32,9 @@ Redis.silence_deprecations = true
 
 Sidekiq.configure_server do |config|
   config.on(:startup) do
+    # rubocop:disable Rails/FindEach
     Sidekiq::Cron::Job.all.each(&:destroy)
+    # rubocop:enable Rails/FindEach
     unless FeatureToggle.service_moved? || FeatureToggle.service_unavailable?
       Sidekiq::Cron::Job.load_from_hash YAML.load_file("config/sidekiq_cron_schedule.yml")
     end

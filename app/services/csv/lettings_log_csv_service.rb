@@ -398,12 +398,14 @@ module Csv
 
     def label_if_boolean_value(value)
       return "Yes" if value == true
-      return "No" if value == false
+
+      "No" if value == false
     end
 
     def conventional_yes_no_label(value)
       return "Yes" if value == 1
-      return "No" if value&.zero?
+
+      "No" if value&.zero?
     end
   end
 end

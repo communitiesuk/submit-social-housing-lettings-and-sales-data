@@ -50,9 +50,7 @@ RSpec.describe Csv::LettingsLogCsvService do
       before do
         allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
         allow(form_handler_mock).to receive(:form_name_from_start_year)
-        allow(form_handler_mock).to receive(:get_form).and_return(lettings_form)
-        allow(form_handler_mock).to receive(:ordered_questions_for_year).and_return(lettings_form.questions)
-        allow(form_handler_mock).to receive(:lettings_in_crossover_period?).and_return(true)
+        allow(form_handler_mock).to receive_messages(get_form: lettings_form, ordered_questions_for_year: lettings_form.questions, lettings_in_crossover_period?: true)
       end
 
       it "calls the form handler to get all questions for the specified year" do
@@ -241,7 +239,6 @@ RSpec.describe Csv::LettingsLogCsvService do
             hhmemb: 4,
             age1_known: 0,
             age1: 35,
-            sex1: "F",
             sexrab1: "F",
             gender_same_as_sex1: 1,
             ethnic_group: 0,
@@ -252,7 +249,6 @@ RSpec.describe Csv::LettingsLogCsvService do
             relat2: "P",
             age2_known: 0,
             age2: 32,
-            sex2: "M",
             sexrab2: "M",
             gender_same_as_sex2: 2,
             gender_description2: "Non-binary",
@@ -261,7 +257,6 @@ RSpec.describe Csv::LettingsLogCsvService do
             details_known_4: 0,
             relat4: "R",
             age4_known: 1,
-            sex4: "R",
             sexrab4: "R",
             gender_same_as_sex4: 3,
             ecstat4: 10,

@@ -12,7 +12,7 @@ RSpec.describe Form::Lettings::Pages::PersonOverRetirementValueCheck, type: :mod
   end
 
   it "has the correct description" do
-    expect(page.description).to be nil
+    expect(page.description).to be_nil
   end
 
   it "has correct questions" do

@@ -138,7 +138,7 @@ RSpec.describe OrganisationsController, type: :request do
                                    .find(organisation.id)
                                    .organisation_rent_periods
 
-        expect(rent_periods.map(&:rent_period).map(&:to_s)).to match_array([period_to_create, period_to_not_delete])
+        expect(rent_periods.map(&:rent_period).map(&:to_s)).to contain_exactly(period_to_create, period_to_not_delete)
       end
     end
   end

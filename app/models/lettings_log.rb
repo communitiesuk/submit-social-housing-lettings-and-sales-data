@@ -520,7 +520,7 @@ class LettingsLog < Log
   def is_london_rent?
     # 2: London Affordable Rent
     # 4: London Living Rent
-    rent_type == 2 || rent_type == 4
+    [2, 4].include?(rent_type)
   end
 
   def previous_tenancy_was_foster_care?
@@ -725,7 +725,7 @@ class LettingsLog < Log
   end
 
   def has_any_person_details?(person_index)
-    ["sex#{person_index}", "relat#{person_index}", "ecstat#{person_index}"].any? { |field| public_send(field).present? } || public_send("age#{person_index}_known") == 1
+    ["sex#{person_index}", "sexrab#{person_index}", "relat#{person_index}", "ecstat#{person_index}"].any? { |field| public_send(field).present? } || public_send("age#{person_index}_known") == 1
   end
 
   def details_not_known_for_person?(person_index)
@@ -754,7 +754,7 @@ class LettingsLog < Log
   end
 
   def affordable_or_social_rent?
-    renttype == 1 || renttype == 2
+    [1, 2].include?(renttype)
   end
 
   def no_or_unknown_other_housing_needs?
@@ -951,6 +951,10 @@ private
     [sex1, sex2, sex3, sex4, sex5, sex6, sex7, sex8].any?("R")
   end
 
+  def sexrab_refused?
+    [sexrab1, sexrab2, sexrab3, sexrab4, sexrab5, sexrab6, sexrab7, sexrab8].any?("R")
+  end
+
   def relat_refused?
     [relat2, relat3, relat4, relat5, relat6, relat7, relat8].any?("R")
   end
@@ -967,7 +971,7 @@ private
     num_of_weeks = NUM_OF_WEEKS_FROM_PERIOD[period]
     return "" unless value && num_of_weeks
 
-    format_as_currency((value * 52 / num_of_weeks))
+    format_as_currency(value * 52 / num_of_weeks)
   end
 
   def fully_wheelchair_accessible?

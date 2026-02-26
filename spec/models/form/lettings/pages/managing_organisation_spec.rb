@@ -24,7 +24,7 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
   end
 
   it "has the correct depends_on" do
-    expect(page.depends_on).to be nil
+    expect(page.depends_on).to be_nil
   end
 
   describe "#routed_to?" do
@@ -33,7 +33,7 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
 
     context "when user nil" do
       it "is not shown" do
-        expect(page.routed_to?(log, nil)).to eq(false)
+        expect(page.routed_to?(log, nil)).to be(false)
       end
     end
 
@@ -45,7 +45,7 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
         let(:log) { create(:lettings_log, owning_organisation: user.organisation) }
 
         it "is shown" do
-          expect(page.routed_to?(log, user)).to eq(true)
+          expect(page.routed_to?(log, user)).to be(true)
         end
       end
 
@@ -54,7 +54,7 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
         let(:log) { create(:lettings_log, owning_organisation: nil) }
 
         it "is not shown" do
-          expect(page.routed_to?(log, user)).to eq(false)
+          expect(page.routed_to?(log, user)).to be(false)
         end
       end
 
@@ -65,7 +65,7 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
 
         context "with 0 managing_agents" do
           it "is not shown" do
-            expect(page.routed_to?(log, user)).to eq(false)
+            expect(page.routed_to?(log, user)).to be(false)
           end
         end
 
@@ -76,7 +76,7 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
           end
 
           it "is shown" do
-            expect(page.routed_to?(log, user)).to eq(true)
+            expect(page.routed_to?(log, user)).to be(true)
           end
         end
 
@@ -92,7 +92,7 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
           end
 
           it "is shown" do
-            expect(page.routed_to?(log, user)).to eq(true)
+            expect(page.routed_to?(log, user)).to be(true)
           end
         end
       end
@@ -106,7 +106,7 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
           let(:log) { create(:lettings_log, owning_organisation: user.organisation) }
 
           it "is shown" do
-            expect(page.routed_to?(log, user)).to eq(true)
+            expect(page.routed_to?(log, user)).to be(true)
           end
         end
 
@@ -119,7 +119,7 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
           end
 
           it "is not shown" do
-            expect(page.routed_to?(log, user)).to eq(false)
+            expect(page.routed_to?(log, user)).to be(false)
           end
         end
       end
@@ -131,7 +131,7 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
 
         context "with 0 managing_agents" do
           it "is not shown" do
-            expect(page.routed_to?(log, user)).to eq(false)
+            expect(page.routed_to?(log, user)).to be(false)
           end
         end
 
@@ -142,7 +142,7 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
           end
 
           it "is shown" do
-            expect(page.routed_to?(log, user)).to eq(true)
+            expect(page.routed_to?(log, user)).to be(true)
           end
         end
 
@@ -158,7 +158,7 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
           end
 
           it "is shown" do
-            expect(page.routed_to?(log, user)).to eq(true)
+            expect(page.routed_to?(log, user)).to be(true)
           end
         end
       end

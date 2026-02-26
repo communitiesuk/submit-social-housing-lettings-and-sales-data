@@ -7,9 +7,9 @@ RSpec.describe Exports::ExportService do
   let(:expected_master_manifest_filename) { "Manifest_2022_05_01_0001.csv" }
   let(:start_time) { Time.zone.local(2022, 5, 1) }
   let(:user) { FactoryBot.create(:user, email: "test1@example.com") }
-  let(:organisations_export_service) { instance_double("Exports::OrganisationExportService", export_xml_organisations: {}) }
-  let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: {}) }
-  let(:sales_logs_export_service) { instance_double("Exports::SalesLogExportService", export_xml_sales_logs: {}) }
+  let(:organisations_export_service) { instance_double(Exports::OrganisationExportService, export_xml_organisations: {}) }
+  let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: {}) }
+  let(:sales_logs_export_service) { instance_double(Exports::SalesLogExportService, export_xml_sales_logs: {}) }
 
   before do
     Timecop.freeze(start_time)
@@ -29,7 +29,7 @@ RSpec.describe Exports::ExportService do
     let(:start_time) { Time.zone.local(2022, 5, 1) }
 
     context "and no lettings archives get created in lettings logs export" do
-      let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: {}) }
+      let(:lettings_logs_export_service) { instance_double(Exports::LettingsLogExportService, export_xml_lettings_logs: {}) }
 
       context "and no user or organisation archives get created in user export" do
         it "generates a master manifest with the correct name" do
@@ -48,7 +48,7 @@ RSpec.describe Exports::ExportService do
       end
 
       context "and one user archive gets created in user export" do
-        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time }) }
+        let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: { "some_user_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -66,7 +66,7 @@ RSpec.describe Exports::ExportService do
       end
 
       context "and one organisation archive gets created in organisation export" do
-        let(:organisations_export_service) { instance_double("Exports::OrganisationExportService", export_xml_organisations: { "some_organisation_file_base_name" => start_time }) }
+        let(:organisations_export_service) { instance_double(Exports::OrganisationExportService, export_xml_organisations: { "some_organisation_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -84,8 +84,8 @@ RSpec.describe Exports::ExportService do
       end
 
       context "and user and organisation archive gets created in organisation export" do
-        let(:organisations_export_service) { instance_double("Exports::OrganisationExportService", export_xml_organisations: { "some_organisation_file_base_name" => start_time }) }
-        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time }) }
+        let(:organisations_export_service) { instance_double(Exports::OrganisationExportService, export_xml_organisations: { "some_organisation_file_base_name" => start_time }) }
+        let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: { "some_user_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -104,7 +104,7 @@ RSpec.describe Exports::ExportService do
     end
 
     context "and one lettings archive gets created in lettings logs export" do
-      let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: { "some_file_base_name" => start_time }) }
+      let(:lettings_logs_export_service) { instance_double(Exports::LettingsLogExportService, export_xml_lettings_logs: { "some_file_base_name" => start_time }) }
 
       context "and no user archives get created in user export" do
         it "generates a master manifest with the correct name" do
@@ -123,7 +123,7 @@ RSpec.describe Exports::ExportService do
       end
 
       context "and one user archive gets created in user export" do
-        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time }) }
+        let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: { "some_user_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -142,7 +142,7 @@ RSpec.describe Exports::ExportService do
     end
 
     context "and multiple lettings archives get created in lettings logs export" do
-      let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: { "some_file_base_name" => start_time, "second_file_base_name" => start_time }) }
+      let(:lettings_logs_export_service) { instance_double(Exports::LettingsLogExportService, export_xml_lettings_logs: { "some_file_base_name" => start_time, "second_file_base_name" => start_time }) }
 
       context "and no user archives get created in user export" do
         it "generates a master manifest with the correct name" do
@@ -161,7 +161,7 @@ RSpec.describe Exports::ExportService do
       end
 
       context "and multiple user archive gets created in user export" do
-        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time, "second_user_file_base_name" => start_time }) }
+        let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: { "some_user_file_base_name" => start_time, "second_user_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -179,8 +179,8 @@ RSpec.describe Exports::ExportService do
       end
 
       context "and multiple user and organisation archives gets created in user export" do
-        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time, "second_user_file_base_name" => start_time }) }
-        let(:organisations_export_service) { instance_double("Exports::OrganisationExportService", export_xml_organisations: { "some_organisation_file_base_name" => start_time, "second_organisation_file_base_name" => start_time }) }
+        let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: { "some_user_file_base_name" => start_time, "second_user_file_base_name" => start_time }) }
+        let(:organisations_export_service) { instance_double(Exports::OrganisationExportService, export_xml_organisations: { "some_organisation_file_base_name" => start_time, "second_organisation_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -199,8 +199,8 @@ RSpec.describe Exports::ExportService do
     end
 
     context "and multiple sales archives get created in sales logs export" do
-      let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: { "some_file_base_name" => start_time, "second_file_base_name" => start_time }) }
-      let(:sales_logs_export_service) { instance_double("Exports::SalesLogExportService", export_xml_sales_logs: { "some_sales_file_base_name" => start_time, "second_sales_file_base_name" => start_time }) }
+      let(:lettings_logs_export_service) { instance_double(Exports::LettingsLogExportService, export_xml_lettings_logs: { "some_file_base_name" => start_time, "second_file_base_name" => start_time }) }
+      let(:sales_logs_export_service) { instance_double(Exports::SalesLogExportService, export_xml_sales_logs: { "some_sales_file_base_name" => start_time, "second_sales_file_base_name" => start_time }) }
 
       context "and no user archives get created in user export" do
         it "generates a master manifest with the correct name" do
@@ -219,7 +219,7 @@ RSpec.describe Exports::ExportService do
       end
 
       context "and multiple user archive gets created in user export" do
-        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time, "second_user_file_base_name" => start_time }) }
+        let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: { "some_user_file_base_name" => start_time, "second_user_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -237,8 +237,8 @@ RSpec.describe Exports::ExportService do
       end
 
       context "and multiple user and organisation archives gets created in user export" do
-        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time, "second_user_file_base_name" => start_time }) }
-        let(:organisations_export_service) { instance_double("Exports::OrganisationExportService", export_xml_organisations: { "some_organisation_file_base_name" => start_time, "second_organisation_file_base_name" => start_time }) }
+        let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: { "some_user_file_base_name" => start_time, "second_user_file_base_name" => start_time }) }
+        let(:organisations_export_service) { instance_double(Exports::OrganisationExportService, export_xml_organisations: { "some_organisation_file_base_name" => start_time, "second_organisation_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -259,10 +259,10 @@ RSpec.describe Exports::ExportService do
 
   context "when exporting specific lettings log collection" do
     context "and no lettings archives get created in lettings logs export" do
-      let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: {}) }
+      let(:lettings_logs_export_service) { instance_double(Exports::LettingsLogExportService, export_xml_lettings_logs: {}) }
 
       context "and user archive gets created in user export" do
-        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time }) }
+        let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: { "some_user_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -281,10 +281,10 @@ RSpec.describe Exports::ExportService do
     end
 
     context "and lettings archive gets created in lettings logs export" do
-      let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: { "some_file_base_name" => start_time }) }
+      let(:lettings_logs_export_service) { instance_double(Exports::LettingsLogExportService, export_xml_lettings_logs: { "some_file_base_name" => start_time }) }
 
       context "and user archive gets created in user export" do
-        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time }) }
+        let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: { "some_user_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -306,7 +306,7 @@ RSpec.describe Exports::ExportService do
   context "when exporting user collection" do
     context "and no user archives get created in users export" do
       context "and lettings log archive gets created in lettings logs export" do
-        let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: { "some_file_base_name" => start_time }) }
+        let(:lettings_logs_export_service) { instance_double(Exports::LettingsLogExportService, export_xml_lettings_logs: { "some_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -325,10 +325,10 @@ RSpec.describe Exports::ExportService do
     end
 
     context "and users archive gets created in users export" do
-      let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: { "some_file_base_name" => start_time }) }
+      let(:lettings_logs_export_service) { instance_double(Exports::LettingsLogExportService, export_xml_lettings_logs: { "some_file_base_name" => start_time }) }
 
       context "and lettings log archive gets created in lettings log export" do
-        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time }) }
+        let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: { "some_user_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -349,10 +349,10 @@ RSpec.describe Exports::ExportService do
 
   context "when exporting organisation collection" do
     context "and no organisation archives get created in organisations export" do
-      let(:organisations_export_service) { instance_double("Exports::OrganisationExportService", export_xml_organisations: {}) }
+      let(:organisations_export_service) { instance_double(Exports::OrganisationExportService, export_xml_organisations: {}) }
 
       context "and lettings log archive gets created in lettings logs export" do
-        let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: { "some_file_base_name" => start_time }) }
+        let(:lettings_logs_export_service) { instance_double(Exports::LettingsLogExportService, export_xml_lettings_logs: { "some_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -371,10 +371,10 @@ RSpec.describe Exports::ExportService do
     end
 
     context "and organisations archive gets created in organisations export" do
-      let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: { "some_file_base_name" => start_time }) }
+      let(:lettings_logs_export_service) { instance_double(Exports::LettingsLogExportService, export_xml_lettings_logs: { "some_file_base_name" => start_time }) }
 
       context "and lettings log archive gets created in lettings log export" do
-        let(:organisations_export_service) { instance_double("Exports::OrganisationExportService", export_xml_organisations: { "some_organisation_file_base_name" => start_time }) }
+        let(:organisations_export_service) { instance_double(Exports::OrganisationExportService, export_xml_organisations: { "some_organisation_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -399,8 +399,8 @@ RSpec.describe Exports::ExportService do
 
     context "when exporting daily XMLs" do
       context "and no sales archives get created in sales logs export" do
-        let(:sales_logs_export_service) { instance_double("Exports::SalesLogExportService", export_xml_sales_logs: {}) }
-        let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: {}) }
+        let(:sales_logs_export_service) { instance_double(Exports::SalesLogExportService, export_xml_sales_logs: {}) }
+        let(:lettings_logs_export_service) { instance_double(Exports::LettingsLogExportService, export_xml_lettings_logs: {}) }
 
         context "and no user or organisation archives get created in user export" do
           it "generates a master manifest with the correct name" do
@@ -420,8 +420,8 @@ RSpec.describe Exports::ExportService do
       end
 
       context "and one sales archive gets created in sales logs export" do
-        let(:sales_logs_export_service) { instance_double("Exports::SalesLogExportService", export_xml_sales_logs: { "some_sales_file_base_name" => start_time }) }
-        let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: { "some_file_base_name" => start_time }) }
+        let(:sales_logs_export_service) { instance_double(Exports::SalesLogExportService, export_xml_sales_logs: { "some_sales_file_base_name" => start_time }) }
+        let(:lettings_logs_export_service) { instance_double(Exports::LettingsLogExportService, export_xml_lettings_logs: { "some_file_base_name" => start_time }) }
 
         context "and no user archives get created in user export" do
           it "generates a master manifest with the correct name" do
@@ -440,7 +440,7 @@ RSpec.describe Exports::ExportService do
         end
 
         context "and one user archive gets created in user export" do
-          let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time }) }
+          let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: { "some_user_file_base_name" => start_time }) }
 
           it "generates a master manifest with the correct name" do
             expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -459,8 +459,8 @@ RSpec.describe Exports::ExportService do
       end
 
       context "and multiple sales archives get created in sales logs export" do
-        let(:sales_logs_export_service) { instance_double("Exports::SalesLogExportService", export_xml_sales_logs: { "some_sales_file_base_name" => start_time, "second_sales_file_base_name" => start_time }) }
-        let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: { "some_file_base_name" => start_time, "second_file_base_name" => start_time }) }
+        let(:sales_logs_export_service) { instance_double(Exports::SalesLogExportService, export_xml_sales_logs: { "some_sales_file_base_name" => start_time, "second_sales_file_base_name" => start_time }) }
+        let(:lettings_logs_export_service) { instance_double(Exports::LettingsLogExportService, export_xml_lettings_logs: { "some_file_base_name" => start_time, "second_file_base_name" => start_time }) }
 
         context "and no user archives get created in user export" do
           it "generates a master manifest with the correct name" do
@@ -479,7 +479,7 @@ RSpec.describe Exports::ExportService do
         end
 
         context "and multiple user archive gets created in user export" do
-          let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time, "second_user_file_base_name" => start_time }) }
+          let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: { "some_user_file_base_name" => start_time, "second_user_file_base_name" => start_time }) }
 
           it "generates a master manifest with the correct name" do
             expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -497,8 +497,8 @@ RSpec.describe Exports::ExportService do
         end
 
         context "and multiple user and organisation archives gets created in user export" do
-          let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time, "second_user_file_base_name" => start_time }) }
-          let(:organisations_export_service) { instance_double("Exports::OrganisationExportService", export_xml_organisations: { "some_organisation_file_base_name" => start_time, "second_organisation_file_base_name" => start_time }) }
+          let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: { "some_user_file_base_name" => start_time, "second_user_file_base_name" => start_time }) }
+          let(:organisations_export_service) { instance_double(Exports::OrganisationExportService, export_xml_organisations: { "some_organisation_file_base_name" => start_time, "second_organisation_file_base_name" => start_time }) }
 
           it "generates a master manifest with the correct name" do
             expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -521,13 +521,13 @@ RSpec.describe Exports::ExportService do
   context "when exporting specific sales log collection" do
     let(:start_time) { Time.zone.local(2025, 5, 1) }
     let(:expected_master_manifest_filename) { "Manifest_2025_05_01_0001.csv" }
-    let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: {}) }
+    let(:lettings_logs_export_service) { instance_double(Exports::LettingsLogExportService, export_xml_lettings_logs: {}) }
 
     context "and no sales archives get created in sales logs export" do
-      let(:sales_logs_export_service) { instance_double("Exports::SalesLogExportService", export_xml_sales_logs: {}) }
+      let(:sales_logs_export_service) { instance_double(Exports::SalesLogExportService, export_xml_sales_logs: {}) }
 
       context "and user archive gets created in user export" do
-        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time }) }
+        let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: { "some_user_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
@@ -546,10 +546,10 @@ RSpec.describe Exports::ExportService do
     end
 
     context "and sales archive gets created in sales logs export" do
-      let(:sales_logs_export_service) { instance_double("Exports::SalesLogExportService", export_xml_sales_logs: { "some_sales_file_base_name" => start_time }) }
+      let(:sales_logs_export_service) { instance_double(Exports::SalesLogExportService, export_xml_sales_logs: { "some_sales_file_base_name" => start_time }) }
 
       context "and user archive gets created in user export" do
-        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time }) }
+        let(:users_export_service) { instance_double(Exports::UserExportService, export_xml_users: { "some_user_file_base_name" => start_time }) }
 
         it "generates a master manifest with the correct name" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
