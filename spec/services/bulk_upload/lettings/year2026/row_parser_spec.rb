@@ -321,10 +321,11 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                 :field_144, # pscharge
                 :field_145, # supcharg
               ].each do |field|
-                expect(parser.errors[field]).to include(error_message)
+                expect(parser.errors[field]).to include(error_message), "field: #{field}"
               end
 
               expect(parser.errors[:field_6]).not_to include(error_message)
+              expect(parser.errors[:field_43]).not_to include(error_message)
             end
           end
 
@@ -343,8 +344,8 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
             end
           end
 
-          context "when a supported housing log already exists in the db" do # TODO: CLDC-4119: Beware! The `postcode_full` method in the `LettingsLog` class may cause issues with these supported housing log duplicate detection tests after postcode is added. See comment on the `postcode_full` method for details.
-            let(:attributes) { valid_attributes.merge({ field_4: "2", field_5: "S#{scheme.id}", field_6: location.old_visible_id, field_35: 3, field_140: 0 }) }
+          context "when a supported housing log already exists in the db" do
+            let(:attributes) { valid_attributes.merge({ field_4: "2", field_5: "S#{scheme.id}", field_6: location.old_visible_id }) }
 
             before do
               parser.log.save!
@@ -366,7 +367,11 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                 :field_9, # startdate
                 :field_10, # startdate
                 :field_13, # tenancycode
-                :field_6, # location
+                :field_18, # uprn
+                :field_19, # address_line_1
+                :field_23, # postcode_full
+                :field_24, # postcode_full
+                :field_25, # la
                 :field_41, # age1
                 :field_42, # sexrab1
                 :field_47, # ecstat1
@@ -375,141 +380,10 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                 :field_144, # pscharge
                 :field_145, # supcharg
               ].each do |field|
-                expect(parser.errors[field]).to include(error_message)
+                expect(parser.errors[field]).to include(error_message), "field: #{field}"
               end
 
-              expect(parser.errors[:field_23]).not_to include(error_message)
-              expect(parser.errors[:field_24]).not_to include(error_message)
-              expect(parser.errors[:field_25]).not_to include(error_message)
-            end
-          end
-
-          context "with old core scheme and location ids" do
-            context "when a supported housing log already exists in the db" do
-              let(:attributes) { { bulk_upload:, field_4: "2", field_5: "123" } }
-
-              before do
-                parser.log.save!
-                parser.instance_variable_set(:@valid, nil)
-              end
-
-              it "is not a valid row" do
-                expect(parser).not_to be_valid
-              end
-
-              it "adds an error to all the fields used to determine duplicates" do
-                parser.valid?
-
-                error_message = I18n.t("validations.lettings.2026.bulk_upload.duplicate")
-
-                [
-                  :field_1, # owning_organisation
-                  :field_8, # startdate
-                  :field_9, # startdate
-                  :field_10, # startdate
-                  :field_13, # tenancycode
-                  :field_6, # location
-                  :field_41, # age1
-                  :field_42, # sexrab1
-                  :field_47, # ecstat1
-                  :field_142, # brent
-                  :field_143, # scharge
-                  :field_144, # pscharge
-                  :field_145, # supcharg
-                ].each do |field|
-                  expect(parser.errors[field]).to include(error_message)
-                end
-
-                expect(parser.errors[:field_23]).not_to include(error_message)
-                expect(parser.errors[:field_24]).not_to include(error_message)
-                expect(parser.errors[:field_25]).not_to include(error_message)
-              end
-            end
-          end
-
-          context "with new core scheme and location ids" do
-            context "when a supported housing log already exists in the db" do
-              let(:attributes) { { bulk_upload:, field_4: "2", field_5: "S123" } }
-
-              before do
-                parser.log.save!
-                parser.instance_variable_set(:@valid, nil)
-              end
-
-              it "is not a valid row" do
-                expect(parser).not_to be_valid
-              end
-
-              it "adds an error to all the fields used to determine duplicates" do
-                parser.valid?
-
-                error_message = I18n.t("validations.lettings.2026.bulk_upload.duplicate")
-
-                [
-                  :field_1, # owning_organisation
-                  :field_8, # startdate
-                  :field_9, # startdate
-                  :field_10, # startdate
-                  :field_13, # tenancycode
-                  :field_6, # location
-                  :field_41, # age1
-                  :field_42, # sexrab1
-                  :field_47, # ecstat1
-                ].each do |field|
-                  expect(parser.errors[field]).to include(error_message)
-                end
-
-                expect(parser.errors[:field_23]).not_to include(error_message)
-                expect(parser.errors[:field_24]).not_to include(error_message)
-                expect(parser.errors[:field_25]).not_to include(error_message)
-              end
-            end
-
-            context "when a supported housing log already exists in the db (2)" do
-              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
-              let(:attributes) do
-                valid_attributes.merge({ field_5: "S#{scheme.id}",
-                                         field_4: "2",
-                                         field_11: "2",
-                                         field_6: location.id,
-                                         field_1: owning_org.old_visible_id,
-                                         field_140: 0,
-                                         field_35: 4 })
-              end
-
-              before do
-                parser.log.save!
-                parser.instance_variable_set(:@valid, nil)
-              end
-
-              it "is not a valid row" do
-                expect(parser).not_to be_valid
-              end
-
-              it "adds an error to all the fields used to determine duplicates" do
-                parser.valid?
-
-                error_message = I18n.t("validations.lettings.2026.bulk_upload.duplicate")
-
-                [
-                  :field_1, # owning_organisation
-                  :field_8, # startdate
-                  :field_9, # startdate
-                  :field_10, # startdate
-                  :field_13, # tenancycode
-                  :field_6, # location
-                  :field_41, # age1
-                  :field_42, # sexrab1
-                  :field_47, # ecstat1
-                  :field_140, # household_charge
-                ].each do |field|
-                  expect(parser.errors[field]).to include(error_message)
-                end
-
-                expect(parser.errors[:field_23]).not_to include(error_message)
-                expect(parser.errors[:field_24]).not_to include(error_message)
-                expect(parser.errors[:field_25]).not_to include(error_message)
-              end
+              expect(parser.errors[:field_6]).not_to include(error_message)
             end
           end
 

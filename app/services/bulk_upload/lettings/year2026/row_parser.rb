@@ -569,12 +569,13 @@ class BulkUpload::Lettings::Year2026::RowParser
       "field_1",   # owning org
       "field_8",   # startdate
       "field_9",   # startdate
-      "field_10", # startdate
-      "field_13", # tenancycode
-      !general_needs? ? :field_6.to_s : nil, # location # TODO: CLDC-4119: remove location from hash
-      !supported_housing? ? "field_23" : nil,  # postcode # TODO: CLDC-4119: add postcode to hash for supported housing
-      !supported_housing? ? "field_24" : nil,  # postcode # TODO: CLDC-4119: add postcode to hash for supported housing
-      "field_41", # age1
+      "field_10",  # startdate
+      "field_13",  # tenancycode
+      "field_18",  # uprn
+      "field_19",  # address_line1
+      "field_23",  # postcode first half
+      "field_24",  # postcode second half
+      "field_41",  # age1
       "field_42",  # sexrab1
       "field_47",  # ecstat1
     )
@@ -728,8 +729,9 @@ private
       "ecstat1",
       "owning_organisation",
       "tcharge",
-      !supported_housing? ? "postcode_full" : nil, # TODO: CLDC-4119: add postcode to duplicate check fields for supported housing
-      !general_needs? ? "location" : nil, # TODO: CLDC-4119: remove location from duplicate check fields
+      "postcode_full",
+      "address_line1",
+      "uprn",
       "tenancycode",
       log.chcharge.present? ? "chcharge" : nil,
     ].compact
@@ -1000,11 +1002,11 @@ private
       errors.add(:field_9, error_message) # startdate
       errors.add(:field_10, error_message) # startdate
       errors.add(:field_13, error_message) # tenancycode
-      errors.add(:field_6, error_message) if !general_needs? && :field_6.present? # location # TODO: CLDC-4119: remove location from error fields
-      errors.add(:field_5, error_message) if !general_needs? && :field_6.blank? # add to Scheme field as unclear whether log uses New or Old CORE ids
-      errors.add(:field_23, error_message) unless supported_housing? # postcode_full # TODO: CLDC-4119: add postcode to error fields for supported housing
-      errors.add(:field_24, error_message) unless supported_housing? # postcode_full # TODO: CLDC-4119: add postcode to error fields for supported housing
-      errors.add(:field_25, error_message) unless supported_housing? # la # TODO: CLDC-4119: add LA to error fields for supported housing
+      errors.add(:field_18, error_message) # uprn
+      errors.add(:field_19, error_message) # address_line_1
+      errors.add(:field_23, error_message) # postcode_full
+      errors.add(:field_24, error_message) # postcode_full
+      errors.add(:field_25, error_message) # la
       errors.add(:field_41, error_message) # age1
       errors.add(:field_42, error_message) # sexrab1
       errors.add(:field_47, error_message) # ecstat1
