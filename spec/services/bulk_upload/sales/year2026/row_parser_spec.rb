@@ -2019,7 +2019,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       end
     end
 
-    describe "mortlen amd mortgage_length_known" do
+    describe "mortlen amd mortlen_known" do
       context "when field_90 is a number" do
         let(:field_90_number_attributes) { valid_attributes.merge({ field_90: 20 }) }
 
@@ -2031,9 +2031,9 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
             expect(log.mortlen).to eq(20)
           end
 
-          it "sets mortgage_length_known to yes" do
+          it "sets mortlen_known to yes" do
             log = parser.log
-            expect(log.mortgage_length_known).to eq(0)
+            expect(log.mortlen_known).to eq(0)
           end
         end
 
@@ -2045,9 +2045,9 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
             expect(log.mortlen).to eq(20)
           end
 
-          it "sets mortgage_length_known to nil" do
+          it "sets mortlen_known to nil" do
             log = parser.log
-            expect(log.mortgage_length_known).to be_nil
+            expect(log.mortlen_known).to be_nil
           end
         end
       end
@@ -2063,9 +2063,9 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
             expect(log.mortlen).to be_nil
           end
 
-          it "sets mortgage_length_known to no" do
+          it "sets mortlen_known to no" do
             log = parser.log
-            expect(log.mortgage_length_known).to eq(1)
+            expect(log.mortlen_known).to eq(1)
           end
         end
       end

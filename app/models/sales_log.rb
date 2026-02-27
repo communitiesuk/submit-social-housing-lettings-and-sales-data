@@ -390,7 +390,7 @@ class SalesLog < Log
     proptype_changed? && proptype_was == 2
   end
 
-  def buyer_interviewed_changed_to_not_interviewed_and_mortgage_length_known?
+  def buyer_interviewed_changed_to_not_interviewed_and_mortlen_set?
     noint_changed? && noint_was == 2 && buyer_not_interviewed? && mortlen.present?
   end
 

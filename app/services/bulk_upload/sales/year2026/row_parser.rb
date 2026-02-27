@@ -776,7 +776,7 @@ private
 
       hb: %i[field_74],
       mortlen: mortlen_fields,
-      mortgage_length_known: mortlen_fields,
+      mortlen_known: mortlen_fields,
       proplen: proplen_fields,
 
       jointmore: %i[field_13],
@@ -954,7 +954,7 @@ private
     attributes["hb"] = field_74
 
     attributes["mortlen"] = mortlen != "R" ? mortlen : nil
-    attributes["mortgage_length_known"] = mortgage_length_known
+    attributes["mortlen_known"] = mortlen_known
 
     attributes["proplen"] = proplen if proplen&.positive?
     attributes["proplen_asked"] = attributes["proplen"].present? ? 0 : 1
@@ -1179,7 +1179,7 @@ private
     field_118 if discounted_ownership?
   end
 
-  def mortgage_length_known
+  def mortlen_known
     return nil if buyer_interviewed?
 
     if mortlen == "R"

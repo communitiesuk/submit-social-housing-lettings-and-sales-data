@@ -166,7 +166,7 @@ FactoryBot.define do
       has_mscharge { 1 }
       mscharge { 100 }
       mortlen { 10 }
-      mortgage_length_known { 0 }
+      mortlen_known { 0 }
       pcodenk { 0 }
       postcode_full { "SW1A 1AA" }
       is_la_inferred { false }
