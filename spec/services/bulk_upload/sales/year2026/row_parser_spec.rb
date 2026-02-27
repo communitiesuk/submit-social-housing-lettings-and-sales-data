@@ -2031,9 +2031,9 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
             expect(log.mortlen).to eq(20)
           end
 
-          it "sets mortlen_known to yes" do
+          it "sets mortlen_known to nil" do
             log = parser.log
-            expect(log.mortlen_known).to eq(0)
+            expect(log.mortlen_known).to be_nil
           end
         end
 
@@ -2045,9 +2045,9 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
             expect(log.mortlen).to eq(20)
           end
 
-          it "sets mortlen_known to nil" do
+          it "sets mortlen_known to yes" do
             log = parser.log
-            expect(log.mortlen_known).to be_nil
+            expect(log.mortlen_known).to eq(0)
           end
         end
       end
@@ -2055,8 +2055,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       context "when field_90 is R" do
         let(:field_90_number_attributes) { valid_attributes.merge({ field_90: "R" }) }
 
-        context "and buyer was interviewed" do
-          let(:attributes) { field_90_number_attributes.merge({ field_14: 2 }) }
+        context "and buyer was not interviewed" do
+          let(:attributes) { field_90_number_attributes.merge({ field_14: 1 }) }
 
           it "sets mortlen to nil" do
             log = parser.log
