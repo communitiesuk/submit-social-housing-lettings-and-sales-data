@@ -1,12 +1,15 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::BuildingHeightClass, type: :model do
+  include CollectionTimeHelper
+
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, collection_start_date_for_year(2026))) }
-  let(:sales_log) { FactoryBot.create(:sales_log, :completed) }
+  let(:start_date) { collection_start_date_for_year(2026) }
+  let(:form) { instance_double(Form, start_date:) }
+  let(:subsection) { instance_double(Form::Subsection, form:) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)

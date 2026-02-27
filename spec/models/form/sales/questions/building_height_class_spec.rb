@@ -1,11 +1,16 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::BuildingHeightClass, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, collection_start_date_for_year(2026)))) }
+  let(:start_date) { collection_start_date_for_year(2026) }
+  let(:form) { instance_double(Form, start_date:) }
+  let(:subsection) { instance_double(Form::Subsection, form:) }
+  let(:page) { instance_double(Form::Page, subsection:) }
 
   it "has correct page" do
     expect(question.page).to eq(page)
