@@ -16,9 +16,6 @@ class Form::Sales::Questions::MortgageLengthKnown < ::Form::Question
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
 
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
-    2023 => { 1 => 93, 2 => 106, 3 => 114 },
-    2024 => { 1 => 94, 2 => 107, 3 => 114 },
-    2025 => { 1 => 84, 2 => 108 },
     2026 => { 1 => 84, 2 => 108 },
   }.freeze
 end
