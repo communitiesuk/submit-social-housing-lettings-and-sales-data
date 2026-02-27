@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Pages::BuildingHeightClass, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2026, 4, 1))) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, collection_start_date_for_year(2026))) }
   let(:sales_log) { FactoryBot.create(:sales_log, :completed) }
 
   it "has correct subsection" do
