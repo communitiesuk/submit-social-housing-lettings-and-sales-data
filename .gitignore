@@ -59,3 +59,7 @@ yarn-debug.log*
 !/app/assets/builds/.keep
 
 spec/examples.txt
+
+# AI tooling artifacts
+.playwright-cli/
+review-screenshots/
