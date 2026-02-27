@@ -390,8 +390,8 @@ class SalesLog < Log
     proptype_changed? && proptype_was == 2
   end
 
-  def buyer_not_interviewed_changed_to_interviewed_and_mortgage_length_known?
-    noint_changed? && noint_was == 1 && !buyer_not_interviewed? && mortlen.present?
+  def buyer_interviewed_changed_to_not_interviewed_and_mortgage_length_known?
+    noint_changed? && noint_was == 2 && buyer_not_interviewed? && mortlen.present?
   end
 
   def shared_ownership_scheme?

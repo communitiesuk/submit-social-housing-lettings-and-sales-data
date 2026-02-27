@@ -1475,18 +1475,18 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         context "and buyer was interviewed" do
           let(:attributes) { field_90_number_attributes.merge({ field_14: 2 }) }
 
-          it "does not add an error" do
+          it "adds an error" do
             parser.valid?
-            expect(parser.errors.where(:field_90)).not_to be_present
+            expect(parser.errors.where(:field_90)).to be_present
           end
         end
 
         context "and buyer was not interviewed" do
           let(:attributes) { field_90_number_attributes.merge({ field_14: 1 }) }
 
-          it "adds an error" do
+          it "does not add an error" do
             parser.valid?
-            expect(parser.errors.where(:field_90)).to be_present
+            expect(parser.errors.where(:field_90)).not_to be_present
           end
         end
       end

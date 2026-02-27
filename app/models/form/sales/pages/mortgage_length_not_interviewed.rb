@@ -9,6 +9,7 @@ class Form::Sales::Pages::MortgageLengthNotInterviewed < ::Form::Page
 
   def questions
     @questions ||= [
+      Form::Sales::Questions::MortgageLengthKnown.new(nil, nil, self, ownershipsch: @ownershipsch),
       Form::Sales::Questions::MortgageLength.new(nil, nil, self, ownershipsch: @ownershipsch),
     ]
   end

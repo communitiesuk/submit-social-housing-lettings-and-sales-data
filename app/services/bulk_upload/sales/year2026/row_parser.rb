@@ -454,7 +454,7 @@ class BulkUpload::Sales::Year2026::RowParser
 
   validate :validate_nationality, on: :after_log
   validate :validate_buyer_2_nationality, on: :after_log
-  validate :validate_mortlen_field_if_buyer_not_interviewed, on: :after_log
+  validate :validate_mortlen_field_if_buyer_interviewed, on: :after_log
 
   validate :validate_nulls, on: :after_log
 
@@ -670,6 +670,10 @@ private
 
   def buyer_staircased_before?
     field_99 == 1
+  end
+
+  def buyer_interviewed?
+    field_14 == 2
   end
 
   def rtb_like_sale_type?
@@ -1176,7 +1180,7 @@ private
   end
 
   def mortgage_length_known
-    return nil if field_14 == 1
+    return nil if buyer_interviewed?
 
     if mortlen == "R"
       1
@@ -1552,10 +1556,10 @@ private
     %w[0] + GlobalConstants::COUNTRIES_ANSWER_OPTIONS.keys # 0 is "Prefers not to say"
   end
 
-  def validate_mortlen_field_if_buyer_not_interviewed
-    if field_14 == 1 && mortlen == "R"
-      errors.add(:field_90, I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid_for_not_interviewed")) if shared_ownership?
-      errors.add(:field_118, I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid_for_not_interviewed")) if discounted_ownership?
+  def validate_mortlen_field_if_buyer_interviewed
+    if buyer_interviewed? && mortlen == "R"
+      errors.add(:field_90, I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid_for_interviewed")) if shared_ownership?
+      errors.add(:field_118, I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid_for_interviewed")) if discounted_ownership?
     end
   end
 
