@@ -1,3 +1,5 @@
+# note ownershipsch of 3 was last possible in 2024
+# for 2025 logs and later this section is not used
 class Form::Sales::Subsections::OutrightSale < ::Form::Subsection
   def initialize(id, hsh, section)
     super
@@ -17,9 +19,7 @@ class Form::Sales::Subsections::OutrightSale < ::Form::Subsection
       Form::Sales::Pages::MortgageValueCheck.new("outright_sale_mortgage_amount_mortgage_value_check", nil, self),
       (Form::Sales::Pages::MortgageLender.new("mortgage_lender_outright_sale", nil, self, ownershipsch: 3) unless form.start_year_2024_or_later?),
       (Form::Sales::Pages::MortgageLenderOther.new("mortgage_lender_other_outright_sale", nil, self, ownershipsch: 3) unless form.start_year_2024_or_later?),
-      (Form::Sales::Pages::MortgageLength.new("mortgage_length_outright_sale", nil, self, ownershipsch: 3) unless form.start_year_2026_or_later?),
-      (Form::Sales::Pages::MortgageLengthNotInterviewed.new("mortgage_length_outright_sale_not_interviewed", nil, self, ownershipsch: 3) if form.start_year_2026_or_later?),
-      (Form::Sales::Pages::MortgageLengthInterviewed.new("mortgage_length_outright_sale_interviewed", nil, self, ownershipsch: 3) if form.start_year_2026_or_later?),
+      Form::Sales::Pages::MortgageLength.new("mortgage_length_outright_sale", nil, self, ownershipsch: 3),
       Form::Sales::Pages::ExtraBorrowing.new("extra_borrowing_outright_sale", nil, self, ownershipsch: 3),
       Form::Sales::Pages::Deposit.new("deposit_outright_sale", nil, self, ownershipsch: 3, optional: false),
       Form::Sales::Pages::DepositValueCheck.new("outright_sale_deposit_joint_purchase_value_check", nil, self, joint_purchase: true),
