@@ -1,4 +1,4 @@
-# note ownershipsch of 3 was last possible in 2024
+# NOTE: ownershipsch of 3 was last possible in 2024
 # for 2025 logs and later this section is not used
 class Form::Sales::Subsections::OutrightSale < ::Form::Subsection
   def initialize(id, hsh, section)
