@@ -23,13 +23,6 @@ en:
             hint_text: "This is the sex that was registered at birth. The next question will ask about the buyer's gender identity."
             question_text: "What was buyer 1's sex at birth?"
 
-          sex1:
-            page_header: ""
-            check_answer_label: "Buyer 1’s gender identity"
-            check_answer_prompt: ""
-            hint_text: "This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth."
-            question_text: "Which of these best describes buyer 1’s gender identity?"
-
           ethnic_group:
             page_header: ""
             check_answer_label: "Buyer 1’s ethnic group"
@@ -150,20 +143,6 @@ en:
               check_answer_prompt: ""
               hint_text: "This is the sex that was registered at birth. The next question will ask about the person's gender identity."
               question_text: "What was person 2's sex at birth?"
-
-          sex2:
-            buyer:
-              page_header: ""
-              check_answer_label: "Buyer 2’s gender identity"
-              check_answer_prompt: ""
-              hint_text: "This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth."
-              question_text: "Which of these best describes buyer 2’s gender identity?"
-            person:
-              page_header: ""
-              check_answer_label: "Person 2’s gender identity"
-              check_answer_prompt: ""
-              hint_text: "This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth."
-              question_text: "Which of these best describes person 2’s gender identity?"
 
           ethnic_group2:
             page_header: ""
@@ -294,13 +273,6 @@ en:
             hint_text: "This is the sex that was registered at birth. The next question will ask about the person's gender identity."
             question_text: "What was person 3's sex at birth?"
 
-          sex3:
-            page_header: ""
-            check_answer_label: "Person 3’s gender identity"
-            check_answer_prompt: ""
-            hint_text: "This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth."
-            question_text: "Which of these best describes person 3’s gender identity?"
-
           ecstat3:
             page_header: ""
             check_answer_label: "Person 3’s working situation"
@@ -341,13 +313,6 @@ en:
             check_answer_prompt: ""
             hint_text: "This is the sex that was registered at birth. The next question will ask about the person's gender identity."
             question_text: "What was person 4's sex at birth?"
-
-          sex4:
-            page_header: ""
-            check_answer_label: "Person 4’s gender identity"
-            check_answer_prompt: ""
-            hint_text: "This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth."
-            question_text: "Which of these best describes person 4’s gender identity?"
 
           ecstat4:
             page_header: ""
@@ -390,13 +355,6 @@ en:
             hint_text: "This is the sex that was registered at birth. The next question will ask about the person's gender identity."
             question_text: "What was person 5's sex at birth?"
 
-          sex5:
-            page_header: ""
-            check_answer_label: "Person 5’s gender identity"
-            check_answer_prompt: ""
-            hint_text: "This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth."
-            question_text: "Which of these best describes person 5’s gender identity?"
-
           ecstat5:
             page_header: ""
             check_answer_label: "Person 5’s working situation"
@@ -437,13 +395,6 @@ en:
             check_answer_prompt: ""
             hint_text: "This is the sex that was registered at birth. The next question will ask about the person's gender identity."
             question_text: "What was person 6's sex at birth?"
-
-          sex6:
-            page_header: ""
-            check_answer_label: "Person 6’s gender identity"
-            check_answer_prompt: ""
-            hint_text: "This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth."
-            question_text: "Which of these best describes person 6’s gender identity?"
 
           ecstat6:
             page_header: ""
