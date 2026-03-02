@@ -1,10 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::PersonGenderIdentity, type: :model do
+  include CollectionTimeHelper
+
   subject(:page) { described_class.new(page_id, page_definition, subsection, person_index:) }
 
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1))) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: current_collection_start_date)) }
   let(:person_index) { 1 }
 
   let(:page_id) { "person_2_gender_identity" }

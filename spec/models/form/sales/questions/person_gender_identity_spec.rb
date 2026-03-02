@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page, person_index:) }
 
   let(:question_id) { "sex2" }
@@ -8,7 +10,7 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
   let(:page) { instance_double(Form::Page) }
   let(:person_index) { 2 }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date) }
 
   before do
     allow(page).to receive(:subsection).and_return(subsection)
