@@ -7,9 +7,8 @@ RSpec.describe Form::Sales::Pages::BuildingHeightClass, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:start_date) { collection_start_date_for_year(2026) }
-  let(:form) { instance_double(Form, start_date:) }
-  let(:subsection) { instance_double(Form::Subsection, form:) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: current_collection_start_date)) }
+  let(:sales_log) { FactoryBot.create(:sales_log, :completed) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
