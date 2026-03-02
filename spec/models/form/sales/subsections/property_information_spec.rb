@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
+  include CollectionTimeHelper
+
   subject(:property_information) { described_class.new(nil, nil, section) }
 
   let(:section) { instance_double(Form::Sales::Sections::PropertyInformation) }
@@ -11,14 +13,16 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
 
   describe "pages" do
     let(:section) { instance_double(Form::Sales::Sections::Household, form:) }
-    let(:form) { instance_double(Form, start_date:) }
-
-    before do
-      allow(form).to receive_messages(start_year_2024_or_later?: false, start_year_2025_or_later?: false, start_year_2026_or_later?: false)
-    end
+    let(:start_year_2024_or_later?) { true }
+    let(:start_year_2025_or_later?) { true }
+    let(:start_year_2026_or_later?) { true }
+    let(:form) { instance_double(Form, start_date:, start_year_2024_or_later?: start_year_2024_or_later?, start_year_2025_or_later?: start_year_2025_or_later?, start_year_2026_or_later?: start_year_2026_or_later?) }
 
     context "when 2023" do
-      let(:start_date) { Time.utc(2023, 2, 8) }
+      let(:start_date) { collection_start_date_for_year(2023) }
+      let(:start_year_2024_or_later?) { false }
+      let(:start_year_2025_or_later?) { false }
+      let(:start_year_2026_or_later?) { false }
 
       it "has correct pages" do
         expect(property_information.pages.map(&:id)).to eq(
@@ -44,11 +48,9 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
     end
 
     context "when 2024" do
-      let(:start_date) { Time.utc(2024, 2, 8) }
-
-      before do
-        allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: false, start_year_2026_or_later?: false)
-      end
+      let(:start_date) { collection_start_date_for_year(2024) }
+      let(:start_year_2025_or_later?) { false }
+      let(:start_year_2026_or_later?) { false }
 
       it "has correct pages" do
         expect(property_information.pages.map(&:id)).to eq(
@@ -73,11 +75,8 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
     end
 
     context "when 2025" do
-      let(:start_date) { Time.utc(2025, 2, 8) }
-
-      before do
-        allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true, start_year_2026_or_later?: false)
-      end
+      let(:start_date) { collection_start_date_for_year(2025) }
+      let(:start_year_2026_or_later?) { false }
 
       it "has correct pages" do
         expect(property_information.pages.map(&:id)).to eq(
@@ -102,11 +101,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
     end
 
     context "when 2026" do
-      let(:start_date) { Time.utc(2026, 2, 8) }
-
-      before do
-        allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true, start_year_2026_or_later?: true)
-      end
+      let(:start_date) { collection_start_date_for_year(2026) }
 
       it "has correct pages" do
         expect(property_information.pages.map(&:id)).to eq(
