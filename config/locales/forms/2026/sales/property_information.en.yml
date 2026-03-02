@@ -59,6 +59,13 @@ en:
             hint_text: ""
             question_text: "What type of unit is the property?"
 
+          buildheightclass:
+            page_header: ""
+            check_answer_label: "Building height classification"
+            check_answer_prompt: ""
+            hint_text: "High-rise residential buildings are those containing 2 or more residential units and either have 7 or more storeys or are at least 18 metres in height. If unsure, answer based on the number of storeys."
+            question_text: "What is the building height classification?"
+
           builtype:
             page_header: ""
             check_answer_label: "Type of building"
