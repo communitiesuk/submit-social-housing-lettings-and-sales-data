@@ -167,6 +167,9 @@ class BulkUpload::Sales::Year2026::RowParser
     :field_75, # What is the total amount the buyers had in savings before they paid any deposit for the property?
     :field_70, # What is buyer 1’s gross annual income?
     :field_72, # What is buyer 2’s gross annual income?
+
+    :field_90,  # What is the length of the mortgage in years? - Shared ownership
+    :field_118, # What is the length of the mortgage in years? - Discounted ownership
   ].freeze
 
   attribute :bulk_upload
