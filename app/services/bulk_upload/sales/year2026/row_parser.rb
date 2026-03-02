@@ -149,12 +149,12 @@ class BulkUpload::Sales::Year2026::RowParser
     :field_51, # Age of person 5
     :field_55, # Age of person 6
 
-    :field_122, # Buyer 1's sex, as registered at birth
-    :field_123, # Buyer/Person 2's sex, as registered at birth
-    :field_124, # Person 3's sex, as registered at birth
-    :field_125, # Person 4's sex, as registered at birth
-    :field_126, # Person 5's sex, as registered at birth
-    :field_127, # Person 6's sex, as registered at birth
+    :field_29, # Buyer 1's sex, as registered at birth
+    :field_36, # Buyer/Person 2's sex, as registered at birth
+    :field_44, # Person 3's sex, as registered at birth
+    :field_48, # Person 4's sex, as registered at birth
+    :field_52, # Person 5's sex, as registered at birth
+    :field_56, # Person 6's sex, as registered at birth
 
     :field_64, # What was buyer 2’s previous tenure?
 
