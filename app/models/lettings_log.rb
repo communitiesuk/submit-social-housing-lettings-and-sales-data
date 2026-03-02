@@ -445,7 +445,7 @@ class LettingsLog < Log
     unittype_gn_changed? && unittype_gn_was == 2
   end
 
-  def is_person_under_16(person_index)
+  def is_person_under_16?(person_index)
     public_send("age#{person_index}") && public_send("age#{person_index}") < 16
   end
 
