@@ -1,15 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::GenderIdentity2, type: :model do
-  include CollectionTimeHelper
-
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form, start_date: current_collection_start_date) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
 
   before do
     allow(page).to receive(:subsection).and_return(subsection)
