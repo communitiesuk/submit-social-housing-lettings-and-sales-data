@@ -46,14 +46,14 @@ class Form::Sales::Questions::PreviousPostcodeKnown < ::Form::Question
 end
 ```
 
-Let's take a look at the properties in the `initialize` function.
+## Useful Properties
 
 <dl>
 <dt>id</dt>
 <dd>The name of the field. This should correspond to a column in the database. In the example, the id is 'ppcodenk'.</dd>
 
 <dt>copy_key</dt>
-<dd>This specifies copy from <code>config/locales/forms/...</code> that should be associated with the question</dd>
+<dd>This specifies copy from <code>config/locales/forms/...</code> that should be associated with the question. Not normally needed, will be inferred as <code>#{form.type}.#{subsection.copy_key}.#{id}</code>.</dd>
 
 <dt>type</dt>
 <dd>Determines what type of question is rendered on the page. In the example, the question is a Radio Form so the <code>app/views/form/_radio_question.html.erb</code> partial will be rendered on the page when this question is displayed to the user</dd>
@@ -75,7 +75,17 @@ Let's take a look at the properties in the `initialize` function.
 <dd>
   Determines which number gets rendered next to the question text on the question page and in the 'check your answers' page.
   <br/>
-  The convention that we use for the question number is that we only add to the 'QUESTION_NUMBER_FROM_YEAR' hash when the question number changes. So, if the example remains unchanged into 2026, 2027, etc., that means that it is still question 57. 
+  The convention that we use for the question number is that the hash should contain all years explicitly, even if it doesn't change between years. When building a new year's forms we should add the question number for the new year to all questions. See the `add_new_year_to_questions` rake.
+</dd>
+
+<dt>disable_clearing_if_not_routed_or_dynamic_answer_options</dt>
+<dd>
+  Questions that are not routed to will be cleared. Setting this to true will prevent this from happening. Normally can be replaced with implementing <code>derived?</code>.
+</dd>
+
+<dt>check_answers_card_number</dt>
+<dd>
+  Is used only for the household characteristics section as each person gets their own card on the CYA page. If you're looking to add a custom CYA card somewhere else in the form, see <code>check_answers_card_title</code>
 </dd>
 </dl>
 
@@ -109,3 +119,26 @@ end
 <dt>inferred_answers</dt>
 <dd>Determines any questions whose answers can be inferred based on the answer to this question. In the example, the 'la' question (Local Authority) can be inferred from the Postcode. We set a property 'is_la_inferred' on the log to record this inferrance.</dd>
 </dl>
+
+## Useful methods
+<dl>
+<dt>derived?</dt>
+<dd>This is function that should return true if the question is to be derived, such as where it's answer can be inferred based on another question. Setting this to true will cause the question to not be shown in CYA. The user will still be shown the question. This method is very similar to a depends_on method, but a depends_on block is used to always infer an answer of "". derived? is reliant on other code setting the answer, such as <code>set_derived_fields!</code></dd>
+
+<dt>get_extra_check_answer_value</dt>
+<dd>Used for putting extra lines below the main answer in the CYA page. Used on the address search to show the full address below the UPRN</dd>
+
+<dt>label_from_value</dt>
+<dd>Used for custom labels that differ from the main site. Normally will use the labels on the page, Useful for instance changing "No, enter xyz" to just "No".</dd>
+
+<dt>skip_question_in_form_flow?</dt>
+<dd>Similar to derived, but the user is still able to go back and edit the question later. Will not cause question to be hidden from CYA.</dd>
+</dl>
+
+## Question visibility
+There are broadly 3 reasons to hide a question. Here's how to handle them.
+
+1. The question should not be asked, answer should be derived as nil and user should not be able to change this. If so, set up a `depends_on` on the page.
+2. The question should not be asked, answer should be derived as some value and user should not be able to change this. If so, set up a `depends_on` on the page and set up a `derived?`. Use a method like `set_derived_fields!` to set the answer.
+3. The question should not be asked, answer should be derived as some value and user should be able to change this. If so, set up a `skip_question_in_form_flow?` method.
+
