@@ -142,9 +142,32 @@ class BulkUpload::Sales::Year2026::RowParser
     field_125: "Person 4's sex, as registered at birth",
     field_126: "Person 5's sex, as registered at birth",
     field_127: "Person 6's sex, as registered at birth",
+    field_128: "What is the building height classification?",
   }.freeze
 
   ERROR_BASE_KEY = "validations.sales.2026.bulk_upload".freeze
+
+  CASE_INSENSITIVE_FIELDS = [
+    :field_28, # Age of buyer 1
+    :field_35, # Age of person 2
+    :field_43, # Age of person 3
+    :field_47, # Age of person 4
+    :field_51, # Age of person 5
+    :field_55, # Age of person 6
+
+    :field_122, # Buyer 1's sex, as registered at birth
+    :field_123, # Buyer/Person 2's sex, as registered at birth
+    :field_124, # Person 3's sex, as registered at birth
+    :field_125, # Person 4's sex, as registered at birth
+    :field_126, # Person 5's sex, as registered at birth
+    :field_127, # Person 6's sex, as registered at birth
+
+    :field_64, # What was buyer 2’s previous tenure?
+
+    :field_75, # What is the total amount the buyers had in savings before they paid any deposit for the property?
+    :field_70, # What is buyer 1’s gross annual income?
+    :field_72, # What is buyer 2’s gross annual income?
+  ].freeze
 
   attribute :bulk_upload
   attribute :block_log_creation, :boolean, default: -> { false }
@@ -288,6 +311,7 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_125, :string
   attribute :field_126, :string
   attribute :field_127, :string
+  attribute :field_128, :integer
 
   validates :field_1,
             presence: {
@@ -468,6 +492,8 @@ class BulkUpload::Sales::Year2026::RowParser
 
     return true if blank_row?
 
+    normalise_case_insensitive_fields
+
     super(:before_log)
     @before_errors = errors.dup
 
@@ -539,6 +565,13 @@ class BulkUpload::Sales::Year2026::RowParser
   end
 
 private
+
+  def normalise_case_insensitive_fields
+    CASE_INSENSITIVE_FIELDS.each do |field|
+      value = send(field)
+      send("#{field}=", value.upcase) if value.present?
+    end
+  end
 
   def prevtenbuy2
     case field_64
@@ -801,6 +834,7 @@ private
       sexrab4: %i[field_125],
       sexrab5: %i[field_126],
       sexrab6: %i[field_127],
+      buildheightclass: %i[field_128],
     }
   end
 
@@ -842,6 +876,7 @@ private
     attributes["sexrab4"] = field_125
     attributes["sexrab5"] = field_126
     attributes["sexrab6"] = field_127
+    attributes["buildheightclass"] = field_128
 
     attributes["relat2"] = relationship_from_is_partner(field_34)
     attributes["relat3"] = relationship_from_is_partner(field_42)
