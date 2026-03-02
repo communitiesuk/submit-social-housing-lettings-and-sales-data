@@ -256,18 +256,6 @@ private
     [1, 2].include?(prevten) || [1, 2].include?(prevtenbuy2)
   end
 
-  def clear_gender_description_unless_gender_not_same_as_sex!
-    # we do this as the gender same as sex page always contains the gender description box that's hidden
-    # default submit will send a "" for gender description. this ensure it's nil in this case
-    # as well as blanking it if the user writes it in mistakenly in bulk upload
-    (1..6).each do |person_index|
-      gender_same_as_sex = public_send("gender_same_as_sex#{person_index}")
-      if gender_same_as_sex.present? && gender_same_as_sex != 2
-        self["gender_description#{person_index}"] = nil
-      end
-    end
-  end
-
   def reset_address_fields!
     self.uprn = nil
     self.uprn_known = nil

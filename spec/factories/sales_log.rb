@@ -310,6 +310,9 @@ FactoryBot.define do
       ethnic_group { 17 }
       sexrab2 { "X" }
       sex2 { "X" }
+      gender_same_as_sex1 { 1 }
+      gender_same_as_sex2 { 2 }
+      gender_description2 { "Non-binary" }
       buy2livein { "1" }
       ecstat1 { "1" }
       ecstat2 { "1" }

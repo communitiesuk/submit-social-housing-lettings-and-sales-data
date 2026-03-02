@@ -27,17 +27,62 @@ RSpec.describe Form::Sales::Questions::PersonGenderSameAsSex, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
-  it "has the correct answer_options" do
-    expect(question.answer_options).to eq({
-      "1" => { "value" => "Yes" },
-      "2" => { "value" => "No, enter gender identity" },
-      "divider" => { "value" => true },
-      "3" => { "value" => "Person prefers not to say" },
-    })
+  context "when buyer is false (default)" do
+    it "has the correct answer_options" do
+      expect(question.answer_options).to eq({
+        "1" => { "value" => "Yes" },
+        "2" => { "value" => "No, enter gender identity" },
+        "divider" => { "value" => true },
+        "3" => { "value" => "Person prefers not to say" },
+      })
+    end
+  end
+
+  context "when buyer is true" do
+    subject(:question) { described_class.new(question_id, question_definition, page, person_index:, buyer: true) }
+
+    it "has the correct answer_options" do
+      expect(question.answer_options).to eq({
+        "1" => { "value" => "Yes" },
+        "2" => { "value" => "No, enter gender identity" },
+        "divider" => { "value" => true },
+        "3" => { "value" => "Buyer prefers not to say" },
+      })
+    end
   end
 
   it "returns correct label_from_value for 'Prefers not to say'" do
     expect(question.label_from_value(3)).to eq("Prefers not to say")
+  end
+
+  it "returns nil label_from_value for nil" do
+    expect(question.label_from_value(nil)).to be_nil
+  end
+
+  context "when person 1 (buyer)" do
+    subject(:question) { described_class.new(question_id, question_definition, page, person_index: 1, buyer: true) }
+
+    let(:person_index) { 1 }
+
+    it "has the correct id" do
+      expect(question.id).to eq("gender_same_as_sex1")
+    end
+
+    it "has expected check answers card number" do
+      expect(question.check_answers_card_number).to eq(1)
+    end
+
+    it "has the correct conditional_for" do
+      expect(question.conditional_for).to eq({ "gender_description1" => [2] })
+    end
+
+    it "has the correct inferred_check_answers_value" do
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "gender_same_as_sex1" => 2 }, "value" => "No" }])
+    end
+
+    it "has the correct answer_options with Buyer label" do
+      expect(question.answer_options["3"]).to eq({ "value" => "Buyer prefers not to say" })
+    end
   end
 
   context "when person 2" do

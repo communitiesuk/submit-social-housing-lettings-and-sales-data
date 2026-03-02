@@ -23,6 +23,46 @@ RSpec.describe Form::Sales::Questions::PersonGenderDescription, type: :model do
     expect(question.type).to eq("text")
   end
 
+  context "when person 1" do
+    let(:person_index) { 1 }
+
+    it "has the correct id" do
+      expect(question.id).to eq("gender_description1")
+    end
+
+    it "has expected check answers card number" do
+      expect(question.check_answers_card_number).to eq(1)
+    end
+
+    it "has the correct inferred_check_answers_value" do
+      expect(question.inferred_check_answers_value).to be_nil
+    end
+
+    context "when gender_same_as_sex1 is 'Yes'" do
+      let(:log) { build(:sales_log, gender_same_as_sex1: 1) }
+
+      it "is marked as derived" do
+        expect(question.derived?(log)).to be true
+      end
+    end
+
+    context "when gender_same_as_sex1 is 'No'" do
+      let(:log) { build(:sales_log, gender_same_as_sex1: 2) }
+
+      it "is not marked as derived" do
+        expect(question.derived?(log)).to be false
+      end
+    end
+
+    context "when gender_same_as_sex1 is 'Prefers not to say'" do
+      let(:log) { build(:sales_log, gender_same_as_sex1: 3) }
+
+      it "is marked as derived" do
+        expect(question.derived?(log)).to be true
+      end
+    end
+  end
+
   context "when person 2" do
     let(:person_index) { 2 }
 
@@ -36,6 +76,22 @@ RSpec.describe Form::Sales::Questions::PersonGenderDescription, type: :model do
 
     it "has the correct inferred_check_answers_value" do
       expect(question.inferred_check_answers_value).to be_nil
+    end
+
+    context "when gender_same_as_sex2 is 'Yes'" do
+      let(:log) { build(:sales_log, gender_same_as_sex2: 1) }
+
+      it "is marked as derived" do
+        expect(question.derived?(log)).to be true
+      end
+    end
+
+    context "when gender_same_as_sex2 is 'No'" do
+      let(:log) { build(:sales_log, gender_same_as_sex2: 2) }
+
+      it "is not marked as derived" do
+        expect(question.derived?(log)).to be false
+      end
     end
   end
 
