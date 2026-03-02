@@ -142,6 +142,7 @@ class BulkUpload::Sales::Year2026::RowParser
     field_125: "Person 4's sex, as registered at birth",
     field_126: "Person 5's sex, as registered at birth",
     field_127: "Person 6's sex, as registered at birth",
+    field_128: "What is the building height classification?",
   }.freeze
 
   ERROR_BASE_KEY = "validations.sales.2026.bulk_upload".freeze
@@ -288,6 +289,7 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_125, :string
   attribute :field_126, :string
   attribute :field_127, :string
+  attribute :field_128, :integer
 
   validates :field_1,
             presence: {
@@ -801,6 +803,7 @@ private
       sexrab4: %i[field_125],
       sexrab5: %i[field_126],
       sexrab6: %i[field_127],
+      buildheightclass: %i[field_128],
     }
   end
 
@@ -842,6 +845,7 @@ private
     attributes["sexrab4"] = field_125
     attributes["sexrab5"] = field_126
     attributes["sexrab6"] = field_127
+    attributes["buildheightclass"] = field_128
 
     attributes["relat2"] = relationship_from_is_partner(field_34)
     attributes["relat3"] = relationship_from_is_partner(field_42)
