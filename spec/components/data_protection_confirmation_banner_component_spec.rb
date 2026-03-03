@@ -39,7 +39,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
 
     context "when org does have a signed data sharing agreement" do
       it "does not display banner" do
-        expect(component.display_banner?).to eq(false)
+        expect(component.display_banner?).to be(false)
         expect(render.content).to be_empty
       end
     end
