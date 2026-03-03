@@ -411,7 +411,7 @@ RSpec.describe Exports::SalesLogExportService do
       end
 
       context "and one sales log is available for export" do
-        let!(:sales_log) { FactoryBot.create(:sales_log, :export) }
+        let!(:sales_log) { FactoryBot.create(:sales_log, :export, hholdcount: 6) }
         let(:expected_zip_filename) { "core_sales_2026_2027_apr_mar_f0001_inc0001.zip" }
         let(:expected_data_filename) { "core_sales_2026_2027_apr_mar_f0001_inc0001_pt001.xml" }
         let(:xml_export_file) { File.open("spec/fixtures/exports/sales_log_26_27.xml", "r:UTF-8") }
