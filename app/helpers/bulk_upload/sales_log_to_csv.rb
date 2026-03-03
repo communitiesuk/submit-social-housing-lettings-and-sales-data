@@ -565,14 +565,14 @@ class BulkUpload::SalesLogToCsv
       log.wchair,
 
       log.age1,
-      log.sex1,
+      log.sexrab1,
       log.ethnic, # 30
       log.nationality_all_group,
       log.ecstat1,
       log.buy1livein,
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat2],
       log.age2,
-      log.sex2,
+      log.sexrab2,
       log.ethnic_group2,
       log.nationality_all_buyer2_group,
       log.ecstat2,
@@ -581,19 +581,19 @@ class BulkUpload::SalesLogToCsv
 
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat3],
       log.age3,
-      log.sex3,
+      log.sexrab3,
       log.ecstat3,
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat4],
       log.age4,
-      log.sex4,
+      log.sexrab4,
       log.ecstat4,
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat5], # 50
       log.age5,
-      log.sex5,
+      log.sexrab5,
       log.ecstat5,
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat6],
       log.age6,
-      log.sex6,
+      log.sexrab6,
       log.ecstat6,
 
       log.prevten,
@@ -666,26 +666,19 @@ class BulkUpload::SalesLogToCsv
       log.deposit, # 120
 
       log.mscharge,
-      log.sexrab1,
-      log.sexrab2,
-      log.sexrab3,
-      log.sexrab4,
-      log.sexrab5,
-      log.sexrab6,
-      log.buildheightclass,
+      log.buildheightclass, # 122
       log.gender_same_as_sex1,
-      log.gender_description1, # 130
-
+      log.gender_description1,
       log.gender_same_as_sex2,
       log.gender_description2,
       log.gender_same_as_sex3,
       log.gender_description3,
       log.gender_same_as_sex4,
       log.gender_description4,
-      log.gender_same_as_sex5,
+      log.gender_same_as_sex5, # 131
       log.gender_description5,
       log.gender_same_as_sex6,
-      log.gender_description6, # 140
+      log.gender_description6, # 134
     ]
   end
 
