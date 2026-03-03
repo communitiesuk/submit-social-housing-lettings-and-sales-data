@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_25_162121) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_25_135309) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -824,6 +824,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_25_162121) do
     t.string "sexrab4"
     t.string "sexrab5"
     t.string "sexrab6"
+    t.integer "mortlen_known"
     t.integer "buildheightclass"
     t.integer "gender_same_as_sex1"
     t.integer "gender_same_as_sex2"
