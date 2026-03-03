@@ -10,6 +10,7 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
     @pages ||= [
       (uprn_questions if form.start_date.year >= 2024),
       (Form::Sales::Pages::PropertyUnitType.new(nil, nil, self) if form.start_year_2025_or_later?),
+      (Form::Sales::Pages::BuildingHeightClass.new(nil, nil, self) if form.start_year_2026_or_later?),
       Form::Sales::Pages::PropertyNumberOfBedrooms.new(nil, nil, self),
       Form::Sales::Pages::AboutPriceValueCheck.new("about_price_bedrooms_value_check", nil, self),
       (Form::Sales::Pages::PropertyUnitType.new(nil, nil, self) unless form.start_year_2025_or_later?),

@@ -565,14 +565,14 @@ class BulkUpload::SalesLogToCsv
       log.wchair,
 
       log.age1,
-      log.sex1,
+      log.sexrab1,
       log.ethnic, # 30
       log.nationality_all_group,
       log.ecstat1,
       log.buy1livein,
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat2],
       log.age2,
-      log.sex2,
+      log.sexrab2,
       log.ethnic_group2,
       log.nationality_all_buyer2_group,
       log.ecstat2,
@@ -581,19 +581,19 @@ class BulkUpload::SalesLogToCsv
 
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat3],
       log.age3,
-      log.sex3,
+      log.sexrab3,
       log.ecstat3,
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat4],
       log.age4,
-      log.sex4,
+      log.sexrab4,
       log.ecstat4,
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat5], # 50
       log.age5,
-      log.sex5,
+      log.sexrab5,
       log.ecstat5,
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat6],
       log.age6,
-      log.sex6,
+      log.sexrab6,
       log.ecstat6,
 
       log.prevten,
@@ -665,12 +665,7 @@ class BulkUpload::SalesLogToCsv
       log.extrabor,
       log.deposit, # 120
       log.mscharge,
-      log.sexrab1,
-      log.sexrab2,
-      log.sexrab3,
-      log.sexrab4,
-      log.sexrab5,
-      log.sexrab6, # 127
+      log.buildheightclass, # 122
     ]
   end
 

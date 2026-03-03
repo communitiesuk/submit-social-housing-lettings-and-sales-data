@@ -6,8 +6,8 @@ class Form::Sales::Pages::ServiceCharge < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::HasServiceCharge.new(nil, nil, self),
-      Form::Sales::Questions::ServiceCharge.new(nil, nil, self),
+      Form::Sales::Questions::HasServiceCharge.new(nil, nil, self, staircasing: false),
+      Form::Sales::Questions::ServiceCharge.new(nil, nil, self, staircasing: false),
     ]
   end
 end
