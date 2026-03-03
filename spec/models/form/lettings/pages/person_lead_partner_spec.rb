@@ -9,8 +9,8 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
   let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2026_or_later?: start_year_2026_or_later?, person_question_count:) }
   let(:subsection) { instance_double(Form::Subsection, form:) }
   let(:person_index) { 2 }
-  let(:is_another_person_partner?) { false }
-  let(:log) { instance_double(LettingsLog, is_another_person_partner?: is_another_person_partner?) }
+  let(:is_any_person_partner?) { false }
+  let(:log) { instance_double(LettingsLog, is_any_person_partner?: is_any_person_partner?) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -23,7 +23,7 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
   describe "#skip_page_in_form_flow?" do
     context "with start year < 2026", metadata: { year: 25 } do
       context "when no other person is the partner of the lead tenant" do
-        let(:is_another_person_partner?) { false }
+        let(:is_any_person_partner?) { false }
 
         it "returns false" do
           expect(page.skip_page_in_form_flow?(log)).to be false
@@ -31,7 +31,7 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
       end
 
       context "when another person is the partner of the lead tenant" do
-        let(:is_another_person_partner?) { true }
+        let(:is_any_person_partner?) { true }
 
         it "returns false" do
           expect(page.skip_page_in_form_flow?(log)).to be false
@@ -43,7 +43,7 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
       let(:start_year_2026_or_later?) { true }
 
       context "when no other person is the partner of the lead tenant" do
-        let(:is_another_person_partner?) { false }
+        let(:is_any_person_partner?) { false }
 
         it "returns false" do
           expect(page.skip_page_in_form_flow?(log)).to be false
@@ -51,7 +51,7 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
       end
 
       context "when another person is the partner of the lead tenant" do
-        let(:is_another_person_partner?) { true }
+        let(:is_any_person_partner?) { true }
 
         it "returns true" do
           expect(page.skip_page_in_form_flow?(log)).to be true

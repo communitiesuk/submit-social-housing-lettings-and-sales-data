@@ -1759,7 +1759,7 @@ RSpec.describe LettingsLog, type: :model do
       end
 
       context "when there is an existing relationship" do
-        let(:log) { create(:lettings_log, :completed, hhmemb: 6, details_known_2: 0, details_known_3: 0, details_known_4: 0, details_known_5: 0, details_known_6: 0, relat2: "X", relat3: "P", relat4: "R", relat5: "X") }
+        let(:log) { create(:lettings_log, :in_progress, hhmemb: 6, details_known_2: 0, details_known_3: 0, details_known_4: 0, details_known_5: 0, details_known_6: 0, relat2: "X", relat3: "P", relat4: "R", relat5: "X") }
 
         context "and a new relationship is added to an earlier person than the existing one" do
           before do
@@ -1876,7 +1876,7 @@ RSpec.describe LettingsLog, type: :model do
       end
 
       context "when more than one relationship is set" do
-        let(:log) { create(:lettings_log, :completed, hhmemb: 6, details_known_2: 0, details_known_3: 0, details_known_4: 0, details_known_5: 0, details_known_6: 0, relat2: "X", relat3: "X", relat4: "R", relat5: "X") }
+        let(:log) { create(:lettings_log, :in_progress, hhmemb: 6, details_known_2: 0, details_known_3: 0, details_known_4: 0, details_known_5: 0, details_known_6: 0, relat2: "X", relat3: "X", relat4: "R", relat5: "X") }
 
         before do
           log.relat2 = "P"

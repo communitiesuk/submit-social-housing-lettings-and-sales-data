@@ -2350,20 +2350,20 @@ RSpec.describe LettingsLog do
     end
   end
 
-  describe "#is_another_person_partner?" do
-    context "when no other person is the partner of the lead tenant" do
-      let(:log) { create(:lettings_log, :completed, hhmemb: 4, relat2: "X", relat3: "R") }
+  describe "#is_any_person_partner?" do
+    context "when no person is the partner of the lead tenant" do
+      let(:log) { create(:lettings_log, :in_progress, hhmemb: 3, details_known_2: 0, details_known_3: 0, relat2: "X", relat3: "R") }
 
       it "returns false" do
-        expect(log.is_another_person_partner?(4)).to be false
+        expect(log.is_any_person_partner?).to be false
       end
     end
 
-    context "when another person is the partner of the lead tenant" do
-      let(:log) { create(:lettings_log, :completed, hhmemb: 4, relat2: "X", relat3: "P") }
+    context "when a person is the partner of the lead tenant" do
+      let(:log) { create(:lettings_log, :in_progress, hhmemb: 3, details_known_2: 0, details_known_3: 0, relat2: "X", relat3: "P") }
 
       it "returns true" do
-        expect(log.is_another_person_partner?(4)).to be true
+        expect(log.is_any_person_partner?).to be true
       end
     end
   end

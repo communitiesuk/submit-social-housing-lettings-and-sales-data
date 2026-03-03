@@ -449,9 +449,7 @@ class LettingsLog < Log
     public_send("age#{person_index}") && public_send("age#{person_index}") < 16
   end
 
-  def is_another_person_partner?(person_index)
-    partner_numbers.delete(person_index)
-
+  def is_any_person_partner?
     !partner_numbers.empty?
   end
 
