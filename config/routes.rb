@@ -301,7 +301,7 @@ Rails.application.routes.draw do
       get "review", to: "form#review"
     end
 
-    FormHandler.instance.lettings_forms.each do |_key, form|
+    FormHandler.instance.lettings_forms.each_value do |form|
       form.pages.map do |page|
         get page.id.to_s.dasherize, to: "form#show_page"
         post page.id.to_s.dasherize, to: "form#submit_form"
@@ -377,7 +377,7 @@ Rails.application.routes.draw do
       get "review", to: "form#review"
     end
 
-    FormHandler.instance.sales_forms.each do |_key, form|
+    FormHandler.instance.sales_forms.each_value do |form|
       form.pages.map do |page|
         get page.id.to_s.dasherize, to: "form#show_page"
         post page.id.to_s.dasherize, to: "form#submit_form"
@@ -405,11 +405,15 @@ Rails.application.routes.draw do
 
   if FeatureToggle.create_test_logs_enabled?
     get "create-test-lettings-log", to: "test_data#create_test_lettings_log"
+    get "create-next-year-test-lettings-log", to: "test_data#create_next_year_test_lettings_log"
     get "create-setup-test-lettings-log", to: "test_data#create_setup_test_lettings_log"
+    get "create-next-year-setup-test-lettings-log", to: "test_data#create_next_year_setup_test_lettings_log"
     get "create-2025-test-lettings-bulk-upload", to: "test_data#create_2025_test_lettings_bulk_upload"
     get "create-2026-test-lettings-bulk-upload", to: "test_data#create_2026_test_lettings_bulk_upload"
     get "create-test-sales-log", to: "test_data#create_test_sales_log"
+    get "create-next-year-test-sales-log", to: "test_data#create_next_year_test_sales_log"
     get "create-setup-test-sales-log", to: "test_data#create_setup_test_sales_log"
+    get "create-next-year-setup-test-sales-log", to: "test_data#create_next_year_setup_test_sales_log"
     get "create-2025-test-sales-bulk-upload", to: "test_data#create_2025_test_sales_bulk_upload"
     get "create-2026-test-sales-bulk-upload", to: "test_data#create_2026_test_sales_bulk_upload"
   end

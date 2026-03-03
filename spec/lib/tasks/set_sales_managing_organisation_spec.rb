@@ -15,7 +15,7 @@ RSpec.describe "set_sales_managing_organisation" do
       let!(:sales_log) { create(:sales_log, :completed, managing_organisation_id: nil) }
 
       it "updates sales log managing_organisation_id with owning_organisation_id" do
-        expect(sales_log.managing_organisation_id).to eq(nil)
+        expect(sales_log.managing_organisation_id).to be_nil
         expect(sales_log.status).to eq("in_progress")
         task.invoke
         sales_log.reload
@@ -26,17 +26,17 @@ RSpec.describe "set_sales_managing_organisation" do
       it "does not update sales log managing_organisation_id if owning_organisation_id is nil" do
         sales_log.update!(owning_organisation_id: nil)
         expect(sales_log.status).to eq("in_progress")
-        expect(sales_log.managing_organisation_id).to eq(nil)
+        expect(sales_log.managing_organisation_id).to be_nil
         task.invoke
         sales_log.reload
-        expect(sales_log.managing_organisation_id).to eq(nil)
+        expect(sales_log.managing_organisation_id).to be_nil
         expect(sales_log.status).to eq("in_progress")
       end
 
       it "skips validations" do
         sales_log.saledate = Time.zone.local(2021, 3, 3)
         sales_log.save!(validate: false)
-        expect(sales_log.managing_organisation_id).to eq(nil)
+        expect(sales_log.managing_organisation_id).to be_nil
         expect(sales_log.status).to eq("in_progress")
         task.invoke
         sales_log.reload

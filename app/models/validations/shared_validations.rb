@@ -56,11 +56,11 @@ module Validations::SharedValidations
 
       next unless incorrect_accuracy
 
-      case question.step
-      when 0.01 then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_hundredth", field:)
-      when 0.1 then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_tenth", field:)
-      when 1 then record.errors.add question.id.to_sym, :not_integer, message: I18n.t("validations.shared.numeric.whole_number", field:)
-      when 10 then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_ten", field:)
+      case question.step.to_d
+      when BigDecimal("0.01") then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_hundredth", field:)
+      when BigDecimal("0.1") then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_tenth", field:)
+      when BigDecimal("1") then record.errors.add question.id.to_sym, :not_integer, message: I18n.t("validations.shared.numeric.whole_number", field:)
+      when BigDecimal("10") then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_ten", field:)
       else
         record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_step", field:, step: question.step)
       end
@@ -105,8 +105,8 @@ private
 
   def add_range_error(record, question)
     field = question.check_answer_label || question.id
-    min = [question.prefix, number_with_delimiter(question.min, delimiter: ","), question.suffix].join("") if question.min
-    max = [question.prefix, number_with_delimiter(question.max, delimiter: ","), question.suffix].join("") if question.max
+    min = [question.prefix, number_with_delimiter(question.min, delimiter: ","), question.suffix_label(record)].join("") if question.min
+    max = [question.prefix, number_with_delimiter(question.max, delimiter: ","), question.suffix_label(record)].join("") if question.max
 
     if min && max
       record.errors.add question.id.to_sym, :outside_the_range, message: I18n.t("validations.shared.numeric.within_range", field:, min:, max:)

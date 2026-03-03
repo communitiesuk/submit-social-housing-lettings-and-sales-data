@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.6"
+ruby "3.4.4"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem "rails", "~> 7.2.2"
@@ -51,7 +51,7 @@ gem "paper_trail-globalid"
 gem "pundit"
 
 # Request rate limiting
-gem "rack", ">= 2.2.6.3"
+gem "rack", "~> 3.1.20"
 gem "rack-attack"
 gem "redis", "~> 4.8"
 # Receive exceptions and configure alerts
@@ -72,8 +72,11 @@ gem "sidekiq-cron"
 gem "unread"
 
 # Pinning versions to address vulnerabilities
-gem "nokogiri", "~> 1.18.9"
+gem "nokogiri", "~> 1.19.1"
 gem "thor", "~> 1.4.0"
+
+# Pinning until activesupport is updated to v8.1.2
+gem "connection_pool", "~> 2.5"
 
 group :development, :test do
   # Check gems for known vulnerabilities
@@ -95,7 +98,7 @@ group :development do
   # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
   gem "erb_lint", require: false
   gem "rack-mini-profiler", "~> 3.3.0"
-  gem "rubocop-govuk", "4.3.0", require: false
+  gem "rubocop-govuk", "5.2.0", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false
 end

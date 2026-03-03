@@ -12,9 +12,9 @@ class Form::Lettings::Questions::SchargeWeekly < ::Form::Question
     @result_field = "tcharge"
     @prefix = "£"
     @suffix = " every week"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @strip_commas = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 96, 2024 => 95, 2025 => 93 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 96, 2024 => 95, 2025 => 93, 2026 => 101 }.freeze
 end

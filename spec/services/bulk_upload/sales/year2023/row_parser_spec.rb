@@ -273,7 +273,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
           expect(parser).to be_valid
         end
 
-        it "instantiates a log with everything completed", aggregate_failures: true do
+        it "instantiates a log with everything completed", :aggregate_failures do
           questions = parser.send(:questions).reject do |q|
             parser.send(:log).optional_fields.include?(q.id) || q.completed?(parser.send(:log))
           end
@@ -931,7 +931,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
 
             it "does not set ##{age}" do
               parser.valid?
-              expect(parser.errors[field.to_sym]).to include(/#{I18n.t("validations.sales.2023.bulk_upload.not_answered", question: "")}/)
+              expect(parser.errors[field.to_sym]).to include(/#{I18n.t('validations.sales.2023.bulk_upload.not_answered', question: '')}/)
             end
           end
         end

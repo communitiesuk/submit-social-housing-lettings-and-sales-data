@@ -12,14 +12,14 @@ en:
               question_text: "Are you sure this is correct?"
               title_text: "You told us somebody in the household is pregnant."
               informative_text: "You also told us that all the tenants living at the property are male."
-            females_in_soft_age_range_in_pregnant_household_value_check:
+            no_household_member_likely_to_be_pregnant_check:
               page_header: ""
               check_answer_label: "Pregnancy confirmation"
               check_answer_prompt: "Confirm pregnancy status"
               hint_text: ""
               question_text: "Are you sure this is correct?"
               title_text: "You told us somebody in the household is pregnant."
-              informative_text: "You also told us that any female tenants living at the property are in the following age ranges:<ul class=\"govuk-body-l app-panel--interruption\"><li>under 16 years old</li><li>over 50 years old</li></ul>"
+              informative_text: "Your answers for the age, sex and gender of each household member suggest there is no household member who is likely to be pregnant."
 
           no_retirement_value_check:
             page_header: ""
@@ -57,6 +57,14 @@ en:
             title_text: "You told us that the tenant’s main reason for leaving their last settled home was %{reasonother}."
             informative_text: "The reason you have entered looks very similar to one of the existing response categories. Please check the categories and select the appropriate one. If the existing categories are not suitable, please confirm here to move onto the next question."
 
+          tenancyother_value_check:
+            page_header: ""
+            check_answer_label: "Tenancy other confirmation"
+            check_answer_prompt: "Confirm tenancy type"
+            hint_text: ""
+            question_text: ""
+            title_text: "You told us that the type of tenancy was %{tenancyother}."
+            informative_text: "We already know whether the tenancy is introductory or has a starter period from your previous answer. Your answer to the type of main tenancy question should be the type of tenancy that the tenant will roll onto after any introductory or starter period. Choose from the categories or write a description if no category is suitable."
           referral_value_check:
             page_header: ""
             check_answer_label: "Referral confirmation"

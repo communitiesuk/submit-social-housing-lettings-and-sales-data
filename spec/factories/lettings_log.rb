@@ -35,6 +35,7 @@ FactoryBot.define do
       setup_completed
       status { 1 }
       tenancycode { "same tenancy code" }
+      address_line1 { "same address line 1" }
       postcode_full { "A1 1AA" }
       uprn_known { 0 }
       declaration { 1 }
@@ -168,6 +169,9 @@ FactoryBot.define do
       first_time_property_let_as_social_housing { 0 }
       referral_type { 1 }
       referral { 2 }
+      referral_register { 1 }
+      referral_noms { 1 }
+      referral_org { 1 }
       uprn_known { 0 }
       joint { 3 }
       address_line1 { "Address line 1" }

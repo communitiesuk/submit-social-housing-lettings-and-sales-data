@@ -30,7 +30,7 @@ RSpec.describe Form::Sales::Pages::SavingsValueCheck, type: :model do
   end
 
   it "is interruption screen page" do
-    expect(page.interruption_screen?).to eq(true)
+    expect(page.interruption_screen?).to be(true)
   end
 
   it "has the correct interruption_screen_question_ids" do

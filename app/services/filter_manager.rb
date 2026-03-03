@@ -121,7 +121,7 @@ class FilterManager
 
       new_filters = new_filters.except("user") if params["assigned_to"] == "all"
       new_filters["user"] = current_user.id.to_s if params["assigned_to"] == "you"
-      new_filters = new_filters.except("user_text_search") if params["assigned_to"] == "all" || params["assigned_to"] == "you"
+      new_filters = new_filters.except("user_text_search") if %w[all you].include?(params["assigned_to"])
       new_filters = new_filters.except("owning_organisation_text_search") if params["owning_organisation_select"] == "all"
       new_filters = new_filters.except("managing_organisation_text_search") if params["managing_organisation_select"] == "all"
     end

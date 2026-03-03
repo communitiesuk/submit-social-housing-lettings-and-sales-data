@@ -4,7 +4,7 @@ RSpec.describe Form::Lettings::Questions::PersonWorkingSituation, type: :model d
   subject(:question) { described_class.new(nil, question_definition, page, person_index:) }
 
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2025, 4, 4)))) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2025, 4, 4), start_year_2026_or_later?: false, person_question_count: 4))) }
   let(:person_index) { 2 }
 
   before do
@@ -46,11 +46,11 @@ RSpec.describe Form::Lettings::Questions::PersonWorkingSituation, type: :model d
   end
 
   it "has correct conditional for" do
-    expect(question.conditional_for).to be nil
+    expect(question.conditional_for).to be_nil
   end
 
   it "has the correct hidden_in_check_answers" do
-    expect(question.hidden_in_check_answers).to be nil
+    expect(question.hidden_in_check_answers).to be_nil
   end
 
   context "with person 2" do

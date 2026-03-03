@@ -25,7 +25,7 @@ RSpec.describe Form::Sales::Pages::AboutPriceValueCheck, type: :model do
   end
 
   it "is interruption screen page" do
-    expect(page.interruption_screen?).to eq(true)
+    expect(page.interruption_screen?).to be(true)
   end
 
   it "has the correct title_text" do

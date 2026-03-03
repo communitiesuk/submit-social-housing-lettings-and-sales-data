@@ -29,7 +29,7 @@ RSpec.describe "Checkboxes" do
     sign_in user
   end
 
-  context "when exclusive checkbox is selected", js: true do
+  context "when exclusive checkbox is selected", :js do
     it "deselects all other checkboxes" do
       visit("/lettings-logs/#{id}/accessibility-requirements")
       page.check("lettings-log-accessibility-requirements-housingneeds-a-field", allow_label_click: true)

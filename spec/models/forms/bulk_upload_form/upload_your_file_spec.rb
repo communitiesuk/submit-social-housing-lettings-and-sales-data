@@ -12,7 +12,7 @@ RSpec.describe Forms::BulkUploadForm::UploadYourFile do
     )
   end
   let(:current_user) { create(:user) }
-  let(:mock_storage_service) { instance_double("S3Service") }
+  let(:mock_storage_service) { instance_double(Storage::S3Service) }
 
   before do
     vcap_services = { "aws-s3-bucket" => {} }

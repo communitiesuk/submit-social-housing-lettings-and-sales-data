@@ -9,8 +9,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdNeeds, type: :model do
   let(:section) { instance_double(Form::Lettings::Sections::Household, form:) }
 
   before do
-    allow(form).to receive(:start_year_2025_or_later?).and_return(false)
-    allow(form).to receive(:start_year_2026_or_later?).and_return(false)
+    allow(form).to receive_messages(start_year_2025_or_later?: false, start_year_2026_or_later?: false)
   end
 
   it "has correct section" do
@@ -42,8 +41,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdNeeds, type: :model do
 
   context "with start year >= 2026", metadata: { year: 26 } do
     before do
-      allow(form).to receive(:start_year_2025_or_later?).and_return(true)
-      allow(form).to receive(:start_year_2026_or_later?).and_return(true)
+      allow(form).to receive_messages(start_year_2025_or_later?: true, start_year_2026_or_later?: true)
     end
 
     it "has correct pages" do
@@ -53,8 +51,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdNeeds, type: :model do
           armed_forces_serving
           armed_forces_injured
           pregnant
-          no_females_pregnant_household_value_check
-          females_in_soft_age_range_in_pregnant_household_value_check
+          no_household_member_likely_to_be_pregnant_check
           access_needs_exist
           type_of_access_needs
           health_conditions

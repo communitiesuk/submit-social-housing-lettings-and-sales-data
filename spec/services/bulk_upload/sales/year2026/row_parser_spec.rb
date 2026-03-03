@@ -112,12 +112,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       field_105: "07",
       field_106: "2023",
       field_110: "900",
-      field_122: "F",
-      field_123: "F",
-      field_124: "M",
-      field_125: "M",
-      field_126: "R",
-      field_127: "R",
+      field_122: "1",
     }
   end
 
@@ -288,7 +283,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           expect(parser).to be_valid
         end
 
-        it "instantiates a log with everything completed", aggregate_failures: true do
+        it "instantiates a log with everything completed", :aggregate_failures do
           parser.valid?
 
           questions = parser.send(:questions).reject do |q|
@@ -298,6 +293,20 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           expect(questions.map(&:id).size).to eq(0)
           expect(questions.map(&:id)).to eql([])
         end
+
+        context "and case insensitive fields are set to lowercase" do
+          let(:case_insensitive_fields) { %w[field_29 field_36 field_44 field_48 field_52 field_56] }
+          let(:case_insensitive_integer_fields_with_r_option) { %w[field_28 field_35 field_43 field_47 field_51 field_55 field_64 field_75 field_70 field_72] }
+          let(:attributes) do
+            valid_attributes
+              .merge(case_insensitive_fields.each_with_object({}) { |field, h| h[field.to_sym] = valid_attributes[field.to_sym]&.downcase })
+              .merge(case_insensitive_integer_fields_with_r_option.each_with_object({}) { |field, h| h[field.to_sym] = "r" })
+          end
+
+          it "is still valid" do
+            expect(parser).to be_valid
+          end
+        end
       end
 
       describe "#validate_nulls" do
@@ -306,7 +315,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
           it "fetches the question's check_answer_label if it exists" do
             parser.valid?
-            expect(parser.errors[:field_29]).to eql([I18n.t("validations.not_answered", question: "buyer 1’s gender identity.")])
+            expect(parser.errors[:field_29]).to eql([I18n.t("validations.not_answered", question: "buyer 1’s sex registered at birth.")])
           end
         end
 
@@ -779,7 +788,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           :field_21, # Postcode
           :field_22, # Postcode
           :field_28, # Buyer 1 age
-          :field_29, # Buyer 1 gender
+          :field_29, # Buyer 1 sex registered at birth
           :field_32, # Buyer 1 working situation
           :field_7, # Purchaser code
         ].each do |field|
@@ -809,7 +818,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           :field_21, # Postcode
           :field_22, # Postcode
           :field_28, # Buyer 1 age
-          :field_29, # Buyer 1 gender
+          :field_29, # Buyer 1 sex registered at birth
           :field_32, # Buyer 1 working situation
           :field_7, # Purchaser code
         ].each do |field|
@@ -1442,7 +1451,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       end
 
       it "does not add duplicate logs validation to the blank row" do
-        expect(parser.log_already_exists?).to eq(false)
+        expect(parser.log_already_exists?).to be(false)
       end
     end
   end
@@ -1636,8 +1645,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
         it "is correctly set" do
           parser.valid?
-          expect(parser.log.nationality_all).to be(nil)
-          expect(parser.log.nationality_all_group).to be(nil)
+          expect(parser.log.nationality_all).to be_nil
+          expect(parser.log.nationality_all_group).to be_nil
           expect(parser.errors["field_31"]).to include(I18n.t("validations.sales.2026.bulk_upload.nationality.invalid"))
         end
       end
@@ -1721,8 +1730,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
         it "is correctly set" do
           parser.valid?
-          expect(parser.log.nationality_all_buyer2).to be(nil)
-          expect(parser.log.nationality_all_buyer2_group).to be(nil)
+          expect(parser.log.nationality_all_buyer2).to be_nil
+          expect(parser.log.nationality_all_buyer2_group).to be_nil
           expect(parser.errors["field_38"]).to include(I18n.t("validations.sales.2026.bulk_upload.nationality.invalid"))
         end
       end

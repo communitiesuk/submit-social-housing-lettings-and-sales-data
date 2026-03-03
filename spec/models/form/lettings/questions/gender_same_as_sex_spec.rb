@@ -42,7 +42,7 @@ RSpec.describe Form::Lettings::Questions::GenderSameAsSex, type: :model do
     end
 
     it "has the correct inferred_check_answers_value" do
-      expect(question.inferred_check_answers_value).to be_nil
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "gender_same_as_sex#{person_index}" => 2 }, "value" => "No" }])
     end
 
     it "has the correct question number" do
@@ -72,7 +72,7 @@ RSpec.describe Form::Lettings::Questions::GenderSameAsSex, type: :model do
     end
 
     it "has the correct inferred_check_answers_value" do
-      expect(question.inferred_check_answers_value).to be_nil
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "gender_same_as_sex#{person_index}" => 2 }, "value" => "No" }])
     end
 
     it "has the correct question number" do
@@ -102,7 +102,7 @@ RSpec.describe Form::Lettings::Questions::GenderSameAsSex, type: :model do
     end
 
     it "has the correct inferred_check_answers_value" do
-      expect(question.inferred_check_answers_value).to be_nil
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "gender_same_as_sex#{person_index}" => 2 }, "value" => "No" }])
     end
 
     it "has the correct question number" do
@@ -132,7 +132,7 @@ RSpec.describe Form::Lettings::Questions::GenderSameAsSex, type: :model do
     end
 
     it "has the correct inferred_check_answers_value" do
-      expect(question.inferred_check_answers_value).to be_nil
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "gender_same_as_sex#{person_index}" => 2 }, "value" => "No" }])
     end
 
     it "has the correct question number" do
@@ -162,7 +162,7 @@ RSpec.describe Form::Lettings::Questions::GenderSameAsSex, type: :model do
     end
 
     it "has the correct inferred_check_answers_value" do
-      expect(question.inferred_check_answers_value).to be_nil
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "gender_same_as_sex#{person_index}" => 2 }, "value" => "No" }])
     end
 
     it "has the correct question number" do
@@ -192,7 +192,7 @@ RSpec.describe Form::Lettings::Questions::GenderSameAsSex, type: :model do
     end
 
     it "has the correct inferred_check_answers_value" do
-      expect(question.inferred_check_answers_value).to be_nil
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "gender_same_as_sex#{person_index}" => 2 }, "value" => "No" }])
     end
 
     it "has the correct question number" do
@@ -222,7 +222,7 @@ RSpec.describe Form::Lettings::Questions::GenderSameAsSex, type: :model do
     end
 
     it "has the correct inferred_check_answers_value" do
-      expect(question.inferred_check_answers_value).to be_nil
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "gender_same_as_sex#{person_index}" => 2 }, "value" => "No" }])
     end
 
     it "has the correct question number" do
@@ -252,7 +252,7 @@ RSpec.describe Form::Lettings::Questions::GenderSameAsSex, type: :model do
     end
 
     it "has the correct inferred_check_answers_value" do
-      expect(question.inferred_check_answers_value).to be_nil
+      expect(question.inferred_check_answers_value).to eq([{ "condition" => { "gender_same_as_sex#{person_index}" => 2 }, "value" => "No" }])
     end
 
     it "has the correct question number" do

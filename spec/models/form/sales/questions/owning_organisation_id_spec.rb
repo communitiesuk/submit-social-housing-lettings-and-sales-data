@@ -300,9 +300,9 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
       answers = question.displayed_answer_options(lettings_log).map { |key, value| OpenStruct.new(id: key, name: nil, resource: value) }
       answers.each do |answer|
         if answer.resource == "Select an option"
-          expect(question.answer_selected?(lettings_log, answer)).to eq(true)
+          expect(question.answer_selected?(lettings_log, answer)).to be(true)
         else
-          expect(question.answer_selected?(lettings_log, answer)).to eq(false)
+          expect(question.answer_selected?(lettings_log, answer)).to be(false)
         end
       end
     end
@@ -314,9 +314,9 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
       answers = question.displayed_answer_options(lettings_log).map { |key, value| OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value) }
       answers.each do |answer|
         if answer.id == organisation_1.id
-          expect(question.answer_selected?(lettings_log, answer)).to eq(true)
+          expect(question.answer_selected?(lettings_log, answer)).to be(true)
         else
-          expect(question.answer_selected?(lettings_log, answer)).to eq(false)
+          expect(question.answer_selected?(lettings_log, answer)).to be(false)
         end
       end
     end

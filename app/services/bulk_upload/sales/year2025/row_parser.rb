@@ -139,6 +139,28 @@ class BulkUpload::Sales::Year2025::RowParser
 
   ERROR_BASE_KEY = "validations.sales.2025.bulk_upload".freeze
 
+  CASE_INSENSITIVE_FIELDS = [
+    :field_28, # Age of buyer 1
+    :field_35, # Age of person 2
+    :field_43, # Age of person 3
+    :field_47, # Age of person 4
+    :field_51, # Age of person 5
+    :field_55, # Age of person 6
+
+    :field_29, # Gender identity of buyer 1
+    :field_36, # Gender identity of person 2
+    :field_44, # Gender identity of person 3
+    :field_48, # Gender identity of person 4
+    :field_52, # Gender identity of person 5
+    :field_56, # Gender identity of person 6
+
+    :field_64, # What was buyer 2’s previous tenure?
+
+    :field_75, # What is the total amount the buyers had in savings before they paid any deposit for the property?
+    :field_70, # What is buyer 1’s gross annual income?
+    :field_72, # What is buyer 2’s gross annual income?
+  ].freeze
+
   attribute :bulk_upload
   attribute :block_log_creation, :boolean, default: -> { false }
 
@@ -454,6 +476,8 @@ class BulkUpload::Sales::Year2025::RowParser
 
     return true if blank_row?
 
+    normalise_case_insensitive_fields
+
     super(:before_log)
     @before_errors = errors.dup
 
@@ -524,6 +548,13 @@ class BulkUpload::Sales::Year2025::RowParser
   end
 
 private
+
+  def normalise_case_insensitive_fields
+    CASE_INSENSITIVE_FIELDS.each do |field|
+      value = send(field)
+      send("#{field}=", value.upcase) if value.present?
+    end
+  end
 
   def prevtenbuy2
     case field_64
@@ -906,7 +937,7 @@ private
     attributes["mortlen"] = mortlen
 
     attributes["proplen"] = proplen if proplen&.positive?
-    attributes["proplen_asked"] = attributes["proplen"]&.present? ? 0 : 1
+    attributes["proplen_asked"] = attributes["proplen"].present? ? 0 : 1
     attributes["jointmore"] = field_13
     attributes["staircase"] = field_10
     attributes["privacynotice"] = field_15
@@ -1008,7 +1039,8 @@ private
   ].each do |hash|
     define_method("age#{hash[:person]}_known?") do
       return 1 if public_send(hash[:field]) == "R"
-      return 0 if send("person_#{hash[:person]}_present?")
+
+      0 if send("person_#{hash[:person]}_present?")
     end
   end
 
@@ -1076,58 +1108,68 @@ private
 
   def sale_type
     return field_9 if shared_ownership?
-    return field_11 if discounted_ownership?
+
+    field_11 if discounted_ownership?
   end
 
   def value
     return field_86 if shared_ownership_initial_purchase?
     return field_113 if discounted_ownership?
-    return field_107 if staircasing?
+
+    field_107 if staircasing?
   end
 
   def equity
     return field_87 if shared_ownership_initial_purchase?
-    return field_108 if staircasing?
+
+    field_108 if staircasing?
   end
 
   def mortgage
     return field_89 if shared_ownership?
-    return field_117 if discounted_ownership?
+
+    field_117 if discounted_ownership?
   end
 
   def extrabor
-    return field_119 if discounted_ownership?
+    field_119 if discounted_ownership?
   end
 
   def deposit
     return field_91 if shared_ownership?
-    return field_120 if discounted_ownership?
+
+    field_120 if discounted_ownership?
   end
 
   def mrent
     return field_93 if shared_ownership_initial_purchase?
-    return field_111 if staircasing?
+
+    field_111 if staircasing?
   end
 
   def mscharge
     return field_94 if shared_ownership?
-    return field_121 if discounted_ownership?
+
+    field_121 if discounted_ownership?
   end
 
   def mortlen
     return field_90 if shared_ownership?
-    return field_118 if discounted_ownership?
+
+    field_118 if discounted_ownership?
   end
 
   def proplen
     return field_79 if shared_ownership?
-    return field_112 if discounted_ownership?
+
+    field_112 if discounted_ownership?
   end
 
   def mortgageused
     return field_88 if shared_ownership_initial_purchase?
     return field_116 if discounted_ownership?
-    return field_109 if staircasing?
+
+    field_109 if staircasing?
   end
 
   def value_fields
@@ -1369,7 +1411,7 @@ private
   end
 
   def validate_valid_radio_option
-    log.attributes.each do |question_id, _v|
+    log.attributes.each_key do |question_id|
       question = log.form.get_question(question_id, log)
 
       next if question_id == "type"
