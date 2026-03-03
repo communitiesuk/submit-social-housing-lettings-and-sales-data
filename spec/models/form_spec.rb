@@ -19,21 +19,42 @@ RSpec.describe Form, type: :model do
     let(:previous_page_id) { form.get_page("person_1_age") }
     let(:value_check_previous_page) { form.get_page("net_income_value_check") }
 
-    it "returns the next page given the previous" do
+    it "returns the next page, given the previous" do
       expect(form.next_page_id(previous_page_id, lettings_log, user)).to eq("person_1_gender")
     end
 
-    context "when the next page's `skip_page_in_form_flow?` returns `true`" do
-      let(:next_page) { form.get_page("person_1_gender") }
+    context "when the next page has more than one question" do
+      let(:previous_page_id) { form.get_page("tenancy_start_date") }
+      let(:next_page) { form.get_page("rent_type") }
 
-      before do
-        allow(next_page).to receive(:skip_page_in_form_flow?)
-          .with(lettings_log)
-          .and_return(true)
+      context "when every question on the next page returns `true` from its `skip_question_in_form_flow?` method" do
+        before do
+          allow(next_page.questions.first).to receive(:skip_question_in_form_flow?)
+            .with(lettings_log)
+            .and_return(true)
+          allow(next_page.questions.second).to receive(:skip_question_in_form_flow?)
+            .with(lettings_log)
+            .and_return(true)
+        end
+
+        it "returns the page after next, given the previous" do
+          expect(form.next_page_id(previous_page_id, lettings_log, user)).to eq("tenant_code")
+        end
       end
 
-      it "returns the page after next, given the previous" do
-        expect(form.next_page_id(previous_page_id, lettings_log, user)).to eq("person_1_working_situation")
+      context "when at least question on the next page returns `false` from its `skip_question_in_form_flow?` method" do
+        before do
+          allow(next_page.questions.first).to receive(:skip_question_in_form_flow?)
+            .with(lettings_log)
+            .and_return(true)
+          allow(next_page.questions.second).to receive(:skip_question_in_form_flow?)
+            .with(lettings_log)
+            .and_return(false)
+        end
+
+        it "returns the next page, given the previous" do
+          expect(form.next_page_id(previous_page_id, lettings_log, user)).to eq("rent_type")
+        end
       end
     end
 

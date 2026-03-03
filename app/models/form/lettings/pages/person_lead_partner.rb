@@ -28,8 +28,4 @@ class Form::Lettings::Pages::PersonLeadPartner < ::Form::Page
       [{ "details_known_#{@person_index}" => 0 }]
     end
   end
-
-  def skip_page_in_form_flow?(log)
-    form.start_year_2026_or_later? && log.is_any_person_partner?
-  end
 end

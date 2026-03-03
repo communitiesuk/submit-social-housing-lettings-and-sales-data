@@ -55,10 +55,6 @@ class Form::Page
 
   def skip_href(log = nil); end
 
-  def skip_page_in_form_flow?(_log)
-    false
-  end
-
 private
 
   def conditional_question_ids

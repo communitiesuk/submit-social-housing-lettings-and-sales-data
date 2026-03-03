@@ -37,4 +37,8 @@ class Form::Lettings::Questions::PersonPartner < ::Form::Question
   def derived?(log)
     form.start_year_2026_or_later? && log.is_person_under_16?(@person_index)
   end
+
+  def skip_question_in_form_flow?(log)
+    form.start_year_2026_or_later? && log.is_any_person_partner?
+  end
 end
