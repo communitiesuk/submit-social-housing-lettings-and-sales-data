@@ -161,6 +161,9 @@ class BulkUpload::Sales::Year2026::RowParser
     :field_75, # What is the total amount the buyers had in savings before they paid any deposit for the property?
     :field_70, # What is buyer 1’s gross annual income?
     :field_72, # What is buyer 2’s gross annual income?
+
+    :field_90,  # What is the length of the mortgage in years? - Shared ownership
+    :field_118, # What is the length of the mortgage in years? - Discounted ownership
   ].freeze
 
   attribute :bulk_upload
@@ -264,7 +267,7 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_87, :decimal
   attribute :field_88, :integer
   attribute :field_89, :decimal
-  attribute :field_90, :integer
+  attribute :field_90, :string
   attribute :field_91, :decimal
   attribute :field_92, :decimal
   attribute :field_93, :decimal
@@ -294,7 +297,7 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_115, :decimal
   attribute :field_116, :integer
   attribute :field_117, :decimal
-  attribute :field_118, :integer
+  attribute :field_118, :string
   attribute :field_119, :integer
   attribute :field_120, :decimal
   attribute :field_121, :decimal
@@ -427,6 +430,22 @@ class BulkUpload::Sales::Year2026::RowParser
             },
             on: :before_log
 
+  validates :field_90,
+            if: :shared_ownership?,
+            format: {
+              with: /\A(\d+|R)\z/,
+              message: I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid"),
+            },
+            on: :after_log
+
+  validates :field_118,
+            if: :discounted_ownership?,
+            format: {
+              with: /\A(\d+|R)\z/,
+              message: I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid"),
+            },
+            on: :after_log
+
   validate :validate_buyer1_economic_status, on: :before_log
   validate :validate_buyer2_economic_status, on: :before_log
   validate :validate_valid_radio_option, on: :before_log
@@ -449,6 +468,7 @@ class BulkUpload::Sales::Year2026::RowParser
 
   validate :validate_nationality, on: :after_log
   validate :validate_buyer_2_nationality, on: :after_log
+  validate :validate_mortlen_field_if_buyer_interviewed, on: :after_log
 
   validate :validate_nulls, on: :after_log
 
@@ -674,6 +694,10 @@ private
     field_99 == 1
   end
 
+  def buyer_interviewed?
+    field_14 == 2
+  end
+
   def rtb_like_sale_type?
     [9, 14, 29].include?(field_11)
   end
@@ -767,6 +791,7 @@ private
 
       hb: %i[field_74],
       mortlen: mortlen_fields,
+      mortlen_known: mortlen_fields,
       proplen: proplen_fields,
 
       jointmore: %i[field_13],
@@ -938,7 +963,8 @@ private
 
     attributes["hb"] = field_74
 
-    attributes["mortlen"] = mortlen
+    attributes["mortlen"] = mortlen != "R" ? mortlen : nil
+    attributes["mortlen_known"] = mortlen_known
 
     attributes["proplen"] = proplen if proplen&.positive?
     attributes["proplen_asked"] = attributes["proplen"].present? ? 0 : 1
@@ -1161,6 +1187,16 @@ private
     return field_90 if shared_ownership?
 
     field_118 if discounted_ownership?
+  end
+
+  def mortlen_known
+    return nil if buyer_interviewed?
+
+    if mortlen == "R"
+      1
+    else
+      0
+    end
   end
 
   def proplen
@@ -1528,14 +1564,10 @@ private
     %w[0] + GlobalConstants::COUNTRIES_ANSWER_OPTIONS.keys # 0 is "Prefers not to say"
   end
 
-  def validate_relat_fields
-    %i[field_34 field_42 field_46 field_50 field_54].each do |field|
-      value = send(field)
-      next if value.blank?
-
-      unless (1..3).cover?(value)
-        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: format_ending(QUESTIONS[field])))
-      end
+  def validate_mortlen_field_if_buyer_interviewed
+    if buyer_interviewed? && mortlen == "R"
+      errors.add(:field_90, I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid_for_interviewed")) if shared_ownership?
+      errors.add(:field_118, I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid_for_interviewed")) if discounted_ownership?
     end
   end
 

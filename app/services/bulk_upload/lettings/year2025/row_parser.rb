@@ -555,6 +555,8 @@ class BulkUpload::Lettings::Year2025::RowParser
       "field_10", # startdate
       "field_13", # tenancycode
       !general_needs? ? :field_6.to_s : nil, # location
+      !supported_housing? ? "field_18" : nil,  # uprn
+      !supported_housing? ? "field_19" : nil,  # address line 1
       !supported_housing? ? "field_23" : nil,  # postcode
       !supported_housing? ? "field_24" : nil,  # postcode
       "field_42", # age1
@@ -718,6 +720,8 @@ private
       "ecstat1",
       "owning_organisation",
       "tcharge",
+      !supported_housing? ? "uprn" : nil,
+      !supported_housing? ? "address_line1" : nil,
       !supported_housing? ? "postcode_full" : nil,
       !general_needs? ? "location" : nil,
       "tenancycode",
@@ -1000,6 +1004,8 @@ private
       errors.add(:field_13, error_message) # tenancycode
       errors.add(:field_6, error_message) if !general_needs? && :field_6.present? # location
       errors.add(:field_5, error_message) if !general_needs? && :field_6.blank? # add to Scheme field as unclear whether log uses New or Old CORE ids
+      errors.add(:field_18, error_message) unless supported_housing? # uprn
+      errors.add(:field_19, error_message) unless supported_housing? # address_line1
       errors.add(:field_23, error_message) unless supported_housing? # postcode_full
       errors.add(:field_24, error_message) unless supported_housing? # postcode_full
       errors.add(:field_25, error_message) unless supported_housing? # la
