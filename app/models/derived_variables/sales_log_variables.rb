@@ -98,6 +98,10 @@ module DerivedVariables::SalesLogVariables
     self.numstair = is_firststair? ? 1 : nil if numstair == 1 && firststair_changed?
     self.mrent = 0 if stairowned_100?
 
+    if buyer_interviewed_changed_to_not_interviewed_and_mortlen_set?
+      self.mortlen_known = 0
+    end
+
     set_encoded_derived_values!(DEPENDENCIES)
   end
 
