@@ -243,6 +243,7 @@ RSpec.describe Csv::SalesLogCsvService do
       let(:now) { collection_start_date_for_year(2026) }
       let(:year) { 2026 }
       let(:fixed_time) { collection_start_date_for_year(2026) }
+
       before do
         log.update!(
           nationality_all: 36,
@@ -380,8 +381,7 @@ RSpec.describe Csv::SalesLogCsvService do
                     sexrab4: "R",
                     sex4: "X",
                     relat4: "X",
-                    details_known_5: 2,
-                    )
+                    details_known_5: 2)
       end
 
       it "exports the CSV with all values correct" do
@@ -481,8 +481,7 @@ RSpec.describe Csv::SalesLogCsvService do
                     sexrab4: "R",
                     sex4: "X",
                     relat4: "X",
-                    details_known_5: 2,
-                    )
+                    details_known_5: 2)
       end
 
       context "and exporting with labels" do
