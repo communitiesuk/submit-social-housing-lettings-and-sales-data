@@ -24,6 +24,8 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
     )
   end
   let(:person_index) { 2 }
+  let(:is_any_person_partner?) { false }
+  let(:log) { instance_double(LettingsLog, is_any_person_partner?: is_any_person_partner?) }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -45,6 +47,48 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
 
   it "has the correct hidden_in_check_answers" do
     expect(question.hidden_in_check_answers).to be_nil
+  end
+
+  describe "#skip_page_in_form_flow?" do
+    context "with start year < 2026", metadata: { year: 25 } do
+      let(:year) { 2025 }
+
+      context "when no other person is the partner of the lead tenant" do
+        let(:is_any_person_partner?) { false }
+
+        it "returns false" do
+          expect(question.skip_question_in_form_flow?(log)).to be false
+        end
+      end
+
+      context "when another person is the partner of the lead tenant" do
+        let(:is_any_person_partner?) { true }
+
+        it "returns false" do
+          expect(question.skip_question_in_form_flow?(log)).to be false
+        end
+      end
+    end
+
+    context "with start year >= 2026", metadata: { year: 26 } do
+      let(:year) { 2026 }
+
+      context "when no other person is the partner of the lead tenant" do
+        let(:is_any_person_partner?) { false }
+
+        it "returns false" do
+          expect(question.skip_question_in_form_flow?(log)).to be false
+        end
+      end
+
+      context "when another person is the partner of the lead tenant" do
+        let(:is_any_person_partner?) { true }
+
+        it "returns true" do
+          expect(question.skip_question_in_form_flow?(log)).to be true
+        end
+      end
+    end
   end
 
   context "with person 2" do
