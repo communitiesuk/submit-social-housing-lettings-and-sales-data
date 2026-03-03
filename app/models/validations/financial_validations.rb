@@ -228,7 +228,7 @@ private
       end
 
       if record.weekly_value(record["brent"]) > rent_range.hard_max
-        record.errors.add :brent, :over_hard_max, message: I18n.t("validations.lettings.financial.brent.above_hard_max")
+        record.errors.add :brent, :above_hard_max, message: I18n.t("validations.lettings.financial.brent.above_hard_max")
         record.errors.add :beds, I18n.t("validations.lettings.financial.beds.rent_above_hard_max")
         record.errors.add :uprn, I18n.t("validations.lettings.financial.uprn.rent_above_hard_max")
         record.errors.add :la, I18n.t("validations.lettings.financial.la.rent_above_hard_max")
