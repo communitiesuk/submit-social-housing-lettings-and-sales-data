@@ -666,7 +666,7 @@ class BulkUpload::SalesLogToCsv
       log.deposit, # 120
 
       log.mscharge,
-      log.buildheightclass, # 122
+      log.buildheightclass,
       log.gender_same_as_sex1,
       log.gender_description1,
       log.gender_same_as_sex2,
@@ -674,8 +674,8 @@ class BulkUpload::SalesLogToCsv
       log.gender_same_as_sex3,
       log.gender_description3,
       log.gender_same_as_sex4,
-      log.gender_description4,
-      log.gender_same_as_sex5, # 131
+      log.gender_description4, # 130
+      log.gender_same_as_sex5,
       log.gender_description5,
       log.gender_same_as_sex6,
       log.gender_description6, # 134
