@@ -332,9 +332,9 @@ RSpec.describe Validations::SoftValidations do
         end
       end
 
-      context "when female tenants are under 16" do
+      context "when female tenants are 13 or over" do
         before do
-          record.age1 = 15
+          record.age1 = 13
           record.sexrab1 = "F"
           record.gender_same_as_sex1 = 1
         end
@@ -356,9 +356,9 @@ RSpec.describe Validations::SoftValidations do
         end
       end
 
-      context "when female tenants are over 50" do
+      context "when female tenants are 55 or under" do
         before do
-          record.age1 = 51
+          record.age1 = 55
           record.sexrab1 = "F"
           record.gender_same_as_sex1 = 1
         end
@@ -370,7 +370,7 @@ RSpec.describe Validations::SoftValidations do
 
       context "when female tenants are over 55" do
         before do
-          record.age1 = 60
+          record.age1 = 56
           record.sexrab1 = "F"
           record.gender_same_as_sex1 = 1
         end
@@ -380,7 +380,20 @@ RSpec.describe Validations::SoftValidations do
         end
       end
 
-      context "when non binary tenants are under 16" do
+      context "when non binary tenants are 13 or over" do
+        before do
+          record.age1 = 13
+          record.sexrab1 = "M"
+          record.gender_same_as_sex1 = 2
+          record.gender_description1 = "Non-binary"
+        end
+
+        it "does not show the interruption screen" do
+          expect(record.no_household_member_likely_to_be_pregnant?).to be false
+        end
+      end
+
+      context "when non binary tenants are under 13" do
         before do
           record.age1 = 12
           record.sexrab1 = "M"
@@ -393,9 +406,22 @@ RSpec.describe Validations::SoftValidations do
         end
       end
 
-      context "when non binary tenants are over 50" do
+      context "when non binary tenants are 55 or under" do
         before do
-          record.age1 = 60
+          record.age1 = 55
+          record.sexrab1 = "M"
+          record.gender_same_as_sex1 = 2
+          record.gender_description1 = "Non-binary"
+        end
+
+        it "does not show the interruption screen" do
+          expect(record.no_household_member_likely_to_be_pregnant?).to be false
+        end
+      end
+
+      context "when non binary tenants are over 55" do
+        before do
+          record.age1 = 56
           record.sexrab1 = "M"
           record.gender_same_as_sex1 = 2
           record.gender_description1 = "Non-binary"
