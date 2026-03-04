@@ -299,6 +299,7 @@ FactoryBot.define do
       age1 { 27 }
       sexrab1 { "F" }
       sex1 { "F" }
+      gender_same_as_sex1 { 1 }
       national { 18 }
       buy1livein { 1 }
       relat2 { "P" }
@@ -311,7 +312,6 @@ FactoryBot.define do
       ethnic_group { 17 }
       sexrab2 { "R" }
       sex2 { "X" }
-      gender_same_as_sex1 { 1 }
       gender_same_as_sex2 { 2 }
       gender_description2 { "Non-binary" }
       buy2livein { "1" }
