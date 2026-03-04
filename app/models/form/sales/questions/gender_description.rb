@@ -1,4 +1,4 @@
-class Form::Sales::Questions::PersonGenderDescription < ::Form::Question
+class Form::Sales::Questions::GenderDescription < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
     @id = "gender_description#{person_index}"

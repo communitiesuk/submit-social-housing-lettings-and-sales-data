@@ -1,4 +1,4 @@
-class Form::Sales::Questions::PersonGenderSameAsSex < ::Form::Question
+class Form::Sales::Questions::GenderSameAsSex < ::Form::Question
   def initialize(id, hsh, page, person_index:, buyer: false)
     super(id, hsh, page)
     @id = "gender_same_as_sex#{person_index}"

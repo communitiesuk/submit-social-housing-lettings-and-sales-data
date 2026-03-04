@@ -14,8 +14,8 @@ class Form::Sales::Pages::Buyer1GenderSameAsSex < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::PersonGenderSameAsSex.new(nil, nil, self, person_index: 1, buyer: true),
-      Form::Sales::Questions::PersonGenderDescription.new(nil, nil, self, person_index: 1),
+      Form::Sales::Questions::GenderSameAsSex.new(nil, nil, self, person_index: 1, buyer: true),
+      Form::Sales::Questions::GenderDescription.new(nil, nil, self, person_index: 1),
     ]
   end
 end

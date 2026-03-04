@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::PersonGenderDescription, type: :model do
+RSpec.describe Form::Sales::Questions::GenderDescription, type: :model do
   include CollectionTimeHelper
 
   subject(:question) { described_class.new(question_id, question_definition, page, person_index:) }
