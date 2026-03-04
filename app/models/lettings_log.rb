@@ -815,12 +815,16 @@ class LettingsLog < Log
     "lettings_log"
   end
 
+  def newbuild?
+    rsnvac == 15
+  end
+
   def changed_to_newbuild?
-    rsnvac == 15 && rsnvac_was != 15
+    newbuild? && rsnvac_was != 15
   end
 
   def changed_from_newbuild?
-    rsnvac != 15 && rsnvac_was == 15
+    !newbuild? && rsnvac_was == 15
   end
 
   def is_address_asked?
