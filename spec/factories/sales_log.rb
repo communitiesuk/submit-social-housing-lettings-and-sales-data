@@ -322,6 +322,7 @@ FactoryBot.define do
       details_known_3 { 1 }
       age3_known { 0 }
       age3 { 14 }
+      gender_same_as_sex3 { 3 }
       details_known_4 { 1 }
       age4_known { 0 }
       age4 { 18 }
