@@ -8,6 +8,7 @@ class Form::Sales::Questions::GenderSameAsSex < ::Form::Question
     @inferred_check_answers_value = [{ "condition" => { "gender_same_as_sex#{person_index}" => 2 }, "value" => "No" }]
     @person_index = person_index
     @buyer = buyer
+    @copy_key = "sales.household_characteristics.gender_same_as_sex#{person_index}.#{buyer ? 'buyer' : 'person'}" if person_index == 2
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
