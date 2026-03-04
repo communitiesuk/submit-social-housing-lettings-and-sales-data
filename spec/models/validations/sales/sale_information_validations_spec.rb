@@ -1385,76 +1385,156 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       sale_information_validator.validate_mortgage_used_dont_know(sales_log)
     end
 
-    context "when mortgageused is don't know" do
-      let(:mortgageused) { 3 }
+    context "when 2025", metadata: { year: 25 } do
+      let(:saledate) { collection_start_date_for_year(2025) }
 
-      context "and it is a discounted ownership sale" do
-        let(:ownershipsch) { 2 }
+      context "when mortgageused is don't know" do
+        let(:mortgageused) { 3 }
 
-        it "adds an error" do
-          expect(sales_log.errors[:mortgageused]).to include "Enter a valid value for was a mortgage used for the purchase of this property?"
+        context "and it is a discounted ownership sale" do
+          let(:ownershipsch) { 2 }
+
+          it "adds an error" do
+            expect(sales_log.errors[:mortgageused]).to include "Enter a valid value for was a mortgage used for the purchase of this property?"
+          end
         end
-      end
 
-      context "and it is an outright sale" do
-        let(:ownershipsch) { 3 }
+        context "and it is an outright sale" do
+          let(:ownershipsch) { 3 }
 
-        it "does not add any errors" do
-          expect(sales_log.errors).to be_empty
+          it "does not add any errors" do
+            expect(sales_log.errors).to be_empty
+          end
         end
-      end
 
-      context "and it is a shared ownership scheme sale" do
-        let(:ownershipsch) { 1 }
+        context "and it is a shared ownership scheme sale" do
+          let(:ownershipsch) { 1 }
 
-        context "and a staircasing transaction" do
-          let(:staircase) { 1 }
+          context "and a staircasing transaction" do
+            let(:staircase) { 1 }
 
-          context "and stairowned is nil" do
-            let(:stairowned) { nil }
+            context "and stairowned is nil" do
+              let(:stairowned) { nil }
 
-            it "does not add an error" do
-              expect(sales_log.errors).to be_empty
+              it "does not add an error" do
+                expect(sales_log.errors).to be_empty
+              end
+            end
+
+            context "and stairowned is less than 100" do
+              let(:stairowned) { 50 }
+
+              it "adds errors" do
+                expect(sales_log.errors[:mortgageused]).to include "The percentage owned has to be 100% if the mortgage used is 'Don’t know'"
+                expect(sales_log.errors[:stairowned]).to include "The percentage owned has to be 100% if the mortgage used is 'Don’t know'"
+              end
+            end
+
+            context "and stairowned is 100" do
+              let(:stairowned) { 100 }
+
+              it "does not add an error" do
+                expect(sales_log.errors).to be_empty
+              end
             end
           end
 
-          context "and stairowned is less than 100" do
-            let(:stairowned) { 50 }
+          context "and not a staircasing transaction" do
+            let(:staircase) { 2 }
 
             it "adds errors" do
-              expect(sales_log.errors[:mortgageused]).to include "The percentage owned has to be 100% if the mortgage used is 'Don’t know'"
-              expect(sales_log.errors[:stairowned]).to include "The percentage owned has to be 100% if the mortgage used is 'Don’t know'"
-            end
-          end
-
-          context "and stairowned is 100" do
-            let(:stairowned) { 100 }
-
-            it "does not add an error" do
-              expect(sales_log.errors).to be_empty
+              expect(sales_log.errors[:mortgageused]).to include "Enter a valid value for was a mortgage used for the purchase of this property?"
+              expect(sales_log.errors[:staircase]).to include "You must answer either ‘yes’ or ‘no’ to the question ‘was a mortgage used’ for staircasing transactions."
             end
           end
         end
+      end
 
-        context "and not a staircasing transaction" do
-          let(:staircase) { 2 }
+      context "when mortgageused is not don't know" do
+        let(:mortgageused) { 1 }
 
-          it "adds errors" do
-            expect(sales_log.errors[:mortgageused]).to include "Enter a valid value for was a mortgage used for the purchase of this property?"
-            expect(sales_log.errors[:staircase]).to include "You must answer either ‘yes’ or ‘no’ to the question ‘was a mortgage used’ for staircasing transactions."
+        context "and it is a discounted ownership sale" do
+          let(:ownershipsch) { 2 }
+
+          it "does not add an error" do
+            expect(sales_log.errors).to be_empty
           end
         end
       end
     end
 
-    context "when mortgageused is not don't know" do
-      let(:mortgageused) { 1 }
+    context "when 2026", metadata: { year: 26 } do
+      let(:saledate) { collection_start_date_for_year(2026) }
 
-      context "and it is a discounted ownership sale" do
-        let(:ownershipsch) { 2 }
+      context "when mortgageused is don't know" do
+        let(:mortgageused) { 3 }
 
-        it "does not add an error" do
-          expect(sales_log.errors).to be_empty
+        context "and it is a discounted ownership sale" do
+          let(:ownershipsch) { 2 }
+
+          it "does not add any errors" do
+            expect(sales_log.errors).to be_empty
+          end
+        end
+
+        context "and it is an outright sale" do
+          let(:ownershipsch) { 3 }
+
+          it "does not add any errors" do
+            expect(sales_log.errors).to be_empty
+          end
+        end
+
+        context "and it is a shared ownership scheme sale" do
+          let(:ownershipsch) { 1 }
+
+          context "and a staircasing transaction" do
+            let(:staircase) { 1 }
+
+            context "and stairowned is nil" do
+              let(:stairowned) { nil }
+
+              it "does not add an error" do
+                expect(sales_log.errors).to be_empty
+              end
+            end
+
+            context "and stairowned is less than 100" do
+              let(:stairowned) { 50 }
+
+              it "does not add any errors" do
+                expect(sales_log.errors).to be_empty
+              end
+            end
+
+            context "and stairowned is 100" do
+              let(:stairowned) { 100 }
+
+              it "does not add an error" do
+                expect(sales_log.errors).to be_empty
+              end
+            end
+          end
+
+          context "and not a staircasing transaction" do
+            let(:staircase) { 2 }
+
+            it "does not add any errors" do
+              expect(sales_log.errors).to be_empty
+            end
+          end
+        end
+      end
+
+      context "when mortgageused is not don't know" do
+        let(:mortgageused) { 1 }
+
+        context "and it is a discounted ownership sale" do
+          let(:ownershipsch) { 2 }
+
+          it "does not add an error" do
+            expect(sales_log.errors).to be_empty
+          end
         end
       end
     end
