@@ -52,10 +52,10 @@ class Log < ApplicationRecord
   scope :imported_2023, -> { imported.filter_by_year(2023) }
   # TODO: CLDC-4273: use .union in filter_by_organisation rather than raw SQL
   scope :filter_by_organisation, lambda { |orgs, _user = nil|
-    owned   = unscoped.where(owning_organisation: orgs).select(:id)
-    managed = unscoped.where(managing_organisation: orgs).select(:id)
+    owned = where(owning_organisation: orgs).select(:id)
+    managed = where(managing_organisation: orgs).select(:id)
 
-    where("#{table_name}.id = ANY(ARRAY(#{owned.to_sql} UNION #{managed.to_sql}))")
+    where("id = ANY(ARRAY(#{owned.to_sql} UNION #{managed.to_sql}))")
   }
   scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
   scope :filter_by_managing_organisation, ->(managing_organisation, _user = nil) { where(managing_organisation:) }
