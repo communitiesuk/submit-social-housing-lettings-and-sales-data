@@ -154,6 +154,7 @@ module Validations::Sales::FinancialValidations
 
     if record.newservicecharges == record.mscharge
       record.errors.add :newservicecharges, I18n.t("validations.sales.financial.newservicecharges.same_as_previous")
+      record.errors.add :mscharge, I18n.t("validations.sales.financial.mscharge.same_as_new")
     end
   end
 

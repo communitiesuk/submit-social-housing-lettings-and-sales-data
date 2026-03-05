@@ -48,6 +48,7 @@ en:
         mscharge:
           monthly_leasehold_charges:
             not_zero: "Monthly leasehold charges cannot be £0 if the property has monthly charges."
+          same_as_new: "You said that the service charge will change and you entered the same amount as the new service charge. If the service charge will not change, answer 'No' to 'Will the service charge change after this staircasing transaction takes place?'."
 
         newservicecharges:
           negative: "Service charge cannot be negative."

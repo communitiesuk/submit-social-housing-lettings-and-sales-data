@@ -568,6 +568,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
       record.mscharge = 100
       financial_validator.validate_newservicecharges_different_from_mscharge(record)
       expect(record.errors["newservicecharges"]).to include(match I18n.t("validations.sales.financial.newservicecharges.same_as_previous"))
+      expect(record.errors["mscharge"]).to include(match I18n.t("validations.sales.financial.mscharge.same_as_new"))
     end
   end
 end
