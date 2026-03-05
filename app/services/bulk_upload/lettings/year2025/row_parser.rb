@@ -679,10 +679,17 @@ private
         next if log.form.questions.none? { |q| q.id == interruption_screen_question_id && q.page.routed_to?(log, nil) }
 
         field_mapping_for_errors[interruption_screen_question_id.to_sym]&.each do |field|
-          if errors.none? { |e| field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
-            error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(" ")
-            errors.add(field, message: error_message, category: :soft_validation)
+          error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(" ")
+
+          # skip if an existing error with the same message on the same question.
+          # this is needed since a single soft validation will appear in n places on the flow
+          # and a soft validation contains m interruption screen question IDs.
+          # without this filter we'd add n * m errors
+          next unless errors.none? do |e|
+            e.options[:message] == error_message && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute)
           end
+
+          errors.add(field, message: error_message, category: :soft_validation)
         end
       end
     end
