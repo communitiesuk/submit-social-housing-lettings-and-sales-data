@@ -545,15 +545,14 @@ class BulkUpload::SalesLogToCsv
       log.ownershipsch,
       log.ownershipsch == 1 ? log.type : "", # field_9: "What is the type of shared ownership sale?",
       log.staircase, # 10
-
       log.ownershipsch == 2 ? log.type : "", # field_11: "What is the type of discounted ownership sale?",
       log.jointpur,
       log.jointmore,
       log.noint,
       log.privacynotice,
+
       log.uprn,
       log.address_line1&.tr(",", " "), # 20
-
       log.address_line2&.tr(",", " "),
       log.town_or_city&.tr(",", " "),
       log.county&.tr(",", " "),
@@ -564,10 +563,10 @@ class BulkUpload::SalesLogToCsv
       log.beds,
       log.builtype,
       log.wchair,
+
       log.age1,
       log.sexrab1,
       log.ethnic, # 30
-
       log.nationality_all_group,
       log.ecstat1,
       log.buy1livein,
@@ -578,8 +577,8 @@ class BulkUpload::SalesLogToCsv
       log.nationality_all_buyer2_group,
       log.ecstat2,
       log.buy2livein, # 40
-
       log.hholdcount,
+
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat3],
       log.age3,
       log.sexrab3,
@@ -589,7 +588,6 @@ class BulkUpload::SalesLogToCsv
       log.sexrab4,
       log.ecstat4,
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat5], # 50
-
       log.age5,
       log.sexrab5,
       log.ecstat5,
@@ -597,10 +595,10 @@ class BulkUpload::SalesLogToCsv
       log.age6,
       log.sexrab6,
       log.ecstat6,
+
       log.prevten,
       log.ppcodenk,
       ((log.ppostcode_full || "").split(" ") || [""]).first, # 60
-
       ((log.ppostcode_full || "").split(" ") || [""]).last,
       log.prevloc,
       log.buy2living,
@@ -611,8 +609,8 @@ class BulkUpload::SalesLogToCsv
       log.armedforcesspouse,
       log.disabled,
       log.wheel,
-      log.income1, # 70
 
+      log.income1, # 70
       log.inc1mort,
       log.income2,
       log.inc2mort,
@@ -620,10 +618,10 @@ class BulkUpload::SalesLogToCsv
       log.savings.present? || "R",
       log.prevown,
       log.prevshared,
+
       log.resale,
       log.proplen,
       log.hodate&.day, # 80
-
       log.hodate&.month,
       log.hodate&.strftime("%y"),
       log.frombeds,
@@ -634,18 +632,17 @@ class BulkUpload::SalesLogToCsv
       log.mortgageused,
       log.mortgage,
       log.mortlen, # 90
-
       log.deposit,
       log.cashdis,
       log.mrent,
       log.mscharge,
       log.management_fee,
+
       log.stairbought,
       log.stairowned,
       log.staircasesale,
       log.firststair,
       log.initialpurchase&.day, # 100
-
       log.initialpurchase&.month,
       log.initialpurchase&.strftime("%y"),
       log.numstair,
@@ -656,8 +653,8 @@ class BulkUpload::SalesLogToCsv
       log.equity,
       log.mortgageused,
       log.mrentprestaircasing, # 110
-
       log.mrent,
+
       log.proplen,
       log.value,
       log.grant,
@@ -667,7 +664,6 @@ class BulkUpload::SalesLogToCsv
       log.mortlen,
       log.extrabor,
       log.deposit, # 120
-
       log.mscharge,
       log.buildheightclass,
       log.hasservicechargeschanged,
