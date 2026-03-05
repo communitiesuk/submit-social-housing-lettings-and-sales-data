@@ -138,7 +138,7 @@ class BulkUpload::Sales::Year2026::RowParser
     field_122: "What is the building height classification?",
 
     field_123: "Will the service charge change after this staircasing transaction takes place?",
-    field_124: "What is the new monthly service charge after staircasing?",
+    field_124: "What are the new total monthly service charges for the property?",
   }.freeze
 
   ERROR_BASE_KEY = "validations.sales.2026.bulk_upload".freeze
