@@ -112,13 +112,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       field_105: "07",
       field_106: "2023",
       field_110: "900",
-      field_122: "F",
-      field_123: "F",
-      field_124: "M",
-      field_125: "M",
-      field_126: "R",
-      field_127: "R",
-      field_128: "2",
+      field_122: "1",
+      field_123: "2",
     }
   end
 
@@ -299,6 +294,20 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           expect(questions.map(&:id).size).to eq(0)
           expect(questions.map(&:id)).to eql([])
         end
+
+        context "and case insensitive fields are set to lowercase" do
+          let(:case_insensitive_fields) { %w[field_29 field_36 field_44 field_48 field_52 field_56] }
+          let(:case_insensitive_integer_fields_with_r_option) { %w[field_28 field_35 field_43 field_47 field_51 field_55 field_64 field_75 field_70 field_72 field_90 field_118] }
+          let(:attributes) do
+            valid_attributes
+              .merge(case_insensitive_fields.each_with_object({}) { |field, h| h[field.to_sym] = valid_attributes[field.to_sym]&.downcase })
+              .merge(case_insensitive_integer_fields_with_r_option.each_with_object({}) { |field, h| h[field.to_sym] = "r" })
+          end
+
+          it "is still valid" do
+            expect(parser).to be_valid
+          end
+        end
       end
 
       describe "#validate_nulls" do
@@ -307,7 +316,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
           it "fetches the question's check_answer_label if it exists" do
             parser.valid?
-            expect(parser.errors[:field_29]).to eql([I18n.t("validations.not_answered", question: "buyer 1’s gender identity.")])
+            expect(parser.errors[:field_29]).to eql([I18n.t("validations.not_answered", question: "buyer 1’s sex registered at birth.")])
           end
         end
 
@@ -780,7 +789,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           :field_21, # Postcode
           :field_22, # Postcode
           :field_28, # Buyer 1 age
-          :field_29, # Buyer 1 gender
+          :field_29, # Buyer 1 sex registered at birth
           :field_32, # Buyer 1 working situation
           :field_7, # Purchaser code
         ].each do |field|
@@ -810,7 +819,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           :field_21, # Postcode
           :field_22, # Postcode
           :field_28, # Buyer 1 age
-          :field_29, # Buyer 1 gender
+          :field_29, # Buyer 1 sex registered at birth
           :field_32, # Buyer 1 working situation
           :field_7, # Purchaser code
         ].each do |field|
@@ -1446,6 +1455,74 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         expect(parser.log_already_exists?).to be(false)
       end
     end
+
+    describe "field_90" do
+      context "when field_90 is a number" do
+        let(:field_90_number_attributes) { valid_attributes.merge({ field_90: 20 }) }
+
+        context "and buyer was interviewed" do
+          let(:attributes) { field_90_number_attributes.merge({ field_14: 2 }) }
+
+          it "does not add an error" do
+            parser.valid?
+            expect(parser.errors.where(:field_90)).not_to be_present
+          end
+        end
+
+        context "and buyer was not interviewed" do
+          let(:attributes) { field_90_number_attributes.merge({ field_14: 1 }) }
+
+          it "does not add an error" do
+            parser.valid?
+            expect(parser.errors.where(:field_90)).not_to be_present
+          end
+        end
+      end
+
+      context "when field_90 is R" do
+        let(:field_90_number_attributes) { valid_attributes.merge({ field_90: "R" }) }
+
+        context "and buyer was interviewed" do
+          let(:attributes) { field_90_number_attributes.merge({ field_14: 2 }) }
+
+          it "adds an error" do
+            parser.valid?
+            expect(parser.errors.where(:field_90)).to be_present
+          end
+        end
+
+        context "and buyer was not interviewed" do
+          let(:attributes) { field_90_number_attributes.merge({ field_14: 1 }) }
+
+          it "does not add an error" do
+            parser.valid?
+            expect(parser.errors.where(:field_90)).not_to be_present
+          end
+        end
+      end
+
+      context "when field_90 is neither a number nor R" do
+        let(:field_90_number_attributes) { valid_attributes.merge({ field_90: "something" }) }
+
+        context "and buyer was interviewed" do
+          let(:attributes) { field_90_number_attributes.merge({ field_14: 2 }) }
+
+          it "adds an error" do
+            parser.valid?
+            expect(parser.errors.where(:field_90)).to be_present
+          end
+        end
+
+        context "and buyer was not interviewed" do
+          let(:attributes) { field_90_number_attributes.merge({ field_14: 1 }) }
+
+          it "adds an error" do
+            parser.valid?
+            expect(parser.errors.where(:field_90)).to be_present
+          end
+        end
+      end
+    end
   end
 
   describe "#log" do
@@ -1948,6 +2025,58 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         it "blocks log creation" do
           parser.valid?
           expect(parser).to be_block_log_creation
+        end
+      end
+    end
+
+    describe "mortlen amd mortlen_known" do
+      context "when field_90 is a number" do
+        let(:field_90_number_attributes) { valid_attributes.merge({ field_90: 20 }) }
+
+        context "and buyer was interviewed" do
+          let(:attributes) { field_90_number_attributes.merge({ field_14: 2 }) }
+
+          it "sets mortlen to the length" do
+            log = parser.log
+            expect(log.mortlen).to eq(20)
+          end
+
+          it "sets mortlen_known to nil" do
+            log = parser.log
+            expect(log.mortlen_known).to be_nil
+          end
+        end
+
+        context "and buyer was not interviewed" do
+          let(:attributes) { field_90_number_attributes.merge({ field_14: 1 }) }
+
+          it "sets mortlen to the length" do
+            log = parser.log
+            expect(log.mortlen).to eq(20)
+          end
+
+          it "sets mortlen_known to yes" do
+            log = parser.log
+            expect(log.mortlen_known).to eq(0)
+          end
+        end
+      end
+
+      context "when field_90 is R" do
+        let(:field_90_number_attributes) { valid_attributes.merge({ field_90: "R" }) }
+
+        context "and buyer was not interviewed" do
+          let(:attributes) { field_90_number_attributes.merge({ field_14: 1 }) }
+
+          it "sets mortlen to nil" do
+            log = parser.log
+            expect(log.mortlen).to be_nil
+          end
+
+          it "sets mortlen_known to no" do
+            log = parser.log
+            expect(log.mortlen_known).to eq(1)
+          end
         end
       end
     end

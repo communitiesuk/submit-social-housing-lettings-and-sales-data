@@ -90,6 +90,7 @@ FactoryBot.define do
       buy1livein { 1 }
       relat2 { "P" }
       proptype { 1 }
+      buildheightclass { 2 }
       age2_known { 0 }
       age2 { Faker::Number.within(range: 25..45) }
       builtype { 1 }
@@ -166,6 +167,7 @@ FactoryBot.define do
       has_mscharge { 1 }
       mscharge { 100 }
       mortlen { 10 }
+      mortlen_known { 0 }
       pcodenk { 0 }
       postcode_full { "SW1A 1AA" }
       is_la_inferred { false }
@@ -293,12 +295,13 @@ FactoryBot.define do
       buy1livein { 1 }
       relat2 { "P" }
       proptype { 1 }
+      buildheightclass { 2 }
       age2_known { 0 }
       age2 { 33 }
       builtype { 1 }
       ethnic { 3 }
       ethnic_group { 17 }
-      sexrab2 { "X" }
+      sexrab2 { "R" }
       sex2 { "X" }
       buy2livein { "1" }
       ecstat1 { "1" }
@@ -333,11 +336,11 @@ FactoryBot.define do
       prevshared { 2 }
       sexrab3 { "F" }
       sex3 { "F" }
-      sexrab4 { "X" }
+      sexrab4 { "R" }
       sex4 { "X" }
       sexrab5 { "M" }
       sex5 { "M" }
-      sexrab6 { "X" }
+      sexrab6 { "R" }
       sex6 { "X" }
       mortgage { 20_000 }
       ecstat3 { 9 }

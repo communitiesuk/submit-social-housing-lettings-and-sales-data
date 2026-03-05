@@ -204,6 +204,13 @@ en:
             hint_text: "You should round up to the nearest year. Value should not exceed 60 years."
             question_text: "What is the length of the mortgage?"
 
+          mortlen_known:
+            page_header: ""
+            check_answer_label: "Length of mortgage known"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Do you know the length of the mortgage?"
+
           extrabor:
             page_header: ""
             check_answer_label: "Any other borrowing"
