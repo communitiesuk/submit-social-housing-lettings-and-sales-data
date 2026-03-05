@@ -25,7 +25,7 @@ en:
 
           gender_same_as_sex1:
             page_header: ""
-            check_answer_label: "Buyer 1's gender identity same as registered at birth"
+            check_answer_label: "Buyer 1's gender identity same as sex registered at birth"
             check_answer_prompt: ""
             hint_text: ""
             question_text: "Is the gender buyer 1 identifies with the same as their sex registered at birth?"
@@ -161,13 +161,13 @@ en:
           gender_same_as_sex2:
             buyer:
               page_header: ""
-              check_answer_label: "Buyer 2's gender identity same as registered at birth"
+              check_answer_label: "Buyer 2's gender identity same as sex registered at birth"
               check_answer_prompt: ""
               hint_text: ""
               question_text: "Is the gender buyer 2 identifies with the same as their sex registered at birth?"
             person:
               page_header: ""
-              check_answer_label: "Person 2's gender identity same as registered at birth"
+              check_answer_label: "Person 2's gender identity same as sex registered at birth"
               check_answer_prompt: ""
               hint_text: ""
               question_text: "Is the gender person 2 identifies with the same as their sex registered at birth?"
@@ -310,7 +310,7 @@ en:
 
           gender_same_as_sex3:
             page_header: ""
-            check_answer_label: "Person 3's gender identity same as registered at birth"
+            check_answer_label: "Person 3's gender identity same as sex registered at birth"
             check_answer_prompt: ""
             hint_text: ""
             question_text: "Is the gender person 3 identifies with the same as their sex registered at birth?"
@@ -365,7 +365,7 @@ en:
 
           gender_same_as_sex4:
             page_header: ""
-            check_answer_label: "Person 4's gender identity same as registered at birth"
+            check_answer_label: "Person 4's gender identity same as sex registered at birth"
             check_answer_prompt: ""
             hint_text: ""
             question_text: "Is the gender person 4 identifies with the same as their sex registered at birth?"
@@ -420,7 +420,7 @@ en:
 
           gender_same_as_sex5:
             page_header: ""
-            check_answer_label: "Person 5's gender identity same as registered at birth"
+            check_answer_label: "Person 5's gender identity same as sex registered at birth"
             check_answer_prompt: ""
             hint_text: ""
             question_text: "Is the gender person 5 identifies with the same as their sex registered at birth?"
@@ -475,7 +475,7 @@ en:
 
           gender_same_as_sex6:
             page_header: ""
-            check_answer_label: "Person 6's gender identity same as registered at birth"
+            check_answer_label: "Person 6's gender identity same as sex registered at birth"
             check_answer_prompt: ""
             hint_text: ""
             question_text: "Is the gender person 6 identifies with the same as their sex registered at birth?"
