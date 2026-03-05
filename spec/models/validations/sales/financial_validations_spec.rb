@@ -479,46 +479,6 @@ RSpec.describe Validations::Sales::FinancialValidations do
     end
   end
 
-  describe "#validate_newservicecharges" do
-    let(:record) { FactoryBot.build(:sales_log, ownershipsch: 1, staircase: 1) }
-
-    it "does not add errors when newservicecharges is nil" do
-      record.newservicecharges = nil
-      financial_validator.validate_newservicecharges(record)
-      expect(record.errors).to be_empty
-    end
-
-    it "does not add errors when newservicecharges is valid" do
-      record.newservicecharges = 100.50
-      financial_validator.validate_newservicecharges(record)
-      expect(record.errors).to be_empty
-    end
-
-    it "adds an error when newservicecharges is negative" do
-      record.newservicecharges = -50
-      financial_validator.validate_newservicecharges(record)
-      expect(record.errors["newservicecharges"]).to include(match I18n.t("validations.sales.financial.newservicecharges.negative"))
-    end
-
-    it "adds an error when newservicecharges is over the maximum" do
-      record.newservicecharges = 10_000
-      financial_validator.validate_newservicecharges(record)
-      expect(record.errors["newservicecharges"]).to include(match I18n.t("validations.sales.financial.newservicecharges.over_max"))
-    end
-
-    it "does not add errors when newservicecharges is exactly the maximum" do
-      record.newservicecharges = 9999.99
-      financial_validator.validate_newservicecharges(record)
-      expect(record.errors).to be_empty
-    end
-
-    it "does not add errors when newservicecharges is zero" do
-      record.newservicecharges = 0
-      financial_validator.validate_newservicecharges(record)
-      expect(record.errors).to be_empty
-    end
-  end
-
   describe "#validate_newservicecharges_different_from_mscharge" do
     let(:record) { FactoryBot.build(:sales_log, ownershipsch: 1, staircase: 1) }
 

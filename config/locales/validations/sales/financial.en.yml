@@ -51,8 +51,6 @@ en:
           same_as_new: "You said that the service charge will change and you entered the same amount as the new service charge. If the service charge will not change, answer 'No' to that question before entering the service charge here."
 
         newservicecharges:
-          negative: "Service charge cannot be negative."
-          over_max: "Service charge cannot be higher than £9,999.99."
           same_as_previous: "You said that the service charge will change and you entered the same amount as the previous question. If the service charge will not change, answer 'No'."
 
         resale:
