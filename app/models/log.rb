@@ -55,7 +55,7 @@ class Log < ApplicationRecord
     owned = where(owning_organisation: orgs).select(:id)
     managed = where(managing_organisation: orgs).select(:id)
 
-    where("id = ANY(ARRAY(#{owned.to_sql} UNION #{managed.to_sql}))")
+    where("#{table_name}.id = ANY(ARRAY(#{owned.to_sql} UNION #{managed.to_sql}))")
   }
   scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
   scope :filter_by_managing_organisation, ->(managing_organisation, _user = nil) { where(managing_organisation:) }
