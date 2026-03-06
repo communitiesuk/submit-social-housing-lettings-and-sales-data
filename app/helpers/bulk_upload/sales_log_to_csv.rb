@@ -664,10 +664,23 @@ class BulkUpload::SalesLogToCsv
       log.mortlen,
       log.extrabor,
       log.deposit, # 120
+
       log.mscharge,
       log.buildheightclass,
+      log.gender_same_as_sex1,
+      log.gender_description1,
+      log.gender_same_as_sex2,
+      log.gender_description2,
+      log.gender_same_as_sex3,
+      log.gender_description3,
+      log.gender_same_as_sex4,
+      log.gender_description4, # 130
+      log.gender_same_as_sex5,
+      log.gender_description5,
+      log.gender_same_as_sex6,
+      log.gender_description6,
       log.hasservicechargeschanged,
-      log.newservicecharges, # 124
+      log.newservicecharges, # 136
     ]
   end
 

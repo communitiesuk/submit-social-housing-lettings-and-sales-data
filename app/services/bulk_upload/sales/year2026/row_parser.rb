@@ -124,6 +124,7 @@ class BulkUpload::Sales::Year2026::RowParser
     field_109: "Was a mortgage used for this staircasing transaction?",
     field_110: "What was the basic monthly rent prior to staircasing?",
     field_111: "What is the basic monthly rent after staircasing?",
+
     field_112: "How long have the buyers been living in the property before the purchase? - Discounted ownership",
     field_113: "What was the full purchase price?",
     field_114: "What was the amount of any loan, grant, discount or subsidy given?",
@@ -136,9 +137,20 @@ class BulkUpload::Sales::Year2026::RowParser
     field_121: "What are the total monthly leasehold charges for the property?",
 
     field_122: "What is the building height classification?",
-
-    field_123: "Will the service charge change after this staircasing transaction takes place?",
-    field_124: "What are the new total monthly service charges for the property?",
+    field_123: "Is the gender buyer 1 identifies with the same as their sex registered at birth?",
+    field_124: "If 'No', enter buyer 1's gender identity",
+    field_125: "Is the gender buyer/person 2 identifies with the same as their sex registered at birth?",
+    field_126: "If 'No', enter buyer/person 2's gender identity",
+    field_127: "Is the gender person 3 identifies with the same as their sex registered at birth?",
+    field_128: "If 'No', enter person 3's gender identity",
+    field_129: "Is the gender person 4 identifies with the same as their sex registered at birth?",
+    field_130: "If 'No', enter person 4's gender identity",
+    field_131: "Is the gender person 5 identifies with the same as their sex registered at birth?",
+    field_132: "If 'No', enter person 5's gender identity",
+    field_133: "Is the gender person 6 identifies with the same as their sex registered at birth?",
+    field_134: "If 'No', enter person 6's gender identity",
+    field_135: "Will the service charge change after this staircasing transaction takes place?",
+    field_136: "What are the new total monthly service charges for the property?",
   }.freeze
 
   ERROR_BASE_KEY = "validations.sales.2026.bulk_upload".freeze
@@ -306,7 +318,20 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_122, :integer
 
   attribute :field_123, :integer
-  attribute :field_124, :decimal
+  attribute :field_124, :string
+  attribute :field_125, :integer
+  attribute :field_126, :string
+  attribute :field_127, :integer
+  attribute :field_128, :string
+  attribute :field_129, :integer
+  attribute :field_130, :string
+  attribute :field_131, :integer
+  attribute :field_132, :string
+  attribute :field_133, :integer
+  attribute :field_134, :string
+
+  attribute :field_135, :integer
+  attribute :field_136, :decimal
 
   validates :field_1,
             presence: {
@@ -846,8 +871,21 @@ private
 
       buildheightclass: %i[field_122],
 
-      hasservicechargeschanged: %i[field_123],
-      newservicecharges: %i[field_124],
+      gender_same_as_sex1: %i[field_123],
+      gender_description1: %i[field_124],
+      gender_same_as_sex2: %i[field_125],
+      gender_description2: %i[field_126],
+      gender_same_as_sex3: %i[field_127],
+      gender_description3: %i[field_128],
+      gender_same_as_sex4: %i[field_129],
+      gender_description4: %i[field_130],
+      gender_same_as_sex5: %i[field_131],
+      gender_description5: %i[field_132],
+      gender_same_as_sex6: %i[field_133],
+      gender_description6: %i[field_134],
+
+      hasservicechargeschanged: %i[field_135],
+      newservicecharges: %i[field_136],
     }
   end
 
@@ -884,8 +922,21 @@ private
     attributes["sexrab6"] = field_56
     attributes["buildheightclass"] = field_122
 
-    attributes["hasservicechargeschanged"] = field_123
-    attributes["newservicecharges"] = field_124
+    attributes["gender_same_as_sex1"] = field_123
+    attributes["gender_description1"] = field_124
+    attributes["gender_same_as_sex2"] = field_125
+    attributes["gender_description2"] = field_126
+    attributes["gender_same_as_sex3"] = field_127
+    attributes["gender_description3"] = field_128
+    attributes["gender_same_as_sex4"] = field_129
+    attributes["gender_description4"] = field_130
+    attributes["gender_same_as_sex5"] = field_131
+    attributes["gender_description5"] = field_132
+    attributes["gender_same_as_sex6"] = field_133
+    attributes["gender_description6"] = field_134
+
+    attributes["hasservicechargeschanged"] = field_135
+    attributes["newservicecharges"] = field_136
 
     attributes["relat2"] = relationship_from_is_partner(field_34)
     attributes["relat3"] = relationship_from_is_partner(field_42)
@@ -1087,23 +1138,23 @@ private
   end
 
   def person_2_present?
-    field_35.present? || field_36.present? || field_34.present?
+    field_35.present? || field_36.present? || field_34.present? || field_125.present? || field_126.present?
   end
 
   def person_3_present?
-    field_43.present? || field_44.present? || field_42.present?
+    field_43.present? || field_44.present? || field_42.present? || field_127.present? || field_128.present?
   end
 
   def person_4_present?
-    field_47.present? || field_48.present? || field_46.present?
+    field_47.present? || field_48.present? || field_46.present? || field_129.present? || field_130.present?
   end
 
   def person_5_present?
-    field_51.present? || field_52.present? || field_50.present?
+    field_51.present? || field_52.present? || field_50.present? || field_131.present? || field_132.present?
   end
 
   def person_6_present?
-    field_55.present? || field_56.present? || field_54.present?
+    field_55.present? || field_56.present? || field_54.present? || field_133.present? || field_134.present?
   end
 
   def relationship_from_is_partner(is_partner)

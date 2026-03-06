@@ -102,6 +102,8 @@ module DerivedVariables::SalesLogVariables
       self.mortlen_known = 0
     end
 
+    clear_gender_description_unless_gender_not_same_as_sex! if form.start_year_2026_or_later?
+
     set_encoded_derived_values!(DEPENDENCIES)
   end
 
