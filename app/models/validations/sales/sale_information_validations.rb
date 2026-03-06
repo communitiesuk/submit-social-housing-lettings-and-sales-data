@@ -80,7 +80,9 @@ module Validations::Sales::SaleInformationValidations
     return unless record.mortgage || record.mortgageused == 2 || record.mortgageused == 3
     return unless record.discount || record.grant || record.type == 29
 
-    if mortgage_deposit_and_grant_total_is_over_discount_tolerance?(record) && record.discounted_ownership_sale?
+    tolerance = record.value_with_discount_tolerance
+
+    if over_tolerance?(record.mortgage_deposit_and_grant_total, record.value_with_discount, tolerance, strict: !record.discount.nil? || record.form.start_year_2026_or_later?) && record.discounted_ownership_sale?
       deposit_and_grant_sentence = record.grant.present? ? ", cash deposit (#{record.field_formatted_as_currency('deposit')}), and grant (#{record.field_formatted_as_currency('grant')})" : " and cash deposit (#{record.field_formatted_as_currency('deposit')})"
       discount_sentence = record.discount.present? ? " (#{record.field_formatted_as_currency('value')}) subtracted by the sum of the full purchase price (#{record.field_formatted_as_currency('value')}) multiplied by the percentage discount (#{record.discount}%)" : ""
       %i[mortgageused mortgage value deposit discount grant].each do |field|
@@ -201,10 +203,12 @@ module Validations::Sales::SaleInformationValidations
   def check_non_staircasing_socialhomebuy_mortgage(record)
     return unless record.cashdis
 
+    tolerance = record.expected_shared_ownership_deposit_value_tolerance
+
     if record.mortgage_used?
       return unless record.mortgage
 
-      if total_is_over_expected_shared_ownership_deposit_tolerance?(record.mortgage_deposit_and_discount_total, record)
+      if over_tolerance?(record.mortgage_deposit_and_discount_total, record.expected_shared_ownership_deposit_value, tolerance, strict: record.form.start_year_2026_or_later?)
         %i[mortgage value deposit cashdis equity].each do |field|
           record.errors.add field, I18n.t("validations.sales.sale_information.#{field}.non_staircasing_mortgage.mortgage_used_socialhomebuy",
                                           mortgage: record.field_formatted_as_currency("mortgage"),
@@ -225,7 +229,7 @@ module Validations::Sales::SaleInformationValidations
                                                                  expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value")).html_safe
       end
     elsif record.mortgage_not_used?
-      if total_is_over_expected_shared_ownership_deposit_tolerance?(record.deposit_and_discount_total, record)
+      if over_tolerance?(record.deposit_and_discount_total, record.expected_shared_ownership_deposit_value, tolerance, strict: record.form.start_year_2026_or_later?)
         %i[mortgageused value deposit cashdis equity].each do |field|
           record.errors.add field, I18n.t("validations.sales.sale_information.#{field}.non_staircasing_mortgage.mortgage_not_used_socialhomebuy",
                                           deposit_and_discount_total: record.field_formatted_as_currency("deposit_and_discount_total"),
@@ -247,10 +251,12 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def check_non_staircasing_non_socialhomebuy_mortgage(record)
+    tolerance = record.expected_shared_ownership_deposit_value_tolerance
+
     if record.mortgage_used?
       return unless record.mortgage
 
-      if total_is_over_expected_shared_ownership_deposit_tolerance?(record.mortgage_and_deposit_total, record)
+      if over_tolerance?(record.mortgage_and_deposit_total, record.expected_shared_ownership_deposit_value, tolerance, strict: record.form.start_year_2026_or_later?)
         %i[mortgage value deposit equity].each do |field|
           record.errors.add field, I18n.t("validations.sales.sale_information.#{field}.non_staircasing_mortgage.mortgage_used",
                                           mortgage: record.field_formatted_as_currency("mortgage"),
@@ -269,7 +275,7 @@ module Validations::Sales::SaleInformationValidations
                                                                  expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value")).html_safe
       end
     elsif record.mortgage_not_used?
-      if total_is_over_expected_shared_ownership_deposit_tolerance?(record.deposit, record)
+      if over_tolerance?(record.deposit, record.expected_shared_ownership_deposit_value, tolerance, strict: record.form.start_year_2026_or_later?)
         %i[mortgageused value deposit equity].each do |field|
           record.errors.add field, I18n.t("validations.sales.sale_information.#{field}.non_staircasing_mortgage.mortgage_not_used",
                                           deposit: record.field_formatted_as_currency("deposit"),
@@ -390,25 +396,6 @@ module Validations::Sales::SaleInformationValidations
     if record.firststair == 2 && record.numstair < 2
       record.errors.add :numstair, I18n.t("validations.sales.sale_information.numstair.must_be_greater_than_one")
       record.errors.add :firststair, I18n.t("validations.sales.sale_information.firststair.cannot_be_no")
-    end
-  end
-
-  def total_is_over_expected_shared_ownership_deposit_tolerance?(total, record)
-    if record.form.start_year_2026_or_later?
-      !record.expected_shared_ownership_deposit_value_range.cover?(total)
-    else
-      over_tolerance?(total, record.expected_shared_ownership_deposit_value, 1)
-    end
-  end
-
-  def mortgage_deposit_and_grant_total_is_over_discount_tolerance?(record)
-    if record.form.start_year_2026_or_later?
-      !record.value_with_discount_range.cover?(record.mortgage_deposit_and_grant_total)
-    else
-      # we found that this tolerance still wasn't working for us, so for post 2026 we just calculate a range for 0.1% higher and lower.
-      # this means we can be certain an answer 0.1% higher or lower will always be accepted without needed to backsolve for the tolerance
-      tolerance = record.discount ? record.value * 0.05 / 100 : 1
-      over_tolerance?(record.mortgage_deposit_and_grant_total, record.value_with_discount, tolerance, strict: record.discount.present?)
     end
   end
 
