@@ -268,6 +268,12 @@ class SalesLog < Log
     value * equity / 100
   end
 
+  def expected_shared_ownership_deposit_value_range
+    return unless value && equity
+
+    (value * ((equity - 0.1) / 100)..value * ((equity + 0.1) / 100))
+  end
+
   def stairbought_part_of_value
     return unless value && stairbought
 
@@ -466,6 +472,15 @@ class SalesLog < Log
 
     discount_amount = discount ? value * discount / 100 : 0
     value - discount_amount
+  end
+
+  def value_with_discount_range
+    return if value.blank?
+    return (value..value) if discount.nil?
+
+    discount_amount_lower_bound = value * (discount - 0.1) / 100
+    discount_amount_upper_bound = value * (discount + 0.1) / 100
+    (value - discount_amount_upper_bound..value - discount_amount_lower_bound)
   end
 
   def mortgage_deposit_and_grant_total
