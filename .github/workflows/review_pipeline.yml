@@ -1,15 +1,15 @@
 name: Review app pipeline
 
 concurrency:
-  group: review-${{ github.event.pull_request.number }}
+  group: review-${{ inputs.pull_request_id }}
 
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
   workflow_dispatch:
+    inputs:
+      pull_request_id:
+        required: true
+        type: string
+        description: "The pull request ID to deploy a review app for."
 
 defaults:
   run:
@@ -20,7 +20,7 @@ jobs:
     name: Deploy review app infrastructure
     uses: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/.github/workflows/create_review_app_infra.yml@main
     with:
-      key: ${{ github.event.pull_request.number }}
+      key: ${{ inputs.pull_request_id }}
       app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
     permissions:
       id-token: write
@@ -32,8 +32,8 @@ jobs:
     with:
       aws_account_id: 837698168072
       aws_role_prefix: core-dev
-      aws_task_prefix: core-review-${{ github.event.pull_request.number }}
-      concurrency_tag: ${{ github.event.pull_request.number }}
+      aws_task_prefix: core-review-${{ inputs.pull_request_id }}
+      concurrency_tag: ${{ inputs.pull_request_id }}
       environment: review
     permissions:
       id-token: write
@@ -43,15 +43,26 @@ jobs:
     needs: [code]
     runs-on: ubuntu-latest
     permissions:
-      issues: write
       pull-requests: write
 
     steps:
       - name: Comment on PR with URL
-        uses: unsplash/comment-on-pr@v1.3.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/github-script@v7
         with:
-          msg: "Created review app at https://review.submit-social-housing-data.communities.gov.uk/${{ github.event.pull_request.number }}. Note that the review app will be automatically deprovisioned after 30 days and will need the review app pipeline running again."
-          check_for_duplicate_msg: true
-          duplicate_msg_pattern: Created review app at*
+          script: |
+            const pullRequestId = ${{ inputs.pull_request_id }};
+            const body = `Created review app at https://review.submit-social-housing-data.communities.gov.uk/${pullRequestId}. Note that the review app will be automatically deprovisioned after 30 days and will need the review app pipeline running again.`;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pullRequestId,
+            });
+            const duplicate = comments.find(c => c.body.startsWith('Created review app at'));
+            if (!duplicate) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pullRequestId,
+                body: body,
+              });
+            }
