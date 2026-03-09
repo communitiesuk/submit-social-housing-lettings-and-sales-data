@@ -4,6 +4,8 @@ on:
   issue_comment:
     types: [created]
 
+permissions: {}
+
 jobs:
   get_pr_details:
     name: Get PR details
