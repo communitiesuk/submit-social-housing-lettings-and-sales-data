@@ -1,6 +1,6 @@
 class Form::Sales::Questions::HasServiceCharge < ::Form::Question
-  def initialize(id, hsh, subsection, staircasing:)
-    super(id, hsh, subsection)
+  def initialize(id, hsh, page, staircasing:)
+    super(id, hsh, page)
     @id = "has_mscharge"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
@@ -16,7 +16,7 @@ class Form::Sales::Questions::HasServiceCharge < ::Form::Question
     }
     @copy_key = "sales.sale_information.servicecharges.has_servicecharge"
     @staircasing = staircasing
-    @question_number = question_number_from_year[form.start_date.year] || question_number_from_year[question_number_from_year.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR_AND_SECTION, value_key: subsection.id)
   end
 
   ANSWER_OPTIONS = {
@@ -24,11 +24,8 @@ class Form::Sales::Questions::HasServiceCharge < ::Form::Question
     "0" => { "value" => "No" },
   }.freeze
 
-  def question_number_from_year
-    if @staircasing
-      { 2026 => 0 }.freeze
-    else
-      { 2025 => 88, 2026 => 0 }.freeze
-    end
-  end
+  QUESTION_NUMBER_FROM_YEAR_AND_SECTION = {
+    2025 => 88,
+    2026 => { "shared_ownership_initial_purchase" => 88, "shared_ownership_staircasing_transaction" => 88 },
+  }
 end
