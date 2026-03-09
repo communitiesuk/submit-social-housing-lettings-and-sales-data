@@ -8,7 +8,7 @@ on:
       pull_request_id:
         required: true
         type: string
-        description: "The pull request ID to deploy a review app for."
+        description: "The number of the PR for which to deploy a review app. Note: this is NOT the ticket number"
 
 permissions: {}
 
