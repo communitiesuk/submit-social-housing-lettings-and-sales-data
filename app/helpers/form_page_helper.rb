@@ -55,12 +55,4 @@ module FormPageHelper
       question.date_example_override(log) || "For example, #{date_mid_collection_year_formatted(log.startdate).tr(' ', '/')}",
     ].compact.join("<br><br>").html_safe
   end
-
-  def clear_address_text(log)
-    if log.lettings? && log.newbuild?
-      "Clear address and search by UPRN instead"
-    else
-      "Clear address and search instead"
-    end
-  end
 end
