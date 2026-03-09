@@ -271,8 +271,8 @@ class SalesLog < Log
   def expected_shared_ownership_deposit_value_tolerance
     return 1 unless value && equity
 
-    # we found that a simple tolerance was not quite what we wanted here.
-    # CORE wants it so if a user say, has a 66.6% equity then can enter either 66.6% or 66.7%
+    # we found that a fixed tolerance was not quite what we wanted here.
+    # CORE wants it so if a user say, has a 66.666% equity they can enter either 66.6% or 66.7% (or 66.5%)
     # so in 2026 we base our tolerance off of a discount 0.1% higher or lower
     if form.start_year_2026_or_later?
       lower_bound = value * ((equity - 0.1) / 100)
