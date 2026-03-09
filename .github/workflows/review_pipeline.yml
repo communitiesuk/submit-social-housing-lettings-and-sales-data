@@ -4,61 +4,47 @@ on:
   issue_comment:
     types: [created]
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
-  setup:
-    name: Resolve PR details
+  get_pr_details:
+    name: Get PR details
     if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/deploy-review')
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: read
     outputs:
-      pr_number: ${{ steps.resolve.outputs.pr_number }}
-      ref: ${{ steps.resolve.outputs.ref }}
+      pr_number: ${{ steps.get_pr_details.outputs.pr_number }}
     steps:
-      - name: Resolve PR number and ref
-        id: resolve
+      - name: Get PR number
+        id: get_pr_details
         uses: actions/github-script@v7
         with:
           script: |
-            const prNumber = context.issue.number;
-            const { data: pr } = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber,
-            });
-            core.setOutput('pr_number', prNumber.toString());
-            core.setOutput('ref', pr.head.ref);
+            core.setOutput('pr_number', context.issue.number.toString());
 
   infra:
     name: Deploy review app infrastructure
-    needs: [setup]
+    needs: [get_pr_details]
     uses: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/.github/workflows/create_review_app_infra.yml@main
     with:
-      key: ${{ needs.setup.outputs.pr_number }}
+      key: ${{ needs.get_pr_details.outputs.pr_number }}
       app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
     permissions:
       id-token: write
 
   code:
     name: Deploy review app code
-    needs: [setup, infra]
+    needs: [get_pr_details, infra]
     uses: ./.github/workflows/aws_deploy.yml
     with:
       aws_account_id: 837698168072
       aws_role_prefix: core-dev
-      aws_task_prefix: core-review-${{ needs.setup.outputs.pr_number }}
-      concurrency_tag: ${{ needs.setup.outputs.pr_number }}
+      aws_task_prefix: core-review-${{ needs.get_pr_details.outputs.pr_number }}
+      concurrency_tag: ${{ needs.get_pr_details.outputs.pr_number }}
       environment: review
     permissions:
       id-token: write
 
   comment:
     name: Add link to PR
-    needs: [setup, code]
+    needs: [get_pr_details, code]
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -68,7 +54,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const prNumber = ${{ needs.setup.outputs.pr_number }};
+            const prNumber = ${{ needs.get_pr_details.outputs.pr_number }};
             const body = `Created review app at https://review.submit-social-housing-data.communities.gov.uk/${prNumber}. Note that the review app will be automatically deprovisioned after 30 days and will need the review app pipeline running again.`;
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
