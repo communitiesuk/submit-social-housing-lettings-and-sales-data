@@ -97,4 +97,25 @@ RSpec.describe Form::Lettings::Questions::Waityear, type: :model do
       })
     end
   end
+
+  context "with 2026/27 form" do
+    before do
+      allow(form).to receive(:start_year_2026_or_later?).and_return(true)
+    end
+
+    it "has the correct answer_options" do
+      expect(question.answer_options).to eq({
+        "13" => { "value" => "Household not on the housing register (or waiting list) in this area" },
+        "2" => { "value" => "Under 1 year" },
+        "7" => { "value" => "1 year but under 2 years" },
+        "8" => { "value" => "2 years but under 3 years" },
+        "9" => { "value" => "3 years but under 4 years" },
+        "10" => { "value" => "4 years but under 5 years" },
+        "11" => { "value" => "5 years but under 10 years" },
+        "12" => { "value" => "10 years or more" },
+        "divider" => { "value" => true },
+        "6" => { "value" => "Don’t know" },
+      })
+    end
+  end
 end
