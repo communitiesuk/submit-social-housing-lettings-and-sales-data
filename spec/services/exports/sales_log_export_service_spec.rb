@@ -333,7 +333,7 @@ RSpec.describe Exports::SalesLogExportService do
       end
     end
 
-    context "when exporting only 24/25 collection period" do
+    context "when exporting only 24/25 collection period", metadata: { year: 24 } do
       let(:start_time) { Time.zone.local(2024, 4, 3) }
 
       before do
@@ -365,8 +365,8 @@ RSpec.describe Exports::SalesLogExportService do
       end
     end
 
-    context "when exporting only 25/26 collection period" do
-      let(:start_time) { Time.zone.local(2025, 4, 1) }
+    context "when exporting only 25/26 collection period", metadata: { year: 25 } do
+      let(:start_time) { collection_start_date_for_year(2025) }
 
       before do
         Timecop.freeze(start_time)
@@ -397,8 +397,8 @@ RSpec.describe Exports::SalesLogExportService do
       end
     end
 
-    context "when exporting only 26/27 collection period" do
-      let(:start_time) { Time.zone.local(2026, 4, 1) }
+    context "when exporting only 26/27 collection period", metadata: { year: 26 } do
+      let(:start_time) { collection_start_date_for_year(2026) }
 
       before do
         Timecop.freeze(start_time)

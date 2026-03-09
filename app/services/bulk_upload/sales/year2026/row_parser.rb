@@ -35,14 +35,14 @@ class BulkUpload::Sales::Year2026::RowParser
     field_27: "Is the property built or adapted to wheelchair user standards?",
 
     field_28: "Age of buyer 1",
-    field_29: "Gender identity of buyer 1",
+    field_29: "Buyer 1's sex, as registered at birth",
     field_30: "What is buyer 1’s ethnic group?",
     field_31: "What is buyer 1’s nationality?",
     field_32: "Working situation of buyer 1",
     field_33: "Will buyer 1 live in the property?",
     field_34: "Is buyer 2 or person 2 the partner of buyer 1?",
     field_35: "Age of person 2",
-    field_36: "Gender identity of person 2",
+    field_36: "Buyer/Person 2's sex, as registered at birth",
     field_37: "Which of the following best describes buyer 2’s ethnic background?",
     field_38: "What is buyer 2’s nationality?",
     field_39: "What is buyer 2 or person 2’s working situation?",
@@ -51,19 +51,19 @@ class BulkUpload::Sales::Year2026::RowParser
 
     field_42: "Is person 3 the partner of buyer 1?",
     field_43: "Age of person 3",
-    field_44: "Gender identity of person 3",
+    field_44: "Person 3's sex, as registered at birth",
     field_45: "Working situation of person 3",
     field_46: "Is person 4 the partner of buyer 1?",
     field_47: "Age of person 4",
-    field_48: "Gender identity of person 4",
+    field_48: "Person 4's sex, as registered at birth",
     field_49: "Working situation of person 4",
     field_50: "Is person 5 the partner of buyer 1?",
     field_51: "Age of person 5",
-    field_52: "Gender identity of person 5",
+    field_52: "Person 5's sex, as registered at birth",
     field_53: "Working situation of person 5",
     field_54: "Is person 6 the partner of buyer 1?",
     field_55: "Age of person 6",
-    field_56: "Gender identity of person 6",
+    field_56: "Person 6's sex, as registered at birth",
     field_57: "Working situation of person 6",
 
     field_58: "What was buyer 1’s previous tenure?",
@@ -136,16 +136,47 @@ class BulkUpload::Sales::Year2026::RowParser
     field_120: "How much was the cash deposit paid on the property?",
     field_121: "What are the total monthly leasehold charges for the property?",
 
-    field_122: "Buyer 1's sex, as registered at birth",
-    field_123: "Buyer/Person 2's sex, as registered at birth",
-    field_124: "Person 3's sex, as registered at birth",
-    field_125: "Person 4's sex, as registered at birth",
-    field_126: "Person 5's sex, as registered at birth",
-    field_127: "Person 6's sex, as registered at birth",
-    field_128: "What is the building height classification?",
+    field_122: "What is the building height classification?",
+    field_123: "Is the gender buyer 1 identifies with the same as their sex registered at birth?",
+    field_124: "If 'No', enter buyer 1's gender identity",
+    field_125: "Is the gender buyer/person 2 identifies with the same as their sex registered at birth?",
+    field_126: "If 'No', enter buyer/person 2's gender identity",
+    field_127: "Is the gender person 3 identifies with the same as their sex registered at birth?",
+    field_128: "If 'No', enter person 3's gender identity",
+    field_129: "Is the gender person 4 identifies with the same as their sex registered at birth?",
+    field_130: "If 'No', enter person 4's gender identity",
+    field_131: "Is the gender person 5 identifies with the same as their sex registered at birth?",
+    field_132: "If 'No', enter person 5's gender identity",
+    field_133: "Is the gender person 6 identifies with the same as their sex registered at birth?",
+    field_134: "If 'No', enter person 6's gender identity",
   }.freeze
 
   ERROR_BASE_KEY = "validations.sales.2026.bulk_upload".freeze
+
+  CASE_INSENSITIVE_FIELDS = [
+    :field_28, # Age of buyer 1
+    :field_35, # Age of person 2
+    :field_43, # Age of person 3
+    :field_47, # Age of person 4
+    :field_51, # Age of person 5
+    :field_55, # Age of person 6
+
+    :field_29, # Buyer 1's sex, as registered at birth
+    :field_36, # Buyer/Person 2's sex, as registered at birth
+    :field_44, # Person 3's sex, as registered at birth
+    :field_48, # Person 4's sex, as registered at birth
+    :field_52, # Person 5's sex, as registered at birth
+    :field_56, # Person 6's sex, as registered at birth
+
+    :field_64, # What was buyer 2’s previous tenure?
+
+    :field_75, # What is the total amount the buyers had in savings before they paid any deposit for the property?
+    :field_70, # What is buyer 1’s gross annual income?
+    :field_72, # What is buyer 2’s gross annual income?
+
+    :field_90,  # What is the length of the mortgage in years? - Shared ownership
+    :field_118, # What is the length of the mortgage in years? - Discounted ownership
+  ].freeze
 
   attribute :bulk_upload
   attribute :block_log_creation, :boolean, default: -> { false }
@@ -248,7 +279,7 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_87, :decimal
   attribute :field_88, :integer
   attribute :field_89, :decimal
-  attribute :field_90, :integer
+  attribute :field_90, :string
   attribute :field_91, :decimal
   attribute :field_92, :decimal
   attribute :field_93, :decimal
@@ -278,18 +309,24 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_115, :decimal
   attribute :field_116, :integer
   attribute :field_117, :decimal
-  attribute :field_118, :integer
+  attribute :field_118, :string
   attribute :field_119, :integer
   attribute :field_120, :decimal
   attribute :field_121, :decimal
+  attribute :field_122, :integer
 
-  attribute :field_122, :string
-  attribute :field_123, :string
+  attribute :field_123, :integer
   attribute :field_124, :string
-  attribute :field_125, :string
+  attribute :field_125, :integer
   attribute :field_126, :string
-  attribute :field_127, :string
-  attribute :field_128, :integer
+  attribute :field_127, :integer
+  attribute :field_128, :string
+  attribute :field_129, :integer
+  attribute :field_130, :string
+  attribute :field_131, :integer
+  attribute :field_132, :string
+  attribute :field_133, :integer
+  attribute :field_134, :string
 
   validates :field_1,
             presence: {
@@ -418,6 +455,22 @@ class BulkUpload::Sales::Year2026::RowParser
             },
             on: :before_log
 
+  validates :field_90,
+            if: :shared_ownership?,
+            format: {
+              with: /\A(\d+|R)\z/,
+              message: I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid"),
+            },
+            on: :after_log
+
+  validates :field_118,
+            if: :discounted_ownership?,
+            format: {
+              with: /\A(\d+|R)\z/,
+              message: I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid"),
+            },
+            on: :after_log
+
   validate :validate_buyer1_economic_status, on: :before_log
   validate :validate_buyer2_economic_status, on: :before_log
   validate :validate_valid_radio_option, on: :before_log
@@ -440,6 +493,7 @@ class BulkUpload::Sales::Year2026::RowParser
 
   validate :validate_nationality, on: :after_log
   validate :validate_buyer_2_nationality, on: :after_log
+  validate :validate_mortlen_field_if_buyer_interviewed, on: :after_log
 
   validate :validate_nulls, on: :after_log
 
@@ -469,6 +523,8 @@ class BulkUpload::Sales::Year2026::RowParser
     errors.clear
 
     return true if blank_row?
+
+    normalise_case_insensitive_fields
 
     super(:before_log)
     @before_errors = errors.dup
@@ -528,8 +584,7 @@ class BulkUpload::Sales::Year2026::RowParser
       "field_21", # postcode
       "field_22", # postcode
       "field_28", # age1
-      "field_29", # sex1
-      "field_122", # sexrab1
+      "field_29", # sexrab1
       "field_32", # ecstat1
     )
   end
@@ -541,6 +596,13 @@ class BulkUpload::Sales::Year2026::RowParser
   end
 
 private
+
+  def normalise_case_insensitive_fields
+    CASE_INSENSITIVE_FIELDS.each do |field|
+      value = send(field)
+      send("#{field}=", value.upcase) if value.present?
+    end
+  end
 
   def prevtenbuy2
     case field_64
@@ -657,6 +719,10 @@ private
     field_99 == 1
   end
 
+  def buyer_interviewed?
+    field_14 == 2
+  end
+
   def rtb_like_sale_type?
     [9, 14, 27, 29].include?(field_11)
   end
@@ -678,13 +744,6 @@ private
       age5: %i[field_51],
       age6_known: %i[field_55],
       age6: %i[field_55],
-      sex1: %i[field_29],
-      sex2: %i[field_36],
-      sex3: %i[field_44],
-
-      sex4: %i[field_48],
-      sex5: %i[field_52],
-      sex6: %i[field_56],
       relat2: %i[field_34],
       relat3: %i[field_42],
       relat4: %i[field_46],
@@ -757,6 +816,7 @@ private
 
       hb: %i[field_74],
       mortlen: mortlen_fields,
+      mortlen_known: mortlen_fields,
       proplen: proplen_fields,
 
       jointmore: %i[field_13],
@@ -797,13 +857,26 @@ private
       lasttransaction: %i[field_104 field_105 field_106],
       initialpurchase: %i[field_100 field_101 field_102],
 
-      sexrab1: %i[field_122],
-      sexrab2: %i[field_123],
-      sexrab3: %i[field_124],
-      sexrab4: %i[field_125],
-      sexrab5: %i[field_126],
-      sexrab6: %i[field_127],
-      buildheightclass: %i[field_128],
+      sexrab1: %i[field_29],
+      sexrab2: %i[field_36],
+      sexrab3: %i[field_44],
+      sexrab4: %i[field_48],
+      sexrab5: %i[field_52],
+      sexrab6: %i[field_56],
+      buildheightclass: %i[field_122],
+
+      gender_same_as_sex1: %i[field_123],
+      gender_description1: %i[field_124],
+      gender_same_as_sex2: %i[field_125],
+      gender_description2: %i[field_126],
+      gender_same_as_sex3: %i[field_127],
+      gender_description3: %i[field_128],
+      gender_same_as_sex4: %i[field_129],
+      gender_description4: %i[field_130],
+      gender_same_as_sex5: %i[field_131],
+      gender_description5: %i[field_132],
+      gender_same_as_sex6: %i[field_133],
+      gender_description6: %i[field_134],
     }
   end
 
@@ -832,20 +905,26 @@ private
     attributes["age6_known"] = age6_known?
     attributes["age6"] = field_55 if attributes["age6_known"]&.zero? && field_55&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["sex1"] = field_29
-    attributes["sex2"] = field_36
-    attributes["sex3"] = field_44
-    attributes["sex4"] = field_48
-    attributes["sex5"] = field_52
-    attributes["sex6"] = field_56
+    attributes["sexrab1"] = field_29
+    attributes["sexrab2"] = field_36
+    attributes["sexrab3"] = field_44
+    attributes["sexrab4"] = field_48
+    attributes["sexrab5"] = field_52
+    attributes["sexrab6"] = field_56
+    attributes["buildheightclass"] = field_122
 
-    attributes["sexrab1"] = field_122
-    attributes["sexrab2"] = field_123
-    attributes["sexrab3"] = field_124
-    attributes["sexrab4"] = field_125
-    attributes["sexrab5"] = field_126
-    attributes["sexrab6"] = field_127
-    attributes["buildheightclass"] = field_128
+    attributes["gender_same_as_sex1"] = field_123
+    attributes["gender_description1"] = field_124
+    attributes["gender_same_as_sex2"] = field_125
+    attributes["gender_description2"] = field_126
+    attributes["gender_same_as_sex3"] = field_127
+    attributes["gender_description3"] = field_128
+    attributes["gender_same_as_sex4"] = field_129
+    attributes["gender_description4"] = field_130
+    attributes["gender_same_as_sex5"] = field_131
+    attributes["gender_description5"] = field_132
+    attributes["gender_same_as_sex6"] = field_133
+    attributes["gender_description6"] = field_134
 
     attributes["relat2"] = relationship_from_is_partner(field_34)
     attributes["relat3"] = relationship_from_is_partner(field_42)
@@ -935,7 +1014,8 @@ private
 
     attributes["hb"] = field_74
 
-    attributes["mortlen"] = mortlen
+    attributes["mortlen"] = mortlen != "R" ? mortlen : nil
+    attributes["mortlen_known"] = mortlen_known
 
     attributes["proplen"] = proplen if proplen&.positive?
     attributes["proplen_asked"] = attributes["proplen"].present? ? 0 : 1
@@ -1046,23 +1126,23 @@ private
   end
 
   def person_2_present?
-    field_35.present? || field_36.present? || field_34.present? || field_123.present?
+    field_35.present? || field_36.present? || field_34.present? || field_125.present? || field_126.present?
   end
 
   def person_3_present?
-    field_43.present? || field_44.present? || field_42.present? || field_124.present?
+    field_43.present? || field_44.present? || field_42.present? || field_127.present? || field_128.present?
   end
 
   def person_4_present?
-    field_47.present? || field_48.present? || field_46.present? || field_125.present?
+    field_47.present? || field_48.present? || field_46.present? || field_129.present? || field_130.present?
   end
 
   def person_5_present?
-    field_51.present? || field_52.present? || field_50.present? || field_126.present?
+    field_51.present? || field_52.present? || field_50.present? || field_131.present? || field_132.present?
   end
 
   def person_6_present?
-    field_55.present? || field_56.present? || field_54.present? || field_127.present?
+    field_55.present? || field_56.present? || field_54.present? || field_133.present? || field_134.present?
   end
 
   def relationship_from_is_partner(is_partner)
@@ -1158,6 +1238,16 @@ private
     return field_90 if shared_ownership?
 
     field_118 if discounted_ownership?
+  end
+
+  def mortlen_known
+    return nil if buyer_interviewed?
+
+    if mortlen == "R"
+      1
+    else
+      0
+    end
   end
 
   def proplen
@@ -1285,7 +1375,6 @@ private
       saledate
       age1
       sexrab1
-      sex1
       ecstat1
       owning_organisation
       postcode_full
@@ -1462,8 +1551,7 @@ private
       errors.add(:field_21, error_message) # Postcode
       errors.add(:field_22, error_message) # Postcode
       errors.add(:field_28, error_message) # Buyer 1 age
-      errors.add(:field_29, error_message) # Buyer 1 gender
-      errors.add(:field_122, error_message) # Buyer 1 sex registered at birth
+      errors.add(:field_29, error_message) # Buyer 1 sex registered at birth
       errors.add(:field_32, error_message) # Buyer 1 working situation
       errors.add(:field_7, error_message) # Purchaser code
     end
@@ -1527,14 +1615,10 @@ private
     %w[0] + GlobalConstants::COUNTRIES_ANSWER_OPTIONS.keys # 0 is "Prefers not to say"
   end
 
-  def validate_relat_fields
-    %i[field_34 field_42 field_46 field_50 field_54].each do |field|
-      value = send(field)
-      next if value.blank?
-
-      unless (1..3).cover?(value)
-        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: format_ending(QUESTIONS[field])))
-      end
+  def validate_mortlen_field_if_buyer_interviewed
+    if buyer_interviewed? && mortlen == "R"
+      errors.add(:field_90, I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid_for_interviewed")) if shared_ownership?
+      errors.add(:field_118, I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid_for_interviewed")) if discounted_ownership?
     end
   end
 
