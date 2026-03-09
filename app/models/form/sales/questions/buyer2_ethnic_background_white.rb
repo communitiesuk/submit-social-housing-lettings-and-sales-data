@@ -27,5 +27,5 @@ class Form::Sales::Questions::Buyer2EthnicBackgroundWhite < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 31, 2024 => 33, 2025 => 31, 2026 => 31 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 31, 2024 => 33, 2025 => 31, 2026 => 35 }.freeze
 end

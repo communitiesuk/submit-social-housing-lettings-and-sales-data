@@ -14,5 +14,5 @@ class Form::Sales::Questions::Buyer2Income < ::Form::Question
     @strip_commas = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 69, 2024 => 71, 2025 => 68, 2026 => 68 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 69, 2024 => 71, 2025 => 68, 2026 => 76 }.freeze
 end

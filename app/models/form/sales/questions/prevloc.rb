@@ -18,5 +18,5 @@ class Form::Sales::Questions::Prevloc < ::Form::Question
     { "" => "Select an option" }.merge(LocalAuthority.active(form.start_date).map { |la| [la.code, la.name] }.to_h)
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 58, 2024 => 60, 2025 => 58, 2026 => 58 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 58, 2024 => 60, 2025 => 58, 2026 => 66 }.freeze
 end

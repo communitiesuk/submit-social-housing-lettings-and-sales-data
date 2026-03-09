@@ -23,5 +23,5 @@ class Form::Sales::Questions::HasServiceChargesChanged < ::Form::Question
     "2" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2026 => 0 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2026 => 113 }.freeze
 end

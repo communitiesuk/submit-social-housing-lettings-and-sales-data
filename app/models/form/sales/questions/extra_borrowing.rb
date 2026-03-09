@@ -20,6 +20,6 @@ class Form::Sales::Questions::ExtraBorrowing < ::Form::Question
     2023 => { 1 => 94, 2 => 107, 3 => 115 },
     2024 => { 1 => 95, 2 => 108, 3 => 115 },
     2025 => { 2 => 109 },
-    2026 => { "discounted_ownership_scheme" => 109 },
+    2026 => { "discounted_ownership_scheme" => 119 },
   }.freeze
 end

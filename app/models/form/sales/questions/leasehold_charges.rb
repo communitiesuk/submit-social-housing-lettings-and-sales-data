@@ -17,6 +17,6 @@ class Form::Sales::Questions::LeaseholdCharges < ::Form::Question
     2023 => { 1 => 98, 2 => 109, 3 => 117 },
     2024 => { 1 => 99, 2 => 110, 3 => 117 },
     2025 => { 2 => 111 },
-    2026 => { "discounted_ownership_scheme" => 111 },
+    2026 => { "discounted_ownership_scheme" => 121 },
   }.freeze
 end

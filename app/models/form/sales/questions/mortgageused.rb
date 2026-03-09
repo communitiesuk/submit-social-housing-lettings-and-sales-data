@@ -34,7 +34,7 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
     2023 => { 1 => 90, 2 => 103, 3 => 111 },
     2024 => { 1 => 91, 2 => 104, 3 => 112 },
     2025 => { "shared_ownership_initial_purchase" => 82, "shared_ownership_staircasing_transaction" => 99, "discounted_ownership_scheme" => 106 },
-    2026 => { "shared_ownership_initial_purchase" => 82, "shared_ownership_staircasing_transaction" => 99, "discounted_ownership_scheme" => 106 },
+    2026 => { "shared_ownership_initial_purchase" => 90, "shared_ownership_staircasing_transaction" => 107, "discounted_ownership_scheme" => 116 },
   }.freeze
 
   def top_guidance_partial

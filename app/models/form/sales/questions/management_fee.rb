@@ -12,5 +12,5 @@ class Form::Sales::Questions::ManagementFee < ::Form::Question
     @strip_commas = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2025 => 89, 2026 => 89 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2025 => 89, 2026 => 97 }.freeze
 end

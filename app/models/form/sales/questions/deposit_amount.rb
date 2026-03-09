@@ -24,7 +24,7 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     2023 => { 1 => 95, 2 => 108, 3 => 116 },
     2024 => { 1 => 96, 2 => 109, 3 => 116 },
     2025 => { 1 => 85, 2 => 110 },
-    2026 => { "shared_ownership_initial_purchase" => 85, "discounted_ownership_scheme" => 110 },
+    2026 => { "shared_ownership_initial_purchase" => 93, "discounted_ownership_scheme" => 120 },
   }.freeze
 
   def top_guidance_partial

@@ -13,5 +13,5 @@ class Form::Sales::Questions::NewServiceCharges < ::Form::Question
     @strip_commas = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2026 => 0 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2026 => 113 }.freeze
 end

@@ -14,5 +14,5 @@ class Form::Sales::Questions::Prevshared < ::Form::Question
     "3" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 74, 2024 => 76, 2025 => 73, 2026 => 73 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 74, 2024 => 76, 2025 => 73, 2026 => 81 }.freeze
 end

@@ -5,7 +5,8 @@ class Form::Sales::Questions::PersonSexRegisteredAtBirth < ::Form::Question
     @copy_key = "sales.household_characteristics.sexrab2.person" if person_index == 2
     @check_answers_card_number = person_index
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @person_index = person_index
+    @question_number = question_number
   end
 
   ANSWER_OPTIONS = {
@@ -15,7 +16,12 @@ class Form::Sales::Questions::PersonSexRegisteredAtBirth < ::Form::Question
     "R" => { "value" => "Person prefers not to say" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2026 => 0 }.freeze
+  BASE_QUESTION_NUMBERS = { 2023 => 30, 2024 => 32, 2025 => 31 }.freeze
+  def question_number
+    base_question_number = BASE_QUESTION_NUMBERS[form.start_date.year] || BASE_QUESTION_NUMBERS[BASE_QUESTION_NUMBERS.keys.max]
+
+    base_question_number + (form.person_question_count * @person_index)
+  end
 
   def label_from_value(value, _log = nil, _user = nil)
     return unless value

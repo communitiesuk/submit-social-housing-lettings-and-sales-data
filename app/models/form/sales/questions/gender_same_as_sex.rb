@@ -9,10 +9,20 @@ class Form::Sales::Questions::GenderSameAsSex < ::Form::Question
     @person_index = person_index
     @buyer = buyer
     @copy_key = "sales.household_characteristics.gender_same_as_sex#{person_index}.#{buyer ? 'buyer' : 'person'}" if person_index == 2
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = question_number
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2026 => 0 }.freeze
+  BASE_QUESTION_NUMBERS = { 2026 => 32 }.freeze
+  BUYER_OVERRIDE_QUESTION_NUMBERS = { 2026 => { 1 => 23, 2 => 32 } }.freeze
+  def question_number
+    buyer_override_question_number = BUYER_OVERRIDE_QUESTION_NUMBERS.dig(form.start_date.year,@person_index)
+
+    return buyer_override_question_number if buyer_override_question_number.present? && @buyer
+
+    base_question_number = BASE_QUESTION_NUMBERS[form.start_date.year] || BASE_QUESTION_NUMBERS[BASE_QUESTION_NUMBERS.keys.max]
+
+    base_question_number + (form.person_question_count * @person_index)
+  end
 
   def answer_options
     {

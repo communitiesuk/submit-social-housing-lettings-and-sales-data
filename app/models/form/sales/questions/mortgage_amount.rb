@@ -17,7 +17,7 @@ class Form::Sales::Questions::MortgageAmount < ::Form::Question
     2023 => { 1 => 91, 2 => 104, 3 => 112 },
     2024 => { 1 => 92, 2 => 105, 3 => 113 },
     2025 => { 1 => 83, 2 => 107 },
-    2026 => { "shared_ownership_initial_purchase" => 83, "discounted_ownership_scheme" => 107 },
+    2026 => { "shared_ownership_initial_purchase" => 91, "discounted_ownership_scheme" => 117 },
   }.freeze
 
   def derived?(log)

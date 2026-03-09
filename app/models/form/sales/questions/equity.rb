@@ -17,6 +17,6 @@ class Form::Sales::Questions::Equity < ::Form::Question
     2023 => 89,
     2024 => 90,
     2025 => { "shared_ownership_initial_purchase" => 81, "shared_ownership_staircasing_transaction" => 98 },
-    2026 => { "shared_ownership_initial_purchase" => 81, "shared_ownership_staircasing_transaction" => 98 },
+    2026 => { "shared_ownership_initial_purchase" => 89, "shared_ownership_staircasing_transaction" => 106 },
   }.freeze
 end

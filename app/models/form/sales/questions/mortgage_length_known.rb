@@ -16,6 +16,6 @@ class Form::Sales::Questions::MortgageLengthKnown < ::Form::Question
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
 
   QUESTION_NUMBER_FROM_YEAR_AND_SECTION = {
-    2026 => { "shared_ownership_initial_purchase" => 84, "discounted_ownership_scheme" => 108 },
+    2026 => { "shared_ownership_initial_purchase" => 92, "discounted_ownership_scheme" => 118 },
   }.freeze
 end

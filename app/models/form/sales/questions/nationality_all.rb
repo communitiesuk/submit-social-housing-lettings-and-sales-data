@@ -20,7 +20,7 @@ class Form::Sales::Questions::NationalityAll < ::Form::Question
     2023 => { 1 => 24, 2 => 32 },
     2024 => { 1 => 26, 2 => 34 },
     2025 => { 1 => 24, 2 => 32 },
-    2026 => { 1 => 24, 2 => 32 },
+    2026 => { 1 => 26, 2 => 35 },
   }.freeze
 
   def label_from_value(value)

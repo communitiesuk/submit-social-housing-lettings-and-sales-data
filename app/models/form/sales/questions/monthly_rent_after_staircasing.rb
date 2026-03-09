@@ -12,5 +12,5 @@ class Form::Sales::Questions::MonthlyRentAfterStaircasing < ::Form::Question
     @strip_commas = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2025 => 101, 2026 => 101 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2025 => 101, 2026 => 109 }.freeze
 end

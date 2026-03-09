@@ -19,6 +19,6 @@ class Form::Sales::Questions::MortgageLength < ::Form::Question
     2023 => { 1 => 93, 2 => 106, 3 => 114 },
     2024 => { 1 => 94, 2 => 107, 3 => 114 },
     2025 => { 1 => 84, 2 => 108 },
-    2026 => { "shared_ownership_initial_purchase" => 84, "discounted_ownership_scheme" => 108 },
+    2026 => { "shared_ownership_initial_purchase" => 92, "discounted_ownership_scheme" => 118 },
   }.freeze
 end

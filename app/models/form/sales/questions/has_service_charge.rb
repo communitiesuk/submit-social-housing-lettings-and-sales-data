@@ -26,6 +26,6 @@ class Form::Sales::Questions::HasServiceCharge < ::Form::Question
 
   QUESTION_NUMBER_FROM_YEAR_AND_SECTION = {
     2025 => 88,
-    2026 => { "shared_ownership_initial_purchase" => 88, "shared_ownership_staircasing_transaction" => 88 },
-  }
+    2026 => { "shared_ownership_initial_purchase" => 96, "shared_ownership_staircasing_transaction" => 110 },
+  }.freeze
 end

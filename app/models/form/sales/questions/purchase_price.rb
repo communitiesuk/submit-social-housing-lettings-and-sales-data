@@ -17,7 +17,7 @@ class Form::Sales::Questions::PurchasePrice < ::Form::Question
     2023 => { 2 => 100, 3 => 110 },
     2024 => { 2 => 101, 3 => 111 },
     2025 => { 2 => 103 },
-    2026 => { "discounted_ownership_scheme" => 103 },
+    2026 => { "discounted_ownership_scheme" => 113 },
   }.freeze
 
   def copy_key

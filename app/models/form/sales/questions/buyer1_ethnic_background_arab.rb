@@ -14,5 +14,5 @@ class Form::Sales::Questions::Buyer1EthnicBackgroundArab < ::Form::Question
     "16" => { "value" => "Other ethnic group" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 23, 2024 => 25, 2025 => 23, 2026 => 23 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 23, 2024 => 25, 2025 => 23, 2026 => 25 }.freeze
 end

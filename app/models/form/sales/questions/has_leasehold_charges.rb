@@ -27,6 +27,6 @@ class Form::Sales::Questions::HasLeaseholdCharges < ::Form::Question
   QUESTION_NUMBER_FROM_YEAR_AND_SECTION = {
     2024 => { 1 => 99, 2 => 110, 3 => 117 },
     2025 => { 2 => 111 },
-    2026 => 111,
+    2026 => 121,
   }.freeze
 end
