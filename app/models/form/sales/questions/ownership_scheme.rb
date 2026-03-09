@@ -27,5 +27,5 @@ class Form::Sales::Questions::OwnershipScheme < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 3, 2024 => 5, 2025 => 5 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 3, 2024 => 5, 2025 => 5, 2026 => 5 }.freeze
 end

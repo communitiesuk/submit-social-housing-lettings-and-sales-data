@@ -23,5 +23,5 @@ class Form::Sales::Questions::PostcodeForFullAddress < ::Form::Question
     @bottom_guidance_partial = "address_fallback"
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 15, 2024 => 16, 2025 => 14 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 15, 2024 => 16, 2025 => 14, 2026 => 14 }.freeze
 end

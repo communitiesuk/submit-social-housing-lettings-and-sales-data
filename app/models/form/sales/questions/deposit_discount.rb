@@ -13,5 +13,5 @@ class Form::Sales::Questions::DepositDiscount < ::Form::Question
     @strip_commas = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 96, 2024 => 97, 2025 => 86 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 96, 2024 => 97, 2025 => 86, 2026 => 86 }.freeze
 end

@@ -27,7 +27,7 @@ class Form::Sales::Questions::PersonAgeKnown < ::Form::Question
     "1" => { "value" => "No" },
   }.freeze
 
-  BASE_QUESTION_NUMBERS = { 2023 => 29, 2024 => 31, 2025 => 29 }.freeze
+  BASE_QUESTION_NUMBERS = { 2023 => 29, 2024 => 31, 2025 => 29, 2026 => 29 }.freeze
   def question_number
     base_question_number = BASE_QUESTION_NUMBERS[form.start_date.year] || BASE_QUESTION_NUMBERS[BASE_QUESTION_NUMBERS.keys.max]
 

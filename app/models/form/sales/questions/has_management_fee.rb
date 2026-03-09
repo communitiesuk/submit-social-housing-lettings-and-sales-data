@@ -23,5 +23,5 @@ class Form::Sales::Questions::HasManagementFee < ::Form::Question
     "0" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2025 => 89 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2025 => 89, 2026 => 89 }.freeze
 end

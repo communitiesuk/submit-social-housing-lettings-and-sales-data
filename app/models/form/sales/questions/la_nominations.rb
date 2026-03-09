@@ -15,5 +15,5 @@ class Form::Sales::Questions::LaNominations < ::Form::Question
     "3" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 83, 2024 => 85, 2025 => 85 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 83, 2024 => 85, 2025 => 85, 2026 => 85 }.freeze
 end
