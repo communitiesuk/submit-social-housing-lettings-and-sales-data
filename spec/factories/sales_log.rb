@@ -86,6 +86,7 @@ FactoryBot.define do
       age1 { Faker::Number.within(range: 27..45) }
       sexrab1 { %w[F M R].sample }
       sex1 { %w[F M X R].sample }
+      gender_same_as_sex1 { 1 }
       national { 18 }
       buy1livein { 1 }
       relat2 { "P" }
@@ -98,6 +99,8 @@ FactoryBot.define do
       ethnic_group { 17 }
       sexrab2 {  %w[F M R].sample }
       sex2 { "X" }
+      gender_same_as_sex2 { 2 }
+      gender_description2 { Faker::Gender.type }
       buy2livein { "1" }
       ecstat1 { "1" }
       ecstat2 { "1" }
@@ -131,12 +134,17 @@ FactoryBot.define do
       prevshared { 2 }
       sexrab3 { %w[F M R].sample }
       sex3 { %w[F M X R].sample }
+      gender_same_as_sex3 { 1 }
       sexrab4 { %w[F M R].sample }
       sex4 { %w[F M X R].sample }
+      gender_same_as_sex4 { 2 }
+      gender_description4 { Faker::Gender.type }
       sexrab5 { %w[F M R].sample }
       sex5 { %w[F M X R].sample }
+      gender_same_as_sex5 { 3 }
       sexrab6 { %w[F M R].sample }
       sex6 { %w[F M X R].sample }
+      gender_same_as_sex6 { 3 }
       mortgage { 20_000 }
       ecstat3 { 9 }
       ecstat4 { 3 }
@@ -167,6 +175,7 @@ FactoryBot.define do
       has_mscharge { 1 }
       mscharge { 100 }
       mortlen { 10 }
+      mortlen_known { 0 }
       pcodenk { 0 }
       postcode_full { "SW1A 1AA" }
       is_la_inferred { false }
@@ -290,6 +299,7 @@ FactoryBot.define do
       age1 { 27 }
       sexrab1 { "F" }
       sex1 { "F" }
+      gender_same_as_sex1 { 1 }
       national { 18 }
       buy1livein { 1 }
       relat2 { "P" }
@@ -300,8 +310,10 @@ FactoryBot.define do
       builtype { 1 }
       ethnic { 3 }
       ethnic_group { 17 }
-      sexrab2 { "X" }
+      sexrab2 { "R" }
       sex2 { "X" }
+      gender_same_as_sex2 { 2 }
+      gender_description2 { "Non-binary" }
       buy2livein { "1" }
       ecstat1 { "1" }
       ecstat2 { "1" }
@@ -310,6 +322,7 @@ FactoryBot.define do
       details_known_3 { 1 }
       age3_known { 0 }
       age3 { 14 }
+      gender_same_as_sex3 { 3 }
       details_known_4 { 1 }
       age4_known { 0 }
       age4 { 18 }
@@ -335,11 +348,11 @@ FactoryBot.define do
       prevshared { 2 }
       sexrab3 { "F" }
       sex3 { "F" }
-      sexrab4 { "X" }
+      sexrab4 { "R" }
       sex4 { "X" }
       sexrab5 { "M" }
       sex5 { "M" }
-      sexrab6 { "X" }
+      sexrab6 { "R" }
       sex6 { "X" }
       mortgage { 20_000 }
       ecstat3 { 9 }
