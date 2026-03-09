@@ -34,5 +34,5 @@ class Form::Sales::Questions::SharedOwnershipType < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 4, 2024 => 6 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 4, 2024 => 6, 2025 => 6 }.freeze
 end
