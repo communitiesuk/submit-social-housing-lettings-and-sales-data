@@ -35,8 +35,8 @@ en:
               tenancy:
                 check_answer_label: "Type of main tenancy after the starter or introductory period has ended"
                 check_answer_prompt: ""
-                hint_text: ""
-                question_text: "What is the type of tenancy after the starter or introductory period has ended?"
+                hint_text: "This is for the main tenancy after any starter or introductory period."
+                question_text: "What is the type of tenancy?"
               tenancyother:
                 check_answer_label: ""
                 check_answer_prompt: ""
