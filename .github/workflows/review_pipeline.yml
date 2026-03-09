@@ -3,13 +3,19 @@ name: Review app pipeline
 on:
   issue_comment:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      pull_request_id:
+        required: true
+        type: string
+        description: "The pull request ID to deploy a review app for."
 
 permissions: {}
 
 jobs:
   get_pr_details:
     name: Get PR details
-    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/deploy-review')
+    if: github.event_name == 'workflow_dispatch' || (github.event.issue.pull_request && startsWith(github.event.comment.body, '/deploy-review'))
     runs-on: ubuntu-latest
     outputs:
       pr_number: ${{ steps.get_pr_details.outputs.pr_number }}
@@ -19,7 +25,11 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            core.setOutput('pr_number', context.issue.number.toString());
+            if (context.eventName === 'workflow_dispatch') {
+              core.setOutput('pr_number', '${{ inputs.pull_request_id }}');
+            } else {
+              core.setOutput('pr_number', context.issue.number.toString());
+            }
 
   infra:
     name: Deploy review app infrastructure
