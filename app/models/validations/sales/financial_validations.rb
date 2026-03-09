@@ -140,7 +140,7 @@ module Validations::Sales::FinancialValidations
   end
 
   def validate_newservicecharges_different_from_mscharge(record)
-    return unless record.hasservicechargeschanged == 1 && record.newservicecharges && record.mscharge
+    return unless record.hasservicechargeschanged == 1 && record.newservicecharges && record.has_mscharge == 1 && record.mscharge
 
     if record.newservicecharges == record.mscharge
       record.errors.add :newservicecharges, I18n.t("validations.sales.financial.newservicecharges.same_as_previous")

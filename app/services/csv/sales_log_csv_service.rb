@@ -108,10 +108,6 @@ module Csv
         labels: %i[mscharge_value],
         codes: %i[mscharge_value],
       },
-      hasservicechargeschanged: {
-        labels: %i[hasservicechargeschanged_label],
-        codes: %i[hasservicechargeschanged],
-      },
       newservicecharges: {
         labels: %i[newservicecharges],
         codes: %i[newservicecharges],

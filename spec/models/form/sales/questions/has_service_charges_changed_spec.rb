@@ -1,13 +1,15 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::HasServiceChargesChanged, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
   let(:page) { instance_double(Form::Page, subsection:) }
-  let(:start_date) { Time.utc(2026, 5, 1) }
+  let(:start_date) { collection_start_date_for_year(2026) }
 
   it "has correct page" do
     expect(question.page).to eq(page)

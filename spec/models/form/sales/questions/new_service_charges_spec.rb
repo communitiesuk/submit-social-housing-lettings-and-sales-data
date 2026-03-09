@@ -7,7 +7,7 @@ RSpec.describe Form::Sales::Questions::NewServiceCharges, type: :model do
   let(:question_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
   let(:page) { instance_double(Form::Page, subsection:) }
-  let(:start_date) { Time.utc(2026, 5, 1) }
+  let(:start_date) { collection_start_date_for_year(2026) }
 
   it "has correct page" do
     expect(question.page).to eq(page)

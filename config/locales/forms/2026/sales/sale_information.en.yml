@@ -296,7 +296,7 @@ en:
               check_answer_label: "New monthly service charges"
               check_answer_prompt: ""
               hint_text: ""
-              question_text: "Yes, enter monthly amount:"
+              question_text: "Enter the new total monthly charge"
 
           purchase_price:
             discounted_ownership:
