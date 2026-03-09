@@ -108,10 +108,6 @@ module Csv
         labels: %i[mscharge_value],
         codes: %i[mscharge_value],
       },
-      newservicecharges: {
-        labels: %i[newservicecharges],
-        codes: %i[newservicecharges],
-      },
     }.freeze
 
     PERSON_DETAILS = {}.tap { |hash|
