@@ -485,6 +485,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
     it "does not add errors when hasservicechargeschanged is nil" do
       record.hasservicechargeschanged = nil
       record.newservicecharges = 100
+      record.has_mscharge = 1
       record.mscharge = 100
       financial_validator.validate_newservicecharges_different_from_mscharge(record)
       expect(record.errors).to be_empty
@@ -493,6 +494,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
     it "does not add errors when hasservicechargeschanged is 2 (No)" do
       record.hasservicechargeschanged = 2
       record.newservicecharges = 100
+      record.has_mscharge = 1
       record.mscharge = 100
       financial_validator.validate_newservicecharges_different_from_mscharge(record)
       expect(record.errors).to be_empty
@@ -501,6 +503,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
     it "does not add errors when newservicecharges is nil" do
       record.hasservicechargeschanged = 1
       record.newservicecharges = nil
+      record.has_mscharge = 1
       record.mscharge = 100
       financial_validator.validate_newservicecharges_different_from_mscharge(record)
       expect(record.errors).to be_empty
@@ -509,6 +512,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
     it "does not add errors when mscharge is nil" do
       record.hasservicechargeschanged = 1
       record.newservicecharges = 100
+      record.has_mscharge = 2
       record.mscharge = nil
       financial_validator.validate_newservicecharges_different_from_mscharge(record)
       expect(record.errors).to be_empty
@@ -517,6 +521,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
     it "does not add errors when newservicecharges is different from mscharge" do
       record.hasservicechargeschanged = 1
       record.newservicecharges = 150
+      record.has_mscharge = 1
       record.mscharge = 100
       financial_validator.validate_newservicecharges_different_from_mscharge(record)
       expect(record.errors).to be_empty
@@ -525,6 +530,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
     it "adds an error when hasservicechargeschanged is 1 (Yes) and newservicecharges equals mscharge" do
       record.hasservicechargeschanged = 1
       record.newservicecharges = 100
+      record.has_mscharge = 1
       record.mscharge = 100
       financial_validator.validate_newservicecharges_different_from_mscharge(record)
       expect(record.errors["newservicecharges"]).to include(match I18n.t("validations.sales.financial.newservicecharges.same_as_previous"))
