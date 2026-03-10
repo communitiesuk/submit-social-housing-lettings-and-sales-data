@@ -30,154 +30,153 @@ class BulkUpload::Sales::Year2026::RowParser
     field_22: "Part 2 of postcode of property",
     field_23: "What is the local authority of the property?",
     field_24: "What type of unit is the property?",
-    field_25: "How many bedrooms does the property have?",
-    field_26: "Which type of building is the property?",
-    field_27: "Is the property built or adapted to wheelchair user standards?",
+    field_25: "What is the building height classification?",
+    field_26: "How many bedrooms does the property have?",
+    field_27: "Which type of building is the property?",
+    field_28: "Is the property built or adapted to wheelchair user standards?",
 
-    field_28: "Age of buyer 1",
-    field_29: "Buyer 1's sex, as registered at birth",
-    field_30: "What is buyer 1’s ethnic group?",
-    field_31: "What is buyer 1’s nationality?",
-    field_32: "Working situation of buyer 1",
-    field_33: "Will buyer 1 live in the property?",
-    field_34: "Is buyer 2 or person 2 the partner of buyer 1?",
-    field_35: "Age of person 2",
-    field_36: "Buyer/Person 2's sex, as registered at birth",
-    field_37: "Which of the following best describes buyer 2’s ethnic background?",
-    field_38: "What is buyer 2’s nationality?",
-    field_39: "What is buyer 2 or person 2’s working situation?",
-    field_40: "Will buyer 2 live in the property?",
-    field_41: "Besides the buyers, how many people will live in the property?",
+    field_29: "Age of buyer 1",
+    field_30: "Buyer 1's sex, as registered at birth",
+    field_31: "Is the gender buyer 1 identifies with the same as their sex registered at birth?",
+    field_32: "If 'No', enter buyer 1's gender identity",
+    field_33: "What is buyer 1’s ethnic group?",
+    field_34: "What is buyer 1’s nationality?",
+    field_35: "Working situation of buyer 1",
+    field_36: "Will buyer 1 live in the property?",
+    field_37: "Is buyer 2 or person 2 the partner of buyer 1?",
+    field_38: "Age of person 2",
+    field_39: "Buyer/Person 2's sex, as registered at birth",
+    field_40: "Is the gender buyer/person 2 identifies with the same as their sex registered at birth?",
+    field_41: "If 'No', enter buyer/person 2's gender identity",
+    field_42: "Which of the following best describes buyer 2’s ethnic background?",
+    field_43: "What is buyer 2’s nationality?",
+    field_44: "What is buyer 2 or person 2’s working situation?",
+    field_45: "Will buyer 2 live in the property?",
+    field_46: "Besides the buyers, how many people will live in the property?",
 
-    field_42: "Is person 3 the partner of buyer 1?",
-    field_43: "Age of person 3",
-    field_44: "Person 3's sex, as registered at birth",
-    field_45: "Working situation of person 3",
-    field_46: "Is person 4 the partner of buyer 1?",
-    field_47: "Age of person 4",
-    field_48: "Person 4's sex, as registered at birth",
-    field_49: "Working situation of person 4",
-    field_50: "Is person 5 the partner of buyer 1?",
-    field_51: "Age of person 5",
-    field_52: "Person 5's sex, as registered at birth",
-    field_53: "Working situation of person 5",
-    field_54: "Is person 6 the partner of buyer 1?",
-    field_55: "Age of person 6",
-    field_56: "Person 6's sex, as registered at birth",
-    field_57: "Working situation of person 6",
+    field_47: "Is person 3 the partner of buyer 1?",
+    field_48: "Age of person 3",
+    field_49: "Person 3's sex, as registered at birth",
+    field_50: "Is the gender person 3 identifies with the same as their sex registered at birth?",
+    field_51: "If 'No', enter person 3's gender identity",
+    field_52: "Working situation of person 3",
+    field_53: "Is person 4 the partner of buyer 1?",
+    field_54: "Age of person 4",
+    field_55: "Person 4's sex, as registered at birth",
+    field_56: "Is the gender person 4 identifies with the same as their sex registered at birth?",
+    field_57: "If 'No', enter person 4's gender identity",
+    field_58: "Working situation of person 4",
+    field_59: "Is person 5 the partner of buyer 1?",
+    field_60: "Age of person 5",
+    field_61: "Person 5's sex, as registered at birth",
+    field_62: "Is the gender person 5 identifies with the same as their sex registered at birth?",
+    field_63: "If 'No', enter person 5's gender identity",
+    field_64: "Working situation of person 5",
+    field_65: "Is person 6 the partner of buyer 1?",
+    field_66: "Age of person 6",
+    field_67: "Person 6's sex, as registered at birth",
+    field_68: "Is the gender person 6 identifies with the same as their sex registered at birth?",
+    field_69: "If 'No', enter person 6's gender identity",
+    field_70: "Working situation of person 6",
 
-    field_58: "What was buyer 1’s previous tenure?",
-    field_59: "Do you know the postcode of buyer 1’s last settled home?",
-    field_60: "Part 1 of postcode of buyer 1’s last settled home",
-    field_61: "Part 2 of postcode of buyer 1’s last settled home",
-    field_62: "What is the local authority of buyer 1’s last settled home?",
-    field_63: "At the time of purchase, was buyer 2 living at the same address as buyer 1?",
-    field_64: "What was buyer 2’s previous tenure?",
+    field_71: "What was buyer 1’s previous tenure?",
+    field_72: "Do you know the postcode of buyer 1’s last settled home?",
+    field_73: "Part 1 of postcode of buyer 1’s last settled home",
+    field_74: "Part 2 of postcode of buyer 1’s last settled home",
+    field_75: "What is the local authority of buyer 1’s last settled home?",
+    field_76: "At the time of purchase, was buyer 2 living at the same address as buyer 1?",
+    field_77: "What was buyer 2’s previous tenure?",
 
-    field_65: "Has the buyer ever served in the UK Armed Forces and for how long?",
-    field_66: "Is the buyer still serving in the UK armed forces?",
-    field_67: "Are any of the buyers a spouse or civil partner of a UK Armed Forces regular who died in service within the last 2 years?",
-    field_68: "Does anyone in the household consider themselves to have a disability?",
-    field_69: "Does anyone in the household use a wheelchair?",
+    field_78: "Has the buyer ever served in the UK Armed Forces and for how long?",
+    field_79: "Is the buyer still serving in the UK armed forces?",
+    field_80: "Are any of the buyers a spouse or civil partner of a UK Armed Forces regular who died in service within the last 2 years?",
+    field_81: "Does anyone in the household consider themselves to have a disability?",
+    field_82: "Does anyone in the household use a wheelchair?",
 
-    field_70: "What is buyer 1’s gross annual income?",
-    field_71: "Was buyer 1’s income used for a mortgage application?",
-    field_72: "What is buyer 2’s gross annual income?",
-    field_73: "Was buyer 2’s income used for a mortgage application?",
-    field_74: "Were the buyers receiving any of these housing-related benefits immediately before buying this property?",
-    field_75: "What is the total amount the buyers had in savings before they paid any deposit for the property?",
-    field_76: "Have any of the purchasers previously owned a property?",
-    field_77: "Was the previous property under shared ownership?",
+    field_83: "What is buyer 1’s gross annual income?",
+    field_84: "Was buyer 1’s income used for a mortgage application?",
+    field_85: "What is buyer 2’s gross annual income?",
+    field_86: "Was buyer 2’s income used for a mortgage application?",
+    field_87: "Were the buyers receiving any of these housing-related benefits immediately before buying this property?",
+    field_88: "What is the total amount the buyers had in savings before they paid any deposit for the property?",
+    field_89: "Have any of the purchasers previously owned a property?",
+    field_90: "Was the previous property under shared ownership?",
 
-    field_78: "Is this a resale?",
-    field_79: "How long have the buyers been living in the property before the purchase? - Shared ownership",
-    field_80: "What is the day of the practical completion or handover date?",
-    field_81: "What is the month of the practical completion or handover date?",
-    field_82: "What is the year of the practical completion or handover date?",
-    field_83: "How many bedrooms did the buyer’s previous property have?",
-    field_84: "What was the type of the buyer’s previous property?",
-    field_85: "What was the rent type of the buyer’s previous property?",
-    field_86: "What was the full purchase price?",
-    field_87: "What was the initial percentage share purchased?",
-    field_88: "Was a mortgage used for the purchase of this property? - Shared ownership",
-    field_89: "What is the mortgage amount?",
-    field_90: "What is the length of the mortgage in years? - Shared ownership",
-    field_91: "How much was the cash deposit paid on the property?",
-    field_92: "How much cash discount was given through Social Homebuy?",
-    field_93: "What is the basic monthly rent?",
-    field_94: "What are the total monthly service charges for the property?",
-    field_95: "What are the total monthly estate management fees for the property?",
+    field_91: "Is this a resale?",
+    field_92: "How long have the buyers been living in the property before the purchase? - Shared ownership",
+    field_93: "What is the day of the practical completion or handover date?",
+    field_94: "What is the month of the practical completion or handover date?",
+    field_95: "What is the year of the practical completion or handover date?",
+    field_96: "How many bedrooms did the buyer’s previous property have?",
+    field_97: "What was the type of the buyer’s previous property?",
+    field_98: "What was the rent type of the buyer’s previous property?",
+    field_99: "What was the full purchase price?",
+    field_100: "What was the initial percentage share purchased?",
+    field_101: "Was a mortgage used for the purchase of this property? - Shared ownership",
+    field_102: "What is the mortgage amount?",
+    field_103: "What is the length of the mortgage in years? - Shared ownership",
+    field_104: "How much was the cash deposit paid on the property?",
+    field_105: "How much cash discount was given through Social Homebuy?",
+    field_106: "What is the basic monthly rent?",
+    field_107: "What are the total monthly service charges for the property?",
+    field_108: "What are the total monthly estate management fees for the property?",
 
-    field_96: "What percentage of the property has been bought in this staircasing transaction?",
-    field_97: "What percentage of the property does the buyer now own in total?",
-    field_98: "Was this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?",
-    field_99: "Is this the first time the buyer has engaged in staircasing in the home?",
-    field_100: "What was the day of the initial purchase of a share in the property? DD",
-    field_101: "What was the month of the initial purchase of a share in the property? MM",
-    field_102: "What was the year of the initial purchase of a share in the property? YYYY",
-    field_103: "Including this time, how many times has the shared owner engaged in staircasing in the home?",
-    field_104: "What was the day of the last staircasing transaction? DD",
-    field_105: "What was the month of the last staircasing transaction? MM",
-    field_106: "What was the year of the last staircasing transaction? YYYY",
-    field_107: "What is the full purchase price for this staircasing transaction?",
-    field_108: "What was the percentage share purchased in the initial transaction?",
-    field_109: "Was a mortgage used for this staircasing transaction?",
-    field_110: "What was the basic monthly rent prior to staircasing?",
-    field_111: "What is the basic monthly rent after staircasing?",
+    field_109: "What percentage of the property has been bought in this staircasing transaction?",
+    field_110: "What percentage of the property does the buyer now own in total?",
+    field_111: "Was this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?",
+    field_112: "Is this the first time the buyer has engaged in staircasing in the home?",
+    field_113: "What was the day of the initial purchase of a share in the property? DD",
+    field_114: "What was the month of the initial purchase of a share in the property? MM",
+    field_115: "What was the year of the initial purchase of a share in the property? YYYY",
+    field_116: "Including this time, how many times has the shared owner engaged in staircasing in the home?",
+    field_117: "What was the day of the last staircasing transaction? DD",
+    field_118: "What was the month of the last staircasing transaction? MM",
+    field_119: "What was the year of the last staircasing transaction? YYYY",
+    field_120: "What is the full purchase price for this staircasing transaction?",
+    field_121: "What was the percentage share purchased in the initial transaction?",
+    field_122: "Was a mortgage used for this staircasing transaction?",
+    field_123: "What was the basic monthly rent prior to staircasing?",
+    field_124: "What is the basic monthly rent after staircasing?",
+    field_125: "Will the service charge change after this staircasing transaction takes place?",
+    field_126: "What are the new total monthly service charges for the property?",
 
-    field_112: "How long have the buyers been living in the property before the purchase? - Discounted ownership",
-    field_113: "What was the full purchase price?",
-    field_114: "What was the amount of any loan, grant, discount or subsidy given?",
-    field_115: "What was the percentage discount?",
-    field_116: "Was a mortgage used for the purchase of this property? - Discounted ownership",
-    field_117: "What is the mortgage amount?",
-    field_118: "What is the length of the mortgage in years? - Discounted ownership",
-    field_119: "Does this include any extra borrowing?",
-    field_120: "How much was the cash deposit paid on the property?",
-    field_121: "What are the total monthly leasehold charges for the property?",
-
-    field_122: "What is the building height classification?",
-    field_123: "Is the gender buyer 1 identifies with the same as their sex registered at birth?",
-    field_124: "If 'No', enter buyer 1's gender identity",
-    field_125: "Is the gender buyer/person 2 identifies with the same as their sex registered at birth?",
-    field_126: "If 'No', enter buyer/person 2's gender identity",
-    field_127: "Is the gender person 3 identifies with the same as their sex registered at birth?",
-    field_128: "If 'No', enter person 3's gender identity",
-    field_129: "Is the gender person 4 identifies with the same as their sex registered at birth?",
-    field_130: "If 'No', enter person 4's gender identity",
-    field_131: "Is the gender person 5 identifies with the same as their sex registered at birth?",
-    field_132: "If 'No', enter person 5's gender identity",
-    field_133: "Is the gender person 6 identifies with the same as their sex registered at birth?",
-    field_134: "If 'No', enter person 6's gender identity",
-    field_135: "Will the service charge change after this staircasing transaction takes place?",
-    field_136: "What are the new total monthly service charges for the property?",
+    field_127: "How long have the buyers been living in the property before the purchase? - Discounted ownership",
+    field_128: "What was the full purchase price?",
+    field_129: "What was the amount of any loan, grant, discount or subsidy given?",
+    field_130: "What was the percentage discount?",
+    field_131: "Was a mortgage used for the purchase of this property? - Discounted ownership",
+    field_132: "What is the mortgage amount?",
+    field_133: "What is the length of the mortgage in years? - Discounted ownership",
+    field_134: "Does this include any extra borrowing?",
+    field_135: "How much was the cash deposit paid on the property?",
+    field_136: "What are the total monthly leasehold charges for the property?",
   }.freeze
 
   ERROR_BASE_KEY = "validations.sales.2026.bulk_upload".freeze
 
   CASE_INSENSITIVE_FIELDS = [
-    :field_28, # Age of buyer 1
-    :field_35, # Age of person 2
-    :field_43, # Age of person 3
-    :field_47, # Age of person 4
-    :field_51, # Age of person 5
-    :field_55, # Age of person 6
+    :field_29, # Age of buyer 1
+    :field_38, # Age of person 2
+    :field_48, # Age of person 3
+    :field_54, # Age of person 4
+    :field_60, # Age of person 5
+    :field_66, # Age of person 6
 
-    :field_29, # Buyer 1's sex, as registered at birth
-    :field_36, # Buyer/Person 2's sex, as registered at birth
-    :field_44, # Person 3's sex, as registered at birth
-    :field_48, # Person 4's sex, as registered at birth
-    :field_52, # Person 5's sex, as registered at birth
-    :field_56, # Person 6's sex, as registered at birth
+    :field_30, # Buyer 1's sex, as registered at birth
+    :field_39, # Buyer/Person 2's sex, as registered at birth
+    :field_49, # Person 3's sex, as registered at birth
+    :field_55, # Person 4's sex, as registered at birth
+    :field_61, # Person 5's sex, as registered at birth
+    :field_67, # Person 6's sex, as registered at birth
 
-    :field_64, # What was buyer 2’s previous tenure?
+    :field_77, # What was buyer 2’s previous tenure?
 
-    :field_75, # What is the total amount the buyers had in savings before they paid any deposit for the property?
-    :field_70, # What is buyer 1’s gross annual income?
-    :field_72, # What is buyer 2’s gross annual income?
+    :field_88, # What is the total amount the buyers had in savings before they paid any deposit for the property?
+    :field_83, # What is buyer 1’s gross annual income?
+    :field_85, # What is buyer 2’s gross annual income?
 
-    :field_90,  # What is the length of the mortgage in years? - Shared ownership
-    :field_118, # What is the length of the mortgage in years? - Discounted ownership
+    :field_103, # What is the length of the mortgage in years? - Shared ownership
+    :field_133, # What is the length of the mortgage in years? - Discounted ownership
   ].freeze
 
   attribute :bulk_upload
@@ -213,124 +212,122 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_25, :integer
   attribute :field_26, :integer
   attribute :field_27, :integer
+  attribute :field_28, :integer
 
-  attribute :field_28, :string
   attribute :field_29, :string
-  attribute :field_30, :integer
+  attribute :field_30, :string
   attribute :field_31, :integer
-  attribute :field_32, :integer
+  attribute :field_32, :string
   attribute :field_33, :integer
   attribute :field_34, :integer
-  attribute :field_35, :string
-  attribute :field_36, :string
+  attribute :field_35, :integer
+  attribute :field_36, :integer
   attribute :field_37, :integer
-  attribute :field_38, :integer
-  attribute :field_39, :integer
+  attribute :field_38, :string
+  attribute :field_39, :string
   attribute :field_40, :integer
-  attribute :field_41, :integer
-
+  attribute :field_41, :string
   attribute :field_42, :integer
-  attribute :field_43, :string
-  attribute :field_44, :string
+  attribute :field_43, :integer
+  attribute :field_44, :integer
   attribute :field_45, :integer
   attribute :field_46, :integer
-  attribute :field_47, :string
+
+  attribute :field_47, :integer
   attribute :field_48, :string
-  attribute :field_49, :integer
+  attribute :field_49, :string
   attribute :field_50, :integer
   attribute :field_51, :string
-  attribute :field_52, :string
+  attribute :field_52, :integer
   attribute :field_53, :integer
-  attribute :field_54, :integer
+  attribute :field_54, :string
   attribute :field_55, :string
-  attribute :field_56, :string
-  attribute :field_57, :integer
-
+  attribute :field_56, :integer
+  attribute :field_57, :string
   attribute :field_58, :integer
   attribute :field_59, :integer
   attribute :field_60, :string
   attribute :field_61, :string
-  attribute :field_62, :string
-  attribute :field_63, :integer
-  attribute :field_64, :string
-
+  attribute :field_62, :integer
+  attribute :field_63, :string
+  attribute :field_64, :integer
   attribute :field_65, :integer
-  attribute :field_66, :integer
-  attribute :field_67, :integer
+  attribute :field_66, :string
+  attribute :field_67, :string
   attribute :field_68, :integer
-  attribute :field_69, :integer
+  attribute :field_69, :string
+  attribute :field_70, :integer
 
-  attribute :field_70, :string
   attribute :field_71, :integer
-  attribute :field_72, :string
-  attribute :field_73, :integer
-  attribute :field_74, :integer
+  attribute :field_72, :integer
+  attribute :field_73, :string
+  attribute :field_74, :string
   attribute :field_75, :string
   attribute :field_76, :integer
-  attribute :field_77, :integer
+  attribute :field_77, :string
 
   attribute :field_78, :integer
   attribute :field_79, :integer
   attribute :field_80, :integer
   attribute :field_81, :integer
   attribute :field_82, :integer
-  attribute :field_83, :integer
-  attribute :field_84, :integer
-  attribute :field_85, :integer
-  attribute :field_86, :decimal
-  attribute :field_87, :decimal
-  attribute :field_88, :integer
-  attribute :field_89, :decimal
-  attribute :field_90, :string
-  attribute :field_91, :decimal
-  attribute :field_92, :decimal
-  attribute :field_93, :decimal
-  attribute :field_94, :decimal
-  attribute :field_95, :decimal
 
-  attribute :field_96, :decimal
-  attribute :field_97, :decimal
+  attribute :field_83, :string
+  attribute :field_84, :integer
+  attribute :field_85, :string
+  attribute :field_86, :integer
+  attribute :field_87, :integer
+  attribute :field_88, :string
+  attribute :field_89, :integer
+  attribute :field_90, :integer
+
+  attribute :field_91, :integer
+  attribute :field_92, :integer
+  attribute :field_93, :integer
+  attribute :field_94, :integer
+  attribute :field_95, :integer
+  attribute :field_96, :integer
+  attribute :field_97, :integer
   attribute :field_98, :integer
-  attribute :field_99, :integer
-  attribute :field_100, :integer
+  attribute :field_99, :decimal
+  attribute :field_100, :decimal
   attribute :field_101, :integer
-  attribute :field_102, :integer
-  attribute :field_103, :integer
-  attribute :field_104, :integer
-  attribute :field_105, :integer
-  attribute :field_106, :integer
+  attribute :field_102, :decimal
+  attribute :field_103, :string
+  attribute :field_104, :decimal
+  attribute :field_105, :decimal
+  attribute :field_106, :decimal
   attribute :field_107, :decimal
   attribute :field_108, :decimal
-  attribute :field_109, :integer
-  attribute :field_110, :decimal
-  attribute :field_111, :decimal
 
+  attribute :field_109, :decimal
+  attribute :field_110, :decimal
+  attribute :field_111, :integer
   attribute :field_112, :integer
-  attribute :field_113, :decimal
+  attribute :field_113, :integer
   attribute :field_114, :integer
-  attribute :field_115, :decimal
+  attribute :field_115, :integer
   attribute :field_116, :integer
-  attribute :field_117, :decimal
-  attribute :field_118, :string
+  attribute :field_117, :integer
+  attribute :field_118, :integer
   attribute :field_119, :integer
   attribute :field_120, :decimal
   attribute :field_121, :decimal
   attribute :field_122, :integer
-
-  attribute :field_123, :integer
-  attribute :field_124, :string
+  attribute :field_123, :decimal
+  attribute :field_124, :decimal
   attribute :field_125, :integer
-  attribute :field_126, :string
-  attribute :field_127, :integer
-  attribute :field_128, :string
-  attribute :field_129, :integer
-  attribute :field_130, :string
-  attribute :field_131, :integer
-  attribute :field_132, :string
-  attribute :field_133, :integer
-  attribute :field_134, :string
+  attribute :field_126, :decimal
 
-  attribute :field_135, :integer
+  attribute :field_127, :integer
+  attribute :field_128, :decimal
+  attribute :field_129, :integer
+  attribute :field_130, :decimal
+  attribute :field_131, :integer
+  attribute :field_132, :decimal
+  attribute :field_133, :string
+  attribute :field_134, :integer
+  attribute :field_135, :decimal
   attribute :field_136, :decimal
 
   validates :field_1,
@@ -425,7 +422,7 @@ class BulkUpload::Sales::Year2026::RowParser
             },
             on: :after_log
 
-  validates :field_115,
+  validates :field_130,
             numericality: {
               message: I18n.t("#{ERROR_BASE_KEY}.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"),
               greater_than_or_equal_to: 0,
@@ -451,7 +448,7 @@ class BulkUpload::Sales::Year2026::RowParser
             },
             on: :after_log
 
-  validates :field_103,
+  validates :field_116,
             numericality: {
               greater_than_or_equal_to: 2,
               less_than_or_equal_to: 10,
@@ -460,7 +457,7 @@ class BulkUpload::Sales::Year2026::RowParser
             },
             on: :before_log
 
-  validates :field_90,
+  validates :field_103,
             if: :shared_ownership?,
             format: {
               with: /\A(\d+|R)\z/,
@@ -468,7 +465,7 @@ class BulkUpload::Sales::Year2026::RowParser
             },
             on: :after_log
 
-  validates :field_118,
+  validates :field_133,
             if: :discounted_ownership?,
             format: {
               with: /\A(\d+|R)\z/,
@@ -588,9 +585,9 @@ class BulkUpload::Sales::Year2026::RowParser
       "field_7",  # purchaser_code
       "field_21", # postcode
       "field_22", # postcode
-      "field_28", # age1
-      "field_29", # sexrab1
-      "field_32", # ecstat1
+      "field_29", # age1
+      "field_30", # sexrab1
+      "field_35", # ecstat1
     )
   end
 
@@ -610,16 +607,16 @@ private
   end
 
   def prevtenbuy2
-    case field_64
+    case field_77
     when "R"
       0
     else
-      field_64
+      field_77
     end
   end
 
   def infer_buyer2_ethnic_group_from_ethnic
-    case field_37
+    case field_42
     when 1, 2, 3, 18, 20
       0
     when 4, 5, 6, 7
@@ -631,7 +628,7 @@ private
     when 16, 19
       4
     else
-      field_37
+      field_42
     end
   end
 
@@ -697,19 +694,19 @@ private
   end
 
   def two_buyers_share_address?
-    field_63 == 2
+    field_76 == 2
   end
 
   def not_resale?
-    field_78 == 2
+    field_91 == 2
   end
 
   def buyer_1_previous_tenure_not_1_or_2?
-    field_58 != 1 && field_58 != 2
+    field_71 != 1 && field_71 != 2
   end
 
   def mortgage_used?
-    field_88 == 2
+    field_101 == 2
   end
 
   def social_homebuy?
@@ -717,11 +714,11 @@ private
   end
 
   def buyers_own_all?
-    field_97 == 100
+    field_110 == 100
   end
 
   def buyer_staircased_before?
-    field_99 == 1
+    field_112 == 1
   end
 
   def buyer_interviewed?
@@ -737,89 +734,89 @@ private
       purchid: %i[field_7],
       saledate: %i[field_1 field_2 field_3],
       noint: %i[field_14],
-      age1_known: %i[field_28],
-      age1: %i[field_28],
-      age2_known: %i[field_35],
-      age2: %i[field_35],
-      age3_known: %i[field_43],
-      age3: %i[field_43],
-      age4_known: %i[field_47],
-      age4: %i[field_47],
-      age5_known: %i[field_51],
-      age5: %i[field_51],
-      age6_known: %i[field_55],
-      age6: %i[field_55],
-      relat2: %i[field_34],
-      relat3: %i[field_42],
-      relat4: %i[field_46],
-      relat5: %i[field_50],
-      relat6: %i[field_54],
+      age1_known: %i[field_29],
+      age1: %i[field_29],
+      age2_known: %i[field_38],
+      age2: %i[field_38],
+      age3_known: %i[field_48],
+      age3: %i[field_48],
+      age4_known: %i[field_54],
+      age4: %i[field_54],
+      age5_known: %i[field_60],
+      age5: %i[field_60],
+      age6_known: %i[field_66],
+      age6: %i[field_66],
+      relat2: %i[field_37],
+      relat3: %i[field_47],
+      relat4: %i[field_53],
+      relat5: %i[field_59],
+      relat6: %i[field_65],
 
-      ecstat1: %i[field_32],
-      ecstat2: %i[field_39],
-      ecstat3: %i[field_45],
+      ecstat1: %i[field_35],
+      ecstat2: %i[field_44],
+      ecstat3: %i[field_52],
 
-      ecstat4: %i[field_49],
-      ecstat5: %i[field_53],
-      ecstat6: %i[field_57],
-      ethnic_group: %i[field_30],
-      ethnic: %i[field_30],
-      nationality_all: %i[field_31],
-      nationality_all_group: %i[field_31],
-      income1nk: %i[field_70],
-      income1: %i[field_70],
-      income2nk: %i[field_72],
-      income2: %i[field_72],
-      inc1mort: %i[field_71],
-      inc2mort: %i[field_73],
-      savingsnk: %i[field_75],
-      savings: %i[field_75],
-      prevown: %i[field_76],
-      prevten: %i[field_58],
-      prevloc: %i[field_62],
-      previous_la_known: %i[field_62],
-      ppcodenk: %i[field_59],
-      ppostcode_full: %i[field_60 field_61],
-      disabled: %i[field_68],
+      ecstat4: %i[field_58],
+      ecstat5: %i[field_64],
+      ecstat6: %i[field_70],
+      ethnic_group: %i[field_33],
+      ethnic: %i[field_33],
+      nationality_all: %i[field_34],
+      nationality_all_group: %i[field_34],
+      income1nk: %i[field_83],
+      income1: %i[field_83],
+      income2nk: %i[field_85],
+      income2: %i[field_85],
+      inc1mort: %i[field_84],
+      inc2mort: %i[field_86],
+      savingsnk: %i[field_88],
+      savings: %i[field_88],
+      prevown: %i[field_89],
+      prevten: %i[field_71],
+      prevloc: %i[field_75],
+      previous_la_known: %i[field_75],
+      ppcodenk: %i[field_72],
+      ppostcode_full: %i[field_73 field_74],
+      disabled: %i[field_81],
 
-      wheel: %i[field_69],
-      beds: %i[field_25],
+      wheel: %i[field_82],
+      beds: %i[field_26],
       proptype: %i[field_24],
-      builtype: %i[field_26],
+      builtype: %i[field_27],
       la_known: %i[field_23],
       la: %i[field_23],
 
       is_la_inferred: %i[field_23],
       pcodenk: %i[field_21 field_22],
       postcode_full: %i[field_21 field_22],
-      wchair: %i[field_27],
+      wchair: %i[field_28],
 
       type: %i[field_9 field_11 field_8],
-      resale: %i[field_78],
-      hodate: %i[field_80 field_81 field_82],
+      resale: %i[field_91],
+      hodate: %i[field_93 field_94 field_95],
 
-      frombeds: %i[field_83],
-      fromprop: %i[field_84],
+      frombeds: %i[field_96],
+      fromprop: %i[field_97],
       value: value_fields,
       equity: equity_fields,
       mortgage: mortgage_fields,
       extrabor: extrabor_fields,
       deposit: deposit_fields,
-      cashdis: %i[field_92],
+      cashdis: %i[field_105],
       mrent: mrent_fields,
 
       has_mscharge: mscharge_fields,
       mscharge: mscharge_fields,
-      grant: %i[field_114],
-      discount: %i[field_115],
+      grant: %i[field_129],
+      discount: %i[field_130],
       owning_organisation_id: %i[field_4],
       managing_organisation_id: [:field_5],
       assigned_to: %i[field_6],
-      hhregres: %i[field_65],
-      hhregresstill: %i[field_66],
-      armedforcesspouse: %i[field_67],
+      hhregres: %i[field_78],
+      hhregresstill: %i[field_79],
+      armedforcesspouse: %i[field_80],
 
-      hb: %i[field_74],
+      hb: %i[field_87],
       mortlen: mortlen_fields,
       mortlen_known: mortlen_fields,
       proplen: proplen_fields,
@@ -830,12 +827,12 @@ private
       ownershipsch: %i[field_8],
 
       jointpur: %i[field_12],
-      buy1livein: %i[field_33],
-      buy2livein: %i[field_40],
-      hholdcount: %i[field_41],
-      stairbought: %i[field_96],
-      stairowned: %i[field_97],
-      socprevten: %i[field_85],
+      buy1livein: %i[field_36],
+      buy2livein: %i[field_45],
+      hholdcount: %i[field_46],
+      stairbought: %i[field_109],
+      stairowned: %i[field_110],
+      socprevten: %i[field_98],
       mortgageused: mortgageused_fields,
 
       uprn: %i[field_16],
@@ -845,47 +842,47 @@ private
       county: %i[field_20],
       uprn_selection: [:field_17],
 
-      ethnic_group2: %i[field_37],
-      ethnicbuy2: %i[field_37],
-      nationality_all_buyer2: %i[field_38],
-      nationality_all_buyer2_group: %i[field_38],
+      ethnic_group2: %i[field_42],
+      ethnicbuy2: %i[field_42],
+      nationality_all_buyer2: %i[field_43],
+      nationality_all_buyer2_group: %i[field_43],
 
-      buy2living: %i[field_63],
-      prevtenbuy2: %i[field_64],
+      buy2living: %i[field_76],
+      prevtenbuy2: %i[field_77],
 
-      prevshared: %i[field_77],
+      prevshared: %i[field_90],
 
-      staircasesale: %i[field_98],
-      firststair: %i[field_99],
-      numstair: %i[field_103],
-      mrentprestaircasing: %i[field_110],
-      lasttransaction: %i[field_104 field_105 field_106],
-      initialpurchase: %i[field_100 field_101 field_102],
+      staircasesale: %i[field_111],
+      firststair: %i[field_112],
+      numstair: %i[field_116],
+      mrentprestaircasing: %i[field_123],
+      lasttransaction: %i[field_117 field_118 field_119],
+      initialpurchase: %i[field_113 field_114 field_115],
 
-      sexrab1: %i[field_29],
-      sexrab2: %i[field_36],
-      sexrab3: %i[field_44],
-      sexrab4: %i[field_48],
-      sexrab5: %i[field_52],
-      sexrab6: %i[field_56],
+      sexrab1: %i[field_30],
+      sexrab2: %i[field_39],
+      sexrab3: %i[field_49],
+      sexrab4: %i[field_55],
+      sexrab5: %i[field_61],
+      sexrab6: %i[field_67],
 
-      buildheightclass: %i[field_122],
+      buildheightclass: %i[field_25],
 
-      gender_same_as_sex1: %i[field_123],
-      gender_description1: %i[field_124],
-      gender_same_as_sex2: %i[field_125],
-      gender_description2: %i[field_126],
-      gender_same_as_sex3: %i[field_127],
-      gender_description3: %i[field_128],
-      gender_same_as_sex4: %i[field_129],
-      gender_description4: %i[field_130],
-      gender_same_as_sex5: %i[field_131],
-      gender_description5: %i[field_132],
-      gender_same_as_sex6: %i[field_133],
-      gender_description6: %i[field_134],
+      gender_same_as_sex1: %i[field_31],
+      gender_description1: %i[field_32],
+      gender_same_as_sex2: %i[field_40],
+      gender_description2: %i[field_41],
+      gender_same_as_sex3: %i[field_50],
+      gender_description3: %i[field_51],
+      gender_same_as_sex4: %i[field_56],
+      gender_description4: %i[field_57],
+      gender_same_as_sex5: %i[field_62],
+      gender_description5: %i[field_63],
+      gender_same_as_sex6: %i[field_68],
+      gender_description6: %i[field_69],
 
-      hasservicechargeschanged: %i[field_135],
-      newservicecharges: %i[field_136],
+      hasservicechargeschanged: %i[field_125],
+      newservicecharges: %i[field_126],
     }
   end
 
@@ -897,59 +894,59 @@ private
     attributes["noint"] = field_14
 
     attributes["age1_known"] = age1_known?
-    attributes["age1"] = field_28 if attributes["age1_known"]&.zero? && field_28&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age1"] = field_29 if attributes["age1_known"]&.zero? && field_29&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age2_known"] = age2_known?
-    attributes["age2"] = field_35 if attributes["age2_known"]&.zero? && field_35&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age2"] = field_38 if attributes["age2_known"]&.zero? && field_38&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age3_known"] = age3_known?
-    attributes["age3"] = field_43 if attributes["age3_known"]&.zero? && field_43&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age3"] = field_48 if attributes["age3_known"]&.zero? && field_48&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age4_known"] = age4_known?
-    attributes["age4"] = field_47 if attributes["age4_known"]&.zero? && field_47&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age4"] = field_54 if attributes["age4_known"]&.zero? && field_54&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age5_known"] = age5_known?
-    attributes["age5"] = field_51 if attributes["age5_known"]&.zero? && field_51&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age5"] = field_60 if attributes["age5_known"]&.zero? && field_60&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age6_known"] = age6_known?
-    attributes["age6"] = field_55 if attributes["age6_known"]&.zero? && field_55&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age6"] = field_66 if attributes["age6_known"]&.zero? && field_66&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["sexrab1"] = field_29
-    attributes["sexrab2"] = field_36
-    attributes["sexrab3"] = field_44
-    attributes["sexrab4"] = field_48
-    attributes["sexrab5"] = field_52
-    attributes["sexrab6"] = field_56
-    attributes["buildheightclass"] = field_122
+    attributes["sexrab1"] = field_30
+    attributes["sexrab2"] = field_39
+    attributes["sexrab3"] = field_49
+    attributes["sexrab4"] = field_55
+    attributes["sexrab5"] = field_61
+    attributes["sexrab6"] = field_67
+    attributes["buildheightclass"] = field_25
 
-    attributes["gender_same_as_sex1"] = field_123
-    attributes["gender_description1"] = field_124
-    attributes["gender_same_as_sex2"] = field_125
-    attributes["gender_description2"] = field_126
-    attributes["gender_same_as_sex3"] = field_127
-    attributes["gender_description3"] = field_128
-    attributes["gender_same_as_sex4"] = field_129
-    attributes["gender_description4"] = field_130
-    attributes["gender_same_as_sex5"] = field_131
-    attributes["gender_description5"] = field_132
-    attributes["gender_same_as_sex6"] = field_133
-    attributes["gender_description6"] = field_134
+    attributes["gender_same_as_sex1"] = field_31
+    attributes["gender_description1"] = field_32
+    attributes["gender_same_as_sex2"] = field_40
+    attributes["gender_description2"] = field_41
+    attributes["gender_same_as_sex3"] = field_50
+    attributes["gender_description3"] = field_51
+    attributes["gender_same_as_sex4"] = field_56
+    attributes["gender_description4"] = field_57
+    attributes["gender_same_as_sex5"] = field_62
+    attributes["gender_description5"] = field_63
+    attributes["gender_same_as_sex6"] = field_68
+    attributes["gender_description6"] = field_69
 
-    attributes["hasservicechargeschanged"] = field_135
-    attributes["newservicecharges"] = field_136
+    attributes["hasservicechargeschanged"] = field_125
+    attributes["newservicecharges"] = field_126
 
-    attributes["relat2"] = relationship_from_is_partner(field_34)
-    attributes["relat3"] = relationship_from_is_partner(field_42)
-    attributes["relat4"] = relationship_from_is_partner(field_46)
-    attributes["relat5"] = relationship_from_is_partner(field_50)
-    attributes["relat6"] = relationship_from_is_partner(field_54)
+    attributes["relat2"] = relationship_from_is_partner(field_37)
+    attributes["relat3"] = relationship_from_is_partner(field_47)
+    attributes["relat4"] = relationship_from_is_partner(field_53)
+    attributes["relat5"] = relationship_from_is_partner(field_59)
+    attributes["relat6"] = relationship_from_is_partner(field_65)
 
-    attributes["ecstat1"] = field_32
-    attributes["ecstat2"] = field_39
-    attributes["ecstat3"] = field_45
-    attributes["ecstat4"] = field_49
-    attributes["ecstat5"] = field_53
-    attributes["ecstat6"] = field_57
+    attributes["ecstat1"] = field_35
+    attributes["ecstat2"] = field_44
+    attributes["ecstat3"] = field_52
+    attributes["ecstat4"] = field_58
+    attributes["ecstat5"] = field_64
+    attributes["ecstat6"] = field_70
 
     attributes["details_known_2"] = details_known?(2)
     attributes["details_known_3"] = details_known?(3)
@@ -958,34 +955,34 @@ private
     attributes["details_known_6"] = details_known?(6)
 
     attributes["ethnic_group"] = ethnic_group_from_ethnic
-    attributes["ethnic"] = field_30
-    attributes["nationality_all"] = field_31 if field_31.present? && valid_nationality_options.include?(field_31.to_s)
+    attributes["ethnic"] = field_33
+    attributes["nationality_all"] = field_34 if field_34.present? && valid_nationality_options.include?(field_34.to_s)
     attributes["nationality_all_group"] = nationality_group(attributes["nationality_all"])
 
-    attributes["income1nk"] = field_70 == "R" ? 1 : 0
-    attributes["income1"] = field_70.to_i if attributes["income1nk"]&.zero? && field_70&.match(/\A\d+\z/)
+    attributes["income1nk"] = field_83 == "R" ? 1 : 0
+    attributes["income1"] = field_83.to_i if attributes["income1nk"]&.zero? && field_83&.match(/\A\d+\z/)
 
-    attributes["income2nk"] = field_72 == "R" ? 1 : 0
-    attributes["income2"] = field_72.to_i if attributes["income2nk"]&.zero? && field_72&.match(/\A\d+\z/)
+    attributes["income2nk"] = field_85 == "R" ? 1 : 0
+    attributes["income2"] = field_85.to_i if attributes["income2nk"]&.zero? && field_85&.match(/\A\d+\z/)
 
-    attributes["inc1mort"] = field_71
-    attributes["inc2mort"] = field_73
+    attributes["inc1mort"] = field_84
+    attributes["inc2mort"] = field_86
 
-    attributes["savingsnk"] = field_75 == "R" ? 1 : 0
-    attributes["savings"] = field_75.to_i if attributes["savingsnk"]&.zero? && field_75&.match(/\A\d+\z/)
-    attributes["prevown"] = field_76
+    attributes["savingsnk"] = field_88 == "R" ? 1 : 0
+    attributes["savings"] = field_88.to_i if attributes["savingsnk"]&.zero? && field_88&.match(/\A\d+\z/)
+    attributes["prevown"] = field_89
 
-    attributes["prevten"] = field_58
-    attributes["prevloc"] = field_62
+    attributes["prevten"] = field_71
+    attributes["prevloc"] = field_75
     attributes["previous_la_known"] = previous_la_known
     attributes["ppcodenk"] = previous_postcode_known
     attributes["ppostcode_full"] = ppostcode_full
 
-    attributes["disabled"] = field_68
-    attributes["wheel"] = field_69
-    attributes["beds"] = field_25
+    attributes["disabled"] = field_81
+    attributes["wheel"] = field_82
+    attributes["beds"] = field_26
     attributes["proptype"] = field_24
-    attributes["builtype"] = field_26
+    attributes["builtype"] = field_27
     attributes["la_known"] = field_23.present? ? 1 : 0
     attributes["la"] = field_23
     attributes["la_as_entered"] = field_23
@@ -993,15 +990,15 @@ private
     attributes["pcodenk"] = 0 if postcode_full.present?
     attributes["postcode_full"] = postcode_full
     attributes["postcode_full_as_entered"] = postcode_full
-    attributes["wchair"] = field_27
+    attributes["wchair"] = field_28
 
     attributes["type"] = sale_type
-    attributes["resale"] = field_78
+    attributes["resale"] = field_91
 
     attributes["hodate"] = hodate
 
-    attributes["frombeds"] = field_83
-    attributes["fromprop"] = field_84
+    attributes["frombeds"] = field_96
+    attributes["fromprop"] = field_97
 
     attributes["value"] = value
     attributes["equity"] = equity
@@ -1009,22 +1006,22 @@ private
     attributes["extrabor"] = extrabor
     attributes["deposit"] = deposit
 
-    attributes["cashdis"] = field_92
+    attributes["cashdis"] = field_105
     attributes["mrent"] = mrent
     attributes["mscharge"] = mscharge if mscharge&.positive?
     attributes["has_mscharge"] = attributes["mscharge"].present? ? 1 : 0
-    attributes["grant"] = field_114
-    attributes["discount"] = field_115
+    attributes["grant"] = field_129
+    attributes["discount"] = field_130
 
     attributes["owning_organisation"] = owning_organisation
     attributes["managing_organisation"] = managing_organisation
     attributes["assigned_to"] = assigned_to || (bulk_upload.user.support? ? nil : bulk_upload.user)
     attributes["created_by"] = bulk_upload.user
-    attributes["hhregres"] = field_65
-    attributes["hhregresstill"] = field_66
-    attributes["armedforcesspouse"] = field_67
+    attributes["hhregres"] = field_78
+    attributes["hhregresstill"] = field_79
+    attributes["armedforcesspouse"] = field_80
 
-    attributes["hb"] = field_74
+    attributes["hb"] = field_87
 
     attributes["mortlen"] = mortlen != "R" ? mortlen : nil
     attributes["mortlen_known"] = mortlen_known
@@ -1036,12 +1033,12 @@ private
     attributes["privacynotice"] = field_15
     attributes["ownershipsch"] = field_8
     attributes["jointpur"] = field_12
-    attributes["buy1livein"] = field_33
-    attributes["buy2livein"] = field_40
-    attributes["hholdcount"] = field_41
-    attributes["stairbought"] = field_96
-    attributes["stairowned"] = field_97
-    attributes["socprevten"] = field_85
+    attributes["buy1livein"] = field_36
+    attributes["buy2livein"] = field_45
+    attributes["hholdcount"] = field_46
+    attributes["stairbought"] = field_109
+    attributes["stairowned"] = field_110
+    attributes["socprevten"] = field_98
     attributes["soctenant"] = infer_soctenant_from_prevten_and_prevtenbuy2
     attributes["mortgageused"] = mortgageused
 
@@ -1062,25 +1059,25 @@ private
     attributes["select_best_address_match"] = true if field_16.blank?
 
     attributes["ethnic_group2"] = infer_buyer2_ethnic_group_from_ethnic
-    attributes["ethnicbuy2"] = field_37
-    attributes["nationality_all_buyer2"] = field_38 if field_38.present? && valid_nationality_options.include?(field_38.to_s)
+    attributes["ethnicbuy2"] = field_42
+    attributes["nationality_all_buyer2"] = field_43 if field_43.present? && valid_nationality_options.include?(field_43.to_s)
     attributes["nationality_all_buyer2_group"] = nationality_group(attributes["nationality_all_buyer2"])
 
-    attributes["buy2living"] = field_63
+    attributes["buy2living"] = field_76
     attributes["prevtenbuy2"] = prevtenbuy2
 
-    attributes["prevshared"] = field_77
+    attributes["prevshared"] = field_90
 
-    attributes["staircasesale"] = field_98
+    attributes["staircasesale"] = field_111
 
-    attributes["firststair"] = field_99
-    attributes["numstair"] = field_103
-    attributes["mrentprestaircasing"] = field_110
+    attributes["firststair"] = field_112
+    attributes["numstair"] = field_116
+    attributes["mrentprestaircasing"] = field_123
     attributes["lasttransaction"] = lasttransaction
     attributes["initialpurchase"] = initialpurchase
 
-    attributes["management_fee"] = field_95
-    attributes["has_management_fee"] = field_95.present? && field_95.positive? ? 1 : 0
+    attributes["management_fee"] = field_108
+    attributes["has_management_fee"] = field_108.present? && field_108.positive? ? 1 : 0
 
     attributes
   end
@@ -1097,38 +1094,38 @@ private
   end
 
   def hodate
-    year = field_82.to_s.strip.length.between?(1, 2) ? field_82 + 2000 : field_82
-    Date.new(year, field_81, field_80) if field_82.present? && field_81.present? && field_80.present?
+    year = field_95.to_s.strip.length.between?(1, 2) ? field_95 + 2000 : field_95
+    Date.new(year, field_94, field_93) if field_95.present? && field_94.present? && field_93.present?
   rescue Date::Error
     Date.new
   end
 
   def lasttransaction
-    year = field_106.to_s.strip.length.between?(1, 2) ? field_106 + 2000 : field_106
-    Date.new(year, field_105, field_104) if field_106.present? && field_105.present? && field_104.present?
+    year = field_119.to_s.strip.length.between?(1, 2) ? field_119 + 2000 : field_119
+    Date.new(year, field_118, field_117) if field_119.present? && field_118.present? && field_117.present?
   rescue Date::Error
     Date.new
   end
 
   def initialpurchase
-    year = field_102.to_s.strip.length.between?(1, 2) ? field_102 + 2000 : field_102
-    Date.new(year, field_101, field_100) if field_102.present? && field_101.present? && field_100.present?
+    year = field_115.to_s.strip.length.between?(1, 2) ? field_115 + 2000 : field_115
+    Date.new(year, field_114, field_113) if field_115.present? && field_114.present? && field_113.present?
   rescue Date::Error
     Date.new
   end
 
   def age1_known?
-    return 1 if field_28 == "R"
+    return 1 if field_29 == "R"
 
     0
   end
 
   [
-    { person: 2, field: :field_35 },
-    { person: 3, field: :field_43 },
-    { person: 4, field: :field_47 },
-    { person: 5, field: :field_51 },
-    { person: 6, field: :field_55 },
+    { person: 2, field: :field_38 },
+    { person: 3, field: :field_48 },
+    { person: 4, field: :field_54 },
+    { person: 5, field: :field_60 },
+    { person: 6, field: :field_66 },
   ].each do |hash|
     define_method("age#{hash[:person]}_known?") do
       return 1 if public_send(hash[:field]) == "R"
@@ -1138,23 +1135,23 @@ private
   end
 
   def person_2_present?
-    field_35.present? || field_36.present? || field_34.present? || field_125.present? || field_126.present?
+    field_38.present? || field_39.present? || field_37.present? || field_40.present? || field_41.present?
   end
 
   def person_3_present?
-    field_43.present? || field_44.present? || field_42.present? || field_127.present? || field_128.present?
+    field_48.present? || field_49.present? || field_47.present? || field_50.present? || field_51.present?
   end
 
   def person_4_present?
-    field_47.present? || field_48.present? || field_46.present? || field_129.present? || field_130.present?
+    field_54.present? || field_55.present? || field_53.present? || field_56.present? || field_57.present?
   end
 
   def person_5_present?
-    field_51.present? || field_52.present? || field_50.present? || field_131.present? || field_132.present?
+    field_60.present? || field_61.present? || field_59.present? || field_62.present? || field_63.present?
   end
 
   def person_6_present?
-    field_55.present? || field_56.present? || field_54.present? || field_133.present? || field_134.present?
+    field_66.present? || field_67.present? || field_65.present? || field_68.present? || field_69.present?
   end
 
   def relationship_from_is_partner(is_partner)
@@ -1173,9 +1170,9 @@ private
   end
 
   def ethnic_group_from_ethnic
-    return nil if field_30.blank?
+    return nil if field_33.blank?
 
-    case field_30
+    case field_33
     when 1, 2, 3, 18, 20
       0
     when 4, 5, 6, 7
@@ -1196,7 +1193,7 @@ private
   end
 
   def ppostcode_full
-    "#{field_60} #{field_61}" if field_60 && field_61
+    "#{field_73} #{field_74}" if field_73 && field_74
   end
 
   def sale_type
@@ -1206,50 +1203,50 @@ private
   end
 
   def value
-    return field_86 if shared_ownership_initial_purchase?
-    return field_113 if discounted_ownership?
+    return field_99 if shared_ownership_initial_purchase?
+    return field_128 if discounted_ownership?
 
-    field_107 if staircasing?
+    field_120 if staircasing?
   end
 
   def equity
-    return field_87 if shared_ownership_initial_purchase?
+    return field_100 if shared_ownership_initial_purchase?
 
-    field_108 if staircasing?
+    field_121 if staircasing?
   end
 
   def mortgage
-    return field_89 if shared_ownership?
+    return field_102 if shared_ownership?
 
-    field_117 if discounted_ownership?
+    field_132 if discounted_ownership?
   end
 
   def extrabor
-    field_119 if discounted_ownership?
+    field_134 if discounted_ownership?
   end
 
   def deposit
-    return field_91 if shared_ownership?
+    return field_104 if shared_ownership?
 
-    field_120 if discounted_ownership?
+    field_135 if discounted_ownership?
   end
 
   def mrent
-    return field_93 if shared_ownership_initial_purchase?
+    return field_106 if shared_ownership_initial_purchase?
 
-    field_111 if staircasing?
+    field_124 if staircasing?
   end
 
   def mscharge
-    return field_94 if shared_ownership?
+    return field_107 if shared_ownership?
 
-    field_121 if discounted_ownership?
+    field_136 if discounted_ownership?
   end
 
   def mortlen
-    return field_90 if shared_ownership?
+    return field_103 if shared_ownership?
 
-    field_118 if discounted_ownership?
+    field_133 if discounted_ownership?
   end
 
   def mortlen_known
@@ -1263,87 +1260,87 @@ private
   end
 
   def proplen
-    return field_79 if shared_ownership?
+    return field_92 if shared_ownership?
 
-    field_112 if discounted_ownership?
+    field_127 if discounted_ownership?
   end
 
   def mortgageused
-    return field_88 if shared_ownership_initial_purchase?
-    return field_116 if discounted_ownership?
+    return field_101 if shared_ownership_initial_purchase?
+    return field_131 if discounted_ownership?
 
-    field_109 if staircasing?
+    field_122 if staircasing?
   end
 
   def value_fields
-    return [:field_86] if shared_ownership_initial_purchase?
-    return [:field_113] if discounted_ownership?
-    return [:field_107] if staircasing?
+    return [:field_99] if shared_ownership_initial_purchase?
+    return [:field_128] if discounted_ownership?
+    return [:field_120] if staircasing?
 
-    %i[field_86 field_113 field_107]
+    %i[field_99 field_128 field_120]
   end
 
   def equity_fields
-    return [:field_87] if shared_ownership_initial_purchase?
-    return [:field_108] if staircasing?
+    return [:field_100] if shared_ownership_initial_purchase?
+    return [:field_121] if staircasing?
 
-    %i[field_87 field_108]
+    %i[field_100 field_121]
   end
 
   def mortgage_fields
-    return [:field_89] if shared_ownership?
-    return [:field_117] if discounted_ownership?
+    return [:field_102] if shared_ownership?
+    return [:field_132] if discounted_ownership?
 
-    %i[field_89 field_117]
+    %i[field_102 field_132]
   end
 
   def extrabor_fields
-    return [:field_119] if discounted_ownership?
+    return [:field_134] if discounted_ownership?
 
-    %i[field_119]
+    %i[field_134]
   end
 
   def deposit_fields
-    return [:field_91] if shared_ownership?
-    return [:field_120] if discounted_ownership?
+    return [:field_104] if shared_ownership?
+    return [:field_135] if discounted_ownership?
 
-    %i[field_91 field_120]
+    %i[field_104 field_135]
   end
 
   def mrent_fields
-    return [:field_93] if shared_ownership_initial_purchase?
-    return [:field_111] if staircasing?
+    return [:field_106] if shared_ownership_initial_purchase?
+    return [:field_124] if staircasing?
 
-    %i[field_93 field_111]
+    %i[field_106 field_124]
   end
 
   def mscharge_fields
-    return [:field_94] if shared_ownership?
-    return [:field_121] if discounted_ownership?
+    return [:field_107] if shared_ownership?
+    return [:field_136] if discounted_ownership?
 
-    %i[field_94 field_121]
+    %i[field_107 field_136]
   end
 
   def mortlen_fields
-    return [:field_90] if shared_ownership?
-    return [:field_118] if discounted_ownership?
+    return [:field_103] if shared_ownership?
+    return [:field_133] if discounted_ownership?
 
-    %i[field_90 field_118]
+    %i[field_103 field_133]
   end
 
   def proplen_fields
-    return [:field_79] if shared_ownership?
-    return [:field_112] if discounted_ownership?
+    return [:field_92] if shared_ownership?
+    return [:field_127] if discounted_ownership?
 
-    %i[field_79 field_112]
+    %i[field_92 field_127]
   end
 
   def mortgageused_fields
-    return [:field_88] if shared_ownership_initial_purchase?
-    return [:field_116] if discounted_ownership?
-    return [:field_109] if staircasing?
+    return [:field_101] if shared_ownership_initial_purchase?
+    return [:field_131] if discounted_ownership?
+    return [:field_122] if staircasing?
 
-    %i[field_88 field_116 field_109]
+    %i[field_101 field_131 field_122]
   end
 
   def owning_organisation
@@ -1355,19 +1352,19 @@ private
   end
 
   def previous_la_known
-    field_62.present? ? 1 : 0
+    field_75.present? ? 1 : 0
   end
 
   def previous_postcode_known
-    return 1 if field_59 == 2
+    return 1 if field_72 == 2
 
-    0 if field_59 == 1
+    0 if field_72 == 1
   end
 
   def infer_soctenant_from_prevten_and_prevtenbuy2
     return unless shared_ownership?
 
-    if [1, 2].include?(field_58) || [1, 2].include?(field_64.to_i)
+    if [1, 2].include?(field_71) || [1, 2].include?(field_77.to_i)
       1
     else
       2
@@ -1562,9 +1559,9 @@ private
       errors.add(:field_3, error_message) # Sale completion date
       errors.add(:field_21, error_message) # Postcode
       errors.add(:field_22, error_message) # Postcode
-      errors.add(:field_28, error_message) # Buyer 1 age
-      errors.add(:field_29, error_message) # Buyer 1 sex registered at birth
-      errors.add(:field_32, error_message) # Buyer 1 working situation
+      errors.add(:field_29, error_message) # Buyer 1 age
+      errors.add(:field_30, error_message) # Buyer 1 sex registered at birth
+      errors.add(:field_35, error_message) # Buyer 1 working situation
       errors.add(:field_7, error_message) # Purchaser code
     end
   end
@@ -1588,12 +1585,12 @@ private
   end
 
   def validate_buyer1_economic_status
-    if field_32 == 9
-      if field_28.present? && field_28.to_i >= 16
-        errors.add(:field_32, I18n.t("#{ERROR_BASE_KEY}.ecstat1.buyer_cannot_be_over_16_and_child"))
-        errors.add(:field_28, I18n.t("#{ERROR_BASE_KEY}.age1.buyer_cannot_be_over_16_and_child"))
+    if field_35 == 9
+      if field_29.present? && field_29.to_i >= 16
+        errors.add(:field_35, I18n.t("#{ERROR_BASE_KEY}.ecstat1.buyer_cannot_be_over_16_and_child"))
+        errors.add(:field_29, I18n.t("#{ERROR_BASE_KEY}.age1.buyer_cannot_be_over_16_and_child"))
       else
-        errors.add(:field_32, I18n.t("#{ERROR_BASE_KEY}.ecstat1.buyer_cannot_be_child"))
+        errors.add(:field_35, I18n.t("#{ERROR_BASE_KEY}.ecstat1.buyer_cannot_be_child"))
       end
     end
   end
@@ -1601,25 +1598,25 @@ private
   def validate_buyer2_economic_status
     return unless joint_purchase?
 
-    if field_39 == 9
-      if field_35.present? && field_35.to_i >= 16
-        errors.add(:field_39, I18n.t("#{ERROR_BASE_KEY}.ecstat2.buyer_cannot_be_over_16_and_child"))
-        errors.add(:field_35, I18n.t("#{ERROR_BASE_KEY}.age2.buyer_cannot_be_over_16_and_child"))
+    if field_44 == 9
+      if field_38.present? && field_38.to_i >= 16
+        errors.add(:field_44, I18n.t("#{ERROR_BASE_KEY}.ecstat2.buyer_cannot_be_over_16_and_child"))
+        errors.add(:field_38, I18n.t("#{ERROR_BASE_KEY}.age2.buyer_cannot_be_over_16_and_child"))
       else
-        errors.add(:field_39, I18n.t("#{ERROR_BASE_KEY}.ecstat2.buyer_cannot_be_child"))
+        errors.add(:field_44, I18n.t("#{ERROR_BASE_KEY}.ecstat2.buyer_cannot_be_child"))
       end
     end
   end
 
   def validate_nationality
-    if field_31.present? && !valid_nationality_options.include?(field_31.to_s)
-      errors.add(:field_31, I18n.t("#{ERROR_BASE_KEY}.nationality.invalid"))
+    if field_34.present? && !valid_nationality_options.include?(field_34.to_s)
+      errors.add(:field_34, I18n.t("#{ERROR_BASE_KEY}.nationality.invalid"))
     end
   end
 
   def validate_buyer_2_nationality
-    if field_38.present? && !valid_nationality_options.include?(field_38.to_s)
-      errors.add(:field_38, I18n.t("#{ERROR_BASE_KEY}.nationality.invalid"))
+    if field_43.present? && !valid_nationality_options.include?(field_43.to_s)
+      errors.add(:field_43, I18n.t("#{ERROR_BASE_KEY}.nationality.invalid"))
     end
   end
 
@@ -1629,8 +1626,8 @@ private
 
   def validate_mortlen_field_if_buyer_interviewed
     if buyer_interviewed? && mortlen == "R"
-      errors.add(:field_90, I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid_for_interviewed")) if shared_ownership?
-      errors.add(:field_118, I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid_for_interviewed")) if discounted_ownership?
+      errors.add(:field_103, I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid_for_interviewed")) if shared_ownership?
+      errors.add(:field_133, I18n.t("#{ERROR_BASE_KEY}.mortlen.invalid_for_interviewed")) if discounted_ownership?
     end
   end
 
