@@ -263,6 +263,7 @@ RSpec.describe Csv::SalesLogCsvService do
           ecstat4: 3,
           age4_known: 1,
           sexrab4: "R",
+          gender_same_as_sex4: 2,
           sex4: "X",
           relat4: "X",
           details_known_5: 2,
@@ -387,6 +388,7 @@ RSpec.describe Csv::SalesLogCsvService do
                     ecstat4: 3,
                     age4_known: 1,
                     sexrab4: "R",
+                    gender_same_as_sex4: 2,
                     sex4: "X",
                     relat4: "X",
                     details_known_5: 2)
@@ -487,6 +489,7 @@ RSpec.describe Csv::SalesLogCsvService do
                     ecstat4: 3,
                     age4_known: 1,
                     sexrab4: "R",
+                    gender_same_as_sex4: 2,
                     sex4: "X",
                     relat4: "X",
                     details_known_5: 2)
