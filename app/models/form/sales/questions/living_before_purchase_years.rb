@@ -20,6 +20,6 @@ class Form::Sales::Questions::LivingBeforePurchaseYears < ::Form::Question
     2023 => { 1 => 75, 2 => 99 },
     2024 => { 1 => 77, 2 => 100 },
     2025 => { 1 => 75, 2 => 102 },
-    2026 => { "shared_ownership_initial_purchase" => 83, "discounted_ownership_scheme" => 114 },
+    2026 => { "shared_ownership_initial_purchase" => 83, "discounted_ownership_scheme" => 112 },
   }.freeze
 end
