@@ -86,6 +86,7 @@ FactoryBot.define do
       age1 { Faker::Number.within(range: 27..45) }
       sexrab1 { %w[F M R].sample }
       sex1 { %w[F M X R].sample }
+      gender_same_as_sex1 { 1 }
       national { 18 }
       buy1livein { 1 }
       relat2 { "P" }
@@ -98,6 +99,8 @@ FactoryBot.define do
       ethnic_group { 17 }
       sexrab2 {  %w[F M R].sample }
       sex2 { "X" }
+      gender_same_as_sex2 { 2 }
+      gender_description2 { Faker::Gender.type }
       buy2livein { "1" }
       ecstat1 { "1" }
       ecstat2 { "1" }
@@ -131,12 +134,17 @@ FactoryBot.define do
       prevshared { 2 }
       sexrab3 { %w[F M R].sample }
       sex3 { %w[F M X R].sample }
+      gender_same_as_sex3 { 1 }
       sexrab4 { %w[F M R].sample }
       sex4 { %w[F M X R].sample }
+      gender_same_as_sex4 { 2 }
+      gender_description4 { Faker::Gender.type }
       sexrab5 { %w[F M R].sample }
       sex5 { %w[F M X R].sample }
+      gender_same_as_sex5 { 3 }
       sexrab6 { %w[F M R].sample }
       sex6 { %w[F M X R].sample }
+      gender_same_as_sex6 { 3 }
       mortgage { 20_000 }
       ecstat3 { 9 }
       ecstat4 { 3 }
@@ -291,6 +299,7 @@ FactoryBot.define do
       age1 { 27 }
       sexrab1 { "F" }
       sex1 { "F" }
+      gender_same_as_sex1 { 1 }
       national { 18 }
       buy1livein { 1 }
       relat2 { "P" }
@@ -303,6 +312,8 @@ FactoryBot.define do
       ethnic_group { 17 }
       sexrab2 { "R" }
       sex2 { "X" }
+      gender_same_as_sex2 { 2 }
+      gender_description2 { "Non-binary" }
       buy2livein { "1" }
       ecstat1 { "1" }
       ecstat2 { "1" }
@@ -311,6 +322,7 @@ FactoryBot.define do
       details_known_3 { 1 }
       age3_known { 0 }
       age3 { 14 }
+      gender_same_as_sex3 { 3 }
       details_known_4 { 1 }
       age4_known { 0 }
       age4 { 18 }
