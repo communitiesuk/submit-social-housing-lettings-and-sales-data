@@ -170,7 +170,6 @@ class Scheme < ApplicationRecord
     "Low level": 2,
     "Medium level": 3,
     "High level": 4,
-    "Nursing care in a care home": 5,
     "Floating support": 6,
   }.freeze
 
@@ -280,7 +279,6 @@ class Scheme < ApplicationRecord
       "Short stay": "Up to one year.",
       "Medium stay": "More than one year but with an expectation to move on.",
       "Permanent": "Provides a home for life with no requirement for the tenant to move.",
-
     }
     Scheme.intended_stays.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
   end
