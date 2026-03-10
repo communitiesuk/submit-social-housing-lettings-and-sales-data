@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Pages::ServiceChargeStaircasing, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2026, 4, 1))) }
+  let(:subsection) { instance_double(Form::Subsection, id: "shared_ownership_staircasing_transaction", form: instance_double(Form, start_date: Time.zone.local(2026, 4, 1), start_year_2026_or_later?: true)) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)

@@ -7,7 +7,7 @@ RSpec.describe Form::Sales::Pages::Buyer1GenderSameAsSex, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: current_collection_start_date)) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: current_collection_start_date, person_question_count: 4)) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)

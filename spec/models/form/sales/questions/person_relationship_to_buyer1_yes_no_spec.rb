@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Questions::PersonRelationshipToBuyer1YesNo, type: :m
 
   let(:question_id) { "relat2" }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2025, 4, 1)))) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2025, 4, 1), person_question_count: 4))) }
   let(:person_index) { 2 }
 
   it "has correct page" do
