@@ -196,7 +196,7 @@ RSpec.describe Validations::SoftValidations do
 
       context "when female tenants are under 16" do
         it "shows the interruption screen" do
-          record.age2 = 14
+          record.age2 = 15
           record.sex2 = "F"
           record.preg_occ = 1
           record.hhmemb = 2
@@ -209,9 +209,20 @@ RSpec.describe Validations::SoftValidations do
         end
       end
 
+      context "when female tenants are 16 and over" do
+        it "does not show the interruption screen" do
+          record.age1 = 16
+          record.sex1 = "F"
+          record.preg_occ = 1
+          record.hhmemb = 1
+          record.age1_known = 0
+          expect(record.non_males_in_pregnant_household_not_in_pregnancy_range?).to be false
+        end
+      end
+
       context "when female tenants are over 50" do
         it "shows the interruption screen" do
-          record.age1 = 54
+          record.age1 = 51
           record.sex1 = "F"
           record.preg_occ = 1
           record.hhmemb = 1
@@ -220,9 +231,20 @@ RSpec.describe Validations::SoftValidations do
         end
       end
 
+      context "when female tenants are 50 or under" do
+        it "shows the interruption screen" do
+          record.age1 = 50
+          record.sex1 = "F"
+          record.preg_occ = 1
+          record.hhmemb = 1
+          record.age1_known = 0
+          expect(record.non_males_in_pregnant_household_not_in_pregnancy_range?).to be false
+        end
+      end
+
       context "when non-binary tenants are under 16" do
         it "does not show the interruption screen" do
-          record.age2 = 14
+          record.age2 = 15
           record.sex2 = "X"
           record.preg_occ = 1
           record.hhmemb = 2
@@ -237,7 +259,7 @@ RSpec.describe Validations::SoftValidations do
 
       context "when non-binary tenants are over 50" do
         it "does not show the interruption screen" do
-          record.age1 = 54
+          record.age1 = 51
           record.sex1 = "X"
           record.preg_occ = 1
           record.hhmemb = 1
