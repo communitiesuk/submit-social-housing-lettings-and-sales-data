@@ -16,7 +16,7 @@ class Form::Sales::Questions::PersonSexRegisteredAtBirth < ::Form::Question
     "R" => { "value" => "Person prefers not to say" },
   }.freeze
 
-  BASE_QUESTION_NUMBERS = { 2023 => 30, 2024 => 32, 2025 => 31 }.freeze
+  BASE_QUESTION_NUMBERS = { 2023 => 30, 2024 => 32, 2025 => 31, 2026 => 31 }.freeze
 
   def label_from_value(value, _log = nil, _user = nil)
     return unless value
