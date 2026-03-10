@@ -12,7 +12,7 @@ class Form::Sales::Questions::GenderDescription < ::Form::Question
   BASE_QUESTION_NUMBERS = { 2026 => 32 }.freeze
   BUYER_OVERRIDE_QUESTION_NUMBERS = { 2026 => { 1 => 23, 2 => 32 } }.freeze
   def question_number
-    buyer_override_question_number = BUYER_OVERRIDE_QUESTION_NUMBERS.dig(form.start_date.year,@person_index)
+    buyer_override_question_number = BUYER_OVERRIDE_QUESTION_NUMBERS.dig(form.start_date.year, @person_index)
 
     return buyer_override_question_number if buyer_override_question_number.present? && @buyer
 
