@@ -8,8 +8,8 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
   let(:page_id) { "number_of_others_in_property" }
   let(:page_definition) { nil }
   let(:joint_purchase) { false }
-  let(:form) { instance_double(Form, start_date: current_collection_start_date, start_year_2026_or_later?: true, start_year_2025_or_later?: false, depends_on_met: true) }
-  let(:subsection) { instance_double(Form::Subsection, enabled?: true, depends_on: nil) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date, start_year_2026_or_later?: true, start_year_2025_or_later?: true) }
+  let(:subsection) { instance_double(Form::Subsection, depends_on: nil) }
 
   before do
     allow(subsection).to receive(:form).and_return(form)
@@ -31,7 +31,7 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
     expect(page.description).to be_nil
   end
 
-  context "with joint purchase" do
+  context "when the page expects a joint purchase" do
     let(:page_id) { "number_of_others_in_property_joint_purchase" }
     let(:joint_purchase) { true }
 
@@ -47,7 +47,7 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
       context "with 2024 logs" do
         let(:form) { instance_double(Form, start_date: collection_start_date_for_year(2024), start_year_2026_or_later?: false, start_year_2025_or_later?: false, depends_on_met: true) }
 
-        context "with joint purchase" do
+        context "when the sales log is a joint purchase" do
           context "when buyer has seen privacy notice and buyer interviewed" do
             let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0) }
 
@@ -81,11 +81,11 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
           end
         end
 
-        context "with non joint purchase" do
+        context "when the sales log is not a joint purchase" do
           context "when buyer has seen privacy notice and buyer interviewed" do
             let(:log) { build(:sales_log, privacynotice: 1, jointpur: 2, noint: 0) }
 
-            it "routes to the page" do
+            it "does not route to the page" do
               expect(page).not_to be_routed_to(log, nil)
             end
           end
@@ -93,7 +93,7 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
           context "when buyer has seen privacy notice and buyer not interviewed" do
             let(:log) { build(:sales_log, privacynotice: 1, jointpur: 2, noint: 1) }
 
-            it "routes to the page" do
+            it "does not route to the page" do
               expect(page).not_to be_routed_to(log, nil)
             end
           end
@@ -109,7 +109,7 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
           context "and buyer has not seen privacy notice and buyer not interviewed" do
             let(:log) { build(:sales_log, privacynotice: nil, jointpur: 2, noint: 1) }
 
-            it "routes to the page" do
+            it "does not route to the page" do
               expect(page).not_to be_routed_to(log, nil)
             end
           end
@@ -119,7 +119,7 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
       context "with 2025 logs" do
         let(:form) { instance_double(Form, start_date: collection_start_date_for_year(2025), start_year_2026_or_later?: false, start_year_2025_or_later?: true, depends_on_met: true) }
 
-        context "and staircase is not 1" do
+        context "and the sales log is not a staircasing transaction" do
           let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0, staircase: 2) }
 
           it "routes to the page" do
@@ -127,7 +127,7 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
           end
         end
 
-        context "and staircase is 1" do
+        context "and the sales log is a staircasing transaction" do
           let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0, staircase: 1) }
 
           it "does not route to the page" do
@@ -139,7 +139,7 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
       context "with 2026 logs" do
         let(:form) { instance_double(Form, start_date: current_collection_start_date, start_year_2026_or_later?: true, start_year_2025_or_later?: true, depends_on_met: true) }
 
-        context "and staircase is not 1" do
+        context "and the sales log is not a staircasing transaction" do
           let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0, staircase: 2) }
 
           it "routes to the page" do
@@ -147,7 +147,7 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
           end
         end
 
-        context "and staircase is 1" do
+        context "and the sales log is a staircasing transaction" do
           let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0, staircase: 1) }
 
           it "does not route to the page" do
