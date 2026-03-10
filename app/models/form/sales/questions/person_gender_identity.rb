@@ -12,7 +12,7 @@ class Form::Sales::Questions::PersonGenderIdentity < ::Form::Question
       "value" => "Prefers not to say",
     }]
     @person_index = person_index
-    @question_number = question_number
+    @question_number = get_person_question_number(BASE_QUESTION_NUMBERS)
   end
 
   ANSWER_OPTIONS = {
@@ -23,9 +23,4 @@ class Form::Sales::Questions::PersonGenderIdentity < ::Form::Question
   }.freeze
 
   BASE_QUESTION_NUMBERS = { 2023 => 30, 2024 => 32, 2025 => 30 }.freeze
-  def question_number
-    base_question_number = BASE_QUESTION_NUMBERS[form.start_date.year] || BASE_QUESTION_NUMBERS[BASE_QUESTION_NUMBERS.keys.max]
-
-    base_question_number + (form.person_question_count * @person_index)
-  end
 end

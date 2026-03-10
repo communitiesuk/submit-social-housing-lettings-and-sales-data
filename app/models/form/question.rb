@@ -391,6 +391,16 @@ private
     hash_value[value_key]
   end
 
+  def get_person_question_number(base_hash, override_hash: nil)
+    buyer_override_question_number = override_hash&.dig(form.start_date.year, @person_index)
+
+    return buyer_override_question_number if buyer_override_question_number.present? && @buyer
+
+    base_question_number = base_hash[form.start_date.year] || base_hash[base_hash.keys.max]
+
+    base_question_number + (form.person_question_count * @person_index)
+  end
+
   RADIO_YES_VALUE = {
     renewal: [1],
     postcode_known: [1],

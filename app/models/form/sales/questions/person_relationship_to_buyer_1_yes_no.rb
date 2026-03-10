@@ -16,13 +16,7 @@ class Form::Sales::Questions::PersonRelationshipToBuyer1YesNo < ::Form::Question
     }]
     @check_answers_card_number = person_index
     @person_index = person_index
-    @question_number = question_number
-  end
-
-  def question_number
-    base_question_number = BASE_QUESTION_NUMBERS[form.start_date.year] || BASE_QUESTION_NUMBERS[BASE_QUESTION_NUMBERS.keys.max]
-
-    base_question_number + (form.person_question_count * @person_index)
+    @question_number = get_person_question_number(BASE_QUESTION_NUMBERS)
   end
 
   BASE_QUESTION_NUMBERS = { 2025 => 28, 2026 => 29 }.freeze
