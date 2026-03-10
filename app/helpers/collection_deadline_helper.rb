@@ -6,13 +6,13 @@ module CollectionDeadlineHelper
       first_quarter_deadline: Time.zone.local(2025, 7, 11),
       second_quarter_deadline: Time.zone.local(2025, 10, 10),
       third_quarter_deadline: Time.zone.local(2026, 1, 16),
-      fourth_quarter_deadline: Time.zone.local(2026, 6, 5), # Same as submission deadline
+      fourth_quarter_deadline: Form::DEADLINES[2025][:submission_deadline],
     },
     2026 => {
       first_quarter_deadline: Time.zone.local(2026, 7, 10),
       second_quarter_deadline: Time.zone.local(2026, 10, 9),
       third_quarter_deadline: Time.zone.local(2027, 1, 15),
-      fourth_quarter_deadline: Time.zone.local(2027, 6, 4), # Same as submission deadline
+      fourth_quarter_deadline: Form::DEADLINES[2026][:submission_deadline],
     },
   }.freeze
 
