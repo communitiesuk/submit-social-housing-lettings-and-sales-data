@@ -18,7 +18,7 @@ class Form::Sales::Questions::UprnKnown < ::Form::Question
         { "uprn_known" => 1 },
       ],
     }
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {

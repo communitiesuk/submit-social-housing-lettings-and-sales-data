@@ -9,7 +9,7 @@ class Form::Sales::Questions::StaircaseBought < ::Form::Question
     @max = 100
     @step = 0.1
     @suffix = "%"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @top_guidance_partial = "financial_calculations_shared_ownership"
   end
 

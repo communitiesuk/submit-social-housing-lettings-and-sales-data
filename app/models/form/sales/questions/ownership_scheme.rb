@@ -3,7 +3,7 @@ class Form::Sales::Questions::OwnershipScheme < ::Form::Question
     super
     @id = "ownershipsch"
     @type = "radio"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   def answer_options

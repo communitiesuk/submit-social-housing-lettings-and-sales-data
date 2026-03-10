@@ -8,7 +8,7 @@ class Form::Sales::Questions::NumberOfOthersInProperty < ::Form::Question
     @min = 0
     @max = 15
     @step = 1
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 35, 2024 => 37, 2025 => 35, 2026 => 38 }.freeze
