@@ -1356,7 +1356,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
         it "returns correct errors" do
           parser.valid?
-          expect(parser.errors[:field_101]).to include(I18n.t("validations.sales.2026.bulk_upload.invalid_option", question: "was a mortgage used for the purchase of this property? - Shared ownership."))
+          expect(parser.errors[:field_101]).to include(I18n.t("validations.sales.2026.bulk_upload.invalid_option", question: "was a mortgage used to buy this property?"))
 
           parser.log.blank_invalid_non_setup_fields!
           parser.log.save!
