@@ -17,20 +17,34 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
   let(:form) { instance_double(Form, start_date: saledate, start_year_2024_or_later?: start_year_2024_or_later?, start_year_2025_or_later?: start_year_2025_or_later?, start_year_2026_or_later?: start_year_2026_or_later?) }
   let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: "shared_ownership")) }
 
+  context "when it is a shared ownership scheme" do
+    let(:ownershipsch) { 1 }
+
+    it "has the correct top_guidance_partial" do
+      expect(question.top_guidance_partial).to eq("financial_calculations_shared_ownership")
+    end
+  end
+
+  context "when it is a discounted ownership sale" do
+    let(:ownershipsch) { 2 }
+
+    it "has the correct top_guidance_partial" do
+      expect(question.top_guidance_partial).to eq("financial_calculations_discounted_ownership")
+    end
+  end
+
+  context "when it is an outright sale" do
+    let(:ownershipsch) { 3 }
+
+    it "has the correct top_guidance_partial" do
+      expect(question.top_guidance_partial).to eq("financial_calculations_outright_sale")
+    end
+  end
+
   context "when the form start year is 2024", metadata: { year: 24 } do
     let(:saledate) { collection_start_date_for_year(2024) }
-    let(:ownershipsch) { 1 }
     let(:start_year_2025_or_later?) { false }
     let(:start_year_2026_or_later?) { false }
-
-    it "has the correct answer_options" do
-      expect(question.answer_options).to eq({
-        "1" => { "value" => "Yes" },
-        "2" => { "value" => "No" },
-        "divider" => { "value" => true },
-        "3" => { "value" => "Don’t know" },
-      })
-    end
 
     context "when it is a discounted ownership sale" do
       let(:ownershipsch) { 2 }
@@ -47,6 +61,10 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
     context "when it is an outright sale" do
       let(:ownershipsch) { 3 }
 
+      it "shows the correct question number" do
+        expect(question.question_number).to eq 112
+      end
+
       it "shows the don't know option" do
         expect_the_question_to_show_dont_know
       end
@@ -54,6 +72,10 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
 
     context "when it is a shared ownership scheme" do
       let(:ownershipsch) { 1 }
+
+      it "shows the correct question number" do
+        expect(question.question_number).to eq 91
+      end
 
       context "and it is a staircasing transaction" do
         let(:staircase) { 1 }
@@ -104,10 +126,14 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
     context "when it is a shared ownership scheme" do
       let(:ownershipsch) { 1 }
 
+      it "shows the correct question number" do
+        expect(question.question_number).to eq 82
+      end
+
       context "and it is a staircasing transaction" do
         let(:staircase) { 1 }
 
-        it "does show the don't know option" do
+        it "shows the don't know option" do
           expect_the_question_to_show_dont_know
         end
 
@@ -140,7 +166,7 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
         expect(question.question_number).to eq 106
       end
 
-      it "does show the don't know option" do
+      it "shows the don't know option" do
         expect_the_question_to_show_dont_know
       end
     end
@@ -148,10 +174,14 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
     context "when it is a shared ownership scheme" do
       let(:ownershipsch) { 1 }
 
+      it "shows the correct question number" do
+        expect(question.question_number).to eq 82
+      end
+
       context "and it is a staircasing transaction" do
         let(:staircase) { 1 }
 
-        it "does show the don't know option" do
+        it "shows the don't know option" do
           expect_the_question_to_show_dont_know
         end
       end
@@ -159,7 +189,7 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
       context "and it is not a staircasing transaction" do
         let(:staircase) { 2 }
 
-        it "does show the don't know option" do
+        it "shows the don't know option" do
           expect_the_question_to_show_dont_know
         end
       end
