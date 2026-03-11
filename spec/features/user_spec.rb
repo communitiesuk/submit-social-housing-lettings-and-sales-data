@@ -282,6 +282,12 @@ RSpec.describe "User Features" do
             end
           end
         end
+
+        it "shows correct filters" do
+          expect(page).to have_selector("label", text: "Data provider")
+          expect(page).to have_selector("label", text: "Data coordinator")
+          expect(page).not_to have_selector("label", text: "Support")
+        end
       end
     end
 
@@ -617,6 +623,20 @@ RSpec.describe "User Features" do
         click_link("Reactivate user")
         click_button("I’m sure – reactivate this user")
         expect(page).to have_button("Resend invite link")
+      end
+    end
+
+    context "when filtering users" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in(user)
+        visit(users_path)
+      end
+
+      it "shows correct filters" do
+        expect(page).to have_selector("label", text: "Data provider")
+        expect(page).to have_selector("label", text: "Data coordinator")
+        expect(page).to have_selector("label", text: "Support")
       end
     end
   end
