@@ -22,10 +22,6 @@ on:
       release_tag:
         required: false
         type: string
-      ref:
-        required: false
-        type: string
-        default: ""
 
 concurrency:
   group: deploy-${{ inputs.environment }}${{ inputs.concurrency_tag }}
@@ -46,8 +42,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.ref || github.sha }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -59,19 +53,16 @@ jobs:
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Resolve commit SHA
-        run: echo "commit_sha=${{ inputs.ref || github.sha }}" >> $GITHUB_ENV
-
       - name: Check if image with tag already exists
         run: |
-          echo "image-exists=$(if aws ecr describe-images --repository-name=$repository --image-ids imageTag=${{ env.commit_sha }} > /dev/null 2>&1; then echo true; else echo false; fi)" >> $GITHUB_ENV
+          echo "image-exists=$(if aws ecr describe-images --repository-name=$repository --image-ids imageTag=${{ github.sha }} > /dev/null 2>&1; then echo true; else echo false; fi)" >> $GITHUB_ENV
 
       - name: Build, tag, and push docker image to ECR if there is no image, failing for releases
         id: build-image
         if: ${{ env.image-exists == 'false' }}
         env:
           registry: ${{ steps.ecr-login.outputs.registry }}
-          commit_tag: ${{ env.commit_sha }}
+          commit_tag: ${{ github.sha }}
         run: |
           if [[ ${{ inputs.environment }} == 'production' ]]; then
             echo "Error: Deployment to production environment is not allowed as there is no docker image (i.e. the AWS deploy on staging was unsuccessful for this commit)."
@@ -109,7 +100,7 @@ jobs:
         id: update-image-tags
         env:
           registry: ${{ steps.ecr-login.outputs.registry }}
-          commit_tag: ${{ inputs.ref || github.sha }}
+          commit_tag: ${{ github.sha }}
           readable_tag: ${{ inputs.environment }}-${{ env.additional-tag }}
         run: |
           manifest=$(aws ecr batch-get-image --repository-name $repository --image-ids imageTag=$commit_tag --output text --query images[].imageManifest)
