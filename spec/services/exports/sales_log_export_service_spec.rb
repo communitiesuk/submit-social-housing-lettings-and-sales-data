@@ -518,7 +518,7 @@ RSpec.describe Exports::SalesLogExportService do
               export_file.sub!("<ETHNICGROUP2>17</ETHNICGROUP2>", "<ETHNICGROUP2/>")
               export_file.sub!("<HASESTATEFEE>1</HASESTATEFEE>", "<HASESTATEFEE/>")
               export_file.sub!("<HB>4</HB>", "<HB/>")
-              export_file.sub!("<HHOLDCOUNT>4</HHOLDCOUNT>", "<HHOLDCOUNT/>")
+              export_file.sub!("<HHOLDCOUNT>6</HHOLDCOUNT>", "<HHOLDCOUNT/>")
               export_file.sub!("<HHREGRES>7</HHREGRES>", "<HHREGRES/>")
               export_file.sub!("<INC1MORT>1</INC1MORT>", "<INC1MORT/>")
               export_file.sub!("<INC1NK>0</INC1NK>", "<INC1NK/>")
