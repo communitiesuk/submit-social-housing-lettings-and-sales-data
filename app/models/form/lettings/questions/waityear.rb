@@ -11,7 +11,7 @@ class Form::Lettings::Questions::Waityear < ::Form::Question
     if form.start_year_2025_or_later?
       return {
         "13" => { "value" => "Household not on the housing register (or waiting list) in this area" },
-        "2" => { "value" => "Less than 1 year" },
+        "2" => { "value" => "Under 1 year" },
         "7" => { "value" => "1 year but under 2 years" },
         "8" => { "value" => "2 years but under 3 years" },
         "9" => { "value" => "3 years but under 4 years" },
