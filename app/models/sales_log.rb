@@ -583,4 +583,8 @@ class SalesLog < Log
   def mscharge_value
     mscharge if discounted_ownership_sale? || !form.start_year_2025_or_later?
   end
+
+  def hasservicechargeschanged_label
+    form.get_question(:hasservicechargeschanged, self)&.label_from_value(hasservicechargeschanged)
+  end
 end
