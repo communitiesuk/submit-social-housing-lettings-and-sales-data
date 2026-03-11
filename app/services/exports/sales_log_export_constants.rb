@@ -157,7 +157,11 @@ module Exports::SalesLogExportConstants
     YEAR_2025_EXPORT_FIELDS << "SEX#{index}"
   end
 
-  YEAR_2026_EXPORT_FIELDS = Set["BUILDHEIGHTCLASS"]
+  YEAR_2026_EXPORT_FIELDS = Set[
+    "BUILDHEIGHTCLASS",
+    "HASSERVICECHARGESCHANGED",
+    "NEWSERVICECHARGES",
+  ]
 
   (1..6).each do |index|
     YEAR_2026_EXPORT_FIELDS << "SEXRAB#{index}"

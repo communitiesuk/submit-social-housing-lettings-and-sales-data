@@ -149,6 +149,8 @@ class BulkUpload::Sales::Year2026::RowParser
     field_132: "If 'No', enter person 5's gender identity",
     field_133: "Is the gender person 6 identifies with the same as their sex registered at birth?",
     field_134: "If 'No', enter person 6's gender identity",
+    field_135: "Will the service charge change after this staircasing transaction takes place?",
+    field_136: "What are the new total monthly service charges for the property?",
   }.freeze
 
   ERROR_BASE_KEY = "validations.sales.2026.bulk_upload".freeze
@@ -327,6 +329,9 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_132, :string
   attribute :field_133, :integer
   attribute :field_134, :string
+
+  attribute :field_135, :integer
+  attribute :field_136, :decimal
 
   validates :field_1,
             presence: {
@@ -863,6 +868,7 @@ private
       sexrab4: %i[field_48],
       sexrab5: %i[field_52],
       sexrab6: %i[field_56],
+
       buildheightclass: %i[field_122],
 
       gender_same_as_sex1: %i[field_123],
@@ -877,6 +883,9 @@ private
       gender_description5: %i[field_132],
       gender_same_as_sex6: %i[field_133],
       gender_description6: %i[field_134],
+
+      hasservicechargeschanged: %i[field_135],
+      newservicecharges: %i[field_136],
     }
   end
 
@@ -925,6 +934,9 @@ private
     attributes["gender_description5"] = field_132
     attributes["gender_same_as_sex6"] = field_133
     attributes["gender_description6"] = field_134
+
+    attributes["hasservicechargeschanged"] = field_135
+    attributes["newservicecharges"] = field_136
 
     attributes["relat2"] = relationship_from_is_partner(field_34)
     attributes["relat3"] = relationship_from_is_partner(field_42)

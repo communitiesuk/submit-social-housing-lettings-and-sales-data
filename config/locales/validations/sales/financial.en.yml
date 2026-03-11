@@ -48,6 +48,10 @@ en:
         mscharge:
           monthly_leasehold_charges:
             not_zero: "Monthly leasehold charges cannot be £0 if the property has monthly charges."
+          same_as_new: "You said that the service charge will change and you entered the same amount as the new service charge. If the service charge will not change, answer 'No' to that question before entering the service charge here."
+
+        newservicecharges:
+          same_as_previous: "You said that the service charge will change and you entered the same amount as the previous question. If the service charge will not change, answer 'No'."
 
         resale:
           equity_over_max: "The maximum initial equity stake is %{max_equity}%."
