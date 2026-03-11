@@ -54,10 +54,10 @@ module FiltersHelper
 
   def user_role_type_filters(include_support: false)
     roles = {
-      "1" => "Data provider",
-      "2" => "Coordinator",
+      "data_provider" => "Data provider",
+      "data_coordinator" => "Data coordinator",
     }
-    roles["99"] = "Support" if include_support
+    roles["support"] = "Support" if include_support
     roles.freeze
   end
 
