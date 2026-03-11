@@ -14,6 +14,8 @@ on:
         type: string
         description: "The PR number of the review app to tear down. Note: this is NOT the ticket number"
 
+permissions: {}
+
 env:
   app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
   aws_account_id: 837698168072
