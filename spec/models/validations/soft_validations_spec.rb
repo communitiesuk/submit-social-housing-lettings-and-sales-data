@@ -180,7 +180,7 @@ RSpec.describe Validations::SoftValidations do
         end
       end
 
-      context "when all tenants are male and household members are over 8" do
+      context "when all tenants are male and more than 8 household members" do
         it "does not show the interruption screen" do
           (1..8).each do |n|
             record.send("sex#{n}=", "M")
@@ -336,7 +336,7 @@ RSpec.describe Validations::SoftValidations do
         end
       end
 
-      context "when all tenants are male and household members are over 8" do
+      context "when all tenants are male and more than 8 household members" do
         before do
           (1..8).each do |n|
             record.send("sexrab#{n}=", "M")
