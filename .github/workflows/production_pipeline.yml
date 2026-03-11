@@ -3,6 +3,7 @@ name: Production CI/CD Pipeline
 on:
   release:
     types: [released]
+  workflow_dispatch:
 
 defaults:
   run:
