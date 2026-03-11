@@ -3,7 +3,7 @@ class Form::Sales::Questions::PurchasePrice < ::Form::Question
     super(id, hsh, page)
     @id = "value"
     @type = "numeric"
-    @min = 0
+    @min = form.start_year_2026_or_later? ? 15_000 : 0
     @step = 0.01
     @width = 5
     @prefix = "£"
