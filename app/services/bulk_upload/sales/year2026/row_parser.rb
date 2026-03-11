@@ -10,7 +10,7 @@ class BulkUpload::Sales::Year2026::RowParser
     field_3: "What is the sale completion date? - year YY",
     field_4: "Which organisation owned this property before the sale?",
     field_5: "Which organisation is reporting this sale?",
-    field_6: "What is the CORE username of the account this sale log should be assigned to?",
+    field_6: "What is the CORE username of the account this sales log should be assigned to?",
     field_7: "What is the purchaser code?",
     field_8: "Is this a shared ownership or discounted ownership sale?",
     field_9: "What is the type of shared ownership sale?",
