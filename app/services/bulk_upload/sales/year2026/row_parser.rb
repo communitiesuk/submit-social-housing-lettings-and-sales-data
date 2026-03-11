@@ -155,7 +155,7 @@ class BulkUpload::Sales::Year2026::RowParser
 
   CASE_INSENSITIVE_FIELDS = [
     :field_29, # Age of buyer 1
-    :field_38, # Age of person 2
+    :field_38, # Age of buyer/person 2
     :field_48, # Age of person 3
     :field_54, # Age of person 4
     :field_60, # Age of person 5
