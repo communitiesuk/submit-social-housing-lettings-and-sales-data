@@ -16,8 +16,27 @@ defaults:
     shell: bash
 
 jobs:
+  get_pr_head_sha:
+    name: Get PR HEAD SHA
+    runs-on: ubuntu-latest
+    outputs:
+      pr_head_sha: ${{ steps.get_sha.outputs.pr_head_sha }}
+    steps:
+      - name: Get PR HEAD SHA
+        id: get_sha
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: parseInt('${{ inputs.pr_number }}'),
+            });
+            core.setOutput('pr_head_sha', pr.head.sha);
+
   code:
     name: Deploy review app code
+    needs: [get_pr_head_sha]
     uses: ./.github/workflows/aws_deploy.yml
     with:
       aws_account_id: 837698168072
@@ -25,5 +44,6 @@ jobs:
       aws_task_prefix: core-review-${{ inputs.pr_number }}
       concurrency_tag: ${{ inputs.pr_number }}
       environment: review
+      ref: ${{ needs.get_pr_head_sha.outputs.pr_head_sha }}
     permissions:
       id-token: write

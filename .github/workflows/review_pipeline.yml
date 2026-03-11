@@ -53,7 +53,7 @@ jobs:
     needs: [get_pr_details]
     runs-on: ubuntu-latest
     permissions:
-      actions: read
+      pull-requests: read
     outputs:
       started: ${{ steps.check.outputs.started }}
     steps:
@@ -63,24 +63,13 @@ jobs:
         with:
           script: |
             const prNumber = '${{ needs.get_pr_details.outputs.pr_number }}';
-            const { data: runs } = await github.rest.actions.listWorkflowRuns({
+            const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'review_pipeline.yml',
-              event: 'issue_comment',
+              issue_number: parseInt(prNumber),
             });
-            const { data: dispatchRuns } = await github.rest.actions.listWorkflowRuns({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'review_pipeline.yml',
-              event: 'workflow_dispatch',
-            });
-            const allRuns = [...runs.workflow_runs, ...dispatchRuns.workflow_runs];
-            const prRun = allRuns.find(run =>
-              run.display_title.includes(`#${prNumber}`) ||
-              run.head_branch === context.payload.pull_request.head.ref
-            );
-            core.setOutput('started', prRun ? 'true' : 'false');
+            const deployComment = comments.find(c => c.body === 'Starting review app deployment...');
+            core.setOutput('started', deployComment ? 'true' : 'false');
 
   deployment_started_comment:
     name: Comment deployment started
