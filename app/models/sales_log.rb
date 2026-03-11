@@ -390,6 +390,10 @@ class SalesLog < Log
     proptype_changed? && proptype_was == 2
   end
 
+  def buyer_interviewed_changed_to_not_interviewed_and_mortlen_set?
+    noint_changed? && noint_was == 2 && buyer_not_interviewed? && mortlen.present?
+  end
+
   def shared_ownership_scheme?
     ownershipsch == 1
   end
@@ -578,5 +582,9 @@ class SalesLog < Log
 
   def mscharge_value
     mscharge if discounted_ownership_sale? || !form.start_year_2025_or_later?
+  end
+
+  def hasservicechargeschanged_label
+    form.get_question(:hasservicechargeschanged, self)&.label_from_value(hasservicechargeschanged)
   end
 end

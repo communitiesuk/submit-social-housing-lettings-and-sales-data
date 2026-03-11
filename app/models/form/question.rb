@@ -340,7 +340,10 @@ private
   end
 
   def evaluate_condition(condition, log)
-    case page.questions.find { |q| q.id == condition[:from] }.type
+    conditional_question = page.questions.find { |q| q.id == condition[:from] }
+    return true unless conditional_question
+
+    case conditional_question.type
     when "numeric"
       operator = condition[:cond][/[<>=]+/].to_sym
       operand = condition[:cond][/\d+/].to_i

@@ -3,6 +3,11 @@ task rubocop: :environment do
   sh "bundle exec rubocop"
 end
 
+desc "Run Rubocop Autocorrect"
+task rubocop_autocorrect: :environment do
+  sh "bundle exec rubocop -A"
+end
+
 desc "Run ERB Lint"
 task erblint: :environment do
   sh "bundle exec erb_lint --lint-all"

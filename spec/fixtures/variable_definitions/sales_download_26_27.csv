@@ -5,3 +5,17 @@ sexrab4,What was person 4's sex at birth?
 sexrab5,What was person 5's sex at birth?
 sexrab6,What was person 6's sex at birth?
 buildheightclass, What is the building height classification?
+gender_same_as_sex1,Is the gender buyer 1 identifies with the same as their sex registered at birth?
+gender_description1,If 'No', enter buyer 1's gender identity
+gender_same_as_sex2,Is the gender buyer/person 2 identifies with the same as their sex registered at birth?
+gender_description2,If 'No', enter buyer/person 2's gender identity
+gender_same_as_sex3,Is the gender person 3 identifies with the same as their sex registered at birth?
+gender_description3,If 'No', enter person 3's gender identity
+gender_same_as_sex4,Is the gender person 4 identifies with the same as their sex registered at birth?
+gender_description4,If 'No', enter person 4's gender identity
+gender_same_as_sex5,Is the gender person 5 identifies with the same as their sex registered at birth?
+gender_description5,If 'No', enter person 5's gender identity
+gender_same_as_sex6,Is the gender person 6 identifies with the same as their sex registered at birth?
+gender_description6,If 'No', enter person 6's gender identity
+hasservicechargeschanged,Will the service charge change after this staircasing transaction takes place?
+newservicecharges,What are the new total monthly service charges for the property?
