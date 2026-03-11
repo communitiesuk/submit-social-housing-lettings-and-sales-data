@@ -166,7 +166,7 @@ RSpec.describe BulkUpload::Sales::Year2026::CsvParser do
 
       it "returns correct column" do
         expect(service.column_for_field("field_1")).to eql("B")
-        expect(service.column_for_field("field_126")).to eql("DW")
+        expect(service.column_for_field("field_112")).to eql("DI")
       end
     end
   end
