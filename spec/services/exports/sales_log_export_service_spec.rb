@@ -451,18 +451,12 @@ RSpec.describe Exports::SalesLogExportService do
       end
 
       context "with shared ownership and mscharge" do
-        let!(:sales_log) { FactoryBot.create(:sales_log, :export, ownershipsch: 1, staircase: 2, type: 30, mscharge: 321, has_management_fee: 1, management_fee: 222) }
-
-        def replace_mscharge_and_shared_ownership_values(export_file)
+        def replace_shared_ownership_values(export_file)
           export_file.sub!("<HASSERVICECHARGES/>", "<HASSERVICECHARGES>1</HASSERVICECHARGES>")
           export_file.sub!("<SERVICECHARGES/>", "<SERVICECHARGES>321.0</SERVICECHARGES>")
-          export_file.sub!("<HASESTATEFEE/>", "<HASESTATEFEE>1</HASESTATEFEE>")
-          export_file.sub!("<ESTATEFEE/>", "<ESTATEFEE>222.0</ESTATEFEE>")
           export_file.sub!("<MSCHARGE>100.0</MSCHARGE>", "<MSCHARGE/>")
           export_file.sub!("<HASMSCHARGE>1</HASMSCHARGE>", "<HASMSCHARGE/>")
 
-          export_file.sub!("<TYPE>8</TYPE>", "<TYPE>30</TYPE>")
-          export_file.sub!("<STAIRCASE/>", "<STAIRCASE>2</STAIRCASE>")
           export_file.sub!("<GRANT>10000.0</GRANT>", "<GRANT/>")
           export_file.sub!("<PPCODENK>0</PPCODENK>", "<PPCODENK>1</PPCODENK>")
           export_file.sub!("<PPOSTC1>SW1A</PPOSTC1>", "<PPOSTC1/>")
@@ -474,16 +468,93 @@ RSpec.describe Exports::SalesLogExportService do
           export_file.sub!("<PREVLOCNAME>Westminster</PREVLOCNAME>", "<PREVLOCNAME/>")
         end
 
-        it "exports mscharge fields as hasmscharge and mscharge" do
-          expected_content = replace_entity_ids(sales_log, xml_export_file.read)
-          expected_content = replace_mscharge_and_shared_ownership_values(expected_content)
-          expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
-            entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
-            expect(entry).not_to be_nil
-            expect(entry.get_input_stream.read).to have_same_xml_contents_as(expected_content)
+        context "when not staircasing" do
+          let!(:sales_log) { FactoryBot.create(:sales_log, :export, ownershipsch: 1, staircase: 2, type: 30, mscharge: 321, has_management_fee: 1, management_fee: 222) }
+
+          def replace_non_staircasing_values(export_file)
+            export_file.sub!("<HASESTATEFEE/>", "<HASESTATEFEE>1</HASESTATEFEE>")
+            export_file.sub!("<ESTATEFEE/>", "<ESTATEFEE>222.0</ESTATEFEE>")
+            export_file.sub!("<TYPE>8</TYPE>", "<TYPE>30</TYPE>")
+            export_file.sub!("<STAIRCASE/>", "<STAIRCASE>2</STAIRCASE>")
           end
 
-          export_service.export_xml_sales_logs
+          it "exports mscharge fields as hasmscharge and mscharge" do
+            expected_content = replace_entity_ids(sales_log, xml_export_file.read)
+            replace_shared_ownership_values(expected_content)
+            replace_non_staircasing_values(expected_content)
+            expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+              entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
+              expect(entry).not_to be_nil
+              expect(entry.get_input_stream.read).to have_same_xml_contents_as(expected_content)
+            end
+
+            export_service.export_xml_sales_logs
+          end
+        end
+
+        context "when staircasing" do
+          context "when exporting only 26/27 collection period", metadata: { year: 26 } do
+            let(:start_time) { collection_start_date_for_year(2026) }
+            let(:expected_zip_filename) { "core_sales_2026_2027_apr_mar_f0001_inc0001.zip" }
+            let(:expected_data_filename) { "core_sales_2026_2027_apr_mar_f0001_inc0001_pt001.xml" }
+            let(:xml_export_file) { File.open("spec/fixtures/exports/sales_log_26_27.xml", "r:UTF-8") }
+            let!(:sales_log) { FactoryBot.create(:sales_log, :export, ownershipsch: 1, staircase: 1, type: 2, mscharge: 321, has_management_fee: 1, management_fee: 222, hasservicechargeschanged: 1, newservicecharges: 150) }
+
+            def replace_staircasing_values(export_file)
+              export_file.sub!("<HASESTATEFEE/>", "<HASESTATEFEE>1</HASESTATEFEE>")
+              export_file.sub!("<ESTATEFEE/>", "<ESTATEFEE>222.0</ESTATEFEE>")
+              export_file.sub!("<TYPE>8</TYPE>", "<TYPE>2</TYPE>")
+              export_file.sub!("<STAIRCASE/>", "<STAIRCASE>1</STAIRCASE>")
+              export_file.sub!("<ARMEDFORCESSPOUSE>5</ARMEDFORCESSPOUSE>", "<ARMEDFORCESSPOUSE/>")
+              export_file.sub!("<BUILTYPE>1</BUILTYPE>", "<BUILTYPE/>")
+              export_file.sub!("<BUY2LIVING>3</BUY2LIVING>", "<BUY2LIVING/>")
+              export_file.sub!("<DEPOSIT>80000.0</DEPOSIT>", "<DEPOSIT/>")
+              export_file.sub!("<DISABLED>1</DISABLED>", "<DISABLED/>")
+              export_file.sub!("<ECSTAT1>1</ECSTAT1>", "<ECSTAT1/>")
+              export_file.sub!("<ECSTAT2>1</ECSTAT2>", "<ECSTAT2/>")
+              export_file.sub!("<ESTATEFEE>222.0</ESTATEFEE>", "<ESTATEFEE/>")
+              export_file.sub!("<ETHNIC>17</ETHNIC>", "<ETHNIC/>")
+              export_file.sub!("<ETHNICGROUP1>17</ETHNICGROUP1>", "<ETHNICGROUP1/>")
+              export_file.sub!("<ETHNICGROUP2>17</ETHNICGROUP2>", "<ETHNICGROUP2/>")
+              export_file.sub!("<HASESTATEFEE>1</HASESTATEFEE>", "<HASESTATEFEE/>")
+              export_file.sub!("<HB>4</HB>", "<HB/>")
+              export_file.sub!("<HHOLDCOUNT>4</HHOLDCOUNT>", "<HHOLDCOUNT/>")
+              export_file.sub!("<HHREGRES>7</HHREGRES>", "<HHREGRES/>")
+              export_file.sub!("<INC1MORT>1</INC1MORT>", "<INC1MORT/>")
+              export_file.sub!("<INC1NK>0</INC1NK>", "<INC1NK/>")
+              export_file.sub!("<INC2MORT>1</INC2MORT>", "<INC2MORT/>")
+              export_file.sub!("<INC2NK>0</INC2NK>", "<INC2NK/>")
+              export_file.sub!("<INCOME1>10000</INCOME1>", "<INCOME1/>")
+              export_file.sub!("<INCOME2>10000</INCOME2>", "<INCOME2/>")
+              export_file.sub!("<LIVEINBUYER1>1</LIVEINBUYER1>", "<LIVEINBUYER1/>")
+              export_file.sub!("<LIVEINBUYER2>1</LIVEINBUYER2>", "<LIVEINBUYER2/>")
+              export_file.sub!("<MORTGAGE>20000.0</MORTGAGE>", "<MORTGAGE/>")
+              export_file.sub!("<MORTLEN1>10</MORTLEN1>", "<MORTLEN1/>")
+              export_file.sub!("<NATIONALITYALL1>826</NATIONALITYALL1>", "<NATIONALITYALL1/>")
+              export_file.sub!("<NATIONALITYALL2>826</NATIONALITYALL2>", "<NATIONALITYALL2/>")
+              export_file.sub!("<PREVOWN>1</PREVOWN>", "<PREVOWN/>")
+              export_file.sub!("<PREVSHARED>2</PREVSHARED>", "<PREVSHARED/>")
+              export_file.sub!("<PREVTEN>1</PREVTEN>", "<PREVTEN/>")
+              export_file.sub!("<SAVINGSNK>1</SAVINGSNK>", "<SAVINGSNK/>")
+              export_file.sub!("<WCHAIR>1</WCHAIR>", "<WCHAIR/>")
+              export_file.sub!("<WHEEL>1</WHEEL>", "<WHEEL/>")
+              export_file.sub!("<HASSERVICECHARGESCHANGED/>", "<HASSERVICECHARGESCHANGED>1</HASSERVICECHARGESCHANGED>")
+              export_file.sub!("<NEWSERVICECHARGES/>", "<NEWSERVICECHARGES>150.0</NEWSERVICECHARGES>")
+            end
+
+            it "exports mscharge fields and hasservicechargeschanged and newservicecharges" do
+              expected_content = replace_entity_ids(sales_log, xml_export_file.read)
+              replace_shared_ownership_values(expected_content)
+              replace_staircasing_values(expected_content)
+              expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+                entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
+                expect(entry).not_to be_nil
+                expect(entry.get_input_stream.read).to have_same_xml_contents_as(expected_content)
+              end
+
+              export_service.export_xml_sales_logs(full_update: true, collection_year: 2026)
+            end
+          end
         end
       end
     end
