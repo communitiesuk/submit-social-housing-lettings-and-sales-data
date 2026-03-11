@@ -1,57 +1,162 @@
 name: Review app pipeline
 
-concurrency:
-  group: review-${{ github.event.pull_request.number }}
-
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
+  issue_comment:
+    types: [created]
   workflow_dispatch:
+    inputs:
+      pr_number:
+        required: true
+        type: string
+        description: "The number of the PR for which to deploy a review app. Note: this is NOT the ticket number"
+  pull_request:
+    types: [synchronize]
 
-defaults:
-  run:
-    shell: bash
+concurrency:
+  group: deploy-review${{ github.event.pull_request.number || inputs.pr_number || github.event.issue.number }}
+
+permissions: {}
 
 jobs:
+  get_pr_details:
+    name: Get PR details
+    if: github.event_name == 'workflow_dispatch' || (github.event.issue.pull_request && startsWith(github.event.comment.body, '/deploy-review')) || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    outputs:
+      pr_number: ${{ steps.get_pr_details.outputs.pr_number }}
+      pr_head_sha: ${{ steps.get_pr_details.outputs.pr_head_sha }}
+    steps:
+      - name: Get PR number and HEAD SHA
+        id: get_pr_details
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let prNumber;
+            if (context.eventName === 'workflow_dispatch') {
+              prNumber = '${{ inputs.pr_number }}';
+            } else if (context.eventName === 'pull_request') {
+              prNumber = context.payload.pull_request.number.toString();
+            } else {
+              prNumber = context.issue.number.toString();
+            }
+            core.setOutput('pr_number', prNumber);
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: parseInt(prNumber),
+            });
+            core.setOutput('pr_head_sha', pr.head.sha);
+
+  check_deployment_started:
+    name: Check if deployment has been started
+    if: github.event_name == 'pull_request'
+    needs: [get_pr_details]
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      started: ${{ steps.check.outputs.started }}
+    steps:
+      - name: Check for previous deployment workflow runs
+        id: check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = '${{ needs.get_pr_details.outputs.pr_number }}';
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: parseInt(prNumber),
+            });
+            const deployComment = comments.find(c => c.body === 'Starting review app deployment...');
+            core.setOutput('started', deployComment ? 'true' : 'false');
+
+  deployment_started_comment:
+    name: Comment deployment started
+    if: github.event_name != 'pull_request'
+    needs: [get_pr_details]
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ needs.get_pr_details.outputs.pr_number }},
+              body: 'Starting review app deployment...',
+            });
+
   infra:
     name: Deploy review app infrastructure
+    if: github.event_name != 'pull_request'
+    needs: [get_pr_details]
     uses: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/.github/workflows/create_review_app_infra.yml@main
     with:
-      key: ${{ github.event.pull_request.number }}
+      key: ${{ needs.get_pr_details.outputs.pr_number }}
       app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
     permissions:
       id-token: write
 
   code:
     name: Deploy review app code
-    needs: [infra]
+    if: github.event_name != 'pull_request'
+    needs: [get_pr_details, infra]
     uses: ./.github/workflows/aws_deploy.yml
     with:
       aws_account_id: 837698168072
       aws_role_prefix: core-dev
-      aws_task_prefix: core-review-${{ github.event.pull_request.number }}
-      concurrency_tag: ${{ github.event.pull_request.number }}
+      aws_task_prefix: core-review-${{ needs.get_pr_details.outputs.pr_number }}
+      concurrency_tag: ${{ needs.get_pr_details.outputs.pr_number }}
       environment: review
+      ref: ${{ needs.get_pr_details.outputs.pr_head_sha }}
+    permissions:
+      id-token: write
+
+  auto_update_code:
+    name: Auto-update review app code
+    if: github.event_name == 'pull_request' && needs.check_deployment_started.outputs.started == 'true'
+    needs: [get_pr_details, check_deployment_started]
+    uses: ./.github/workflows/aws_deploy.yml
+    with:
+      aws_account_id: 837698168072
+      aws_role_prefix: core-dev
+      aws_task_prefix: core-review-${{ needs.get_pr_details.outputs.pr_number }}
+      concurrency_tag: ${{ needs.get_pr_details.outputs.pr_number }}
+      environment: review
+      ref: ${{ needs.get_pr_details.outputs.pr_head_sha }}
     permissions:
       id-token: write
 
   comment:
     name: Add link to PR
-    needs: [code]
+    if: github.event_name != 'pull_request'
+    needs: [get_pr_details, code]
     runs-on: ubuntu-latest
     permissions:
-      issues: write
       pull-requests: write
 
     steps:
       - name: Comment on PR with URL
-        uses: unsplash/comment-on-pr@v1.3.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/github-script@v7
         with:
-          msg: "Created review app at https://review.submit-social-housing-data.communities.gov.uk/${{ github.event.pull_request.number }}. Note that the review app will be automatically deprovisioned after 30 days and will need the review app pipeline running again."
-          check_for_duplicate_msg: true
-          duplicate_msg_pattern: Created review app at*
+          script: |
+            const prNumber = ${{ needs.get_pr_details.outputs.pr_number }};
+            const body = `Created review app at https://review.submit-social-housing-data.communities.gov.uk/${prNumber}. Note that the review app will be automatically deprovisioned after 30 days and will need the review app pipeline running again.`;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+            });
+            const duplicate = comments.find(c => c.body.startsWith('Created review app at'));
+            if (!duplicate) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: body,
+              });
+            }
