@@ -61,7 +61,14 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::815624722760:role/core-application-repo
+
+      - name: Configure AWS credentials for review environment
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: eu-west-2
           role-to-assume: arn:aws:iam::837698168072:role/core-dev-deployment
+          role-chaining: true
 
       - name: Check if ECS service exists
         id: check
