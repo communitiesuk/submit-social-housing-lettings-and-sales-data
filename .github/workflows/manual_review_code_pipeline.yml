@@ -1,51 +1,29 @@
-name: Manual review app build and deploy
+name: Manual review app code pipeline
 
 concurrency:
-  group: deploy-review${{ inputs.pr_number }}
+  group: review-${{ inputs.review_app_key }}
 
 on:
   workflow_dispatch:
     inputs:
-      pr_number:
+      review_app_key:
         required: true
         type: string
-        description: "The PR number of the review app to deploy code for. Note: this is NOT the ticket number"
-
-permissions: {}
+        description: "The review app ID to deploy code for."
 
 defaults:
   run:
     shell: bash
 
 jobs:
-  get_pr_head_sha:
-    name: Get PR HEAD SHA
-    runs-on: ubuntu-latest
-    outputs:
-      pr_head_sha: ${{ steps.get_sha.outputs.pr_head_sha }}
-    steps:
-      - name: Get PR HEAD SHA
-        id: get_sha
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { data: pr } = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: parseInt('${{ inputs.pr_number }}'),
-            });
-            core.setOutput('pr_head_sha', pr.head.sha);
-
   code:
     name: Deploy review app code
-    needs: [get_pr_head_sha]
     uses: ./.github/workflows/aws_deploy.yml
     with:
       aws_account_id: 837698168072
       aws_role_prefix: core-dev
-      aws_task_prefix: core-review-${{ inputs.pr_number }}
-      concurrency_tag: ${{ inputs.pr_number }}
+      aws_task_prefix: core-review-${{ inputs.review_app_key }}
+      concurrency_tag: ${{ inputs.review_app_key }}
       environment: review
-      ref: ${{ needs.get_pr_head_sha.outputs.pr_head_sha }}
     permissions:
       id-token: write
