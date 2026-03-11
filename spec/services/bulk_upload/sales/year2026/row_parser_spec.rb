@@ -116,6 +116,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       field_123: "1",
       field_125: "2",
       field_126: "Non-binary",
+      field_135: "1",
+      field_136: "150",
     }
   end
 
