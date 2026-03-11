@@ -1,27 +1,85 @@
 name: Review app teardown pipeline
 
 concurrency:
-  group: review-${{ github.event.pull_request.number }}
+  group: deploy-review${{ github.event.pull_request.number || inputs.pr_number }}
 
 on:
   pull_request:
     types:
       - closed
   workflow_dispatch:
+    inputs:
+      pr_number:
+        required: true
+        type: string
+        description: "The PR number of the review app to tear down. Note: this is NOT the ticket number"
+
+permissions: {}
 
 env:
   app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
   aws_account_id: 837698168072
   aws_region: eu-west-2
   aws_role_prefix: core-dev
-  aws_task_prefix: core-review-${{ github.event.pull_request.number }}
 
 jobs:
-  database:
-    name: Drop database
+  get_pr_number:
+    name: Get PR number
+    runs-on: ubuntu-latest
+    outputs:
+      pr_number: ${{ steps.get.outputs.pr_number }}
+    steps:
+      - name: Get PR number
+        id: get
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "pr_number=${{ inputs.pr_number }}" >> $GITHUB_OUTPUT
+          else
+            echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+          fi
+
+  check_review_app_exists:
+    name: Check if review app exists
+    needs: [get_pr_number]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
+    outputs:
+      exists: ${{ steps.check.outputs.exists }}
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.aws_region }}
+          role-to-assume: ${{ env.app_repo_role }}
+
+      - name: Configure AWS credentials for review environment
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.aws_region }}
+          role-to-assume: arn:aws:iam::${{ env.aws_account_id }}:role/${{ env.aws_role_prefix }}-deployment
+          role-chaining: true
+
+      - name: Check if ECS service exists
+        id: check
+        env:
+          aws_task_prefix: core-review-${{ needs.get_pr_number.outputs.pr_number }}
+        run: |
+          if aws ecs describe-services --cluster ${{ env.aws_task_prefix }}-app --services ${{ env.aws_task_prefix }}-app --query "services[?status=='ACTIVE']" | grep -q 'serviceName'; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+  database:
+    name: Drop database
+    if: needs.check_review_app_exists.outputs.exists == 'true'
+    needs: [get_pr_number, check_review_app_exists]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    env:
+      aws_task_prefix: core-review-${{ needs.get_pr_number.outputs.pr_number }}
 
     steps:
       - name: Configure AWS credentials
@@ -55,10 +113,11 @@ jobs:
 
   infra:
     name: Teardown review app
-    needs: [database]
+    if: needs.check_review_app_exists.outputs.exists == 'true'
+    needs: [get_pr_number, check_review_app_exists, database]
     uses: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/.github/workflows/destroy_review_app_infra.yml@main
     with:
-      key: ${{ github.event.pull_request.number }}
+      key: ${{ needs.get_pr_number.outputs.pr_number }}
       app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
     permissions:
       id-token: write
