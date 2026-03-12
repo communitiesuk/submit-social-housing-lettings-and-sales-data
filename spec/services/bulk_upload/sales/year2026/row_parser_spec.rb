@@ -1321,13 +1321,9 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       context "when value is 3 and stairowned is not 100" do
         let(:attributes) { setup_section_params.merge(field_109: "3", field_10: "1", field_96: "50", field_97: "99", field_120: nil) }
 
-        it "returns correct errors" do
+        it "does not add errors" do
           parser.valid?
-          expect(parser.errors[:field_109]).to include("The percentage owned has to be 100% if the mortgage used is 'Don’t know'")
-
-          parser.log.blank_invalid_non_setup_fields!
-          parser.log.save!
-          expect(parser.log.mortgageused).to be_nil
+          expect(parser.errors[:field_109]).to be_empty
         end
       end
 
@@ -1371,13 +1367,9 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       context "when value is 3 and stairowned is not answered" do
         let(:attributes) { setup_section_params.merge(field_88: "3", field_10: "2", field_96: "50", field_97: nil, field_120: nil) }
 
-        it "returns correct errors" do
+        it "does not add errors" do
           parser.valid?
-          expect(parser.errors[:field_88]).to include(I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?"))
-
-          parser.log.blank_invalid_non_setup_fields!
-          parser.log.save!
-          expect(parser.log.mortgageused).to be_nil
+          expect(parser.errors[:field_88]).to be_empty
         end
       end
 
@@ -1413,13 +1405,9 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     describe "#field_116" do
       let(:attributes) { valid_attributes.merge({ field_8: "2", field_11: "9", field_116: "3" }) }
 
-      it "does not allow 3 (don't know) as an option for discounted ownership" do
+      it "allows 3 (don't know) as an option for discounted ownership" do
         parser.valid?
-        expect(parser.errors[:field_116]).to include(I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?"))
-
-        parser.log.blank_invalid_non_setup_fields!
-        parser.log.save!
-        expect(parser.log.mortgageused).to be_nil
+        expect(parser.errors[:field_116]).to be_empty
       end
 
       context "when validate_discounted_ownership_value is triggered" do

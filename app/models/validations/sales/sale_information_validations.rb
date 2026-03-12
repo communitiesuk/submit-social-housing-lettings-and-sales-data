@@ -372,13 +372,10 @@ module Validations::Sales::SaleInformationValidations
 
   def validate_mortgage_used_dont_know(record)
     return unless record.mortgage_use_unknown?
+    return if record.form.start_year_2026_or_later?
 
     if record.discounted_ownership_sale?
       record.errors.add :mortgageused, I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?")
-    end
-    if record.outright_sale? && record.saledate && !record.form.start_year_2024_or_later?
-      record.errors.add :mortgageused, I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?")
-      record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.mortgage_used_year")
     end
     if record.shared_ownership_scheme? && record.is_not_staircasing?
       record.errors.add :mortgageused, I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?")
