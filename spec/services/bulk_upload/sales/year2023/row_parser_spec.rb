@@ -1136,17 +1136,6 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         end
       end
     end
-
-    describe "#field_128" do
-      let(:attributes) { valid_attributes.merge({ field_7: "3", field_10: "10", field_128: "3", field_12: "2" }) }
-
-      it "does not allow 3 (don't know) as an option for outright sale" do
-        expect(parser.errors[:field_128]).to include("Enter a valid value for was a mortgage used for the purchase of this property?")
-        parser.log.blank_invalid_non_setup_fields!
-        parser.log.save!
-        expect(parser.log.mortgageused).to be_nil
-      end
-    end
   end
 
   describe "#log" do

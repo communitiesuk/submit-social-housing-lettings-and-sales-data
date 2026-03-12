@@ -406,7 +406,7 @@ class BulkUpload::Sales::Year2026::RowParser
 
   validates :field_11,
             inclusion: {
-              in: [8, 9, 14, 21, 22, 27, 29],
+              in: [8, 9, 14, 21, 22, 29],
               if: proc { field_11.present? },
               category: :setup,
               question: QUESTIONS[:field_11].downcase,
@@ -582,6 +582,8 @@ class BulkUpload::Sales::Year2026::RowParser
       "field_2",  # saledate
       "field_3",  # saledate
       "field_7",  # purchaser_code
+      "field_16", # uprn
+      "field_17", # address_line1
       "field_21", # postcode
       "field_22", # postcode
       "field_29", # age1
@@ -725,7 +727,7 @@ private
   end
 
   def rtb_like_sale_type?
-    [9, 14, 27, 29].include?(field_11)
+    [9, 14, 29].include?(field_11)
   end
 
   def field_mapping_for_errors
@@ -1386,6 +1388,8 @@ private
       ecstat1
       owning_organisation
       postcode_full
+      uprn
+      address_line1
       purchid
     ]
   end
@@ -1556,6 +1560,8 @@ private
       errors.add(:field_1, error_message) # Sale completion date
       errors.add(:field_2, error_message) # Sale completion date
       errors.add(:field_3, error_message) # Sale completion date
+      errors.add(:field_16, error_message) # UPRN
+      errors.add(:field_17, error_message) # Address line 1
       errors.add(:field_21, error_message) # Postcode
       errors.add(:field_22, error_message) # Postcode
       errors.add(:field_29, error_message) # Buyer 1 age

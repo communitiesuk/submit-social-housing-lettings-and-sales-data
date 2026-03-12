@@ -411,7 +411,7 @@ RSpec.describe Exports::SalesLogExportService do
       end
 
       context "and one sales log is available for export" do
-        let!(:sales_log) { FactoryBot.create(:sales_log, :export) }
+        let!(:sales_log) { FactoryBot.create(:sales_log, :export, hholdcount: 6) }
         let(:expected_zip_filename) { "core_sales_2026_2027_apr_mar_f0001_inc0001.zip" }
         let(:expected_data_filename) { "core_sales_2026_2027_apr_mar_f0001_inc0001_pt001.xml" }
         let(:xml_export_file) { File.open("spec/fixtures/exports/sales_log_26_27.xml", "r:UTF-8") }
@@ -498,7 +498,7 @@ RSpec.describe Exports::SalesLogExportService do
             let(:expected_zip_filename) { "core_sales_2026_2027_apr_mar_f0001_inc0001.zip" }
             let(:expected_data_filename) { "core_sales_2026_2027_apr_mar_f0001_inc0001_pt001.xml" }
             let(:xml_export_file) { File.open("spec/fixtures/exports/sales_log_26_27.xml", "r:UTF-8") }
-            let!(:sales_log) { FactoryBot.create(:sales_log, :export, ownershipsch: 1, staircase: 1, type: 2, mscharge: 321, has_management_fee: 1, management_fee: 222, hasservicechargeschanged: 1, newservicecharges: 150) }
+            let!(:sales_log) { FactoryBot.create(:sales_log, :export, ownershipsch: 1, staircase: 1, type: 2, mscharge: 321, has_management_fee: 1, management_fee: 222, hasservicechargeschanged: 1, newservicecharges: 150, hholdcount: 6) }
 
             def replace_staircasing_values(export_file)
               export_file.sub!("<HASESTATEFEE/>", "<HASESTATEFEE>1</HASESTATEFEE>")
@@ -518,7 +518,7 @@ RSpec.describe Exports::SalesLogExportService do
               export_file.sub!("<ETHNICGROUP2>17</ETHNICGROUP2>", "<ETHNICGROUP2/>")
               export_file.sub!("<HASESTATEFEE>1</HASESTATEFEE>", "<HASESTATEFEE/>")
               export_file.sub!("<HB>4</HB>", "<HB/>")
-              export_file.sub!("<HHOLDCOUNT>4</HHOLDCOUNT>", "<HHOLDCOUNT/>")
+              export_file.sub!("<HHOLDCOUNT>6</HHOLDCOUNT>", "<HHOLDCOUNT/>")
               export_file.sub!("<HHREGRES>7</HHREGRES>", "<HHREGRES/>")
               export_file.sub!("<INC1MORT>1</INC1MORT>", "<INC1MORT/>")
               export_file.sub!("<INC1NK>0</INC1NK>", "<INC1NK/>")
