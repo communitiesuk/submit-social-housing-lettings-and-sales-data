@@ -117,6 +117,7 @@ module Validations::Sales::SoftValidations
 
   def mortgage_plus_deposit_less_than_discounted_value?
     return unless mortgage && deposit && value && discount
+    return if form.start_year_2026_or_later?
 
     discounted_value = value * (100 - discount) / 100
     mortgage + deposit < discounted_value
