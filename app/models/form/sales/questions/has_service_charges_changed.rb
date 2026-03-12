@@ -15,7 +15,7 @@ class Form::Sales::Questions::HasServiceChargesChanged < ::Form::Question
       ],
     }
     @copy_key = "sales.sale_information.servicecharges_changed.has_service_charges_changed"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {
@@ -23,5 +23,5 @@ class Form::Sales::Questions::HasServiceChargesChanged < ::Form::Question
     "2" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2026 => 0 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2026 => 111 }.freeze
 end

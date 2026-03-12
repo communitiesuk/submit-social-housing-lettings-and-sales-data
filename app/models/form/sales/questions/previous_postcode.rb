@@ -16,9 +16,9 @@ class Form::Sales::Questions::PreviousPostcode < ::Form::Question
         "is_previous_la_inferred" => true,
       },
     }
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 57, 2024 => 59, 2025 => 57 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 57, 2024 => 59, 2025 => 57, 2026 => 65 }.freeze
 end

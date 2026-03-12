@@ -7,7 +7,7 @@ RSpec.describe Form::Sales::Questions::NewServiceCharges, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
+  let(:subsection) { instance_double(Form::Subsection, id: "shared_ownership_staircasing_transaction", form: instance_double(Form, start_date:, start_year_2026_or_later?: true)) }
   let(:page) { instance_double(Form::Page, subsection:) }
   let(:start_date) { collection_start_date_for_year(2026) }
 
@@ -48,6 +48,6 @@ RSpec.describe Form::Sales::Questions::NewServiceCharges, type: :model do
   end
 
   it "has the correct question number" do
-    expect(question.question_number).to eq(0)
+    expect(question.question_number).to eq(111)
   end
 end

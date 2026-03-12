@@ -11,7 +11,7 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
   let(:log) { build(:sales_log, :in_progress, ownershipsch:, stairowned:, staircase:) }
 
   context "when the form start year is 2024" do
-    let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+    let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2026_or_later?: false) }
     let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: "shared_ownership")) }
     let(:saledate) { Time.zone.local(2024, 5, 1) }
     let(:ownershipsch) { 1 }
@@ -93,9 +93,10 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
   end
 
   context "when the form start year is 2025" do
-    let(:form) { instance_double(Form, start_date: Time.zone.local(2025, 4, 1)) }
-    let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: "shared_ownership")) }
+    let(:form) { instance_double(Form, start_date: Time.zone.local(2025, 4, 1), start_year_2026_or_later?: false) }
+    let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: subsection_id)) }
     let(:saledate) { Time.zone.local(2025, 5, 1) }
+    let(:subsection_id) { "shared_ownership_initial_purchase" }
 
     before do
       allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true)
@@ -103,6 +104,7 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
 
     context "when it is a discounted ownership sale" do
       let(:ownershipsch) { 2 }
+      let(:subsection_id) { "discounted_ownership_scheme" }
 
       it "shows the correct question number" do
         expect(question.question_number).to eq 106

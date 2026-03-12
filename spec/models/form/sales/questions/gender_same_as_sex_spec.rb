@@ -10,7 +10,7 @@ RSpec.describe Form::Sales::Questions::GenderSameAsSex, type: :model do
   let(:page) { instance_double(Form::Page) }
   let(:person_index) { 2 }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form, start_date: current_collection_start_date) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date, person_question_count: 4) }
 
   before do
     allow(page).to receive(:subsection).and_return(subsection)
