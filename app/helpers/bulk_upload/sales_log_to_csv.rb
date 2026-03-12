@@ -678,7 +678,9 @@ class BulkUpload::SalesLogToCsv
       log.gender_same_as_sex5,
       log.gender_description5,
       log.gender_same_as_sex6,
-      log.gender_description6, # 134
+      log.gender_description6,
+      log.hasservicechargeschanged,
+      log.newservicecharges, # 136
     ]
   end
 

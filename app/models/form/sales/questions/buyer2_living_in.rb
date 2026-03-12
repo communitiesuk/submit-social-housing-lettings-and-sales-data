@@ -4,7 +4,7 @@ class Form::Sales::Questions::Buyer2LivingIn < ::Form::Question
     @id = "buy2living"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {
@@ -14,5 +14,5 @@ class Form::Sales::Questions::Buyer2LivingIn < ::Form::Question
     "3" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 60, 2024 => 62, 2025 => 59 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 60, 2024 => 62, 2025 => 59, 2026 => 67 }.freeze
 end

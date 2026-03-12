@@ -346,9 +346,9 @@ class Log < ApplicationRecord
   end
 
   def clear_gender_description_unless_gender_not_same_as_sex!
-    # we do this as the gender same as sex page always contains the gender description box that's hidden
-    # default submit will send a "" for gender description. this ensure it's nil in this case
-    # as well as blanking it if the user writes it in mistakenly in bulk upload
+    # gender_description is always routed to (even when hidden on the page), so default submit will set it as ""
+    # This method ensures gender_description is cleared if gender is the same as sex
+    # This also has the benefit of clearing a mistakenly input gender_description in bulk upload if gender is the same as sex
     max_person = lettings? ? 8 : 6
     (1..max_person).each do |person_index|
       gender_same_as_sex = public_send("gender_same_as_sex#{person_index}")

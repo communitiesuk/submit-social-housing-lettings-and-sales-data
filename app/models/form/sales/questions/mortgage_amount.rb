@@ -1,6 +1,6 @@
 class Form::Sales::Questions::MortgageAmount < ::Form::Question
-  def initialize(id, hsh, subsection, ownershipsch:)
-    super(id, hsh, subsection)
+  def initialize(id, hsh, page, ownershipsch:)
+    super(id, hsh, page)
     @id = "mortgage"
     @type = "numeric"
     @min = 1
@@ -8,15 +8,16 @@ class Form::Sales::Questions::MortgageAmount < ::Form::Question
     @width = 5
     @prefix = "£"
     @ownershipsch = ownershipsch
-    @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR_AND_SECTION, value_key: form.start_year_2026_or_later? ? subsection.id : ownershipsch)
     @top_guidance_partial = top_guidance_partial
     @strip_commas = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+  QUESTION_NUMBER_FROM_YEAR_AND_SECTION = {
     2023 => { 1 => 91, 2 => 104, 3 => 112 },
     2024 => { 1 => 92, 2 => 105, 3 => 113 },
     2025 => { 1 => 83, 2 => 107 },
+    2026 => { "shared_ownership_initial_purchase" => 91, "discounted_ownership_scheme" => 117 },
   }.freeze
 
   def derived?(log)
