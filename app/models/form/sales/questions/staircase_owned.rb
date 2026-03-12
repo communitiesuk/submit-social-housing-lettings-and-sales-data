@@ -9,8 +9,8 @@ class Form::Sales::Questions::StaircaseOwned < ::Form::Question
     @max = 100
     @step = 0.1
     @suffix = "%"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 78, 2024 => 80, 2025 => 91 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 78, 2024 => 80, 2025 => 91, 2026 => 99 }.freeze
 end

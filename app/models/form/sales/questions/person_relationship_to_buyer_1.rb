@@ -41,6 +41,6 @@ class Form::Sales::Questions::PersonRelationshipToBuyer1 < ::Form::Question
                              30
                            end
 
-    base_question_number + (4 * @person_index)
+    base_question_number + (form.person_question_count * @person_index)
   end
 end

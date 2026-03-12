@@ -6,9 +6,9 @@ class Form::Sales::Questions::County < ::Form::Question
     @type = "text"
     @plain_label = true
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @hide_question_number_on_page = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 15, 2024 => 16, 2025 => 14 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 15, 2024 => 16, 2025 => 14, 2026 => 14 }.freeze
 end

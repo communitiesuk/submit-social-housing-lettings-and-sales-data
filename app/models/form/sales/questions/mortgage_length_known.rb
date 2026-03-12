@@ -10,12 +10,12 @@ class Form::Sales::Questions::MortgageLengthKnown < ::Form::Question
         { "mortlen_known" => 0 },
       ],
     }
-    @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR_AND_SECTION, value_key: form.start_year_2026_or_later? ? subsection.id : ownershipsch)
   end
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
-    2026 => { 1 => 84, 2 => 108 },
+  QUESTION_NUMBER_FROM_YEAR_AND_SECTION = {
+    2026 => { "shared_ownership_initial_purchase" => 92, "discounted_ownership_scheme" => 118 },
   }.freeze
 end

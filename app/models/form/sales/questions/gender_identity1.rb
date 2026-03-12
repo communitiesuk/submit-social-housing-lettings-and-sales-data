@@ -5,7 +5,7 @@ class Form::Sales::Questions::GenderIdentity1 < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 1
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {
@@ -15,5 +15,5 @@ class Form::Sales::Questions::GenderIdentity1 < ::Form::Question
     "R" => { "value" => "Prefers not to say" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 21, 2024 => 23, 2025 => 21 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 21, 2024 => 23, 2025 => 21, 2026 => 22 }.freeze
 end

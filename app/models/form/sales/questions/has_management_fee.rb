@@ -15,7 +15,7 @@ class Form::Sales::Questions::HasManagementFee < ::Form::Question
         },
       ],
     }
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {
@@ -23,5 +23,5 @@ class Form::Sales::Questions::HasManagementFee < ::Form::Question
     "0" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2025 => 89 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2025 => 89, 2026 => 97 }.freeze
 end
