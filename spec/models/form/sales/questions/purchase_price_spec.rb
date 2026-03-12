@@ -1,11 +1,15 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::PurchasePrice, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page, ownershipsch: 1) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
+  let(:start_year) { current_collection_start_year }
+  let(:start_year_2026_or_later?) { false }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: collection_start_date_for_year(start_year), start_year_2026_or_later?: start_year_2026_or_later?))) }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -30,6 +34,8 @@ RSpec.describe Form::Sales::Questions::PurchasePrice, type: :model do
   context "when discounted ownership scheme" do
     subject(:question) { described_class.new(question_id, question_definition, page, ownershipsch: 2) }
 
+    let(:start_year) { 2023 }
+
     it "has the correct question_number" do
       expect(question.question_number).to eq(100)
     end
@@ -37,6 +43,8 @@ RSpec.describe Form::Sales::Questions::PurchasePrice, type: :model do
 
   context "when outright sale" do
     subject(:question) { described_class.new(question_id, question_definition, page, ownershipsch: 3) }
+
+    let(:start_year) { 2023 }
 
     it "has the correct question_number" do
       expect(question.question_number).to eq(110)
@@ -51,7 +59,20 @@ RSpec.describe Form::Sales::Questions::PurchasePrice, type: :model do
     expect(question.prefix).to eq("£")
   end
 
-  it "has correct min" do
-    expect(question.min).to eq(0)
+  context "with year 2025", metadata: { year: 25 } do
+    let(:start_year) { 2025 }
+
+    it "has correct min" do
+      expect(question.min).to eq(0)
+    end
+  end
+
+  context "with year 2026", metadata: { year: 26 } do
+    let(:start_year) { 2026 }
+    let(:start_year_2026_or_later?) { true }
+
+    it "has correct min" do
+      expect(question.min).to eq(15_000)
+    end
   end
 end
