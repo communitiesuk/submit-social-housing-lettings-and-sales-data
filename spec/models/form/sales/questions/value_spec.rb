@@ -1,11 +1,15 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::Value, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, id: "value_shared_ownership", subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)), id: "shared_ownership")) }
+  let(:start_year) { current_collection_start_year }
+  let(:start_year_2026_or_later?) { false }
+  let(:page) { instance_double(Form::Page, id: "value_shared_ownership", subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: collection_start_date_for_year(start_year), start_year_2026_or_later?: start_year_2026_or_later?), id: "shared_ownership")) }
 
   before do
     allow(page.subsection.form).to receive(:start_year_2025_or_later?).and_return(false)
@@ -35,7 +39,20 @@ RSpec.describe Form::Sales::Questions::Value, type: :model do
     expect(question.prefix).to eq("£")
   end
 
-  it "has correct min" do
-    expect(question.min).to eq(0)
+  context "with year 2025", metadata: { year: 25 } do
+    let(:start_year) { 2025 }
+
+    it "has correct min" do
+      expect(question.min).to eq(0)
+    end
+  end
+
+  context "with year 2026", metadata: { year: 26 } do
+    let(:start_year) { 2026 }
+    let(:start_year_2026_or_later?) { true }
+
+    it "has correct min" do
+      expect(question.min).to eq(15_000)
+    end
   end
 end
