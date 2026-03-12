@@ -10,7 +10,7 @@ class Form::Sales::Questions::Prevloc < ::Form::Question
       },
       "value" => "Not known",
     }]
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
@@ -18,5 +18,5 @@ class Form::Sales::Questions::Prevloc < ::Form::Question
     { "" => "Select an option" }.merge(LocalAuthority.active(form.start_date).map { |la| [la.code, la.name] }.to_h)
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 58, 2024 => 60, 2025 => 58 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 58, 2024 => 60, 2025 => 58, 2026 => 66 }.freeze
 end

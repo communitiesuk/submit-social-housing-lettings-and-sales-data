@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Form::Sales::Questions::HasLeaseholdCharges, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page, ownershipsch: 1) }
 
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2025, 4, 4)) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2025, 4, 4), start_year_2026_or_later?: false) }
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, id: "shared_ownership", form:)) }

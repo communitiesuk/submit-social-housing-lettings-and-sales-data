@@ -5,30 +5,45 @@ RSpec.describe Form::Sales::Questions::NumberOfOthersInProperty, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
   let(:joint_purchase) { true }
 
-  it "has correct page" do
-    expect(question.page).to be(page)
+  context "with 2023 form" do
+    let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2026_or_later?: false))) }
+
+    it "has correct page" do
+      expect(question.page).to be(page)
+    end
+
+    it "has the correct id" do
+      expect(question.id).to eq("hholdcount")
+    end
+
+    it "has the correct type" do
+      expect(question.type).to eq("numeric")
+    end
+
+    it "is not marked as derived" do
+      expect(question.derived?(nil)).to be false
+    end
+
+    it "has the correct min" do
+      expect(question.min).to be 0
+    end
+
+    it "has the correct max" do
+      expect(question.max).to be 15
+    end
   end
 
-  it "has the correct id" do
-    expect(question.id).to eq("hholdcount")
-  end
+  context "with 2026 form" do
+    let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2026, 4, 1), start_year_2026_or_later?: true))) }
 
-  it "has the correct type" do
-    expect(question.type).to eq("numeric")
-  end
+    it "has the correct min" do
+      expect(question.min).to be 1
+    end
 
-  it "is not marked as derived" do
-    expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct min" do
-    expect(question.min).to be 0
-  end
-
-  it "has the correct max" do
-    expect(question.max).to be 15
+    it "has the correct max" do
+      expect(question.max).to be 15
+    end
   end
 end

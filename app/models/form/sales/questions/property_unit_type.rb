@@ -5,7 +5,7 @@ class Form::Sales::Questions::PropertyUnitType < ::Form::Question
     @copy_key = "sales.property_information.proptype"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {
@@ -16,5 +16,5 @@ class Form::Sales::Questions::PropertyUnitType < ::Form::Question
     "9" => { "value" => "Other" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 12, 2024 => 19, 2025 => 16 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 12, 2024 => 19, 2025 => 16, 2026 => 16 }.freeze
 end

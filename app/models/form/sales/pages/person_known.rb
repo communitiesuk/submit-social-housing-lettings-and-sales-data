@@ -16,18 +16,18 @@ class Form::Sales::Pages::PersonKnown < Form::Sales::Pages::Person
       [{ "not_joint_purchase?" => true,
          "hholdcount" => {
            "operator" => ">=",
-           "operand" => 1,
+           "operand" => form.start_year_2026_or_later? ? 2 : 1,
          } }]
     else
       [{ "not_joint_purchase?" => true,
          "hholdcount" => {
            "operator" => ">=",
-           "operand" => @person_index - 1,
+           "operand" => form.start_year_2026_or_later? ? @person_index : @person_index - 1,
          } },
        { "joint_purchase?" => true,
          "hholdcount" => {
            "operator" => ">=",
-           "operand" => @person_index - 2,
+           "operand" => form.start_year_2026_or_later? ? @person_index : @person_index - 2,
          } }]
     end
   end
