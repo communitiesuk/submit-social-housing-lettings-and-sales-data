@@ -149,6 +149,8 @@ class BulkUpload::Sales::Year2026::RowParser
     field_132: "If 'No', enter person 5's gender identity",
     field_133: "Is the gender person 6 identifies with the same as their sex registered at birth?",
     field_134: "If 'No', enter person 6's gender identity",
+    field_135: "Will the service charge change after this staircasing transaction takes place?",
+    field_136: "What are the new total monthly service charges for the property?",
   }.freeze
 
   ERROR_BASE_KEY = "validations.sales.2026.bulk_upload".freeze
@@ -327,6 +329,9 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_132, :string
   attribute :field_133, :integer
   attribute :field_134, :string
+
+  attribute :field_135, :integer
+  attribute :field_136, :decimal
 
   validates :field_1,
             presence: {
@@ -581,6 +586,8 @@ class BulkUpload::Sales::Year2026::RowParser
       "field_2",  # saledate
       "field_3",  # saledate
       "field_7",  # purchaser_code
+      "field_16", # uprn
+      "field_17", # address_line1
       "field_21", # postcode
       "field_22", # postcode
       "field_28", # age1
@@ -863,6 +870,7 @@ private
       sexrab4: %i[field_48],
       sexrab5: %i[field_52],
       sexrab6: %i[field_56],
+
       buildheightclass: %i[field_122],
 
       gender_same_as_sex1: %i[field_123],
@@ -877,6 +885,9 @@ private
       gender_description5: %i[field_132],
       gender_same_as_sex6: %i[field_133],
       gender_description6: %i[field_134],
+
+      hasservicechargeschanged: %i[field_135],
+      newservicecharges: %i[field_136],
     }
   end
 
@@ -925,6 +936,9 @@ private
     attributes["gender_description5"] = field_132
     attributes["gender_same_as_sex6"] = field_133
     attributes["gender_description6"] = field_134
+
+    attributes["hasservicechargeschanged"] = field_135
+    attributes["newservicecharges"] = field_136
 
     attributes["relat2"] = relationship_from_is_partner(field_34)
     attributes["relat3"] = relationship_from_is_partner(field_42)
@@ -1378,6 +1392,8 @@ private
       ecstat1
       owning_organisation
       postcode_full
+      uprn
+      address_line1
       purchid
     ]
   end
@@ -1548,6 +1564,8 @@ private
       errors.add(:field_1, error_message) # Sale completion date
       errors.add(:field_2, error_message) # Sale completion date
       errors.add(:field_3, error_message) # Sale completion date
+      errors.add(:field_16, error_message) # UPRN
+      errors.add(:field_17, error_message) # Address line 1
       errors.add(:field_21, error_message) # Postcode
       errors.add(:field_22, error_message) # Postcode
       errors.add(:field_28, error_message) # Buyer 1 age

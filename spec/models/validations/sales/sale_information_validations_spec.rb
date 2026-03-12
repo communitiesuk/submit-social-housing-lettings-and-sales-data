@@ -663,6 +663,46 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         expect(record.errors["grant"]).to be_empty
       end
     end
+
+    context "with year 2026", :aggregate_failures do
+      let(:saledate) { Time.zone.local(2026, 4, 1) }
+
+      context "when mortgage and deposit is exact" do
+        let(:record) { FactoryBot.build(:sales_log, saledate:, mortgage: 85_000, deposit: 5_000, value: 100_000, discount: 10, ownershipsch: 2, type: 9) }
+
+        it "does not add an error" do
+          sale_information_validator.validate_discounted_ownership_value(record)
+          expect(record.errors["mortgage"]).to be_empty
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["deposit"]).to be_empty
+          expect(record.errors["discount"]).to be_empty
+        end
+      end
+
+      context "when mortgage and deposit is within 0.1% discount tolerance" do
+        let(:record) { FactoryBot.build(:sales_log, saledate:, mortgage: 85_000, deposit: 5_000, value: 100_000, discount: 10.1, ownershipsch: 2, type: 9) }
+
+        it "does not add an error" do
+          sale_information_validator.validate_discounted_ownership_value(record)
+          expect(record.errors["mortgage"]).to be_empty
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["deposit"]).to be_empty
+          expect(record.errors["discount"]).to be_empty
+        end
+      end
+
+      context "when mortgage and deposit is outside 0.1% discount tolerance" do
+        let(:record) { FactoryBot.build(:sales_log, saledate:, mortgage: 85_000, deposit: 5_000, value: 100_000, discount: 10.2, ownershipsch: 2, type: 9) }
+
+        it "adds an error" do
+          sale_information_validator.validate_discounted_ownership_value(record)
+          expect(record.errors["mortgage"]).not_to be_empty
+          expect(record.errors["value"]).not_to be_empty
+          expect(record.errors["deposit"]).not_to be_empty
+          expect(record.errors["discount"]).not_to be_empty
+        end
+      end
+    end
   end
 
   describe "#validate_outright_sale_value_matches_mortgage_plus_deposit" do
@@ -1168,6 +1208,82 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           expect(record.errors["equity"]).to be_empty
           expect(record.errors["cashdis"]).to be_empty
           expect(record.errors["type"]).to be_empty
+        end
+      end
+    end
+
+    context "with year 2026", :aggregate_failures do
+      let(:saledate) { Time.zone.local(2026, 4, 1) }
+
+      context "when mortgage and deposit is exact" do
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 2, deposit: 5_000, value: 100_000, equity: 15, ownershipsch: 1, type: 30, saledate:) }
+
+        it "does not add an error" do
+          sale_information_validator.validate_non_staircasing_mortgage(record)
+          expect(record.errors["mortgage"]).to be_empty
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["deposit"]).to be_empty
+          expect(record.errors["equity"]).to be_empty
+        end
+      end
+
+      context "when mortgage and deposit is within 0.1% equity tolerance" do
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 2, deposit: 5_000, value: 100_000, equity: 15.1, ownershipsch: 1, type: 30, saledate:) }
+
+        it "does not add an error" do
+          sale_information_validator.validate_non_staircasing_mortgage(record)
+          expect(record.errors["mortgage"]).to be_empty
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["deposit"]).to be_empty
+          expect(record.errors["equity"]).to be_empty
+        end
+      end
+
+      context "when mortgage and deposit is outside 0.1% equity tolerance" do
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 2, deposit: 5_000, value: 100_000, equity: 15.2, ownershipsch: 1, type: 30, saledate:) }
+
+        it "adds an error" do
+          sale_information_validator.validate_non_staircasing_mortgage(record)
+          expect(record.errors["mortgage"]).not_to be_empty
+          expect(record.errors["value"]).not_to be_empty
+          expect(record.errors["deposit"]).not_to be_empty
+          expect(record.errors["equity"]).not_to be_empty
+        end
+      end
+
+      context "when deposit (no mortgage) is exact" do
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 2, deposit: 15_000, value: 100_000, equity: 15, ownershipsch: 1, type: 30, saledate:) }
+
+        it "does not add an error" do
+          sale_information_validator.validate_non_staircasing_mortgage(record)
+          expect(record.errors["mortgageused"]).to be_empty
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["deposit"]).to be_empty
+          expect(record.errors["equity"]).to be_empty
+        end
+      end
+
+      context "when deposit (no mortgage) is within 0.1% equity tolerance" do
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 2, deposit: 15_000, value: 100_000, equity: 15.1, ownershipsch: 1, type: 30, saledate:) }
+
+        it "does not add an error" do
+          sale_information_validator.validate_non_staircasing_mortgage(record)
+          expect(record.errors["mortgageused"]).to be_empty
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["deposit"]).to be_empty
+          expect(record.errors["equity"]).to be_empty
+        end
+      end
+
+      context "when deposit (no mortgage) is outside 0.1% equity tolerance" do
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 2, deposit: 15_000, value: 100_000, equity: 15.2, ownershipsch: 1, type: 30, saledate:) }
+
+        it "adds an error" do
+          sale_information_validator.validate_non_staircasing_mortgage(record)
+          expect(record.errors["mortgageused"]).not_to be_empty
+          expect(record.errors["value"]).not_to be_empty
+          expect(record.errors["deposit"]).not_to be_empty
+          expect(record.errors["equity"]).not_to be_empty
         end
       end
     end
