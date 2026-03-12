@@ -158,8 +158,12 @@ private
   def number_of_household_members
     return unless hholdcount.present? && jointpur.present?
 
-    number_of_buyers = joint_purchase? ? 2 : 1
-    hholdcount + number_of_buyers
+    if form.start_year_2026_or_later?
+      hholdcount
+    else
+      number_of_buyers = joint_purchase? ? 2 : 1
+      hholdcount + number_of_buyers
+    end
   end
 
   def total_elder

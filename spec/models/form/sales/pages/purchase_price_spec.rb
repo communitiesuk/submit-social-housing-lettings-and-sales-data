@@ -8,7 +8,7 @@ RSpec.describe Form::Sales::Pages::PurchasePrice, type: :model do
   let(:subsection) { instance_double(Form::Subsection) }
 
   before do
-    allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_2024_or_later?: false, start_date: Time.zone.local(2023, 4, 1)))
+    allow(subsection).to receive_messages(form: instance_double(Form, start_year_2024_or_later?: false, start_date: Time.zone.local(2023, 4, 1), start_year_2026_or_later?: false), id: "discounted_ownership_scheme")
   end
 
   it "has correct subsection" do

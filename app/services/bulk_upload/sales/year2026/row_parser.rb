@@ -47,7 +47,7 @@ class BulkUpload::Sales::Year2026::RowParser
     field_38: "What is buyer 2’s nationality?",
     field_39: "What is buyer 2 or person 2’s working situation?",
     field_40: "Will buyer 2 live in the property?",
-    field_41: "Besides the buyers, how many people will live in the property?",
+    field_41: "In total, how many people live in the property?",
 
     field_42: "Is person 3 the partner of buyer 1?",
     field_43: "Age of person 3",
@@ -149,6 +149,8 @@ class BulkUpload::Sales::Year2026::RowParser
     field_132: "If 'No', enter person 5's gender identity",
     field_133: "Is the gender person 6 identifies with the same as their sex registered at birth?",
     field_134: "If 'No', enter person 6's gender identity",
+    field_135: "Will the service charge change after this staircasing transaction takes place?",
+    field_136: "What are the new total monthly service charges for the property?",
   }.freeze
 
   ERROR_BASE_KEY = "validations.sales.2026.bulk_upload".freeze
@@ -328,6 +330,9 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_133, :integer
   attribute :field_134, :string
 
+  attribute :field_135, :integer
+  attribute :field_136, :decimal
+
   validates :field_1,
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "sale completion date (day)."),
@@ -405,7 +410,7 @@ class BulkUpload::Sales::Year2026::RowParser
 
   validates :field_11,
             inclusion: {
-              in: [8, 9, 14, 21, 22, 27, 29],
+              in: [8, 9, 14, 21, 22, 29],
               if: proc { field_11.present? },
               category: :setup,
               question: QUESTIONS[:field_11].downcase,
@@ -583,6 +588,8 @@ class BulkUpload::Sales::Year2026::RowParser
       "field_2",  # saledate
       "field_3",  # saledate
       "field_7",  # purchaser_code
+      "field_16", # uprn
+      "field_17", # address_line1
       "field_21", # postcode
       "field_22", # postcode
       "field_28", # age1
@@ -730,7 +737,7 @@ private
   end
 
   def rtb_like_sale_type?
-    [9, 14, 27, 29].include?(field_11)
+    [9, 14, 29].include?(field_11)
   end
 
   def invalid_fields
@@ -880,6 +887,7 @@ private
       sexrab4: %i[field_48],
       sexrab5: %i[field_52],
       sexrab6: %i[field_56],
+
       buildheightclass: %i[field_122],
 
       gender_same_as_sex1: %i[field_123],
@@ -894,6 +902,9 @@ private
       gender_description5: %i[field_132],
       gender_same_as_sex6: %i[field_133],
       gender_description6: %i[field_134],
+
+      hasservicechargeschanged: %i[field_135],
+      newservicecharges: %i[field_136],
     }
   end
 
@@ -942,6 +953,9 @@ private
     attributes["gender_description5"] = field_132
     attributes["gender_same_as_sex6"] = field_133
     attributes["gender_description6"] = field_134
+
+    attributes["hasservicechargeschanged"] = field_135
+    attributes["newservicecharges"] = field_136
 
     attributes["relat2"] = relationship_from_is_partner(field_34)
     attributes["relat3"] = relationship_from_is_partner(field_42)
@@ -1395,6 +1409,8 @@ private
       ecstat1
       owning_organisation
       postcode_full
+      uprn
+      address_line1
       purchid
     ]
   end
@@ -1565,6 +1581,8 @@ private
       errors.add(:field_1, error_message) # Sale completion date
       errors.add(:field_2, error_message) # Sale completion date
       errors.add(:field_3, error_message) # Sale completion date
+      errors.add(:field_16, error_message) # UPRN
+      errors.add(:field_17, error_message) # Address line 1
       errors.add(:field_21, error_message) # Postcode
       errors.add(:field_22, error_message) # Postcode
       errors.add(:field_28, error_message) # Buyer 1 age

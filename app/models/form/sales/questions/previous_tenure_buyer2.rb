@@ -4,7 +4,7 @@ class Form::Sales::Questions::PreviousTenureBuyer2 < ::Form::Question
     @id = "prevtenbuy2"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {
@@ -20,5 +20,5 @@ class Form::Sales::Questions::PreviousTenureBuyer2 < ::Form::Question
     "0" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 61, 2024 => 63, 2025 => 60 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 61, 2024 => 63, 2025 => 60, 2026 => 68 }.freeze
 end

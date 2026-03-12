@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Questions::PersonAgeKnown, type: :model do
 
   let(:question_id) { "age3_known" }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1), person_question_count: 4))) }
   let(:person_index) { 2 }
 
   it "has correct page" do

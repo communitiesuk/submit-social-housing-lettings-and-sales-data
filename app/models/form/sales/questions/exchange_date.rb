@@ -4,7 +4,7 @@ class Form::Sales::Questions::ExchangeDate < ::Form::Question
     @id = "exdate"
     @copy_key = "sales.sale_information.exchange_date"
     @type = "date"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 81, 2024 => 83 }.freeze

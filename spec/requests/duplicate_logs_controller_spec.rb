@@ -170,7 +170,8 @@ RSpec.describe DuplicateLogsController, type: :request do
               expect(page).to have_content("- Buyer 1’s gender identity", count: 3)
               expect(page).to have_content("- Buyer 1’s working situation", count: 3)
               expect(page).to have_content("- Postcode", count: 3)
-              expect(page).to have_link("Change", count: 21)
+              expect(page).to have_content("- Address line 1", count: 3)
+              expect(page).to have_link("Change", count: 24)
               expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
               expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
               expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[1].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
@@ -216,7 +217,8 @@ RSpec.describe DuplicateLogsController, type: :request do
                 expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
                 expect(page).to have_content("- Buyer 1’s working situation", count: 1)
                 expect(page).to have_content("- Postcode", count: 1)
-                expect(page).to have_link("Change", count: 7)
+                expect(page).to have_content("- Address line 1", count: 1)
+                expect(page).to have_link("Change", count: 8)
                 expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
               end
 
@@ -242,7 +244,8 @@ RSpec.describe DuplicateLogsController, type: :request do
                 expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
                 expect(page).to have_content("- Buyer 1’s working situation", count: 1)
                 expect(page).to have_content("- Postcode", count: 1)
-                expect(page).to have_link("Change", count: 7)
+                expect(page).to have_content("- Address line 1", count: 1)
+                expect(page).to have_link("Change", count: 8)
                 expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
               end
 
@@ -377,7 +380,8 @@ RSpec.describe DuplicateLogsController, type: :request do
               expect(page).to have_content("- Buyer 1’s gender identity", count: 3)
               expect(page).to have_content("- Buyer 1’s working situation", count: 3)
               expect(page).to have_content("- Postcode", count: 3)
-              expect(page).to have_link("Change", count: 18)
+              expect(page).to have_content("- Address line 1", count: 3)
+              expect(page).to have_link("Change", count: 21)
               expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
               expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
               expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[1].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
@@ -405,7 +409,8 @@ RSpec.describe DuplicateLogsController, type: :request do
                 expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
                 expect(page).to have_content("- Buyer 1’s working situation", count: 1)
                 expect(page).to have_content("- Postcode", count: 1)
-                expect(page).to have_link("Change", count: 6)
+                expect(page).to have_content("- Address line 1", count: 1)
+                expect(page).to have_link("Change", count: 7)
                 expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
               end
 
@@ -431,7 +436,8 @@ RSpec.describe DuplicateLogsController, type: :request do
                 expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
                 expect(page).to have_content("- Buyer 1’s working situation", count: 1)
                 expect(page).to have_content("- Postcode", count: 1)
-                expect(page).to have_link("Change", count: 6)
+                expect(page).to have_content("- Address line 1", count: 1)
+                expect(page).to have_link("Change", count: 7)
                 expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
               end
 

@@ -5,8 +5,8 @@ RSpec.describe Form::Sales::Pages::Deposit, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, enabled?: true, depends_on: true) }
-  let(:form) { instance_double(Form, start_year_2024_or_later?: false, start_date: Time.zone.local(2023, 4, 1), depends_on_met: true) }
+  let(:subsection) { instance_double(Form::Subsection, enabled?: true, depends_on: true, id: "shared_ownership_initial_purchase") }
+  let(:form) { instance_double(Form, start_year_2024_or_later?: false, start_date: Time.zone.local(2023, 4, 1), depends_on_met: true, start_year_2026_or_later?: false) }
   let(:optional) { false }
 
   before do

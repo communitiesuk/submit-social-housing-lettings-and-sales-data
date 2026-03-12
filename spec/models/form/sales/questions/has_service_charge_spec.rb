@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Questions::HasServiceCharge, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
+  let(:subsection) { instance_double(Form::Subsection, id: "shared_ownership_initial_purchase", form: instance_double(Form, start_date:, start_year_2026_or_later?: false)) }
   let(:page) { instance_double(Form::Page, subsection:) }
   let(:start_date) { Time.utc(2025, 5, 1) }
   let(:staircasing) { false }
@@ -67,24 +67,23 @@ RSpec.describe Form::Sales::Questions::HasServiceCharge, type: :model do
 
   context "with 2026/27 form" do
     let(:start_date) { Time.utc(2026, 4, 1) }
-
-    before do
-      allow(subsection.form).to receive(:start_year_2026_or_later?).and_return(true)
-    end
+    let(:subsection) { instance_double(Form::Subsection, id: subsection_id, form: instance_double(Form, start_date:, start_year_2026_or_later?: true)) }
 
     context "when staircasing" do
       let(:staircasing) { true }
+      let(:subsection_id) { "shared_ownership_staircasing_transaction" }
 
       it "has the correct question number" do
-        expect(question.question_number).to eq(0)
+        expect(question.question_number).to eq(110)
       end
     end
 
     context "when not staircasing" do
       let(:staircasing) { false }
+      let(:subsection_id) { "shared_ownership_initial_purchase" }
 
       it "has the correct question number" do
-        expect(question.question_number).to eq(0)
+        expect(question.question_number).to eq(96)
       end
     end
   end
