@@ -28,6 +28,7 @@ jobs:
 
   code:
     name: Deploy review app code
+    if: contains(github.event.pull_request.labels.*.name, 'deploy-review')
     needs: [infra]
     uses: ./.github/workflows/aws_deploy.yml
     with:
