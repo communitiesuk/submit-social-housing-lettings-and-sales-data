@@ -7,7 +7,6 @@ on:
 jobs:
   hint:
     name: Add review app hint
-    if: "!contains(github.event.pull_request.labels.*.name, 'deploy-review')"
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
