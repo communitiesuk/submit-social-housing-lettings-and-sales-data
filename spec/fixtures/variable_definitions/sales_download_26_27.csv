@@ -20,3 +20,4 @@ gender_description6,If 'No', enter person 6's gender identity
 hasservicechargeschanged,Will the service charge change after this staircasing transaction takes place?
 newservicecharges,What are the new total monthly service charges for the property?
 hholdcount,In total, how many people live in the property?
+hhtype,Household type
