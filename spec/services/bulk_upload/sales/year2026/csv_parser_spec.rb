@@ -195,8 +195,8 @@ RSpec.describe BulkUpload::Sales::Year2026::CsvParser do
     let(:field_values) { log_to_csv.to_2026_row }
 
     before do
-      field_32_index = field_numbers.index(32)
-      field_values[field_32_index] = "abc" # should be an integer
+      field_34_index = field_numbers.index(34)
+      field_values[field_34_index] = "abc" # should be an integer
 
       file.write(log_to_csv.custom_field_numbers_row(field_numbers:))
       file.write(log_to_csv.to_custom_csv_row(field_values:))
@@ -204,7 +204,7 @@ RSpec.describe BulkUpload::Sales::Year2026::CsvParser do
     end
 
     it "sets the invalid data to nil" do
-      expect(service.row_parsers[0].field_32).to be_nil
+      expect(service.row_parsers[0].field_34).to be_nil
     end
   end
 end
