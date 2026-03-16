@@ -42,12 +42,7 @@ class BulkUpload::Lettings::Year2026::CsvParser
       hash_rows = field_numbers
                     .zip(stripped_row)
                     .map do |field, value|
-                      # this is needed as a string passed to an int attribute is by default mapped to '0'.
-                      # this is bad as some questions will accept a '0'. so you could enter something invalid and not be told about it
-                      expected_is_integer = ROW_PARSER_CLASS.attribute_types[field].is_a?(ActiveModel::Type::Integer)
-                      # we must be certain that the user entered a string that cannot be coerced to an integer
-                      actual_is_non_empty_string = value.present? && Integer(value, exception: false).nil? && Float(value, exception: false).nil?
-                      field_is_valid = !(expected_is_integer && actual_is_non_empty_string)
+                      field_is_valid = value_is_valid_for_field(field, value)
 
                       correct_value = field_is_valid ? value : nil
 
@@ -144,6 +139,20 @@ private
     else
       year = rows.first[9].to_s.strip.length.between?(1, 2) ? rows.first[9].to_i + 2000 : rows.first[9].to_i
       Date.new(year, rows.first[8].to_i, rows.first[7].to_i)
+    end
+  end
+
+  # this is needed as a string passed to an int attribute is by default mapped to '0'.
+  # this is bad as some questions will accept a '0'. so you could enter something invalid and not be told about it
+  def value_is_valid_for_field(field, value)
+    field_type = ROW_PARSER_CLASS.attribute_types[field]
+
+    if field_type.is_a?(ActiveModel::Type::Integer)
+      value.nil? || Integer(value, exception: false).present?
+    elsif field_type.is_a?(ActiveModel::Type::Decimal)
+      value.nil? || Float(value, exception: false).present?
+    else
+      true
     end
   end
 end
