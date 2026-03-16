@@ -7,7 +7,6 @@ on:
   pull_request:
     types:
       - closed
-  workflow_dispatch:
 
 env:
   app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
