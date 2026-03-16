@@ -127,7 +127,7 @@ RSpec.describe BulkUpload::Sales::Validator do
       before do
         log.owning_organisation = nil
         log.saledate = date
-        file.write(log_to_csv.default_field_numbers_row)
+        file.write(log_to_csv.default_field_numbers_row_for_year(year))
         file.write(log_to_csv.to_csv_row)
         file.rewind
       end
