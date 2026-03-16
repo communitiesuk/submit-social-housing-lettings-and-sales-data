@@ -18,7 +18,7 @@ defaults:
 jobs:
   infra:
     name: Deploy review app infrastructure
-    if: contains(github.event.pull_request.labels.*.name, 'deploy-review')
+    if: contains(github.event.pull_request.labels.*.name, 'review-app')
     uses: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/.github/workflows/create_review_app_infra.yml@main
     with:
       key: ${{ github.event.pull_request.number }}
@@ -28,7 +28,7 @@ jobs:
 
   code:
     name: Deploy review app code
-    if: contains(github.event.pull_request.labels.*.name, 'deploy-review')
+    if: contains(github.event.pull_request.labels.*.name, 'review-app')
     needs: [infra]
     uses: ./.github/workflows/aws_deploy.yml
     with:
@@ -42,7 +42,7 @@ jobs:
 
   comment:
     name: Add link to PR
-    if: contains(github.event.pull_request.labels.*.name, 'deploy-review')
+    if: contains(github.event.pull_request.labels.*.name, 'review-app')
     needs: [code]
     runs-on: ubuntu-latest
     permissions:
