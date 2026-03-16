@@ -1,4 +1,4 @@
-name: Review app teardown pipeline
+name: "Review App: Teardown"
 
 concurrency:
   group: review-${{ github.event.pull_request.number }}

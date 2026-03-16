@@ -1,4 +1,4 @@
-name: Review app pipeline
+name: "Review App: Deploy"
 
 concurrency:
   group: review-${{ github.event.pull_request.number }}

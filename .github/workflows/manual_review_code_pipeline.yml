@@ -1,4 +1,4 @@
-name: Manual review app code pipeline
+name: "Review App: Manual Code Redeploy"
 
 concurrency:
   group: review-${{ inputs.review_app_key }}
