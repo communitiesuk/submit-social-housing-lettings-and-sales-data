@@ -51,73 +51,73 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       field_22: "4BB",
       field_23: "E09000008",
       field_24: "1",
-      field_25: "2",
-      field_26: "1",
-      field_27: "3",
-      field_28: "32",
-      field_29: "M",
-      field_30: "12",
-      field_31: "28",
-      field_32: "1",
-      field_33: "1",
-      field_34: "3",
-      field_35: "32",
-      field_36: "F",
-      field_37: "17",
-      field_38: "28",
-      field_39: "2",
-      field_40: "1",
-      field_41: "1",
-      field_58: "1",
-      field_59: "1",
-      field_60: "A1",
-      field_61: "1AA",
-      field_62: "E09000008",
-      field_63: "3",
-      field_65: "3",
-      field_67: "5",
-      field_68: "3",
-      field_69: "3",
-      field_70: "30000",
+      field_26: "2",
+      field_27: "1",
+      field_28: "3",
+      field_29: "32",
+      field_30: "M",
+      field_33: "12",
+      field_34: "28",
+      field_35: "1",
+      field_36: "1",
+      field_37: "3",
+      field_38: "32",
+      field_39: "F",
+      field_42: "17",
+      field_43: "28",
+      field_44: "2",
+      field_45: "1",
+      field_46: "1",
       field_71: "1",
-      field_72: "15000",
-      field_73: "1",
-      field_74: "4",
-      field_75: "20000",
+      field_72: "1",
+      field_73: "A1",
+      field_74: "1AA",
+      field_75: "E09000008",
       field_76: "3",
-      field_79: "5",
-      field_80: "24",
+      field_78: "3",
+      field_80: "5",
       field_81: "3",
-      field_82: "2022",
-      field_83: "1",
+      field_82: "3",
+      field_83: "30000",
       field_84: "1",
-      field_85: "1",
-      field_107: "250000",
-      field_108: "25",
-      field_109: "1",
-      field_89: "5000",
-      field_90: "20",
-      field_96: "10",
-      field_97: "40",
+      field_85: "15000",
+      field_86: "1",
+      field_87: "4",
+      field_88: "20000",
+      field_89: "3",
+      field_92: "5",
+      field_93: "24",
+      field_94: "3",
+      field_95: "2022",
+      field_96: "1",
+      field_97: "1",
       field_98: "1",
-      field_99: "2",
-      field_94: "200",
-      field_91: "20000",
-      field_111: "800",
-      field_100: "05",
-      field_101: "04",
-      field_102: "2020",
-      field_103: "4",
-      field_104: "06",
-      field_105: "07",
-      field_106: "2023",
-      field_110: "900",
+      field_120: "250000",
+      field_121: "25",
       field_122: "1",
-      field_123: "1",
-      field_125: "2",
-      field_126: "Non-binary",
-      field_135: "1",
-      field_136: "150",
+      field_102: "5000",
+      field_103: "20",
+      field_109: "10",
+      field_110: "40",
+      field_111: "1",
+      field_112: "2",
+      field_107: "200",
+      field_104: "20000",
+      field_124: "800",
+      field_113: "05",
+      field_114: "04",
+      field_115: "2020",
+      field_116: "4",
+      field_117: "06",
+      field_118: "07",
+      field_119: "2023",
+      field_123: "900",
+      field_25: "1",
+      field_31: "1",
+      field_40: "2",
+      field_41: "Non-binary",
+      field_125: "1",
+      field_126: "150",
     }
   end
 
@@ -150,7 +150,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     context "when the only populated fields are empty strings or whitespace" do
       before do
         parser.field_6 = " "
-        parser.field_25 = ""
+        parser.field_26 = ""
       end
 
       it "returns true" do
@@ -179,11 +179,11 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
   end
 
   describe "previous postcode known" do
-    context "when field_59 is 1" do
+    context "when field_72 is 1" do
       let(:attributes) do
         {
           bulk_upload:,
-          field_59: 1,
+          field_72: 1,
         }
       end
 
@@ -192,11 +192,11 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       end
     end
 
-    context "when field_59 is 2" do
+    context "when field_72 is 2" do
       let(:attributes) do
         {
           bulk_upload:,
-          field_59: 2,
+          field_72: 2,
         }
       end
 
@@ -211,9 +211,9 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       let(:attributes) do
         {
           bulk_upload:,
-          field_70: "R", # income 1
-          field_72: "R", # income 2
-          field_75: "R", # savings
+          field_83: "R", # income 1
+          field_85: "R", # income 2
+          field_88: "R", # savings
         }
       end
 
@@ -234,9 +234,9 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       let(:attributes) do
         {
           bulk_upload:,
-          field_70: "30000", # income 1
-          field_72: "0", # income 2
-          field_75: "12420", # savings
+          field_83: "30000", # income 1
+          field_85: "0", # income 2
+          field_88: "12420", # savings
         }
       end
 
@@ -300,8 +300,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
 
         context "and case insensitive fields are set to lowercase" do
-          let(:case_insensitive_fields) { %w[field_29 field_36 field_44 field_48 field_52 field_56] }
-          let(:case_insensitive_integer_fields_with_r_option) { %w[field_28 field_35 field_43 field_47 field_51 field_55 field_64 field_75 field_70 field_72 field_90 field_118] }
+          let(:case_insensitive_fields) { %w[field_30 field_39 field_49 field_55 field_61 field_67] }
+          let(:case_insensitive_integer_fields_with_r_option) { %w[field_29 field_38 field_48 field_54 field_60 field_66 field_77 field_88 field_83 field_85 field_103 field_133] }
           let(:attributes) do
             valid_attributes
               .merge(case_insensitive_fields.each_with_object({}) { |field, h| h[field.to_sym] = valid_attributes[field.to_sym]&.downcase })
@@ -316,11 +316,11 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
       describe "#validate_nulls" do
         context "when non-setup questions are null" do
-          let(:attributes) { setup_section_params.merge({ field_29: "" }) }
+          let(:attributes) { setup_section_params.merge({ field_30: "" }) }
 
           it "fetches the question's check_answer_label if it exists" do
             parser.valid?
-            expect(parser.errors[:field_29]).to eql([I18n.t("validations.not_answered", question: "buyer 1’s sex registered at birth.")])
+            expect(parser.errors[:field_30]).to eql([I18n.t("validations.not_answered", question: "buyer 1’s sex registered at birth.")])
           end
         end
 
@@ -334,12 +334,12 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
 
         context "when an invalid value error has been added" do
-          let(:attributes) { setup_section_params.merge({ field_10: "2", field_32: "100" }) }
+          let(:attributes) { setup_section_params.merge({ field_10: "2", field_35: "100" }) }
 
           it "does not add an additional error" do
             parser.valid?
-            expect(parser.errors[:field_32].length).to eq(1)
-            expect(parser.errors[:field_32]).to include(match I18n.t("validations.sales.2026.bulk_upload.invalid_option", question: ""))
+            expect(parser.errors[:field_35].length).to eq(1)
+            expect(parser.errors[:field_35]).to include(match I18n.t("validations.sales.2026.bulk_upload.invalid_option", question: ""))
           end
         end
 
@@ -439,9 +439,9 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       let(:attributes) do
         {
           bulk_upload:,
-          field_28: "2",
-          field_43: "8",
-          field_36: "1",
+          field_29: "2",
+          field_48: "8",
+          field_39: "1",
         }
       end
 
@@ -810,9 +810,9 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           :field_17, # Address line 1
           :field_21, # Postcode
           :field_22, # Postcode
-          :field_28, # Buyer 1 age
-          :field_29, # Buyer 1 sex registered at birth
-          :field_32, # Buyer 1 working situation
+          :field_29, # Buyer 1 age
+          :field_30, # Buyer 1 sex registered at birth
+          :field_35, # Buyer 1 working situation
           :field_7, # Purchaser code
         ].each do |field|
           expect(parser.errors[field]).to include(error_message)
@@ -842,9 +842,9 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           :field_17, # Address line 1
           :field_21, # Postcode
           :field_22, # Postcode
-          :field_28, # Buyer 1 age
-          :field_29, # Buyer 1 sex registered at birth
-          :field_32, # Buyer 1 working situation
+          :field_29, # Buyer 1 age
+          :field_30, # Buyer 1 sex registered at birth
+          :field_35, # Buyer 1 working situation
           :field_7, # Purchaser code
         ].each do |field|
           expect(parser.errors[field]).to be_blank
@@ -885,31 +885,31 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       end
     end
 
-    describe "#field_115" do # percentage discount
+    describe "#field_130" do # percentage discount
       context "when percentage discount over 70" do
-        let(:attributes) { valid_attributes.merge({ field_8: "2", field_10: "2", field_11: "9", field_115: "71" }) }
+        let(:attributes) { valid_attributes.merge({ field_8: "2", field_10: "2", field_11: "9", field_130: "71" }) }
 
         it "returns correct error" do
           parser.valid?
-          expect(parser.errors.where(:field_115).map(&:message)).to include(I18n.t("validations.sales.2026.bulk_upload.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"))
+          expect(parser.errors.where(:field_130).map(&:message)).to include(I18n.t("validations.sales.2026.bulk_upload.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"))
         end
       end
 
       context "when percentage discount not over 70" do
-        let(:attributes) { valid_attributes.merge({ field_8: "2", field_10: "2", field_115: "70" }) }
+        let(:attributes) { valid_attributes.merge({ field_8: "2", field_10: "2", field_130: "70" }) }
 
         it "does not return error" do
           parser.valid?
-          expect(parser.errors.where(:field_115)).not_to be_present
+          expect(parser.errors.where(:field_130)).not_to be_present
         end
       end
 
       context "when percentage less than 0" do
-        let(:attributes) { valid_attributes.merge({ field_8: "2", field_10: "2", field_115: "-1" }) }
+        let(:attributes) { valid_attributes.merge({ field_8: "2", field_10: "2", field_130: "-1" }) }
 
         it "returns correct error" do
           parser.valid?
-          expect(parser.errors.where(:field_115).map(&:message)).to include(I18n.t("validations.sales.2026.bulk_upload.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"))
+          expect(parser.errors.where(:field_130).map(&:message)).to include(I18n.t("validations.sales.2026.bulk_upload.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"))
         end
       end
     end
@@ -1108,17 +1108,17 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     [
-      %w[age1_known details_known_1 age1 field_28 field_34 field_36],
-      %w[age2_known details_known_2 age2 field_35 field_34 field_36],
-      %w[age3_known details_known_3 age3 field_43 field_42 field_44],
-      %w[age4_known details_known_4 age4 field_47 field_46 field_48],
-      %w[age5_known details_known_5 age5 field_51 field_50 field_52],
-      %w[age6_known details_known_6 age6 field_55 field_54 field_56],
+      %w[age1_known details_known_1 age1 field_29 field_37 field_39],
+      %w[age2_known details_known_2 age2 field_38 field_37 field_39],
+      %w[age3_known details_known_3 age3 field_48 field_47 field_49],
+      %w[age4_known details_known_4 age4 field_54 field_53 field_55],
+      %w[age5_known details_known_5 age5 field_60 field_59 field_61],
+      %w[age6_known details_known_6 age6 field_66 field_65 field_67],
     ].each do |known, details_known, age, field, relationship, gender|
       describe "##{known} and ##{age}" do
         context "when #{field} is blank" do
           context "and person details are blank" do
-            let(:attributes) { setup_section_params.merge({ field.to_s => nil, relationship.to_sym => nil, gender.to_sym => nil, field_15: "1", field_41: "6" }) }
+            let(:attributes) { setup_section_params.merge({ field.to_s => nil, relationship.to_sym => nil, gender.to_sym => nil, field_15: "1", field_46: "6" }) }
 
             it "does not set ##{known}" do
               unless known == "age1_known"
@@ -1138,7 +1138,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           end
 
           context "and person details are given" do
-            let(:attributes) { setup_section_params.merge({ field.to_sym => nil, relationship.to_sym => "C", gender.to_sym => "X", field_15: "1", field_41: "6" }) }
+            let(:attributes) { setup_section_params.merge({ field.to_sym => nil, relationship.to_sym => "C", gender.to_sym => "X", field_15: "1", field_46: "6" }) }
 
             it "does not set ##{age}" do
               parser.valid?
@@ -1148,7 +1148,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
 
         context "when #{field} is R" do
-          let(:attributes) { setup_section_params.merge({ field.to_s => "R", field_14: "1", field_41: "6", field_15: "1" }) }
+          let(:attributes) { setup_section_params.merge({ field.to_s => "R", field_14: "1", field_46: "6", field_15: "1" }) }
 
           it "sets ##{known} 1" do
             expect(parser.log.public_send(known)).to be(1)
@@ -1160,7 +1160,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
 
         context "when #{field} is a number" do
-          let(:attributes) { setup_section_params.merge({ field.to_s => "50", field_14: "1", field_41: "6", field_15: "1" }) }
+          let(:attributes) { setup_section_params.merge({ field.to_s => "50", field_14: "1", field_46: "6", field_15: "1" }) }
 
           it "sets ##{known} to 0" do
             expect(parser.log.public_send(known)).to be(0)
@@ -1172,7 +1172,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
 
         context "when #{field} is a non-sensical value" do
-          let(:attributes) { setup_section_params.merge({ field.to_s => "A", field_14: "1", field_41: "6", field_15: "1" }) }
+          let(:attributes) { setup_section_params.merge({ field.to_s => "A", field_14: "1", field_46: "6", field_15: "1" }) }
 
           it "sets ##{known} to 0" do
             expect(parser.log.public_send(known)).to be(0)
@@ -1187,15 +1187,15 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
     describe "relationship field mappings" do
       [
-        %w[field_34 relat2 2],
-        %w[field_42 relat3 3],
-        %w[field_46 relat4 4],
-        %w[field_50 relat5 5],
-        %w[field_54 relat6 6],
+        %w[field_37 relat2 2],
+        %w[field_47 relat3 3],
+        %w[field_53 relat4 4],
+        %w[field_59 relat5 5],
+        %w[field_65 relat6 6],
       ].each do |input_field, relationship_attribute, person_num|
         describe input_field.to_s do
           context "when #{input_field} is 1" do
-            let(:attributes) { setup_section_params.merge({ input_field.to_sym => "1", field_41: "6" }) }
+            let(:attributes) { setup_section_params.merge({ input_field.to_sym => "1", field_46: "6" }) }
 
             it "sets relationship to P" do
               expect(parser.log.public_send(relationship_attribute)).to eq("P")
@@ -1203,7 +1203,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           end
 
           context "when #{input_field} is 2" do
-            let(:attributes) { setup_section_params.merge({ input_field.to_sym => "2", field_41: "6" }) }
+            let(:attributes) { setup_section_params.merge({ input_field.to_sym => "2", field_46: "6" }) }
 
             it "sets relationship to X" do
               expect(parser.log.public_send(relationship_attribute)).to eq("X")
@@ -1211,7 +1211,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           end
 
           context "when #{input_field} is 3" do
-            let(:attributes) { setup_section_params.merge({ input_field.to_sym => "3", field_41: "6" }) }
+            let(:attributes) { setup_section_params.merge({ input_field.to_sym => "3", field_46: "6" }) }
 
             it "sets relationship to R" do
               expect(parser.log.public_send(relationship_attribute)).to eq("R")
@@ -1219,7 +1219,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           end
 
           context "when #{input_field} is 4" do
-            let(:attributes) { setup_section_params.merge({ input_field.to_sym => "4", field_41: "6" }) }
+            let(:attributes) { setup_section_params.merge({ input_field.to_sym => "4", field_46: "6" }) }
 
             it "gives a validation error" do
               parser.valid?
@@ -1231,102 +1231,102 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       end
     end
 
-    describe "field_39" do # ecstat2
+    describe "field_44" do # ecstat2
       context "when buyer 2 has no age but has ecstat as child" do
-        let(:attributes) { valid_attributes.merge({ field_35: nil, field_39: "9" }) }
+        let(:attributes) { valid_attributes.merge({ field_38: nil, field_44: "9" }) }
 
         it "a custom validation is applied" do
           parser.valid?
 
-          expect(parser.errors[:field_39]).to include I18n.t("validations.sales.2026.bulk_upload.ecstat2.buyer_cannot_be_child")
+          expect(parser.errors[:field_44]).to include I18n.t("validations.sales.2026.bulk_upload.ecstat2.buyer_cannot_be_child")
         end
       end
 
       context "when buyer 2 is under 16" do
-        let(:attributes) { valid_attributes.merge({ field_35: "9" }) }
+        let(:attributes) { valid_attributes.merge({ field_38: "9" }) }
 
         it "a custom validation is applied" do
           parser.valid?
 
           validation_message = "Buyer 2’s age must be between 16 and 110."
-          expect(parser.errors[:field_35]).to include validation_message
+          expect(parser.errors[:field_38]).to include validation_message
         end
       end
 
       context "when buyer 2 is over 16 but has ecstat as child" do
-        let(:attributes) { valid_attributes.merge({ field_35: "17", field_39: "9" }) }
+        let(:attributes) { valid_attributes.merge({ field_38: "17", field_44: "9" }) }
 
         it "a custom validation is applied" do
           parser.valid?
 
-          expect(parser.errors[:field_39]).to include I18n.t("validations.sales.2026.bulk_upload.ecstat2.buyer_cannot_be_over_16_and_child")
-          expect(parser.errors[:field_35]).to include I18n.t("validations.sales.2026.bulk_upload.age2.buyer_cannot_be_over_16_and_child")
+          expect(parser.errors[:field_44]).to include I18n.t("validations.sales.2026.bulk_upload.ecstat2.buyer_cannot_be_over_16_and_child")
+          expect(parser.errors[:field_38]).to include I18n.t("validations.sales.2026.bulk_upload.age2.buyer_cannot_be_over_16_and_child")
         end
       end
 
       context "when person 2 a child but not a buyer" do
-        let(:attributes) { valid_attributes.merge({ field_12: 2, field_35: "10", field_39: "9" }) }
+        let(:attributes) { valid_attributes.merge({ field_12: 2, field_38: "10", field_44: "9" }) }
 
         it "does not add errors to their age and ecstat fields" do
           parser.valid?
-          expect(parser.errors[:field_35]).to be_empty
-          expect(parser.errors[:field_39]).to be_empty
+          expect(parser.errors[:field_38]).to be_empty
+          expect(parser.errors[:field_44]).to be_empty
         end
       end
     end
 
-    describe "field_32" do # ecstat1
+    describe "field_35" do # ecstat1
       context "when buyer 1 has no age but has ecstat as child" do
-        let(:attributes) { valid_attributes.merge({ field_28: nil, field_32: "9" }) }
+        let(:attributes) { valid_attributes.merge({ field_29: nil, field_35: "9" }) }
 
         it "a custom validation is applied" do
           parser.valid?
 
-          expect(parser.errors[:field_32]).to include I18n.t("validations.sales.2026.bulk_upload.ecstat1.buyer_cannot_be_child")
+          expect(parser.errors[:field_35]).to include I18n.t("validations.sales.2026.bulk_upload.ecstat1.buyer_cannot_be_child")
         end
       end
 
       context "when buyer 1 is under 16" do
-        let(:attributes) { valid_attributes.merge({ field_28: "9" }) }
+        let(:attributes) { valid_attributes.merge({ field_29: "9" }) }
 
         it "a custom validation is applied" do
           parser.valid?
 
           validation_message = "Buyer 1’s age must be between 16 and 110."
-          expect(parser.errors[:field_28]).to include validation_message
+          expect(parser.errors[:field_29]).to include validation_message
         end
       end
 
       context "when buyer 1 is over 16 but has ecstat as child" do
-        let(:attributes) { valid_attributes.merge({ field_28: "17", field_32: "9" }) }
+        let(:attributes) { valid_attributes.merge({ field_29: "17", field_35: "9" }) }
 
         it "a custom validation is applied" do
           parser.valid?
 
-          expect(parser.errors[:field_32]).to include I18n.t("validations.sales.2026.bulk_upload.ecstat1.buyer_cannot_be_over_16_and_child")
-          expect(parser.errors[:field_28]).to include I18n.t("validations.sales.2026.bulk_upload.age1.buyer_cannot_be_over_16_and_child")
+          expect(parser.errors[:field_35]).to include I18n.t("validations.sales.2026.bulk_upload.ecstat1.buyer_cannot_be_over_16_and_child")
+          expect(parser.errors[:field_29]).to include I18n.t("validations.sales.2026.bulk_upload.age1.buyer_cannot_be_over_16_and_child")
         end
       end
     end
 
-    describe "#field_33" do # will buyer1 live in property?
+    describe "#field_36" do # will buyer1 live in property?
       context "when not a possible value" do
-        let(:attributes) { valid_attributes.merge({ field_10: "2", field_33: "3" }) }
+        let(:attributes) { valid_attributes.merge({ field_10: "2", field_36: "3" }) }
 
         it "is not valid" do
           parser.valid?
-          expect(parser.errors).to include(:field_33)
+          expect(parser.errors).to include(:field_36)
         end
       end
     end
 
-    describe "#field_109" do # staircasing mortgageused
+    describe "#field_122" do # staircasing mortgageused
       context "when invalid value" do
-        let(:attributes) { setup_section_params.merge(field_109: "4") }
+        let(:attributes) { setup_section_params.merge(field_122: "4") }
 
         it "returns correct errors" do
           parser.valid?
-          expect(parser.errors[:field_109]).to include(I18n.t("validations.sales.2026.bulk_upload.invalid_option", question: "was a mortgage used for this staircasing transaction?"))
+          expect(parser.errors[:field_122]).to include(I18n.t("validations.sales.2026.bulk_upload.invalid_option", question: "was a mortgage used for this staircasing transaction?"))
 
           parser.log.blank_invalid_non_setup_fields!
           parser.log.save!
@@ -1335,44 +1335,44 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       end
 
       context "when value is 3 and stairowned is not 100" do
-        let(:attributes) { setup_section_params.merge(field_109: "3", field_10: "1", field_96: "50", field_97: "99", field_120: nil) }
+        let(:attributes) { setup_section_params.merge(field_122: "3", field_10: "1", field_109: "50", field_110: "99", field_135: nil) }
 
         it "does not add errors" do
           parser.valid?
-          expect(parser.errors[:field_109]).to be_empty
+          expect(parser.errors[:field_122]).to be_empty
         end
       end
 
       context "when value is 3 and stairowned is not answered" do
-        let(:attributes) { setup_section_params.merge(field_109: "3", field_10: "1", field_96: "50", field_97: nil, field_120: nil) }
+        let(:attributes) { setup_section_params.merge(field_122: "3", field_10: "1", field_109: "50", field_110: nil, field_135: nil) }
 
         it "does not add errors" do
           parser.valid?
-          expect(parser.errors[:field_109]).to be_empty
+          expect(parser.errors[:field_122]).to be_empty
         end
       end
 
       context "when value is 3 and stairowned is 100" do
-        let(:attributes) { setup_section_params.merge(field_109: "3", field_10: "1", field_96: "50", field_97: "100", field_120: nil) }
+        let(:attributes) { setup_section_params.merge(field_122: "3", field_10: "1", field_109: "50", field_110: "100", field_135: nil) }
 
         it "does not add errors and sets mortgage used to 3" do
           parser.valid?
           expect(parser.log.mortgageused).to eq(3)
           expect(parser.log.stairowned).to eq(100)
           expect(parser.log.deposit).to be_nil
-          expect(parser.errors[:field_109]).to be_empty
-          expect(parser.errors[:field_120]).to be_empty
+          expect(parser.errors[:field_122]).to be_empty
+          expect(parser.errors[:field_135]).to be_empty
         end
       end
     end
 
-    describe "#field_88" do # shared ownership mortgageused
+    describe "#field_101" do # shared ownership mortgageused
       context "when invalid value" do
-        let(:attributes) { setup_section_params.merge(field_10: "2", field_88: "4") }
+        let(:attributes) { setup_section_params.merge(field_10: "2", field_101: "4") }
 
         it "returns correct errors" do
           parser.valid?
-          expect(parser.errors[:field_88]).to include(I18n.t("validations.sales.2026.bulk_upload.invalid_option", question: "was a mortgage used for the purchase of this property? - Shared ownership."))
+          expect(parser.errors[:field_101]).to include(I18n.t("validations.sales.2026.bulk_upload.invalid_option", question: "was a mortgage used to buy this property?"))
 
           parser.log.blank_invalid_non_setup_fields!
           parser.log.save!
@@ -1381,16 +1381,16 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       end
 
       context "when value is 3 and stairowned is not answered" do
-        let(:attributes) { setup_section_params.merge(field_88: "3", field_10: "2", field_96: "50", field_97: nil, field_120: nil) }
+        let(:attributes) { setup_section_params.merge(field_101: "3", field_10: "2", field_109: "50", field_110: nil, field_135: nil) }
 
         it "does not add errors" do
           parser.valid?
-          expect(parser.errors[:field_88]).to be_empty
+          expect(parser.errors[:field_101]).to be_empty
         end
       end
 
       context "with non staircasing mortgage error" do
-        let(:attributes) { setup_section_params.merge(field_9: "30", field_88: "1", field_89: "10000", field_91: "5000", field_86: "30000", field_87: "28", field_10: "2") }
+        let(:attributes) { setup_section_params.merge(field_9: "30", field_101: "1", field_102: "10000", field_104: "5000", field_99: "30000", field_100: "28", field_10: "2") }
 
         it "does not add a BU error on type (because it's a setup field and would block log creation)" do
           parser.valid?
@@ -1399,59 +1399,59 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
         it "includes errors on other related fields" do
           parser.valid?
-          expect(parser.errors[:field_89]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
-          expect(parser.errors[:field_91]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
-          expect(parser.errors[:field_86]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
-          expect(parser.errors[:field_87]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
+          expect(parser.errors[:field_102]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
+          expect(parser.errors[:field_104]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
+          expect(parser.errors[:field_99]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
+          expect(parser.errors[:field_100]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
         end
 
         it "does not add errors to other ownership type fields" do
           parser.valid?
-          expect(parser.errors[:field_117]).to be_empty
+          expect(parser.errors[:field_132]).to be_empty
+          expect(parser.errors[:field_135]).to be_empty
+          expect(parser.errors[:field_128]).to be_empty
           expect(parser.errors[:field_120]).to be_empty
-          expect(parser.errors[:field_113]).to be_empty
-          expect(parser.errors[:field_107]).to be_empty
-          expect(parser.errors[:field_108]).to be_empty
-          expect(parser.errors[:field_116]).to be_empty
-          expect(parser.errors[:field_109]).to be_empty
+          expect(parser.errors[:field_121]).to be_empty
+          expect(parser.errors[:field_131]).to be_empty
+          expect(parser.errors[:field_122]).to be_empty
         end
       end
     end
 
-    describe "#field_116" do
-      let(:attributes) { valid_attributes.merge({ field_8: "2", field_11: "9", field_116: "3" }) }
+    describe "#field_131" do
+      let(:attributes) { valid_attributes.merge({ field_8: "2", field_11: "9", field_131: "3" }) }
 
       it "allows 3 (don't know) as an option for discounted ownership" do
         parser.valid?
-        expect(parser.errors[:field_116]).to be_empty
+        expect(parser.errors[:field_131]).to be_empty
       end
 
       context "when validate_discounted_ownership_value is triggered" do
-        let(:attributes) { setup_section_params.merge(field_113: 100, field_120: 100, field_8: 2, field_10: 2, field_11: 9, field_116: 2, field_115: 10) }
+        let(:attributes) { setup_section_params.merge(field_128: 100, field_135: 100, field_8: 2, field_10: 2, field_11: 9, field_131: 2, field_130: 10) }
 
         it "only adds errors to the discounted ownership field" do
           parser.valid?
-          expect(parser.errors[:field_88]).to be_empty
-          expect(parser.errors[:field_117]).to include("The mortgage and cash deposit (£100.00) added together is £100.00.</br></br>The full purchase price (£100.00) subtracted by the sum of the full purchase price (£100.00) multiplied by the percentage discount (10.0%) is £90.00.</br></br>These two amounts should be the same.")
-          expect(parser.errors[:field_126]).to be_empty
+          expect(parser.errors[:field_101]).to be_empty
+          expect(parser.errors[:field_132]).to include("The mortgage and cash deposit (£100.00) added together is £100.00.</br></br>The full purchase price (£100.00) subtracted by the sum of the full purchase price (£100.00) multiplied by the percentage discount (10.0%) is £90.00.</br></br>These two amounts should be the same.")
+          expect(parser.errors[:field_41]).to be_empty
         end
       end
     end
 
     describe "soft validations" do
       context "when soft validation is triggered" do
-        let(:attributes) { valid_attributes.merge({ field_10: 2, field_28: 22, field_32: 5 }) }
+        let(:attributes) { valid_attributes.merge({ field_10: 2, field_29: 22, field_35: 5 }) }
 
         it "adds an error to the relevant fields" do
           parser.valid?
-          expect(parser.errors.where(:field_28, category: :soft_validation)).to be_present
-          expect(parser.errors.where(:field_32, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_29, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_35, category: :soft_validation)).to be_present
         end
 
         it "populates with correct error message" do
           parser.valid?
-          expect(parser.errors.where(:field_28, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired. The minimum expected retirement age in England is 66.")
-          expect(parser.errors.where(:field_32, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired. The minimum expected retirement age in England is 66.")
+          expect(parser.errors.where(:field_29, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired. The minimum expected retirement age in England is 66.")
+          expect(parser.errors.where(:field_35, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired. The minimum expected retirement age in England is 66.")
         end
       end
     end
@@ -1468,16 +1468,16 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       end
     end
 
-    describe "field_90" do
-      context "when field_90 is a number" do
-        let(:field_90_number_attributes) { valid_attributes.merge({ field_90: 20 }) }
+    describe "field_103" do
+      context "when field_103 is a number" do
+        let(:field_90_number_attributes) { valid_attributes.merge({ field_103: 20 }) }
 
         context "and buyer was interviewed" do
           let(:attributes) { field_90_number_attributes.merge({ field_14: 2 }) }
 
           it "does not add an error" do
             parser.valid?
-            expect(parser.errors.where(:field_90)).not_to be_present
+            expect(parser.errors.where(:field_103)).not_to be_present
           end
         end
 
@@ -1486,20 +1486,20 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
           it "does not add an error" do
             parser.valid?
-            expect(parser.errors.where(:field_90)).not_to be_present
+            expect(parser.errors.where(:field_103)).not_to be_present
           end
         end
       end
 
-      context "when field_90 is R" do
-        let(:field_90_number_attributes) { valid_attributes.merge({ field_90: "R" }) }
+      context "when field_103 is R" do
+        let(:field_90_number_attributes) { valid_attributes.merge({ field_103: "R" }) }
 
         context "and buyer was interviewed" do
           let(:attributes) { field_90_number_attributes.merge({ field_14: 2 }) }
 
           it "adds an error" do
             parser.valid?
-            expect(parser.errors.where(:field_90)).to be_present
+            expect(parser.errors.where(:field_103)).to be_present
           end
         end
 
@@ -1508,20 +1508,20 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
           it "does not add an error" do
             parser.valid?
-            expect(parser.errors.where(:field_90)).not_to be_present
+            expect(parser.errors.where(:field_103)).not_to be_present
           end
         end
       end
 
-      context "when field_90 is neither a number nor R" do
-        let(:field_90_number_attributes) { valid_attributes.merge({ field_90: "something" }) }
+      context "when field_103 is neither a number nor R" do
+        let(:field_90_number_attributes) { valid_attributes.merge({ field_103: "something" }) }
 
         context "and buyer was interviewed" do
           let(:attributes) { field_90_number_attributes.merge({ field_14: 2 }) }
 
           it "adds an error" do
             parser.valid?
-            expect(parser.errors.where(:field_90)).to be_present
+            expect(parser.errors.where(:field_103)).to be_present
           end
         end
 
@@ -1530,7 +1530,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
           it "adds an error" do
             parser.valid?
-            expect(parser.errors.where(:field_90)).to be_present
+            expect(parser.errors.where(:field_103)).to be_present
           end
         end
       end
@@ -1615,8 +1615,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     describe "#ethnic_group" do
-      context "when field_30 is 20" do
-        let(:attributes) { setup_section_params.merge({ field_30: "20" }) }
+      context "when field_33 is 20" do
+        let(:attributes) { setup_section_params.merge({ field_33: "20" }) }
 
         it "is correctly set" do
           expect(parser.log.ethnic_group).to be(0)
@@ -1625,14 +1625,14 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     describe "#ethnic_group2" do
-      let(:attributes) { setup_section_params.merge({ field_37: "1" }) }
+      let(:attributes) { setup_section_params.merge({ field_42: "1" }) }
 
       it "is correctly set" do
         expect(parser.log.ethnic_group2).to be(0)
       end
 
-      context "when field_37 is 20" do
-        let(:attributes) { setup_section_params.merge({ field_37: "20" }) }
+      context "when field_42 is 20" do
+        let(:attributes) { setup_section_params.merge({ field_42: "20" }) }
 
         it "is correctly set" do
           expect(parser.log.ethnic_group2).to be(0)
@@ -1641,7 +1641,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     describe "#ethnicbuy2" do
-      let(:attributes) { setup_section_params.merge({ field_37: "1" }) }
+      let(:attributes) { setup_section_params.merge({ field_42: "1" }) }
 
       it "is correctly set" do
         expect(parser.log.ethnicbuy2).to be(1)
@@ -1649,8 +1649,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     describe "#nationality_all" do
-      context "when field_31 is a 3 digit nationality code" do
-        let(:attributes) { setup_section_params.merge({ field_31: "036" }) }
+      context "when field_34 is a 3 digit nationality code" do
+        let(:attributes) { setup_section_params.merge({ field_34: "036" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all).to be(36)
@@ -1658,8 +1658,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_31 is a nationality code without the trailing 0s" do
-        let(:attributes) { setup_section_params.merge({ field_31: "36" }) }
+      context "when field_34 is a nationality code without the trailing 0s" do
+        let(:attributes) { setup_section_params.merge({ field_34: "36" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all).to be(36)
@@ -1667,8 +1667,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_31 is a nationality code with trailing 0s" do
-        let(:attributes) { setup_section_params.merge({ field_31: "0036" }) }
+      context "when field_34 is a nationality code with trailing 0s" do
+        let(:attributes) { setup_section_params.merge({ field_34: "0036" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all).to be(36)
@@ -1676,8 +1676,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_31 is 0" do
-        let(:attributes) { setup_section_params.merge({ field_31: "0" }) }
+      context "when field_34 is 0" do
+        let(:attributes) { setup_section_params.merge({ field_34: "0" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all).to be(0)
@@ -1685,8 +1685,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_31 is 000" do
-        let(:attributes) { setup_section_params.merge({ field_31: "000" }) }
+      context "when field_34 is 000" do
+        let(:attributes) { setup_section_params.merge({ field_34: "000" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all).to be(0)
@@ -1694,8 +1694,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_31 is 0000" do
-        let(:attributes) { setup_section_params.merge({ field_31: "0000" }) }
+      context "when field_34 is 0000" do
+        let(:attributes) { setup_section_params.merge({ field_34: "0000" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all).to be(0)
@@ -1703,8 +1703,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_31 is 826" do
-        let(:attributes) { setup_section_params.merge({ field_31: "826" }) }
+      context "when field_34 is 826" do
+        let(:attributes) { setup_section_params.merge({ field_34: "826" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all).to be(826)
@@ -1712,8 +1712,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_31 is 826 with trailing 0s" do
-        let(:attributes) { setup_section_params.merge({ field_31: "0826" }) }
+      context "when field_34 is 826 with trailing 0s" do
+        let(:attributes) { setup_section_params.merge({ field_34: "0826" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all).to be(826)
@@ -1721,21 +1721,21 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_31 is not a valid option" do
-        let(:attributes) { setup_section_params.merge({ field_31: "123123" }) }
+      context "when field_34 is not a valid option" do
+        let(:attributes) { setup_section_params.merge({ field_34: "123123" }) }
 
         it "is correctly set" do
           parser.valid?
           expect(parser.log.nationality_all).to be_nil
           expect(parser.log.nationality_all_group).to be_nil
-          expect(parser.errors["field_31"]).to include(I18n.t("validations.sales.2026.bulk_upload.nationality.invalid"))
+          expect(parser.errors["field_34"]).to include(I18n.t("validations.sales.2026.bulk_upload.nationality.invalid"))
         end
       end
     end
 
     describe "#nationality_all_buyer2" do
-      context "when field_38 is a 3 digit nationality code" do
-        let(:attributes) { setup_section_params.merge({ field_38: "036" }) }
+      context "when field_43 is a 3 digit nationality code" do
+        let(:attributes) { setup_section_params.merge({ field_43: "036" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all_buyer2).to be(36)
@@ -1743,8 +1743,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_38 is a nationality code without the trailing 0s" do
-        let(:attributes) { setup_section_params.merge({ field_38: "36" }) }
+      context "when field_43 is a nationality code without the trailing 0s" do
+        let(:attributes) { setup_section_params.merge({ field_43: "36" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all_buyer2).to be(36)
@@ -1752,8 +1752,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_38 is a nationality code with trailing 0s" do
-        let(:attributes) { setup_section_params.merge({ field_38: "0036" }) }
+      context "when field_43 is a nationality code with trailing 0s" do
+        let(:attributes) { setup_section_params.merge({ field_43: "0036" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all_buyer2).to be(36)
@@ -1761,8 +1761,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_38 is 0" do
-        let(:attributes) { setup_section_params.merge({ field_38: "0" }) }
+      context "when field_43 is 0" do
+        let(:attributes) { setup_section_params.merge({ field_43: "0" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all_buyer2).to be(0)
@@ -1770,8 +1770,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_38 is 000" do
-        let(:attributes) { setup_section_params.merge({ field_38: "000" }) }
+      context "when field_43 is 000" do
+        let(:attributes) { setup_section_params.merge({ field_43: "000" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all_buyer2).to be(0)
@@ -1779,8 +1779,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_38 is 0000" do
-        let(:attributes) { setup_section_params.merge({ field_38: "0000" }) }
+      context "when field_43 is 0000" do
+        let(:attributes) { setup_section_params.merge({ field_43: "0000" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all_buyer2).to be(0)
@@ -1788,8 +1788,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_38 is 826" do
-        let(:attributes) { setup_section_params.merge({ field_38: "826" }) }
+      context "when field_43 is 826" do
+        let(:attributes) { setup_section_params.merge({ field_43: "826" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all_buyer2).to be(826)
@@ -1797,8 +1797,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_38 is 826 with trailing 0s" do
-        let(:attributes) { setup_section_params.merge({ field_38: "0826" }) }
+      context "when field_43 is 826 with trailing 0s" do
+        let(:attributes) { setup_section_params.merge({ field_43: "0826" }) }
 
         it "is correctly set" do
           expect(parser.log.nationality_all_buyer2).to be(826)
@@ -1806,20 +1806,20 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_38 is not a valid option" do
-        let(:attributes) { setup_section_params.merge({ field_38: "123123" }) }
+      context "when field_43 is not a valid option" do
+        let(:attributes) { setup_section_params.merge({ field_43: "123123" }) }
 
         it "is correctly set" do
           parser.valid?
           expect(parser.log.nationality_all_buyer2).to be_nil
           expect(parser.log.nationality_all_buyer2_group).to be_nil
-          expect(parser.errors["field_38"]).to include(I18n.t("validations.sales.2026.bulk_upload.nationality.invalid"))
+          expect(parser.errors["field_43"]).to include(I18n.t("validations.sales.2026.bulk_upload.nationality.invalid"))
         end
       end
     end
 
     describe "#buy2living" do
-      let(:attributes) { setup_section_params.merge({ field_63: "1" }) }
+      let(:attributes) { setup_section_params.merge({ field_76: "1" }) }
 
       it "is correctly set" do
         expect(parser.log.buy2living).to be(1)
@@ -1827,7 +1827,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     describe "#prevtenbuy2" do
-      let(:attributes) { setup_section_params.merge({ field_64: "R" }) }
+      let(:attributes) { setup_section_params.merge({ field_77: "R" }) }
 
       it "is correctly set" do
         expect(parser.log.prevtenbuy2).to be(0)
@@ -1835,7 +1835,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     describe "#hhregres" do
-      let(:attributes) { setup_section_params.merge({ field_65: "1" }) }
+      let(:attributes) { setup_section_params.merge({ field_78: "1" }) }
 
       it "is correctly set" do
         expect(parser.log.hhregres).to be(1)
@@ -1843,7 +1843,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     describe "#hhregresstill" do
-      let(:attributes) { setup_section_params.merge({ field_66: "4" }) }
+      let(:attributes) { setup_section_params.merge({ field_79: "4" }) }
 
       it "is correctly set" do
         expect(parser.log.hhregresstill).to be(4)
@@ -1851,7 +1851,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     describe "#prevshared" do
-      let(:attributes) { setup_section_params.merge({ field_77: "3" }) }
+      let(:attributes) { setup_section_params.merge({ field_90: "3" }) }
 
       it "is correctly set" do
         expect(parser.log.prevshared).to be(3)
@@ -1859,7 +1859,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     describe "#staircasesale" do
-      let(:attributes) { setup_section_params.merge({ field_98: "1" }) }
+      let(:attributes) { setup_section_params.merge({ field_111: "1" }) }
 
       it "is correctly set" do
         expect(parser.log.staircasesale).to be(1)
@@ -1877,7 +1877,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
       context "when shared ownership" do
         context "when prevten is a social housing type" do
-          let(:attributes) { valid_attributes.merge({ field_8: "1", field_58: "1" }) }
+          let(:attributes) { valid_attributes.merge({ field_8: "1", field_71: "1" }) }
 
           it "is set to yes" do
             expect(parser.log.soctenant).to be(1)
@@ -1886,7 +1886,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
         context "when prevten is not a social housing type" do
           context "and prevtenbuy2 is a social housing type" do
-            let(:attributes) { valid_attributes.merge({ field_8: "1", field_58: "3", field_64: "2" }) }
+            let(:attributes) { valid_attributes.merge({ field_8: "1", field_71: "3", field_77: "2" }) }
 
             it "is set to yes" do
               expect(parser.log.soctenant).to be(1)
@@ -1894,7 +1894,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           end
 
           context "and prevtenbuy2 is not a social housing type" do
-            let(:attributes) { valid_attributes.merge({ field_8: "1", field_58: "3", field_64: "4" }) }
+            let(:attributes) { valid_attributes.merge({ field_8: "1", field_71: "3", field_77: "4" }) }
 
             it "is set to no" do
               expect(parser.log.soctenant).to be(2)
@@ -1902,7 +1902,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           end
 
           context "and prevtenbuy2 is blank" do
-            let(:attributes) { valid_attributes.merge({ field_8: "1", field_58: "3", field_64: nil }) }
+            let(:attributes) { valid_attributes.merge({ field_8: "1", field_71: "3", field_77: nil }) }
 
             it "is set to no" do
               expect(parser.log.soctenant).to be(2)
@@ -1913,7 +1913,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     describe "with living before purchase years for shared ownership more than 0" do
-      let(:attributes) { setup_section_params.merge({ field_8: "1", field_79: "1" }) }
+      let(:attributes) { setup_section_params.merge({ field_8: "1", field_92: "1" }) }
 
       it "is sets living before purchase asked to yes and sets the correct living before purchase years" do
         expect(parser.log.proplen_asked).to be(0)
@@ -1922,7 +1922,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     describe "with living before purchase years for discounted ownership more than 0" do
-      let(:attributes) { setup_section_params.merge({ field_8: "2", field_112: "1" }) }
+      let(:attributes) { setup_section_params.merge({ field_8: "2", field_127: "1" }) }
 
       it "is sets living before purchase asked to yes and sets the correct living before purchase years" do
         expect(parser.log.proplen_asked).to be(0)
@@ -1931,7 +1931,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     describe "with living before purchase years for shared ownership set to 0" do
-      let(:attributes) { setup_section_params.merge({ field_8: "1", field_79: "0" }) }
+      let(:attributes) { setup_section_params.merge({ field_8: "1", field_92: "0" }) }
 
       it "is sets living before purchase asked to no" do
         expect(parser.log.proplen_asked).to be(1)
@@ -1940,7 +1940,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     describe "with living before purchase 0 years for discounted ownership set to 0" do
-      let(:attributes) { setup_section_params.merge({ field_8: "2", field_112: "0" }) }
+      let(:attributes) { setup_section_params.merge({ field_8: "2", field_127: "0" }) }
 
       it "is sets living before purchase asked to no" do
         expect(parser.log.proplen_asked).to be(1)
@@ -1949,7 +1949,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     context "when mscharge is given, but is set to 0 for shared ownership" do
-      let(:attributes) { valid_attributes.merge(field_94: "0") }
+      let(:attributes) { valid_attributes.merge(field_107: "0") }
 
       it "does not override variables correctly" do
         log = parser.log
@@ -1959,7 +1959,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     context "when mscharge is given, but is set to 0 for discounted ownership" do
-      let(:attributes) { valid_attributes.merge(field_8: "2", field_121: "0") }
+      let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "0") }
 
       it "does not override variables correctly" do
         log = parser.log
@@ -2042,8 +2042,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     describe "mortlen amd mortlen_known" do
-      context "when field_90 is a number" do
-        let(:field_90_number_attributes) { valid_attributes.merge({ field_90: 20 }) }
+      context "when field_103 is a number" do
+        let(:field_90_number_attributes) { valid_attributes.merge({ field_103: 20 }) }
 
         context "and buyer was interviewed" do
           let(:attributes) { field_90_number_attributes.merge({ field_14: 2 }) }
@@ -2074,8 +2074,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
       end
 
-      context "when field_90 is R" do
-        let(:field_90_number_attributes) { valid_attributes.merge({ field_90: "R" }) }
+      context "when field_103 is R" do
+        let(:field_90_number_attributes) { valid_attributes.merge({ field_103: "R" }) }
 
         context "and buyer was not interviewed" do
           let(:attributes) { field_90_number_attributes.merge({ field_14: 1 }) }
