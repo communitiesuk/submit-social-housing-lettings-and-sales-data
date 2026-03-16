@@ -703,6 +703,18 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         end
       end
     end
+
+    context "when mortgageused is don't know" do
+      let(:record) { FactoryBot.build(:sales_log, :saledate_today, mortgageused: 3, deposit: 10_000, value: 100_000, discount: 10, ownershipsch: 2, type: 9) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_discounted_ownership_value(record)
+        expect(record.errors["mortgage"]).to be_empty
+        expect(record.errors["value"]).to be_empty
+        expect(record.errors["deposit"]).to be_empty
+        expect(record.errors["discount"]).to be_empty
+      end
+    end
   end
 
   describe "#validate_outright_sale_value_matches_mortgage_plus_deposit" do
