@@ -116,7 +116,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       field_31: "1",
       field_40: "2",
       field_41: "Non-binary",
-      field_125: "1",
+      field_125: "100",
       field_126: "150",
     }
   end
@@ -1945,7 +1945,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     context "when mscharge is given, but is set to 0 for shared ownership" do
-      let(:attributes) { valid_attributes.merge(field_107: "0") }
+      let(:attributes) { valid_attributes.merge(field_125: "0") }
 
       it "does not override variables correctly" do
         log = parser.log
