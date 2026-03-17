@@ -18,7 +18,6 @@ class SalesLog < Log
   include Validations::Sales::SoftValidations
   include Validations::SoftValidations
   include MoneyFormattingHelper
-  include CollectionTimeHelper
 
   self.inheritance_column = :_type_disabled
 
@@ -38,8 +37,6 @@ class SalesLog < Log
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
-  scope :filter_by_year_or_later, ->(year) { where("sales_logs.saledate >= ?", Time.zone.local(year.to_i, 4, 1)) }
-  scope :filter_by_year_or_earlier, ->(year) { where("sales_logs.saledate < ?", Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :filter_by_years_or_nil, lambda { |years, _user = nil|
     first_year = years.shift
     query = filter_by_year(first_year)
@@ -72,14 +69,12 @@ class SalesLog < Log
   }
   scope :age1_answered, -> { where.not(age1: nil).or(where(age1_known: [1, 2])) }
   scope :ecstat1_answered, -> { where.not(ecstat1: nil).or(where("saledate >= ?", Time.zone.local(2025, 4, 1))) }
-  scope :sex1_answered, -> { where.not(sex1: nil).filter_by_year_or_earlier(2025).or(where.not(sexrab1: nil).filter_by_year_or_later(2026)) }
-  scope :address_answered, -> { where.not(postcode_full: nil).where.not(address_line1: nil).or(where.not(uprn: nil)) }
   scope :duplicate_logs, lambda { |log|
     visible.where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
     .where.not(id: log.id)
     .where.not(saledate: nil)
-    .sex1_answered
-    .address_answered
+    .where.not(sex1: nil)
+    .where.not(postcode_full: nil)
     .ecstat1_answered
     .age1_answered
   }
@@ -89,8 +84,8 @@ class SalesLog < Log
     scope = visible
     .group(*DUPLICATE_LOG_ATTRIBUTES)
     .where.not(saledate: nil)
-    .sex1_answered
-    .address_answered
+    .where.not(sex1: nil)
+    .where.not(postcode_full: nil)
     .age1_answered
     .ecstat1_answered
     .having("COUNT(*) > 1")
@@ -103,7 +98,7 @@ class SalesLog < Log
   }
 
   OPTIONAL_FIELDS = %w[purchid othtype buyers_organisations].freeze
-  DUPLICATE_LOG_ATTRIBUTES = %w[owning_organisation_id purchid saledate age1_known age1 sex1 sexrab1 ecstat1 postcode_full uprn address_line1].freeze
+  DUPLICATE_LOG_ATTRIBUTES = %w[owning_organisation_id purchid saledate age1_known age1 sex1 ecstat1 postcode_full].freeze
 
   def lettings?
     false
@@ -543,12 +538,10 @@ class SalesLog < Log
     ["owning_organisation_id",
      "saledate",
      "purchid",
-     "address_line1",
-     "postcode_full",
-     "uprn",
      "age1",
+     "sex1",
      "ecstat1",
-     form.start_year_2026_or_later? ? "sexrab1" : "sex1"].compact
+     uprn.blank? ? "postcode_full" : "uprn"].compact
   end
 
   def soctenant_is_inferred?
