@@ -41,7 +41,7 @@ class BulkUpload::Lettings::Year2025::CsvParser
       hash_rows = field_numbers
                     .zip(stripped_row)
                     .map do |field, value|
-                      field_is_valid = value_is_valid_for_field(field, value)
+                      field_is_valid = value_is_valid_for_field?(field, value)
 
                       correct_value = field_is_valid ? value : nil
 
@@ -133,7 +133,7 @@ private
 
   # this is needed as a string passed to an int attribute is by default mapped to '0'.
   # this is bad as some questions will accept a '0'. so you could enter something invalid and not be told about it
-  def value_is_valid_for_field(field, value)
+  def value_is_valid_for_field?(field, value)
     field_type = ROW_PARSER_CLASS.attribute_types[field]
 
     if field_type.is_a?(ActiveModel::Type::Integer)
