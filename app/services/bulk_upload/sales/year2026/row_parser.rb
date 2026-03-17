@@ -897,7 +897,7 @@ private
       gender_same_as_sex6: %i[field_68],
       gender_description6: %i[field_69],
 
-      hasservicechargeschanged: %i[field_125],
+      hasservicechargeschanged: %i[field_126],
       newservicecharges: %i[field_126],
     }
   end
@@ -948,8 +948,8 @@ private
     attributes["gender_same_as_sex6"] = field_68
     attributes["gender_description6"] = field_69
 
-    attributes["hasservicechargeschanged"] = field_125
-    attributes["newservicecharges"] = field_126
+    attributes["newservicecharges"] = field_126 if field_126&.positive?
+    attributes["hasservicechargeschanged"] = attributes["newservicecharges"].present? ? 1 : 0
 
     attributes["relat2"] = relationship_from_is_partner(field_37)
     attributes["relat3"] = relationship_from_is_partner(field_47)
@@ -1254,7 +1254,8 @@ private
   end
 
   def mscharge
-    return field_107 if shared_ownership?
+    return field_107 if shared_ownership_initial_purchase?
+    return field_125 if staircasing?
 
     field_136 if discounted_ownership?
   end
@@ -1333,6 +1334,7 @@ private
   def mscharge_fields
     return [:field_107] if shared_ownership?
     return [:field_136] if discounted_ownership?
+    return [:field_125] if staircasing?
 
     %i[field_107 field_136]
   end
