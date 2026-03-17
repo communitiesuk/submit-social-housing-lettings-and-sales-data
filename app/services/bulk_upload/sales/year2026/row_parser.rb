@@ -176,6 +176,11 @@ class BulkUpload::Sales::Year2026::RowParser
 
     :field_103, # What is the length of the mortgage in years? - Shared ownership
     :field_133, # What is the length of the mortgage in years? - Discounted ownership
+
+    :field_107, # What are the total monthly service charges for the property?
+    :field_125, # What are the monthly service charges for the property?
+    :field_126, # New monthly service charge amount
+    :field_136, # What are the total monthly leasehold charges for the property?
   ].freeze
 
   attribute :bulk_upload
@@ -296,7 +301,7 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_104, :decimal
   attribute :field_105, :decimal
   attribute :field_106, :decimal
-  attribute :field_107, :decimal
+  attribute :field_107, :string
   attribute :field_108, :decimal
 
   attribute :field_109, :decimal
@@ -315,8 +320,8 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_122, :integer
   attribute :field_123, :decimal
   attribute :field_124, :decimal
-  attribute :field_125, :decimal
-  attribute :field_126, :decimal
+  attribute :field_125, :string
+  attribute :field_126, :string
 
   attribute :field_127, :integer
   attribute :field_128, :decimal
@@ -327,7 +332,7 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_133, :string
   attribute :field_134, :integer
   attribute :field_135, :decimal
-  attribute :field_136, :decimal
+  attribute :field_136, :string
 
   validates :field_1,
             presence: {
@@ -948,7 +953,7 @@ private
     attributes["gender_same_as_sex6"] = field_68
     attributes["gender_description6"] = field_69
 
-    attributes["newservicecharges"] = field_126 if field_126&.positive?
+    attributes["newservicecharges"] = field_126.to_d if field_126.present? && field_126 != "R" && field_126.to_d.positive?
     attributes["hasservicechargeschanged"] = attributes["newservicecharges"].present? ? 1 : 2
 
     attributes["relat2"] = relationship_from_is_partner(field_37)
@@ -1024,7 +1029,7 @@ private
 
     attributes["cashdis"] = field_105
     attributes["mrent"] = mrent
-    attributes["mscharge"] = mscharge if mscharge&.positive?
+    attributes["mscharge"] = mscharge.to_d if mscharge.present? && mscharge != "R" && mscharge.to_d.positive?
     attributes["has_mscharge"] = attributes["mscharge"].present? ? 1 : 0
     attributes["grant"] = field_129
     attributes["discount"] = field_130
