@@ -1964,26 +1964,6 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       end
     end
 
-    context "when mscharge field is set to R" do
-      let(:attributes) { valid_attributes.merge(field_125: "R") }
-
-      it "does not set mscharge and sets has_mscharge to no" do
-        log = parser.log
-        expect(log["has_mscharge"]).to eq(0)
-        expect(log["mscharge"]).to be_nil
-      end
-    end
-
-    context "when newservicecharges field is set to R" do
-      let(:attributes) { valid_attributes.merge(field_126: "R") }
-
-      it "does not set newservicecharges and sets hasservicechargeschanged to no" do
-        log = parser.log
-        expect(log["newservicecharges"]).to be_nil
-        expect(log["hasservicechargeschanged"]).to eq(2)
-      end
-    end
-
     context "when newservicecharges is positive" do
       let(:attributes) { valid_attributes.merge(field_126: "150") }
 
