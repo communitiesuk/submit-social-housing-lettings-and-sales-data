@@ -533,7 +533,6 @@ class BulkUpload::SalesLogToCsv
   end
 
   def to_2026_row
-    # TODO: CLDC-4162: Implement when 2026 template is available
     [
       log.saledate&.day,
       log.saledate&.month,
@@ -552,53 +551,66 @@ class BulkUpload::SalesLogToCsv
       log.privacynotice,
 
       log.uprn,
-      log.address_line1&.tr(",", " "), # 20
+      log.address_line1&.tr(",", " "),
       log.address_line2&.tr(",", " "),
       log.town_or_city&.tr(",", " "),
-      log.county&.tr(",", " "),
+      log.county&.tr(",", " "), # 20
       ((log.postcode_full || "").split(" ") || [""]).first,
       ((log.postcode_full || "").split(" ") || [""]).last,
       log.la,
       log.proptype,
+      log.buildheightclass,
       log.beds,
       log.builtype,
       log.wchair,
 
       log.age1,
-      log.sexrab1,
-      log.ethnic, # 30
+      log.sexrab1, # 30
+      log.gender_same_as_sex1,
+      log.gender_description1,
+      log.ethnic,
       log.nationality_all_group,
       log.ecstat1,
       log.buy1livein,
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat2],
       log.age2,
       log.sexrab2,
+      log.gender_same_as_sex2, # 40
+      log.gender_description2,
       log.ethnic_group2,
       log.nationality_all_buyer2_group,
       log.ecstat2,
-      log.buy2livein, # 40
+      log.buy2livein,
       log.hholdcount,
 
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat3],
       log.age3,
       log.sexrab3,
+      log.gender_same_as_sex3, # 50
+      log.gender_description3,
       log.ecstat3,
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat4],
       log.age4,
       log.sexrab4,
+      log.gender_same_as_sex4,
+      log.gender_description4,
       log.ecstat4,
-      { "P" => 1, "X" => 2, "R" => 3 }[log.relat5], # 50
-      log.age5,
+      { "P" => 1, "X" => 2, "R" => 3 }[log.relat5],
+      log.age5, # 60
       log.sexrab5,
+      log.gender_same_as_sex5,
+      log.gender_description5,
       log.ecstat5,
       { "P" => 1, "X" => 2, "R" => 3 }[log.relat6],
       log.age6,
       log.sexrab6,
-      log.ecstat6,
+      log.gender_same_as_sex6,
+      log.gender_description6,
+      log.ecstat6, # 70
 
       log.prevten,
       log.ppcodenk,
-      ((log.ppostcode_full || "").split(" ") || [""]).first, # 60
+      ((log.ppostcode_full || "").split(" ") || [""]).first,
       ((log.ppostcode_full || "").split(" ") || [""]).last,
       log.prevloc,
       log.buy2living,
@@ -606,32 +618,32 @@ class BulkUpload::SalesLogToCsv
 
       log.hhregres,
       log.hhregresstill,
-      log.armedforcesspouse,
+      log.armedforcesspouse, # 80
       log.disabled,
       log.wheel,
 
-      log.income1, # 70
+      log.income1,
       log.inc1mort,
       log.income2,
       log.inc2mort,
       log.hb,
       log.savings.present? || "R",
       log.prevown,
-      log.prevshared,
+      log.prevshared, # 90
 
       log.resale,
       log.proplen,
-      log.hodate&.day, # 80
+      log.hodate&.day,
       log.hodate&.month,
       log.hodate&.strftime("%y"),
       log.frombeds,
       log.fromprop,
       log.socprevten,
       log.value,
-      log.equity,
+      log.equity, # 100
       log.mortgageused,
       log.mortgage,
-      log.mortlen, # 90
+      log.mortlen,
       log.deposit,
       log.cashdis,
       log.mrent,
@@ -639,33 +651,34 @@ class BulkUpload::SalesLogToCsv
       log.management_fee,
 
       log.stairbought,
-      log.stairowned,
+      log.stairowned, # 110
       log.staircasesale,
       log.firststair,
-      log.initialpurchase&.day, # 100
+      log.initialpurchase&.day,
       log.initialpurchase&.month,
       log.initialpurchase&.strftime("%y"),
       log.numstair,
       log.lasttransaction&.day,
       log.lasttransaction&.month,
       log.lasttransaction&.strftime("%y"),
-      log.value,
+      log.value, # 120
       log.equity,
       log.mortgageused,
-      log.mrentprestaircasing, # 110
+      log.mrentprestaircasing,
       log.mrent,
+      log.hasservicechargeschanged,
+      log.newservicecharges,
 
       log.proplen,
       log.value,
       log.grant,
-      log.discount,
+      log.discount, # 130
       log.mortgageused,
       log.mortgage,
       log.mortlen,
       log.extrabor,
-      log.deposit, # 120
-      log.mscharge,
-      log.buildheightclass, # 122
+      log.deposit,
+      log.mscharge, # 136
     ]
   end
 

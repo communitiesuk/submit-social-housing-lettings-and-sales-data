@@ -50,7 +50,13 @@ class Log < ApplicationRecord
   scope :has_old_form_id, -> { where.not(old_form_id: nil) }
   scope :imported_2023_with_old_form_id, -> { imported.filter_by_year(2023).has_old_form_id }
   scope :imported_2023, -> { imported.filter_by_year(2023) }
-  scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
+  # TODO: CLDC-4273: use .union in filter_by_organisation rather than raw SQL
+  scope :filter_by_organisation, lambda { |orgs, _user = nil|
+    owned = unscoped { where(owning_organisation: orgs).select(:id) }
+    managed = unscoped { where(managing_organisation: orgs).select(:id) }
+
+    where("#{table_name}.id = ANY(ARRAY(#{owned.to_sql} UNION #{managed.to_sql}))")
+  }
   scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
   scope :filter_by_managing_organisation, ->(managing_organisation, _user = nil) { where(managing_organisation:) }
   scope :filter_by_user_text_search, ->(param, user) { where(assigned_to: User.visible(user).search_by(param)) }
@@ -335,6 +341,19 @@ class Log < ApplicationRecord
     incomplete_subsections.flat_map do |subsection|
       subsection.questions.select do |question|
         question.displayed_to_user?(self) && question.unanswered?(self)
+      end
+    end
+  end
+
+  def clear_gender_description_unless_gender_not_same_as_sex!
+    # gender_description is always routed to (even when hidden on the page), so default submit will set it as ""
+    # This method ensures gender_description is cleared if gender is the same as sex
+    # This also has the benefit of clearing a mistakenly input gender_description in bulk upload if gender is the same as sex
+    max_person = lettings? ? 8 : 6
+    (1..max_person).each do |person_index|
+      gender_same_as_sex = public_send("gender_same_as_sex#{person_index}")
+      if gender_same_as_sex.present? && gender_same_as_sex != 2
+        self["gender_description#{person_index}"] = nil
       end
     end
   end

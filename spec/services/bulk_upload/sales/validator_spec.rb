@@ -127,7 +127,7 @@ RSpec.describe BulkUpload::Sales::Validator do
       before do
         log.owning_organisation = nil
         log.saledate = date
-        file.write(log_to_csv.default_field_numbers_row)
+        file.write(log_to_csv.default_field_numbers_row_for_year(year))
         file.write(log_to_csv.to_csv_row)
         file.rewind
       end
@@ -225,7 +225,7 @@ RSpec.describe BulkUpload::Sales::Validator do
       end
 
       it "creates errors" do
-        expect { validator.call }.to change(BulkUploadError.where(category: :setup, error: "This is a duplicate of a log in your file."), :count).by(20)
+        expect { validator.call }.to change(BulkUploadError.where(category: :setup, error: "This is a duplicate of a log in your file."), :count).by(24)
       end
     end
   end

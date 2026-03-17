@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_25_162121) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_05_095832) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -825,6 +825,21 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_25_162121) do
     t.string "sexrab5"
     t.string "sexrab6"
     t.integer "buildheightclass"
+    t.integer "mortlen_known"
+    t.integer "hasservicechargeschanged"
+    t.decimal "newservicecharges", precision: 10, scale: 2
+    t.integer "gender_same_as_sex1"
+    t.integer "gender_same_as_sex2"
+    t.integer "gender_same_as_sex3"
+    t.integer "gender_same_as_sex4"
+    t.integer "gender_same_as_sex5"
+    t.integer "gender_same_as_sex6"
+    t.string "gender_description1"
+    t.string "gender_description2"
+    t.string "gender_description3"
+    t.string "gender_description4"
+    t.string "gender_description5"
+    t.string "gender_description6"
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"

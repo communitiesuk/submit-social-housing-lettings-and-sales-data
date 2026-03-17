@@ -38,6 +38,14 @@ RSpec.describe Csv::SalesLogCsvService do
       age6: nil,
       ecstat6: nil,
       relat6: nil,
+      gender_same_as_sex1: 1,
+      gender_same_as_sex2: 2,
+      gender_description2: "Nonbinary",
+      gender_same_as_sex3: 1,
+      gender_same_as_sex4: 2,
+      gender_description4: "Genderfluid",
+      gender_same_as_sex5: 3,
+      gender_same_as_sex6: nil,
       sexrab6: nil,
       sex6: nil,
       town_or_city: "Town or city",
@@ -245,7 +253,21 @@ RSpec.describe Csv::SalesLogCsvService do
       let(:fixed_time) { collection_start_date_for_year(2026) }
 
       before do
-        log.update!(nationality_all: 36, manual_address_entry_selected: false, uprn: "1", uprn_known: 1)
+        log.update!(
+          nationality_all: 36,
+          manual_address_entry_selected: false,
+          uprn: "1",
+          uprn_known: 1,
+          hholdcount: 5,
+          details_known_4: 1,
+          ecstat4: 3,
+          age4_known: 1,
+          sexrab4: "R",
+          gender_same_as_sex4: 2,
+          sex4: "X",
+          relat4: "X",
+          details_known_5: 2,
+        )
       end
 
       it "exports the CSV with the 2026 ordering and all values correct" do
@@ -358,7 +380,18 @@ RSpec.describe Csv::SalesLogCsvService do
       let(:year) { 2026 }
 
       before do
-        log.update!(manual_address_entry_selected: false, uprn: "1", uprn_known: 1)
+        log.update!(manual_address_entry_selected: false,
+                    uprn: "1",
+                    uprn_known: 1,
+                    hholdcount: 5,
+                    details_known_4: 1,
+                    ecstat4: 3,
+                    age4_known: 1,
+                    sexrab4: "R",
+                    gender_same_as_sex4: 2,
+                    sex4: "X",
+                    relat4: "X",
+                    details_known_5: 2)
       end
 
       it "exports the CSV with all values correct" do
@@ -446,7 +479,20 @@ RSpec.describe Csv::SalesLogCsvService do
       let(:fixed_time) { collection_start_date_for_year(2026) }
 
       before do
-        log.update!(nationality_all: 36, manual_address_entry_selected: false, uprn: "1", uprn_known: 1, buildheightclass: 2)
+        log.update!(nationality_all: 36,
+                    manual_address_entry_selected: false,
+                    uprn: "1",
+                    uprn_known: 1,
+                    buildheightclass: 2,
+                    hholdcount: 5,
+                    details_known_4: 1,
+                    ecstat4: 3,
+                    age4_known: 1,
+                    sexrab4: "R",
+                    gender_same_as_sex4: 2,
+                    sex4: "X",
+                    relat4: "X",
+                    details_known_5: 2)
       end
 
       context "and exporting with labels" do

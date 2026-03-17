@@ -18,6 +18,7 @@ class SalesLog < Log
   include Validations::Sales::SoftValidations
   include Validations::SoftValidations
   include MoneyFormattingHelper
+  include CollectionTimeHelper
 
   self.inheritance_column = :_type_disabled
 
@@ -37,6 +38,8 @@ class SalesLog < Log
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
+  scope :filter_by_year_or_later, ->(year) { where("sales_logs.saledate >= ?", Time.zone.local(year.to_i, 4, 1)) }
+  scope :filter_by_year_or_earlier, ->(year) { where("sales_logs.saledate < ?", Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :filter_by_years_or_nil, lambda { |years, _user = nil|
     first_year = years.shift
     query = filter_by_year(first_year)
@@ -69,12 +72,14 @@ class SalesLog < Log
   }
   scope :age1_answered, -> { where.not(age1: nil).or(where(age1_known: [1, 2])) }
   scope :ecstat1_answered, -> { where.not(ecstat1: nil).or(where("saledate >= ?", Time.zone.local(2025, 4, 1))) }
+  scope :sex1_answered, -> { where.not(sex1: nil).filter_by_year_or_earlier(2025).or(where.not(sexrab1: nil).filter_by_year_or_later(2026)) }
+  scope :address_answered, -> { where.not(postcode_full: nil).where.not(address_line1: nil).or(where.not(uprn: nil)) }
   scope :duplicate_logs, lambda { |log|
     visible.where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
     .where.not(id: log.id)
     .where.not(saledate: nil)
-    .where.not(sex1: nil)
-    .where.not(postcode_full: nil)
+    .sex1_answered
+    .address_answered
     .ecstat1_answered
     .age1_answered
   }
@@ -84,8 +89,8 @@ class SalesLog < Log
     scope = visible
     .group(*DUPLICATE_LOG_ATTRIBUTES)
     .where.not(saledate: nil)
-    .where.not(sex1: nil)
-    .where.not(postcode_full: nil)
+    .sex1_answered
+    .address_answered
     .age1_answered
     .ecstat1_answered
     .having("COUNT(*) > 1")
@@ -98,7 +103,7 @@ class SalesLog < Log
   }
 
   OPTIONAL_FIELDS = %w[purchid othtype buyers_organisations].freeze
-  DUPLICATE_LOG_ATTRIBUTES = %w[owning_organisation_id purchid saledate age1_known age1 sex1 ecstat1 postcode_full].freeze
+  DUPLICATE_LOG_ATTRIBUTES = %w[owning_organisation_id purchid saledate age1_known age1 sex1 sexrab1 ecstat1 postcode_full uprn address_line1].freeze
 
   def lettings?
     false
@@ -268,6 +273,22 @@ class SalesLog < Log
     value * equity / 100
   end
 
+  def expected_shared_ownership_deposit_value_tolerance
+    return 1 unless value && equity
+
+    # we found that a fixed tolerance was not quite what we wanted here.
+    # CORE wants it so if a user say, has a 66.666% equity they can enter either 66.6% or 66.7% (or 66.5%)
+    # so in 2026 we base our tolerance off of a discount 0.1% higher or lower
+    if form.start_year_2026_or_later?
+      lower_bound = value * ((equity - 0.1) / 100)
+      upper_bound = value * ((equity + 0.1) / 100)
+
+      (upper_bound - lower_bound) / 2
+    else
+      1
+    end
+  end
+
   def stairbought_part_of_value
     return unless value && stairbought
 
@@ -390,6 +411,10 @@ class SalesLog < Log
     proptype_changed? && proptype_was == 2
   end
 
+  def buyer_interviewed_changed_to_not_interviewed_and_mortlen_set?
+    noint_changed? && noint_was == 2 && buyer_not_interviewed? && mortlen.present?
+  end
+
   def shared_ownership_scheme?
     ownershipsch == 1
   end
@@ -464,6 +489,22 @@ class SalesLog < Log
     value - discount_amount
   end
 
+  def value_with_discount_tolerance
+    return 1 if value.blank? || discount.nil?
+
+    # we found that a simple tolerance was not quite what we wanted here.
+    # CORE wants it so if a user say, has a 66.6% discount then can enter either 66.6% or 66.7%
+    # so in 2026 we base our tolerance off of a discount 0.1% higher or lower
+    if form.start_year_2026_or_later?
+      discount_amount_lower_bound = value * (discount - 0.1) / 100
+      discount_amount_upper_bound = value * (discount + 0.1) / 100
+
+      (discount_amount_upper_bound - discount_amount_lower_bound) / 2
+    else
+      discount ? value * 0.05 / 100 : 1
+    end
+  end
+
   def mortgage_deposit_and_grant_total
     return if deposit.blank?
 
@@ -502,10 +543,12 @@ class SalesLog < Log
     ["owning_organisation_id",
      "saledate",
      "purchid",
+     "address_line1",
+     "postcode_full",
+     "uprn",
      "age1",
-     "sex1",
      "ecstat1",
-     uprn.blank? ? "postcode_full" : "uprn"].compact
+     form.start_year_2026_or_later? ? "sexrab1" : "sex1"].compact
   end
 
   def soctenant_is_inferred?
@@ -578,5 +621,9 @@ class SalesLog < Log
 
   def mscharge_value
     mscharge if discounted_ownership_sale? || !form.start_year_2025_or_later?
+  end
+
+  def hasservicechargeschanged_label
+    form.get_question(:hasservicechargeschanged, self)&.label_from_value(hasservicechargeschanged)
   end
 end
