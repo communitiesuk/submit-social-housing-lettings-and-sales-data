@@ -790,8 +790,6 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           :field_1, # Sale completion date
           :field_2, # Sale completion date
           :field_3, # Sale completion date
-          :field_16, # UPRN
-          :field_17, # Address line 1
           :field_21, # Postcode
           :field_22, # Postcode
           :field_29, # Buyer 1 age
@@ -822,8 +820,6 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           :field_1, # Sale completion date
           :field_2, # Sale completion date
           :field_3, # Sale completion date
-          :field_16, # UPRN
-          :field_17, # Address line 1
           :field_21, # Postcode
           :field_22, # Postcode
           :field_29, # Buyer 1 age

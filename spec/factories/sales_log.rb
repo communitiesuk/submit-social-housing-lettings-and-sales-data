@@ -67,7 +67,6 @@ FactoryBot.define do
       sexrab1 { "F" }
       sex1 { "F" }
       ecstat1 { 1 }
-      address_line1 { "same address line 1" }
       postcode_full { "A1 1AA" }
       noint { 2 }
       uprn_known { 0 }
