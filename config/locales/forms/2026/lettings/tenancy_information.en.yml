@@ -21,27 +21,27 @@ en:
             tenancy_type:
               page_header: ""
               tenancy:
-                check_answer_label: "Type of tenancy"
+                check_answer_label: "Type of main tenancy"
                 check_answer_prompt: ""
                 hint_text: ""
                 question_text: "What is the type of tenancy?"
               tenancyother:
-                check_answer_label: "Type of tenancy (other)"
+                check_answer_label: ""
                 check_answer_prompt: ""
                 hint_text: ""
-                question_text: "Please state the type of tenancy"
+                question_text: "Please state the tenancy type"
             starter_tenancy_type:
               page_header: ""
               tenancy:
-                check_answer_label: "Type of tenancy"
-                check_answer_prompt: ""
-                hint_text: "This is for the main tenancy after any starter or introductory period."
-                question_text: "What is the type of tenancy?"
-              tenancyother:
-                check_answer_label: "Type of tenancy (other)"
+                check_answer_label: "Type of main tenancy after the starter or introductory period has ended"
                 check_answer_prompt: ""
                 hint_text: ""
-                question_text: "Please state the type of tenancy"
+                question_text: "What is the type of tenancy after the starter or introductory period has ended?"
+              tenancyother:
+                check_answer_label: ""
+                check_answer_prompt: ""
+                hint_text: ""
+                question_text: "Please state the tenancy type"
 
           tenancylength:
             tenancy_length:
