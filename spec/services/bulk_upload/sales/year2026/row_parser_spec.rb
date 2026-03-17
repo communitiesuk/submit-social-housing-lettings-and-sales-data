@@ -1985,6 +1985,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     end
 
     context "when newservicecharges is positive" do
+      let(:attributes) { valid_attributes.merge(field_126: "150") }
+
       it "sets newservicecharges and hasservicechargeschanged correctly" do
         log = parser.log
         expect(log["newservicecharges"]).to eq(150)
