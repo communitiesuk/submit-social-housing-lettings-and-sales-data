@@ -1,4 +1,5 @@
-name: "Review App: Manual Code Redeploy"
+# Pushes the Docker image to a review app, for use when the ECS image has expired.
+name: "Review App: Deploy (ECS Image only)"
 
 concurrency:
   group: review-${{ inputs.review_app_key }}
