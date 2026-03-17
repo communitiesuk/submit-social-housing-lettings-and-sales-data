@@ -315,7 +315,7 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_122, :integer
   attribute :field_123, :decimal
   attribute :field_124, :decimal
-  attribute :field_125, :integer
+  attribute :field_125, :decimal
   attribute :field_126, :decimal
 
   attribute :field_127, :integer
@@ -949,7 +949,7 @@ private
     attributes["gender_description6"] = field_69
 
     attributes["newservicecharges"] = field_126 if field_126&.positive?
-    attributes["hasservicechargeschanged"] = attributes["newservicecharges"].present? ? 1 : 0
+    attributes["hasservicechargeschanged"] = attributes["newservicecharges"].present? ? 1 : 2
 
     attributes["relat2"] = relationship_from_is_partner(field_37)
     attributes["relat3"] = relationship_from_is_partner(field_47)
@@ -1336,7 +1336,7 @@ private
     return [:field_136] if discounted_ownership?
     return [:field_125] if staircasing?
 
-    %i[field_107 field_136]
+    %i[field_107 field_136 field_125]
   end
 
   def mortlen_fields
