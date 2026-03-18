@@ -445,8 +445,12 @@ class LettingsLog < Log
     unittype_gn_changed? && unittype_gn_was == 2
   end
 
-  def is_partner_inferred?(person_index)
+  def is_person_under_16?(person_index)
     public_send("age#{person_index}") && public_send("age#{person_index}") < 16
+  end
+
+  def is_any_person_partner?
+    !partner_numbers.empty?
   end
 
   def age_changed_from_below_16(person_index)
@@ -941,6 +945,10 @@ private
         owning_organisation[:provider_type] == "PRP" ? 13 : 15
       end
     end
+  end
+
+  def partner_numbers
+    (2..8).select { |i| public_send("relat#{i}") == "P" }
   end
 
   def age_refused?

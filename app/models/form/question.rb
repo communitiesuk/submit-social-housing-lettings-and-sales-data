@@ -304,6 +304,10 @@ class Form::Question
     nil
   end
 
+  def skip_question_in_form_flow?(_log)
+    false
+  end
+
 private
 
   def selected_answer_option_is_derived?(log)
