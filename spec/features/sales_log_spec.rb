@@ -352,16 +352,6 @@ RSpec.describe "Sales Log Features" do
   end
 
   context "when a log becomes a duplicate" do
-    before do
-      Timecop.freeze(Time.zone.local(2024, 3, 3))
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
-
     context "and updating duplicate log" do
       let(:user) { create(:user, :data_coordinator) }
       let(:sales_log) { create(:sales_log, :duplicate, assigned_to: user) }
