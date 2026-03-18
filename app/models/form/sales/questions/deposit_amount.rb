@@ -1,6 +1,6 @@
 class Form::Sales::Questions::DepositAmount < ::Form::Question
-  def initialize(id, hsh, subsection, ownershipsch:, optional:)
-    super(id, hsh, subsection)
+  def initialize(id, hsh, page, ownershipsch:, optional:)
+    super(id, hsh, page)
     @id = "deposit"
     @type = "numeric"
     @min = 0
@@ -9,7 +9,7 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     @width = 5
     @prefix = "£"
     @ownershipsch = ownershipsch
-    @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR_AND_SECTION, value_key: form.start_year_2026_or_later? ? subsection.id : ownershipsch)
     @optional = optional
     @top_guidance_partial = top_guidance_partial
     @copy_key = copy_key
@@ -20,10 +20,11 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     log.outright_sale? && !log.mortgage_used?
   end
 
-  QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+  QUESTION_NUMBER_FROM_YEAR_AND_SECTION = {
     2023 => { 1 => 95, 2 => 108, 3 => 116 },
     2024 => { 1 => 96, 2 => 109, 3 => 116 },
     2025 => { 1 => 85, 2 => 110 },
+    2026 => { "shared_ownership_initial_purchase" => 93, "discounted_ownership_scheme" => 120 },
   }.freeze
 
   def top_guidance_partial

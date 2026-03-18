@@ -11,7 +11,7 @@ class Form::Sales::Questions::Buyer1Nationality < ::Form::Question
       },
       "value" => "Prefers not to say",
     }]
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {
@@ -22,5 +22,5 @@ class Form::Sales::Questions::Buyer1Nationality < ::Form::Question
     "13" => { "value" => "Buyer prefers not to say" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 24, 2024 => 26, 2025 => 24 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 24, 2024 => 26, 2025 => 24, 2026 => 26 }.freeze
 end

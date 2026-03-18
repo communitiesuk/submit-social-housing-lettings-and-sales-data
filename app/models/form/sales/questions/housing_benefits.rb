@@ -6,7 +6,7 @@ class Form::Sales::Questions::HousingBenefits < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_title = "All buyers" if form.start_year_2026_or_later?
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {
@@ -17,5 +17,5 @@ class Form::Sales::Questions::HousingBenefits < ::Form::Question
     "4" => { "value" => "Don’t know " },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 71, 2024 => 73, 2025 => 70 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 71, 2024 => 73, 2025 => 70, 2026 => 78 }.freeze
 end

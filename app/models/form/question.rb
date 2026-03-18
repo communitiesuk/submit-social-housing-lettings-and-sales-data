@@ -304,6 +304,10 @@ class Form::Question
     nil
   end
 
+  def skip_question_in_form_flow?(_log)
+    false
+  end
+
 private
 
   def selected_answer_option_is_derived?(log)
@@ -373,8 +377,32 @@ private
   # every year currently visible should have an explicit question number specified.
   # however, form_handler.rb will still initialise the next form even if its not visible.
   # so we have a fallback to the latest year for these future years so all question have a question number.
-  def get_question_number_from_hash(hash)
-    hash[form.start_date.year] || hash[hash.keys.max]
+  #
+  # some hashes are complex and require a second key to find the correct year.
+  # 2025 and before the question number used to depend on the ownershipsch and other log attributes
+  # 2026 and beyond we use the subsection ID for consistency
+  def get_question_number_from_hash(hash, value_key: nil)
+    year = if hash[form.start_date.year].present?
+             form.start_date.year
+           else
+             hash.keys.max
+           end
+
+    hash_value = hash[year]
+
+    return hash_value if hash_value.is_a?(Integer)
+
+    hash_value[value_key]
+  end
+
+  def get_person_question_number(base_hash, override_hash: nil)
+    buyer_override_question_number = override_hash&.dig(form.start_date.year, @person_index)
+
+    return buyer_override_question_number if buyer_override_question_number.present? && @buyer
+
+    base_question_number = base_hash[form.start_date.year] || base_hash[base_hash.keys.max]
+
+    base_question_number + (form.person_question_count * @person_index)
   end
 
   RADIO_YES_VALUE = {

@@ -268,6 +268,22 @@ class SalesLog < Log
     value * equity / 100
   end
 
+  def expected_shared_ownership_deposit_value_tolerance
+    return 1 unless value && equity
+
+    # we found that a fixed tolerance was not quite what we wanted here.
+    # CORE wants it so if a user say, has a 66.666% equity they can enter either 66.6% or 66.7% (or 66.5%)
+    # so in 2026 we base our tolerance off of a discount 0.1% higher or lower
+    if form.start_year_2026_or_later?
+      lower_bound = value * ((equity - 0.1) / 100)
+      upper_bound = value * ((equity + 0.1) / 100)
+
+      (upper_bound - lower_bound) / 2
+    else
+      1
+    end
+  end
+
   def stairbought_part_of_value
     return unless value && stairbought
 
@@ -468,6 +484,22 @@ class SalesLog < Log
     value - discount_amount
   end
 
+  def value_with_discount_tolerance
+    return 1 if value.blank? || discount.nil?
+
+    # we found that a simple tolerance was not quite what we wanted here.
+    # CORE wants it so if a user say, has a 66.6% discount then can enter either 66.6% or 66.7%
+    # so in 2026 we base our tolerance off of a discount 0.1% higher or lower
+    if form.start_year_2026_or_later?
+      discount_amount_lower_bound = value * (discount - 0.1) / 100
+      discount_amount_upper_bound = value * (discount + 0.1) / 100
+
+      (discount_amount_upper_bound - discount_amount_lower_bound) / 2
+    else
+      discount ? value * 0.05 / 100 : 1
+    end
+  end
+
   def mortgage_deposit_and_grant_total
     return if deposit.blank?
 
@@ -582,5 +614,9 @@ class SalesLog < Log
 
   def mscharge_value
     mscharge if discounted_ownership_sale? || !form.start_year_2025_or_later?
+  end
+
+  def hasservicechargeschanged_label
+    form.get_question(:hasservicechargeschanged, self)&.label_from_value(hasservicechargeschanged)
   end
 end

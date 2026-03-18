@@ -13,13 +13,8 @@ class Form::Sales::Questions::PersonAge < ::Form::Question
     @max = 110
     @step = 1
     @person_index = person_index
-    @question_number = question_number
+    @question_number = get_person_question_number(BASE_QUESTION_NUMBERS)
   end
 
-  BASE_QUESTION_NUMBERS = { 2023 => 29, 2024 => 31, 2025 => 29 }.freeze
-  def question_number
-    base_question_number = BASE_QUESTION_NUMBERS[form.start_date.year] || BASE_QUESTION_NUMBERS[BASE_QUESTION_NUMBERS.keys.max]
-
-    base_question_number + (4 * @person_index)
-  end
+  BASE_QUESTION_NUMBERS = { 2023 => 29, 2024 => 31, 2025 => 29, 2026 => 30 }.freeze
 end

@@ -6,7 +6,7 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
   let(:optional) { false }
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, id: "shared_ownership_initial_purchase", form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2026_or_later?: false))) }
 
   context "when the ownership type is shared" do
     let(:log) { build(:sales_log, :completed, ownershipsch: 1, mortgageused: 2) }

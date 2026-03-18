@@ -6,7 +6,7 @@ RSpec.describe Form::Sales::Pages::PersonGenderSameAsSex, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection, person_index:) }
 
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: current_collection_start_date)) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: current_collection_start_date, person_question_count: 4)) }
   let(:person_index) { 2 }
   let(:page_id) { "person_2_gender_same_as_sex" }
 

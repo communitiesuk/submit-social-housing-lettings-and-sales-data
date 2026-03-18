@@ -3,7 +3,7 @@ class Form::Sales::Questions::PropertyLocalAuthority < ::Form::Question
     super
     @id = "la"
     @type = "select"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
@@ -15,5 +15,5 @@ class Form::Sales::Questions::PropertyLocalAuthority < ::Form::Question
     log.saledate && log.saledate.year >= 2023 && log.is_la_inferred?
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 16, 2024 => 17, 2025 => 15 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 16, 2024 => 17, 2025 => 15, 2026 => 15 }.freeze
 end
