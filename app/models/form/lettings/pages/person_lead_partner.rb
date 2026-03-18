@@ -19,7 +19,10 @@ class Form::Lettings::Pages::PersonLeadPartner < ::Form::Page
             "operand" => 16,
           },
         },
-        { "details_known_#{@person_index}" => 0, "age#{@person_index}" => nil },
+        {
+          "details_known_#{@person_index}" => 0,
+          "age#{@person_index}" => nil,
+        },
       ]
     else
       [{ "details_known_#{@person_index}" => 0 }]

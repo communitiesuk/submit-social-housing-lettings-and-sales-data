@@ -24,6 +24,8 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
     )
   end
   let(:person_index) { 2 }
+  let(:is_any_person_partner?) { false }
+  let(:log) { instance_double(LettingsLog, is_any_person_partner?: is_any_person_partner?) }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -47,6 +49,48 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
     expect(question.hidden_in_check_answers).to be_nil
   end
 
+  describe "#skip_page_in_form_flow?" do
+    context "with start year < 2026", metadata: { year: 25 } do
+      let(:year) { 2025 }
+
+      context "when no other person is the partner of the lead tenant" do
+        let(:is_any_person_partner?) { false }
+
+        it "returns false" do
+          expect(question.skip_question_in_form_flow?(log)).to be false
+        end
+      end
+
+      context "when another person is the partner of the lead tenant" do
+        let(:is_any_person_partner?) { true }
+
+        it "returns false" do
+          expect(question.skip_question_in_form_flow?(log)).to be false
+        end
+      end
+    end
+
+    context "with start year >= 2026", metadata: { year: 26 } do
+      let(:year) { 2026 }
+
+      context "when no other person is the partner of the lead tenant" do
+        let(:is_any_person_partner?) { false }
+
+        it "returns false" do
+          expect(question.skip_question_in_form_flow?(log)).to be false
+        end
+      end
+
+      context "when another person is the partner of the lead tenant" do
+        let(:is_any_person_partner?) { true }
+
+        it "returns true" do
+          expect(question.skip_question_in_form_flow?(log)).to be true
+        end
+      end
+    end
+  end
+
   context "with person 2" do
     it "has the correct id" do
       expect(question.id).to eq("relat2")
@@ -56,39 +100,49 @@ RSpec.describe Form::Lettings::Questions::PersonPartner, type: :model do
       expect(question.check_answers_card_number).to eq(2)
     end
 
-    context "with person 2 age < 16" do
-      let(:log) { build(:lettings_log, age2: 10) }
+    context "and in 2025", metadata: { year: 25 } do
+      let(:year) { 2025 }
+      let(:person_question_count) { 4 }
 
-      context "and in 2025", metadata: { year: 25 } do
-        let(:year) { 2025 }
+      it "has the correct question number" do
+        expect(question.question_number).to eq(37)
+      end
+
+      context "with person 2 age < 16" do
+        let(:log) { build(:lettings_log, age2: 10) }
 
         it "is not marked as derived" do
           expect(question.derived?(log)).to be false
         end
       end
 
-      context "and in 2026", metadata: { year: 26 } do
-        let(:year) { 2026 }
+      context "with person 2 age >= 16" do
+        let(:log) { build(:lettings_log, age2: 20) }
+
+        it "is not marked as derived" do
+          expect(question.derived?(log)).to be false
+        end
+      end
+    end
+
+    context "and in 2026", metadata: { year: 26 } do
+      let(:year) { 2026 }
+      let(:person_question_count) { 5 }
+
+      it "has the correct question number" do
+        expect(question.question_number).to eq(38)
+      end
+
+      context "with person 2 age < 16" do
+        let(:log) { build(:lettings_log, age2: 10) }
 
         it "is marked as derived" do
           expect(question.derived?(log)).to be true
         end
       end
-    end
 
-    context "with person 2 age >= 16" do
-      let(:log) { build(:lettings_log, age2: 20) }
-
-      context "and in 2025", metadata: { year: 25 } do
-        let(:year) { 2025 }
-
-        it "is not marked as derived" do
-          expect(question.derived?(log)).to be false
-        end
-      end
-
-      context "and in 2026", metadata: { year: 26 } do
-        let(:year) { 2026 }
+      context "with person 2 age >= 16" do
+        let(:log) { build(:lettings_log, age2: 20) }
 
         it "is not marked as derived" do
           expect(question.derived?(log)).to be false
