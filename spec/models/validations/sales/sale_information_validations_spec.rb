@@ -6,6 +6,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
   subject(:sale_information_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::Sales::SaleInformationValidations } }
+  let(:saledate) { current_collection_start_date }
 
   describe "#validate_practical_completion_date" do
     context "when hodate blank" do
@@ -59,8 +60,10 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
 
     context "when hodate 3 or more years before saledate" do
+      let(:record) { build(:sales_log, hodate: saledate - 3.years, saledate:) }
+
       context "and form year is 2024 or earlier" do
-        let(:record) { build(:sales_log, hodate: previous_collection_start_date - 3.years, saledate: previous_collection_start_date) }
+        let(:saledate) { collection_start_date_for_year(2024) }
 
         it "does add an error" do
           sale_information_validator.validate_practical_completion_date(record)
@@ -71,7 +74,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
 
       context "and form year is 2025 or later" do
-        let(:record) { build(:sales_log, hodate: current_collection_start_date - 3.years, saledate: current_collection_start_date) }
+        let(:saledate) { collection_start_date_for_year(2025) }
 
         it "does not add an error" do
           sale_information_validator.validate_practical_completion_date(record)
@@ -376,10 +379,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
   end
 
   describe "#validate_discounted_ownership_value" do
-    let(:record) { FactoryBot.build(:sales_log, :saledate_today, mortgage: 10_000, deposit: 5_000, value: 30_000, ownershipsch: 2, type: 8) }
-
     context "when grant is routed to" do
-      let(:record) { FactoryBot.build(:sales_log, :saledate_today, deposit: nil, ownershipsch: 2, type: 8) }
+      let(:record) { FactoryBot.build(:sales_log, saledate:, deposit: nil, ownershipsch: 2, type: 8) }
 
       context "and not provided" do
         before do
@@ -453,7 +454,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
 
     context "when discount is routed to" do
-      let(:record) { FactoryBot.build(:sales_log, :saledate_today, grant: nil, ownershipsch: 2, type: 9) }
+      let(:record) { FactoryBot.build(:sales_log, saledate:, grant: nil, ownershipsch: 2, type: 9) }
 
       context "and not provided" do
         it "returns false" do
@@ -475,72 +476,131 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
 
       context "and is provided" do
-        it "does not add errors if mortgage and deposit total equals market value - discount" do
-          record.value = 30_000
-          record.mortgage = 10_000
-          record.deposit = 5_000
-          record.discount = 50
+        context "and is 2025" do
+          let(:saledate) { collection_start_date_for_year(2025) }
 
-          sale_information_validator.validate_discounted_ownership_value(record)
+          it "does not add errors if mortgage and deposit total equals market value - discount" do
+            record.value = 30_000
+            record.mortgage = 10_000
+            record.deposit = 5_000
+            record.discount = 50
 
-          expect(record.errors["mortgageused"]).to be_empty
-          expect(record.errors["mortgage"]).to be_empty
-          expect(record.errors["value"]).to be_empty
-          expect(record.errors["deposit"]).to be_empty
-          expect(record.errors["ownershipsch"]).to be_empty
-          expect(record.errors["discount"]).to be_empty
-          expect(record.errors["grant"]).to be_empty
+            sale_information_validator.validate_discounted_ownership_value(record)
+
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["mortgage"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["ownershipsch"]).to be_empty
+            expect(record.errors["discount"]).to be_empty
+            expect(record.errors["grant"]).to be_empty
+          end
+
+          it "does not add errors if mortgage and deposit total is within a 0.05% x market value tolerance of market value - discount" do
+            record.value = 123_000
+            record.mortgage = 66_112
+            record.deposit = 0
+            record.discount = 46.3
+
+            sale_information_validator.validate_discounted_ownership_value(record)
+
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["mortgage"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["ownershipsch"]).to be_empty
+            expect(record.errors["discount"]).to be_empty
+            expect(record.errors["grant"]).to be_empty
+          end
+
+          it "adds errors if mortgage and deposit total is not within a 0.05% x market value tolerance of market value - discount" do
+            record.value = 123_000
+            record.mortgage = 66_113
+            record.deposit = 0
+            record.discount = 46.3
+
+            sale_information_validator.validate_discounted_ownership_value(record)
+
+            expect(record.errors["mortgageused"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["mortgage"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["value"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["deposit"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["ownershipsch"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["discount"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["grant"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
+          end
+
+          it "does not add errors if mortgage and deposit total is exactly 0.05% x market value away from market value - discount" do
+            record.value = 120_000
+            record.mortgage = 64_500
+            record.deposit = 0
+            record.discount = 46.3
+
+            sale_information_validator.validate_discounted_ownership_value(record)
+
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["mortgage"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["ownershipsch"]).to be_empty
+            expect(record.errors["discount"]).to be_empty
+            expect(record.errors["grant"]).to be_empty
+          end
         end
 
-        it "does not add errors if mortgage and deposit total is within a 0.05% x market value tolerance of market value - discount" do
-          record.value = 123_000
-          record.mortgage = 66_112
-          record.deposit = 0
-          record.discount = 46.3
+        context "and is 2026" do
+          let(:saledate) { collection_start_date_for_year(2026) }
 
-          sale_information_validator.validate_discounted_ownership_value(record)
+          it "does not add errors if mortgage and deposit total equals market value - discount" do
+            record.value = 30_000
+            record.mortgage = 10_000
+            record.deposit = 5_000
+            record.discount = 50
 
-          expect(record.errors["mortgageused"]).to be_empty
-          expect(record.errors["mortgage"]).to be_empty
-          expect(record.errors["value"]).to be_empty
-          expect(record.errors["deposit"]).to be_empty
-          expect(record.errors["ownershipsch"]).to be_empty
-          expect(record.errors["discount"]).to be_empty
-          expect(record.errors["grant"]).to be_empty
-        end
+            sale_information_validator.validate_discounted_ownership_value(record)
 
-        it "adds errors if mortgage and deposit total is not within a 0.05% x market value tolerance of market value - discount" do
-          record.value = 123_000
-          record.mortgage = 66_113
-          record.deposit = 0
-          record.discount = 46.3
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["mortgage"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["ownershipsch"]).to be_empty
+            expect(record.errors["discount"]).to be_empty
+            expect(record.errors["grant"]).to be_empty
+          end
 
-          sale_information_validator.validate_discounted_ownership_value(record)
+          it "does not add errors if mortgage and deposit total is within a 0.1% tolerance" do
+            record.value = 30_000
+            record.mortgage = 10_000
+            record.deposit = 5_000
+            record.discount = 50.1
 
-          expect(record.errors["mortgageused"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
-          expect(record.errors["mortgage"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
-          expect(record.errors["value"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
-          expect(record.errors["deposit"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
-          expect(record.errors["ownershipsch"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
-          expect(record.errors["discount"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
-          expect(record.errors["grant"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
-        end
+            sale_information_validator.validate_discounted_ownership_value(record)
 
-        it "does not add errors if mortgage and deposit total is exactly 0.05% x market value away from market value - discount" do
-          record.value = 120_000
-          record.mortgage = 64_500
-          record.deposit = 0
-          record.discount = 46.3
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["mortgage"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["ownershipsch"]).to be_empty
+            expect(record.errors["discount"]).to be_empty
+            expect(record.errors["grant"]).to be_empty
+          end
 
-          sale_information_validator.validate_discounted_ownership_value(record)
+          it "adds errors if mortgage and deposit total is not within a 0.1% tolerance" do
+            record.value = 123_000
+            record.mortgage = 66_113
+            record.deposit = 0
+            record.discount = 50.2
 
-          expect(record.errors["mortgageused"]).to be_empty
-          expect(record.errors["mortgage"]).to be_empty
-          expect(record.errors["value"]).to be_empty
-          expect(record.errors["deposit"]).to be_empty
-          expect(record.errors["ownershipsch"]).to be_empty
-          expect(record.errors["discount"]).to be_empty
-          expect(record.errors["grant"]).to be_empty
+            sale_information_validator.validate_discounted_ownership_value(record)
+
+            expect(record.errors["mortgageused"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (50.2%) is £61,254.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["mortgage"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (50.2%) is £61,254.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["value"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (50.2%) is £61,254.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["deposit"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (50.2%) is £61,254.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["ownershipsch"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (50.2%) is £61,254.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["discount"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (50.2%) is £61,254.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["grant"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (50.2%) is £61,254.00.</br></br>These two amounts should be the same.")
+          end
         end
       end
     end
@@ -661,46 +721,6 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         expect(record.errors["ownershipsch"]).to be_empty
         expect(record.errors["discount"]).to be_empty
         expect(record.errors["grant"]).to be_empty
-      end
-    end
-
-    context "with year 2026", :aggregate_failures do
-      let(:saledate) { Time.zone.local(2026, 4, 1) }
-
-      context "when mortgage and deposit is exact" do
-        let(:record) { FactoryBot.build(:sales_log, saledate:, mortgage: 85_000, deposit: 5_000, value: 100_000, discount: 10, ownershipsch: 2, type: 9) }
-
-        it "does not add an error" do
-          sale_information_validator.validate_discounted_ownership_value(record)
-          expect(record.errors["mortgage"]).to be_empty
-          expect(record.errors["value"]).to be_empty
-          expect(record.errors["deposit"]).to be_empty
-          expect(record.errors["discount"]).to be_empty
-        end
-      end
-
-      context "when mortgage and deposit is within 0.1% discount tolerance" do
-        let(:record) { FactoryBot.build(:sales_log, saledate:, mortgage: 85_000, deposit: 5_000, value: 100_000, discount: 10.1, ownershipsch: 2, type: 9) }
-
-        it "does not add an error" do
-          sale_information_validator.validate_discounted_ownership_value(record)
-          expect(record.errors["mortgage"]).to be_empty
-          expect(record.errors["value"]).to be_empty
-          expect(record.errors["deposit"]).to be_empty
-          expect(record.errors["discount"]).to be_empty
-        end
-      end
-
-      context "when mortgage and deposit is outside 0.1% discount tolerance" do
-        let(:record) { FactoryBot.build(:sales_log, saledate:, mortgage: 85_000, deposit: 5_000, value: 100_000, discount: 10.2, ownershipsch: 2, type: 9) }
-
-        it "adds an error" do
-          sale_information_validator.validate_discounted_ownership_value(record)
-          expect(record.errors["mortgage"]).not_to be_empty
-          expect(record.errors["value"]).not_to be_empty
-          expect(record.errors["deposit"]).not_to be_empty
-          expect(record.errors["discount"]).not_to be_empty
-        end
       end
     end
   end
