@@ -2022,10 +2022,10 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         expect(parser.errors[:field_126]).to include(I18n.t("validations.sales.2026.bulk_upload.newservicecharges.invalid"))
       end
 
-      it "sets hasservicechargeschanged to no" do
+      it "does not set hasservicechargeschanged" do
         log = parser.log
         expect(log["newservicecharges"]).to be_nil
-        expect(log["hasservicechargeschanged"]).to eq(2)
+        expect(log["hasservicechargeschanged"]).to be_nil
       end
     end
 
@@ -2037,10 +2037,10 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
       end
 
-      it "sets has_mscharge to no" do
+      it "does not set has_mscharge" do
         log = parser.log
         expect(log["mscharge"]).to be_nil
-        expect(log["has_mscharge"]).to eq(0)
+        expect(log["has_mscharge"]).to be_nil
       end
     end
 
