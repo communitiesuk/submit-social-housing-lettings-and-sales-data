@@ -477,6 +477,8 @@ class BulkUpload::Sales::Year2026::RowParser
             },
             on: :after_log
 
+  validate :validate_service_charge_fields, on: :before_log
+
   validate :validate_buyer1_economic_status, on: :before_log
   validate :validate_buyer2_economic_status, on: :before_log
   validate :validate_valid_radio_option, on: :before_log
@@ -954,7 +956,7 @@ private
     attributes["gender_description6"] = field_69
 
     attributes["newservicecharges"] = field_126.to_d if field_126.present? && field_126 != "R" && field_126.to_d.positive?
-    attributes["hasservicechargeschanged"] = attributes["newservicecharges"].present? ? 1 : 2
+    attributes["hasservicechargeschanged"] = attributes["newservicecharges"].present? ? 1 : 2 if field_126.present?
 
     attributes["relat2"] = relationship_from_is_partner(field_37)
     attributes["relat3"] = relationship_from_is_partner(field_47)
@@ -1030,7 +1032,7 @@ private
     attributes["cashdis"] = field_105
     attributes["mrent"] = mrent
     attributes["mscharge"] = mscharge.to_d if mscharge.present? && mscharge != "R" && mscharge.to_d.positive?
-    attributes["has_mscharge"] = attributes["mscharge"].present? ? 1 : 0
+    attributes["has_mscharge"] = attributes["mscharge"].present? ? 1 : 0 if mscharge.present?
     attributes["grant"] = field_129
     attributes["discount"] = field_130
 
@@ -1337,11 +1339,11 @@ private
   end
 
   def mscharge_fields
-    return [:field_107] if shared_ownership?
-    return [:field_136] if discounted_ownership?
+    return [:field_107] if shared_ownership_initial_purchase?
     return [:field_125] if staircasing?
+    return [:field_136] if discounted_ownership?
 
-    %i[field_107 field_136 field_125]
+    %i[field_107 field_125 field_136]
   end
 
   def mortlen_fields
@@ -1391,6 +1393,33 @@ private
       1
     else
       2
+    end
+  end
+
+  def validate_service_charge_fields
+    service_charge_format = /\A(\d+(\.\d+)?|R)\z/
+    message = I18n.t("#{ERROR_BASE_KEY}.mscharge.invalid")
+
+    if shared_ownership_initial_purchase? && field_107.present? && !field_107.match?(service_charge_format)
+      block_log_creation!
+      errors.add(:field_107, message)
+    end
+
+    if staircasing?
+      if field_125.present? && !field_125.match?(service_charge_format)
+        block_log_creation!
+        errors.add(:field_125, message)
+      end
+
+      if field_126.present? && !field_126.match?(service_charge_format)
+        block_log_creation!
+        errors.add(:field_126, I18n.t("#{ERROR_BASE_KEY}.newservicecharges.invalid"))
+      end
+    end
+
+    if discounted_ownership? && field_136.present? && !field_136.match?(service_charge_format)
+      block_log_creation!
+      errors.add(:field_136, message)
     end
   end
 
