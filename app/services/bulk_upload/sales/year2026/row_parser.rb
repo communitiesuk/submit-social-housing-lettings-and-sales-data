@@ -956,7 +956,7 @@ private
     attributes["gender_same_as_sex6"] = field_68
     attributes["gender_description6"] = field_69
 
-    attributes["newservicecharges"] = field_126.to_d if field_126.present? && field_126 != "R" && field_126.to_d.positive?
+    attributes["newservicecharges"] = field_126.to_d if field_126.present? && field_126 != "R" && field_126.match?(SERVICE_CHARGE_FORMAT)
     attributes["hasservicechargeschanged"] = attributes["newservicecharges"].present? ? 1 : 2 if field_126.present? && field_126.match?(SERVICE_CHARGE_FORMAT)
 
     attributes["relat2"] = relationship_from_is_partner(field_37)
@@ -1419,9 +1419,7 @@ private
     end
   end
 
-  # Will send a "Bulk upload failed" email rather than an "Errors in bulk upload" email.
-  # The body of the "Bulk upload failed" email says there are errors in the setup section,
-  # so only use this method for setup section errors.
+  # Will send a "Bulk upload failed" email rather than an "Errors in bulk upload" email
   def block_log_creation!
     self.block_log_creation = true
   end

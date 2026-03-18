@@ -1997,10 +1997,10 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     context "when newservicecharges is set to 0" do
       let(:attributes) { valid_attributes.merge(field_126: "0") }
 
-      it "does not set newservicecharges and sets hasservicechargeschanged to no" do
+      it "sets newservicecharges to 0 and hasservicechargeschanged to yes" do
         log = parser.log
-        expect(log["newservicecharges"]).to be_nil
-        expect(log["hasservicechargeschanged"]).to eq(2)
+        expect(log["newservicecharges"]).to eq(0)
+        expect(log["hasservicechargeschanged"]).to eq(1)
       end
     end
 
@@ -2022,7 +2022,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         expect(parser.errors[:field_126]).to include(I18n.t("validations.sales.2026.bulk_upload.newservicecharges.invalid"))
       end
 
-      it "does not set hasservicechargeschanged" do
+      it "does not set newservicecharges or hasservicechargeschanged" do
         log = parser.log
         expect(log["newservicecharges"]).to be_nil
         expect(log["hasservicechargeschanged"]).to be_nil
@@ -2037,7 +2037,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
       end
 
-      it "does not set has_mscharge" do
+      it "does not set mscharge or has_mscharge" do
         log = parser.log
         expect(log["mscharge"]).to be_nil
         expect(log["has_mscharge"]).to be_nil
@@ -2047,7 +2047,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
     context "when mscharge is blank for staircasing" do
       let(:attributes) { valid_attributes.merge(field_125: nil) }
 
-      it "leaves has_mscharge nil" do
+      it "leaves mscharge and has_mscharge nil" do
         log = parser.log
         expect(log["mscharge"]).to be_nil
         expect(log["has_mscharge"]).to be_nil
