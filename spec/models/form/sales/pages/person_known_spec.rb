@@ -3,11 +3,13 @@ require "rails_helper"
 RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection, person_index:) }
 
-  context "without joint purchase" do
-    let(:page_id) { "person_2_known" }
-    let(:page_definition) { nil }
-    let(:subsection) { instance_double(Form::Subsection) }
-    let(:person_index) { 2 }
+  let(:page_id) { "person_2_known" }
+  let(:page_definition) { nil }
+  let(:person_index) { 2 }
+
+  context "with pre-2026 form" do
+    let(:form) { instance_double(Form, start_year_2026_or_later?: false) }
+    let(:subsection) { instance_double(Form::Subsection, form:) }
 
     it "has correct subsection" do
       expect(page.subsection).to eq(subsection)
@@ -147,6 +149,146 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
             "hholdcount" => {
               "operator" => ">=",
               "operand" => 3,
+            },
+          },
+        ])
+      end
+    end
+
+    context "with person 6" do
+      let(:page_id) { "person_6_known" }
+      let(:person_index) { 6 }
+
+      it "has correct depends_on" do
+        expect(page.depends_on).to eq([
+          {
+            "not_joint_purchase?" => true,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 5,
+            },
+          },
+          {
+            "joint_purchase?" => true,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 4,
+            },
+          },
+        ])
+      end
+    end
+  end
+
+  context "with 2026 form" do
+    let(:form) { instance_double(Form, start_year_2026_or_later?: true) }
+    let(:subsection) { instance_double(Form::Subsection, form:) }
+
+    context "with person 2" do
+      let(:page_id) { "person_2_known" }
+      let(:person_index) { 2 }
+
+      it "has correct depends_on" do
+        expect(page.depends_on).to eq([{
+          "not_joint_purchase?" => true,
+          "hholdcount" => {
+            "operator" => ">=",
+            "operand" => 2,
+          },
+        }])
+      end
+    end
+
+    context "with person 3" do
+      let(:page_id) { "person_3_known" }
+      let(:person_index) { 3 }
+
+      it "has correct depends_on" do
+        expect(page.depends_on).to eq([
+          {
+            "not_joint_purchase?" => true,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 3,
+            },
+          },
+          {
+            "joint_purchase?" => true,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 3,
+            },
+          },
+        ])
+      end
+    end
+
+    context "with person 4" do
+      let(:page_id) { "person_4_known" }
+      let(:person_index) { 4 }
+
+      it "has correct depends_on" do
+        expect(page.depends_on).to eq([
+          {
+            "not_joint_purchase?" => true,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 4,
+            },
+          },
+          {
+            "joint_purchase?" => true,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 4,
+            },
+          },
+        ])
+      end
+    end
+
+    context "with person 5" do
+      let(:page_id) { "person_5_known" }
+      let(:person_index) { 5 }
+
+      it "has correct depends_on" do
+        expect(page.depends_on).to eq([
+          {
+            "not_joint_purchase?" => true,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 5,
+            },
+          },
+          {
+            "joint_purchase?" => true,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 5,
+            },
+          },
+        ])
+      end
+    end
+
+    context "with person 6" do
+      let(:page_id) { "person_6_known" }
+      let(:person_index) { 6 }
+
+      it "has correct depends_on" do
+        expect(page.depends_on).to eq([
+          {
+            "not_joint_purchase?" => true,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 6,
+            },
+          },
+          {
+            "joint_purchase?" => true,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 6,
             },
           },
         ])

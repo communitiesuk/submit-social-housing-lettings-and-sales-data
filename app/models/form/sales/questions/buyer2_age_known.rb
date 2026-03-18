@@ -19,7 +19,7 @@ class Form::Sales::Questions::Buyer2AgeKnown < ::Form::Question
       ],
     }
     @check_answers_card_number = 2
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {
@@ -27,5 +27,5 @@ class Form::Sales::Questions::Buyer2AgeKnown < ::Form::Question
     "1" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 28, 2024 => 30, 2025 => 28 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 28, 2024 => 30, 2025 => 28, 2026 => 30 }.freeze
 end

@@ -3,7 +3,7 @@
     <%= govuk_summary_list do |summary_list| %>
       <% log.duplicate_check_questions(current_user).each do |question| %>
         <% summary_list.with_row do |row| %>
-          <% row.with_key { duplicate_log_question_label(question) } %>
+          <% row.with_key { duplicate_log_question_label(question, log) } %>
 
           <% row.with_value do %>
             <%= simple_format(

@@ -4,7 +4,7 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
     @id = "owning_organisation_id"
     @derived = true
     @type = "select"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   def answer_options(log = nil, user = nil)
@@ -93,5 +93,5 @@ private
     "#{name} (inactive as of #{merge_date.to_fs(:govuk_date)})"
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => nil, 2024 => 1, 2025 => 1 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2024 => 1, 2025 => 1, 2026 => 1 }.freeze
 end

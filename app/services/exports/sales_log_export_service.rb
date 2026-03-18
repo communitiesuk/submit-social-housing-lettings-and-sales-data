@@ -135,6 +135,9 @@ module Exports
       attribute_hash["hasestatefee"] = sales_log.has_management_fee
       attribute_hash["estatefee"] = sales_log.management_fee
 
+      attribute_hash["hasservicechargeschanged"] = sales_log.hasservicechargeschanged
+      attribute_hash["newservicecharges"] = sales_log.newservicecharges
+
       attribute_hash["stairlastday"] = sales_log.lasttransaction&.day
       attribute_hash["stairlastmonth"] = sales_log.lasttransaction&.month
       attribute_hash["stairlastyear"] = sales_log.lasttransaction&.year
@@ -159,6 +162,10 @@ module Exports
       included_fields.merge(ALL_YEAR_EXPORT_FIELDS)
 
       year_fields = case sales_log.collection_start_year
+                    when 2024
+                      YEAR_2024_EXPORT_FIELDS
+                    when 2025
+                      YEAR_2025_EXPORT_FIELDS
                     when 2026
                       YEAR_2026_EXPORT_FIELDS
                     else

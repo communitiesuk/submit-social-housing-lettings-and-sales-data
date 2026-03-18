@@ -6,7 +6,7 @@ class Form::Sales::Questions::AddressSearch < ::Form::Question
     @copy_key = "sales.property_information.address_search"
     @plain_label = true
     @bottom_guidance_partial = "address_search"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
     @hide_question_number_on_page = true
   end
 
@@ -38,5 +38,5 @@ class Form::Sales::Questions::AddressSearch < ::Form::Question
     answer_options(log, user).transform_values { |value| value["value"] } || {}
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2024 => 15, 2025 => 13 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2024 => 15, 2025 => 13, 2026 => 13 }.freeze
 end

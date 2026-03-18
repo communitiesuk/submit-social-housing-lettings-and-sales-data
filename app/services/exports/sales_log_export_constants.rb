@@ -139,16 +139,33 @@ module Exports::SalesLogExportConstants
   (1..6).each do |index|
     ALL_YEAR_EXPORT_FIELDS << "AGE#{index}"
     ALL_YEAR_EXPORT_FIELDS << "ECSTAT#{index}"
-    ALL_YEAR_EXPORT_FIELDS << "SEX#{index}"
   end
 
   (2..6).each do |index|
     ALL_YEAR_EXPORT_FIELDS << "RELAT#{index}"
   end
 
-  YEAR_2026_EXPORT_FIELDS = Set[]
+  YEAR_2024_EXPORT_FIELDS = Set[]
+
+  (1..6).each do |index|
+    YEAR_2024_EXPORT_FIELDS << "SEX#{index}"
+  end
+
+  YEAR_2025_EXPORT_FIELDS = Set[]
+
+  (1..6).each do |index|
+    YEAR_2025_EXPORT_FIELDS << "SEX#{index}"
+  end
+
+  YEAR_2026_EXPORT_FIELDS = Set[
+    "BUILDHEIGHTCLASS",
+    "HASSERVICECHARGESCHANGED",
+    "NEWSERVICECHARGES",
+  ]
 
   (1..6).each do |index|
     YEAR_2026_EXPORT_FIELDS << "SEXRAB#{index}"
+    YEAR_2026_EXPORT_FIELDS << "GENDER_SAME_AS_SEX#{index}"
+    YEAR_2026_EXPORT_FIELDS << "GENDER_DESCRIPTION#{index}"
   end
 end

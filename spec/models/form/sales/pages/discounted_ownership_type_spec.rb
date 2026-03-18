@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Pages::DiscountedOwnershipType, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:, start_year_2026_or_later?: true)) }
   let(:start_date) { Time.zone.today }
 
   it "has correct subsection" do

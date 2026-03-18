@@ -3,8 +3,7 @@ require "csv"
 class BulkUpload::Lettings::Year2026::CsvParser
   include CollectionTimeHelper
 
-  # TODO: CLDC-4162: Update when 2026 format is known
-  FIELDS = 148
+  FIELDS = 147
   FORM_YEAR = 2026
 
   attr_reader :path
@@ -26,8 +25,7 @@ class BulkUpload::Lettings::Year2026::CsvParser
   end
 
   def cols
-    # TODO: CLDC-4162: Update when 2026 format is known
-    @cols ||= ("A".."FA").to_a
+    @cols ||= ("A".."ER").to_a
   end
 
   def row_parsers

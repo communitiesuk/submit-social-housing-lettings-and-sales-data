@@ -4,8 +4,8 @@ class Form::Sales::Questions::HandoverDate < ::Form::Question
     @id = "hodate"
     @copy_key = "sales.sale_information.handover_date"
     @type = "date"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 82, 2024 => 84, 2025 => 76 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 82, 2024 => 84, 2025 => 76, 2026 => 84 }.freeze
 end
