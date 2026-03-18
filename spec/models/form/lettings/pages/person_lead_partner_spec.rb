@@ -28,8 +28,6 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
     end
 
     context "with start year < 2026", metadata: { year: 25 } do
-      let(:person_question_count) { 4 }
-
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
           [{ "details_known_2" => 0 }],
@@ -39,7 +37,6 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
 
     context "with start year >= 2026", metadata: { year: 26 } do
       let(:start_year_2026_or_later?) { true }
-      let(:person_question_count) { 5 }
 
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
@@ -70,8 +67,6 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
     end
 
     context "with start year < 2026", metadata: { year: 25 } do
-      let(:person_question_count) { 4 }
-
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
           [{ "details_known_3" => 0 }],
@@ -81,7 +76,6 @@ RSpec.describe Form::Lettings::Pages::PersonLeadPartner, type: :model do
 
     context "with start year >= 2026", metadata: { year: 26 } do
       let(:start_year_2026_or_later?) { true }
-      let(:person_question_count) { 5 }
 
       it "has correct depends_on" do
         expect(page.depends_on).to eq(

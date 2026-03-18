@@ -108,7 +108,8 @@ class Form
 
     return :check_answers if next_page.nil?
     return next_page.id if next_page.routed_to?(log, current_user) &&
-      (!ignore_answered || next_page.has_unanswered_questions?(log))
+      (!ignore_answered || next_page.has_unanswered_questions?(log)) &&
+      next_page.questions.any? { |question| !question.skip_question_in_form_flow?(log) }
 
     next_page_id(next_page, log, current_user, ignore_answered:)
   end
@@ -323,7 +324,12 @@ class Form
         if value.is_a?(Hash) && value.key?("operator")
           operator = value["operator"]
           operand = value["operand"]
-          log[question]&.send(operator, operand)
+
+          if operator == "!=" # This branch is needed as `nil` does not behave as expected with the default logic (`nil&.send("!=", nil)` => `nil` i.e., `false`).
+            log[question] != operand
+          else
+            log[question]&.send(operator, operand)
+          end
         else
           parts = question.split(".")
           log_value = send_chain(parts, log)
