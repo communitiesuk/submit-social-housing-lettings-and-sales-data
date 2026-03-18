@@ -48,7 +48,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipStaircasingTransaction, 
           staircase_mortgage_used_shared_ownership
           monthly_rent_staircasing_owned
           monthly_rent_staircasing
-          monthly_charges_shared_ownership_value_check
+          monthly_charges_staircasing_value_check
         ],
       )
     end
@@ -78,7 +78,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipStaircasingTransaction, 
           monthly_rent_staircasing
           service_charge_staircasing
           service_charge_changed
-          monthly_charges_shared_ownership_value_check
+          monthly_charges_staircasing_value_check
         ],
       )
     end
