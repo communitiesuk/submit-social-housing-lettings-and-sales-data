@@ -152,6 +152,7 @@ class BulkUpload::Sales::Year2026::RowParser
   }.freeze
 
   ERROR_BASE_KEY = "validations.sales.2026.bulk_upload".freeze
+  SERVICE_CHARGE_FORMAT = /\A(\d+(\.\d+)?|R)\z/
 
   CASE_INSENSITIVE_FIELDS = [
     :field_29, # Age of buyer 1
@@ -956,7 +957,7 @@ private
     attributes["gender_description6"] = field_69
 
     attributes["newservicecharges"] = field_126.to_d if field_126.present? && field_126 != "R" && field_126.to_d.positive?
-    attributes["hasservicechargeschanged"] = attributes["newservicecharges"].present? ? 1 : 2 if field_126.present?
+    attributes["hasservicechargeschanged"] = attributes["newservicecharges"].present? ? 1 : 2 if field_126.present? && field_126.match?(SERVICE_CHARGE_FORMAT)
 
     attributes["relat2"] = relationship_from_is_partner(field_37)
     attributes["relat3"] = relationship_from_is_partner(field_47)
@@ -1032,7 +1033,7 @@ private
     attributes["cashdis"] = field_105
     attributes["mrent"] = mrent
     attributes["mscharge"] = mscharge.to_d if mscharge.present? && mscharge != "R" && mscharge.to_d.positive?
-    attributes["has_mscharge"] = attributes["mscharge"].present? ? 1 : 0 if mscharge.present?
+    attributes["has_mscharge"] = attributes["mscharge"].present? ? 1 : 0 if mscharge.present? && mscharge.match?(SERVICE_CHARGE_FORMAT)
     attributes["grant"] = field_129
     attributes["discount"] = field_130
 
@@ -1397,32 +1398,28 @@ private
   end
 
   def validate_service_charge_fields
-    service_charge_format = /\A(\d+(\.\d+)?|R)\z/
     message = I18n.t("#{ERROR_BASE_KEY}.mscharge.invalid")
 
-    if shared_ownership_initial_purchase? && field_107.present? && !field_107.match?(service_charge_format)
-      block_log_creation!
+    if shared_ownership_initial_purchase? && field_107.present? && !field_107.match?(SERVICE_CHARGE_FORMAT)
       errors.add(:field_107, message)
     end
 
     if staircasing?
-      if field_125.present? && !field_125.match?(service_charge_format)
-        block_log_creation!
+      if field_125.present? && !field_125.match?(SERVICE_CHARGE_FORMAT)
         errors.add(:field_125, message)
       end
 
-      if field_126.present? && !field_126.match?(service_charge_format)
-        block_log_creation!
+      if field_126.present? && !field_126.match?(SERVICE_CHARGE_FORMAT)
         errors.add(:field_126, I18n.t("#{ERROR_BASE_KEY}.newservicecharges.invalid"))
       end
     end
 
-    if discounted_ownership? && field_136.present? && !field_136.match?(service_charge_format)
-      block_log_creation!
+    if discounted_ownership? && field_136.present? && !field_136.match?(SERVICE_CHARGE_FORMAT)
       errors.add(:field_136, message)
     end
   end
 
+  # Will send a "Bulk upload failed" email rather than an "Errors in bulk upload" email
   def block_log_creation!
     self.block_log_creation = true
   end

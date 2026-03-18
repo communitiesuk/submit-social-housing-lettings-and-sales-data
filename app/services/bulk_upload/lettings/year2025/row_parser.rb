@@ -525,6 +525,7 @@ class BulkUpload::Lettings::Year2025::RowParser
     @log ||= LettingsLog.new(attributes_for_log)
   end
 
+  # Will send a "Bulk upload failed" email rather than an "Errors in bulk upload" email
   def block_log_creation!
     self.block_log_creation = true
   end

@@ -1288,6 +1288,7 @@ private
     end
   end
 
+  # Will send a "Bulk upload failed" email rather than an "Errors in bulk upload" email
   def block_log_creation!
     self.block_log_creation = true
   end
