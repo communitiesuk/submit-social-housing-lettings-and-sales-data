@@ -3,7 +3,8 @@ require "rails_helper"
 RSpec.describe Validations::Sales::SoftValidations do
   include CollectionTimeHelper
 
-  let(:record) { build(:sales_log) }
+  let(:saledate) { current_collection_start_date }
+  let(:record) { build(:sales_log, saledate:) }
 
   describe "income validations" do
     context "when validating soft range based on ecstat" do
@@ -396,17 +397,33 @@ RSpec.describe Validations::Sales::SoftValidations do
         expect(record).not_to be_mortgage_plus_deposit_less_than_discounted_value
       end
 
-      it "returns true if the deposit and mortgage add up to less than the discounted value" do
-        record.value = 500_000
-        record.discount = 10
-        record.mortgage = 200_000
-        record.deposit = 200_000
-        expect(record).to be_mortgage_plus_deposit_less_than_discounted_value
+      context "and 2025", metadata: { year: 25 } do
+        let(:saledate) { collection_start_date_for_year(2025) }
+
+        it "returns true if the deposit and mortgage add up to less than the discounted value" do
+          record.value = 500_000
+          record.discount = 10
+          record.mortgage = 200_000
+          record.deposit = 200_000
+          expect(record).to be_mortgage_plus_deposit_less_than_discounted_value
+        end
+      end
+
+      context "and 2026", metadata: { year: 26 } do
+        let(:saledate) { collection_start_date_for_year(2026) }
+
+        it "returns false if the deposit and mortgage add up to less than the discounted value" do
+          record.value = 500_000
+          record.discount = 10
+          record.mortgage = 200_000
+          record.deposit = 200_000
+          expect(record).not_to be_mortgage_plus_deposit_less_than_discounted_value
+        end
       end
     end
 
     context "when validating extra borrowing" do
-      let(:record) { build(:sales_log, saledate: previous_collection_start_date) }
+      let(:saledate) { collection_start_date_for_year(2025) }
 
       it "returns false for logs from 2024 onwards" do
         record.extrabor = 2
