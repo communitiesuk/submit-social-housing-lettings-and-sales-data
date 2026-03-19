@@ -1994,7 +1994,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         context "when blank" do
           let(:attributes) { valid_attributes.merge(field_10: "2", field_107: nil) }
 
-          it "leaves has_mscharge and mscharge nil" do
+          it "does not set has_mscharge or mscharge" do
             log = parser.log
             expect(log["has_mscharge"]).to be_nil
             expect(log["mscharge"]).to be_nil
@@ -2061,7 +2061,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         context "when blank" do
           let(:attributes) { valid_attributes.merge(field_125: nil) }
 
-          it "leaves has_mscharge and mscharge nil" do
+          it "does not set has_mscharge or mscharge" do
             log = parser.log
             expect(log["has_mscharge"]).to be_nil
             expect(log["mscharge"]).to be_nil
@@ -2128,7 +2128,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         context "when blank" do
           let(:attributes) { valid_attributes.merge(field_8: "2", field_136: nil) }
 
-          it "leaves has_mscharge and mscharge nil" do
+          it "does not set has_mscharge or mscharge" do
             log = parser.log
             expect(log["has_mscharge"]).to be_nil
             expect(log["mscharge"]).to be_nil
@@ -2178,7 +2178,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
 
         context "when an invalid string" do
-          let(:attributes) { valid_attributes.merge(field_126: "S") }
+          let(:attributes) { valid_attributes.merge(field_126: "X") }
 
           it "adds a validation error" do
             parser.valid?
@@ -2195,7 +2195,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         context "when blank" do
           let(:attributes) { valid_attributes.merge(field_126: nil) }
 
-          it "leaves hasservicechargeschanged and newservicecharges nil" do
+          it "does not set hasservicechargeschanged or newservicecharges" do
             log = parser.log
             expect(log["hasservicechargeschanged"]).to be_nil
             expect(log["newservicecharges"]).to be_nil
