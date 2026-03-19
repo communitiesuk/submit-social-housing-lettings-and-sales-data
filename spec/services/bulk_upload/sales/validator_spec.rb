@@ -37,7 +37,8 @@ RSpec.describe BulkUpload::Sales::Validator do
 
     context "when file has too many columns" do
       before do
-        file.write((%w[a] * (Object.const_get("BulkUpload::Sales::Year#{year}::CsvParser::MAX_COLUMNS") + 1)).join(","))
+        Timecop.travel(collection_start_date_for_year_or_later(2025))
+        file.write((%w[a] * (Object.const_get("BulkUpload::Sales::Year#{year}::CsvParser::FIELDS") + 1)).join(","))
         file.rewind
       end
 
