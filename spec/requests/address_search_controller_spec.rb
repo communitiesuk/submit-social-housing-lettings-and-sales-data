@@ -152,9 +152,9 @@ RSpec.describe AddressSearchController, type: :request do
         before do
           body = { results: [{ DPA: { "ADDRESS": "100, Test Street", "UPRN": "100" } }] }.to_json
           uprn_body = { results: [{ DPA: nil }] }.to_json
-          WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?key=OS_DATA_KEY&maxresults=10&minmatch=0.2&query=100")
+          WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&maxresults=10&minmatch=0.2&query=100")
                  .to_return(status: 200, body:, headers: {})
-          WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=100")
+          WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&uprn=100")
                  .to_return(status: 200, body: uprn_body, headers: {})
         end
 
@@ -170,9 +170,9 @@ RSpec.describe AddressSearchController, type: :request do
         before do
           body = { results: [{ DPA: nil }] }.to_json
           uprn_body = { results: [{ DPA: { "ADDRESS": "321, Test Street", UPRN: "321" } }] }.to_json
-          WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?key=OS_DATA_KEY&maxresults=10&minmatch=0.2&query=321")
+          WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&maxresults=10&minmatch=0.2&query=321")
                  .to_return(status: 200, body:, headers: {})
-          WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=321")
+          WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&uprn=321")
                  .to_return(status: 200, body: uprn_body, headers: {})
         end
 
@@ -199,9 +199,9 @@ RSpec.describe AddressSearchController, type: :request do
       before do
         address_body = { results: [{ DPA: { "ADDRESS": "Path not taken", UPRN: "111" } }] }.to_json
         uprn_body = { results: [{ DPA: { "ADDRESS": "2, Test Street", UPRN: "123456" } }] }.to_json
-        WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?key=OS_DATA_KEY&maxresults=10&minmatch=0.2&query=123456")
+        WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&maxresults=10&minmatch=0.2&query=123456")
                .to_return(status: 200, body: address_body, headers: {})
-        WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=123456")
+        WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&uprn=123456")
                .to_return(status: 200, body: uprn_body, headers: {})
       end
 
@@ -217,9 +217,9 @@ RSpec.describe AddressSearchController, type: :request do
       before do
         address_body = { results: [{ DPA: { "ADDRESS": "70, Test Street", UPRN: "123777" } }] }.to_json
         uprn_body = { results: [{ DPA: { "ADDRESS": "Path not taken", UPRN: "111" } }] }.to_json
-        WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?key=OS_DATA_KEY&maxresults=10&minmatch=0.2&query=70,")
+        WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&maxresults=10&minmatch=0.2&query=70,")
                .to_return(status: 200, body: address_body, headers: {})
-        WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=70,")
+        WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&uprn=70,")
                .to_return(status: 200, body: uprn_body, headers: {})
       end
 
@@ -235,9 +235,9 @@ RSpec.describe AddressSearchController, type: :request do
       before do
         address_body = { results: [{ DPA: { "ADDRESS": "111, Test Street", UPRN: "123777" } }] }.to_json
         uprn_body = { results: [{ DPA: { "ADDRESS": "70 Bean Road", UPRN: "111" } }] }.to_json
-        WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?key=OS_DATA_KEY&maxresults=10&minmatch=0.2&query=111")
+        WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&maxresults=10&minmatch=0.2&query=111")
                .to_return(status: 200, body: address_body, headers: {})
-        WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=111")
+        WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&uprn=111")
                .to_return(status: 200, body: uprn_body, headers: {})
       end
 
