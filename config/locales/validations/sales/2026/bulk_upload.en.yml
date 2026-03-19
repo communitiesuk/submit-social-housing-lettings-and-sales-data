@@ -45,7 +45,7 @@ en:
           nationality:
             invalid: "Select a valid nationality."
           mscharge:
-            invalid: "Service charge must be a number or the letter R."
+            invalid: "Service charge must be a positive number or the letter R."
           newservicecharges:
             invalid: "New service charge must be a number or the letter R."
           mortlen:

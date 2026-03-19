@@ -1400,12 +1400,12 @@ private
   def validate_service_charge_fields
     message = I18n.t("#{ERROR_BASE_KEY}.mscharge.invalid")
 
-    if shared_ownership_initial_purchase? && field_107.present? && !field_107.match?(SERVICE_CHARGE_FORMAT)
+    if shared_ownership_initial_purchase? && field_107.present? && (!field_107.match?(SERVICE_CHARGE_FORMAT) || field_107.to_d.zero?)
       errors.add(:field_107, message)
     end
 
     if staircasing?
-      if field_125.present? && !field_125.match?(SERVICE_CHARGE_FORMAT)
+      if field_125.present? && (!field_125.match?(SERVICE_CHARGE_FORMAT) || field_125.to_d.zero?)
         errors.add(:field_125, message)
       end
 
@@ -1414,7 +1414,7 @@ private
       end
     end
 
-    if discounted_ownership? && field_136.present? && !field_136.match?(SERVICE_CHARGE_FORMAT)
+    if discounted_ownership? && field_136.present? && (!field_136.match?(SERVICE_CHARGE_FORMAT) || field_136.to_d.zero?)
       errors.add(:field_136, message)
     end
   end
