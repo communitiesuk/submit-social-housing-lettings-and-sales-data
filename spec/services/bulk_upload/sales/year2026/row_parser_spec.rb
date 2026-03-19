@@ -1944,113 +1944,233 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       end
     end
 
-    context "when mscharge is given, but is set to 0 for shared ownership" do
-      let(:attributes) { valid_attributes.merge(field_125: "0") }
+    context "with service charges fields" do
+      context "with mscharge for shared ownership initial purchase (field_107)" do
+        context "when positive" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "100") }
 
-      it "does not override variables" do
-        log = parser.log
-        expect(log["has_mscharge"]).to eq(0) # no
-        expect(log["mscharge"]).to be_nil
-      end
-    end
+          it "sets has_mscharge to yes and mscharge to the value" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(100)
+          end
+        end
 
-    context "when mscharge is given, but is set to 0 for discounted ownership" do
-      let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "0") }
+        context "when set to 0" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "0") }
 
-      it "does not override variables" do
-        log = parser.log
-        expect(log["has_mscharge"]).to eq(0) # no
-        expect(log["mscharge"]).to be_nil
-      end
-    end
+          it "does not set mscharge and sets has_mscharge to no" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
 
-    context "when mscharge is set to R for staircasing" do
-      let(:attributes) { valid_attributes.merge(field_125: "R") }
+        context "when set to R" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "R") }
 
-      it "does not set mscharge and sets has_mscharge to no" do
-        log = parser.log
-        expect(log["has_mscharge"]).to eq(0)
-        expect(log["mscharge"]).to be_nil
-      end
-    end
+          it "does not set mscharge and sets has_mscharge to no" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
 
-    context "when newservicecharges is set to R" do
-      let(:attributes) { valid_attributes.merge(field_126: "R") }
+        context "when an invalid string" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "X") }
 
-      it "does not set newservicecharges and sets hasservicechargeschanged to no" do
-        log = parser.log
-        expect(log["newservicecharges"]).to be_nil
-        expect(log["hasservicechargeschanged"]).to eq(2)
-      end
-    end
+          it "adds a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_107]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+          end
 
-    context "when newservicecharges is positive" do
-      let(:attributes) { valid_attributes.merge(field_126: "150") }
+          it "does not set mscharge or has_mscharge" do
+            log = parser.log
+            expect(log["mscharge"]).to be_nil
+            expect(log["has_mscharge"]).to be_nil
+          end
+        end
 
-      it "sets newservicecharges and hasservicechargeschanged correctly" do
-        log = parser.log
-        expect(log["newservicecharges"]).to eq(150)
-        expect(log["hasservicechargeschanged"]).to eq(1)
-      end
-    end
+        context "when blank" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: nil) }
 
-    context "when newservicecharges is set to 0" do
-      let(:attributes) { valid_attributes.merge(field_126: "0") }
-
-      it "sets newservicecharges to 0 and hasservicechargeschanged to yes" do
-        log = parser.log
-        expect(log["newservicecharges"]).to eq(0)
-        expect(log["hasservicechargeschanged"]).to eq(1)
-      end
-    end
-
-    context "when newservicecharges is blank" do
-      let(:attributes) { valid_attributes.merge(field_126: nil) }
-
-      it "does not set newservicecharges and leaves hasservicechargeschanged nil" do
-        log = parser.log
-        expect(log["newservicecharges"]).to be_nil
-        expect(log["hasservicechargeschanged"]).to be_nil
-      end
-    end
-
-    context "when newservicecharges is an invalid string" do
-      let(:attributes) { valid_attributes.merge(field_126: "S") }
-
-      it "adds a validation error" do
-        parser.valid?
-        expect(parser.errors[:field_126]).to include(I18n.t("validations.sales.2026.bulk_upload.newservicecharges.invalid"))
+          it "leaves mscharge and has_mscharge nil" do
+            log = parser.log
+            expect(log["mscharge"]).to be_nil
+            expect(log["has_mscharge"]).to be_nil
+          end
+        end
       end
 
-      it "does not set newservicecharges or hasservicechargeschanged" do
-        log = parser.log
-        expect(log["newservicecharges"]).to be_nil
-        expect(log["hasservicechargeschanged"]).to be_nil
+      context "with mscharge for staircasing (field_125)" do
+        context "when positive" do
+          let(:attributes) { valid_attributes.merge(field_125: "100") }
+
+          it "sets has_mscharge to yes and mscharge to the value" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(100)
+          end
+        end
+
+        context "when set to 0" do
+          let(:attributes) { valid_attributes.merge(field_125: "0") }
+
+          it "does not set mscharge and sets has_mscharge to no" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when set to R" do
+          let(:attributes) { valid_attributes.merge(field_125: "R") }
+
+          it "does not set mscharge and sets has_mscharge to no" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when an invalid string" do
+          let(:attributes) { valid_attributes.merge(field_125: "X") }
+
+          it "adds a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+          end
+
+          it "does not set mscharge or has_mscharge" do
+            log = parser.log
+            expect(log["mscharge"]).to be_nil
+            expect(log["has_mscharge"]).to be_nil
+          end
+        end
+
+        context "when blank" do
+          let(:attributes) { valid_attributes.merge(field_125: nil) }
+
+          it "leaves mscharge and has_mscharge nil" do
+            log = parser.log
+            expect(log["mscharge"]).to be_nil
+            expect(log["has_mscharge"]).to be_nil
+          end
+        end
       end
-    end
 
-    context "when mscharge is an invalid string for staircasing" do
-      let(:attributes) { valid_attributes.merge(field_125: "X") }
+      context "with mscharge for discounted ownership (field_136)" do
+        context "when positive" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "100") }
 
-      it "adds a validation error" do
-        parser.valid?
-        expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+          it "sets has_mscharge to yes and mscharge to the value" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(100)
+          end
+        end
+
+        context "when set to 0" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "0") }
+
+          it "does not set mscharge and sets has_mscharge to no" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when set to R" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "R") }
+
+          it "does not set mscharge and sets has_mscharge to no" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when an invalid string" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "X") }
+
+          it "adds a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_136]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+          end
+
+          it "does not set mscharge or has_mscharge" do
+            log = parser.log
+            expect(log["mscharge"]).to be_nil
+            expect(log["has_mscharge"]).to be_nil
+          end
+        end
+
+        context "when blank" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: nil) }
+
+          it "leaves mscharge and has_mscharge nil" do
+            log = parser.log
+            expect(log["mscharge"]).to be_nil
+            expect(log["has_mscharge"]).to be_nil
+          end
+        end
       end
 
-      it "does not set mscharge or has_mscharge" do
-        log = parser.log
-        expect(log["mscharge"]).to be_nil
-        expect(log["has_mscharge"]).to be_nil
-      end
-    end
+      context "with newservicecharges (field_126)" do
+        context "when positive" do
+          let(:attributes) { valid_attributes.merge(field_126: "150") }
 
-    context "when mscharge is blank for staircasing" do
-      let(:attributes) { valid_attributes.merge(field_125: nil) }
+          it "sets newservicecharges to the value and hasservicechargeschanged to yes" do
+            log = parser.log
+            expect(log["newservicecharges"]).to eq(150)
+            expect(log["hasservicechargeschanged"]).to eq(1)
+          end
+        end
 
-      it "leaves mscharge and has_mscharge nil" do
-        log = parser.log
-        expect(log["mscharge"]).to be_nil
-        expect(log["has_mscharge"]).to be_nil
+        context "when set to 0" do
+          let(:attributes) { valid_attributes.merge(field_126: "0") }
+
+          it "sets newservicecharges to 0 and hasservicechargeschanged to yes" do
+            log = parser.log
+            expect(log["newservicecharges"]).to eq(0)
+            expect(log["hasservicechargeschanged"]).to eq(1)
+          end
+        end
+
+        context "when set to R" do
+          let(:attributes) { valid_attributes.merge(field_126: "R") }
+
+          it "does not set newservicecharges and sets hasservicechargeschanged to no" do
+            log = parser.log
+            expect(log["newservicecharges"]).to be_nil
+            expect(log["hasservicechargeschanged"]).to eq(2)
+          end
+        end
+
+        context "when an invalid string" do
+          let(:attributes) { valid_attributes.merge(field_126: "S") }
+
+          it "adds a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_126]).to include(I18n.t("validations.sales.2026.bulk_upload.newservicecharges.invalid"))
+          end
+
+          it "does not set newservicecharges or hasservicechargeschanged" do
+            log = parser.log
+            expect(log["newservicecharges"]).to be_nil
+            expect(log["hasservicechargeschanged"]).to be_nil
+          end
+        end
+
+        context "when blank" do
+          let(:attributes) { valid_attributes.merge(field_126: nil) }
+
+          it "does not set newservicecharges and leaves hasservicechargeschanged nil" do
+            log = parser.log
+            expect(log["newservicecharges"]).to be_nil
+            expect(log["hasservicechargeschanged"]).to be_nil
+          end
+        end
       end
     end
 
