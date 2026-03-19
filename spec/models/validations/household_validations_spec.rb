@@ -6,7 +6,7 @@ RSpec.describe Validations::HouseholdValidations do
   subject(:household_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::HouseholdValidations } }
-  let(:startdate) { Time.zone.now }
+  let(:startdate) { current_collection_start_date }
   let(:record) { FactoryBot.build(:lettings_log, :setup_completed, startdate:, assigned_to: create(:user)) }
 
   describe "reasonable preference validations" do
@@ -117,52 +117,57 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
 
-    context "when referral is not internal transfer" do
-      it "can be permanently decanted from another property owned by this landlord" do
-        record.reason = 1
-        record.referral_type = 1
-        record.referral = 2
-        household_validator.validate_reason_for_leaving_last_settled_home(record)
-        expect(record.errors["reason"])
-          .to be_empty
-        expect(record.errors["referral"])
-          .to be_empty
-        expect(record.errors["referral_type"])
-          .to be_empty
-      end
-    end
+    context "when 2025", metadata: { year: 25 } do
+      # post 2025 we don't ask referral and referral_type any more
+      let(:startdate) { collection_start_date_for_year(2025) }
 
-    context "when referral is internal transfer" do
-      it "can be permanently decanted from another property owned by this landlord" do
-        record.reason = 1
-        record.referral_type = 3
-        record.referral = 1
-        household_validator.validate_reason_for_leaving_last_settled_home(record)
-        expect(record.errors["reason"])
-          .to be_empty
-        expect(record.errors["referral"])
-          .to be_empty
-        expect(record.errors["referral_type"])
-          .to be_empty
+      context "when referral is not internal transfer" do
+        it "can be permanently decanted from another property owned by this landlord" do
+          record.reason = 1
+          record.referral_type = 1
+          record.referral = 2
+          household_validator.validate_reason_for_leaving_last_settled_home(record)
+          expect(record.errors["reason"])
+            .to be_empty
+          expect(record.errors["referral"])
+            .to be_empty
+          expect(record.errors["referral_type"])
+            .to be_empty
+        end
       end
 
-      it "cannot have a PRP as landlord and Housing situation before this letting cannot be LA general needs" do
-        record.owning_organisation.provider_type = "PRP"
-        record.prevten = 30
-        record.referral_type = 3
-        record.referral = 1
-        household_validator.validate_referral(record)
-        expect(record.errors["referral"])
-          .to include(match(I18n.t("validations.lettings.household.referral.la_general_needs.internal_transfer")))
-        expect(record.errors["prevten"])
-          .to include(match(I18n.t("validations.lettings.household.prevten.la_general_needs.internal_transfer")))
+      context "when referral is internal transfer" do
+        it "can be permanently decanted from another property owned by this landlord" do
+          record.reason = 1
+          record.referral_type = 3
+          record.referral = 1
+          household_validator.validate_reason_for_leaving_last_settled_home(record)
+          expect(record.errors["reason"])
+            .to be_empty
+          expect(record.errors["referral"])
+            .to be_empty
+          expect(record.errors["referral_type"])
+            .to be_empty
+        end
 
-        record.prevten = 31
-        household_validator.validate_referral(record)
-        expect(record.errors["referral"])
-          .to include(match(I18n.t("validations.lettings.household.referral.la_general_needs.internal_transfer")))
-        expect(record.errors["prevten"])
-          .to include(match(I18n.t("validations.lettings.household.prevten.la_general_needs.internal_transfer")))
+        it "cannot have a PRP as landlord and Housing situation before this letting cannot be LA general needs" do
+          record.owning_organisation.provider_type = "PRP"
+          record.prevten = 30
+          record.referral_type = 3
+          record.referral = 1
+          household_validator.validate_referral(record)
+          expect(record.errors["referral"])
+            .to include(match(I18n.t("validations.lettings.household.referral.la_general_needs.internal_transfer")))
+          expect(record.errors["prevten"])
+            .to include(match(I18n.t("validations.lettings.household.prevten.la_general_needs.internal_transfer")))
+
+          record.prevten = 31
+          household_validator.validate_referral(record)
+          expect(record.errors["referral"])
+            .to include(match(I18n.t("validations.lettings.household.referral.la_general_needs.internal_transfer")))
+          expect(record.errors["prevten"])
+            .to include(match(I18n.t("validations.lettings.household.prevten.la_general_needs.internal_transfer")))
+        end
       end
     end
   end
@@ -445,53 +450,57 @@ RSpec.describe Validations::HouseholdValidations do
   end
 
   describe "referral validations" do
-    context "when homelessness is assessed" do
-      it "can be internal transfer" do
-        record.homeless = 11
-        record.referral_type = 3
-        record.referral = 1
-        household_validator.validate_referral(record)
-        expect(record.errors["referral"]).to be_empty
-        expect(record.errors["referral_type"]).to be_empty
-        expect(record.errors["homeless"]).to be_empty
+    context "when start year is 2025", metadata: { year: 25 } do
+      let(:startdate) { collection_start_date_for_year(2025) }
+
+      context "when homelessness is assessed" do
+        it "can be internal transfer" do
+          record.homeless = 11
+          record.referral_type = 3
+          record.referral = 1
+          household_validator.validate_referral(record)
+          expect(record.errors["referral"]).to be_empty
+          expect(record.errors["referral_type"]).to be_empty
+          expect(record.errors["homeless"]).to be_empty
+        end
+
+        it "can be non internal transfer" do
+          record.owning_organisation.provider_type = "PRP"
+          record.homeless = 0
+          record.referral_type = 2
+          record.referral = 3
+          household_validator.validate_referral(record)
+          expect(record.errors["referral"]).to be_empty
+          expect(record.errors["referral_type"]).to be_empty
+          expect(record.errors["homeless"]).to be_empty
+        end
       end
 
-      it "can be non internal transfer" do
-        record.owning_organisation.provider_type = "PRP"
-        record.homeless = 0
-        record.referral_type = 2
-        record.referral = 3
-        household_validator.validate_referral(record)
-        expect(record.errors["referral"]).to be_empty
-        expect(record.errors["referral_type"]).to be_empty
-        expect(record.errors["homeless"]).to be_empty
+      context "when homelessness is other" do
+        it "cannot be internal transfer" do
+          record.referral_type = 3
+          record.referral = 1
+          record.homeless = 7
+          household_validator.validate_referral(record)
+          expect(record.errors["referral"]).to be_empty
+          expect(record.errors["referral_type"]).to be_empty
+          expect(record.errors["homeless"]).to be_empty
+        end
+
+        it "can be non internal transfer" do
+          record.owning_organisation.provider_type = "PRP"
+          record.referral_type = 2
+          record.referral = 3
+          record.homeless = 1
+          household_validator.validate_referral(record)
+          expect(record.errors["referral"]).to be_empty
+          expect(record.errors["referral_type"]).to be_empty
+          expect(record.errors["homeless"]).to be_empty
+        end
       end
     end
 
-    context "when homelessness is other" do
-      it "cannot be internal transfer" do
-        record.referral_type = 3
-        record.referral = 1
-        record.homeless = 7
-        household_validator.validate_referral(record)
-        expect(record.errors["referral"]).to be_empty
-        expect(record.errors["referral_type"]).to be_empty
-        expect(record.errors["homeless"]).to be_empty
-      end
-
-      it "can be non internal transfer" do
-        record.owning_organisation.provider_type = "PRP"
-        record.referral_type = 2
-        record.referral = 3
-        record.homeless = 1
-        household_validator.validate_referral(record)
-        expect(record.errors["referral"]).to be_empty
-        expect(record.errors["referral_type"]).to be_empty
-        expect(record.errors["homeless"]).to be_empty
-      end
-    end
-
-    context "when start year is 2026" do
+    context "when start year is 2026", metadata: { year: 26 } do
       let(:startdate) { collection_start_date_for_year(2026) }
 
       [
