@@ -2218,8 +2218,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
         it "adds validation errors to both fields" do
           parser.valid?
-          expect(parser.errors[:field_125]).to be_present
-          expect(parser.errors[:field_126]).to be_present
+          expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.financial.mscharge.same_as_new"))
+          expect(parser.errors[:field_126]).to include(I18n.t("validations.sales.financial.newservicecharges.same_as_previous"))
         end
       end
     end
