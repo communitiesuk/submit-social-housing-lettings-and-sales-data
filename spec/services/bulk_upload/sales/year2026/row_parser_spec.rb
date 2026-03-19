@@ -301,7 +301,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
         context "and case insensitive fields are set to lowercase" do
           let(:case_insensitive_fields) { %w[field_30 field_39 field_49 field_55 field_61 field_67] }
-          let(:case_insensitive_integer_fields_with_r_option) { %w[field_29 field_38 field_48 field_54 field_60 field_66 field_77 field_88 field_83 field_85 field_103 field_133] }
+          let(:case_insensitive_integer_fields_with_r_option) { %w[field_29 field_38 field_48 field_54 field_60 field_66 field_77 field_88 field_83 field_85 field_103 field_107 field_125 field_126 field_133 field_136] }
           let(:attributes) do
             valid_attributes
               .merge(case_insensitive_fields.each_with_object({}) { |field, h| h[field.to_sym] = valid_attributes[field.to_sym]&.downcase })
