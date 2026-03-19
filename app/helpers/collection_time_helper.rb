@@ -94,4 +94,17 @@ module CollectionTimeHelper
     available_dates = (start_date..end_date).to_a - [date.to_date]
     available_dates.empty? ? nil : available_dates.sample
   end
+
+  # will time travel forwards only if needed.
+  # useful for writing future tests that will also test the current time if it can.
+  # stops tests being frozen on a specific year.
+  def collection_start_date_for_year_or_later(year)
+    Timecop.return do
+      if current_collection_start_year < year
+        collection_start_date_for_year(year)
+      else
+        current_collection_start_date
+      end
+    end
+  end
 end
