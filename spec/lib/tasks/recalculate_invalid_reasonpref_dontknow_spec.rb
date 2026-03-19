@@ -26,52 +26,62 @@ RSpec.describe "recalculate_invalid_reasonpref_dontknow" do
   end
   let(:valid_logs) { create_list(:lettings_log, 3, :completed, :ignore_validation_errors, reasonpref: 1, rp_dontknow: 0, rp_homeless: 1, rp_insan_unsat: 1, rp_medwel: rand(2), rp_hardship: rand(2), updated_at: Time.zone.local(2024, 4, 2, 12, 0, 0), startdate: Time.zone.local(2024, rand(4..12), rand(1..30))) }
 
-  it "updates the logs from 2024/25 with invalid rp_dontknow values" do
-    invalid_logs.each do |log|
-      expect(log.reasonpref).to eq(1)
-      expect(log.rp_dontknow).to eq(1)
-      expect(log.rp_homeless).to eq(1)
+  context "when 2025", metadata: { year: 25 } do
+    before do
+      Timecop.travel(collection_start_date_for_year(2025))
     end
-    task.invoke
-    invalid_logs.each do |log|
-      log.reload
-      expect(log.reasonpref).to eq(1)
-      expect(log.rp_dontknow).to eq(0)
-      expect(log.rp_homeless).to eq(1)
-      expect(log.updated_at).not_to eq(Time.zone.local(2024, 4, 2, 12, 0, 0))
-    end
-  end
 
-  it "does not update the logs pre 2024 with invalid rp_dontknow values" do
-    pre_2024_invalid_logs.each do |log|
-      expect(log.reasonpref).to eq(1)
-      expect(log.rp_dontknow).to eq(1)
-      expect(log.rp_homeless).to eq(1)
+    after do
+      Timecop.return
     end
-    task.invoke
-    pre_2024_invalid_logs.each do |log|
-      log.reload
-      expect(log.reasonpref).to eq(1)
-      expect(log.rp_dontknow).to eq(1)
-      expect(log.rp_homeless).to eq(1)
-    end
-  end
 
-  it "does not update the logs with valid rp_dontknow values" do
-    valid_logs.each do |log|
-      expect(log.reasonpref).to eq(1)
-      expect(log.rp_dontknow).to eq(0)
-      expect(log.rp_homeless).to eq(1)
-      expect(log.rp_insan_unsat).to eq(1)
+    it "updates the logs from 2024/25 with invalid rp_dontknow values" do
+      invalid_logs.each do |log|
+        expect(log.reasonpref).to eq(1)
+        expect(log.rp_dontknow).to eq(1)
+        expect(log.rp_homeless).to eq(1)
+      end
+      task.invoke
+      invalid_logs.each do |log|
+        log.reload
+        expect(log.reasonpref).to eq(1)
+        expect(log.rp_dontknow).to eq(0)
+        expect(log.rp_homeless).to eq(1)
+        expect(log.updated_at).not_to eq(Time.zone.local(2024, 4, 2, 12, 0, 0))
+      end
     end
-    task.invoke
-    valid_logs.each do |log|
-      log.reload
-      expect(log.reasonpref).to eq(1)
-      expect(log.rp_dontknow).to eq(0)
-      expect(log.rp_homeless).to eq(1)
-      expect(log.rp_insan_unsat).to eq(1)
-      expect(log.updated_at).to eq(Time.zone.local(2024, 4, 2, 12, 0, 0))
+
+    it "does not update the logs pre 2024 with invalid rp_dontknow values" do
+      pre_2024_invalid_logs.each do |log|
+        expect(log.reasonpref).to eq(1)
+        expect(log.rp_dontknow).to eq(1)
+        expect(log.rp_homeless).to eq(1)
+      end
+      task.invoke
+      pre_2024_invalid_logs.each do |log|
+        log.reload
+        expect(log.reasonpref).to eq(1)
+        expect(log.rp_dontknow).to eq(1)
+        expect(log.rp_homeless).to eq(1)
+      end
+    end
+
+    it "does not update the logs with valid rp_dontknow values" do
+      valid_logs.each do |log|
+        expect(log.reasonpref).to eq(1)
+        expect(log.rp_dontknow).to eq(0)
+        expect(log.rp_homeless).to eq(1)
+        expect(log.rp_insan_unsat).to eq(1)
+      end
+      task.invoke
+      valid_logs.each do |log|
+        log.reload
+        expect(log.reasonpref).to eq(1)
+        expect(log.rp_dontknow).to eq(0)
+        expect(log.rp_homeless).to eq(1)
+        expect(log.rp_insan_unsat).to eq(1)
+        expect(log.updated_at).to eq(Time.zone.local(2024, 4, 2, 12, 0, 0))
+      end
     end
   end
 end
