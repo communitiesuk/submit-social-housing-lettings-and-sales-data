@@ -1959,7 +1959,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         context "when set to 0" do
           let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "0") }
 
-          it "does not set mscharge and sets has_mscharge to no" do
+          it "sets has_mscharge to no and does not set mscharge" do
             log = parser.log
             expect(log["has_mscharge"]).to eq(0)
             expect(log["mscharge"]).to be_nil
@@ -1969,7 +1969,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         context "when set to R" do
           let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "R") }
 
-          it "does not set mscharge and sets has_mscharge to no" do
+          it "sets has_mscharge to no and does not set mscharge" do
             log = parser.log
             expect(log["has_mscharge"]).to eq(0)
             expect(log["mscharge"]).to be_nil
@@ -1984,20 +1984,30 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
             expect(parser.errors[:field_107]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
           end
 
-          it "does not set mscharge or has_mscharge" do
+          it "does not set has_mscharge or mscharge" do
             log = parser.log
-            expect(log["mscharge"]).to be_nil
             expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
           end
         end
 
         context "when blank" do
           let(:attributes) { valid_attributes.merge(field_10: "2", field_107: nil) }
 
-          it "leaves mscharge and has_mscharge nil" do
+          it "leaves has_mscharge and mscharge nil" do
             log = parser.log
-            expect(log["mscharge"]).to be_nil
             expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when negative" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "-100") }
+
+          it "does not set has_mscharge or mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
           end
         end
       end
@@ -2016,7 +2026,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         context "when set to 0" do
           let(:attributes) { valid_attributes.merge(field_125: "0") }
 
-          it "does not set mscharge and sets has_mscharge to no" do
+          it "sets has_mscharge to no and does not set mscharge" do
             log = parser.log
             expect(log["has_mscharge"]).to eq(0)
             expect(log["mscharge"]).to be_nil
@@ -2026,7 +2036,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         context "when set to R" do
           let(:attributes) { valid_attributes.merge(field_125: "R") }
 
-          it "does not set mscharge and sets has_mscharge to no" do
+          it "sets has_mscharge to no and does not set mscharge" do
             log = parser.log
             expect(log["has_mscharge"]).to eq(0)
             expect(log["mscharge"]).to be_nil
@@ -2041,20 +2051,30 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
             expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
           end
 
-          it "does not set mscharge or has_mscharge" do
+          it "does not set has_mscharge or mscharge" do
             log = parser.log
-            expect(log["mscharge"]).to be_nil
             expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
           end
         end
 
         context "when blank" do
           let(:attributes) { valid_attributes.merge(field_125: nil) }
 
-          it "leaves mscharge and has_mscharge nil" do
+          it "leaves has_mscharge and mscharge nil" do
             log = parser.log
-            expect(log["mscharge"]).to be_nil
             expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when negative" do
+          let(:attributes) { valid_attributes.merge(field_125: "-100") }
+
+          it "does not set has_mscharge or mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
           end
         end
       end
@@ -2073,7 +2093,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         context "when set to 0" do
           let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "0") }
 
-          it "does not set mscharge and sets has_mscharge to no" do
+          it "sets has_mscharge to no and does not set mscharge" do
             log = parser.log
             expect(log["has_mscharge"]).to eq(0)
             expect(log["mscharge"]).to be_nil
@@ -2083,7 +2103,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         context "when set to R" do
           let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "R") }
 
-          it "does not set mscharge and sets has_mscharge to no" do
+          it "sets has_mscharge to no and does not set mscharge" do
             log = parser.log
             expect(log["has_mscharge"]).to eq(0)
             expect(log["mscharge"]).to be_nil
@@ -2098,20 +2118,30 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
             expect(parser.errors[:field_136]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
           end
 
-          it "does not set mscharge or has_mscharge" do
+          it "does not set has_mscharge or mscharge" do
             log = parser.log
-            expect(log["mscharge"]).to be_nil
             expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
           end
         end
 
         context "when blank" do
           let(:attributes) { valid_attributes.merge(field_8: "2", field_136: nil) }
 
-          it "leaves mscharge and has_mscharge nil" do
+          it "leaves has_mscharge and mscharge nil" do
             log = parser.log
-            expect(log["mscharge"]).to be_nil
             expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when negative" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "-100") }
+
+          it "does not set has_mscharge or mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
           end
         end
       end
@@ -2120,30 +2150,30 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         context "when positive" do
           let(:attributes) { valid_attributes.merge(field_126: "150") }
 
-          it "sets newservicecharges to the value and hasservicechargeschanged to yes" do
+          it "sets hasservicechargeschanged to yes and newservicecharges to the value" do
             log = parser.log
-            expect(log["newservicecharges"]).to eq(150)
             expect(log["hasservicechargeschanged"]).to eq(1)
+            expect(log["newservicecharges"]).to eq(150)
           end
         end
 
         context "when set to 0" do
           let(:attributes) { valid_attributes.merge(field_126: "0") }
 
-          it "sets newservicecharges to 0 and hasservicechargeschanged to yes" do
+          it "sets hasservicechargeschanged to yes and newservicecharges to 0" do
             log = parser.log
-            expect(log["newservicecharges"]).to eq(0)
             expect(log["hasservicechargeschanged"]).to eq(1)
+            expect(log["newservicecharges"]).to eq(0)
           end
         end
 
         context "when set to R" do
           let(:attributes) { valid_attributes.merge(field_126: "R") }
 
-          it "does not set newservicecharges and sets hasservicechargeschanged to no" do
+          it "sets hasservicechargeschanged to no and does not set newservicecharges" do
             log = parser.log
-            expect(log["newservicecharges"]).to be_nil
             expect(log["hasservicechargeschanged"]).to eq(2)
+            expect(log["newservicecharges"]).to be_nil
           end
         end
 
@@ -2155,21 +2185,41 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
             expect(parser.errors[:field_126]).to include(I18n.t("validations.sales.2026.bulk_upload.newservicecharges.invalid"))
           end
 
-          it "does not set newservicecharges or hasservicechargeschanged" do
+          it "does not set hasservicechargeschanged or newservicecharges" do
             log = parser.log
-            expect(log["newservicecharges"]).to be_nil
             expect(log["hasservicechargeschanged"]).to be_nil
+            expect(log["newservicecharges"]).to be_nil
           end
         end
 
         context "when blank" do
           let(:attributes) { valid_attributes.merge(field_126: nil) }
 
-          it "does not set newservicecharges and leaves hasservicechargeschanged nil" do
+          it "leaves hasservicechargeschanged and newservicecharges nil" do
             log = parser.log
-            expect(log["newservicecharges"]).to be_nil
             expect(log["hasservicechargeschanged"]).to be_nil
+            expect(log["newservicecharges"]).to be_nil
           end
+        end
+
+        context "when negative" do
+          let(:attributes) { valid_attributes.merge(field_126: "-150") }
+
+          it "does not set hasservicechargeschanged or newservicecharges" do
+            log = parser.log
+            expect(log["hasservicechargeschanged"]).to be_nil
+            expect(log["newservicecharges"]).to be_nil
+          end
+        end
+      end
+
+      context "when newservicecharges equals mscharge (field_125 == field_126)" do
+        let(:attributes) { valid_attributes.merge(field_125: "200", field_126: "200") }
+
+        it "adds validation errors to both fields" do
+          parser.valid?
+          expect(parser.errors[:field_125]).to be_present
+          expect(parser.errors[:field_126]).to be_present
         end
       end
     end
