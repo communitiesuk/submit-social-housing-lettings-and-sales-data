@@ -21,8 +21,8 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
   end
 
   it "has the correct answer label for a question" do
-    sex1_question = questions.find { |q| q.id == "sex1" }
-    expect(component.get_answer_label(sex1_question)).to eq("Female")
+    question = questions.find { |q| q.id == "ecstat1" }
+    expect(component.get_answer_label(question)).to eq("Other")
   end
 
   context "when log was created via a bulk upload and has an unanswered question" do
@@ -46,7 +46,7 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
     let(:log) { create(:lettings_log, :in_progress) }
 
     it "displays normal copy with muted colour" do
-      expect(rendered).to have_link(log.form.get_question("sex1", log).check_answer_prompt, href: "/lettings-logs/#{log.id}/lead-tenant-gender-identity?referrer=check_answers_new_answer", class: "govuk-link govuk-link--no-visited-state")
+      expect(rendered).to have_link(log.form.get_question("age1", log).check_answer_prompt, href: "/lettings-logs/#{log.id}/lead-tenant-age?referrer=check_answers_new_answer", class: "govuk-link govuk-link--no-visited-state")
     end
   end
 
