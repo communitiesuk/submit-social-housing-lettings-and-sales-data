@@ -49,6 +49,7 @@ private
       uprn:,
       key: ENV["OS_DATA_KEY"],
       dataset: %w[DPA LPI].join(","),
+      fq: ["COUNTRY_CODE:E"],
     }
     uri.query = URI.encode_www_form(params)
     uri.to_s
