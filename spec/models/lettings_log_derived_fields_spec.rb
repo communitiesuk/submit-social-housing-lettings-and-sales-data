@@ -1068,26 +1068,52 @@ RSpec.describe LettingsLog, type: :model do
   describe "variables dependent on whether a letting is a renewal" do
     let(:organisation) { create(:organisation) }
     let(:user) { create(:user, organisation:) }
-    let(:startdate) { Time.zone.today }
     let(:persisted_renewal_lettings_log) { create(:lettings_log, :setup_completed, startdate:, renewal: 1, assigned_to: user) }
 
-    it "derives waityear offered referral first_time_property_let_as_social_housing rsnvac when renewal" do
-      log.renewal = 1
-      expect { log.set_derived_fields! }
-        .to change(log, :waityear).to(2)
-        .and change(log, :offered).to(0)
-        .and change(log, :referral).to(1)
-        .and change(log, :first_time_property_let_as_social_housing).to(0)
-        .and change(log, :rsnvac).to(14)
+    context "when 2025", metadata: { year: 25 } do
+      let(:startdate) { collection_start_date_for_year(2025) }
+
+      it "derives waityear offered referral first_time_property_let_as_social_housing rsnvac when renewal" do
+        log.renewal = 1
+        expect { log.set_derived_fields! }
+          .to change(log, :waityear).to(2)
+          .and change(log, :offered).to(0)
+          .and change(log, :referral).to(1)
+          .and change(log, :first_time_property_let_as_social_housing).to(0)
+          .and change(log, :rsnvac).to(14)
+      end
+
+      it "clears waityear offered referral first_time_property_let_as_social_housing rsnvac when not a renewal" do
+        expect { persisted_renewal_lettings_log.update!(renewal: 0) }
+          .to change(persisted_renewal_lettings_log, :waityear).from(2).to(nil)
+          .and change(persisted_renewal_lettings_log, :offered).from(0).to(nil)
+          .and change(persisted_renewal_lettings_log, :referral).from(1).to(nil)
+          .and change(persisted_renewal_lettings_log, :first_time_property_let_as_social_housing).from(0).to(nil)
+          .and change(persisted_renewal_lettings_log, :rsnvac).from(14).to(nil)
+      end
     end
 
-    it "clears waityear offered referral first_time_property_let_as_social_housing rsnvac when not a renewal" do
-      expect { persisted_renewal_lettings_log.update!(renewal: 0) }
-        .to change(persisted_renewal_lettings_log, :waityear).from(2).to(nil)
-        .and change(persisted_renewal_lettings_log, :offered).from(0).to(nil)
-        .and change(persisted_renewal_lettings_log, :referral).from(1).to(nil)
-        .and change(persisted_renewal_lettings_log, :first_time_property_let_as_social_housing).from(0).to(nil)
-        .and change(persisted_renewal_lettings_log, :rsnvac).from(14).to(nil)
+    context "when 2026", metadata: { year: 26 } do
+      let(:startdate) { collection_start_date_for_year(2026) }
+
+      it "derives waityear offered referral first_time_property_let_as_social_housing rsnvac when renewal" do
+        log.renewal = 1
+        expect { log.set_derived_fields! }
+          .to change(log, :waityear).to(2)
+                                    .and change(log, :offered).to(0)
+                                                              .and change(log, :referral_register).to(1)
+                                                                                         .and change(log, :first_time_property_let_as_social_housing).to(0)
+                                                                                                                                                     .and change(log, :rsnvac).to(14)
+      end
+
+      it "clears waityear offered referral first_time_property_let_as_social_housing rsnvac when not a renewal" do
+        expect { persisted_renewal_lettings_log.update!(renewal: 0) }
+          .to change(persisted_renewal_lettings_log, :waityear).from(2).to(nil)
+                                                               .and change(persisted_renewal_lettings_log, :offered).from(0).to(nil)
+                                                                                                                    .and change(persisted_renewal_lettings_log, :referral_register).from(1).to(nil)
+                                                                                                                                                                          .and change(persisted_renewal_lettings_log, :first_time_property_let_as_social_housing).from(0).to(nil)
+                                                                                                                                                                                                                                                                 .and change(persisted_renewal_lettings_log, :rsnvac).from(14).to(nil)
+      end
     end
 
     describe "deriving voiddate from startdate" do

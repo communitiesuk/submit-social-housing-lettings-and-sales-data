@@ -8,8 +8,9 @@ RSpec.describe Form::Lettings::Questions::Hhmemb, type: :model do
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:start_year_2026_or_later?) { false }
-  let(:form) { instance_double(Form, start_date: current_collection_start_date, start_year_2026_or_later?: start_year_2026_or_later?) }
+  let(:start_year_2026_or_later?) { true }
+  let(:startdate) { current_collection_start_date }
+  let(:form) { instance_double(Form, start_date:, start_year_2026_or_later?: start_year_2026_or_later?) }
 
   before do
     allow(page).to receive(:subsection).and_return(subsection)
@@ -37,6 +38,9 @@ RSpec.describe Form::Lettings::Questions::Hhmemb, type: :model do
   end
 
   context "when in 2025", { year: 25 } do
+    let(:start_year_2026_or_later?) { false }
+    let(:startdate) { collection_start_date_for_year(2025) }
+
     it "does not have check answers card title" do
       expect(question.check_answers_card_title).to be_nil
     end
@@ -48,6 +52,7 @@ RSpec.describe Form::Lettings::Questions::Hhmemb, type: :model do
 
   context "when in 2026", { year: 26 } do
     let(:start_year_2026_or_later?) { true }
+    let(:startdate) { collection_start_date_for_year(2026) }
 
     it "has correct check answers card title" do
       expect(question.check_answers_card_title).to eq("Household")
