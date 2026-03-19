@@ -4,7 +4,7 @@ class Form::Sales::Questions::LivingBeforePurchaseYears < ::Form::Question
     @id = "proplen"
     @copy_key = "sales.sale_information.living_before_purchase.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}.proplen"
     @type = "numeric"
-    @min = 0
+    @min = form.start_year_2026_or_later? ? 1 : 0
     @max = 80
     @step = 1
     @width = 5
