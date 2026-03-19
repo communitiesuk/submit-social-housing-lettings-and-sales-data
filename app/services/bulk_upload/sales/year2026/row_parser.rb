@@ -478,7 +478,6 @@ class BulkUpload::Sales::Year2026::RowParser
             },
             on: :after_log
 
-
   validate :validate_buyer1_economic_status, on: :before_log
   validate :validate_buyer2_economic_status, on: :before_log
   validate :validate_valid_radio_option, on: :before_log

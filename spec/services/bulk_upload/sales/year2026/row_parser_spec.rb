@@ -1991,8 +1991,43 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           end
         end
 
+        context "when set to 0.0" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "0.0") }
+
+          it "adds a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_107]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+          end
+
+          it "sets has_mscharge to no and does not set mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
         context "when set to R" do
           let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "R") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_107]).to be_blank
+          end
+
+          it "sets has_mscharge to no and does not set mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when set to lowercase r" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "r") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_107]).to be_blank
+          end
 
           it "sets has_mscharge to no and does not set mscharge" do
             log = parser.log
@@ -2083,8 +2118,43 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           end
         end
 
+        context "when set to 0.0" do
+          let(:attributes) { valid_attributes.merge(field_125: "0.0") }
+
+          it "adds a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+          end
+
+          it "sets has_mscharge to no and does not set mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
         context "when set to R" do
           let(:attributes) { valid_attributes.merge(field_125: "R") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_125]).to be_blank
+          end
+
+          it "sets has_mscharge to no and does not set mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when set to lowercase r" do
+          let(:attributes) { valid_attributes.merge(field_125: "r") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_125]).to be_blank
+          end
 
           it "sets has_mscharge to no and does not set mscharge" do
             log = parser.log
@@ -2175,8 +2245,43 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           end
         end
 
+        context "when set to 0.0" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "0.0") }
+
+          it "adds a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_136]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+          end
+
+          it "sets has_mscharge to no and does not set mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
         context "when set to R" do
           let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "R") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_136]).to be_blank
+          end
+
+          it "sets has_mscharge to no and does not set mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when set to lowercase r" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "r") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_136]).to be_blank
+          end
 
           it "sets has_mscharge to no and does not set mscharge" do
             log = parser.log
