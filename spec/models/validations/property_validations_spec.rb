@@ -370,8 +370,8 @@ RSpec.describe Validations::PropertyValidations do
         end
       end
 
-      context "when 2026", metadata: { year: 26 } do
-        let(:startdate) { collection_start_date_for_year(2026) }
+      context "when 2026 or later", metadata: { year: 26 } do
+        let(:startdate) { collection_start_date_for_year_or_later(2026) }
 
         context "and the local authority is active for supported housing log" do
           let(:log) { build(:lettings_log, :completed, startdate:, la: la_ecode_active, needstype: 2) }

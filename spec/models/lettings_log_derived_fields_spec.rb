@@ -1093,26 +1093,26 @@ RSpec.describe LettingsLog, type: :model do
       end
     end
 
-    context "when 2026", metadata: { year: 26 } do
-      let(:startdate) { collection_start_date_for_year(2026) }
+    context "when 2026 or later", metadata: { year: 26 } do
+      let(:startdate) { collection_start_date_for_year_or_later(2026) }
 
       it "derives waityear offered referral first_time_property_let_as_social_housing rsnvac when renewal" do
         log.renewal = 1
         expect { log.set_derived_fields! }
           .to change(log, :waityear).to(2)
-                                    .and change(log, :offered).to(0)
-                                                              .and change(log, :referral_register).to(1)
-                                                                                         .and change(log, :first_time_property_let_as_social_housing).to(0)
-                                                                                                                                                     .and change(log, :rsnvac).to(14)
+          .and change(log, :offered).to(0)
+          .and change(log, :referral_register).to(1)
+          .and change(log, :first_time_property_let_as_social_housing).to(0)
+          .and change(log, :rsnvac).to(14)
       end
 
       it "clears waityear offered referral first_time_property_let_as_social_housing rsnvac when not a renewal" do
         expect { persisted_renewal_lettings_log.update!(renewal: 0) }
           .to change(persisted_renewal_lettings_log, :waityear).from(2).to(nil)
-                                                               .and change(persisted_renewal_lettings_log, :offered).from(0).to(nil)
-                                                                                                                    .and change(persisted_renewal_lettings_log, :referral_register).from(1).to(nil)
-                                                                                                                                                                          .and change(persisted_renewal_lettings_log, :first_time_property_let_as_social_housing).from(0).to(nil)
-                                                                                                                                                                                                                                                                 .and change(persisted_renewal_lettings_log, :rsnvac).from(14).to(nil)
+          .and change(persisted_renewal_lettings_log, :offered).from(0).to(nil)
+          .and change(persisted_renewal_lettings_log, :referral_register).from(1).to(nil)
+          .and change(persisted_renewal_lettings_log, :first_time_property_let_as_social_housing).from(0).to(nil)
+          .and change(persisted_renewal_lettings_log, :rsnvac).from(14).to(nil)
       end
     end
 

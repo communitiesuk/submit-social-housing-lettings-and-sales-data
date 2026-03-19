@@ -74,7 +74,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
 
       context "and form year is 2025 or later" do
-        let(:saledate) { collection_start_date_for_year(2025) }
+        let(:saledate) { collection_start_date_for_year_or_later(2025) }
 
         it "does not add an error" do
           sale_information_validator.validate_practical_completion_date(record)

@@ -409,8 +409,8 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
       end
 
-      context "and 2026", metadata: { year: 26 } do
-        let(:saledate) { collection_start_date_for_year(2026) }
+      context "and 2026 or later", metadata: { year: 26 } do
+        let(:saledate) { collection_start_date_for_year_or_later(2026) }
 
         it "returns false if the deposit and mortgage add up to less than the discounted value" do
           record.value = 500_000
@@ -423,7 +423,7 @@ RSpec.describe Validations::Sales::SoftValidations do
     end
 
     context "when validating extra borrowing" do
-      let(:saledate) { collection_start_date_for_year(2025) }
+      let(:saledate) { collection_start_date_for_year_or_later(2025) }
 
       it "returns false for logs from 2024 onwards" do
         record.extrabor = 2

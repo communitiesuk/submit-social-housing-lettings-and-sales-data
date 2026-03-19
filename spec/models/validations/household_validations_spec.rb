@@ -500,8 +500,8 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
 
-    context "when start year is 2026", metadata: { year: 26 } do
-      let(:startdate) { collection_start_date_for_year(2026) }
+    context "when start year is 2026 or later", metadata: { year: 26 } do
+      let(:startdate) { collection_start_date_for_year_or_later(2026) }
 
       [
         {

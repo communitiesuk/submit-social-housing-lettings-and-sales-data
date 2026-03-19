@@ -712,7 +712,7 @@ RSpec.describe SalesLog, type: :model do
       )
     end
 
-    context "when 2025", metadata: { year: 2025 } do
+    context "when 2025", metadata: { year: 25 } do
       let(:saledate) { collection_start_date_for_year(2025) }
       let(:hholdcount) { 4 }
 
@@ -743,8 +743,8 @@ RSpec.describe SalesLog, type: :model do
       end
     end
 
-    context "when 2026", metadata: { year: 2026 } do
-      let(:saledate) { collection_start_date_for_year(2026) }
+    context "when 2026 or later", metadata: { year: 26 } do
+      let(:saledate) { collection_start_date_for_year_or_later(2026) }
       let(:hholdcount) { 6 }
 
       it "correctly derives and saves hhmemb" do
