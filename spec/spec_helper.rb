@@ -128,8 +128,9 @@ RSpec.configure do |config|
     Timecop.travel(Time.zone.local(2026, 4, 1))
     Singleton.__init__(FormHandler)
     example.run
-    Timecop.travel(Time.zone.local(2026, 4, 1))
+    Timecop.return
     Singleton.__init__(FormHandler)
+    example.run
   end
 end
 
