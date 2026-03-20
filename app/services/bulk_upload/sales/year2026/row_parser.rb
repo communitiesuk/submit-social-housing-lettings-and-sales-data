@@ -956,9 +956,6 @@ private
     attributes["gender_same_as_sex6"] = field_68
     attributes["gender_description6"] = field_69
 
-    attributes["newservicecharges"] = field_126.to_d if field_126.present? && field_126 != "R" && field_126.match?(SERVICE_CHARGE_FORMAT)
-    attributes["hasservicechargeschanged"] = attributes["newservicecharges"].present? ? 1 : 2 if field_126.present? && field_126.match?(SERVICE_CHARGE_FORMAT)
-
     attributes["relat2"] = relationship_from_is_partner(field_37)
     attributes["relat3"] = relationship_from_is_partner(field_47)
     attributes["relat4"] = relationship_from_is_partner(field_53)
@@ -1032,8 +1029,6 @@ private
 
     attributes["cashdis"] = field_105
     attributes["mrent"] = mrent
-    attributes["mscharge"] = mscharge.to_d if mscharge.present? && mscharge != "R" && mscharge.to_d.positive?
-    attributes["has_mscharge"] = attributes["mscharge"].present? ? 1 : 0 if mscharge.present? && mscharge.match?(SERVICE_CHARGE_FORMAT)
     attributes["grant"] = field_129
     attributes["discount"] = field_130
 
@@ -1102,6 +1097,11 @@ private
 
     attributes["management_fee"] = field_108
     attributes["has_management_fee"] = field_108.present? && field_108.positive? ? 1 : 0
+
+    attributes["has_mscharge"] = has_mscharge_value
+    attributes["mscharge"] = mscharge_value
+    attributes["hasservicechargeschanged"] = hasservicechargeschanged_value
+    attributes["newservicecharges"] = newservicecharges_value
 
     attributes
   end
@@ -1268,6 +1268,30 @@ private
     field_136 if discounted_ownership?
   end
 
+  def has_mscharge_value
+    return unless mscharge.present? && mscharge.match?(SERVICE_CHARGE_FORMAT)
+
+    mscharge.casecmp?("R") ? 0 : 1
+  end
+
+  def mscharge_value
+    return unless mscharge.present? && mscharge.match?(SERVICE_CHARGE_FORMAT) && !mscharge.casecmp?("R")
+
+    mscharge.to_d
+  end
+
+  def hasservicechargeschanged_value
+    return unless field_126.present? && field_126.match?(SERVICE_CHARGE_FORMAT)
+
+    field_126.casecmp?("R") ? 2 : 1
+  end
+
+  def newservicecharges_value
+    return unless field_126.present? && field_126.match?(SERVICE_CHARGE_FORMAT) && !field_126.casecmp?("R")
+
+    field_126.to_d
+  end
+
   def mortlen
     return field_103 if shared_ownership?
 
@@ -1400,12 +1424,12 @@ private
   def validate_service_charge_fields
     message = I18n.t("#{ERROR_BASE_KEY}.mscharge.invalid")
 
-    if shared_ownership_initial_purchase? && field_107.present? && (!field_107.match?(SERVICE_CHARGE_FORMAT) || (field_107 != "R" && field_107.to_d.zero?))
+    if shared_ownership_initial_purchase? && field_107.present? && !field_107.match?(SERVICE_CHARGE_FORMAT)
       errors.add(:field_107, message)
     end
 
     if staircasing?
-      if field_125.present? && (!field_125.match?(SERVICE_CHARGE_FORMAT) || (field_125 != "R" && field_125.to_d.zero?))
+      if field_125.present? && !field_125.match?(SERVICE_CHARGE_FORMAT)
         errors.add(:field_125, message)
       end
 
@@ -1414,7 +1438,7 @@ private
       end
     end
 
-    if discounted_ownership? && field_136.present? && (!field_136.match?(SERVICE_CHARGE_FORMAT) || (field_136 != "R" && field_136.to_d.zero?))
+    if discounted_ownership? && field_136.present? && !field_136.match?(SERVICE_CHARGE_FORMAT)
       errors.add(:field_136, message)
     end
   end

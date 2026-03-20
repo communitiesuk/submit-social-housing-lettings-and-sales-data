@@ -1979,30 +1979,32 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         context "when set to 0" do
           let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "0") }
 
-          it "adds a validation error" do
+          it "does not add a bulk upload format validation error but adds a site validation error" do
             parser.valid?
-            expect(parser.errors[:field_107]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_107]).not_to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_107]).to include(I18n.t("validations.sales.financial.mscharge.monthly_leasehold_charges.not_zero"))
           end
 
-          it "sets has_mscharge to no and does not set mscharge" do
+          it "sets has_mscharge to yes and mscharge to the value" do
             log = parser.log
-            expect(log["has_mscharge"]).to eq(0)
-            expect(log["mscharge"]).to be_nil
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(0)
           end
         end
 
         context "when set to 0.0" do
           let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "0.0") }
 
-          it "adds a validation error" do
+          it "does not add a bulk upload format validation error but adds a site validation error" do
             parser.valid?
-            expect(parser.errors[:field_107]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_107]).not_to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_107]).to include(I18n.t("validations.sales.financial.mscharge.monthly_leasehold_charges.not_zero"))
           end
 
-          it "sets has_mscharge to no and does not set mscharge" do
+          it "sets has_mscharge to yes and mscharge to the value" do
             log = parser.log
-            expect(log["has_mscharge"]).to eq(0)
-            expect(log["mscharge"]).to be_nil
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(0)
           end
         end
 
@@ -2106,30 +2108,32 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         context "when set to 0" do
           let(:attributes) { valid_attributes.merge(field_125: "0") }
 
-          it "adds a validation error" do
+          it "does not add a bulk upload format validation error but adds a site validation error" do
             parser.valid?
-            expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_125]).not_to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.financial.mscharge.monthly_leasehold_charges.not_zero"))
           end
 
-          it "sets has_mscharge to no and does not set mscharge" do
+          it "sets has_mscharge to yes and mscharge to the value" do
             log = parser.log
-            expect(log["has_mscharge"]).to eq(0)
-            expect(log["mscharge"]).to be_nil
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(0)
           end
         end
 
         context "when set to 0.0" do
           let(:attributes) { valid_attributes.merge(field_125: "0.0") }
 
-          it "adds a validation error" do
+          it "does not add a bulk upload format validation error but adds a site validation error" do
             parser.valid?
-            expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_125]).not_to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.financial.mscharge.monthly_leasehold_charges.not_zero"))
           end
 
-          it "sets has_mscharge to no and does not set mscharge" do
+          it "sets has_mscharge to yes and mscharge to the value" do
             log = parser.log
-            expect(log["has_mscharge"]).to eq(0)
-            expect(log["mscharge"]).to be_nil
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(0)
           end
         end
 
@@ -2233,30 +2237,30 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         context "when set to 0" do
           let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "0") }
 
-          it "adds a validation error" do
+          it "does not add a validation error" do
             parser.valid?
-            expect(parser.errors[:field_136]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_136]).to be_blank
           end
 
-          it "sets has_mscharge to no and does not set mscharge" do
+          it "sets has_mscharge to yes and mscharge to the value" do
             log = parser.log
-            expect(log["has_mscharge"]).to eq(0)
-            expect(log["mscharge"]).to be_nil
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(0)
           end
         end
 
         context "when set to 0.0" do
           let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "0.0") }
 
-          it "adds a validation error" do
+          it "does not add a validation error" do
             parser.valid?
-            expect(parser.errors[:field_136]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_136]).to be_blank
           end
 
-          it "sets has_mscharge to no and does not set mscharge" do
+          it "sets has_mscharge to yes and mscharge to the value" do
             log = parser.log
-            expect(log["has_mscharge"]).to eq(0)
-            expect(log["mscharge"]).to be_nil
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(0)
           end
         end
 
