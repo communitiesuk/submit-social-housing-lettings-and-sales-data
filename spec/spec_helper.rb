@@ -124,13 +124,13 @@ RSpec.configure do |config|
     Singleton.__init__(FormHandler)
   end
 
-  # config.around do |example|
-  #   Timecop.travel(Time.zone.local(2026, 4, 1))
-  #   Singleton.__init__(FormHandler)
-  #   example.run
-  #   Timecop.travel(Time.zone.local(2026, 4, 1))
-  #   Singleton.__init__(FormHandler)
-  # end
+  config.around do |example|
+    Timecop.travel(Time.zone.local(2026, 4, 1))
+    Singleton.__init__(FormHandler)
+    example.run
+    Timecop.travel(Time.zone.local(2026, 4, 1))
+    Singleton.__init__(FormHandler)
+  end
 end
 
 RSpec::Matchers.define_negated_matcher :not_change, :change
