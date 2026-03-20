@@ -152,7 +152,7 @@ class BulkUpload::Sales::Year2026::RowParser
   }.freeze
 
   ERROR_BASE_KEY = "validations.sales.2026.bulk_upload".freeze
-  SERVICE_CHARGE_FORMAT = /\A(\d+(\.\d+)?|R)\z/i
+  NUMBER_OR_R_FORMAT = /\A(\d+(\.\d+)?|R)\z/i
 
   CASE_INSENSITIVE_FIELDS = [
     :field_29, # Age of buyer 1
@@ -1269,25 +1269,25 @@ private
   end
 
   def has_mscharge_value
-    return unless mscharge.present? && mscharge.match?(SERVICE_CHARGE_FORMAT)
+    return unless mscharge.present? && mscharge.match?(NUMBER_OR_R_FORMAT)
 
     mscharge.casecmp?("R") ? 0 : 1
   end
 
   def mscharge_value
-    return unless mscharge.present? && mscharge.match?(SERVICE_CHARGE_FORMAT) && !mscharge.casecmp?("R")
+    return unless mscharge.present? && mscharge.match?(NUMBER_OR_R_FORMAT) && !mscharge.casecmp?("R")
 
     mscharge.to_d
   end
 
   def hasservicechargeschanged_value
-    return unless field_126.present? && field_126.match?(SERVICE_CHARGE_FORMAT)
+    return unless field_126.present? && field_126.match?(NUMBER_OR_R_FORMAT)
 
     field_126.casecmp?("R") ? 2 : 1
   end
 
   def newservicecharges_value
-    return unless field_126.present? && field_126.match?(SERVICE_CHARGE_FORMAT) && !field_126.casecmp?("R")
+    return unless field_126.present? && field_126.match?(NUMBER_OR_R_FORMAT) && !field_126.casecmp?("R")
 
     field_126.to_d
   end
@@ -1424,21 +1424,21 @@ private
   def validate_service_charge_fields
     message = I18n.t("#{ERROR_BASE_KEY}.mscharge.invalid")
 
-    if shared_ownership_initial_purchase? && field_107.present? && !field_107.match?(SERVICE_CHARGE_FORMAT)
+    if shared_ownership_initial_purchase? && field_107.present? && !field_107.match?(NUMBER_OR_R_FORMAT)
       errors.add(:field_107, message)
     end
 
     if staircasing?
-      if field_125.present? && !field_125.match?(SERVICE_CHARGE_FORMAT)
+      if field_125.present? && !field_125.match?(NUMBER_OR_R_FORMAT)
         errors.add(:field_125, message)
       end
 
-      if field_126.present? && !field_126.match?(SERVICE_CHARGE_FORMAT)
+      if field_126.present? && !field_126.match?(NUMBER_OR_R_FORMAT)
         errors.add(:field_126, I18n.t("#{ERROR_BASE_KEY}.newservicecharges.invalid"))
       end
     end
 
-    if discounted_ownership? && field_136.present? && !field_136.match?(SERVICE_CHARGE_FORMAT)
+    if discounted_ownership? && field_136.present? && !field_136.match?(NUMBER_OR_R_FORMAT)
       errors.add(:field_136, message)
     end
   end
