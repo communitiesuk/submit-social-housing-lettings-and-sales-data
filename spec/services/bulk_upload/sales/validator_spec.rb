@@ -42,6 +42,10 @@ RSpec.describe BulkUpload::Sales::Validator do
         file.rewind
       end
 
+      after do
+        Timecop.return
+      end
+
       it "is not valid" do
         expect(validator).not_to be_valid
       end

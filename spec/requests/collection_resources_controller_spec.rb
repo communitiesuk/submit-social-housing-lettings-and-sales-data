@@ -126,7 +126,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
         context "when the collection year has not started yet" do
           before do
-            Timecop.freeze(Time.zone.local(current_collection_start_year, 3, 1))
+            Timecop.travel(Time.zone.local(current_collection_start_year, 3, 1))
             get collection_resources_path
           end
 
@@ -180,7 +180,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
         context "when the collection year has not started yet" do
           before do
-            Timecop.freeze(Time.zone.local(current_collection_start_year, 3, 1))
+            Timecop.travel(Time.zone.local(current_collection_start_year, 3, 1))
             get collection_resources_path
           end
 
