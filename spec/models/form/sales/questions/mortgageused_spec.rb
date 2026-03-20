@@ -15,8 +15,8 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
   let(:start_year_2025_or_later?) { true }
   let(:start_year_2026_or_later?) { true }
   let(:subsection_id) { "shared_ownership_initial_purchase" }
-  let(:form) { instance_double(Form, start_date: saledate, start_year_2024_or_later?: start_year_2024_or_later?, start_year_2025_or_later?: start_year_2025_or_later?, start_year_2026_or_later?: start_year_2026_or_later?) }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: subsection_id)) }
+  let(:form) { instance_double(Form, type: "sales", start_date: saledate, start_year_2024_or_later?: start_year_2024_or_later?, start_year_2025_or_later?: start_year_2025_or_later?, start_year_2026_or_later?: start_year_2026_or_later?) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: subsection_id, copy_key: subsection_id)) }
 
   context "when it is a shared ownership scheme" do
     let(:ownershipsch) { 1 }
@@ -120,6 +120,10 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
         expect(question.question_number).to eq 106
       end
 
+      it "has the correct copy_key" do
+        expect(question.copy_key).to eq "sales.discounted_ownership_scheme.mortgageused"
+      end
+
       it "does not show the don't know option" do
         expect_the_question_not_to_show_dont_know
       end
@@ -134,6 +138,11 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
 
       context "and it is a staircasing transaction" do
         let(:staircase) { 1 }
+        let(:subsection_id) { "shared_ownership_staircasing_transaction" }
+
+        it "has the correct copy_key" do
+          expect(question.copy_key).to eq "sales.shared_ownership_staircasing_transaction.mortgageused"
+        end
 
         it "shows the don't know option" do
           expect_the_question_to_show_dont_know
@@ -150,9 +159,14 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
 
       context "and it is not a staircasing transaction" do
         let(:staircase) { 2 }
+        let(:subsection_id) { "shared_ownership_initial_purchase" }
 
         it "does not show the don't know option" do
           expect_the_question_not_to_show_dont_know
+        end
+
+        it "has the correct copy_key" do
+          expect(question.copy_key).to eq "sales.shared_ownership_initial_purchase.mortgageused"
         end
       end
     end
@@ -167,6 +181,10 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
 
       it "shows the correct question number" do
         expect(question.question_number).to eq 116
+      end
+
+      it "has the correct copy_key" do
+        expect(question.copy_key).to eq "sales.discounted_ownership_scheme.mortgageused.non_staircase_equity"
       end
 
       it "shows the don't know option" do
@@ -185,6 +203,10 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
           expect(question.question_number).to eq 107
         end
 
+        it "has the correct copy_key" do
+          expect(question.copy_key).to eq "sales.shared_ownership_staircasing_transaction.mortgageused.staircase_equity"
+        end
+
         it "shows the don't know option" do
           expect_the_question_to_show_dont_know
         end
@@ -196,6 +218,10 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
 
         it "shows the correct question number" do
           expect(question.question_number).to eq 90
+        end
+
+        it "has the correct copy_key" do
+          expect(question.copy_key).to eq "sales.shared_ownership_initial_purchase.mortgageused.non_staircase_equity"
         end
 
         it "shows the don't know option" do
