@@ -1070,6 +1070,15 @@ RSpec.describe LettingsLog, type: :model do
     let(:user) { create(:user, organisation:) }
     let(:persisted_renewal_lettings_log) { create(:lettings_log, :setup_completed, startdate:, renewal: 1, assigned_to: user) }
 
+    before do
+      Timecop.travel(startdate)
+      Singleton.__init__(FormHandler)
+    end
+
+    after do
+      Timecop.return
+    end
+
     context "when 2025", metadata: { year: 25 } do
       let(:startdate) { collection_start_date_for_year(2025) }
 
