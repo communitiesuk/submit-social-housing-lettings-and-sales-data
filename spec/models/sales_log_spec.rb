@@ -684,7 +684,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   context "when deriving household variables" do
-    let!(:sales_log) do
+    let(:sales_log) do
       create(
         :sales_log,
         :completed,
@@ -710,6 +710,15 @@ RSpec.describe SalesLog, type: :model do
         age5: 19,
         age6: 46,
       )
+    end
+
+    before do
+      Timecop.travel(saledate)
+      Singleton.__init__(FormHandler)
+    end
+
+    after do
+      Timecop.return
     end
 
     context "when 2025", metadata: { year: 25 } do
