@@ -322,41 +322,41 @@ RSpec.describe StartController, type: :request do
         end
       end
 
-      context "and 2023 collection window is open for editing" do
+      context "and 2024 collection window is open for editing" do
         before do
-          create(:collection_resource, :additional, year: 2023, log_type: "sales", display_name: "sales additional resource (2023 to 2024)")
-          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 4, 1))
+          create(:collection_resource, :additional, year: 2024, log_type: "sales", display_name: "sales additional resource (2024 to 2025)")
+          allow(Time).to receive(:now).and_return(Time.zone.local(2025, 4, 1))
         end
 
-        it "displays correct resources for 2023/24 and 2024/25 collection years" do
+        it "displays correct resources for 2024/25 and 2025/26 collection years" do
           get root_path
+          expect(page).to have_content("Lettings 25/26")
           expect(page).to have_content("Lettings 24/25")
-          expect(page).to have_content("Lettings 23/24")
+          expect(page).to have_content("Lettings 2025 to 2026")
           expect(page).to have_content("Lettings 2024 to 2025")
-          expect(page).to have_content("Lettings 2023 to 2024")
+          expect(page).to have_content("Sales 25/26")
           expect(page).to have_content("Sales 24/25")
-          expect(page).to have_content("Sales 23/24")
+          expect(page).to have_content("Sales 2025 to 2026")
           expect(page).to have_content("Sales 2024 to 2025")
-          expect(page).to have_content("Sales 2023 to 2024")
-          expect(page).to have_content("Download the sales additional resource (2023 to 2024)")
+          expect(page).to have_content("Download the sales additional resource (2024 to 2025)")
         end
       end
 
-      context "and 2023 collection window is closed for editing" do
+      context "and 2024 collection window is closed for editing" do
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 12, 1))
+          allow(Time).to receive(:now).and_return(Time.zone.local(2025, 12, 1))
         end
 
         it "displays correct resources" do
           get root_path
-          expect(page).to have_content("Lettings 24/25")
-          expect(page).not_to have_content("Lettings 23/24")
-          expect(page).to have_content("Lettings 2024 to 2025")
-          expect(page).not_to have_content("Lettings 2023 to 2024")
-          expect(page).to have_content("Sales 24/25")
-          expect(page).not_to have_content("Sales 23/24")
-          expect(page).to have_content("Sales 2024 to 2025")
-          expect(page).not_to have_content("Sales 2023 to 2024")
+          expect(page).to have_content("Lettings 25/26")
+          expect(page).not_to have_content("Lettings 24/25")
+          expect(page).to have_content("Lettings 2025 to 2026")
+          expect(page).not_to have_content("Lettings 2024 to 2025")
+          expect(page).to have_content("Sales 25/26")
+          expect(page).not_to have_content("Sales 24/25")
+          expect(page).to have_content("Sales 2025 to 2026")
+          expect(page).not_to have_content("Sales 2024 to 2025")
         end
       end
 
