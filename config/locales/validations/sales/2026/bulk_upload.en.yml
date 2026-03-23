@@ -46,4 +46,4 @@ en:
             invalid: "Select a valid nationality."
           mortlen:
             invalid: "Mortgage length must be a number or the letter R"
-            invalid_for_interviewed: "You indicated that the buyer was interviewed, but selected “Don’t know” for mortgage length. Please provide the mortgage length or update your response."
+            invalid_for_interviewed: "You indicated that you interviewed the buyer(s), but selected “Don’t know” for mortgage length. Please provide the mortgage length or update your response."

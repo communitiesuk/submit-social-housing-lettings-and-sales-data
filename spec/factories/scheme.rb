@@ -3,7 +3,7 @@ FactoryBot.define do
     service_name { "#{Faker::Name.name}'s Housing & Co." }
     sensitive { Faker::Number.within(range: 0..1) }
     registered_under_care_act { 1 }
-    support_type { [0, 2, 3, 4, 5].sample }
+    support_type { [0, 2, 3, 4].sample }
     scheme_type { 4 }
     arrangement_type { "D" }
     intended_stay { %w[M P S V X].sample }

@@ -18,14 +18,14 @@ module RequestHelper
            .to_return(status: 200, body: "{\"status\":200,\"result\":{\"postcode\":\"ZZ1 1ZZ\",\"admin_district\":\"Westminster\",\"codes\":{\"admin_district\":\"E09000033\"}}}", headers: {})
 
     body = { results: [{ DPA: { UPRN: "10033558653" } }] }.to_json
-    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?key&maxresults=10&minmatch=0.4&query=Address%20line%201,%20SW1A%201AA")
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?fq=COUNTRY_CODE%3AE&key&maxresults=10&minmatch=0.4&query=Address%20line%201,%20SW1A%201AA")
            .to_return(status: 200, body:, headers: {})
     body = { results: [{ DPA: { "POSTCODE": "SW1A 1AA", "POST_TOWN": "London", "PO_BOX_NUMBER": "The Mall, City Of Westminster" } }] }.to_json
-    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key&uprn=1")
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&fq=COUNTRY_CODE%3AE&key&uprn=1")
            .to_return(status: 200, body:, headers: {})
-    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key&uprn=10033558653")
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&fq=COUNTRY_CODE%3AE&key&uprn=10033558653")
            .to_return(status: 200, body:, headers: {})
-    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=10033558653")
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&uprn=10033558653")
            .to_return(status: 200, body:, headers: {})
 
     WebMock.stub_request(:post, /api.notifications.service.gov.uk\/v2\/notifications\/email/)
@@ -45,7 +45,7 @@ module RequestHelper
       ],
     }.to_json
 
-    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=1")
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&uprn=1")
     .to_return(status: 200, body:, headers: {})
 
     body = {
@@ -61,7 +61,7 @@ module RequestHelper
       ],
     }.to_json
 
-    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key&uprn=121")
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&fq=COUNTRY_CODE%3AE&key&uprn=121")
      .to_return(status: 200, body:, headers: {})
 
     body = {
@@ -76,7 +76,7 @@ module RequestHelper
       ],
     }.to_json
 
-    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=123")
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&uprn=123")
     .to_return(status: 200, body:, headers: {})
 
     body = {
@@ -91,13 +91,13 @@ module RequestHelper
       ],
     }.to_json
 
-    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=12")
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&uprn=12")
     .to_return(status: 200, body:, headers: {})
 
-    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=1234567890123")
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&uprn=1234567890123")
     .to_return(status: 404, body: "", headers: {})
 
-    template = Addressable::Template.new "https://api.os.uk/search/places/v1/find?key=OS_DATA_KEY&maxresults=10&minmatch=0.4&query={+address_query}"
+    template = Addressable::Template.new "https://api.os.uk/search/places/v1/find?fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&maxresults=10&minmatch=0.4&query={+address_query}"
     WebMock.stub_request(:get, template)
       .to_return do |request|
         address = request.uri.query_values["query"].split(",")

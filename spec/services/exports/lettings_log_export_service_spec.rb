@@ -158,7 +158,7 @@ RSpec.describe Exports::LettingsLogExportService do
       before do
         Timecop.freeze(start_time)
         Singleton.__init__(FormHandler)
-        stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=100023336956")
+        stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&uprn=100023336956")
          .to_return(status: 200, body: '{"status":200,"results":[{"DPA":{
           "PO_BOX_NUMBER": "fake",
       "ORGANISATION_NAME": "org",

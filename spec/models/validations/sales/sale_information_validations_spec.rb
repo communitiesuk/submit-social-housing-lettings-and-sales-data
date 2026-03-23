@@ -546,6 +546,20 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
             expect(record.errors["discount"]).to be_empty
             expect(record.errors["grant"]).to be_empty
           end
+
+          it "does not add errors if mortgageused is don't know" do
+            record.mortgageused = 3
+            record.value = 30_000
+            record.deposit = 5_000
+            record.discount = 50
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["mortgage"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["ownershipsch"]).to be_empty
+            expect(record.errors["discount"]).to be_empty
+            expect(record.errors["grant"]).to be_empty
+          end
         end
 
         context "and is 2026" do
@@ -600,6 +614,20 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
             expect(record.errors["ownershipsch"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (50.2%) is £61,254.00.</br></br>These two amounts should be the same.")
             expect(record.errors["discount"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (50.2%) is £61,254.00.</br></br>These two amounts should be the same.")
             expect(record.errors["grant"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) subtracted by the sum of the full purchase price (£123,000.00) multiplied by the percentage discount (50.2%) is £61,254.00.</br></br>These two amounts should be the same.")
+          end
+
+          it "does not add errors if mortgageused is don't know" do
+            record.mortgageused = 3
+            record.value = 30_000
+            record.deposit = 5_000
+            record.discount = 50
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["mortgage"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["ownershipsch"]).to be_empty
+            expect(record.errors["discount"]).to be_empty
+            expect(record.errors["grant"]).to be_empty
           end
         end
       end

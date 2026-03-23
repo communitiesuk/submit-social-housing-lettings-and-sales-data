@@ -171,10 +171,16 @@ en:
 
           mortgageused:
             page_header: ""
-            check_answer_label: "Mortgage used"
-            check_answer_prompt: "Tell us if a mortgage was used"
-            hint_text: ""
-            question_text: "Was a mortgage used for the purchase of this property?"
+            staircase_equity:
+              check_answer_label: "Mortgage used"
+              check_answer_prompt: "Tell us if a mortgage was used"
+              hint_text: ""
+              question_text: "Was a mortgage used for this staircasing transaction?"
+            non_staircase_equity:
+              check_answer_label: "Mortgage used"
+              check_answer_prompt: "Tell us if a mortgage was used"
+              hint_text: ""
+              question_text: "Was a mortgage used for the purchase of this property?"
 
           mortgage:
             page_header: ""

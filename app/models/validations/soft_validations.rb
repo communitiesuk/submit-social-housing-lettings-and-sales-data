@@ -76,7 +76,8 @@ module Validations::SoftValidations
   end
 
   def no_household_member_likely_to_be_pregnant?
-    all_male_tenants_in_a_pregnant_household? || non_males_in_pregnant_household_not_in_pregnancy_range?
+    # in this 2026 check we used a wider age range
+    all_male_tenants_in_a_pregnant_household? || non_males_in_pregnant_household_not_in_range?(13, 55)
   end
 
   def all_male_tenants_in_a_pregnant_household?
@@ -84,7 +85,7 @@ module Validations::SoftValidations
   end
 
   def non_males_in_pregnant_household_not_in_pregnancy_range?
-    all_tenants_age_and_gender_information_completed? && non_males_in_the_household? && !any_non_male_in_expected_pregnancy_age_range(16, 50) && preg_occ == 1
+    non_males_in_pregnant_household_not_in_range?(16, 50)
   end
 
   TWO_YEARS_IN_DAYS = 730
@@ -250,6 +251,10 @@ private
     return true if tenant_number == 1
 
     public_send("details_known_#{tenant_number}").zero?
+  end
+
+  def non_males_in_pregnant_household_not_in_range?(min, max)
+    all_tenants_age_and_gender_information_completed? && non_males_in_the_household? && !any_non_male_in_expected_pregnancy_age_range(min, max) && preg_occ == 1
   end
 
   def any_non_male_in_expected_pregnancy_age_range(min, max)

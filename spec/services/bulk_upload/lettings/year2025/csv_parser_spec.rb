@@ -251,4 +251,23 @@ RSpec.describe BulkUpload::Lettings::Year2025::CsvParser do
       end
     end
   end
+
+  context "when parsing csv with data of the wrong type" do
+    let(:log_to_csv) { BulkUpload::LettingsLogToCsv.new(log:) }
+    let(:field_numbers) { log_to_csv.default_2025_field_numbers }
+    let(:field_values) { log_to_csv.to_2025_row }
+
+    before do
+      field_46_index = field_numbers.index(46)
+      field_values[field_46_index] = "GBR" # should be a 3 digit code
+
+      file.write(log_to_csv.custom_field_numbers_row(field_numbers:))
+      file.write(log_to_csv.to_custom_csv_row(field_values:))
+      file.rewind
+    end
+
+    it "sets the invalid data to nil" do
+      expect(service.row_parsers[0].field_46).to be_nil
+    end
+  end
 end
