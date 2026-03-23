@@ -118,7 +118,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "when 2025", metadata: { year: 25 } do
-      # post 2025 we don't ask referral and referral_type any more
+      # post 2025 we don't ask referral and referral_type anymore
       let(:startdate) { collection_start_date_for_year(2025) }
 
       context "when referral is not internal transfer" do
