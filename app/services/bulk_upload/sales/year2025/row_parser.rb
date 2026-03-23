@@ -288,7 +288,7 @@ class BulkUpload::Sales::Year2025::RowParser
 
   attribute :field_112, :integer
   attribute :field_113, :decimal
-  attribute :field_114, :integer
+  attribute :field_114, :decimal
   attribute :field_115, :decimal
   attribute :field_116, :integer
   attribute :field_117, :decimal
@@ -503,6 +503,8 @@ class BulkUpload::Sales::Year2025::RowParser
       end
     end
 
+    add_errors_for_invalid_fields
+
     errors.blank?
   end
 
@@ -547,6 +549,10 @@ class BulkUpload::Sales::Year2025::RowParser
     spreadsheet_duplicate_hash.each_key do |field|
       errors.add(field, I18n.t("#{ERROR_BASE_KEY}.spreadsheet_dupe"), category: :setup)
     end
+  end
+
+  def add_invalid_field(field)
+    invalid_fields << field
   end
 
 private
@@ -675,6 +681,17 @@ private
 
   def rtb_like_sale_type?
     [9, 14, 27, 29].include?(field_11)
+  end
+
+  def invalid_fields
+    @invalid_fields ||= []
+  end
+
+  def add_errors_for_invalid_fields
+    invalid_fields.each do |field|
+      errors.delete(field) # take precedence over any other errors as this is a BU format issue
+      errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: QUESTIONS[field.to_sym]))
+    end
   end
 
   def field_mapping_for_errors
