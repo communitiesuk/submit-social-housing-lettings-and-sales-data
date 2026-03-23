@@ -18,7 +18,7 @@ class BulkUpload::Sales::Year2026::RowParser
     field_11: "What is the type of discounted ownership sale?",
     field_12: "Is this a joint purchase?",
     field_13: "Are there more than 2 joint buyers of this property?",
-    field_14: "Did you interview the buyer to answer these questions?",
+    field_14: "Did you interview the buyer(s) to answer these questions?",
     field_15: "Has the buyer seen or been given access to the MHCLG privacy notice?",
 
     field_16: "If known, enter this property’s UPRN",
