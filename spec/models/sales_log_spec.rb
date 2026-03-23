@@ -725,13 +725,13 @@ RSpec.describe SalesLog, type: :model do
       let(:saledate) { collection_start_date_for_year(2025) }
       let(:hholdcount) { 4 }
 
-      it "correctly derives and saves hhmemb" do
+      it "correctly derives and saves hhmemb if it's a joint purchase" do
         record_from_db = described_class.find(sales_log.id)
         expect(record_from_db["hhmemb"]).to eq(6)
       end
 
-      it "correctly derives and saves hhmemb if it's a joint purchase" do
-        sales_log.update!(jointpur: 2, jointmore: 2)
+      it "correctly derives and saves hhmemb if it's not a joint purchase" do
+        sales_log.update!(jointpur: 2)
         record_from_db = described_class.find(sales_log.id)
         expect(record_from_db["hhmemb"]).to eq(5)
       end
@@ -756,13 +756,13 @@ RSpec.describe SalesLog, type: :model do
       let(:saledate) { collection_start_date_for_year_or_later(2026) }
       let(:hholdcount) { 6 }
 
-      it "correctly derives and saves hhmemb" do
+      it "correctly derives and saves hhmemb if it's a joint purchase" do
         record_from_db = described_class.find(sales_log.id)
         expect(record_from_db["hhmemb"]).to eq(6)
       end
 
-      it "correctly derives and saves hhmemb if it's a joint purchase" do
-        sales_log.update!(jointpur: 2, jointmore: 2)
+      it "correctly derives and saves hhmemb if it's not a joint purchase" do
+        sales_log.update!(jointpur: 2)
         record_from_db = described_class.find(sales_log.id)
         expect(record_from_db["hhmemb"]).to eq(6)
       end
