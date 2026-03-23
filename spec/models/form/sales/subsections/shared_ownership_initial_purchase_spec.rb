@@ -59,7 +59,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
           shared_ownership_deposit_value_check
           monthly_rent
           service_charge
-          monthly_charges_shared_ownership_value_check
+          monthly_charges_initial_purchase_value_check
           estate_management_fee
         ],
       )
@@ -102,7 +102,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
           shared_ownership_deposit_value_check
           monthly_rent
           service_charge
-          monthly_charges_shared_ownership_value_check
+          monthly_charges_initial_purchase_value_check
           estate_management_fee
         ],
       )
@@ -145,7 +145,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
           shared_ownership_deposit_value_check
           monthly_rent
           service_charge
-          monthly_charges_shared_ownership_value_check
+          monthly_charges_initial_purchase_value_check
           estate_management_fee
         ],
       )

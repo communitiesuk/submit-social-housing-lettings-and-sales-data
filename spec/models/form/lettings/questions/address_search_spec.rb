@@ -48,7 +48,7 @@ RSpec.describe Form::Lettings::Questions::AddressSearch, type: :model do
         ],
       }.to_json
 
-      WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=123")
+      WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&uprn=123")
              .to_return(status: 200, body:, headers: {})
     end
 

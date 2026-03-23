@@ -232,20 +232,20 @@ RSpec.describe TasklistHelper do
     end
 
     context "when today is the deadline for log with sale/start date" do
-      let(:log) { build(:sales_log, saledate: Time.zone.local(2025, 2, 1)) }
+      let(:log) { build(:sales_log, saledate: Time.zone.local(2026, 2, 1)) }
 
       it "returns the overdue text" do
-        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 6, 6))
-        expect(deadline_text(log)).to include("Upcoming Q4 deadline: 6 June 2025.")
+        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2026, 6, 5))
+        expect(deadline_text(log)).to include("Upcoming Q4 deadline: 5 June 2026.")
       end
     end
 
     context "when today is after the deadline for log with sale/start date" do
-      let(:log) { build(:sales_log, saledate: Time.zone.local(2025, 2, 1)) }
+      let(:log) { build(:sales_log, saledate: Time.zone.local(2026, 2, 1)) }
 
       it "returns the overdue text" do
-        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 6, 7))
-        expect(deadline_text(log)).to include("Overdue: Q4 deadline 6 June 2025.")
+        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2026, 6, 6))
+        expect(deadline_text(log)).to include("Overdue: Q4 deadline 5 June 2026.")
       end
     end
   end

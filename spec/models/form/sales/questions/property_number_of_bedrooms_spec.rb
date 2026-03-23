@@ -19,8 +19,22 @@ RSpec.describe Form::Sales::Questions::PropertyNumberOfBedrooms, type: :model do
     expect(question.type).to eq("numeric")
   end
 
-  it "is not marked as derived" do
-    expect(question.derived?(nil)).to be false
+  describe "#derived?" do
+    context "when the log is a bedsit" do
+      let(:log) { build(:sales_log, proptype: 2) }
+
+      it "is marked as derived" do
+        expect(question.derived?(log)).to be true
+      end
+    end
+
+    context "when the log is not a bedsit" do
+      let(:log) { build(:sales_log, proptype: 1) }
+
+      it "is not marked as derived" do
+        expect(question.derived?(log)).to be false
+      end
+    end
   end
 
   it "has the correct min" do

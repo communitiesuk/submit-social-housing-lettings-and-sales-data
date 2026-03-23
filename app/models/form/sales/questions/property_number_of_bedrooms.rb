@@ -11,5 +11,9 @@ class Form::Sales::Questions::PropertyNumberOfBedrooms < ::Form::Question
     @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
+  def derived?(log)
+    log.is_bedsit?
+  end
+
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 11, 2024 => 18, 2025 => 17, 2026 => 18 }.freeze
 end

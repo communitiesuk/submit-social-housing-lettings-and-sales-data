@@ -8,7 +8,7 @@ describe UprnClient do
   end
 
   def stub_api_request(body:, status: 200)
-    stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=123")
+    stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA%2CLPI&fq=COUNTRY_CODE%3AE&key=OS_DATA_KEY&uprn=123")
     .to_return(status:, body:, headers: {})
   end
 

@@ -8,6 +8,8 @@ class BulkUpload::Lettings::Year2026::CsvParser
 
   attr_reader :path
 
+  ROW_PARSER_CLASS = BulkUpload::Lettings::Year2026::RowParser
+
   def initialize(path:)
     @path = path
   end
@@ -32,11 +34,30 @@ class BulkUpload::Lettings::Year2026::CsvParser
     @row_parsers ||= body_rows.map { |row|
       next if row.empty?
 
+      invalid_fields = []
       stripped_row = row[col_offset..]
 
-      hash = Hash[field_numbers.zip(stripped_row)]
+      hash_rows = field_numbers
+                    .zip(stripped_row)
+                    .map do |field, value|
+                      field_is_valid = value_is_valid_for_field?(field, value)
 
-      BulkUpload::Lettings::Year2026::RowParser.new(hash)
+                      correct_value = field_is_valid ? value : nil
+
+                      invalid_fields << field unless field_is_valid
+
+                      [field, correct_value]
+                    end
+
+      hash = Hash[hash_rows]
+
+      row_parser = ROW_PARSER_CLASS.new(hash)
+
+      invalid_fields.each do |field|
+        row_parser.add_invalid_field(field)
+      end
+
+      row_parser
     }.compact
   end
 
@@ -116,6 +137,20 @@ private
     else
       year = rows.first[9].to_s.strip.length.between?(1, 2) ? rows.first[9].to_i + 2000 : rows.first[9].to_i
       Date.new(year, rows.first[8].to_i, rows.first[7].to_i)
+    end
+  end
+
+  # this is needed as a string passed to an int attribute is by default mapped to '0'.
+  # this is bad as some questions will accept a '0'. so you could enter something invalid and not be told about it
+  def value_is_valid_for_field?(field, value)
+    field_type = ROW_PARSER_CLASS.attribute_types[field]
+
+    if field_type.is_a?(ActiveModel::Type::Integer)
+      value.nil? || Integer(value, exception: false).present?
+    elsif field_type.is_a?(ActiveModel::Type::Decimal)
+      value.nil? || Float(value, exception: false).present?
+    else
+      true
     end
   end
 end
