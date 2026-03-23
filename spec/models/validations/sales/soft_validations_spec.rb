@@ -423,7 +423,7 @@ RSpec.describe Validations::Sales::SoftValidations do
     end
 
     context "when validating extra borrowing" do
-      let(:saledate) { collection_start_date_for_year_or_later(2025) }
+      let(:saledate) { collection_start_date_for_year_or_later(2024) }
 
       it "returns false for logs from 2024 onwards" do
         record.extrabor = 2
