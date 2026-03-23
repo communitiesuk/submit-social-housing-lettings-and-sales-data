@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe StartController, type: :request do
+  include CollectionTimeHelper
+
   let(:user) { create(:user) }
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:notify_client) { instance_double(Notifications::Client) }
@@ -322,41 +324,67 @@ RSpec.describe StartController, type: :request do
         end
       end
 
-      context "and 2024 collection window is open for editing" do
+      context "and current collection window is open for editing" do
         before do
-          create(:collection_resource, :additional, year: 2024, log_type: "sales", display_name: "sales additional resource (2024 to 2025)")
-          allow(Time).to receive(:now).and_return(Time.zone.local(2025, 4, 1))
+          create(:collection_resource, :additional, year: previous_collection_start_year, log_type: "sales", display_name: "sales additional resource (#{previous_collection_start_year} to #{previous_collection_end_year})")
+          Timecop.freeze(current_collection_start_date)
+        end
+
+        after do
+          Timecop.return
         end
 
         it "displays correct resources for 2024/25 and 2025/26 collection years" do
+          current_collection_start_year_short = current_collection_start_year - 2000
+          current_collection_end_year_short = current_collection_end_year - 2000
+          previous_collection_start_year_short = previous_collection_start_year - 2000
+          previous_collection_end_year_short = previous_collection_end_year - 2000
+          current_collection_range_slash = "#{current_collection_start_year_short}/#{current_collection_end_year_short}"
+          previous_collection_range_slash = "#{previous_collection_start_year_short}/#{previous_collection_end_year_short}"
+          current_collection_range_to = "#{current_collection_start_year} to #{current_collection_end_year}"
+          previous_collection_range_to = "#{previous_collection_start_year} to #{previous_collection_end_year}"
+
           get root_path
-          expect(page).to have_content("Lettings 25/26")
-          expect(page).to have_content("Lettings 24/25")
-          expect(page).to have_content("Lettings 2025 to 2026")
-          expect(page).to have_content("Lettings 2024 to 2025")
-          expect(page).to have_content("Sales 25/26")
-          expect(page).to have_content("Sales 24/25")
-          expect(page).to have_content("Sales 2025 to 2026")
-          expect(page).to have_content("Sales 2024 to 2025")
-          expect(page).to have_content("Download the sales additional resource (2024 to 2025)")
+          expect(page).to have_content("Lettings #{current_collection_range_slash}")
+          expect(page).to have_content("Lettings #{previous_collection_range_slash}")
+          expect(page).to have_content("Lettings #{current_collection_range_to}")
+          expect(page).to have_content("Lettings #{previous_collection_range_to}")
+          expect(page).to have_content("Sales #{current_collection_range_slash}")
+          expect(page).to have_content("Sales #{previous_collection_range_slash}")
+          expect(page).to have_content("Sales #{current_collection_range_to}")
+          expect(page).to have_content("Sales #{previous_collection_range_to}")
+          expect(page).to have_content("Download the sales additional resource (#{previous_collection_range_to})")
         end
       end
 
       context "and 2024 collection window is closed for editing" do
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2025, 12, 1))
+          Timecop.freeze(current_collection_start_date + 6.months)
+        end
+
+        after do
+          Timecop.return
         end
 
         it "displays correct resources" do
+          current_collection_start_year_short = current_collection_start_year - 2000
+          current_collection_end_year_short = current_collection_end_year - 2000
+          previous_collection_start_year_short = previous_collection_start_year - 2000
+          previous_collection_end_year_short = previous_collection_end_year - 2000
+          current_collection_range_slash = "#{current_collection_start_year_short}/#{current_collection_end_year_short}"
+          previous_collection_range_slash = "#{previous_collection_start_year_short}/#{previous_collection_end_year_short}"
+          current_collection_range_to = "#{current_collection_start_year} to #{current_collection_end_year}"
+          previous_collection_range_to = "#{previous_collection_start_year} to #{previous_collection_end_year}"
+
           get root_path
-          expect(page).to have_content("Lettings 25/26")
-          expect(page).not_to have_content("Lettings 24/25")
-          expect(page).to have_content("Lettings 2025 to 2026")
-          expect(page).not_to have_content("Lettings 2024 to 2025")
-          expect(page).to have_content("Sales 25/26")
-          expect(page).not_to have_content("Sales 24/25")
-          expect(page).to have_content("Sales 2025 to 2026")
-          expect(page).not_to have_content("Sales 2024 to 2025")
+          expect(page).to have_content("Lettings #{current_collection_range_slash}")
+          expect(page).not_to have_content("Lettings #{previous_collection_range_slash}")
+          expect(page).to have_content("Lettings #{current_collection_range_to}")
+          expect(page).not_to have_content("Lettings #{previous_collection_range_to}")
+          expect(page).to have_content("Sales #{current_collection_range_slash}")
+          expect(page).not_to have_content("Sales #{previous_collection_range_slash}")
+          expect(page).to have_content("Sales #{current_collection_range_to}")
+          expect(page).not_to have_content("Sales #{previous_collection_range_to}")
         end
       end
 
