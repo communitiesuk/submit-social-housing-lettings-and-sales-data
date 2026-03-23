@@ -27,7 +27,7 @@ class Form::Sales::Subsections::SharedOwnershipStaircasingTransaction < ::Form::
       Form::Sales::Pages::MonthlyRentStaircasing.new(nil, nil, self),
       (Form::Sales::Pages::ServiceChargeStaircasing.new("service_charge_staircasing", nil, self) if form.start_year_2026_or_later?),
       (Form::Sales::Pages::ServiceChargeChanged.new(nil, nil, self) if form.start_year_2026_or_later?),
-      Form::Sales::Pages::MonthlyChargesValueCheck.new("monthly_charges_shared_ownership_value_check", nil, self),
+      Form::Sales::Pages::MonthlyChargesValueCheck.new("monthly_charges_staircasing_value_check", nil, self),
     ].compact
   end
 
