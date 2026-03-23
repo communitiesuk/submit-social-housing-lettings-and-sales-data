@@ -103,7 +103,7 @@ group :development do
   gem "rubocop-rails", require: false
 end
 
-group :test, :staging do
+group :test, :review do
   gem "timecop", "~> 0.9.4"
 end
 
