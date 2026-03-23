@@ -6,6 +6,12 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @ownershipsch = ownershipsch
     @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR_AND_SECTION, value_key: form.start_year_2025_or_later? ? subsection.id : ownershipsch)
+    sub_copy_key = if subsection.id == "shared_ownership_staircasing_transaction"
+                     "staircase_equity"
+                   else
+                     "non_staircase_equity"
+                   end
+    @copy_key = "#{form.type}.#{subsection.copy_key}.#{@id}.#{sub_copy_key}" if form.start_year_2026_or_later?
     @top_guidance_partial = top_guidance_partial
   end
 
