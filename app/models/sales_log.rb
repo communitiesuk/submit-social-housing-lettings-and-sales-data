@@ -85,21 +85,44 @@ class SalesLog < Log
   }
   scope :after_date, ->(date) { where("saledate >= ?", date) }
 
-  scope :duplicate_sets, lambda { |assigned_to_id = nil|
+  scope :duplicate_sets_2025_and_earlier, lambda { |assigned_to_id = nil|
     scope = visible
-    .group(*DUPLICATE_LOG_ATTRIBUTES)
-    .where.not(saledate: nil)
-    .sex1_answered
-    .address_answered
-    .age1_answered
-    .ecstat1_answered
-    .having("COUNT(*) > 1")
+      .filter_by_year_or_earlier(2025)
+      .group(*DUPLICATE_LOG_ATTRIBUTES)
+      .where.not(saledate: nil)
+      .where.not(sex1: nil)
+      .address_answered
+      .age1_answered
+      .ecstat1_answered
+      .having("COUNT(*) > 1")
 
     if assigned_to_id
       scope = scope.having("MAX(CASE WHEN assigned_to_id = ? THEN 1 ELSE 0 END) >= 1", assigned_to_id)
     end
 
     scope.pluck("ARRAY_AGG(id)")
+  }
+
+  scope :duplicate_sets_2026_and_later, lambda { |assigned_to_id = nil|
+    scope = visible
+      .filter_by_year_or_later(2026)
+      .group(*DUPLICATE_LOG_ATTRIBUTES)
+      .where.not(saledate: nil)
+      .where.not(sexrab1: nil)
+      .address_answered
+      .age1_answered
+      .ecstat1_answered
+      .having("COUNT(*) > 1")
+
+    if assigned_to_id
+      scope = scope.having("MAX(CASE WHEN assigned_to_id = ? THEN 1 ELSE 0 END) >= 1", assigned_to_id)
+    end
+
+    scope.pluck("ARRAY_AGG(id)")
+  }
+
+  scope :duplicate_sets, lambda { |assigned_to_id = nil|
+    duplicate_sets_2025_and_earlier(assigned_to_id) + duplicate_sets_2026_and_later(assigned_to_id)
   }
 
   OPTIONAL_FIELDS = %w[purchid othtype buyers_organisations].freeze
