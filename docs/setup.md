@@ -116,9 +116,17 @@ Some windows IDEs, such as [VSCode](https://code.visualstudio.com/docs/remote/ws
    sudo mv geckodriver /usr/local/bin/
    ```
 
-Also ensure you have firefox installed
+   Also ensure you have firefox installed
 
-7. Clone the repo
+7. Install libyaml-dev if on Linux
+
+   Linux (Debian):
+
+   ```bash
+   sudo apt install -y libyaml-dev
+   ```
+
+8. Clone the repo
 
    ```bash
    git clone https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data.git
