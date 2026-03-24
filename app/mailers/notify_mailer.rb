@@ -8,11 +8,21 @@ class NotifyMailer < ApplicationMailer
   def send_email(email, template_id, personalisation)
     return true if intercept_send?(email)
 
-    notify_client.send_email(
-      email_address: email,
-      template_id:,
-      personalisation:,
-    )
+    if defined?(Timecop)
+      Timecop.return do
+        notify_client.send_email(
+          email_address: email,
+          template_id:,
+          personalisation:,
+        )
+      end
+    else
+      notify_client.send_email(
+        email_address: email,
+        template_id:,
+        personalisation:,
+      )
+    end
   end
 
   def personalisation(record, token, url, username: false)
