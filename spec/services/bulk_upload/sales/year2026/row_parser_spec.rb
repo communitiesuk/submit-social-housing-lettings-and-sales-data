@@ -116,7 +116,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       field_31: "1",
       field_40: "2",
       field_41: "Non-binary",
-      field_125: "1",
+      field_125: "200",
       field_126: "150",
     }
   end
@@ -301,7 +301,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
         context "and case insensitive fields are set to lowercase" do
           let(:case_insensitive_fields) { %w[field_30 field_39 field_49 field_55 field_61 field_67] }
-          let(:case_insensitive_integer_fields_with_r_option) { %w[field_29 field_38 field_48 field_54 field_60 field_66 field_77 field_88 field_83 field_85 field_103 field_133] }
+          let(:case_insensitive_integer_fields_with_r_option) { %w[field_29 field_38 field_48 field_54 field_60 field_66 field_77 field_88 field_83 field_85 field_103 field_107 field_125 field_126 field_133 field_136] }
           let(:attributes) do
             valid_attributes
               .merge(case_insensitive_fields.each_with_object({}) { |field, h| h[field.to_sym] = valid_attributes[field.to_sym]&.downcase })
@@ -1948,23 +1948,555 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
       end
     end
 
-    context "when mscharge is given, but is set to 0 for shared ownership" do
-      let(:attributes) { valid_attributes.merge(field_107: "0") }
+    context "with service charges fields" do
+      context "with mscharge for shared ownership initial purchase (field_107)" do
+        context "when positive" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "100") }
 
-      it "does not override variables correctly" do
-        log = parser.log
-        expect(log["has_mscharge"]).to eq(0) # no
-        expect(log["mscharge"]).to be_nil
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_107]).to be_blank
+          end
+
+          it "sets has_mscharge to yes and mscharge to the value" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(100)
+          end
+        end
+
+        context "when set to 1" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "1") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_107]).to be_blank
+          end
+
+          it "sets has_mscharge to yes and mscharge to the value" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(1)
+          end
+        end
+
+        context "when set to 0" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "0") }
+
+          it "does not add a bulk upload format validation error but adds a site validation error" do
+            parser.valid?
+            expect(parser.errors[:field_107]).not_to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_107]).to include(I18n.t("validations.sales.financial.mscharge.monthly_leasehold_charges.not_zero"))
+          end
+
+          it "sets has_mscharge to yes and mscharge to the value" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(0)
+          end
+        end
+
+        context "when set to 0.0" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "0.0") }
+
+          it "does not add a bulk upload format validation error but adds a site validation error" do
+            parser.valid?
+            expect(parser.errors[:field_107]).not_to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_107]).to include(I18n.t("validations.sales.financial.mscharge.monthly_leasehold_charges.not_zero"))
+          end
+
+          it "sets has_mscharge to yes and mscharge to the value" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(0)
+          end
+        end
+
+        context "when set to R" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "R") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_107]).to be_blank
+          end
+
+          it "sets has_mscharge to no and does not set mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when set to lowercase r" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "r") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_107]).to be_blank
+          end
+
+          it "sets has_mscharge to no and does not set mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when an invalid string" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "X") }
+
+          it "adds a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_107]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+          end
+
+          it "does not set has_mscharge or mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when blank" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: nil) }
+
+          it "does not add a bulk upload format validation error but adds a site validation error" do
+            parser.valid?
+            expect(parser.errors[:field_107]).not_to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_107]).to include("You must answer property service charges.")
+          end
+
+          it "does not set has_mscharge or mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when negative" do
+          let(:attributes) { valid_attributes.merge(field_10: "2", field_107: "-100") }
+
+          it "adds a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_107]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+          end
+
+          it "does not set has_mscharge or mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
+          end
+        end
       end
-    end
 
-    context "when mscharge is given, but is set to 0 for discounted ownership" do
-      let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "0") }
+      context "with mscharge for staircasing (field_125)" do
+        context "when positive" do
+          let(:attributes) { valid_attributes.merge(field_125: "100") }
 
-      it "does not override variables correctly" do
-        log = parser.log
-        expect(log["has_mscharge"]).to eq(0) # no
-        expect(log["mscharge"]).to be_nil
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_125]).to be_blank
+          end
+
+          it "sets has_mscharge to yes and mscharge to the value" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(100)
+          end
+        end
+
+        context "when set to 1" do
+          let(:attributes) { valid_attributes.merge(field_125: "1") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_125]).to be_blank
+          end
+
+          it "sets has_mscharge to yes and mscharge to the value" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(1)
+          end
+        end
+
+        context "when set to 0" do
+          let(:attributes) { valid_attributes.merge(field_125: "0") }
+
+          it "does not add a bulk upload format validation error but adds a site validation error" do
+            parser.valid?
+            expect(parser.errors[:field_125]).not_to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.financial.mscharge.monthly_leasehold_charges.not_zero"))
+          end
+
+          it "sets has_mscharge to yes and mscharge to the value" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(0)
+          end
+        end
+
+        context "when set to 0.0" do
+          let(:attributes) { valid_attributes.merge(field_125: "0.0") }
+
+          it "does not add a bulk upload format validation error but adds a site validation error" do
+            parser.valid?
+            expect(parser.errors[:field_125]).not_to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.financial.mscharge.monthly_leasehold_charges.not_zero"))
+          end
+
+          it "sets has_mscharge to yes and mscharge to the value" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(0)
+          end
+        end
+
+        context "when set to R" do
+          let(:attributes) { valid_attributes.merge(field_125: "R") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_125]).to be_blank
+          end
+
+          it "sets has_mscharge to no and does not set mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when set to lowercase r" do
+          let(:attributes) { valid_attributes.merge(field_125: "r") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_125]).to be_blank
+          end
+
+          it "sets has_mscharge to no and does not set mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when an invalid string" do
+          let(:attributes) { valid_attributes.merge(field_125: "X") }
+
+          it "adds a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+          end
+
+          it "does not set has_mscharge or mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when blank" do
+          let(:attributes) { valid_attributes.merge(field_125: nil) }
+
+          it "does not add a bulk upload format validation error but adds a site validation error" do
+            parser.valid?
+            expect(parser.errors[:field_125]).not_to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+            expect(parser.errors[:field_125]).to include("You must answer property service charges.")
+          end
+
+          it "does not set has_mscharge or mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when negative" do
+          let(:attributes) { valid_attributes.merge(field_125: "-100") }
+
+          it "adds a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+          end
+
+          it "does not set has_mscharge or mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+      end
+
+      context "with mscharge for discounted ownership (field_136)" do
+        context "when positive" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "100") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_136]).to be_blank
+          end
+
+          it "sets has_mscharge to yes and mscharge to the value" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(100)
+          end
+        end
+
+        context "when set to 1" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "1") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_136]).to be_blank
+          end
+
+          it "sets has_mscharge to yes and mscharge to the value" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(1)
+          end
+        end
+
+        context "when set to 0" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "0") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_136]).to be_blank
+          end
+
+          it "sets has_mscharge to yes and mscharge to the value" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(0)
+          end
+        end
+
+        context "when set to 0.0" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "0.0") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_136]).to be_blank
+          end
+
+          it "sets has_mscharge to yes and mscharge to the value" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(1)
+            expect(log["mscharge"]).to eq(0)
+          end
+        end
+
+        context "when set to R" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "R") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_136]).to be_blank
+          end
+
+          it "sets has_mscharge to no and does not set mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when set to lowercase r" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "r") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_136]).to be_blank
+          end
+
+          it "sets has_mscharge to no and does not set mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to eq(0)
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when an invalid string" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "X") }
+
+          it "adds a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_136]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+          end
+
+          it "does not set has_mscharge or mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when blank" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: nil) }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_136]).to be_blank
+          end
+
+          it "does not set has_mscharge or mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+
+        context "when negative" do
+          let(:attributes) { valid_attributes.merge(field_8: "2", field_136: "-100") }
+
+          it "adds a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_136]).to include(I18n.t("validations.sales.2026.bulk_upload.mscharge.invalid"))
+          end
+
+          it "does not set has_mscharge or mscharge" do
+            log = parser.log
+            expect(log["has_mscharge"]).to be_nil
+            expect(log["mscharge"]).to be_nil
+          end
+        end
+      end
+
+      context "with newservicecharges (field_126)" do
+        context "when positive" do
+          let(:attributes) { valid_attributes.merge(field_126: "150") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_126]).to be_blank
+          end
+
+          it "sets hasservicechargeschanged to yes and newservicecharges to the value" do
+            log = parser.log
+            expect(log["hasservicechargeschanged"]).to eq(1)
+            expect(log["newservicecharges"]).to eq(150)
+          end
+        end
+
+        context "when set to 0" do
+          let(:attributes) { valid_attributes.merge(field_126: "0") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_126]).to be_blank
+          end
+
+          it "sets hasservicechargeschanged to yes and newservicecharges to 0" do
+            log = parser.log
+            expect(log["hasservicechargeschanged"]).to eq(1)
+            expect(log["newservicecharges"]).to eq(0)
+          end
+        end
+
+        context "when set to 0.0" do
+          let(:attributes) { valid_attributes.merge(field_126: "0.0") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_126]).to be_blank
+          end
+
+          it "sets hasservicechargeschanged to yes and newservicecharges to 0" do
+            log = parser.log
+            expect(log["hasservicechargeschanged"]).to eq(1)
+            expect(log["newservicecharges"]).to eq(0)
+          end
+        end
+
+        context "when set to R" do
+          let(:attributes) { valid_attributes.merge(field_126: "R") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_126]).to be_blank
+          end
+
+          it "sets hasservicechargeschanged to no and does not set newservicecharges" do
+            log = parser.log
+            expect(log["hasservicechargeschanged"]).to eq(2)
+            expect(log["newservicecharges"]).to be_nil
+          end
+        end
+
+        context "when set to lowercase r" do
+          let(:attributes) { valid_attributes.merge(field_126: "r") }
+
+          it "does not add a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_126]).to be_blank
+          end
+
+          it "sets hasservicechargeschanged to no and does not set newservicecharges" do
+            log = parser.log
+            expect(log["hasservicechargeschanged"]).to eq(2)
+            expect(log["newservicecharges"]).to be_nil
+          end
+        end
+
+        context "when an invalid string" do
+          let(:attributes) { valid_attributes.merge(field_126: "X") }
+
+          it "adds a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_126]).to include(I18n.t("validations.sales.2026.bulk_upload.newservicecharges.invalid"))
+          end
+
+          it "does not set hasservicechargeschanged or newservicecharges" do
+            log = parser.log
+            expect(log["hasservicechargeschanged"]).to be_nil
+            expect(log["newservicecharges"]).to be_nil
+          end
+        end
+
+        context "when blank" do
+          let(:attributes) { valid_attributes.merge(field_126: nil) }
+
+          it "does not add a bulk upload format validation error but adds a site validation error" do
+            parser.valid?
+            expect(parser.errors[:field_126]).not_to include(I18n.t("validations.sales.2026.bulk_upload.newservicecharges.invalid"))
+            expect(parser.errors[:field_126]).to include("You must answer service charge will change.")
+          end
+
+          it "does not set hasservicechargeschanged or newservicecharges" do
+            log = parser.log
+            expect(log["hasservicechargeschanged"]).to be_nil
+            expect(log["newservicecharges"]).to be_nil
+          end
+        end
+
+        context "when negative" do
+          let(:attributes) { valid_attributes.merge(field_126: "-150") }
+
+          it "adds a validation error" do
+            parser.valid?
+            expect(parser.errors[:field_126]).to include(I18n.t("validations.sales.2026.bulk_upload.newservicecharges.invalid"))
+          end
+
+          it "does not set hasservicechargeschanged or newservicecharges" do
+            log = parser.log
+            expect(log["hasservicechargeschanged"]).to be_nil
+            expect(log["newservicecharges"]).to be_nil
+          end
+        end
+      end
+
+      context "when newservicecharges equals mscharge (field_125 == field_126)" do
+        let(:attributes) { valid_attributes.merge(field_125: "200", field_126: "200") }
+
+        it "adds validation errors to both fields" do
+          parser.valid?
+          expect(parser.errors[:field_125]).to include(I18n.t("validations.sales.financial.mscharge.same_as_new"))
+          expect(parser.errors[:field_126]).to include(I18n.t("validations.sales.financial.newservicecharges.same_as_previous"))
+        end
       end
     end
 
