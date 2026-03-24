@@ -152,6 +152,7 @@ class BulkUpload::Sales::Year2026::RowParser
   }.freeze
 
   ERROR_BASE_KEY = "validations.sales.2026.bulk_upload".freeze
+  NUMBER_OR_R_FORMAT = /\A(\d+(\.\d+)?|R)\z/i
 
   CASE_INSENSITIVE_FIELDS = [
     :field_29, # Age of buyer 1
@@ -176,6 +177,11 @@ class BulkUpload::Sales::Year2026::RowParser
 
     :field_103, # What is the length of the mortgage in years? - Shared ownership
     :field_133, # What is the length of the mortgage in years? - Discounted ownership
+
+    :field_107, # What are the total monthly service charges for the property?
+    :field_125, # What are the monthly service charges for the property?
+    :field_126, # New monthly service charge amount
+    :field_136, # What are the total monthly leasehold charges for the property?
   ].freeze
 
   attribute :bulk_upload
@@ -296,7 +302,7 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_104, :decimal
   attribute :field_105, :decimal
   attribute :field_106, :decimal
-  attribute :field_107, :decimal
+  attribute :field_107, :string
   attribute :field_108, :decimal
 
   attribute :field_109, :decimal
@@ -315,8 +321,8 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_122, :integer
   attribute :field_123, :decimal
   attribute :field_124, :decimal
-  attribute :field_125, :integer
-  attribute :field_126, :decimal
+  attribute :field_125, :string
+  attribute :field_126, :string
 
   attribute :field_127, :integer
   attribute :field_128, :decimal
@@ -327,7 +333,7 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_133, :string
   attribute :field_134, :integer
   attribute :field_135, :decimal
-  attribute :field_136, :decimal
+  attribute :field_136, :string
 
   validates :field_1,
             presence: {
@@ -495,6 +501,8 @@ class BulkUpload::Sales::Year2026::RowParser
   validate :validate_nationality, on: :after_log
   validate :validate_buyer_2_nationality, on: :after_log
   validate :validate_mortlen_field_if_buyer_interviewed, on: :after_log
+
+  validate :validate_service_charge_fields, on: :after_log
 
   validate :validate_nulls, on: :after_log
 
@@ -899,7 +907,7 @@ private
       gender_same_as_sex6: %i[field_68],
       gender_description6: %i[field_69],
 
-      hasservicechargeschanged: %i[field_125],
+      hasservicechargeschanged: %i[field_126],
       newservicecharges: %i[field_126],
     }
   end
@@ -949,9 +957,6 @@ private
     attributes["gender_description5"] = field_63
     attributes["gender_same_as_sex6"] = field_68
     attributes["gender_description6"] = field_69
-
-    attributes["hasservicechargeschanged"] = field_125
-    attributes["newservicecharges"] = field_126
 
     attributes["relat2"] = relationship_from_is_partner(field_37)
     attributes["relat3"] = relationship_from_is_partner(field_47)
@@ -1026,8 +1031,6 @@ private
 
     attributes["cashdis"] = field_105
     attributes["mrent"] = mrent
-    attributes["mscharge"] = mscharge if mscharge&.positive?
-    attributes["has_mscharge"] = attributes["mscharge"].present? ? 1 : 0
     attributes["grant"] = field_129
     attributes["discount"] = field_130
 
@@ -1096,6 +1099,11 @@ private
 
     attributes["management_fee"] = field_108
     attributes["has_management_fee"] = field_108.present? && field_108.positive? ? 1 : 0
+
+    attributes["has_mscharge"] = has_mscharge_value
+    attributes["mscharge"] = mscharge_value
+    attributes["hasservicechargeschanged"] = hasservicechargeschanged_value
+    attributes["newservicecharges"] = newservicecharges_value
 
     attributes
   end
@@ -1256,9 +1264,34 @@ private
   end
 
   def mscharge
-    return field_107 if shared_ownership?
+    return field_107 if shared_ownership_initial_purchase?
+    return field_125 if staircasing?
 
     field_136 if discounted_ownership?
+  end
+
+  def has_mscharge_value
+    return unless mscharge.present? && mscharge.match?(NUMBER_OR_R_FORMAT)
+
+    mscharge.casecmp?("R") ? 0 : 1
+  end
+
+  def mscharge_value
+    return unless mscharge.present? && mscharge.match?(NUMBER_OR_R_FORMAT) && !mscharge.casecmp?("R")
+
+    mscharge.to_d
+  end
+
+  def hasservicechargeschanged_value
+    return unless field_126.present? && field_126.match?(NUMBER_OR_R_FORMAT)
+
+    field_126.casecmp?("R") ? 2 : 1
+  end
+
+  def newservicecharges_value
+    return unless field_126.present? && field_126.match?(NUMBER_OR_R_FORMAT) && !field_126.casecmp?("R")
+
+    field_126.to_d
   end
 
   def mortlen
@@ -1333,10 +1366,11 @@ private
   end
 
   def mscharge_fields
-    return [:field_107] if shared_ownership?
+    return [:field_107] if shared_ownership_initial_purchase?
+    return [:field_125] if staircasing?
     return [:field_136] if discounted_ownership?
 
-    %i[field_107 field_136]
+    %i[field_107 field_125 field_136]
   end
 
   def mortlen_fields
@@ -1389,6 +1423,29 @@ private
     end
   end
 
+  def validate_service_charge_fields
+    message = I18n.t("#{ERROR_BASE_KEY}.mscharge.invalid")
+
+    if shared_ownership_initial_purchase? && field_107.present? && !field_107.match?(NUMBER_OR_R_FORMAT)
+      errors.add(:field_107, message)
+    end
+
+    if staircasing?
+      if field_125.present? && !field_125.match?(NUMBER_OR_R_FORMAT)
+        errors.add(:field_125, message)
+      end
+
+      if field_126.present? && !field_126.match?(NUMBER_OR_R_FORMAT)
+        errors.add(:field_126, I18n.t("#{ERROR_BASE_KEY}.newservicecharges.invalid"))
+      end
+    end
+
+    if discounted_ownership? && field_136.present? && !field_136.match?(NUMBER_OR_R_FORMAT)
+      errors.add(:field_136, message)
+    end
+  end
+
+  # Will send a "Bulk upload failed" email rather than an "Errors in bulk upload" email
   def block_log_creation!
     self.block_log_creation = true
   end
