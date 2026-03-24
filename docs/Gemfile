@@ -9,6 +9,6 @@ group :development do
 end
 
 # used to be in standard library
-gem "csv"
 gem "base64"
 gem "bigdecimal"
+gem "csv"

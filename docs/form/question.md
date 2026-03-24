@@ -121,6 +121,7 @@ end
 </dl>
 
 ## Useful methods
+
 <dl>
 <dt>derived?</dt>
 <dd>This is function that should return true if the question is to be derived, such as where it's answer can be inferred based on another question. Setting this to true will cause the question to not be shown in CYA. The user will still be shown the question. This method is very similar to a depends_on method, but a depends_on block is used to always infer an answer of "". derived? is reliant on other code setting the answer, such as <code>set_derived_fields!</code></dd>
@@ -136,9 +137,9 @@ end
 </dl>
 
 ## Question visibility
+
 There are broadly 3 reasons to hide a question. Here's how to handle them.
 
 1. The question should not be asked, answer should be derived as nil and user should not be able to change this. If so, set up a `depends_on` on the page.
 2. The question should not be asked, answer should be derived as some value and user should not be able to change this. If so, set up a `depends_on` on the page and set up a `derived?`. Use a method like `set_derived_fields!` to set the answer.
 3. The question should not be asked, answer should be derived as some value and user should be able to change this. If so, set up a `skip_question_in_form_flow?` method.
-
