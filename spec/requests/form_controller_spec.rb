@@ -1194,7 +1194,7 @@ RSpec.describe FormController, type: :request do
           it "displays a success banner" do
             follow_redirect!
 
-            expect(response.body).to include("You have successfully updated Q31: lead tenant’s age")
+            expect(response.body).to match(/You have successfully updated Q\d+: lead tenant’s age/)
           end
         end
 

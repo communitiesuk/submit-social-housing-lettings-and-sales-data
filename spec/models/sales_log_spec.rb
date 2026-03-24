@@ -684,12 +684,13 @@ RSpec.describe SalesLog, type: :model do
   end
 
   context "when deriving household variables" do
-    let!(:sales_log) do
+    let(:sales_log) do
       create(
         :sales_log,
         :completed,
+        saledate:,
         jointpur: 1,
-        hholdcount: 4,
+        hholdcount:,
         details_known_3: 1,
         details_known_4: 1,
         details_known_5: 1,
@@ -711,30 +712,75 @@ RSpec.describe SalesLog, type: :model do
       )
     end
 
-    it "correctly derives and saves hhmemb" do
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["hhmemb"]).to eq(6)
+    before do
+      Timecop.travel(saledate)
+      Singleton.__init__(FormHandler)
     end
 
-    it "correctly derives and saves hhmemb if it's a joint purchase" do
-      sales_log.update!(jointpur: 2, jointmore: 2)
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["hhmemb"]).to eq(5)
+    after do
+      Timecop.return
     end
 
-    it "correctly derives and saves totchild" do
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["totchild"]).to eq(2)
+    context "when 2025", metadata: { year: 25 } do
+      let(:saledate) { collection_start_date_for_year(2025) }
+      let(:hholdcount) { 4 }
+
+      it "correctly derives and saves hhmemb if it's a joint purchase" do
+        record_from_db = described_class.find(sales_log.id)
+        expect(record_from_db["hhmemb"]).to eq(6)
+      end
+
+      it "correctly derives and saves hhmemb if it's not a joint purchase" do
+        sales_log.update!(jointpur: 2)
+        record_from_db = described_class.find(sales_log.id)
+        expect(record_from_db["hhmemb"]).to eq(5)
+      end
+
+      it "correctly derives and saves totchild" do
+        record_from_db = described_class.find(sales_log.id)
+        expect(record_from_db["totchild"]).to eq(2)
+      end
+
+      it "correctly derives and saves totadult" do
+        record_from_db = described_class.find(sales_log.id)
+        expect(record_from_db["totadult"]).to eq(4)
+      end
+
+      it "correctly derives and saves hhtype" do
+        record_from_db = described_class.find(sales_log.id)
+        expect(record_from_db["hhtype"]).to eq(9)
+      end
     end
 
-    it "correctly derives and saves totadult" do
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["totadult"]).to eq(4)
-    end
+    context "when 2026 or later", metadata: { year: 26 } do
+      let(:saledate) { collection_start_date_for_year_or_later(2026) }
+      let(:hholdcount) { 6 }
 
-    it "correctly derives and saves hhtype" do
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["hhtype"]).to eq(9)
+      it "correctly derives and saves hhmemb if it's a joint purchase" do
+        record_from_db = described_class.find(sales_log.id)
+        expect(record_from_db["hhmemb"]).to eq(6)
+      end
+
+      it "correctly derives and saves hhmemb if it's not a joint purchase" do
+        sales_log.update!(jointpur: 2)
+        record_from_db = described_class.find(sales_log.id)
+        expect(record_from_db["hhmemb"]).to eq(6)
+      end
+
+      it "correctly derives and saves totchild" do
+        record_from_db = described_class.find(sales_log.id)
+        expect(record_from_db["totchild"]).to eq(2)
+      end
+
+      it "correctly derives and saves totadult" do
+        record_from_db = described_class.find(sales_log.id)
+        expect(record_from_db["totadult"]).to eq(4)
+      end
+
+      it "correctly derives and saves hhtype" do
+        record_from_db = described_class.find(sales_log.id)
+        expect(record_from_db["hhtype"]).to eq(9)
+      end
     end
   end
 
@@ -806,10 +852,10 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "expected_shared_ownership_deposit_value" do
-    let!(:completed_sales_log) { create(:sales_log, :completed, ownershipsch: 1, type: 2, value: 1000, equity: 50, staircase: 1) }
+    let(:completed_sales_log) { create(:sales_log, :completed, ownershipsch: 1, type: 2, value: 15_000, equity: 50, staircase: 1) }
 
     it "is set to completed for a completed sales log" do
-      expect(completed_sales_log.expected_shared_ownership_deposit_value).to eq(500)
+      expect(completed_sales_log.expected_shared_ownership_deposit_value).to eq(7500)
     end
   end
 

@@ -3,6 +3,8 @@ require_relative "helpers"
 
 RSpec.describe "Sales Log Check Answers Page" do
   include Helpers
+  include CollectionTimeHelper
+
   let(:user) { FactoryBot.create(:user) }
   let(:subsection) { "household-characteristics" }
   let(:conditional_subsection) { "conditional-question" }
@@ -13,7 +15,7 @@ RSpec.describe "Sales Log Check Answers Page" do
       :completed,
       assigned_to: user,
       jointpur: 1,
-      hholdcount: 4,
+      hholdcount: current_collection_start_year >= 2026 ? 6 : 4,
     )
   end
 
@@ -23,7 +25,7 @@ RSpec.describe "Sales Log Check Answers Page" do
       :completed,
       assigned_to: user,
       jointpur: 2,
-      hholdcount: 4,
+      hholdcount: current_collection_start_year >= 2026 ? 6 : 4,
     )
   end
 
