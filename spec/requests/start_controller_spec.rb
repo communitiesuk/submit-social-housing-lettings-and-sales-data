@@ -324,7 +324,7 @@ RSpec.describe StartController, type: :request do
         end
       end
 
-      context "and current collection window is open for editing" do
+      context "and previous collection window is open for editing" do
         before do
           create(:collection_resource, :additional, year: previous_collection_start_year, log_type: "sales", display_name: "sales additional resource (#{previous_collection_start_year} to #{previous_collection_end_year})")
           Timecop.freeze(current_collection_start_date)
@@ -334,7 +334,7 @@ RSpec.describe StartController, type: :request do
           Timecop.return
         end
 
-        it "displays correct resources for 2024/25 and 2025/26 collection years" do
+        it "displays correct resources for previous and current collection years" do
           current_collection_start_year_short = current_collection_start_year - 2000
           current_collection_end_year_short = current_collection_end_year - 2000
           previous_collection_start_year_short = previous_collection_start_year - 2000
@@ -357,7 +357,7 @@ RSpec.describe StartController, type: :request do
         end
       end
 
-      context "and 2024 collection window is closed for editing" do
+      context "and previous collection window is closed for editing" do
         before do
           Timecop.freeze(current_collection_start_date + 6.months)
         end
@@ -366,7 +366,7 @@ RSpec.describe StartController, type: :request do
           Timecop.return
         end
 
-        it "displays correct resources" do
+        it "displays correct resources for current collection year only" do
           current_collection_start_year_short = current_collection_start_year - 2000
           current_collection_end_year_short = current_collection_end_year - 2000
           previous_collection_start_year_short = previous_collection_start_year - 2000
