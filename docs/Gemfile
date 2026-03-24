@@ -7,3 +7,8 @@ end
 group :development do
   gem "webrick"
 end
+
+# used to be in standard library
+gem "csv"
+gem "base64"
+gem "bigdecimal"
