@@ -1,4 +1,5 @@
 class DeviseNotifyMailer < Devise::Mailer
+  include TimecopHelper
   require "notifications/client"
 
   def notify_client
@@ -8,15 +9,7 @@ class DeviseNotifyMailer < Devise::Mailer
   def send_email(email_address, template_id, personalisation)
     return true if intercept_send?(email_address)
 
-    if defined?(Timecop)
-      Timecop.return do
-        notify_client.send_email(
-          email_address:,
-          template_id:,
-          personalisation:,
-        )
-      end
-    else
+    without_timecop do
       notify_client.send_email(
         email_address:,
         template_id:,
