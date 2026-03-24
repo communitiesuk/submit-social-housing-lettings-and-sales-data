@@ -166,6 +166,19 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
           ])
         end
       end
+
+      context "and some locations don't have names" do
+        before do
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 7), name: "other name", postcode: "AA1 1AA")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 6), name: nil, postcode: "AA1 1AB")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 5), name: "A", postcode: "AA1 1AC")
+          lettings_log.update!(scheme:)
+        end
+
+        it "uses the postcode as a fallback" do
+          expect(question.displayed_answer_options(lettings_log).values.map { |v| v["value"] }).to eq(["AA1 1AC", "AA1 1AB", "AA1 1AA"])
+        end
+      end
     end
   end
 
