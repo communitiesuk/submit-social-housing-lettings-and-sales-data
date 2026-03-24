@@ -31,10 +31,14 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
     scheme_location_ids = lettings_log.scheme.locations.visible.confirmed.pluck(:id)
     answer_options.select { |k, _v| scheme_location_ids.include?(k.to_i) }
                   .sort_by { |_, v|
-                    name_or_postcode = v["hint"] || v["value"] # name can be nil, postcode is never nil
-                    name = name_or_postcode.match(/[a-zA-Z].*/).to_s
-                    number = name_or_postcode.match(/\d+/).to_s.to_i
-                    [name, number]
+                    if v["hint"].present?
+                      name = v["hint"]
+                      name_text = name&.match(/[a-zA-Z].*/).to_s
+                      number = name&.match(/\d+/).to_s.to_i
+                      [0, name_text, number]
+                    else
+                      [1, v["value"]]
+                    end
                   }.to_h
   end
 
