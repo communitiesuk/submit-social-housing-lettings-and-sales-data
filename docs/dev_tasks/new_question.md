@@ -82,6 +82,8 @@ To make your new page only appear in the forms for the upcoming year, you wrap t
 
 Note: the `@id` attribute of a page is what will be displayed in the url when visiting it. It must be unique within a collection year (i.e. two pages in 25/26 cannot share an ID, but two pages in different collection years can share an ID).
 
+Do not use a `depends_on` block for showing a page on a specific year.
+
 ### 6. Update the locale file
 
 The locale files define some of the text for the new question, including hints and the question itself.
@@ -90,19 +92,31 @@ Locale files can be found in `config/locales/forms/<year>/sales/` and there is o
 
 Copy the entry for an existing question and substitute in the text for your new one.
 
-### 7. Include the new field in exports
+The locale config for a question by default is laid out like <code>en.forms.\<year>.\<form type>.\<subsection>.\<page id></code>. We assume 1 question per page. If there is more than one question per page you will need to add these as subsections in the page locale and set up a custom <code>@copy_key</code> property in the constructor.
 
-The fields that get exported in CSVs and XMLs are defined in `app/services/exports/sales_log_export_constants.rb`.
+### 7. Add validations
 
-If there is not a set for POST\_<year>\_EXPORT_FIELDS, create one. Add your new field to the current year's set.
+Add validation methods to the appropriate file. For example `app/models/validations/<subsection>_validations.rb` or `app/models/validations/sales/<subsection>_validations.rb` for sales. Any method in these files with a name starting `validate` will be automatically called. Adding an error to the record (log) will show an error on the frontend and the BU.
 
-You may also have to update the `sales_log_export_service.rb` to correctly filter the year-specific fields.
+An error is added by calling `record.errors.add :<question id>, I18n.t("validations.<validation key>")`. You'll need to add the key where appropriate to the relevant locale file inside `config/locales/validations/...`.
 
-### 8. Update the bulk upload row parser
+Make sure to add errors to all relevant question IDs that can trigger the error. Note that questions on CORE can be answered in any order and amended at will so you cannot make assumptions on order of questions answered. CORE uses the question ID to show the error to the user on the page. If you don't add errors to all relevant question IDs, the user will not see an error but not be able to submit.
+
+### 8. Include the new field in exports
+
+The fields that get exported in CSVs and XMLs are defined in `app/services/exports/\<log type>_log_export_constants.rb`.
+
+If there is not a set for `YEAR_<year>_EXPORT_FIELDS`, create one. Add your new field to the current year's set.
+
+You may also have to update the `<log type>_log_export_service.rb` to correctly filter the year-specific fields.
+
+### 9. Update the bulk upload parser
 
 This will allow bulk upload files to save the new field to the database.
 
-You can find the relevant file at `app/services/bulk_upload/sales/year<year>/row_parser.rb`.
+You can find the relevant file at `app/services/bulk_upload/<log type>/year<year>/row_parser.rb`.
+
+If doing this work during yearly rebuild, add this new field as the last field in the file. It's much easier to have a single task at the end to correct all the field numbers.
 
 You will need to add a new `field_XXX` for the new field. In total, update the following places:
 
@@ -113,12 +127,53 @@ You will need to add a new `field_XXX` for the new field. In total, update the f
   ```
 - Add the new field to `field_mapping_for_errors` with the name of the field in the database.
 - Add the new field to `attributes_for_log` with the name of the field in the database.
+- If the field needs to be case-insensitive, add to `CASE_INSENSITIVE_FIELDS`.
 
 You may also have to add some additional validation rules in this file.
 
+We should try and keep validations in the BU few, and leave to validations on the log which you set up earlier. Validations suitable for BU would be those that are specific to the bulk upload process. For instance, validating the input format where we allow "R".
+
 Validation for ensuring that the value uploaded is one of the permitted options is handled automatically, using the question class as the original source of truth.
 
-### 9. Update unit tests
+Make sure that if a value fails a BU validation, then a valid value is not written to the log in the `attributes_for_log` method. If a BU produces a log that is 'complete', all errors will be ignored. Errors on fields the log considers 'valid' are ignored. So, you must make sure the log is incomplete for the user to see the error report. Normally you'll do this intuitively as invalid fields will mean you won't have a valid value.
+
+You'll also need to update the field count in `app/services/bulk_upload/<log type>/year<year>/csv_parser.rb`, as well as the `cols` method.
+
+### 10. Update unit tests
 
 - Create new test files for any new classes you have created. Update any test files for files that you have edited.
 - Update `spec/fixtures/variable_definitions/sales_download_25_26.csv` (for sales/lettings and for the relevant collection year) with the new question's field name and definition.
+
+### 11. Update factory file
+
+In `spec/factories` there are a series of factory files. These generate populated objects for use in tests. We also use them on CORE for the buttons that generate completed logs.
+
+You will need to update the factory file for the relevant log type to include the new field. Don't worry about gating it to be year specific, old year questions will be ignored.
+
+### 12. Update reference example BU file
+
+In `spec/fixtures/files` we keep a sample BU file for a range of years and both log types. This gives us a fixed reference for a valid BU file. Make sure to update this and test that you can upload it locally.
+
+### 13. Update auto generated example BU file
+
+In the `app/helpers_bulk_upload/<log type>_log_to_csv.rb` file we maintain functions that convert a log into a BU file. This is used by tests and by the button on CORE to download an example BU file.
+
+Make sure that this file is updated to include the new field in the relevant `to_<year>_row` method. You don't need to update the field numbers.
+
+If you're adding a new method for this year, copy paste the previous year's row method. This'll avoid some nasty merge conflicts down the line.
+
+Make sure you can download this test file and then upload it again.
+
+### 14. Check the CSV download service
+
+Users are able to download CSV exports of logs. This is handled by `app/services/csv/<log type>_log_csv_service.rb`. It should automatically include the new field, but worth checking locally that you're happy with both the codes and labels download.
+
+### 15. Add test CSV export definitions
+
+In `spec/fixtures/variable_definitions` there are a series of CSV files that define the names of fields. These are normally set in the UI by CORE but to make our tests more authentic we maintain labels for use in the tests.
+
+If making one for the new year, just add a new file in that folder. The CSV export tests will pick it up automatically.
+
+### 16. Check log export service
+
+We export an XML representation of all logs made that day nightly. This is handled by `app/services/exports/<log type>_log_export_service.rb`. It should automatically include the new field, though make sure the spec file for this service passes. You will need to update `apply_cds_transformation` if the column name requested in the export doesn't match the database.
