@@ -808,6 +808,63 @@ RSpec.describe Validations::Sales::SoftValidations do
 
       expect(record).not_to be_purchase_price_out_of_soft_range
     end
+
+    context "when staircasing" do
+      it "is not out of range when stairbought is 10% and value is 20,000 (full price 200,000 is in soft range)" do
+        record.staircase = 1
+        record.stairbought = 10
+        record.value = 20_000
+        record.beds = 2
+        record.la = "E07000223"
+        record.saledate = Time.zone.local(2023, 1, 1)
+
+        expect(record).not_to be_purchase_price_out_of_soft_range
+      end
+
+      it "is out of range when stairbought is 10% and value is 17,000 (full price 170,000 is below soft min of 177,000)" do
+        record.staircase = 1
+        record.stairbought = 10
+        record.value = 17_000
+        record.beds = 2
+        record.la = "E07000223"
+        record.saledate = Time.zone.local(2023, 1, 1)
+
+        expect(record).to be_purchase_price_out_of_soft_range
+      end
+
+      it "is out of range when stairbought is 10% and value is 40,000 (full price 400,000 is above soft max of 384,000)" do
+        record.staircase = 1
+        record.stairbought = 10
+        record.value = 40_000
+        record.beds = 2
+        record.la = "E07000223"
+        record.saledate = Time.zone.local(2023, 1, 1)
+
+        expect(record).to be_purchase_price_out_of_soft_range
+      end
+
+      it "does not trigger when stairbought is not set" do
+        record.staircase = 1
+        record.stairbought = nil
+        record.value = 20_000
+        record.beds = 2
+        record.la = "E07000223"
+        record.saledate = Time.zone.local(2023, 1, 1)
+
+        expect(record).not_to be_purchase_price_out_of_soft_range
+      end
+
+      it "does not trigger when stairbought is 0" do
+        record.staircase = 1
+        record.stairbought = 0
+        record.value = 20_000
+        record.beds = 2
+        record.la = "E07000223"
+        record.saledate = Time.zone.local(2023, 1, 1)
+
+        expect(record).not_to be_purchase_price_out_of_soft_range
+      end
+    end
   end
 
   describe "#grant_outside_common_range?" do
