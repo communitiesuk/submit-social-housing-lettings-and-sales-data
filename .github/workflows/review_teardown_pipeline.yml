@@ -7,6 +7,7 @@ on:
   pull_request:
     types:
       - closed
+      - unlabeled
 
 env:
   app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
@@ -18,6 +19,9 @@ env:
 jobs:
   database:
     name: Drop database
+    if: >
+      (github.event.action == 'closed' && contains(github.event.pull_request.labels.*.name, 'review-app'))
+      || (github.event.action == 'unlabeled' && github.event.label.name == 'review-app')
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -54,6 +58,9 @@ jobs:
 
   infra:
     name: Teardown review app
+    if: >
+      (github.event.action == 'closed' && contains(github.event.pull_request.labels.*.name, 'review-app'))
+      || (github.event.action == 'unlabeled' && github.event.label.name == 'review-app')
     needs: [database]
     uses: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/.github/workflows/destroy_review_app_infra.yml@main
     with:
