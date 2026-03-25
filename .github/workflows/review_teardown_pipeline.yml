@@ -68,3 +68,23 @@ jobs:
       app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
     permissions:
       id-token: write
+
+  comment:
+    name: Comment on PR
+    if: github.event.action == 'unlabeled' && github.event.label.name == 'review-app'
+    needs: [infra]
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'Review app has been torn down. To redeploy, reapply the `review-app` label.',
+            });
