@@ -5,9 +5,7 @@ nav_order: 1
 
 # New Questions
 
-Concerns adding a brand-new question to Lettings Logs or Sales Logs. This question will appear on the website as part of the Sales form and should be handled in Bulk Uploads.
-
-Note: this document focuses on Sales Logs but the steps are equivalent for Lettings Logs by replacing `sales` with `lettings` in file paths etc.
+Concerns adding a brand-new question to Lettings Logs or Sales Logs. This question will appear on the website as part of the form and should be handled in Bulk Uploads. It will be exported as either a CSV download for users or XML export for automated ingestion by downstream users.
 
 Guide is up-to-date as of 2026.
 
@@ -50,9 +48,11 @@ This will update `schema.rb`. You should not edit `schema.rb` directly.
 
 This will define the question that gets rendered on the online form.
 
-Existing question classes can be found in `app/models/form/sales/questions/`. Depending on the type of question (checkboxes, radio groups, free-text fields), there will almost certainly be an existing question class that you can refer to as a guide.
+Existing question classes can be found in `app/models/form/<log type>/questions/`. Depending on the type of question (checkboxes, radio groups, free-text fields), there will almost certainly be an existing question class that you can refer to as a guide.
 
 For example, if you need to create a new radio form, then you may want to copy `armed_forces.rb`.
+
+Sometimes a question will appear in multiple places in the form, or have multiple similar forms. Historically on CORE we'd make a different question class for each, but now we think it's more maintainable to add a small amount of logic to the question to make it dynamic.
 
 See also: [Question]({% link form/question.md %})
 
@@ -60,7 +60,7 @@ See also: [Question]({% link form/question.md %})
 
 This creates the page that your new question will be rendered on.
 
-Existing page classes can be found in `app/models/form/sales/pages`.
+Existing page classes can be found in `app/models/form/<log type>/pages`.
 
 Usually there is only one question per page, but in some cases there may be multiple. It may not be necessary to create a new page if the new question is being added to an existing one.
 
@@ -70,7 +70,7 @@ See also: [Page]({% link form/page.md %})
 
 Without this step, your new page will not be inserted into the form!
 
-Subsections can be found in `app/models/form/sales/subsections`.
+Subsections can be found in `app/models/form/<log type>/subsections`.
 
 You will want to add your new page to the appropriate place in the list returned by `def pages`.
 
@@ -88,11 +88,11 @@ Do not use a `depends_on` block for showing a page on a specific year.
 
 The locale files define some of the text for the new question, including hints and the question itself.
 
-Locale files can be found in `config/locales/forms/<year>/sales/` and there is one locale file for each form subsection.
+Locale files can be found in `config/locales/forms/<year>/<log type>/` and there is one locale file for each form subsection.
 
 Copy the entry for an existing question and substitute in the text for your new one.
 
-The locale config for a question by default is laid out like <code>en.forms.\<year>.\<form type>.\<subsection>.\<page id></code>. We assume 1 question per page. If there is more than one question per page you will need to add these as subsections in the page locale and set up a custom <code>@copy_key</code> property in the constructor.
+The locale config for a question by default is laid out like `en.forms.\<year>.\<form type>.\<subsection>.\<page id>`. We assume 1 question per page. If there is more than one question per page you will need to add these as subsections in the page locale and set up a custom <code>@copy_key</code> property in the constructor.
 
 ### 7. Add validations
 
@@ -131,7 +131,7 @@ You will need to add a new `field_XXX` for the new field. In total, update the f
 
 You may also have to add some additional validation rules in this file.
 
-We should try and keep validations in the BU few, and leave to validations on the log which you set up earlier. Validations suitable for BU would be those that are specific to the bulk upload process. For instance, validating the input format where we allow "R".
+We should try and keep validations in the BU few, and leave to validations on the log which you set up earlier. Only add validation specific to the csv format. For instance, validating the input format where we allow "R".
 
 Validation for ensuring that the value uploaded is one of the permitted options is handled automatically, using the question class as the original source of truth.
 
