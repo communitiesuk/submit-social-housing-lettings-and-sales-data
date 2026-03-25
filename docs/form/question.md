@@ -87,6 +87,11 @@ end
 <dd>
   Is used only for the household characteristics section as each person gets their own card on the CYA page. If you're looking to add a custom CYA card somewhere else in the form, see <code>check_answers_card_title</code>
 </dd>
+
+<dt>check_answers_card_title</dt>
+<dd>
+  If set to non nil, on the CYA this question will be put in a box with this title. If multiple questions set the same <code>check_answers_card_title</code>, they will be grouped.
+</dd>
 </dl>
 
 Another example shows us some fields that are used when we want to infer the answers to one question based on a user's answers to another question. This can allow the user to have to answer fewer questions, lowering their total number of clicks.
