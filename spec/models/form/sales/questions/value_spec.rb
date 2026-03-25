@@ -55,4 +55,18 @@ RSpec.describe Form::Sales::Questions::Value, type: :model do
       expect(question.min).to eq(15_000)
     end
   end
+
+  context "with year 2026 and staircasing subsection", metadata: { year: 26 } do
+    let(:start_year) { 2026 }
+    let(:start_year_2026_or_later?) { true }
+    let(:page) { instance_double(Form::Page, id: "value_shared_ownership_staircase", subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: collection_start_date_for_year(start_year), start_year_2026_or_later?: start_year_2026_or_later?), id: "shared_ownership_staircasing_transaction")) }
+
+    before do
+      allow(page.subsection.form).to receive(:start_year_2025_or_later?).and_return(true)
+    end
+
+    it "has correct min" do
+      expect(question.min).to eq(0)
+    end
+  end
 end
