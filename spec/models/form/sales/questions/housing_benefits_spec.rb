@@ -57,7 +57,7 @@ RSpec.describe Form::Sales::Questions::HousingBenefits, type: :model do
       "2" => { "value" => "Housing benefit" },
       "3" => { "value" => "Universal Credit housing element" },
       "divider" => { "value" => true },
-      "1" => { "value" => "Neither housing benefit or Universal Credit housing element" },
+      "1" => { "value" => "Neither" },
       "4" => { "value" => "Don’t know " },
     })
   end
