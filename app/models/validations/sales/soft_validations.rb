@@ -96,9 +96,8 @@ module Validations::Sales::SoftValidations
 
   def purchase_price_out_of_soft_range?
     return unless value && beds && la && sale_range
-    return if is_staircase? && !stairbought&.positive?
 
-    !full_purchase_price.between?(sale_range.soft_min, sale_range.soft_max)
+    !value.between?(sale_range.soft_min, sale_range.soft_max)
   end
 
   def staircase_owned_out_of_soft_range?
@@ -137,11 +136,11 @@ module Validations::Sales::SoftValidations
   end
 
   def purchase_price_higher_or_lower_text
-    full_purchase_price < sale_range.soft_min ? "lower" : "higher"
+    value < sale_range.soft_min ? "lower" : "higher"
   end
 
   def purchase_price_soft_min_or_soft_max
-    full_purchase_price < sale_range.soft_min ? sale_range.soft_min : sale_range.soft_max
+    value < sale_range.soft_min ? sale_range.soft_min : sale_range.soft_max
   end
 
   def grant_outside_common_range?
@@ -203,14 +202,6 @@ module Validations::Sales::SoftValidations
   end
 
 private
-
-  def full_purchase_price
-    if is_staircase? && stairbought&.positive?
-      value * 100 / stairbought
-    else
-      value
-    end
-  end
 
   def sale_range
     LaSaleRange.find_by(
