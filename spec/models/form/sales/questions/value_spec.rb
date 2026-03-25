@@ -32,7 +32,7 @@ RSpec.describe Form::Sales::Questions::Value, type: :model do
   end
 
   it "has correct width" do
-    expect(question.width).to eq(5)
+    expect(question.width).to eq(10)
   end
 
   it "has correct prefix" do
