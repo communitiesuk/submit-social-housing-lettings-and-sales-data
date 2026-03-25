@@ -68,6 +68,11 @@ en:
                 <li>For UPRN (Unique Property Reference Number), please enter the full value exactly</li>
               </ul>"
 
+          address_uprn:
+            title: "What is a UPRN?"
+            content: "<p>The Unique Property Reference Number (UPRN) is a unique number system created by Ordnance Survey and used by housing providers and various industries across the UK. An example is 0010457355.</p>
+              <p>The UPRN may not be the same as the property reference assigned by your organisation.</p>"
+
           needs_type:
             title: "What does each need type mean?"
             content: "General needs housing includes both self-contained and shared housing without support or specific adaptations.<br><br>Supported housing is housing with special design facilities or features targeted at a specific client group requiring support, for example housing designed for older people, sheltered accommodation, extra care housing. It can include direct access hostels, group homes, and purpose-built self-contained housing. We do not require CORE logs for residential care or nursing homes."
