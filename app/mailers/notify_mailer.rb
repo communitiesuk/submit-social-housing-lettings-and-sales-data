@@ -1,4 +1,5 @@
 class NotifyMailer < ApplicationMailer
+  include TimecopHelper
   require "notifications/client"
 
   def notify_client
@@ -8,11 +9,13 @@ class NotifyMailer < ApplicationMailer
   def send_email(email, template_id, personalisation)
     return true if intercept_send?(email)
 
-    notify_client.send_email(
-      email_address: email,
-      template_id:,
-      personalisation:,
-    )
+    without_timecop do
+      notify_client.send_email(
+        email_address: email,
+        template_id:,
+        personalisation:,
+      )
+    end
   end
 
   def personalisation(record, token, url, username: false)
