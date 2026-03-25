@@ -1,7 +1,5 @@
 module Storage
   class S3Service < StorageService
-    include TimecopHelper
-
     attr_reader :configuration
 
     def initialize(config_service, instance_name)
@@ -13,79 +11,61 @@ module Storage
     end
 
     def list_files(folder)
-      without_timecop do
-        @client.list_objects_v2(bucket: @configuration.bucket_name, prefix: folder)
-               .flat_map { |response| response.contents.map(&:key) }
-      end
+      @client.list_objects_v2(bucket: @configuration.bucket_name, prefix: folder)
+             .flat_map { |response| response.contents.map(&:key) }
     end
 
     def folder_present?(folder)
-      without_timecop do
-        response = @client.list_objects_v2(bucket: @configuration.bucket_name, prefix: folder, max_keys: 1)
-        response.key_count == 1
-      end
+      response = @client.list_objects_v2(bucket: @configuration.bucket_name, prefix: folder, max_keys: 1)
+      response.key_count == 1
     end
 
     def get_presigned_url(file_name, duration, response_content_disposition: nil)
-      without_timecop do
-        Aws::S3::Presigner
-          .new({ client: @client })
-          .presigned_url(:get_object, bucket: @configuration.bucket_name, key: file_name, expires_in: duration, response_content_disposition:)
-      end
+      Aws::S3::Presigner
+        .new({ client: @client })
+        .presigned_url(:get_object, bucket: @configuration.bucket_name, key: file_name, expires_in: duration, response_content_disposition:)
     end
 
     def get_file_io(file_name)
-      without_timecop do
-        @client.get_object(bucket: @configuration.bucket_name, key: file_name)
-               .body
-      end
+      @client.get_object(bucket: @configuration.bucket_name, key: file_name)
+             .body
     end
 
     def get_file(file_name)
-      without_timecop do
-        @client.get_object(bucket: @configuration.bucket_name, key: file_name)
-               .body.read
-      end
+      @client.get_object(bucket: @configuration.bucket_name, key: file_name)
+             .body.read
     end
 
     def write_file(file_name, data, content_type: nil)
-      without_timecop do
-        if content_type.nil?
-          @client.put_object(
-            body: data,
-            bucket: @configuration.bucket_name,
-            key: file_name,
-          )
-        else
-          @client.put_object(
-            body: data,
-            bucket: @configuration.bucket_name,
-            key: file_name,
-            content_type:,
-          )
-        end
+      if content_type.nil?
+        @client.put_object(
+          body: data,
+          bucket: @configuration.bucket_name,
+          key: file_name,
+        )
+      else
+        @client.put_object(
+          body: data,
+          bucket: @configuration.bucket_name,
+          key: file_name,
+          content_type:,
+        )
       end
     end
 
     def get_file_metadata(file_name)
-      without_timecop do
-        @client.head_object(bucket: @configuration.bucket_name, key: file_name)
-      end
+      @client.head_object(bucket: @configuration.bucket_name, key: file_name)
     end
 
     def file_exists?(file_name)
-      without_timecop do
-        @client.head_object(bucket: @configuration.bucket_name, key: file_name)
-        true
-      end
+      @client.head_object(bucket: @configuration.bucket_name, key: file_name)
+      true
     rescue Aws::S3::Errors::NotFound
       false
     end
 
     def delete_file(file_name)
-      without_timecop do
-        @client.delete_object(bucket: @configuration.bucket_name, key: file_name)
-      end
+      @client.delete_object(bucket: @configuration.bucket_name, key: file_name)
     end
 
   private
