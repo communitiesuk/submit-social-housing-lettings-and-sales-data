@@ -808,7 +808,6 @@ RSpec.describe Validations::Sales::SoftValidations do
 
       expect(record).not_to be_purchase_price_out_of_soft_range
     end
-
   end
 
   describe "#grant_outside_common_range?" do
