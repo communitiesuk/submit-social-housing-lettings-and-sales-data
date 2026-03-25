@@ -370,21 +370,6 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
-  def validate_staircasing_purchase_price(record)
-    return unless record.form.start_year_2026_or_later?
-    return unless record.is_staircase? && record.value && record.stairbought&.positive?
-
-    full_purchase_price = record.value * 100 / record.stairbought
-    if full_purchase_price < 15_000
-      %i[value stairbought].each do |field|
-        record.errors.add field, I18n.t("validations.sales.sale_information.#{field}.full_purchase_price_below_min",
-                                        value: record.field_formatted_as_currency("value"),
-                                        stairbought: record.stairbought,
-                                        full_purchase_price: format_as_currency(full_purchase_price))
-      end
-    end
-  end
-
   def validate_mortgage_used_dont_know(record)
     return unless record.mortgage_use_unknown?
     return if record.form.start_year_2026_or_later?

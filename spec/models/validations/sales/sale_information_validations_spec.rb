@@ -994,62 +994,6 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
   end
 
-  describe "#validate_staircasing_purchase_price" do
-    let(:saledate) { Time.zone.local(2026, 4, 1) }
-    let(:record) { build(:sales_log, ownershipsch: 1, staircase: 1, saledate:) }
-
-    it "does not add an error when not staircasing" do
-      record.staircase = 2
-      record.value = 5_000
-      record.stairbought = 10
-      sale_information_validator.validate_staircasing_purchase_price(record)
-
-      expect(record.errors).to be_empty
-    end
-
-    it "does not add an error when value is nil" do
-      record.value = nil
-      record.stairbought = 10
-      sale_information_validator.validate_staircasing_purchase_price(record)
-
-      expect(record.errors).to be_empty
-    end
-
-    it "does not add an error when stairbought is nil" do
-      record.value = 5_000
-      record.stairbought = nil
-      sale_information_validator.validate_staircasing_purchase_price(record)
-
-      expect(record.errors).to be_empty
-    end
-
-    it "does not add an error when full purchase price is at least 15,000" do
-      record.value = 1_500
-      record.stairbought = 10
-      sale_information_validator.validate_staircasing_purchase_price(record)
-
-      expect(record.errors).to be_empty
-    end
-
-    it "adds an error when full purchase price is below 15,000" do
-      record.value = 1_000
-      record.stairbought = 10
-      sale_information_validator.validate_staircasing_purchase_price(record)
-
-      expect(record.errors[:value]).to be_present
-      expect(record.errors[:stairbought]).to be_present
-    end
-
-    it "does not add an error for years before 2026" do
-      record.saledate = Time.zone.local(2025, 4, 1)
-      record.value = 1_000
-      record.stairbought = 10
-      sale_information_validator.validate_staircasing_purchase_price(record)
-
-      expect(record.errors).to be_empty
-    end
-  end
-
   describe "#validate_discount_and_value" do
     let(:record) { FactoryBot.build(:sales_log, value: 200_000, discount: 50, ownershipsch: 2, type: 9, saledate:) }
     let(:saledate) { current_collection_start_date }

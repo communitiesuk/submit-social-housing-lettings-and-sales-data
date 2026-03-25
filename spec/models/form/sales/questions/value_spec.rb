@@ -66,7 +66,7 @@ RSpec.describe Form::Sales::Questions::Value, type: :model do
     end
 
     it "has correct min" do
-      expect(question.min).to eq(0)
+      expect(question.min).to eq(15_000)
     end
   end
 end
