@@ -142,14 +142,14 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
 
       context "and some locations start with numbers" do
         before do
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 5), name: "2 Abe Road", postcode: "AA1 1AA")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 6), name: "1 Abe Road", postcode: "AA1 2AA")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 7), name: "1 Lake Lane", postcode: "AA1 3AA")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 8), name: "3 Abe Road", postcode: "AA1 4AA")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 9), name: "2 Lake Lane", postcode: "AA1 5AA")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 10), name: "Smith Avenue", postcode: "AA1 6AA")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 11), name: "Abacus Road", postcode: "AA1 7AA")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 12), name: "Hawthorne Road", postcode: "AA1 8AA")
+          create(:location, scheme:, startdate: Time.utc(2022, 5, 5), name: "2 Abe Road", postcode: "AA1 1AA")
+          create(:location, scheme:, startdate: Time.utc(2022, 5, 6), name: "1 Abe Road", postcode: "AA1 2AA")
+          create(:location, scheme:, startdate: Time.utc(2022, 5, 7), name: "1 Lake Lane", postcode: "AA1 3AA")
+          create(:location, scheme:, startdate: Time.utc(2022, 5, 8), name: "3 Abe Road", postcode: "AA1 4AA")
+          create(:location, scheme:, startdate: Time.utc(2022, 5, 9), name: "2 Lake Lane", postcode: "AA1 5AA")
+          create(:location, scheme:, startdate: Time.utc(2022, 5, 10), name: "Smith Avenue", postcode: "AA1 6AA")
+          create(:location, scheme:, startdate: Time.utc(2022, 5, 11), name: "Abacus Road", postcode: "AA1 7AA")
+          create(:location, scheme:, startdate: Time.utc(2022, 5, 12), name: "Hawthorne Road", postcode: "AA1 8AA")
           lettings_log.update!(scheme:)
         end
 
@@ -165,6 +165,25 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
             "Hawthorne Road",
           ])
         end
+      end
+    end
+
+    context "and some locations do not have a name" do
+      before do
+        create(:location, scheme:, startdate: Time.utc(2022, 5, 5), name: "2 Abe Road", postcode: "AA1 1AA")
+        create(:location, scheme:, startdate: Time.utc(2022, 5, 6), name: nil, postcode: "AA1 2AA")
+        create(:location, scheme:, startdate: Time.utc(2022, 5, 7), name: nil, postcode: "AA1 3AA")
+        create(:location, scheme:, startdate: Time.utc(2022, 5, 12), name: "Hawthorne Road", postcode: "AA1 8AA")
+        lettings_log.update!(scheme:)
+      end
+
+      it "orders the locations by postcode" do
+        expect(question.displayed_answer_options(lettings_log).values.map { |v| v["value"] }).to eq([
+          "AA1 1AA",
+          "AA1 2AA",
+          "AA1 3AA",
+          "AA1 8AA",
+        ])
       end
     end
   end
