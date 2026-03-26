@@ -6,7 +6,7 @@ class Form::Sales::Questions::Value < ::Form::Question
     @type = "numeric"
     @min = form.start_year_2026_or_later? ? 15_000 : 0
     @step = 1
-    @width = 5
+    @width = 10
     @prefix = "£"
     @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR_AND_SECTION, value_key: subsection.id)
     @top_guidance_partial = "financial_calculations_shared_ownership"
