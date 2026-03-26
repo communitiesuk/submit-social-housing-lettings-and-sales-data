@@ -1,5 +1,4 @@
 class DeviseNotifyMailer < Devise::Mailer
-  include TimecopHelper
   require "notifications/client"
 
   def notify_client
@@ -9,13 +8,11 @@ class DeviseNotifyMailer < Devise::Mailer
   def send_email(email_address, template_id, personalisation)
     return true if intercept_send?(email_address)
 
-    without_timecop do
-      notify_client.send_email(
-        email_address:,
-        template_id:,
-        personalisation:,
-      )
-    end
+    notify_client.send_email(
+      email_address:,
+      template_id:,
+      personalisation:,
+    )
   rescue Notifications::Client::BadRequestError => e
     Sentry.capture_exception(e)
 
