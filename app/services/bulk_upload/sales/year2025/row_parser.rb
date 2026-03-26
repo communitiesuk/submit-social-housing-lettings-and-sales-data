@@ -288,7 +288,7 @@ class BulkUpload::Sales::Year2025::RowParser
 
   attribute :field_112, :integer
   attribute :field_113, :decimal
-  attribute :field_114, :integer
+  attribute :field_114, :decimal
   attribute :field_115, :decimal
   attribute :field_116, :integer
   attribute :field_117, :decimal
@@ -503,6 +503,8 @@ class BulkUpload::Sales::Year2025::RowParser
       end
     end
 
+    add_errors_for_invalid_fields
+
     errors.blank?
   end
 
@@ -533,6 +535,8 @@ class BulkUpload::Sales::Year2025::RowParser
       "field_2",  # saledate
       "field_3",  # saledate
       "field_7",  # purchaser_code
+      "field_16", # uprn
+      "field_17", # address_line1
       "field_21", # postcode
       "field_22", # postcode
       "field_28", # age1
@@ -545,6 +549,10 @@ class BulkUpload::Sales::Year2025::RowParser
     spreadsheet_duplicate_hash.each_key do |field|
       errors.add(field, I18n.t("#{ERROR_BASE_KEY}.spreadsheet_dupe"), category: :setup)
     end
+  end
+
+  def add_invalid_field(field)
+    invalid_fields << field
   end
 
 private
@@ -673,6 +681,17 @@ private
 
   def rtb_like_sale_type?
     [9, 14, 27, 29].include?(field_11)
+  end
+
+  def invalid_fields
+    @invalid_fields ||= []
+  end
+
+  def add_errors_for_invalid_fields
+    invalid_fields.each do |field|
+      errors.delete(field) # take precedence over any other errors as this is a BU format issue
+      errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: QUESTIONS[field.to_sym]))
+    end
   end
 
   def field_mapping_for_errors
@@ -1271,6 +1290,9 @@ private
     end
   end
 
+  # Will send a "Bulk upload failed" email rather than an "Errors in bulk upload" email.
+  # The body of the "Bulk upload failed" email says there are errors in the setup section,
+  # so only use this method for setup section errors.
   def block_log_creation!
     self.block_log_creation = true
   end
@@ -1287,6 +1309,8 @@ private
       ecstat1
       owning_organisation
       postcode_full
+      uprn
+      address_line1
       purchid
     ]
   end
@@ -1457,6 +1481,8 @@ private
       errors.add(:field_1, error_message) # Sale completion date
       errors.add(:field_2, error_message) # Sale completion date
       errors.add(:field_3, error_message) # Sale completion date
+      errors.add(:field_16, error_message) # UPRN
+      errors.add(:field_17, error_message) # Address line 1
       errors.add(:field_21, error_message) # Postcode
       errors.add(:field_22, error_message) # Postcode
       errors.add(:field_28, error_message) # Buyer 1 age

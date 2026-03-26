@@ -37,8 +37,13 @@ RSpec.describe BulkUpload::Sales::Validator do
 
     context "when file has too many columns" do
       before do
-        file.write((%w[a] * (Object.const_get("BulkUpload::Sales::Year#{year}::CsvParser::MAX_COLUMNS") + 1)).join(","))
+        Timecop.travel(collection_start_date_for_year_or_later(2025))
+        file.write((%w[a] * (Object.const_get("BulkUpload::Sales::Year#{year}::CsvParser::FIELDS") + 1)).join(","))
         file.rewind
+      end
+
+      after do
+        Timecop.return
       end
 
       it "is not valid" do
@@ -127,7 +132,7 @@ RSpec.describe BulkUpload::Sales::Validator do
       before do
         log.owning_organisation = nil
         log.saledate = date
-        file.write(log_to_csv.default_field_numbers_row)
+        file.write(log_to_csv.default_field_numbers_row_for_year(year))
         file.write(log_to_csv.to_csv_row)
         file.rewind
       end
@@ -225,7 +230,7 @@ RSpec.describe BulkUpload::Sales::Validator do
       end
 
       it "creates errors" do
-        expect { validator.call }.to change(BulkUploadError.where(category: :setup, error: "This is a duplicate of a log in your file."), :count).by(20)
+        expect { validator.call }.to change(BulkUploadError.where(category: :setup, error: "This is a duplicate of a log in your file."), :count).by(24)
       end
     end
   end

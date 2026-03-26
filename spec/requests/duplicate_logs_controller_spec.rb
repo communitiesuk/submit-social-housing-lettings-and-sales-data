@@ -1,446 +1,923 @@
 require "rails_helper"
 
 RSpec.describe DuplicateLogsController, type: :request do
+  include CollectionTimeHelper
+
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { create(:user, :data_coordinator) }
   let(:lettings_log) { create(:lettings_log, :duplicate, assigned_to: user) }
   let(:sales_log) { create(:sales_log, :duplicate, staircase: 2, assigned_to: user) }
 
-  describe "GET show" do
-    context "when user is not signed in" do
-      it "redirects to sign in page" do
-        get "/lettings-logs/#{lettings_log.id}/duplicate-logs"
-        expect(response).to redirect_to("/account/sign-in")
-      end
+  context "when 2025", metadata: { year: 25 } do
+    before do
+      Timecop.travel(collection_start_date_for_year(2025))
     end
 
-    context "when the user is from different organisation" do
-      let(:other_user) { create(:user) }
-
-      before do
-        allow(other_user).to receive(:need_two_factor_authentication?).and_return(false)
-        sign_in other_user
-      end
-
-      it "renders page not found" do
-        get "/lettings-logs/#{lettings_log.id}/duplicate-logs"
-        expect(response).to have_http_status(:not_found)
-      end
+    after do
+      Timecop.return
     end
 
-    context "when user is signed in" do
-      context "when user is support" do
-        let(:support_user_org) { create(:organisation) }
-        let(:user) { create(:user, :support, organisation: support_user_org) }
+    describe "GET show" do
+      context "when user is not signed in" do
+        it "redirects to sign in page" do
+          get "/lettings-logs/#{lettings_log.id}/duplicate-logs"
+          expect(response).to redirect_to("/account/sign-in")
+        end
+      end
+
+      context "when the user is from different organisation" do
+        let(:other_user) { create(:user) }
 
         before do
-          allow(user).to receive(:need_two_factor_authentication?).and_return(false)
-          sign_in user
+          allow(other_user).to receive(:need_two_factor_authentication?).and_return(false)
+          sign_in other_user
         end
 
-        context "when viewing lettings logs duplicates" do
-          context "when there are multiple duplicate logs" do
-            let(:duplicate_logs) { create_list(:lettings_log, 2, :completed) }
+        it "renders page not found" do
+          get "/lettings-logs/#{lettings_log.id}/duplicate-logs"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
 
-            before do
-              allow(LettingsLog).to receive(:duplicate_logs).and_return(duplicate_logs)
-              get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}"
-            end
+      context "when user is signed in" do
+        context "when user is support" do
+          let(:support_user_org) { create(:organisation) }
+          let(:user) { create(:user, :support, organisation: support_user_org) }
 
-            it "displays links to all the duplicate logs" do
-              expect(page).to have_link("Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
-              expect(page).to have_link("Log #{duplicate_logs.first.id}", href: "/lettings-logs/#{duplicate_logs.first.id}")
-              expect(page).to have_link("Log #{duplicate_logs.second.id}", href: "/lettings-logs/#{duplicate_logs.second.id}")
-            end
-
-            it "displays check your answers for each log with correct questions" do
-              expect(page).to have_content("- Tenancy start date", count: 3)
-              expect(page).to have_content("- Tenant code", count: 3)
-              expect(page).to have_content("- Lead tenant’s age", count: 3)
-              expect(page).to have_content("- Lead tenant’s gender identity", count: 3)
-              expect(page).to have_content("- Lead tenant’s working situation", count: 3)
-              expect(page).to have_content("Household rent and charges", count: 3)
-              expect(page).to have_link("Change", count: 24)
-              expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
-              expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[0].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
-              expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[1].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
-            end
-
-            it "displays check your answers for each log with correct questions where UPRN is given" do
-              lettings_log.update!(uprn: "123", uprn_known: 1, uprn_confirmed: 1, manual_address_entry_selected: false)
-              duplicate_logs[0].update!(uprn: "123", uprn_known: 1, uprn_confirmed: 1, manual_address_entry_selected: false)
-              get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}"
-
-              expect(page).to have_content("- Tenancy start date", count: 3)
-              expect(page).to have_content("- Tenant code", count: 3)
-              expect(page).to have_content("Postcode (from UPRN)", count: 2)
-              expect(page).to have_content("- Lead tenant’s age", count: 3)
-              expect(page).to have_content("- Lead tenant’s gender identity", count: 3)
-              expect(page).to have_content("- Lead tenant’s working situation", count: 3)
-              expect(page).to have_content("Household rent and charges", count: 3)
-              expect(page).to have_link("Change", count: 24)
-              expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
-              expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[0].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
-              expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[1].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
-            end
-
-            it "displays buttons to delete" do
-              expect(page).to have_link("Keep this log and delete duplicates", count: 3)
-              expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates?organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}")
-              expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.first.id}/delete-duplicates?organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}")
-              expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.second.id}/delete-duplicates?organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}")
-            end
+          before do
+            allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+            sign_in user
           end
 
-          context "when there are no more duplicate logs" do
-            context "when accessed from the duplicate logs banner flow" do
+          context "when viewing lettings logs duplicates" do
+            context "when there are multiple duplicate logs" do
+              let(:duplicate_logs) { create_list(:lettings_log, 2, :completed) }
+
               before do
-                allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.none)
-                get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}&referrer=duplicate_logs_banner"
-              end
-
-              it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("- Tenancy start date", count: 1)
-                expect(page).to have_content("- Tenant code", count: 1)
-                expect(page).to have_content("- Lead tenant’s age", count: 1)
-                expect(page).to have_content("- Lead tenant’s gender identity", count: 1)
-                expect(page).to have_content("- Lead tenant’s working situation", count: 1)
-                expect(page).to have_content("Household rent and charges", count: 1)
-                expect(page).to have_link("Change", count: 8)
-                expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
-              end
-
-              it "displays button to review other duplicates" do
-                expect(page).to have_link("Review other duplicates", href: "/organisations/#{lettings_log.owning_organisation_id}/duplicates?referrer=duplicate_logs_banner")
-              end
-
-              it "displays no duplicates banner" do
-                expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
-              end
-            end
-
-            context "when accessed from the single log submission flow" do
-              before do
-                allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.none)
+                allow(LettingsLog).to receive(:duplicate_logs).and_return(duplicate_logs)
                 get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}"
               end
 
+              it "displays links to all the duplicate logs" do
+                expect(page).to have_link("Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+                expect(page).to have_link("Log #{duplicate_logs.first.id}", href: "/lettings-logs/#{duplicate_logs.first.id}")
+                expect(page).to have_link("Log #{duplicate_logs.second.id}", href: "/lettings-logs/#{duplicate_logs.second.id}")
+              end
+
               it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("- Tenancy start date", count: 1)
-                expect(page).to have_content("- Tenant code", count: 1)
-                expect(page).to have_content("- Lead tenant’s age", count: 1)
-                expect(page).to have_content("- Lead tenant’s gender identity", count: 1)
-                expect(page).to have_content("- Lead tenant’s working situation", count: 1)
-                expect(page).to have_content("Household rent and charges", count: 1)
-                expect(page).to have_link("Change", count: 8)
-                expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+                expect(page).to have_content("- Tenancy start date", count: 3)
+                expect(page).to have_content("- Tenant code", count: 3)
+                expect(page).to have_content("- Lead tenant’s age", count: 3)
+                expect(page).to have_content("- Lead tenant’s gender identity", count: 3)
+                expect(page).to have_content("- Lead tenant’s working situation", count: 3)
+                expect(page).to have_content("Household rent and charges", count: 3)
+                expect(page).to have_link("Change", count: 24)
+                expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[0].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[1].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
               end
 
-              it "displays button to return to log" do
-                expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+              it "displays check your answers for each log with correct questions where UPRN is given" do
+                lettings_log.update!(uprn: "123", uprn_known: 1, uprn_confirmed: 1, manual_address_entry_selected: false)
+                duplicate_logs[0].update!(uprn: "123", uprn_known: 1, uprn_confirmed: 1, manual_address_entry_selected: false)
+                get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}"
+
+                expect(page).to have_content("- Tenancy start date", count: 3)
+                expect(page).to have_content("- Tenant code", count: 3)
+                expect(page).to have_content("Postcode (from UPRN)", count: 2)
+                expect(page).to have_content("- Lead tenant’s age", count: 3)
+                expect(page).to have_content("- Lead tenant’s gender identity", count: 3)
+                expect(page).to have_content("- Lead tenant’s working situation", count: 3)
+                expect(page).to have_content("Household rent and charges", count: 3)
+                expect(page).to have_link("Change", count: 24)
+                expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[0].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[1].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
               end
 
-              it "displays no duplicates banner" do
-                expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+              it "displays buttons to delete" do
+                expect(page).to have_link("Keep this log and delete duplicates", count: 3)
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates?organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.first.id}/delete-duplicates?organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.second.id}/delete-duplicates?organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}")
+              end
+            end
+
+            context "when there are no more duplicate logs" do
+              context "when accessed from the duplicate logs banner flow" do
+                before do
+                  allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.none)
+                  get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}&referrer=duplicate_logs_banner"
+                end
+
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Tenancy start date", count: 1)
+                  expect(page).to have_content("- Tenant code", count: 1)
+                  expect(page).to have_content("- Lead tenant’s age", count: 1)
+                  expect(page).to have_content("- Lead tenant’s gender identity", count: 1)
+                  expect(page).to have_content("- Lead tenant’s working situation", count: 1)
+                  expect(page).to have_content("Household rent and charges", count: 1)
+                  expect(page).to have_link("Change", count: 8)
+                  expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+                end
+
+                it "displays button to review other duplicates" do
+                  expect(page).to have_link("Review other duplicates", href: "/organisations/#{lettings_log.owning_organisation_id}/duplicates?referrer=duplicate_logs_banner")
+                end
+
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
+              end
+
+              context "when accessed from the single log submission flow" do
+                before do
+                  allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.none)
+                  get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}"
+                end
+
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Tenancy start date", count: 1)
+                  expect(page).to have_content("- Tenant code", count: 1)
+                  expect(page).to have_content("- Lead tenant’s age", count: 1)
+                  expect(page).to have_content("- Lead tenant’s gender identity", count: 1)
+                  expect(page).to have_content("- Lead tenant’s working situation", count: 1)
+                  expect(page).to have_content("Household rent and charges", count: 1)
+                  expect(page).to have_link("Change", count: 8)
+                  expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+                end
+
+                it "displays button to return to log" do
+                  expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+                end
+
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
+              end
+            end
+          end
+
+          context "when viewing sales logs duplicates" do
+            context "when there are multiple duplicate logs" do
+              let(:duplicate_logs) { create_list(:sales_log, 2, :completed) }
+
+              before do
+                allow(SalesLog).to receive(:duplicate_logs).and_return(duplicate_logs)
+                get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}"
+              end
+
+              it "displays links to all the duplicate logs" do
+                expect(page).to have_link("Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+                expect(page).to have_link("Log #{duplicate_logs.first.id}", href: "/sales-logs/#{duplicate_logs.first.id}")
+                expect(page).to have_link("Log #{duplicate_logs.second.id}", href: "/sales-logs/#{duplicate_logs.second.id}")
+              end
+
+              it "displays check your answers for each log with correct questions" do
+                expect(page).to have_content("- Owning organisation", count: 3)
+                expect(page).to have_content("- Sale completion date", count: 3)
+                expect(page).to have_content("- Purchaser code", count: 3)
+                expect(page).to have_content("- Buyer 1’s age", count: 3)
+                expect(page).to have_content("- Buyer 1’s gender identity", count: 3)
+                expect(page).to have_content("- Buyer 1’s working situation", count: 3)
+                expect(page).to have_content("- Postcode", count: 3)
+                expect(page).to have_content("- Address line 1", count: 3)
+                expect(page).to have_link("Change", count: 24)
+                expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[1].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+              end
+
+              it "displays check your answers for each log with correct questions when UPRN is given" do
+                sales_log.update!(uprn: "123", uprn_known: 1, manual_address_entry_selected: false)
+                duplicate_logs[0].update!(uprn: "123", uprn_known: 1, manual_address_entry_selected: false)
+                duplicate_logs[1].update!(uprn: "123", uprn_known: 1, manual_address_entry_selected: false)
+                get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}"
+
+                expect(page).to have_content("- Sale completion date", count: 3)
+                expect(page).to have_content("- Purchaser code", count: 3)
+                expect(page).to have_content("- Buyer 1’s age", count: 3)
+                expect(page).to have_content("- Buyer 1’s gender identity", count: 3)
+                expect(page).to have_content("- Buyer 1’s working situation", count: 3)
+                expect(page).to have_content("Postcode (from UPRN)", count: 3)
+                expect(page).to have_link("Change", count: 21)
+                expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[1].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+              end
+
+              it "displays buttons to delete" do
+                expect(page).to have_link("Keep this log and delete duplicates", count: 3)
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.first.id}/delete-duplicates?organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.second.id}/delete-duplicates?organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}")
+              end
+            end
+
+            context "when there are no more duplicate logs" do
+              context "when accessed from the duplicate logs banner flow" do
+                before do
+                  allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.none)
+                  get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&referrer=duplicate_logs_banner&organisation_id=#{sales_log.owning_organisation_id}"
+                end
+
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Sale completion date", count: 1)
+                  expect(page).to have_content("- Purchaser code", count: 1)
+                  expect(page).to have_content("- Buyer 1’s age", count: 1)
+                  expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
+                  expect(page).to have_content("- Buyer 1’s working situation", count: 1)
+                  expect(page).to have_content("- Postcode", count: 1)
+                  expect(page).to have_content("- Address line 1", count: 1)
+                  expect(page).to have_link("Change", count: 8)
+                  expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+                end
+
+                it "displays button to review other duplicates" do
+                  expect(page).to have_link("Review other duplicates", href: "/organisations/#{sales_log.owning_organisation_id}/duplicates?referrer=duplicate_logs_banner")
+                end
+
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
+              end
+
+              context "when accessed from the single log submission flow" do
+                before do
+                  allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.none)
+                  get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}"
+                end
+
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Sale completion date", count: 1)
+                  expect(page).to have_content("- Purchaser code", count: 1)
+                  expect(page).to have_content("- Buyer 1’s age", count: 1)
+                  expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
+                  expect(page).to have_content("- Buyer 1’s working situation", count: 1)
+                  expect(page).to have_content("- Postcode", count: 1)
+                  expect(page).to have_content("- Address line 1", count: 1)
+                  expect(page).to have_link("Change", count: 8)
+                  expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+                end
+
+                it "displays button to return to log" do
+                  expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+                end
+
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
               end
             end
           end
         end
 
-        context "when viewing sales logs duplicates" do
-          context "when there are multiple duplicate logs" do
-            let(:duplicate_logs) { create_list(:sales_log, 2, :completed) }
+        context "when user is a data provider" do
+          before do
+            allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+            sign_in user
+          end
 
-            before do
-              allow(SalesLog).to receive(:duplicate_logs).and_return(duplicate_logs)
-              get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}"
+          context "when viewing lettings logs duplicates" do
+            context "when there are multiple duplicate logs" do
+              let(:duplicate_logs) { create_list(:lettings_log, 2, :completed) }
+
+              before do
+                allow(LettingsLog).to receive(:duplicate_logs).and_return(duplicate_logs)
+                get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}"
+              end
+
+              it "displays links to all the duplicate logs" do
+                expect(page).to have_link("Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+                expect(page).to have_link("Log #{duplicate_logs.first.id}", href: "/lettings-logs/#{duplicate_logs.first.id}")
+                expect(page).to have_link("Log #{duplicate_logs.second.id}", href: "/lettings-logs/#{duplicate_logs.second.id}")
+              end
+
+              it "displays check your answers for each log with correct questions" do
+                expect(page).to have_content("- Tenancy start date", count: 3)
+                expect(page).to have_content("- Tenant code", count: 3)
+                expect(page).to have_content("- Lead tenant’s age", count: 3)
+                expect(page).to have_content("- Lead tenant’s gender identity", count: 3)
+                expect(page).to have_content("- Lead tenant’s working situation", count: 3)
+                expect(page).to have_content("Household rent and charges", count: 3)
+                expect(page).to have_link("Change", count: 21)
+                expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[0].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[1].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+              end
+
+              it "displays buttons to delete" do
+                expect(page).to have_link("Keep this log and delete duplicates", count: 3)
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.first.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.second.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+              end
             end
 
-            it "displays links to all the duplicate logs" do
-              expect(page).to have_link("Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
-              expect(page).to have_link("Log #{duplicate_logs.first.id}", href: "/sales-logs/#{duplicate_logs.first.id}")
-              expect(page).to have_link("Log #{duplicate_logs.second.id}", href: "/sales-logs/#{duplicate_logs.second.id}")
-            end
+            context "when there are no more duplicate logs" do
+              context "when accessed from the duplicate logs banner flow" do
+                before do
+                  allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.none)
+                  get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}&referrer=duplicate_logs_banner"
+                end
 
-            it "displays check your answers for each log with correct questions" do
-              expect(page).to have_content("- Owning organisation", count: 3)
-              expect(page).to have_content("- Sale completion date", count: 3)
-              expect(page).to have_content("- Purchaser code", count: 3)
-              expect(page).to have_content("- Buyer 1’s age", count: 3)
-              expect(page).to have_content("- Buyer 1’s gender identity", count: 3)
-              expect(page).to have_content("- Buyer 1’s working situation", count: 3)
-              expect(page).to have_content("- Postcode", count: 3)
-              expect(page).to have_link("Change", count: 21)
-              expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
-              expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
-              expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[1].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
-            end
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Tenancy start date", count: 1)
+                  expect(page).to have_content("- Tenant code", count: 1)
+                  expect(page).to have_content("- Lead tenant’s age", count: 1)
+                  expect(page).to have_content("- Lead tenant’s gender identity", count: 1)
+                  expect(page).to have_content("- Lead tenant’s working situation", count: 1)
+                  expect(page).to have_content("Household rent and charges", count: 1)
+                  expect(page).to have_link("Change", count: 7)
+                  expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+                end
 
-            it "displays check your answers for each log with correct questions when UPRN is given" do
-              sales_log.update!(uprn: "123", uprn_known: 1, manual_address_entry_selected: false)
-              duplicate_logs[0].update!(uprn: "123", uprn_known: 1, manual_address_entry_selected: false)
-              duplicate_logs[1].update!(uprn: "123", uprn_known: 1, manual_address_entry_selected: false)
-              get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}"
+                it "displays button to review other duplicates" do
+                  expect(page).to have_link("Review other duplicates", href: "/duplicate-logs?referrer=duplicate_logs_banner")
+                end
 
-              expect(page).to have_content("- Sale completion date", count: 3)
-              expect(page).to have_content("- Purchaser code", count: 3)
-              expect(page).to have_content("- Buyer 1’s age", count: 3)
-              expect(page).to have_content("- Buyer 1’s gender identity", count: 3)
-              expect(page).to have_content("- Buyer 1’s working situation", count: 3)
-              expect(page).to have_content("Postcode (from UPRN)", count: 3)
-              expect(page).to have_link("Change", count: 21)
-              expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
-              expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
-              expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[1].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
-            end
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
+              end
 
-            it "displays buttons to delete" do
-              expect(page).to have_link("Keep this log and delete duplicates", count: 3)
-              expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}")
-              expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.first.id}/delete-duplicates?organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}")
-              expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.second.id}/delete-duplicates?organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}")
+              context "when accessed from the single log submission flow" do
+                before do
+                  allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.none)
+                  get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}"
+                end
+
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Tenancy start date", count: 1)
+                  expect(page).to have_content("- Tenant code", count: 1)
+                  expect(page).to have_content("- Lead tenant’s age", count: 1)
+                  expect(page).to have_content("- Lead tenant’s gender identity", count: 1)
+                  expect(page).to have_content("- Lead tenant’s working situation", count: 1)
+                  expect(page).to have_content("Household rent and charges", count: 1)
+                  expect(page).to have_link("Change", count: 7)
+                  expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+                end
+
+                it "displays button to return to log" do
+                  expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+                end
+
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
+              end
             end
           end
 
-          context "when there are no more duplicate logs" do
-            context "when accessed from the duplicate logs banner flow" do
+          context "when viewing sales logs duplicates" do
+            context "when there are multiple duplicate logs" do
+              let(:duplicate_logs) { create_list(:sales_log, 2, :completed) }
+
               before do
-                allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.none)
-                get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&referrer=duplicate_logs_banner&organisation_id=#{sales_log.owning_organisation_id}"
+                allow(SalesLog).to receive(:duplicate_logs).and_return(duplicate_logs)
+                get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}"
+              end
+
+              it "displays links to all the duplicate logs" do
+                expect(page).to have_link("Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+                expect(page).to have_link("Log #{duplicate_logs.first.id}", href: "/sales-logs/#{duplicate_logs.first.id}")
+                expect(page).to have_link("Log #{duplicate_logs.second.id}", href: "/sales-logs/#{duplicate_logs.second.id}")
               end
 
               it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("- Sale completion date", count: 1)
-                expect(page).to have_content("- Purchaser code", count: 1)
-                expect(page).to have_content("- Buyer 1’s age", count: 1)
-                expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
-                expect(page).to have_content("- Buyer 1’s working situation", count: 1)
-                expect(page).to have_content("- Postcode", count: 1)
-                expect(page).to have_link("Change", count: 7)
-                expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+                expect(page).to have_content("- Sale completion date", count: 3)
+                expect(page).to have_content("- Purchaser code", count: 3)
+                expect(page).to have_content("- Buyer 1’s age", count: 3)
+                expect(page).to have_content("- Buyer 1’s gender identity", count: 3)
+                expect(page).to have_content("- Buyer 1’s working situation", count: 3)
+                expect(page).to have_content("- Postcode", count: 3)
+                expect(page).to have_content("- Address line 1", count: 3)
+                expect(page).to have_link("Change", count: 21)
+                expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[1].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
               end
 
-              it "displays button to review other duplicates" do
-                expect(page).to have_link("Review other duplicates", href: "/organisations/#{sales_log.owning_organisation_id}/duplicates?referrer=duplicate_logs_banner")
-              end
-
-              it "displays no duplicates banner" do
-                expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+              it "displays buttons to delete" do
+                expect(page).to have_link("Keep this log and delete duplicates", count: 3)
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.first.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.second.id}/delete-duplicates?original_log_id=#{sales_log.id}")
               end
             end
 
-            context "when accessed from the single log submission flow" do
-              before do
-                allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.none)
-                get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}"
+            context "when there are no more duplicate logs" do
+              context "when accessed from the duplicate logs banner flow" do
+                before do
+                  allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.none)
+                  get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&referrer=duplicate_logs_banner"
+                end
+
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Sale completion date", count: 1)
+                  expect(page).to have_content("- Purchaser code", count: 1)
+                  expect(page).to have_content("- Buyer 1’s age", count: 1)
+                  expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
+                  expect(page).to have_content("- Buyer 1’s working situation", count: 1)
+                  expect(page).to have_content("- Postcode", count: 1)
+                  expect(page).to have_content("- Address line 1", count: 1)
+                  expect(page).to have_link("Change", count: 7)
+                  expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+                end
+
+                it "displays button to review other duplicates" do
+                  expect(page).to have_link("Review other duplicates", href: "/duplicate-logs?referrer=duplicate_logs_banner")
+                end
+
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
               end
 
-              it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("- Sale completion date", count: 1)
-                expect(page).to have_content("- Purchaser code", count: 1)
-                expect(page).to have_content("- Buyer 1’s age", count: 1)
-                expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
-                expect(page).to have_content("- Buyer 1’s working situation", count: 1)
-                expect(page).to have_content("- Postcode", count: 1)
-                expect(page).to have_link("Change", count: 7)
-                expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
-              end
+              context "when accessed from the single log submission flow" do
+                before do
+                  allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.none)
+                  get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}"
+                end
 
-              it "displays button to return to log" do
-                expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
-              end
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Sale completion date", count: 1)
+                  expect(page).to have_content("- Purchaser code", count: 1)
+                  expect(page).to have_content("- Buyer 1’s age", count: 1)
+                  expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
+                  expect(page).to have_content("- Buyer 1’s working situation", count: 1)
+                  expect(page).to have_content("- Postcode", count: 1)
+                  expect(page).to have_content("- Address line 1", count: 1)
+                  expect(page).to have_link("Change", count: 7)
+                  expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+                end
 
-              it "displays no duplicates banner" do
-                expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                it "displays button to return to log" do
+                  expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+                end
+
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
               end
             end
           end
         end
       end
+    end
+  end
 
-      context "when user is a data provider" do
+  context "when 2026 or later", metadata: { year: 26 } do
+    before do
+      Timecop.travel(collection_start_date_for_year_or_later(2026))
+    end
+
+    after do
+      Timecop.return
+    end
+
+    describe "GET show" do
+      context "when user is not signed in" do
+        it "redirects to sign in page" do
+          get "/lettings-logs/#{lettings_log.id}/duplicate-logs"
+          expect(response).to redirect_to("/account/sign-in")
+        end
+      end
+
+      context "when the user is from different organisation" do
+        let(:other_user) { create(:user) }
+
         before do
-          allow(user).to receive(:need_two_factor_authentication?).and_return(false)
-          sign_in user
+          allow(other_user).to receive(:need_two_factor_authentication?).and_return(false)
+          sign_in other_user
         end
 
-        context "when viewing lettings logs duplicates" do
-          context "when there are multiple duplicate logs" do
-            let(:duplicate_logs) { create_list(:lettings_log, 2, :completed) }
+        it "renders page not found" do
+          get "/lettings-logs/#{lettings_log.id}/duplicate-logs"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
 
-            before do
-              allow(LettingsLog).to receive(:duplicate_logs).and_return(duplicate_logs)
-              get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}"
-            end
+      context "when user is signed in" do
+        context "when user is support" do
+          let(:support_user_org) { create(:organisation) }
+          let(:user) { create(:user, :support, organisation: support_user_org) }
 
-            it "displays links to all the duplicate logs" do
-              expect(page).to have_link("Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
-              expect(page).to have_link("Log #{duplicate_logs.first.id}", href: "/lettings-logs/#{duplicate_logs.first.id}")
-              expect(page).to have_link("Log #{duplicate_logs.second.id}", href: "/lettings-logs/#{duplicate_logs.second.id}")
-            end
-
-            it "displays check your answers for each log with correct questions" do
-              expect(page).to have_content("- Tenancy start date", count: 3)
-              expect(page).to have_content("- Tenant code", count: 3)
-              expect(page).to have_content("- Lead tenant’s age", count: 3)
-              expect(page).to have_content("- Lead tenant’s gender identity", count: 3)
-              expect(page).to have_content("- Lead tenant’s working situation", count: 3)
-              expect(page).to have_content("Household rent and charges", count: 3)
-              expect(page).to have_link("Change", count: 21)
-              expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
-              expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[0].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
-              expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[1].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
-            end
-
-            it "displays buttons to delete" do
-              expect(page).to have_link("Keep this log and delete duplicates", count: 3)
-              expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
-              expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.first.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
-              expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.second.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
-            end
+          before do
+            allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+            sign_in user
           end
 
-          context "when there are no more duplicate logs" do
-            context "when accessed from the duplicate logs banner flow" do
+          context "when viewing lettings logs duplicates" do
+            context "when there are multiple duplicate logs" do
+              let(:duplicate_logs) { create_list(:lettings_log, 2, :completed) }
+
               before do
-                allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.none)
-                get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}&referrer=duplicate_logs_banner"
+                allow(LettingsLog).to receive(:duplicate_logs).and_return(duplicate_logs)
+                get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}"
+              end
+
+              it "displays links to all the duplicate logs" do
+                expect(page).to have_link("Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+                expect(page).to have_link("Log #{duplicate_logs.first.id}", href: "/lettings-logs/#{duplicate_logs.first.id}")
+                expect(page).to have_link("Log #{duplicate_logs.second.id}", href: "/lettings-logs/#{duplicate_logs.second.id}")
               end
 
               it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("- Tenancy start date", count: 1)
-                expect(page).to have_content("- Tenant code", count: 1)
-                expect(page).to have_content("- Lead tenant’s age", count: 1)
-                expect(page).to have_content("- Lead tenant’s gender identity", count: 1)
-                expect(page).to have_content("- Lead tenant’s working situation", count: 1)
-                expect(page).to have_content("Household rent and charges", count: 1)
-                expect(page).to have_link("Change", count: 7)
-                expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+                expect(page).to have_content("- Tenancy start date", count: 3)
+                expect(page).to have_content("- Tenant code", count: 3)
+                expect(page).to have_content("- Lead tenant’s age", count: 3)
+                expect(page).to have_content("- Lead tenant’s sex registered at birth", count: 3)
+                expect(page).to have_content("- Lead tenant’s working situation", count: 3)
+                expect(page).to have_content("Household rent and charges", count: 3)
+                expect(page).to have_link("Change", count: 27)
+                expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[0].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[1].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
               end
 
-              it "displays button to review other duplicates" do
-                expect(page).to have_link("Review other duplicates", href: "/duplicate-logs?referrer=duplicate_logs_banner")
+              it "displays check your answers for each log with correct questions where UPRN is given" do
+                lettings_log.update!(uprn: "123", uprn_known: 1, uprn_confirmed: 1, manual_address_entry_selected: false)
+                duplicate_logs[0].update!(uprn: "123", uprn_known: 1, uprn_confirmed: 1, manual_address_entry_selected: false)
+                get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}"
+
+                expect(page).to have_content("- Tenancy start date", count: 3)
+                expect(page).to have_content("- Tenant code", count: 3)
+                expect(page).to have_content("- Address", count: 3)
+                expect(page).to have_content("- Lead tenant’s age", count: 3)
+                expect(page).to have_content("- Lead tenant’s sex registered at birth", count: 3)
+                expect(page).to have_content("- Lead tenant’s working situation", count: 3)
+                expect(page).to have_content("Household rent and charges", count: 3)
+                expect(page).to have_link("Change", count: 25)
+                expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[0].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[1].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
               end
 
-              it "displays no duplicates banner" do
-                expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+              it "displays buttons to delete" do
+                expect(page).to have_link("Keep this log and delete duplicates", count: 3)
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates?organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.first.id}/delete-duplicates?organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.second.id}/delete-duplicates?organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}")
               end
             end
 
-            context "when accessed from the single log submission flow" do
+            context "when there are no more duplicate logs" do
+              context "when accessed from the duplicate logs banner flow" do
+                before do
+                  allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.none)
+                  get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}&referrer=duplicate_logs_banner"
+                end
+
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Tenancy start date", count: 1)
+                  expect(page).to have_content("- Tenant code", count: 1)
+                  expect(page).to have_content("- Lead tenant’s age", count: 1)
+                  expect(page).to have_content("- Lead tenant’s sex registered at birth", count: 1)
+                  expect(page).to have_content("- Lead tenant’s working situation", count: 1)
+                  expect(page).to have_content("Household rent and charges", count: 1)
+                  expect(page).to have_link("Change", count: 9)
+                  expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+                end
+
+                it "displays button to review other duplicates" do
+                  expect(page).to have_link("Review other duplicates", href: "/organisations/#{lettings_log.owning_organisation_id}/duplicates?referrer=duplicate_logs_banner")
+                end
+
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
+              end
+
+              context "when accessed from the single log submission flow" do
+                before do
+                  allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.none)
+                  get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}"
+                end
+
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Tenancy start date", count: 1)
+                  expect(page).to have_content("- Tenant code", count: 1)
+                  expect(page).to have_content("- Lead tenant’s age", count: 1)
+                  expect(page).to have_content("- Lead tenant’s sex registered at birth", count: 1)
+                  expect(page).to have_content("- Lead tenant’s working situation", count: 1)
+                  expect(page).to have_content("Household rent and charges", count: 1)
+                  expect(page).to have_link("Change", count: 9)
+                  expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+                end
+
+                it "displays button to return to log" do
+                  expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+                end
+
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
+              end
+            end
+          end
+
+          context "when viewing sales logs duplicates" do
+            context "when there are multiple duplicate logs" do
+              let(:duplicate_logs) { create_list(:sales_log, 2, :completed) }
+
               before do
-                allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.none)
+                allow(SalesLog).to receive(:duplicate_logs).and_return(duplicate_logs)
+                get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}"
+              end
+
+              it "displays links to all the duplicate logs" do
+                expect(page).to have_link("Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+                expect(page).to have_link("Log #{duplicate_logs.first.id}", href: "/sales-logs/#{duplicate_logs.first.id}")
+                expect(page).to have_link("Log #{duplicate_logs.second.id}", href: "/sales-logs/#{duplicate_logs.second.id}")
+              end
+
+              it "displays check your answers for each log with correct questions" do
+                expect(page).to have_content("- Owning organisation", count: 3)
+                expect(page).to have_content("- Sale completion date", count: 3)
+                expect(page).to have_content("- Purchaser code", count: 3)
+                expect(page).to have_content("- Buyer 1’s age", count: 3)
+                expect(page).to have_content("- Buyer 1’s sex registered at birth", count: 3)
+                expect(page).to have_content("- Buyer 1’s working situation", count: 3)
+                expect(page).to have_content("- Postcode", count: 3)
+                expect(page).to have_content("- Address line 1", count: 3)
+                expect(page).to have_link("Change", count: 24)
+                expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[1].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+              end
+
+              it "displays check your answers for each log with correct questions when UPRN is given" do
+                sales_log.update!(uprn: "123", uprn_known: 1, manual_address_entry_selected: false)
+                duplicate_logs[0].update!(uprn: "123", uprn_known: 1, manual_address_entry_selected: false)
+                duplicate_logs[1].update!(uprn: "123", uprn_known: 1, manual_address_entry_selected: false)
+                get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}"
+
+                expect(page).to have_content("- Sale completion date", count: 3)
+                expect(page).to have_content("- Purchaser code", count: 3)
+                expect(page).to have_content("- Buyer 1’s age", count: 3)
+                expect(page).to have_content("- Buyer 1’s sex registered at birth", count: 3)
+                expect(page).to have_content("- Buyer 1’s working situation", count: 3)
+                expect(page).to have_content("- Address", count: 3)
+                expect(page).to have_link("Change", count: 21)
+                expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[1].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+              end
+
+              it "displays buttons to delete" do
+                expect(page).to have_link("Keep this log and delete duplicates", count: 3)
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.first.id}/delete-duplicates?organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.second.id}/delete-duplicates?organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}")
+              end
+            end
+
+            context "when there are no more duplicate logs" do
+              context "when accessed from the duplicate logs banner flow" do
+                before do
+                  allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.none)
+                  get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&referrer=duplicate_logs_banner&organisation_id=#{sales_log.owning_organisation_id}"
+                end
+
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Sale completion date", count: 1)
+                  expect(page).to have_content("- Purchaser code", count: 1)
+                  expect(page).to have_content("- Buyer 1’s age", count: 1)
+                  expect(page).to have_content("- Buyer 1’s sex registered at birth", count: 1)
+                  expect(page).to have_content("- Buyer 1’s working situation", count: 1)
+                  expect(page).to have_content("- Postcode", count: 1)
+                  expect(page).to have_content("- Address line 1", count: 1)
+                  expect(page).to have_link("Change", count: 8)
+                  expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+                end
+
+                it "displays button to review other duplicates" do
+                  expect(page).to have_link("Review other duplicates", href: "/organisations/#{sales_log.owning_organisation_id}/duplicates?referrer=duplicate_logs_banner")
+                end
+
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
+              end
+
+              context "when accessed from the single log submission flow" do
+                before do
+                  allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.none)
+                  get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}"
+                end
+
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Sale completion date", count: 1)
+                  expect(page).to have_content("- Purchaser code", count: 1)
+                  expect(page).to have_content("- Buyer 1’s age", count: 1)
+                  expect(page).to have_content("- Buyer 1’s sex registered at birth", count: 1)
+                  expect(page).to have_content("- Buyer 1’s working situation", count: 1)
+                  expect(page).to have_content("- Postcode", count: 1)
+                  expect(page).to have_content("- Address line 1", count: 1)
+                  expect(page).to have_link("Change", count: 8)
+                  expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+                end
+
+                it "displays button to return to log" do
+                  expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+                end
+
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
+              end
+            end
+          end
+        end
+
+        context "when user is a data provider" do
+          before do
+            allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+            sign_in user
+          end
+
+          context "when viewing lettings logs duplicates" do
+            context "when there are multiple duplicate logs" do
+              let(:duplicate_logs) { create_list(:lettings_log, 2, :completed) }
+
+              before do
+                allow(LettingsLog).to receive(:duplicate_logs).and_return(duplicate_logs)
                 get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}"
               end
 
-              it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("- Tenancy start date", count: 1)
-                expect(page).to have_content("- Tenant code", count: 1)
-                expect(page).to have_content("- Lead tenant’s age", count: 1)
-                expect(page).to have_content("- Lead tenant’s gender identity", count: 1)
-                expect(page).to have_content("- Lead tenant’s working situation", count: 1)
-                expect(page).to have_content("Household rent and charges", count: 1)
-                expect(page).to have_link("Change", count: 7)
-                expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
-              end
-
-              it "displays button to return to log" do
-                expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
-              end
-
-              it "displays no duplicates banner" do
-                expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
-              end
-            end
-          end
-        end
-
-        context "when viewing sales logs duplicates" do
-          context "when there are multiple duplicate logs" do
-            let(:duplicate_logs) { create_list(:sales_log, 2, :completed) }
-
-            before do
-              allow(SalesLog).to receive(:duplicate_logs).and_return(duplicate_logs)
-              get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}"
-            end
-
-            it "displays links to all the duplicate logs" do
-              expect(page).to have_link("Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
-              expect(page).to have_link("Log #{duplicate_logs.first.id}", href: "/sales-logs/#{duplicate_logs.first.id}")
-              expect(page).to have_link("Log #{duplicate_logs.second.id}", href: "/sales-logs/#{duplicate_logs.second.id}")
-            end
-
-            it "displays check your answers for each log with correct questions" do
-              expect(page).to have_content("- Sale completion date", count: 3)
-              expect(page).to have_content("- Purchaser code", count: 3)
-              expect(page).to have_content("- Buyer 1’s age", count: 3)
-              expect(page).to have_content("- Buyer 1’s gender identity", count: 3)
-              expect(page).to have_content("- Buyer 1’s working situation", count: 3)
-              expect(page).to have_content("- Postcode", count: 3)
-              expect(page).to have_link("Change", count: 18)
-              expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
-              expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
-              expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[1].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
-            end
-
-            it "displays buttons to delete" do
-              expect(page).to have_link("Keep this log and delete duplicates", count: 3)
-              expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
-              expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.first.id}/delete-duplicates?original_log_id=#{sales_log.id}")
-              expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.second.id}/delete-duplicates?original_log_id=#{sales_log.id}")
-            end
-          end
-
-          context "when there are no more duplicate logs" do
-            context "when accessed from the duplicate logs banner flow" do
-              before do
-                allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.none)
-                get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&referrer=duplicate_logs_banner"
+              it "displays links to all the duplicate logs" do
+                expect(page).to have_link("Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+                expect(page).to have_link("Log #{duplicate_logs.first.id}", href: "/lettings-logs/#{duplicate_logs.first.id}")
+                expect(page).to have_link("Log #{duplicate_logs.second.id}", href: "/lettings-logs/#{duplicate_logs.second.id}")
               end
 
               it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("- Sale completion date", count: 1)
-                expect(page).to have_content("- Purchaser code", count: 1)
-                expect(page).to have_content("- Buyer 1’s age", count: 1)
-                expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
-                expect(page).to have_content("- Buyer 1’s working situation", count: 1)
-                expect(page).to have_content("- Postcode", count: 1)
-                expect(page).to have_link("Change", count: 6)
-                expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+                expect(page).to have_content("- Tenancy start date", count: 3)
+                expect(page).to have_content("- Tenant code", count: 3)
+                expect(page).to have_content("- Lead tenant’s age", count: 3)
+                expect(page).to have_content("- Lead tenant’s sex registered at birth", count: 3)
+                expect(page).to have_content("- Lead tenant’s working situation", count: 3)
+                expect(page).to have_content("Household rent and charges", count: 3)
+                expect(page).to have_link("Change", count: 24)
+                expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[0].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[1].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
               end
 
-              it "displays button to review other duplicates" do
-                expect(page).to have_link("Review other duplicates", href: "/duplicate-logs?referrer=duplicate_logs_banner")
-              end
-
-              it "displays no duplicates banner" do
-                expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+              it "displays buttons to delete" do
+                expect(page).to have_link("Keep this log and delete duplicates", count: 3)
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.first.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.second.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
               end
             end
 
-            context "when accessed from the single log submission flow" do
+            context "when there are no more duplicate logs" do
+              context "when accessed from the duplicate logs banner flow" do
+                before do
+                  allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.none)
+                  get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}&referrer=duplicate_logs_banner"
+                end
+
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Tenancy start date", count: 1)
+                  expect(page).to have_content("- Tenant code", count: 1)
+                  expect(page).to have_content("- Lead tenant’s age", count: 1)
+                  expect(page).to have_content("- Lead tenant’s sex registered at birth", count: 1)
+                  expect(page).to have_content("- Lead tenant’s working situation", count: 1)
+                  expect(page).to have_content("Household rent and charges", count: 1)
+                  expect(page).to have_link("Change", count: 8)
+                  expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+                end
+
+                it "displays button to review other duplicates" do
+                  expect(page).to have_link("Review other duplicates", href: "/duplicate-logs?referrer=duplicate_logs_banner")
+                end
+
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
+              end
+
+              context "when accessed from the single log submission flow" do
+                before do
+                  allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.none)
+                  get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}"
+                end
+
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Tenancy start date", count: 1)
+                  expect(page).to have_content("- Tenant code", count: 1)
+                  expect(page).to have_content("- Lead tenant’s age", count: 1)
+                  expect(page).to have_content("- Lead tenant’s sex registered at birth", count: 1)
+                  expect(page).to have_content("- Lead tenant’s working situation", count: 1)
+                  expect(page).to have_content("Household rent and charges", count: 1)
+                  expect(page).to have_link("Change", count: 8)
+                  expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+                end
+
+                it "displays button to return to log" do
+                  expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+                end
+
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
+              end
+            end
+          end
+
+          context "when viewing sales logs duplicates" do
+            context "when there are multiple duplicate logs" do
+              let(:duplicate_logs) { create_list(:sales_log, 2, :completed) }
+
               before do
-                allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.none)
+                allow(SalesLog).to receive(:duplicate_logs).and_return(duplicate_logs)
                 get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}"
               end
 
+              it "displays links to all the duplicate logs" do
+                expect(page).to have_link("Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+                expect(page).to have_link("Log #{duplicate_logs.first.id}", href: "/sales-logs/#{duplicate_logs.first.id}")
+                expect(page).to have_link("Log #{duplicate_logs.second.id}", href: "/sales-logs/#{duplicate_logs.second.id}")
+              end
+
               it "displays check your answers for each log with correct questions" do
-                expect(page).to have_content("- Sale completion date", count: 1)
-                expect(page).to have_content("- Purchaser code", count: 1)
-                expect(page).to have_content("- Buyer 1’s age", count: 1)
-                expect(page).to have_content("- Buyer 1’s gender identity", count: 1)
-                expect(page).to have_content("- Buyer 1’s working situation", count: 1)
-                expect(page).to have_content("- Postcode", count: 1)
-                expect(page).to have_link("Change", count: 6)
-                expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+                expect(page).to have_content("- Sale completion date", count: 3)
+                expect(page).to have_content("- Purchaser code", count: 3)
+                expect(page).to have_content("- Buyer 1’s age", count: 3)
+                expect(page).to have_content("- Buyer 1’s sex registered at birth", count: 3)
+                expect(page).to have_content("- Buyer 1’s working situation", count: 3)
+                expect(page).to have_content("- Postcode", count: 3)
+                expect(page).to have_content("- Address line 1", count: 3)
+                expect(page).to have_link("Change", count: 21)
+                expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+                expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[1].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
               end
 
-              it "displays button to return to log" do
-                expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+              it "displays buttons to delete" do
+                expect(page).to have_link("Keep this log and delete duplicates", count: 3)
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.first.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+                expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.second.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+              end
+            end
+
+            context "when there are no more duplicate logs" do
+              context "when accessed from the duplicate logs banner flow" do
+                before do
+                  allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.none)
+                  get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&referrer=duplicate_logs_banner"
+                end
+
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Sale completion date", count: 1)
+                  expect(page).to have_content("- Purchaser code", count: 1)
+                  expect(page).to have_content("- Buyer 1’s age", count: 1)
+                  expect(page).to have_content("- Buyer 1’s sex registered at birth", count: 1)
+                  expect(page).to have_content("- Buyer 1’s working situation", count: 1)
+                  expect(page).to have_content("- Postcode", count: 1)
+                  expect(page).to have_content("- Address line 1", count: 1)
+                  expect(page).to have_link("Change", count: 7)
+                  expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+                end
+
+                it "displays button to review other duplicates" do
+                  expect(page).to have_link("Review other duplicates", href: "/duplicate-logs?referrer=duplicate_logs_banner")
+                end
+
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
               end
 
-              it "displays no duplicates banner" do
-                expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+              context "when accessed from the single log submission flow" do
+                before do
+                  allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.none)
+                  get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}"
+                end
+
+                it "displays check your answers for each log with correct questions" do
+                  expect(page).to have_content("- Sale completion date", count: 1)
+                  expect(page).to have_content("- Purchaser code", count: 1)
+                  expect(page).to have_content("- Buyer 1’s age", count: 1)
+                  expect(page).to have_content("- Buyer 1’s sex registered at birth", count: 1)
+                  expect(page).to have_content("- Buyer 1’s working situation", count: 1)
+                  expect(page).to have_content("- Postcode", count: 1)
+                  expect(page).to have_content("- Address line 1", count: 1)
+                  expect(page).to have_link("Change", count: 7)
+                  expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+                end
+
+                it "displays button to return to log" do
+                  expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+                end
+
+                it "displays no duplicates banner" do
+                  expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
+                end
               end
             end
           end

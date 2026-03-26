@@ -46,6 +46,7 @@ private
       key: ENV["OS_DATA_KEY"],
       maxresults: @options[:maxresults] || 10,
       minmatch: @options[:minmatch] || 0.4,
+      fq: ["COUNTRY_CODE:E"],
     }
     uri.query = URI.encode_www_form(params)
     uri.to_s

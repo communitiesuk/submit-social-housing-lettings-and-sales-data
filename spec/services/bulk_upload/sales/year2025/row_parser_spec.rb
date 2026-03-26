@@ -336,6 +336,22 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
             expect(parser.errors[:field_32]).to include(match I18n.t("validations.sales.2025.bulk_upload.invalid_option", question: ""))
           end
         end
+
+        describe "invalid fields" do
+          let(:attributes) { setup_section_params.merge({ field_31: 0 }) }
+
+          context "when a field has been marked as invalid" do
+            before do
+              parser.add_invalid_field("field_31")
+            end
+
+            it "sets a single error on that field" do
+              parser.valid?
+              expect(parser.errors[:field_31].size).to eq(1)
+              expect(parser.errors[:field_31]).to include(match(I18n.t("validations.sales.2025.bulk_upload.invalid_option", question: "What is buyer 1’s nationality?")))
+            end
+          end
+        end
       end
     end
 
@@ -784,6 +800,8 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
           :field_1, # Sale completion date
           :field_2, # Sale completion date
           :field_3, # Sale completion date
+          :field_16, # UPRN
+          :field_17, # Address line 1
           :field_21, # Postcode
           :field_22, # Postcode
           :field_28, # Buyer 1 age
@@ -814,6 +832,8 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
           :field_1, # Sale completion date
           :field_2, # Sale completion date
           :field_3, # Sale completion date
+          :field_16, # UPRN
+          :field_17, # Address line 1
           :field_21, # Postcode
           :field_22, # Postcode
           :field_28, # Buyer 1 age
@@ -1869,7 +1889,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
     context "when mscharge is given, but is set to 0 for shared ownership" do
       let(:attributes) { valid_attributes.merge(field_94: "0") }
 
-      it "does not override variables correctly" do
+      it "does not override variables" do
         log = parser.log
         expect(log["has_mscharge"]).to eq(0) # no
         expect(log["mscharge"]).to be_nil
@@ -1879,7 +1899,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
     context "when mscharge is given, but is set to 0 for discounted ownership" do
       let(:attributes) { valid_attributes.merge(field_8: "2", field_121: "0") }
 
-      it "does not override variables correctly" do
+      it "does not override variables" do
         log = parser.log
         expect(log["has_mscharge"]).to eq(0) # no
         expect(log["mscharge"]).to be_nil

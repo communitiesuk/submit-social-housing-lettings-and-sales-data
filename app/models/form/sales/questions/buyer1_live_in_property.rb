@@ -5,7 +5,7 @@ class Form::Sales::Questions::Buyer1LiveInProperty < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 1
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   ANSWER_OPTIONS = {
@@ -13,5 +13,5 @@ class Form::Sales::Questions::Buyer1LiveInProperty < ::Form::Question
     "2" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 26, 2024 => 28, 2025 => 26 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 26, 2024 => 28, 2025 => 26, 2026 => 28 }.freeze
 end

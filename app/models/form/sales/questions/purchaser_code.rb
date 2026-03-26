@@ -4,8 +4,8 @@ class Form::Sales::Questions::PurchaserCode < ::Form::Question
     @id = "purchid"
     @type = "text"
     @width = 10
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 2, 2024 => 4 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 2, 2024 => 4, 2025 => 4, 2026 => 4 }.freeze
 end

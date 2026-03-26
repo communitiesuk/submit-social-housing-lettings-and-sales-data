@@ -13,8 +13,8 @@ RSpec.describe "Home Page Features" do
   end
 
   describe "_upcoming_deadlines" do
-    let(:current_collection_year) { 2024 }
-    let(:next_collection_year) { 2025 }
+    let(:current_collection_year) { 2025 }
+    let(:next_collection_year) { 2026 }
 
     context "when visiting during the current collection year" do
       before do
@@ -28,11 +28,11 @@ RSpec.describe "Home Page Features" do
       scenario "displays correct text for quarters" do
         Timecop.freeze(Time.zone.local(current_collection_year, 4, 1)) do
           visit root_path
-          find("span.govuk-details__summary-text", text: "Quarterly cut-off dates for 2024 to 2025").click
-          expect(page).to have_content("Q1 - Friday 12 July 2024")
-          expect(page).to have_content("Q2 - Friday 11 October 2024")
-          expect(page).to have_content("Q3 - Friday 10 January 2025")
-          expect(page).to have_content("End of year deadline - Friday 6 June 2025")
+          find("span.govuk-details__summary-text", text: "Quarterly cut-off dates for 2025 to 2026").click
+          expect(page).to have_content("Q1 - Friday 11 July 2025")
+          expect(page).to have_content("Q2 - Friday 10 October 2025")
+          expect(page).to have_content("Q3 - Friday 16 January 2026")
+          expect(page).to have_content("End of year deadline - Friday 5 June 2026")
         end
         Timecop.return
       end
@@ -40,7 +40,7 @@ RSpec.describe "Home Page Features" do
       scenario "displays correct current quarter as Q1" do
         Timecop.freeze(Time.zone.local(current_collection_year, 4, 1)) do
           visit root_path
-          expect(page).to have_content("Q1 - Friday 12 July 2024")
+          expect(page).to have_content("Q1 - Friday 11 July 2025")
         end
         Timecop.return
       end
@@ -48,7 +48,7 @@ RSpec.describe "Home Page Features" do
       scenario "displays correct current quarter as Q2" do
         Timecop.freeze(Time.zone.local(current_collection_year, 8, 1)) do
           visit root_path
-          expect(page).to have_content("Q2 - Friday 11 October 2024")
+          expect(page).to have_content("Q2 - Friday 10 October 2025")
         end
         Timecop.return
       end
@@ -56,7 +56,7 @@ RSpec.describe "Home Page Features" do
       scenario "displays correct current quarter as Q3" do
         Timecop.freeze(Time.zone.local(current_collection_year, 11, 1)) do
           visit root_path
-          expect(page).to have_content("Q3 - Friday 10 January 2025")
+          expect(page).to have_content("Q3 - Friday 16 January 2026")
         end
         Timecop.return
       end
@@ -74,11 +74,11 @@ RSpec.describe "Home Page Features" do
       scenario "displays correct text for quarters" do
         Timecop.freeze(Time.zone.local(next_collection_year, 4, 1)) do
           visit root_path
-          find("span.govuk-details__summary-text", text: "Quarterly cut-off dates for 2025 to 2026").click
-          expect(page).to have_content("Q1 - Friday 11 July 2025")
-          expect(page).to have_content("Q2 - Friday 10 October 2025")
-          expect(page).to have_content("Q3 - Friday 16 January 2026")
-          expect(page).to have_content("End of year deadline - Friday 5 June 2026")
+          find("span.govuk-details__summary-text", text: "Quarterly cut-off dates for 2026 to 2027").click
+          expect(page).to have_content("Q1 - Friday 10 July 2026")
+          expect(page).to have_content("Q2 - Friday 9 October 2026")
+          expect(page).to have_content("Q3 - Friday 15 January 2027")
+          expect(page).to have_content("End of year deadline - Friday 4 June 2027")
         end
         Timecop.return
       end
@@ -86,7 +86,7 @@ RSpec.describe "Home Page Features" do
       scenario "displays correct current quarter as Q1" do
         Timecop.freeze(Time.zone.local(next_collection_year, 4, 1)) do
           visit root_path
-          expect(page).to have_content("Q1 - Friday 11 July 2025")
+          expect(page).to have_content("Q1 - Friday 10 July 2026")
         end
         Timecop.return
       end
@@ -94,7 +94,7 @@ RSpec.describe "Home Page Features" do
       scenario "displays correct current quarter as Q2" do
         Timecop.freeze(Time.zone.local(next_collection_year, 8, 1)) do
           visit root_path
-          expect(page).to have_content("Q2 - Friday 10 October 2025")
+          expect(page).to have_content("Q2 - Friday 9 October 2026")
         end
         Timecop.return
       end
@@ -102,7 +102,7 @@ RSpec.describe "Home Page Features" do
       scenario "displays correct current quarter as Q3" do
         Timecop.freeze(Time.zone.local(next_collection_year, 11, 1)) do
           visit root_path
-          expect(page).to have_content("Q3 - Friday 16 January 2026")
+          expect(page).to have_content("Q3 - Friday 15 January 2027")
         end
         Timecop.return
       end

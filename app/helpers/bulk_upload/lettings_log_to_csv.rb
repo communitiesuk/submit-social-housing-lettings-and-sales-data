@@ -94,7 +94,6 @@ class BulkUpload::LettingsLogToCsv
   end
 
   def to_2026_row
-    # TODO: CLDC-4162: Implement when 2026 format is known
     [
       overrides[:organisation_id] || log.owning_organisation&.old_visible_id, # 1
       overrides[:managing_organisation_id] || log.managing_organisation&.old_visible_id,
@@ -241,8 +240,8 @@ class BulkUpload::LettingsLogToCsv
       accessible_register, # 130
       log.owning_organisation.la? ? log.referral_register : nil,
       log.owning_organisation.prp? ? log.referral_register : nil,
-      log.referral_noms,
-      log.referral_org,
+      log.owning_organisation.prp? ? log.referral_noms : nil,
+      log.owning_organisation.prp? ? log.referral_org : nil,
       net_income_known,
       log.incfreq,
       log.earnings,

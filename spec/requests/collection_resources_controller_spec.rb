@@ -49,10 +49,14 @@ RSpec.describe CollectionResourcesController, type: :request do
       let(:user) { create(:user, :support) }
 
       before do
-        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 1, 8))
+        Timecop.travel(Time.zone.local(current_collection_start_year, 1, 8))
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         allow(storage_service).to receive(:file_exists?).and_return(true)
         sign_in user
+      end
+
+      after do
+        Timecop.return
       end
 
       it "displays collection resources" do
@@ -122,7 +126,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
         context "when the collection year has not started yet" do
           before do
-            Timecop.freeze(Time.zone.local(2025, 3, 1))
+            Timecop.travel(Time.zone.local(current_collection_start_year, 3, 1))
             get collection_resources_path
           end
 
@@ -131,8 +135,8 @@ RSpec.describe CollectionResourcesController, type: :request do
           end
 
           it "displays next year banner" do
-            expect(page).to have_content("The 2025 to 2026 collection resources are not yet available to users.")
-            expect(page).to have_link("Release the 2025 to 2026 collection resources to users", href: confirm_mandatory_collection_resources_release_path(year: 2025))
+            expect(page).to have_content("The #{next_collection_start_year} to #{next_collection_end_year} collection resources are not yet available to users.")
+            expect(page).to have_link("Release the #{next_collection_start_year} to #{next_collection_end_year} collection resources to users", href: confirm_mandatory_collection_resources_release_path(year: next_collection_start_year))
           end
         end
 
@@ -176,7 +180,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
         context "when the collection year has not started yet" do
           before do
-            Timecop.freeze(Time.zone.local(2025, 3, 1))
+            Timecop.travel(Time.zone.local(current_collection_start_year, 3, 1))
             get collection_resources_path
           end
 
@@ -185,8 +189,8 @@ RSpec.describe CollectionResourcesController, type: :request do
           end
 
           it "displays next year banner" do
-            expect(page).to have_content("The 2025 to 2026 collection resources are not yet available to users.")
-            expect(page).to have_content("Once you have uploaded all the required 2025 to 2026 collection resources, you will be able to release them to users.")
+            expect(page).to have_content("The #{next_collection_start_year} to #{next_collection_end_year} collection resources are not yet available to users.")
+            expect(page).to have_content("Once you have uploaded all the required #{next_collection_start_year} to #{next_collection_end_year} collection resources, you will be able to release them to users.")
           end
         end
       end

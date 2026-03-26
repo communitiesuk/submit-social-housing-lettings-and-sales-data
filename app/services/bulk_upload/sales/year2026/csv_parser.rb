@@ -3,11 +3,12 @@ require "csv"
 class BulkUpload::Sales::Year2026::CsvParser
   include CollectionTimeHelper
 
-  # TODO: CLDC-4162: Update when 2026 format is known
   FIELDS = 136
   FORM_YEAR = 2026
 
   attr_reader :path
+
+  ROW_PARSER_CLASS = BulkUpload::Sales::Year2026::RowParser
 
   def initialize(path:)
     @path = path
@@ -26,18 +27,37 @@ class BulkUpload::Sales::Year2026::CsvParser
   end
 
   def cols
-    # TODO: CLDC-4162: Update when 2026 format is known
-    @cols ||= ("A".."EF").to_a
+    @cols ||= ("A".."EG").to_a
   end
 
   def row_parsers
     @row_parsers ||= body_rows.map { |row|
       next if row.empty?
 
+      invalid_fields = []
       stripped_row = row[col_offset..]
-      hash = Hash[field_numbers.zip(stripped_row)]
 
-      BulkUpload::Sales::Year2026::RowParser.new(hash)
+      hash_rows = field_numbers
+                    .zip(stripped_row)
+                    .map do |field, value|
+                      field_is_valid = value_is_valid_for_field?(field, value)
+
+                      correct_value = field_is_valid ? value : nil
+
+                      invalid_fields << field unless field_is_valid
+
+                      [field, correct_value]
+                    end
+
+      hash = Hash[hash_rows]
+
+      row_parser = ROW_PARSER_CLASS.new(hash)
+
+      invalid_fields.each do |field|
+        row_parser.add_invalid_field(field)
+      end
+
+      row_parser
     }.compact
   end
 
@@ -111,6 +131,20 @@ private
     @normalised_string.tr!("\r", "\n")
 
     @normalised_string
+  end
+
+  # this is needed as a string passed to an int attribute is by default mapped to '0'.
+  # this is bad as some questions will accept a '0'. so you could enter something invalid and not be told about it
+  def value_is_valid_for_field?(field, value)
+    field_type = ROW_PARSER_CLASS.attribute_types[field]
+
+    if field_type.is_a?(ActiveModel::Type::Integer)
+      value.nil? || Integer(value, exception: false).present?
+    elsif field_type.is_a?(ActiveModel::Type::Decimal)
+      value.nil? || Float(value, exception: false).present?
+    else
+      true
+    end
   end
 
   def first_record_start_date

@@ -166,7 +166,7 @@ RSpec.describe BulkUpload::Sales::Year2026::CsvParser do
 
       it "returns correct column" do
         expect(service.column_for_field("field_1")).to eql("B")
-        expect(service.column_for_field("field_99")).to eql("CV")
+        expect(service.column_for_field("field_112")).to eql("DI")
       end
     end
   end
@@ -186,6 +186,25 @@ RSpec.describe BulkUpload::Sales::Year2026::CsvParser do
 
     it "parses csv correctly" do
       expect(service.row_parsers[0].field_16).to eql(log.uprn)
+    end
+  end
+
+  context "when parsing csv with data of the wrong type" do
+    let(:log_to_csv) { BulkUpload::SalesLogToCsv.new(log:) }
+    let(:field_numbers) { log_to_csv.default_field_numbers_for_year(2026) }
+    let(:field_values) { log_to_csv.to_2026_row }
+
+    before do
+      field_34_index = field_numbers.index(34)
+      field_values[field_34_index] = "abc" # should be an integer
+
+      file.write(log_to_csv.custom_field_numbers_row(field_numbers:))
+      file.write(log_to_csv.to_custom_csv_row(field_values:))
+      file.rewind
+    end
+
+    it "sets the invalid data to nil" do
+      expect(service.row_parsers[0].field_34).to be_nil
     end
   end
 end

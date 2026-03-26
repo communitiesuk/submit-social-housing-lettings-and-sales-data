@@ -506,6 +506,8 @@ class BulkUpload::Lettings::Year2025::RowParser
       end
     end
 
+    add_errors_for_invalid_fields
+
     @valid = errors.blank?
   end
 
@@ -523,6 +525,9 @@ class BulkUpload::Lettings::Year2025::RowParser
     @log ||= LettingsLog.new(attributes_for_log)
   end
 
+  # Will send a "Bulk upload failed" email rather than an "Errors in bulk upload" email.
+  # The body of the "Bulk upload failed" email says there are errors in the setup section,
+  # so only use this method for setup section errors.
   def block_log_creation!
     self.block_log_creation = true
   end
@@ -580,6 +585,10 @@ class BulkUpload::Lettings::Year2025::RowParser
         errors.add(field, I18n.t("#{ERROR_BASE_KEY}.spreadsheet_dupe"), category: :setup)
       end
     end
+  end
+
+  def add_invalid_field(field)
+    invalid_fields << field
   end
 
 private
@@ -1017,6 +1026,17 @@ private
       errors.add(:field_125, error_message) # scharge
       errors.add(:field_126, error_message) # pscharge
       errors.add(:field_127, error_message) # chcharge
+    end
+  end
+
+  def invalid_fields
+    @invalid_fields ||= []
+  end
+
+  def add_errors_for_invalid_fields
+    invalid_fields.each do |field|
+      errors.delete(field) # take precedence over any other errors as this is a BU format issue
+      errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: QUESTIONS[field.to_sym]))
     end
   end
 

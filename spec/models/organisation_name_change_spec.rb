@@ -30,13 +30,13 @@ RSpec.describe OrganisationNameChange, type: :model do
 
     it "is invalid if name is the same as the current name on the change date" do
       create(:organisation_name_change, organisation:, name: "New Name", startdate: 1.day.ago)
-      name_change = build(:organisation_name_change, organisation:, name: "New Name", startdate: Time.zone.now)
+      name_change = build(:organisation_name_change, organisation:, name: "New Name", startdate: Time.zone.today)
       expect(name_change).not_to be_valid
       expect(name_change.errors[:name]).to include(I18n.t("validations.organisation.name_changes.name.must_be_different"))
     end
 
     it "is invalid if startdate is after the organisation's merge date" do
-      organisation.update!(merge_date: Time.zone.now)
+      organisation.update!(merge_date: Time.zone.today)
       name_change = build(:organisation_name_change, organisation:, immediate_change: false, startdate: Time.zone.tomorrow)
       expect(name_change).not_to be_valid
       expect(name_change.errors[:startdate]).to include(I18n.t("validations.organisation.name_changes.startdate.must_be_before_merge_date", merge_date: organisation.merge_date.to_formatted_s(:govuk_date)))
@@ -54,12 +54,12 @@ RSpec.describe OrganisationNameChange, type: :model do
 
     it "returns changes before a specific date" do
       name_change = create(:organisation_name_change, organisation:, startdate: 1.day.ago)
-      expect(described_class.before_date(Time.zone.now)).to include(name_change)
+      expect(described_class.before_date(Time.zone.today)).to include(name_change)
     end
 
     it "returns changes after a specific date" do
       name_change = create(:organisation_name_change, organisation:, startdate: 2.days.from_now)
-      expect(described_class.after_date(Time.zone.now)).to include(name_change)
+      expect(described_class.after_date(Time.zone.today)).to include(name_change)
     end
   end
 
@@ -84,7 +84,7 @@ RSpec.describe OrganisationNameChange, type: :model do
   describe "#includes_date?" do
     it "returns true if the date is within the change period" do
       name_change = create(:organisation_name_change, organisation:, startdate: 1.day.ago)
-      expect(name_change.includes_date?(Time.zone.now)).to be true
+      expect(name_change.includes_date?(Time.zone.today)).to be true
     end
 
     it "returns false if the date is outside the change period" do

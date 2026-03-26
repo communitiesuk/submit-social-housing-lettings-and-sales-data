@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page, ownershipsch:) }
 
   let(:question_id) { nil }
@@ -9,25 +11,41 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
   let(:staircase) { nil }
   let(:saledate) { Time.zone.today }
   let(:log) { build(:sales_log, :in_progress, ownershipsch:, stairowned:, staircase:) }
+  let(:start_year_2024_or_later?) { true }
+  let(:start_year_2025_or_later?) { true }
+  let(:start_year_2026_or_later?) { true }
+  let(:subsection_id) { "shared_ownership_initial_purchase" }
+  let(:form) { instance_double(Form, type: "sales", start_date: saledate, start_year_2024_or_later?: start_year_2024_or_later?, start_year_2025_or_later?: start_year_2025_or_later?, start_year_2026_or_later?: start_year_2026_or_later?) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: subsection_id, copy_key: subsection_id)) }
 
-  context "when the form start year is 2024" do
-    let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
-    let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: "shared_ownership")) }
-    let(:saledate) { Time.zone.local(2024, 5, 1) }
+  context "when it is a shared ownership scheme" do
     let(:ownershipsch) { 1 }
 
-    before do
-      allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: false)
+    it "has the correct top_guidance_partial" do
+      expect(question.top_guidance_partial).to eq("financial_calculations_shared_ownership")
     end
+  end
 
-    it "has the correct answer_options" do
-      expect(question.answer_options).to eq({
-        "1" => { "value" => "Yes" },
-        "2" => { "value" => "No" },
-        "divider" => { "value" => true },
-        "3" => { "value" => "Don’t know" },
-      })
+  context "when it is a discounted ownership sale" do
+    let(:ownershipsch) { 2 }
+
+    it "has the correct top_guidance_partial" do
+      expect(question.top_guidance_partial).to eq("financial_calculations_discounted_ownership")
     end
+  end
+
+  context "when it is an outright sale" do
+    let(:ownershipsch) { 3 }
+
+    it "has the correct top_guidance_partial" do
+      expect(question.top_guidance_partial).to eq("financial_calculations_outright_sale")
+    end
+  end
+
+  context "when the form start year is 2024", metadata: { year: 24 } do
+    let(:saledate) { collection_start_date_for_year(2024) }
+    let(:start_year_2025_or_later?) { false }
+    let(:start_year_2026_or_later?) { false }
 
     context "when it is a discounted ownership sale" do
       let(:ownershipsch) { 2 }
@@ -44,23 +62,21 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
     context "when it is an outright sale" do
       let(:ownershipsch) { 3 }
 
-      context "and the saledate is before 24/25" do
-        let(:saledate) { Time.zone.local(2023, 5, 1) }\
-
-        it "does show the don't know option" do
-          expect_the_question_to_show_dont_know
-        end
+      it "shows the correct question number" do
+        expect(question.question_number).to eq 112
       end
 
-      context "and the saledate is 24/25" do
-        it "shows the don't know option" do
-          expect_the_question_to_show_dont_know
-        end
+      it "shows the don't know option" do
+        expect_the_question_to_show_dont_know
       end
     end
 
     context "when it is a shared ownership scheme" do
       let(:ownershipsch) { 1 }
+
+      it "shows the correct question number" do
+        expect(question.question_number).to eq 91
+      end
 
       context "and it is a staircasing transaction" do
         let(:staircase) { 1 }
@@ -92,20 +108,20 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
     end
   end
 
-  context "when the form start year is 2025" do
-    let(:form) { instance_double(Form, start_date: Time.zone.local(2025, 4, 1)) }
-    let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: "shared_ownership")) }
-    let(:saledate) { Time.zone.local(2025, 5, 1) }
-
-    before do
-      allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true)
-    end
+  context "when the form start year is 2025", metadata: { year: 25 } do
+    let(:saledate) { collection_start_date_for_year(2025) }
+    let(:start_year_2026_or_later?) { false }
 
     context "when it is a discounted ownership sale" do
       let(:ownershipsch) { 2 }
+      let(:subsection_id) { "discounted_ownership_scheme" }
 
       it "shows the correct question number" do
         expect(question.question_number).to eq 106
+      end
+
+      it "has the correct copy_key" do
+        expect(question.copy_key).to eq "sales.discounted_ownership_scheme.mortgageused"
       end
 
       it "does not show the don't know option" do
@@ -116,10 +132,19 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
     context "when it is a shared ownership scheme" do
       let(:ownershipsch) { 1 }
 
+      it "shows the correct question number" do
+        expect(question.question_number).to eq 82
+      end
+
       context "and it is a staircasing transaction" do
         let(:staircase) { 1 }
+        let(:subsection_id) { "shared_ownership_staircasing_transaction" }
 
-        it "does show the don't know option" do
+        it "has the correct copy_key" do
+          expect(question.copy_key).to eq "sales.shared_ownership_staircasing_transaction.mortgageused"
+        end
+
+        it "shows the don't know option" do
           expect_the_question_to_show_dont_know
         end
 
@@ -134,9 +159,73 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
 
       context "and it is not a staircasing transaction" do
         let(:staircase) { 2 }
+        let(:subsection_id) { "shared_ownership_initial_purchase" }
 
         it "does not show the don't know option" do
           expect_the_question_not_to_show_dont_know
+        end
+
+        it "has the correct copy_key" do
+          expect(question.copy_key).to eq "sales.shared_ownership_initial_purchase.mortgageused"
+        end
+      end
+    end
+  end
+
+  context "when the form start year is 2026", metadata: { year: 26 } do
+    let(:saledate) { collection_start_date_for_year(2026) }
+
+    context "when it is a discounted ownership sale" do
+      let(:ownershipsch) { 2 }
+      let(:subsection_id) { "discounted_ownership_scheme" }
+
+      it "shows the correct question number" do
+        expect(question.question_number).to eq 116
+      end
+
+      it "has the correct copy_key" do
+        expect(question.copy_key).to eq "sales.discounted_ownership_scheme.mortgageused.non_staircase_equity"
+      end
+
+      it "shows the don't know option" do
+        expect_the_question_to_show_dont_know
+      end
+    end
+
+    context "when it is a shared ownership scheme" do
+      let(:ownershipsch) { 1 }
+
+      context "and it is a staircasing transaction" do
+        let(:staircase) { 1 }
+        let(:subsection_id) { "shared_ownership_staircasing_transaction" }
+
+        it "shows the correct question number" do
+          expect(question.question_number).to eq 107
+        end
+
+        it "has the correct copy_key" do
+          expect(question.copy_key).to eq "sales.shared_ownership_staircasing_transaction.mortgageused.staircase_equity"
+        end
+
+        it "shows the don't know option" do
+          expect_the_question_to_show_dont_know
+        end
+      end
+
+      context "and it is not a staircasing transaction" do
+        let(:staircase) { 2 }
+        let(:subsection_id) { "shared_ownership_initial_purchase" }
+
+        it "shows the correct question number" do
+          expect(question.question_number).to eq 90
+        end
+
+        it "has the correct copy_key" do
+          expect(question.copy_key).to eq "sales.shared_ownership_initial_purchase.mortgageused.non_staircase_equity"
+        end
+
+        it "shows the don't know option" do
+          expect_the_question_to_show_dont_know
         end
       end
     end
