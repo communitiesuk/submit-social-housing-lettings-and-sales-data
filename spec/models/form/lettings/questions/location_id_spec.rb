@@ -142,41 +142,28 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
 
       context "and some locations start with numbers" do
         before do
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 5), name: "2 Abe Road")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 6), name: "1 Abe Road")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 7), name: "1 Lake Lane")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 8), name: "3 Abe Road")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 9), name: "2 Lake Lane")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 10), name: "Smith Avenue")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 11), name: "Abacus Road")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 12), name: "Hawthorne Road")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 5), name: "2 Abe Road", postcode: "AA1 1AA")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 6), name: "1 Abe Road", postcode: "AA1 2AA")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 7), name: "1 Lake Lane", postcode: "AA1 3AA")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 8), name: "3 Abe Road", postcode: "AA1 4AA")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 9), name: "2 Lake Lane", postcode: "AA1 5AA")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 10), name: "Smith Avenue", postcode: "AA1 6AA")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 11), name: "Abacus Road", postcode: "AA1 7AA")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 12), name: "Hawthorne Road", postcode: "AA1 8AA")
           lettings_log.update!(scheme:)
         end
 
-        it "orders the locations by name then numerically" do
+        it "orders the locations by postcode" do
           expect(question.displayed_answer_options(lettings_log).values.map { |v| v["hint"] }).to eq([
-            "Abacus Road",
-            "1 Abe Road",
             "2 Abe Road",
-            "3 Abe Road",
-            "Hawthorne Road",
+            "1 Abe Road",
             "1 Lake Lane",
+            "3 Abe Road",
             "2 Lake Lane",
             "Smith Avenue",
+            "Abacus Road",
+            "Hawthorne Road",
           ])
-        end
-      end
-
-      context "and some locations don't have names" do
-        before do
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 7), name: "other name", postcode: "AA1 1AA")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 6), name: nil, postcode: "AA1 1AB")
-          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 5), name: "A", postcode: "AA1 1AC")
-          lettings_log.update!(scheme:)
-        end
-
-        it "uses the postcode as a fallback" do
-          expect(question.displayed_answer_options(lettings_log).values.map { |v| v["value"] }).to eq(["AA1 1AC", "AA1 1AB", "AA1 1AA"])
         end
       end
     end
