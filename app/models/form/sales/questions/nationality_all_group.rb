@@ -22,4 +22,12 @@ class Form::Sales::Questions::NationalityAllGroup < ::Form::Question
     2025 => { 1 => 24, 2 => 32 },
     2026 => { 1 => 26, 2 => 35 },
   }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "0"
+
+    super
+  end
 end

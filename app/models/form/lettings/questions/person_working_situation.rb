@@ -69,4 +69,12 @@ class Form::Lettings::Questions::PersonWorkingSituation < ::Form::Question
 
     base_question_number + (form.person_question_count * @person_index)
   end
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "10"
+
+    super
+  end
 end

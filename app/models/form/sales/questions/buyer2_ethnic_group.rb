@@ -19,4 +19,12 @@ class Form::Sales::Questions::Buyer2EthnicGroup < ::Form::Question
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 30, 2024 => 32, 2025 => 30, 2026 => 33 }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "17"
+
+    super
+  end
 end

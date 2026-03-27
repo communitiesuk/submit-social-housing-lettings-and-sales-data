@@ -6,12 +6,6 @@ class Form::Sales::Questions::GenderIdentity2 < ::Form::Question
     @copy_key = "sales.household_characteristics.sex2.buyer"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
-    @inferred_check_answers_value = [{
-      "condition" => {
-        "sex2" => "R",
-      },
-      "value" => "Prefers not to say",
-    }]
     @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
@@ -23,4 +17,12 @@ class Form::Sales::Questions::GenderIdentity2 < ::Form::Question
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 29, 2024 => 31, 2025 => 29, 2026 => 31 }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "R"
+
+    super
+  end
 end

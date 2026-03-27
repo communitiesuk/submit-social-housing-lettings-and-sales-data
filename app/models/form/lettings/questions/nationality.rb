@@ -20,4 +20,13 @@ class Form::Lettings::Questions::Nationality < ::Form::Question
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 36, 2024 => 35, 2025 => 35, 2026 => 34 }.freeze
+
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "13"
+    #do these combined qs work the same??
+    super
+  end
 end

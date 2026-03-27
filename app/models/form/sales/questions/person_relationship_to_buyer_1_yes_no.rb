@@ -8,16 +8,18 @@ class Form::Sales::Questions::PersonRelationshipToBuyer1YesNo < ::Form::Question
       "X" => { "value" => "No" },
       "R" => { "value" => "Person prefers not to say" },
     }
-    @inferred_check_answers_value = [{
-      "condition" => {
-        id => "R",
-      },
-      "value" => "Prefers not to say",
-    }]
     @check_answers_card_number = person_index
     @person_index = person_index
     @question_number = get_person_question_number(BASE_QUESTION_NUMBERS)
   end
 
   BASE_QUESTION_NUMBERS = { 2025 => 28, 2026 => 29 }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "R"
+
+    super
+  end
 end

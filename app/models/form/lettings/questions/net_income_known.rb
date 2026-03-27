@@ -17,4 +17,12 @@ class Form::Lettings::Questions::NetIncomeKnown < ::Form::Question
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 86, 2024 => 85, 2025 => 85, 2026 => 93 }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "2"
+
+    super
+  end
 end

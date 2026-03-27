@@ -16,4 +16,12 @@ class Form::Lettings::Questions::PregOcc < ::Form::Question
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 69, 2024 => 68, 2025 => 68, 2026 => 75 }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "3"
+
+    super
+  end
 end

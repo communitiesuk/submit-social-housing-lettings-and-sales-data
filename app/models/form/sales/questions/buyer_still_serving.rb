@@ -26,4 +26,12 @@ class Form::Sales::Questions::BuyerStillServing < ::Form::Question
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 63, 2024 => 65, 2025 => 62, 2026 => 70 }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "6"
+    #change string nums to nums
+    super
+  end
 end

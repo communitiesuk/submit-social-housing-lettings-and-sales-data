@@ -16,4 +16,13 @@ class Form::Lettings::Questions::Illness < ::Form::Question
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 73, 2024 => 72, 2025 => 72, 2026 => 79 }.freeze
+
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "3"
+
+    super
+  end
 end

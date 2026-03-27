@@ -64,4 +64,12 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
   end
 
   BASE_QUESTION_NUMBERS = { 2023 => 31, 2024 => 33, 2025 => 31, 2026 => 33 }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "10"
+
+    super
+  end
 end

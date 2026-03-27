@@ -5,12 +5,6 @@ class Form::Sales::Questions::PersonRelationshipToBuyer1 < ::Form::Question
     @copy_key = "sales.household_characteristics.relat2.person" if person_index == 2
     @answer_options = answer_options
     @check_answers_card_number = person_index
-    @inferred_check_answers_value = [{
-      "condition" => {
-        id => "R",
-      },
-      "value" => "Prefers not to say",
-    }]
     @person_index = person_index
     @question_number = question_number
   end
@@ -42,5 +36,13 @@ class Form::Sales::Questions::PersonRelationshipToBuyer1 < ::Form::Question
                            end
 
     base_question_number + (form.person_question_count * @person_index)
+  end
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "R"
+
+    super
   end
 end

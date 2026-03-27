@@ -9,15 +9,17 @@ class Form::Sales::Questions::Buyer2RelationshipToBuyer1YesNo < ::Form::Question
       "X" => { "value" => "No" },
       "R" => { "value" => "Buyer prefers not to say" },
     }
-    @inferred_check_answers_value = [{
-      "condition" => {
-        "relat2" => "R",
-      },
-      "value" => "Prefers not to say",
-    }]
     @check_answers_card_number = 2
     @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2025 => 27, 2026 => 29 }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "R"
+    #check for when ans opt is already prefers not to say
+    super
+  end
 end

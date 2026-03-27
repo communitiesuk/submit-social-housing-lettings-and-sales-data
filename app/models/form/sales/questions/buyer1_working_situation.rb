@@ -5,12 +5,6 @@ class Form::Sales::Questions::Buyer1WorkingSituation < ::Form::Question
     @type = "radio"
     @answer_options = answer_options
     @check_answers_card_number = 1
-    @inferred_check_answers_value = [{
-      "condition" => {
-        "ecstat1" => 10,
-      },
-      "value" => "Prefers not to say",
-    }]
     @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
@@ -45,4 +39,11 @@ class Form::Sales::Questions::Buyer1WorkingSituation < ::Form::Question
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 25, 2024 => 27, 2025 => 25, 2026 => 27 }.freeze
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "10"
+
+    super
+  end
 end

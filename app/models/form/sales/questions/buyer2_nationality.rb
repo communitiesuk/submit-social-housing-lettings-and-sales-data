@@ -6,12 +6,6 @@ class Form::Sales::Questions::Buyer2Nationality < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
     @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
-    @inferred_check_answers_value = [{
-      "condition" => {
-        "national" => 13,
-      },
-      "value" => "Prefers not to say",
-    }]
   end
 
   ANSWER_OPTIONS = {
@@ -23,4 +17,12 @@ class Form::Sales::Questions::Buyer2Nationality < ::Form::Question
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 32, 2024 => 34, 2025 => 32 }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "13"
+
+    super
+  end
 end
