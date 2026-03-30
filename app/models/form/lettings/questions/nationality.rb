@@ -26,7 +26,7 @@ class Form::Lettings::Questions::Nationality < ::Form::Question
     return unless value
 
     return "Prefers not to say" if value == "13"
-    #do these combined qs work the same??
+
     super
   end
 end

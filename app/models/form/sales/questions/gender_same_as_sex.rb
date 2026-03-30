@@ -27,7 +27,7 @@ class Form::Sales::Questions::GenderSameAsSex < ::Form::Question
   def label_from_value(value, _log = nil, _user = nil)
     return unless value
 
-    return "Prefers not to say" if value == 3
+    return "Prefers not to say" if value == "3"
 
     super
   end

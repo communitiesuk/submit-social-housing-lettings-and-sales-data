@@ -25,8 +25,9 @@ class Form::Sales::Questions::NationalityAll < ::Form::Question
 
   def label_from_value(value)
     return unless value
+
     return "Prefers not to say" if value.to_i.zero?
-    #??
+
     answer_options[value.to_s]["name"]
   end
 end

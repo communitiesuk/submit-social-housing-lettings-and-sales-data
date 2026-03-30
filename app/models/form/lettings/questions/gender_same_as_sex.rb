@@ -7,7 +7,7 @@ class Form::Lettings::Questions::GenderSameAsSex < ::Form::Question
     @conditional_for = { "gender_description#{person_index}" => [2] }
     @person_index = person_index
     @question_number = question_number
-    @inferred_check_answers_value = [{ "condition" => { "gender_same_as_sex#{person_index}" => 2 }, "value" => "No" }] #???
+    @inferred_check_answers_value = [{ "condition" => { "gender_same_as_sex#{person_index}" => 2 }, "value" => "No" }]
   end
 
   def answer_options
@@ -30,7 +30,7 @@ class Form::Lettings::Questions::GenderSameAsSex < ::Form::Question
   def label_from_value(value, _log = nil, _user = nil)
     return unless value
 
-    return "Prefers not to say" if value == 3
+    return "Prefers not to say" if value == "3"
 
     super
   end
