@@ -14,7 +14,7 @@ class Form::Sales::Questions::BuyerStillServing < ::Form::Question
         "5" => { "value" => "No - they left up to and including 2 years ago" },
         "6" => { "value" => "No - they left more than 2 years ago" },
         "divider" => { "value" => true },
-        "7" => { "value" => "Don’t know" },
+        "9" => { "value" => "Don’t know" },
       }.freeze
     else
       {
