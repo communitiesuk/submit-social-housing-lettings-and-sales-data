@@ -55,7 +55,7 @@ jobs:
         with:
           script: |
             const prNumber = context.issue.number;
-            const msg = `Created review app at https://review.submit-social-housing-data.communities.gov.uk/${prNumber}. Note that the review app will be automatically deprovisioned after 30 days and will need the review app pipeline running again.`;
+            const msg = `Created review app at https://review.submit-social-housing-data.communities.gov.uk/${prNumber}. Note that the review app will be automatically deprovisioned after 30 days and will need the review app pipeline running again. To tear down the review app entirely, remove the `review-app` label or merge/close the PR.`;
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
