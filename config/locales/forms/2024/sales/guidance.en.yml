@@ -51,3 +51,8 @@ en:
                 <li>Some properties may not be available yet e.g. new builds; you might need to enter them manually instead</li>
                 <li>For UPRN (Unique Property Reference Number), please enter the full value exactly</li>
               </ul>"
+
+          address_uprn:
+            title: "What is a UPRN?"
+            content: "<p>The Unique Property Reference Number (UPRN) is a unique number system created by Ordnance Survey and used by housing providers and various industries across the UK. An example is 0010457355.</p>
+              <p>The UPRN may not be the same as the property reference assigned by your organisation.</p>"
