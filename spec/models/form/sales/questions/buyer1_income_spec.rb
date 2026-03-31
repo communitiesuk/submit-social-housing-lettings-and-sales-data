@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::Buyer1Income, type: :model do
+  include CollectionTimeHelper
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: collection_start_date_for_year(current_collection_start_year)))) }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -45,5 +46,9 @@ RSpec.describe Form::Sales::Questions::Buyer1Income, type: :model do
 
   it "has correct max" do
     expect(question.max).to eq(999_999)
+  end
+
+  it "has the correct hint_text" do
+    expect(question.hint_text).to eq("")
   end
 end
