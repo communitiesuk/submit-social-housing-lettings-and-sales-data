@@ -4,6 +4,7 @@ class Form::Sales::Questions::MortgageAmount < ::Form::Question
     @id = "mortgage"
     @type = "numeric"
     @min = 1
+    @max = form.start_year_2026_or_later? ? 999_999 : nil
     @step = 1
     @width = 5
     @prefix = "£"

@@ -5,6 +5,7 @@ class Form::Sales::Questions::Value < ::Form::Question
     @copy_key = form.start_year_2025_or_later? ? "sales.sale_information.value.#{page.id}" : "sales.sale_information.value"
     @type = "numeric"
     @min = form.start_year_2026_or_later? ? 15_000 : 0
+    @max = form.start_year_2026_or_later? ? 999_999 : nil
     @step = 1
     @width = 10
     @prefix = "£"

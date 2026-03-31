@@ -5,7 +5,8 @@ RSpec.describe Form::Sales::Questions::MortgageAmount, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, id: "shared_ownership_initial_purchase", form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2026_or_later?: false))) }
+  let(:start_year_2026_or_later?) { false }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, id: "shared_ownership_initial_purchase", form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2026_or_later?: start_year_2026_or_later?))) }
 
   it "has correct page" do
     expect(question.page).to be(page)
@@ -48,6 +49,30 @@ RSpec.describe Form::Sales::Questions::MortgageAmount, type: :model do
 
     it "is marked as derived" do
       expect(question).not_to be_derived(log)
+    end
+  end
+
+  context "with year 2025", metadata: { year: 25 } do
+    let(:start_year_2026_or_later?) { false }
+
+    it "has correct min" do
+      expect(question.min).to eq(1)
+    end
+
+    it "has correct max" do
+      expect(question.max).to be_nil
+    end
+  end
+
+  context "with year 2026", metadata: { year: 26 } do
+    let(:start_year_2026_or_later?) { true }
+
+    it "has correct min" do
+      expect(question.min).to eq(1)
+    end
+
+    it "has correct max" do
+      expect(question.max).to eq(999_999)
     end
   end
 end

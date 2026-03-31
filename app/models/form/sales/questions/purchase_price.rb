@@ -4,6 +4,7 @@ class Form::Sales::Questions::PurchasePrice < ::Form::Question
     @id = "value"
     @type = "numeric"
     @min = form.start_year_2026_or_later? ? 15_000 : 0
+    @max = form.start_year_2026_or_later? ? 999_999 : nil
     @step = 0.01
     @width = 5
     @prefix = "£"

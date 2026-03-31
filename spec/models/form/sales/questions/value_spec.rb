@@ -45,6 +45,10 @@ RSpec.describe Form::Sales::Questions::Value, type: :model do
     it "has correct min" do
       expect(question.min).to eq(0)
     end
+
+    it "has correct max" do
+      expect(question.max).to be_nil
+    end
   end
 
   context "with year 2026", metadata: { year: 26 } do
@@ -53,6 +57,10 @@ RSpec.describe Form::Sales::Questions::Value, type: :model do
 
     it "has correct min" do
       expect(question.min).to eq(15_000)
+    end
+
+    it "has correct max" do
+      expect(question.max).to eq(999_999)
     end
   end
 end
