@@ -525,7 +525,13 @@ RSpec.describe LettingsLog do
           end
 
           context "with a current year log" do
-            let(:log) { create(:lettings_log, :completed, :sh, :startdate_today, owning_organisation:, scheme_id: old_scheme.id, location_id: old_location.id) }
+            let(:log) do
+              built_log = create(:lettings_log, :completed, :sh, :startdate_today, owning_organisation:, scheme_id: old_scheme.id, location_id: old_location.id, postcode_full: old_location.postcode)
+              built_log.save!
+              # changing a location will reset the address details so we must set these again manually
+              built_log.update!(address_line1: "123 Main St", postcode_full: old_location.postcode, town_or_city: "London")
+              built_log
+            end
 
             it "clears the location set on the log" do
               expect { log.update!(scheme: new_scheme) }.to change(log, :location_id).from(old_location.id).to(nil)
