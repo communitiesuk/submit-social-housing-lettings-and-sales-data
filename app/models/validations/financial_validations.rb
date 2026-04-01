@@ -175,6 +175,15 @@ module Validations::FinancialValidations
     end
   end
 
+  def validate_housing_universal_credit_matches_income_proportion(record)
+    return unless record.hb && record.benefits && record.form.start_year_2026_or_later?
+
+    if record.receives_universal_credit && record.no_household_income_comes_from_benefits?
+      record.errors.add :hb, I18n.t("validations.lettings.financial.hb.benefits_received_not_match_income_source")
+      record.errors.add :benefits, I18n.t("validations.lettings.financial.benefits.benefits_received_not_match_income_source")
+    end
+  end
+
 private
 
   def validate_charges(record)
