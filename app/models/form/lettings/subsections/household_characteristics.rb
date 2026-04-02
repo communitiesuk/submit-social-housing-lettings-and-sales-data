@@ -13,6 +13,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       (Form::Lettings::Pages::NoFemalesPregnantHouseholdLeadHhmembValueCheck.new(nil, nil, self) unless form.start_year_2026_or_later?),
       (Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdLeadHhmembValueCheck.new(nil, nil, self) unless form.start_year_2026_or_later?),
       (Form::Lettings::Pages::NoHouseholdMemberLikelyToBePregnantCheck.new("no_household_member_likely_to_be_pregnant_hhmemb_check", nil, self) if form.start_year_2026_or_later?),
+      Form::Lettings::Pages::NetIncomeValueCheck.new("hhmemb_net_income_value_check", nil, self),
       Form::Lettings::Pages::LeadTenantAge.new(nil, nil, self),
       (Form::Lettings::Pages::NoFemalesPregnantHouseholdLeadAgeValueCheck.new(nil, nil, self) unless form.start_year_2026_or_later?),
       (Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdLeadAgeValueCheck.new(nil, nil, self) unless form.start_year_2026_or_later?),
@@ -37,6 +38,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Lettings::Pages::LeadTenantUnderRetirementValueCheck.new("working_situation_lead_tenant_under_retirement_value_check", nil, self),
       Form::Lettings::Pages::LeadTenantOverRetirementValueCheck.new("working_situation_lead_tenant_over_retirement_value_check", nil, self),
       (Form::Lettings::Pages::WorkingSituationIllnessCheckLead.new("working_situation_lead_tenant_long_term_illness_check", nil, self) if form.start_year_2026_or_later?),
+      Form::Lettings::Pages::NetIncomeValueCheck.new("working_situation_lead_tenant_net_income_value_check", nil, self),
       *person_questions(person_index: 2),
       *person_questions(person_index: 3),
       *person_questions(person_index: 4),
@@ -51,6 +53,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
     [
       Form::Lettings::Pages::PersonKnown.new(nil, nil, self, person_index:),
       (Form::Lettings::Pages::PersonAge.new(nil, nil, self, person_index:) if form.start_year_2026_or_later?),
+      (Form::Lettings::Pages::NetIncomeValueCheck.new("person_#{person_index}_age_net_income_value_check", nil, self, person_index:) if form.start_year_2026_or_later?),
       relationship_question(person_index:),
       (Form::Lettings::Pages::PartnerUnder16ValueCheck.new("relationship_#{person_index}_partner_under_16_value_check", nil, self, person_index:) unless form.start_year_2026_or_later?),
       (Form::Lettings::Pages::MultiplePartnersValueCheck.new("relationship_#{person_index}_multiple_partners_value_check", nil, self, person_index:) unless form.start_year_2026_or_later?),
@@ -61,6 +64,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Lettings::Pages::PersonUnderRetirementValueCheck.new("age_#{person_index}_under_retirement_value_check", nil, self, person_index:),
       Form::Lettings::Pages::PersonOverRetirementValueCheck.new("age_#{person_index}_over_retirement_value_check", nil, self, person_index:),
       (Form::Lettings::Pages::PartnerUnder16ValueCheck.new("age_#{person_index}_partner_under_16_value_check", nil, self, person_index:) unless form.start_year_2026_or_later?),
+      (Form::Lettings::Pages::NetIncomeValueCheck.new("age_#{person_index}_net_income_value_check", nil, self, person_index:) unless form.start_year_2026_or_later?),
       (Form::Lettings::Pages::PersonSexRegisteredAtBirth.new(nil, nil, self, person_index:) if form.start_year_2026_or_later?),
       (Form::Lettings::Pages::PersonGenderSameAsSex.new(nil, nil, self, person_index:) if form.start_year_2026_or_later?),
       (Form::Lettings::Pages::PersonGenderIdentity.new(nil, nil, self, person_index:) unless form.start_year_2026_or_later?),
@@ -72,6 +76,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Lettings::Pages::PersonUnderRetirementValueCheck.new("working_situation_#{person_index}_under_retirement_value_check", nil, self, person_index:),
       Form::Lettings::Pages::PersonOverRetirementValueCheck.new("working_situation_#{person_index}_over_retirement_value_check", nil, self, person_index:),
       (Form::Lettings::Pages::WorkingSituationIllnessCheckPerson.new("working_situation_#{person_index}_long_term_illness_check", nil, self, person_index:) if form.start_year_2026_or_later?),
+      Form::Lettings::Pages::NetIncomeValueCheck.new("working_situation_#{person_index}_net_income_value_check", nil, self, person_index:),
     ]
   end
 
