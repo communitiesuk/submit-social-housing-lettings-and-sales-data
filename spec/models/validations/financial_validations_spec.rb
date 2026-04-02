@@ -1245,7 +1245,7 @@ RSpec.describe Validations::FinancialValidations do
         let(:hb) { 6 }
         let(:benefits) { 3 }
 
-        it "adds errors to hb and benefits" do
+        it "does not add errors" do
           financial_validator.validate_housing_universal_credit_matches_income_proportion(record)
           expect(record.errors["hb"]).to be_empty
           expect(record.errors["benefits"]).to be_empty
