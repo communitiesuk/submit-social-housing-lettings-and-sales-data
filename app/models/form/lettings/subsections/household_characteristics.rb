@@ -52,11 +52,14 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
   def person_questions(person_index:)
     [
       Form::Lettings::Pages::PersonKnown.new(nil, nil, self, person_index:),
+
       (Form::Lettings::Pages::PersonAge.new(nil, nil, self, person_index:) if form.start_year_2026_or_later?),
       (Form::Lettings::Pages::NetIncomeValueCheck.new("person_#{person_index}_age_net_income_value_check", nil, self, person_index:) if form.start_year_2026_or_later?),
+
       relationship_question(person_index:),
       (Form::Lettings::Pages::PartnerUnder16ValueCheck.new("relationship_#{person_index}_partner_under_16_value_check", nil, self, person_index:) unless form.start_year_2026_or_later?),
       (Form::Lettings::Pages::MultiplePartnersValueCheck.new("relationship_#{person_index}_multiple_partners_value_check", nil, self, person_index:) unless form.start_year_2026_or_later?),
+
       (Form::Lettings::Pages::PersonAge.new(nil, nil, self, person_index:) unless form.start_year_2026_or_later?),
       (Form::Lettings::Pages::NoFemalesPregnantHouseholdPersonAgeValueCheck.new(nil, nil, self, person_index:) unless form.start_year_2026_or_later?),
       (Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPersonAgeValueCheck.new(nil, nil, self, person_index:) unless form.start_year_2026_or_later?),
@@ -65,6 +68,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Lettings::Pages::PersonOverRetirementValueCheck.new("age_#{person_index}_over_retirement_value_check", nil, self, person_index:),
       (Form::Lettings::Pages::PartnerUnder16ValueCheck.new("age_#{person_index}_partner_under_16_value_check", nil, self, person_index:) unless form.start_year_2026_or_later?),
       (Form::Lettings::Pages::NetIncomeValueCheck.new("age_#{person_index}_net_income_value_check", nil, self, person_index:) unless form.start_year_2026_or_later?),
+
       (Form::Lettings::Pages::PersonSexRegisteredAtBirth.new(nil, nil, self, person_index:) if form.start_year_2026_or_later?),
       (Form::Lettings::Pages::PersonGenderSameAsSex.new(nil, nil, self, person_index:) if form.start_year_2026_or_later?),
       (Form::Lettings::Pages::PersonGenderIdentity.new(nil, nil, self, person_index:) unless form.start_year_2026_or_later?),
@@ -72,6 +76,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       (Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPersonValueCheck.new(nil, nil, self, person_index:) unless form.start_year_2026_or_later?),
       (Form::Lettings::Pages::NoHouseholdMemberLikelyToBePregnantCheck.new("no_household_member_likely_to_be_pregnant_person_#{person_index}_check", nil, self, person_index:) if form.start_year_2026_or_later?),
       Form::Lettings::Pages::PersonOverRetirementValueCheck.new("gender_#{person_index}_over_retirement_value_check", nil, self, person_index:),
+
       Form::Lettings::Pages::PersonWorkingSituation.new(nil, nil, self, person_index:),
       Form::Lettings::Pages::PersonUnderRetirementValueCheck.new("working_situation_#{person_index}_under_retirement_value_check", nil, self, person_index:),
       Form::Lettings::Pages::PersonOverRetirementValueCheck.new("working_situation_#{person_index}_over_retirement_value_check", nil, self, person_index:),
