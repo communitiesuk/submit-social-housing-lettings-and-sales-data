@@ -141,7 +141,7 @@ RSpec.describe Validations::DateValidations do
 
     it "can be within 20 years of the tenancy start date" do
       record.startdate = current_collection_start_date
-      record.mrcdate = current_collection_start_date - 20.years - 1.day
+      record.voiddate = current_collection_start_date - 20.years
       date_validator.validate_property_void_date(record)
       expect(record.errors["voiddate"]).to be_empty
       expect(record.errors["startdate"]).to be_empty
