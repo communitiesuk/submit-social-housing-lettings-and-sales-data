@@ -390,7 +390,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           working_situation_lead_tenant_net_income_value_check
           person_2_known
           person_2_age
-          person_2_age_net_income_value_check
+          age_2_net_income_value_check
           person_2_lead_partner
           no_household_member_likely_to_be_pregnant_person_age_2_check
           age_2_under_retirement_value_check
@@ -406,7 +406,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           working_situation_2_net_income_value_check
           person_3_known
           person_3_age
-          person_3_age_net_income_value_check
+          age_3_net_income_value_check
           person_3_lead_partner
           no_household_member_likely_to_be_pregnant_person_age_3_check
           age_3_under_retirement_value_check
@@ -422,7 +422,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           working_situation_3_net_income_value_check
           person_4_known
           person_4_age
-          person_4_age_net_income_value_check
+          age_4_net_income_value_check
           person_4_lead_partner
           no_household_member_likely_to_be_pregnant_person_age_4_check
           age_4_under_retirement_value_check
@@ -438,7 +438,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           working_situation_4_net_income_value_check
           person_5_known
           person_5_age
-          person_5_age_net_income_value_check
+          age_5_net_income_value_check
           person_5_lead_partner
           no_household_member_likely_to_be_pregnant_person_age_5_check
           age_5_under_retirement_value_check
@@ -454,7 +454,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           working_situation_5_net_income_value_check
           person_6_known
           person_6_age
-          person_6_age_net_income_value_check
+          age_6_net_income_value_check
           person_6_lead_partner
           no_household_member_likely_to_be_pregnant_person_age_6_check
           age_6_under_retirement_value_check
@@ -470,7 +470,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           working_situation_6_net_income_value_check
           person_7_known
           person_7_age
-          person_7_age_net_income_value_check
+          age_7_net_income_value_check
           person_7_lead_partner
           no_household_member_likely_to_be_pregnant_person_age_7_check
           age_7_under_retirement_value_check
@@ -486,7 +486,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
           working_situation_7_net_income_value_check
           person_8_known
           person_8_age
-          person_8_age_net_income_value_check
+          age_8_net_income_value_check
           person_8_lead_partner
           no_household_member_likely_to_be_pregnant_person_age_8_check
           age_8_under_retirement_value_check

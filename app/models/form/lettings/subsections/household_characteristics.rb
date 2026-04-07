@@ -54,7 +54,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Lettings::Pages::PersonKnown.new(nil, nil, self, person_index:),
 
       (Form::Lettings::Pages::PersonAge.new(nil, nil, self, person_index:) if form.start_year_2026_or_later?),
-      (Form::Lettings::Pages::NetIncomeValueCheck.new("person_#{person_index}_age_net_income_value_check", nil, self, person_index:) if form.start_year_2026_or_later?),
+      (Form::Lettings::Pages::NetIncomeValueCheck.new("age_#{person_index}_net_income_value_check", nil, self, person_index:) if form.start_year_2026_or_later?),
 
       relationship_question(person_index:),
       (Form::Lettings::Pages::PartnerUnder16ValueCheck.new("relationship_#{person_index}_partner_under_16_value_check", nil, self, person_index:) unless form.start_year_2026_or_later?),
