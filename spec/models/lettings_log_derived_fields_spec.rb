@@ -111,45 +111,6 @@ RSpec.describe LettingsLog, type: :model do
   end
 
   describe "deriving household member fields" do
-    context "when it is 2024", metadata: { year: 24 } do
-      let(:startdate) { collection_start_date_for_year(2024) }
-
-      before do
-        log.assign_attributes(
-          relat2: "X",
-          relat3: "C",
-          relat4: "X",
-          relat5: "C",
-          relat7: "C",
-          relat8: "X",
-          age1: 22,
-          age2: 16,
-          age4: 60,
-          age6: 88,
-          age7: 14,
-          age8: 42,
-        )
-
-        log.set_derived_fields!
-      end
-
-      it "correctly derives totchild" do
-        expect(log.totchild).to eq 3
-      end
-
-      it "correctly derives totelder" do
-        expect(log.totelder).to eq 2
-      end
-
-      it "correctly derives totadult" do
-        expect(log.totadult).to eq 3
-      end
-
-      it "correctly derives economic status for tenants under 16" do
-        expect(log.ecstat7).to eq 9
-      end
-    end
-
     context "when it is 2025", metadata: { year: 25 } do
       let(:startdate) { collection_start_date_for_year(2025) }
 

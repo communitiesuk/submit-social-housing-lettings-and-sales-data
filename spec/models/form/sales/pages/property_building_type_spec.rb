@@ -1,12 +1,15 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::PropertyBuildingType, type: :model do
+  include CollectionTimeHelper
+
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date) }
   let(:subsection) { instance_double(Form::Subsection, enabled?: true, form:) }
+  let(:saledate) { current_collection_start_date }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -24,45 +27,21 @@ RSpec.describe Form::Sales::Pages::PropertyBuildingType, type: :model do
     expect(page.description).to be_nil
   end
 
-  context "with form year 2024" do
-    let(:form) { Form.new(nil, 2024, [], "sales") }
-    let(:saledate) { Time.zone.local(2024, 4, 1) }
+  context "with a staircasing log" do
+    let(:form) { Form.new(nil, current_collection_start_year, [], "sales") }
+    let(:log) { build(:sales_log, :shared_ownership_setup_complete, staircase: 1, saledate:) }
 
-    context "with a staircasing log" do
-      let(:log) { build(:sales_log, :shared_ownership_setup_complete, staircase: 1, saledate:) }
-
-      it "is routed to" do
-        expect(page.routed_to?(log, nil)).to be true
-      end
-    end
-
-    context "with a non-staircasing log" do
-      let(:log) { build(:sales_log, staircase: nil, saledate:) }
-
-      it "is routed to" do
-        expect(page.routed_to?(log, nil)).to be true
-      end
+    it "is not routed to" do
+      expect(page.routed_to?(log, nil)).to be false
     end
   end
 
-  context "with form year 2025" do
-    let(:form) { Form.new(nil, 2025, [], "sales") }
-    let(:saledate) { Time.zone.local(2025, 4, 1) }
+  context "with a non-staircasing log" do
+    let(:form) { Form.new(nil, current_collection_start_year, [], "sales") }
+    let(:log) { build(:sales_log, staircase: nil, saledate:) }
 
-    context "with a staircasing log" do
-      let(:log) { build(:sales_log, :shared_ownership_setup_complete, staircase: 1, saledate:) }
-
-      it "is not routed to" do
-        expect(page.routed_to?(log, nil)).to be false
-      end
-    end
-
-    context "with a non-staircasing log" do
-      let(:log) { build(:sales_log, staircase: nil, saledate:) }
-
-      it "is routed to" do
-        expect(page.routed_to?(log, nil)).to be true
-      end
+    it "is routed to" do
+      expect(page.routed_to?(log, nil)).to be true
     end
   end
 end
