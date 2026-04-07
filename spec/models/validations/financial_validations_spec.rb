@@ -1246,7 +1246,7 @@ RSpec.describe Validations::FinancialValidations do
         let(:benefits) { 3 }
 
         it "does not add errors" do
-          financial_validator.validate_housing_universal_credit_matches_income_proportion(record)
+          financial_validator.validate_housing_benefits_matches_income_proportion(record)
           expect(record.errors["hb"]).to be_empty
           expect(record.errors["benefits"]).to be_empty
         end
@@ -1263,9 +1263,9 @@ RSpec.describe Validations::FinancialValidations do
         let(:benefits) { 3 }
 
         it "adds errors to hb and benefits" do
-          financial_validator.validate_housing_universal_credit_matches_income_proportion(record)
-          expect(record.errors["hb"]).to include(match I18n.t("validations.lettings.financial.hb.benefits_received_not_match_income_source"))
-          expect(record.errors["benefits"]).to include(match I18n.t("validations.lettings.financial.benefits.benefits_received_not_match_income_source"))
+          financial_validator.validate_housing_benefits_matches_income_proportion(record)
+          expect(record.errors["hb"]).to include(match I18n.t("validations.lettings.financial.hb.housing_benefits_not_match_income_source"))
+          expect(record.errors["benefits"]).to include(match I18n.t("validations.lettings.financial.benefits.housing_benefits_not_match_income_source"))
         end
       end
 
@@ -1274,7 +1274,7 @@ RSpec.describe Validations::FinancialValidations do
         let(:benefits) { 2 }
 
         it "does not add errors" do
-          financial_validator.validate_housing_universal_credit_matches_income_proportion(record)
+          financial_validator.validate_housing_benefits_matches_income_proportion(record)
           expect(record.errors["hb"]).to be_empty
           expect(record.errors["benefits"]).to be_empty
         end
@@ -1284,8 +1284,19 @@ RSpec.describe Validations::FinancialValidations do
         let(:hb) { 1 }
         let(:benefits) { 3 }
 
+        it "adds errors to hb and benefits" do
+          financial_validator.validate_housing_benefits_matches_income_proportion(record)
+          expect(record.errors["hb"]).to include(match I18n.t("validations.lettings.financial.hb.housing_benefits_not_match_income_source"))
+          expect(record.errors["benefits"]).to include(match I18n.t("validations.lettings.financial.benefits.housing_benefits_not_match_income_source"))
+        end
+      end
+
+      context "when tenant receives housing benefit and some household income comes from benefits" do
+        let(:hb) { 1 }
+        let(:benefits) { 2 }
+
         it "does not add errors" do
-          financial_validator.validate_housing_universal_credit_matches_income_proportion(record)
+          financial_validator.validate_housing_benefits_matches_income_proportion(record)
           expect(record.errors["hb"]).to be_empty
           expect(record.errors["benefits"]).to be_empty
         end
@@ -1296,7 +1307,7 @@ RSpec.describe Validations::FinancialValidations do
         let(:benefits) { 3 }
 
         it "does not add errors" do
-          financial_validator.validate_housing_universal_credit_matches_income_proportion(record)
+          financial_validator.validate_housing_benefits_matches_income_proportion(record)
           expect(record.errors["hb"]).to be_empty
           expect(record.errors["benefits"]).to be_empty
         end
@@ -1307,7 +1318,7 @@ RSpec.describe Validations::FinancialValidations do
         let(:benefits) { nil }
 
         it "does not add errors" do
-          financial_validator.validate_housing_universal_credit_matches_income_proportion(record)
+          financial_validator.validate_housing_benefits_matches_income_proportion(record)
           expect(record.errors["hb"]).to be_empty
           expect(record.errors["benefits"]).to be_empty
         end
