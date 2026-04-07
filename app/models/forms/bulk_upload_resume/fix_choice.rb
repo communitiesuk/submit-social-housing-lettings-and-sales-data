@@ -36,9 +36,9 @@ module Forms
 
       def error_report_path
         if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
-          send("summary_bulk_upload_#{log_type}_result_path", bulk_upload)
+          send("summary_bulk_upload_#{log_type}_result_path", bulk_upload, hide_upload_button: "true")
         else
-          send("bulk_upload_#{log_type}_result_path", bulk_upload)
+          send("bulk_upload_#{log_type}_result_path", bulk_upload, hide_upload_button: "true")
         end
       end
 
