@@ -82,6 +82,24 @@ RSpec.describe BulkUploadLettingsResultsController, type: :request do
           expect(response.body).to include("You moved to a different organisation since this file was uploaded. Upload the file again to get an accurate error report.")
         end
       end
+
+      context "and user has upload button shown" do
+        it "displays a link to fix errors" do
+          get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary"
+
+          expect(response.body).to include("Upload your file again")
+          expect(response.body).to include("/lettings-logs/bulk-upload-logs/start")
+        end
+      end
+
+      context "and user has upload button hidden" do
+        it "does not display a link to fix errors" do
+          get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary?hide_upload_button=true"
+
+          expect(response.body).not_to include("Upload your file again")
+          expect(response.body).not_to include("/lettings-logs/bulk-upload-logs/start")
+        end
+      end
     end
   end
 
@@ -150,6 +168,24 @@ RSpec.describe BulkUploadLettingsResultsController, type: :request do
 
         expect(response.body).to include("This error report is out of date.")
         expect(response.body).to include("You moved to a different organisation since this file was uploaded. Upload the file again to get an accurate error report.")
+      end
+    end
+
+    context "and user has upload button shown" do
+      it "displays a link to fix errors" do
+        get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}"
+
+        expect(response.body).to include("Upload your file again")
+        expect(response.body).to include("/lettings-logs/bulk-upload-logs/start")
+      end
+    end
+
+    context "and user has upload button hidden" do
+      it "does not display a link to fix errors" do
+        get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}?hide_upload_button=true"
+
+        expect(response.body).not_to include("Upload your file again")
+        expect(response.body).not_to include("/lettings-logs/bulk-upload-logs/start")
       end
     end
   end
