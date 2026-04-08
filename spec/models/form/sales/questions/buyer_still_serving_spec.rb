@@ -48,6 +48,8 @@ RSpec.describe Form::Sales::Questions::BuyerStillServing, type: :model do
         "4" => { "value" => "Yes" },
         "5" => { "value" => "No - they left up to and including 2 years ago" },
         "6" => { "value" => "No - they left more than 2 years ago" },
+        "divider" => { "value" => true },
+        "9" => { "value" => "Don’t know" },
       })
     end
   end

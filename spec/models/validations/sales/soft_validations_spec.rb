@@ -3,7 +3,8 @@ require "rails_helper"
 RSpec.describe Validations::Sales::SoftValidations do
   include CollectionTimeHelper
 
-  let(:record) { build(:sales_log) }
+  let(:saledate) { current_collection_start_date }
+  let(:record) { build(:sales_log, saledate:) }
 
   describe "income validations" do
     context "when validating soft range based on ecstat" do
@@ -29,57 +30,8 @@ RSpec.describe Validations::Sales::SoftValidations do
         expect(record).not_to be_income2_outside_soft_range_for_ecstat
       end
 
-      context "when log year is before 2025" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2024, 12, 25)) }
-
-        it "does not trigger for low income1 if ecstat1 has no soft min" do
-          record.income1 = 50
-          record.ecstat1 = 4
-          expect(record).not_to be_income1_outside_soft_range_for_ecstat
-        end
-
-        it "returns true if income1 is below soft min for ecstat1" do
-          record.income1 = 4500
-          record.ecstat1 = 1
-          expect(record).to be_income1_outside_soft_range_for_ecstat
-        end
-
-        it "returns false if income1 is >= soft min for ecstat1" do
-          record.income1 = 1500
-          record.ecstat1 = 2
-          expect(record).not_to be_income1_outside_soft_range_for_ecstat
-        end
-
-        it "does not trigger for income2 if ecstat2 has no soft min" do
-          record.income2 = 50
-          record.ecstat2 = 8
-          expect(record).not_to be_income2_outside_soft_range_for_ecstat
-        end
-
-        it "returns true if income2 is below soft min for ecstat2" do
-          record.income2 = 999
-          record.ecstat2 = 3
-          expect(record).to be_income2_outside_soft_range_for_ecstat
-        end
-
-        it "returns false if income2 is >= soft min for ecstat2" do
-          record.income2 = 2500
-          record.ecstat2 = 5
-          expect(record).not_to be_income2_outside_soft_range_for_ecstat
-        end
-
-        it "does not trigger for being over maxima" do
-          record.ecstat1 = 1
-          record.income1 = 200_000
-          record.ecstat2 = 2
-          record.income2 = 100_000
-          expect(record).not_to be_income1_outside_soft_range_for_ecstat
-          expect(record).not_to be_income2_outside_soft_range_for_ecstat
-        end
-      end
-
       context "when log year is 2025" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2025, 12, 25)) }
+        let(:record) { build(:sales_log, saledate: collection_start_date_for_year(2025)) }
 
         it "returns true if income1 is below soft min for ecstat1" do
           record.income1 = 13_399
@@ -396,17 +348,33 @@ RSpec.describe Validations::Sales::SoftValidations do
         expect(record).not_to be_mortgage_plus_deposit_less_than_discounted_value
       end
 
-      it "returns true if the deposit and mortgage add up to less than the discounted value" do
-        record.value = 500_000
-        record.discount = 10
-        record.mortgage = 200_000
-        record.deposit = 200_000
-        expect(record).to be_mortgage_plus_deposit_less_than_discounted_value
+      context "and 2025", metadata: { year: 25 } do
+        let(:saledate) { collection_start_date_for_year(2025) }
+
+        it "returns true if the deposit and mortgage add up to less than the discounted value" do
+          record.value = 500_000
+          record.discount = 10
+          record.mortgage = 200_000
+          record.deposit = 200_000
+          expect(record).to be_mortgage_plus_deposit_less_than_discounted_value
+        end
+      end
+
+      context "and 2026 or later", metadata: { year: 26 } do
+        let(:saledate) { collection_start_date_for_year_or_later(2026) }
+
+        it "returns false if the deposit and mortgage add up to less than the discounted value" do
+          record.value = 500_000
+          record.discount = 10
+          record.mortgage = 200_000
+          record.deposit = 200_000
+          expect(record).not_to be_mortgage_plus_deposit_less_than_discounted_value
+        end
       end
     end
 
     context "when validating extra borrowing" do
-      let(:record) { build(:sales_log, saledate: previous_collection_start_date) }
+      let(:saledate) { collection_start_date_for_year_or_later(2024) }
 
       it "returns false for logs from 2024 onwards" do
         record.extrabor = 2

@@ -29,6 +29,10 @@ module CollectionTimeHelper
     Time.zone.local(current_collection_start_year, 4, 1)
   end
 
+  def current_collection_after_crossover_start_date
+    Form::DEADLINES[current_collection_start_year][:edit_end_date] + 1.day
+  end
+
   def collection_end_date(date)
     Time.zone.local(collection_start_year_for_date(date) + 1, 3, 31).end_of_day
   end
@@ -93,5 +97,11 @@ module CollectionTimeHelper
 
     available_dates = (start_date..end_date).to_a - [date.to_date]
     available_dates.empty? ? nil : available_dates.sample
+  end
+
+  # useful for writing future tests that will also test the current time if it can or a future year if needed.
+  # stops tests being frozen on a specific year.
+  def collection_start_date_for_year_or_later(year)
+    collection_start_date_for_year([current_collection_start_year, year].max)
   end
 end

@@ -240,8 +240,8 @@ class BulkUpload::LettingsLogToCsv
       accessible_register, # 130
       log.owning_organisation.la? ? log.referral_register : nil,
       log.owning_organisation.prp? ? log.referral_register : nil,
-      log.referral_noms,
-      log.referral_org,
+      log.owning_organisation.prp? ? log.referral_noms : nil,
+      log.owning_organisation.prp? ? log.referral_org : nil,
       net_income_known,
       log.incfreq,
       log.earnings,

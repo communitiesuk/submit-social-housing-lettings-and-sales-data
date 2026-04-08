@@ -22,19 +22,45 @@ RSpec.describe BulkUpload, type: :model do
   end
 
   describe "value check clearing" do
-    context "with a lettings log bulk upload" do
-      let(:log) { build(:lettings_log, startdate: current_collection_start_date, bulk_upload:) }
+    context "when 2025", metadata: { year: 25 } do
+      let(:startdate) { collection_start_date_for_year(2025) }
+      let(:saledate) { collection_start_date_for_year(2025) }
 
-      it "has the correct number of value checks to be set as confirmed" do
-        expect(bulk_upload.fields_to_confirm(log)).to match_array %w[rent_value_check void_date_value_check major_repairs_date_value_check pregnancy_value_check retirement_value_check referral_value_check net_income_value_check scharge_value_check pscharge_value_check supcharg_value_check multiple_partners_value_check partner_under_16_value_check reasonother_value_check]
+      context "with a lettings log bulk upload" do
+        let(:log) { build(:lettings_log, startdate:, bulk_upload:) }
+
+        it "has the correct number of value checks to be set as confirmed" do
+          expect(bulk_upload.fields_to_confirm(log)).to match_array %w[rent_value_check void_date_value_check major_repairs_date_value_check pregnancy_value_check retirement_value_check referral_value_check net_income_value_check scharge_value_check pscharge_value_check supcharg_value_check multiple_partners_value_check partner_under_16_value_check reasonother_value_check]
+        end
+      end
+
+      context "with a sales log bulk upload" do
+        let(:log) { build(:sales_log, saledate:, bulk_upload:) }
+
+        it "has the correct number of value checks to be set as confirmed" do
+          expect(bulk_upload.fields_to_confirm(log)).to match_array %w[value_value_check monthly_charges_value_check percentage_discount_value_check income1_value_check income2_value_check combined_income_value_check retirement_value_check old_persons_shared_ownership_value_check buyer_livein_value_check wheel_value_check mortgage_value_check savings_value_check deposit_value_check staircase_bought_value_check stairowned_value_check hodate_check shared_ownership_deposit_value_check extrabor_value_check grant_value_check discounted_sale_value_check deposit_and_mortgage_value_check multiple_partners_value_check partner_under_16_value_check]
+        end
       end
     end
 
-    context "with a sales log bulk upload" do
-      let(:log) { build(:sales_log, saledate: current_collection_start_date, bulk_upload:) }
+    context "when 2026 or later", metadata: { year: 26 } do
+      let(:startdate) { collection_start_date_for_year_or_later(2026) }
+      let(:saledate) { collection_start_date_for_year_or_later(2026) }
 
-      it "has the correct number of value checks to be set as confirmed" do
-        expect(bulk_upload.fields_to_confirm(log)).to match_array %w[value_value_check monthly_charges_value_check percentage_discount_value_check income1_value_check income2_value_check combined_income_value_check retirement_value_check old_persons_shared_ownership_value_check buyer_livein_value_check wheel_value_check mortgage_value_check savings_value_check deposit_value_check staircase_bought_value_check stairowned_value_check hodate_check shared_ownership_deposit_value_check extrabor_value_check grant_value_check discounted_sale_value_check deposit_and_mortgage_value_check multiple_partners_value_check partner_under_16_value_check]
+      context "with a lettings log bulk upload" do
+        let(:log) { build(:lettings_log, startdate:, bulk_upload:) }
+
+        it "has the correct number of value checks to be set as confirmed" do
+          expect(bulk_upload.fields_to_confirm(log)).to match_array %w[rent_value_check void_date_value_check major_repairs_date_value_check pregnancy_value_check retirement_value_check net_income_value_check scharge_value_check pscharge_value_check supcharg_value_check reasonother_value_check tenancyother_value_check working_situation_illness_check]
+        end
+      end
+
+      context "with a sales log bulk upload" do
+        let(:log) { build(:sales_log, saledate:, bulk_upload:) }
+
+        it "has the correct number of value checks to be set as confirmed" do
+          expect(bulk_upload.fields_to_confirm(log)).to match_array %w[value_value_check monthly_charges_value_check percentage_discount_value_check income1_value_check income2_value_check combined_income_value_check retirement_value_check old_persons_shared_ownership_value_check buyer_livein_value_check wheel_value_check mortgage_value_check savings_value_check deposit_value_check staircase_bought_value_check stairowned_value_check hodate_check shared_ownership_deposit_value_check extrabor_value_check grant_value_check discounted_sale_value_check deposit_and_mortgage_value_check multiple_partners_value_check partner_under_16_value_check]
+        end
       end
     end
   end

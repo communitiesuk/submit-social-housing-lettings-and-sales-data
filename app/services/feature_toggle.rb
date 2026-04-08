@@ -1,6 +1,6 @@
 class FeatureToggle
   def self.allow_future_form_use?
-    Rails.env.development? || Rails.env.review? || Rails.env.staging?
+    false
   end
 
   def self.bulk_upload_duplicate_log_check_enabled?
@@ -28,7 +28,7 @@ class FeatureToggle
   end
 
   def self.create_test_logs_enabled?
-    Rails.env.development? || Rails.env.review? || Rails.env.staging?
+    Rails.env.development? || Rails.env.review?
   end
 
   def self.sales_export_enabled?
