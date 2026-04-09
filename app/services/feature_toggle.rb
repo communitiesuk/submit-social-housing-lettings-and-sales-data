@@ -38,6 +38,6 @@ class FeatureToggle
   # IDs of organisations a user must be in to be allowed the support role
   # if nil this feature will be disabled
   def self.support_organisation_allow_list
-    return [1] if Rails.env.production?
+    [1] if Rails.env.production?
   end
 end

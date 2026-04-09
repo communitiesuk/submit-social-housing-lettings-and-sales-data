@@ -393,6 +393,7 @@ class User < ApplicationRecord
 
   def role_is_allowed_to_be_in_organisation?(override_organisation_id: nil)
     return true unless support? && FeatureToggle.support_organisation_allow_list.present?
+
     FeatureToggle.support_organisation_allow_list.include?(override_organisation_id || organisation_id)
   end
 
