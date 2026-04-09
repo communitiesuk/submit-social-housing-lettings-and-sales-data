@@ -25,6 +25,7 @@ class User < ApplicationRecord
 
   validates :organisation_id, presence: true
   validate :organisation_not_merged
+  validate :support_user_is_in_correct_organisation
 
   has_paper_trail ignore: %w[last_sign_in_at
                              current_sign_in_at
@@ -390,6 +391,11 @@ class User < ApplicationRecord
     end
   end
 
+  def role_is_allowed_to_be_in_organisation?(override_organisation_id: nil)
+    return true unless support? && FeatureToggle.support_organisation_allow_list.present?
+    FeatureToggle.support_organisation_allow_list.include?(override_organisation_id || organisation_id)
+  end
+
 protected
 
   # Checks whether a password is needed or not. For validations only.
@@ -404,6 +410,16 @@ private
   def organisation_not_merged
     if organisation&.merge_date.present? && organisation.merge_date < Time.zone.now
       errors.add :organisation_id, I18n.t("validations.organisation.merged")
+    end
+  end
+
+  def support_user_is_in_correct_organisation
+    return if role_is_allowed_to_be_in_organisation?
+
+    if role_changed?
+      errors.add :organisation_id, I18n.t("validations.user.support_user_in_wrong_organisation.change_role")
+    else
+      errors.add :organisation_id, I18n.t("validations.user.support_user_in_wrong_organisation.change_organisation")
     end
   end
 

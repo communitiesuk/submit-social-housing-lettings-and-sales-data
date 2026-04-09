@@ -221,8 +221,14 @@ private
       @user.errors.add :phone
     end
 
-    if user_params.key?(:organisation_id) && user_params[:organisation_id].blank?
-      @user.errors.add :organisation_id, :blank
+    if user_params.key?(:organisation_id)
+      if user_params[:organisation_id].blank?
+        @user.errors.add :organisation_id, :blank
+      elsif !@user.role_is_allowed_to_be_in_organisation?(override_organisation_id: user_params[:organisation_id].to_i)
+        # this will also be flagged by the validation in user.rb.
+        # for convenience we show the error early before they go through the change org flow (involves reassigning logs).
+        @user.errors.add :organisation_id, I18n.t("validations.user.support_user_in_wrong_organisation.change_organisation")
+      end
     end
   end
 
