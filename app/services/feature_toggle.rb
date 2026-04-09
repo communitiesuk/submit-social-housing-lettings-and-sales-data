@@ -39,6 +39,5 @@ class FeatureToggle
   # if nil this feature will be disabled
   def self.support_organisation_allow_list
     return [1] if Rails.env.production?
-    return [1] if Rails.env.development?
   end
 end
