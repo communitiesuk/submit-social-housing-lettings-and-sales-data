@@ -254,10 +254,11 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     context "when initial purchase date == saledate" do
       let(:record) { build(:sales_log, initialpurchase: current_collection_start_date, saledate: current_collection_start_date) }
 
-      it "does not add an error" do
+      it "adds error" do
         sale_information_validator.validate_staircasing_initial_purchase_date(record)
 
-        expect(record.errors[:initialpurchase]).not_to be_present
+        expect(record.errors[:initialpurchase]).to eq([I18n.t("validations.sales.sale_information.initialpurchase.must_be_before_saledate")])
+        expect(record.errors[:saledate]).to eq([I18n.t("validations.sales.sale_information.saledate.must_be_after_initial_purchase_date")])
       end
     end
   end
