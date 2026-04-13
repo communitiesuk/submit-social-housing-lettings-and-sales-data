@@ -2228,7 +2228,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when form end date is in the past" do
-      let(:startdate) { Time.zone.local(2020, 4, 1) }
+      let(:startdate) { Time.zone.local(archived_collection_start_year, 4, 1) }
 
       before do
         allow(log).to receive_message_chain(:form, :new_logs_end_date).and_return(Time.zone.now - 1.day)
