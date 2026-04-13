@@ -30,7 +30,7 @@ module CollectionTimeHelper
   end
 
   def current_collection_after_crossover_start_date
-    Form::DEADLINES[current_collection_start_year][:edit_end_date] + 1.day
+    Form::DEADLINES[previous_collection_start_year][:edit_end_date] + 1.day
   end
 
   def collection_end_date(date)

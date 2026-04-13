@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Location, type: :model do
+  include CollectionTimeHelper
+
   before do
     LocalAuthorityLink.create(local_authority_id: LocalAuthority.find_by(code: "E07000030").id, linked_local_authority_id: LocalAuthority.find_by(code: "E06000063").id)
   end
@@ -1184,35 +1186,19 @@ RSpec.describe Location, type: :model do
     end
 
     context "when there is no start date" do
-      context "and the location was created at the start of the 2022/23 collection window" do
-        let(:location) { FactoryBot.build(:location, created_at: Time.zone.local(2022, 4, 6), startdate: nil) }
+      context "and the location was created at the start of the collection window" do
+        let(:location) { FactoryBot.build(:location, created_at: current_collection_start_date, startdate: nil) }
 
-        it "returns the beginning of 21/22 collection window" do
-          expect(location.available_from).to eq(Time.zone.local(2021, 4, 1))
+        it "returns the beginning of previous collection window" do
+          expect(location.available_from).to eq(previous_collection_start_date)
         end
       end
 
-      context "and the location was created at the end of the 2022/23 collection window" do
-        let(:location) { FactoryBot.build(:location, created_at: Time.zone.local(2023, 2, 6), startdate: nil) }
+      context "and the location was created after the crossover date" do
+        let(:location) { FactoryBot.build(:location, created_at: current_collection_after_crossover_start_date, startdate: nil) }
 
-        it "returns the beginning of 22/23 collection window" do
-          expect(location.available_from).to eq(Time.zone.local(2022, 4, 1))
-        end
-      end
-
-      context "and the location was created at the start of the 2021/22 collection window" do
-        let(:location) { FactoryBot.build(:location, created_at: Time.zone.local(2021, 4, 6), startdate: nil) }
-
-        it "returns the beginning of 20/21 collection window" do
-          expect(location.available_from).to eq(Time.zone.local(2020, 4, 1))
-        end
-      end
-
-      context "and the location was created at the end of the 2021/22 collection window" do
-        let(:location) { FactoryBot.build(:location, created_at: Time.zone.local(2022, 2, 6), startdate: nil) }
-
-        it "returns the beginning of 20/21 collection window" do
-          expect(location.available_from).to eq(Time.zone.local(2020, 4, 1))
+        it "returns the beginning of current collection window" do
+          expect(location.available_from).to eq(current_collection_start_date)
         end
       end
     end
