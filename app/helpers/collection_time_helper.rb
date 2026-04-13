@@ -81,6 +81,10 @@ module CollectionTimeHelper
     current_collection_end_year - 2
   end
 
+  def archived_collection_start_date
+    current_collection_start_date - 2.years
+  end
+
   def previous_collection_new_logs_end_date
     FormHandler.instance.lettings_form_for_start_year(previous_collection_start_year).new_logs_end_date
   end
