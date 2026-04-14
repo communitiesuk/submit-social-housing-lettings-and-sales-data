@@ -19,12 +19,17 @@ class Form::Sales::Questions::BuyerStillServing < ::Form::Question
     else
       {
         "4" => { "value" => "Yes" },
-        "5" => { "value" => "No" },
-        "6" => { "value" => "Buyer prefers not to say" },
+        "5" => { "value" => "No - they left up to and including 2 years ago" },
+        "6" => { "value" => "No - they left more than 2 years ago" },
         "divider" => { "value" => true },
-        "7" => { "value" => "Don’t know" },
+        "9" => { "value" => "Don’t know" },
+        "10" => { "value" => "No" },
       }.freeze
     end
+  end
+
+  def displayed_answer_options(_log, _user = nil)
+    answer_options.reject { |key, _v| key == "10" }
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 63, 2024 => 65, 2025 => 62, 2026 => 70 }.freeze
