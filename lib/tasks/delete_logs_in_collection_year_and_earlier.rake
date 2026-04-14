@@ -1,5 +1,5 @@
 desc "Deletes all logs in a given collection year and earlier. Note that this operation is PERMANENT and this will bypass callbacks/paper trail. Use only as instructed in a yearly cleanup task."
-task :delete_logs_before_year, %i[year] => :environment do |_task, args|
+task :delete_logs_in_collection_year_and_earlier, %i[year] => :environment do |_task, args|
   year = args[:year].to_i
 
   if year < 2020
