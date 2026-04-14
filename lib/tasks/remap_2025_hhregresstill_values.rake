@@ -9,9 +9,16 @@ task :remap_2025_hhregresstill_values, %i[before_datetime] => :environment do |_
   logs = SalesLog.filter_by_year(2025).where(bulk_upload_id: nil).where(hhregresstill: [5, 6, 7]).where("created_at < ?", before_datetime)
   puts "Updating #{logs.count} sales logs"
 
-  logs.where(hhregresstill: 5).update_all(hhregresstill: 10)
-  logs.where(hhregresstill: 6).update_all(hhregresstill: 9)
-  logs.where(hhregresstill: 7).update_all(hhregresstill: 9)
+  updated_ids = []
+  logs.find_each do |log|
+    new_value = case log.hhregresstill
+                when 5 then 10
+                when 6, 7 then 9
+                end
+    log.update!(hhregresstill: new_value)
+    updated_ids << log.id
+  end
 
+  puts "Updated log IDs: #{updated_ids.join(', ')}"
   puts "Done"
 end
