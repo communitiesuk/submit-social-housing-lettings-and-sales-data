@@ -418,7 +418,7 @@ private
     return if role_is_allowed_to_be_in_organisation?
 
     if role_changed?
-      errors.add :organisation_id, I18n.t("validations.user.support_user_in_wrong_organisation.change_role")
+      errors.add :role, I18n.t("validations.user.support_user_in_wrong_organisation.change_role")
     else
       errors.add :organisation_id, I18n.t("validations.user.support_user_in_wrong_organisation.change_organisation")
     end
