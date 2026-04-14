@@ -46,7 +46,7 @@ RSpec.describe BulkUploadSalesResultsController, type: :request do
       end
 
       context "and user has upload button shown" do
-        it "displays a link to fix errors" do
+        it "displays a link to reupload file" do
           get "/sales-logs/bulk-upload-results/#{bulk_upload.id}/summary"
 
           expect(response.body).to include("Upload your file again")
@@ -55,7 +55,7 @@ RSpec.describe BulkUploadSalesResultsController, type: :request do
       end
 
       context "and user has upload button hidden" do
-        it "does not display a link to fix errors" do
+        it "does not display a link to reupload file" do
           get "/sales-logs/bulk-upload-results/#{bulk_upload.id}/summary?hide_upload_button=true"
 
           expect(response.body).not_to include("Upload your file again")
@@ -147,7 +147,7 @@ RSpec.describe BulkUploadSalesResultsController, type: :request do
     end
 
     context "and user has upload button shown" do
-      it "displays a link to fix errors" do
+      it "displays a link to reupload file" do
         get "/sales-logs/bulk-upload-results/#{bulk_upload.id}"
 
         expect(response.body).to include("Upload your file again")
@@ -156,7 +156,7 @@ RSpec.describe BulkUploadSalesResultsController, type: :request do
     end
 
     context "and user has upload button hidden" do
-      it "does not display a link to fix errors" do
+      it "does not display a link to reupload file" do
         get "/sales-logs/bulk-upload-results/#{bulk_upload.id}?hide_upload_button=true"
 
         expect(response.body).not_to include("Upload your file again")
