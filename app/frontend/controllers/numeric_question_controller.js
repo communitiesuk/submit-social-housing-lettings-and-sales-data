@@ -11,7 +11,7 @@ export default class extends Controller {
   calculateFields () {
     const affectedField = this.element.dataset.target
     const fieldsToAdd = JSON.parse(this.element.dataset.calculated).map(x => `lettings-log-${x.replaceAll('_', '-')}-field`)
-    const valuesToAdd = fieldsToAdd.map(x => getFieldValue(x)).filter(x => x)
+    const valuesToAdd = fieldsToAdd.map(x => getFieldValue(x)).filter(x => x && !isNaN(parseFloat(x)))
     const newValue = valuesToAdd.map(x => parseFloat(x)).reduce((a, b) => a + b, 0).toFixed(2)
     const elementToUpdate = document.getElementById(affectedField)
     elementToUpdate.value = newValue

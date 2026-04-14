@@ -7,7 +7,7 @@ en:
             page_header: ""
             check_answer_label: "Any buyer has served as regulars in the UK armed forces"
             check_answer_prompt: "Tell us if any buyer has ever served as a regular in the UK armed forces"
-            hint_text: "A regular is somebody who has served in the Royal Navy, the Royal Marines, the Royal Airforce or Army full time and does not include reserve forces"
+            hint_text: "A regular is somebody who has served in the Royal Navy, the Royal Marines, the Royal Air Force or Army full time and does not include reserve forces"
             question_text: "Have any of the buyers ever served as a regular in the UK armed forces?"
 
           hhregresstill:
