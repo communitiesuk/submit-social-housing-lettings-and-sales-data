@@ -122,11 +122,11 @@ class FormHandler
       forms.delete("archived_lettings")
     end
 
-    if Rails.env.test?
-      forms.merge({ fake_lettings_2021: Form.new("spec/fixtures/forms/2021_2022.json"), real_lettings_2021: Form.new("config/forms/2021_2022.json") })
-    else
-      forms
-    end
+    # if Rails.env.test?
+      # forms.merge({ fake_lettings_2021: Form.new("spec/fixtures/forms/2021_2022.json"), real_lettings_2021: Form.new("config/forms/2021_2022.json") })
+    # else
+    forms
+    # end
   end
 
   def lettings_form_for_start_year(year)

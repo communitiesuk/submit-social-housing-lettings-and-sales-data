@@ -87,13 +87,13 @@
     <prevloc>E07000105</prevloc>
     <hb>6</hb>
     <hbrentshortfall>1</hbrentshortfall>
-    <mrcdate>2020-05-05T10:36:49+01:00</mrcdate>
+    <mrcdate>{mrcdate}</mrcdate>
     <incref>0</incref>
-    <startdate>2022-02-02T10:36:49+00:00</startdate>
+    <startdate>{startdate}</startdate>
     <armedforces>1</armedforces>
     <unitletas>2</unitletas>
     <builtype>1</builtype>
-    <voiddate>2019-11-03T00:00:00+00:00</voiddate>
+    <voiddate>{voiddate}</voiddate>
     <renttype>2</renttype>
     <needstype>1</needstype>
     <lettype>7</lettype>
@@ -152,8 +152,8 @@
     <maningorgid>{managing_org_id}</maningorgid>
     <maningorgname>{managing_org_name}</maningorgname>
     <manhcnum>1234</manhcnum>
-    <createddate>2022-05-01T00:00:00+01:00</createddate>
-    <uploaddate>2022-05-01T00:00:00+01:00</uploaddate>
+    <createddate>{startdate}</createddate>
+    <uploaddate>{startdate}</uploaddate>
     <log_id>{log_id}</log_id>
     <assigned_to>test1@example.com</assigned_to>
     <created_by>test1@example.com</created_by>
