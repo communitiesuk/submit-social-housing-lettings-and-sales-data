@@ -2,6 +2,8 @@ require "rails_helper"
 require "rake"
 
 RSpec.describe "set_sales_managing_organisation" do
+  include CollectionTimeHelper
+
   describe ":set_sales_managing_organisation", type: :task do
     subject(:task) { Rake::Task["set_sales_managing_organisation"] }
 
@@ -34,7 +36,7 @@ RSpec.describe "set_sales_managing_organisation" do
       end
 
       it "skips validations" do
-        sales_log.saledate = Time.zone.local(2021, 3, 3)
+        sales_log.saledate = archived_collection_start_date
         sales_log.save!(validate: false)
         expect(sales_log.managing_organisation_id).to be_nil
         expect(sales_log.status).to eq("in_progress")
