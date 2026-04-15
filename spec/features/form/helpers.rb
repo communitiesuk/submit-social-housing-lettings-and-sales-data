@@ -5,6 +5,19 @@ module Helpers
     click_button("Save and continue")
   end
 
+  def fill_in_date_question(lettings_log_id, question, day, month, year, path, conditional_field: nil)
+    visit("/lettings-logs/#{lettings_log_id}/#{path}")
+    choose("lettings-log-#{conditional_field}-field", allow_label_click: true) if conditional_field
+    fill_in("lettings_log[#{question}]", with: [day, month, year].join("/"))
+    click_button("Save and continue")
+  end
+
+  def fill_in_radio_question(lettings_log_id, question, code, path)
+    visit("/lettings-logs/#{lettings_log_id}/#{path}")
+    choose("lettings-log-#{question.to_s.dasherize}-#{code}-field")
+    click_button("Save and continue")
+  end
+
   def answer_all_questions_in_income_subsection(lettings_log)
     visit("/lettings-logs/#{lettings_log.id}/net-income")
     fill_in("lettings-log-earnings-field", with: 18_000)
