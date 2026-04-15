@@ -318,10 +318,11 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     context "when last transaction date == saledate" do
       let(:record) { build(:sales_log, lasttransaction: current_collection_start_date, saledate: current_collection_start_date) }
 
-      it "does not add an error" do
+      it "adds error" do
         sale_information_validator.validate_staircasing_last_transaction_date(record)
 
-        expect(record.errors[:lasttransaction]).not_to be_present
+        expect(record.errors[:lasttransaction]).to eq([I18n.t("validations.sales.sale_information.lasttransaction.must_be_before_saledate")])
+        expect(record.errors[:saledate]).to eq([I18n.t("validations.sales.sale_information.saledate.must_be_after_last_transaction_date")])
       end
     end
 
@@ -349,10 +350,11 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     context "when last transaction date == initial purchase date" do
       let(:record) { build(:sales_log, lasttransaction: current_collection_start_date, initialpurchase: current_collection_start_date) }
 
-      it "does not add an error" do
+      it "adds error" do
         sale_information_validator.validate_staircasing_last_transaction_date(record)
 
-        expect(record.errors[:lasttransaction]).not_to be_present
+        expect(record.errors[:lasttransaction]).to eq([I18n.t("validations.sales.sale_information.lasttransaction.must_be_after_initial_purchase")])
+        expect(record.errors[:initialpurchase]).to eq([I18n.t("validations.sales.sale_information.initialpurchase.must_be_before_last_transaction")])
       end
     end
   end
