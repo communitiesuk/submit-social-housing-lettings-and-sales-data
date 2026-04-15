@@ -1,5 +1,7 @@
 FROM ruby:3.4.4-alpine3.20 as base
 
+# RUN apk update && apk upgrade --no-cache
+
 WORKDIR /app
 
 # Add the timezone as it's not configured by default in Alpine
