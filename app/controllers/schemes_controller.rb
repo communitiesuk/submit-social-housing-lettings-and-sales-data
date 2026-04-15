@@ -236,6 +236,7 @@ class SchemesController < ApplicationController
   end
 
   def email_csv
+    DownloadRecord.build_from_user(download_type: :scheme, download_filters: session_filters.to_s, user: current_user).save!
     all_orgs = params["organisation_select"] == "all"
     SchemeEmailCsvJob.perform_later(current_user, search_term, session_filters, all_orgs, nil, params[:download_type])
     redirect_to csv_confirmation_schemes_path
