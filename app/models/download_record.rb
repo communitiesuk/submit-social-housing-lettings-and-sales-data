@@ -8,7 +8,6 @@ class DownloadRecord < ApplicationRecord
     user: 0,
     lettings_log: 1,
     sales_log: 2,
-    organisation: 3,
     scheme: 4,
   }.freeze
 
