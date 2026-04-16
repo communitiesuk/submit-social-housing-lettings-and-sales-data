@@ -6,8 +6,10 @@ task :search_for_la_on_logs_with_nil_la, [:year] => :environment do |_task, args
 
   lettings_logs = LettingsLog.filter_by_year(year).where(la: nil, needstype: 1, status: "completed")
   sales_logs = LettingsLog.filter_by_year(year).where(la: nil, status: "completed")
+  lettings_logs_count = lettings_logs.count
+  sales_logs_count = sales_logs.count
 
-  puts "Checking LA on #{lettings_logs.count} lettings logs in #{year}"
+  puts "Checking LA on #{lettings_logs_count} lettings logs in #{year}"
 
   i = 0
   lettings_logs.find_each do |log|
@@ -24,7 +26,9 @@ task :search_for_la_on_logs_with_nil_la, [:year] => :environment do |_task, args
     end
   end
 
-  puts "Checking LA on #{sales_logs.count} sales logs in #{year}"
+  puts "Done #{lettings_logs_count} lettings logs"
+
+  puts "Checking LA on #{sales_logs_count} sales logs in #{year}"
 
   i = 0
   sales_logs.find_each do |log|
@@ -40,6 +44,8 @@ task :search_for_la_on_logs_with_nil_la, [:year] => :environment do |_task, args
       puts "Processed #{i} sales logs"
     end
   end
+
+  puts "Done #{sales_logs_count} sales logs"
 
   puts "Done"
 end
