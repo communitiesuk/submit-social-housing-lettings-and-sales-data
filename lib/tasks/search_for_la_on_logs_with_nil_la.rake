@@ -5,7 +5,7 @@ task :search_for_la_on_logs_with_nil_la, [:year] => :environment do |_task, args
   year = args[:year]&.to_i || current_collection_start_year
 
   lettings_logs = LettingsLog.filter_by_year(year).where(la: nil, needstype: 1, status: "completed")
-  sales_logs = LettingsLog.filter_by_year(year).where(la: nil, status: "completed")
+  sales_logs = SalesLog.filter_by_year(year).where(la: nil, status: "completed")
   lettings_logs_count = lettings_logs.count
   sales_logs_count = sales_logs.count
 
