@@ -40,7 +40,7 @@ class OrganisationsController < ApplicationController
   end
 
   def email_schemes_csv
-    DownloadRecord.build_from_user(download_type: :scheme, download_filters: session_filters.to_s, user: current_user).save!
+    DownloadRecord.build_from_user(download_type: :scheme, download_filters: session_filters.merge({ download_type: params[:download_type] }).to_s, user: current_user).save!
     SchemeEmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation, params[:download_type])
     redirect_to schemes_csv_confirmation_organisation_path
   end
