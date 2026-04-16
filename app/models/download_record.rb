@@ -1,4 +1,4 @@
-# Not used functionally, but used to allow auditing of what users downloaded what info
+# Used to allow for easier auditing of what users downloaded what info
 # Caches some info about the user at the time of download
 class DownloadRecord < ApplicationRecord
   belongs_to :user
