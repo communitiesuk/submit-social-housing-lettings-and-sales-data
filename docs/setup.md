@@ -70,21 +70,19 @@ We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage NodeJS version
 4. Install Ruby and Bundler
 
    ```bash
-   rbenv install 3.4.4
-   rbenv global 3.4.4
+   rbenv install 3.4.9
+   rbenv global 3.4.9
    source ~/.bashrc
    gem install bundler
    ```
 
 5. Install JavaScript dependencies
 
-   Note that we currently use node v16, which is no longer the latest LTS version so you will need to specify the version number when installing
-
    macOS (using nvm):
 
    ```bash
-   nvm install 20
-   nvm use 20
+   nvm install 22
+   nvm use 22
    brew install yarn
    ```
 
