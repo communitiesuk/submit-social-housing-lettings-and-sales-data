@@ -115,8 +115,9 @@ namespace :log_la_fix do
           next
         end
 
+        FileUtils.mkdir_p("log_output")
         sanitised_name = org_name.parameterize(separator: "_")
-        output_file = "#{sanitised_name}_#{log_type}_logs_moved_to_incomplete_with_no_la.csv"
+        output_file = "log_output/#{sanitised_name}_#{log_type}_logs_moved_to_incomplete_with_no_la.csv"
         CSV.open(output_file, "w") do |csv|
           csv << table.headers
           rows.each { |row| csv << row }
