@@ -8,7 +8,7 @@ class DownloadRecord < ApplicationRecord
     user: 0,
     lettings_log: 1,
     sales_log: 2,
-    scheme: 4,
+    scheme_location: 3,
   }.freeze
 
   enum download_type: DOWNLOAD_TYPE
