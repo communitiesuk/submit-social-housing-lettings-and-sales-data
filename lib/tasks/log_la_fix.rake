@@ -23,7 +23,7 @@ namespace :log_la_fix do
       end
 
       if log.la.nil? && log.status == "in_progress"
-        puts "#lettings##{log.id},\"#{log.tenancycode}\",\"#{log.propcode}\",\"#{log.owning_organisation&.name}\",\"#{log.managing_organisation&.name}\",\"#{log.assigned_to&.name}\",#{log.startdate},\"#{log.address_line1}\",\"#{log.address_line2}\",\"#{log.town_or_city}\",\"#{log.county}\",\"#{log.postcode_full}\",\"#{log.la}\""
+        puts "#lettings##{log.id},\"#{log.tenancycode}\",\"#{log.propcode}\",#{log.owning_organisation_id},\"#{log.owning_organisation&.name}\",#{log.managing_organisation_id},\"#{log.managing_organisation&.name}\",#{log.assigned_to_id},\"#{log.assigned_to&.name}\",#{log.startdate},\"#{log.address_line1}\",\"#{log.address_line2}\",\"#{log.town_or_city}\",\"#{log.county}\",\"#{log.postcode_full}\",\"#{log.la}\""
       end
 
       i += 1
@@ -47,7 +47,7 @@ namespace :log_la_fix do
       end
 
       if log.la.nil? && log.status == "in_progress"
-        puts "#sales##{log.id},\"#{log.purchid}\",\"#{log.owning_organisation&.name}\",\"#{log.managing_organisation&.name}\",\"#{log.assigned_to&.name}\",#{log.saledate},\"#{log.address_line1}\",\"#{log.address_line2}\",\"#{log.town_or_city}\",\"#{log.county}\",\"#{log.postcode_full}\",\"#{log.la}\""
+        puts "#sales##{log.id},\"#{log.purchid}\",#{log.owning_organisation_id},\"#{log.owning_organisation&.name}\",#{log.managing_organisation_id},\"#{log.managing_organisation&.name}\",#{log.assigned_to_id},\"#{log.assigned_to&.name}\",#{log.saledate},\"#{log.address_line1}\",\"#{log.address_line2}\",\"#{log.town_or_city}\",\"#{log.county}\",\"#{log.postcode_full}\",\"#{log.la}\""
       end
 
       i += 1
@@ -67,8 +67,8 @@ namespace :log_la_fix do
 
     file = "output.txt"
 
-    lettings_headers = %w[id tenancycode propcode owning_organisation managing_organisation assigned_to startdate address_line1 address_line2 town_or_city county postcode_full la]
-    sales_headers = %w[id purchid owning_organisation managing_organisation assigned_to saledate address_line1 address_line2 town_or_city county postcode_full la]
+    lettings_headers = %w[id tenancycode propcode owning_organisation_id owning_organisation managing_organisation_id managing_organisation assigned_to_id assigned_to startdate address_line1 address_line2 town_or_city county postcode_full la]
+    sales_headers = %w[id purchid owning_organisation_id owning_organisation managing_organisation_id managing_organisation assigned_to_id assigned_to saledate address_line1 address_line2 town_or_city county postcode_full la]
 
     lettings_csv = CSV.open("lettings_logs_moved_to_incomplete_with_no_la.csv", "w")
     sales_csv = CSV.open("sales_logs_moved_to_incomplete_with_no_la.csv", "w")
