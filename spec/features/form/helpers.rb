@@ -18,17 +18,6 @@ module Helpers
     click_button("Save and continue")
   end
 
-  def answer_all_questions_in_income_subsection(lettings_log)
-    visit("/lettings-logs/#{lettings_log.id}/net-income")
-    fill_in("lettings-log-earnings-field", with: 18_000)
-    choose("lettings-log-incfreq-2-field")
-    click_button("Save and continue")
-    choose("lettings-log-benefits-0-field")
-    click_button("Save and continue")
-    choose("lettings-log-hb-1-field")
-    click_button("Save and continue")
-  end
-
   def sign_in(user)
     visit("/lettings-logs")
     fill_in("user[email]", with: user.email)
