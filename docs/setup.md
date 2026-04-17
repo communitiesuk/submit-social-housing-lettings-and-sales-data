@@ -81,8 +81,8 @@ We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage NodeJS version
    macOS (using nvm):
 
    ```bash
-   nvm install 22
-   nvm use 22
+   nvm install 24
+   nvm use 24
    brew install yarn
    ```
 
