@@ -2,13 +2,13 @@ FROM ruby:3.4.9-alpine3.23 as base
 
 WORKDIR /app
 
+# Upgrade base packages to pick up latest security patches
+RUN apk upgrade --no-cache
+
 # Add the timezone as it's not configured by default in Alpine
 RUN apk add --update --no-cache tzdata && \
     cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
-    echo "Europe/London" > /etc/timezone
-
-# Upgrade base packages to pick up latest security patches
-RUN apk upgrade --no-cache
+    echo "Europe/London" > /etc/timezone \
 
 # build-base: compilation tools for bundle
 # yarn: node package manager
