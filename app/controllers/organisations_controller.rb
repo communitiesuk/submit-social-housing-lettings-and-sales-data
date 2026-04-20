@@ -40,6 +40,7 @@ class OrganisationsController < ApplicationController
   end
 
   def email_schemes_csv
+    DownloadRecord.build_from_user(download_type: :scheme_location, download_filters: session_filters.merge({ download_type: params[:download_type] }).to_s, user: current_user).save!
     SchemeEmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation, params[:download_type])
     redirect_to schemes_csv_confirmation_organisation_path
   end
@@ -72,6 +73,7 @@ class OrganisationsController < ApplicationController
         end
       end
       format.csv do
+        DownloadRecord.build_from_user(download_type: :user, download_filters: session_filters.to_s, user: current_user).save!
         send_data byte_order_mark + unpaginated_filtered_users.to_csv, filename: "users-#{@organisation.name}-#{Time.zone.now}.csv"
       end
     end
@@ -205,6 +207,7 @@ class OrganisationsController < ApplicationController
   end
 
   def email_lettings_csv
+    DownloadRecord.build_from_user(download_type: :lettings_log, download_filters: session_filters.to_s, user: current_user).save!
     EmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation, codes_only_export?, "lettings", session_filters["years"].first.to_i)
     redirect_to lettings_logs_csv_confirmation_organisation_path
   end
@@ -243,6 +246,7 @@ class OrganisationsController < ApplicationController
   end
 
   def email_sales_csv
+    DownloadRecord.build_from_user(download_type: :sales_log, download_filters: session_filters.to_s, user: current_user).save!
     EmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation, codes_only_export?, "sales", session_filters["years"].first.to_i)
     redirect_to sales_logs_csv_confirmation_organisation_path
   end
