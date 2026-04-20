@@ -110,7 +110,7 @@ namespace :log_la_fix do
       end
 
       rows_by_org.each do |org_name, rows|
-        if rows.size <= 30
+        if rows.size < 30
           puts "Skipping #{org_name} (#{rows.size} rows)"
           next
         end
