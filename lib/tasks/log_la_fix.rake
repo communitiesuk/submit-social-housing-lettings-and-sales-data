@@ -47,7 +47,7 @@ namespace :log_la_fix do
       end
 
       if log.la.nil? && log.status == "in_progress"
-        puts "#sales##{log.id},\"#{log.purchid}\",#{log.owning_organisation_id},\"#{log.owning_organisation&.name}\",#{log.managing_organisation_id},\"#{log.managing_organisation&.name}\",#{log.assigned_to_id},\"#{log.assigned_to&.name}\",#{log.saledate},\"#{log.address_line1}\",\"#{log.address_line2}\",\"#{log.town_or_city}\",\"#{log.county}\",\"#{log.postcode_full}\",\"#{log.la}\""
+        puts "#sales##{log.id},\"#{log.purchid}\",#{log.owning_organisation_id},\"#{log.owning_organisation&.name}\",#{log.managing_organisation_id},\"#{log.managing_organisation&.name}\",#{log.assigned_to_id},\"#{log.assigned_to&.name}\",#{log.saledate},\"#{log.address_line1}\",\"#{log.address_line2}\",\"#{log.town_or_city}\",\"#{log.county}\",\"#{log.postcode_full}\",\"\",\"\""
       end
 
       i += 1
