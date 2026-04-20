@@ -62,7 +62,7 @@ namespace :log_la_fix do
   end
 
   desc "Parse the output of search_for_la_on_logs_with_nil_la into separate lettings and sales CSV files"
-  task :parse_logs_moved_to_incomplete_with_no_la do
+  task parse_logs_moved_to_incomplete_with_no_la: :environment do
     require "csv"
 
     file = "output.txt"
@@ -95,7 +95,7 @@ namespace :log_la_fix do
   end
 
   desc "Split lettings and sales CSVs by managing organisation into separate files per org"
-  task :split_logs_by_managing_org do
+  task split_logs_by_managing_org: :environment do
     require "csv"
 
     %w[lettings sales].each do |log_type|
