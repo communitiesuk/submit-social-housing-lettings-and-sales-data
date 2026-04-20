@@ -7,6 +7,8 @@ RUN apk add --update --no-cache tzdata && \
     cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
     echo "Europe/London" > /etc/timezone
 
+RUN apk upgrade --no-cache
+
 # build-base: compilation tools for bundle
 # yarn: node package manager
 # postgresql-dev: postgres driver and libraries
