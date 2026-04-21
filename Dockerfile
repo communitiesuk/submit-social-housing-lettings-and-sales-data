@@ -43,7 +43,7 @@ RUN bundle config set without ""
 RUN bundle install --jobs=4 --no-binstubs --no-cache
 
 # Install gecko driver for Capybara tests
-RUN apk add firefox-esr=140.9.1-r0
+RUN apk add firefox=145.0-r0
 RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz \
     && tar -xvzf geckodriver-v0.31.0-linux64.tar.gz \
     && rm geckodriver-v0.31.0-linux64.tar.gz \
