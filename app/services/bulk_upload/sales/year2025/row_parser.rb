@@ -691,7 +691,7 @@ private
     invalid_fields.each do |field|
       # ensure questions not routed to are not included in error report
       error_questions_ids = field_mapping_for_errors
-                              .select { |_k,  fields| fields.map(&:to_s).include?(field.to_s) }
+                              .select { |_k, fields| fields.map(&:to_s).include?(field.to_s) }
                               .keys
                               .map(&:to_s)
       error_questions = questions.select { |question| error_questions_ids.include?(question.id) }
