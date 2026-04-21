@@ -25,11 +25,11 @@ en:
         initialpurchase:
           must_be_after_1980: "The initial purchase date must be after January 1, 1980."
           must_be_before_last_transaction: "The initial purchase date must be before the last staircasing transaction date."
-          must_be_before_saledate: "The initial staircasing transaction date must be before the sale date of this staircasing transaction."
+          must_be_before_saledate: "The initial purchase date must be before the date of this sale."
         lasttransaction:
           must_be_after_1980: "The last staircasing transaction date must be after January 1, 1980."
           must_be_after_initial_purchase: "The last staircasing transaction date must be after the initial purchase date."
-          must_be_before_saledate: "The initial staircasing transaction date must be before the sale date of this staircasing transaction."
+          must_be_before_saledate: "The last staircasing transaction date must be before the date of this sale."
         fromprop:
           previous_property_type_bedsit: "A bedsit cannot have more than 1 bedroom."
         frombeds:
