@@ -42,7 +42,7 @@ module Validations::Sales::SaleInformationValidations
       record.errors.add :initialpurchase, I18n.t("validations.sales.sale_information.initialpurchase.must_be_after_1980")
     end
 
-    if record.saledate.present? && record.initialpurchase >= record.saledate
+    if record.saledate.present? && ((record.initialpurchase > record.saledate) || (record.initialpurchase == record.saledate && record.form.start_year_2026_or_later?))
       record.errors.add :initialpurchase, I18n.t("validations.sales.sale_information.initialpurchase.must_be_before_saledate")
       record.errors.add :saledate, :skip_bu_error, message: I18n.t("validations.sales.sale_information.saledate.must_be_after_initial_purchase_date")
     end
@@ -55,11 +55,11 @@ module Validations::Sales::SaleInformationValidations
       record.errors.add :lasttransaction, I18n.t("validations.sales.sale_information.lasttransaction.must_be_after_1980")
     end
 
-    if record.saledate.present? && record.lasttransaction >= record.saledate
+    if record.saledate.present? && ((record.lasttransaction > record.saledate) || (record.lasttransaction == record.saledate && record.form.start_year_2026_or_later?))
       record.errors.add :lasttransaction, I18n.t("validations.sales.sale_information.lasttransaction.must_be_before_saledate")
       record.errors.add :saledate, :skip_bu_error, message: I18n.t("validations.sales.sale_information.saledate.must_be_after_last_transaction_date")
     end
-    if record.initialpurchase.present? && record.lasttransaction <= record.initialpurchase
+    if record.initialpurchase.present? && ((record.lasttransaction < record.initialpurchase) || (record.lasttransaction == record.initialpurchase && record.form.start_year_2026_or_later?))
       record.errors.add :initialpurchase, I18n.t("validations.sales.sale_information.initialpurchase.must_be_before_last_transaction")
       record.errors.add :lasttransaction, I18n.t("validations.sales.sale_information.lasttransaction.must_be_after_initial_purchase")
     end
