@@ -43,14 +43,14 @@ RUN bundle config set without ""
 RUN bundle install --jobs=4 --no-binstubs --no-cache
 
 # Install gecko driver for Capybara tests
-RUN apk add firefox
+RUN apk add firefox-esr=140.9.1-r0
 RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz \
     && tar -xvzf geckodriver-v0.31.0-linux64.tar.gz \
     && rm geckodriver-v0.31.0-linux64.tar.gz \
     && chmod +x geckodriver \
     && mv geckodriver /usr/local/bin/
 
-CMD bundle exec rake parallel:setup && bundle exec rake parallel:spec
+CMD ["sh", "-c", "bundle exec rake parallel:setup && bundle exec rake parallel:spec"]
 
 FROM base as development
 
@@ -64,7 +64,7 @@ RUN bundle install --jobs=4 --no-binstubs --no-cache
 
 USER nonroot
 
-CMD bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
+CMD ["sh", "-c", "bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0"]
 
 FROM base as production
 
@@ -78,4 +78,4 @@ RUN chown -R nonroot performance_test
 
 USER nonroot
 
-CMD bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
+CMD ["sh", "-c", "bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0"]
