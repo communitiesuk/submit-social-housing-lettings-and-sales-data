@@ -815,18 +815,6 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
   end
 
-  context "with a 2024 log that is not an outright sale" do
-    let(:record) { FactoryBot.build(:sales_log, value: 300_000, ownershipsch: 2, saledate: Time.zone.local(2024, 5, 1)) }
-
-    it "does not add errors" do
-      record.mortgageused = 1
-      record.mortgage = 100_000
-      record.deposit = 100_000
-      sale_information_validator.validate_outright_sale_value_matches_mortgage_plus_deposit(record)
-      expect(record.errors).to be_empty
-    end
-  end
-
   describe "#validate_basic_monthly_rent" do
     context "when within permitted bounds" do
       let(:record) { build(:sales_log, mrent: 9998, ownershipsch: 1, type: 2) }

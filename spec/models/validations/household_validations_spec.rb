@@ -53,7 +53,7 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       context "when form year is >= 2024" do
-        let(:startdate) { Time.zone.local(2024, 4, 1) }
+        let(:startdate) { current_collection_start_date }
 
         context "when checking the content of reasonother" do
           it "validates that the reason doesn't match phrase indicating homelessness" do
@@ -271,7 +271,7 @@ RSpec.describe Validations::HouseholdValidations do
 
   describe "#validate_person_age_matches_relationship" do
     context "with 2024 logs" do
-      let(:startdate) { Time.zone.local(2024, 4, 1) }
+      let(:startdate) { current_collection_start_date }
 
       it "does not add an error is person under 16 is a partner" do
         record.age2 = 14
@@ -293,7 +293,7 @@ RSpec.describe Validations::HouseholdValidations do
 
   describe "#validate_person_age_matches_economic_status" do
     context "with 2024 logs" do
-      let(:startdate) { Time.zone.local(2024, 4, 1) }
+      let(:startdate) { current_collection_start_date }
 
       it "does not run the validation" do
         record.age2 = 14
@@ -309,7 +309,7 @@ RSpec.describe Validations::HouseholdValidations do
 
   describe "#validate_person_age_and_relationship_matches_economic_status" do
     context "with 2024 logs" do
-      let(:startdate) { Time.zone.local(2024, 4, 1) }
+      let(:startdate) { current_collection_start_date }
 
       context "when the household contains a tenant’s child between the ages of 16 and 19" do
         it "does not add an error" do

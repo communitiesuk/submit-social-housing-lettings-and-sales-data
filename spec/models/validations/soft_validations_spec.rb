@@ -18,7 +18,7 @@ RSpec.describe Validations::SoftValidations do
         soft_max: 89.54,
         hard_min: 9.87,
         hard_max: 100.99,
-        start_year: 2021,
+        start_year: current_collection_start_year,
       )
 
       record.la = "E07000223"
@@ -26,7 +26,7 @@ RSpec.describe Validations::SoftValidations do
       record.rent_type = 0
       record.beds = 1
       record.period = 1
-      record.startdate = Time.zone.local(2021, 10, 10)
+      record.startdate = current_collection_start_date
     end
 
     context "when validating soft min" do
@@ -504,16 +504,16 @@ RSpec.describe Validations::SoftValidations do
   describe "major repairs date soft validations" do
     context "when the major repairs date is within 10 years of the tenancy start date" do
       it "shows the interruption screen" do
-        record.startdate = Time.zone.local(2022, 2, 1)
-        record.mrcdate = Time.zone.local(2013, 2, 1)
+        record.startdate = current_collection_start_date
+        record.mrcdate = current_collection_start_date- 9.years
         expect(record.major_repairs_date_in_soft_range?).to be true
       end
     end
 
     context "when the major repairs date is less than 2 years before the tenancy start date" do
       it "does not show the interruption screen" do
-        record.startdate = Time.zone.local(2022, 2, 1)
-        record.mrcdate = Time.zone.local(2021, 2, 1)
+        record.startdate = current_collection_start_date
+        record.mrcdate = current_collection_start_date- 1.year
         expect(record.major_repairs_date_in_soft_range?).to be false
       end
     end
@@ -540,16 +540,16 @@ RSpec.describe Validations::SoftValidations do
   describe "void date soft validations" do
     context "when the void date is within 10 years of the tenancy start date" do
       it "shows the interruption screen" do
-        record.startdate = Time.zone.local(2022, 2, 1)
-        record.voiddate = Time.zone.local(2013, 2, 1)
+        record.startdate = current_collection_start_date
+        record.voiddate = current_collection_start_date - 9.years
         expect(record.voiddate_in_soft_range?).to be true
       end
     end
 
     context "when the void date is less than 2 years before the tenancy start date" do
       it "does not show the interruption screen" do
-        record.startdate = Time.zone.local(2022, 2, 1)
-        record.voiddate = Time.zone.local(2021, 2, 1)
+        record.startdate = current_collection_start_date
+        record.voiddate = current_collection_start_date - 1.year
         expect(record.voiddate_in_soft_range?).to be false
       end
     end
