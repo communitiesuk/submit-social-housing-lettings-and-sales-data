@@ -154,6 +154,7 @@ class BulkUpload::Sales::Year2025::RowParser
     :field_52, # Gender identity of person 5
     :field_56, # Gender identity of person 6
 
+    :field_58, # What was buyer 1’s previous tenure?
     :field_64, # What was buyer 2’s previous tenure?
 
     :field_75, # What is the total amount the buyers had in savings before they paid any deposit for the property?
@@ -227,7 +228,7 @@ class BulkUpload::Sales::Year2025::RowParser
   attribute :field_56, :string
   attribute :field_57, :integer
 
-  attribute :field_58, :integer
+  attribute :field_58, :string
   attribute :field_59, :integer
   attribute :field_60, :string
   attribute :field_61, :string
@@ -561,6 +562,15 @@ private
     CASE_INSENSITIVE_FIELDS.each do |field|
       value = send(field)
       send("#{field}=", value.upcase) if value.present?
+    end
+  end
+
+  def prevten
+    case field_58
+    when "R"
+      0
+    else
+      field_58
     end
   end
 
@@ -902,7 +912,7 @@ private
     attributes["savings"] = field_75.to_i if attributes["savingsnk"]&.zero? && field_75&.match(/\A\d+\z/)
     attributes["prevown"] = field_76
 
-    attributes["prevten"] = field_58
+    attributes["prevten"] = prevten
     attributes["prevloc"] = field_62
     attributes["previous_la_known"] = previous_la_known
     attributes["ppcodenk"] = previous_postcode_known
@@ -1283,7 +1293,7 @@ private
   def infer_soctenant_from_prevten_and_prevtenbuy2
     return unless shared_ownership?
 
-    if [1, 2].include?(field_58) || [1, 2].include?(field_64.to_i)
+    if [1, 2].include?(field_58.to_i) || [1, 2].include?(field_64.to_i)
       1
     else
       2
