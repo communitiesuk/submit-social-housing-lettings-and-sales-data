@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
-  include CollectionTimeHelper
-
   subject(:component) { described_class.new(questions:, log:, user:) }
 
   let(:rendered) { render_inline(component) }

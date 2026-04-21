@@ -1972,8 +1972,8 @@ RSpec.describe LettingsLog do
 
         it "returns the log as a duplicate" do
           expect(duplicate_sets).to contain_exactly(
-            match_array([log.id, duplicate_log.id]),
-            match_array([duplicate_supported_housing_log.id, supported_housing_log.id]),
+            contain_exactly(log.id, duplicate_log.id),
+            contain_exactly(duplicate_supported_housing_log.id, supported_housing_log.id),
           )
         end
 
@@ -1981,8 +1981,8 @@ RSpec.describe LettingsLog do
           supported_housing_log.update!(household_charge: 1, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
           duplicate_supported_housing_log.update!(household_charge: 1, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
           expect(duplicate_sets).to contain_exactly(
-            match_array([log.id, duplicate_log.id]),
-            match_array([supported_housing_log.id, duplicate_supported_housing_log.id]),
+            contain_exactly(log.id, duplicate_log.id),
+            contain_exactly(supported_housing_log.id, duplicate_supported_housing_log.id),
           )
         end
 
@@ -1998,8 +1998,8 @@ RSpec.describe LettingsLog do
           supported_housing_log.update!(is_carehome: 1, chcharge: 100, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
           duplicate_supported_housing_log.update!(is_carehome: 1, chcharge: 100, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
           expect(duplicate_sets).to contain_exactly(
-            match_array([log.id, duplicate_log.id]),
-            match_array([supported_housing_log.id, duplicate_supported_housing_log.id]),
+            contain_exactly(log.id, duplicate_log.id),
+            contain_exactly(supported_housing_log.id, duplicate_supported_housing_log.id),
           )
         end
 

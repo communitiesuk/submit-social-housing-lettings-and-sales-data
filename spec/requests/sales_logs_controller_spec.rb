@@ -90,24 +90,25 @@ RSpec.describe SalesLogsController, type: :request do
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_content)
           expect(json_response["errors"]).to contain_exactly(
-                                               [
-                                                 "beds",
-                                                 [
-                                                   "Number of bedrooms must be 1 if the property is a bedsit."
-                                                 ]
-                                               ],
-                                               [
-                                                 "proptype",
-                                                 [
-                                                   "Answer cannot be 'Bedsit' if the property has 2 or more bedrooms."
-                                                 ]
-                                               ],
-                                               [
-                                                 "saledate",
-                                                 [
-                                                   "Enter a date within the #{previous_collection_start_year} to #{previous_collection_end_year} or #{current_collection_start_year} to #{current_collection_end_year} collection years, which is between 1st April #{previous_collection_start_year} and 31st March #{current_collection_end_year}."
-                                                 ]
-                                               ])
+            [
+              "beds",
+              [
+                "Number of bedrooms must be 1 if the property is a bedsit.",
+              ],
+            ],
+            [
+              "proptype",
+              [
+                "Answer cannot be 'Bedsit' if the property has 2 or more bedrooms.",
+              ],
+            ],
+            [
+              "saledate",
+              [
+                "Enter a date within the #{previous_collection_start_year} to #{previous_collection_end_year} or #{current_collection_start_year} to #{current_collection_end_year} collection years, which is between 1st April #{previous_collection_start_year} and 31st March #{current_collection_end_year}.",
+              ],
+            ],
+          )
         end
       end
     end

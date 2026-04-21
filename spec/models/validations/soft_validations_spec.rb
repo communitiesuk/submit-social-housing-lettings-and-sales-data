@@ -505,7 +505,7 @@ RSpec.describe Validations::SoftValidations do
     context "when the major repairs date is within 10 years of the tenancy start date" do
       it "shows the interruption screen" do
         record.startdate = current_collection_start_date
-        record.mrcdate = current_collection_start_date- 9.years
+        record.mrcdate = current_collection_start_date - 9.years
         expect(record.major_repairs_date_in_soft_range?).to be true
       end
     end
@@ -513,7 +513,7 @@ RSpec.describe Validations::SoftValidations do
     context "when the major repairs date is less than 2 years before the tenancy start date" do
       it "does not show the interruption screen" do
         record.startdate = current_collection_start_date
-        record.mrcdate = current_collection_start_date- 1.year
+        record.mrcdate = current_collection_start_date - 1.year
         expect(record.major_repairs_date_in_soft_range?).to be false
       end
     end

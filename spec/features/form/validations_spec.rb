@@ -11,7 +11,7 @@ RSpec.describe "validations" do
       renewal: 0,
       first_time_property_let_as_social_housing: 0,
       unitletas: 1,
-      rsnvac: 9
+      rsnvac: 9,
     )
   end
   let(:id) { lettings_log.id }

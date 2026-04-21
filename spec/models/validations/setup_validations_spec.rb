@@ -103,7 +103,7 @@ RSpec.describe Validations::SetupValidations do
       end
 
       it "adds an error to startdate" do
-        record.startdate = Time.now + 15.days
+        record.startdate = Time.zone.now + 15.days
         setup_validator.validate_startdate_setup(record)
         expect(record.errors["startdate"]).to include(match I18n.t("validations.lettings.setup.startdate.not_within.next_two_weeks"))
       end
