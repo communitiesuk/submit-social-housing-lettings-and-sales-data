@@ -344,9 +344,9 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
         end
 
         describe "invalid fields" do
-          let(:attributes) { setup_section_params.merge({ field_34: 0 }) }
-
           context "when a field has been marked as invalid" do
+            let(:attributes) { setup_section_params.merge({ field_10: "2", field_34: 0 }) }
+
             before do
               parser.add_invalid_field("field_34")
             end
@@ -355,6 +355,19 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
               parser.valid?
               expect(parser.errors[:field_34].size).to eq(1)
               expect(parser.errors[:field_34]).to include(match(I18n.t("validations.sales.2026.bulk_upload.invalid_option", question: "What is buyer 1's nationality?")))
+            end
+          end
+
+          context "when a field has been marked as invalid but it is not routed to" do
+            let(:attributes) { setup_section_params.merge({ field_10: "1", field_34: 0 }) }
+
+            before do
+              parser.add_invalid_field("field_34")
+            end
+
+            it "does not set an error on that field" do
+              parser.valid?
+              expect(parser.errors[:field_34].size).to eq(0)
             end
           end
         end
