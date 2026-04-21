@@ -10,13 +10,13 @@ RSpec.describe Exports::LettingsLogExportService do
   let(:xml_export_file) { File.open("spec/fixtures/exports/general_needs_log.xml", "r:UTF-8") }
   let(:local_manifest_file) { File.open("spec/fixtures/exports/manifest.xml", "r:UTF-8") }
 
-  # let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
-  # let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json") }
+  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
+  let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json") }
 
-  let(:expected_zip_filename) { "core_#{current_collection_start_year}_#{current_collection_end_year}_apr_mar_f0001_inc0001.zip" }
-  let(:expected_data_filename) { "core_#{current_collection_start_year}_#{current_collection_end_year}_apr_mar_f0001_inc0001_pt001.xml" }
+  let(:expected_zip_filename) { "core_2021_2022_apr_mar_f0001_inc0001.zip" }
+  let(:expected_data_filename) { "core_2021_2022_apr_mar_f0001_inc0001_pt001.xml" }
   let(:expected_manifest_filename) { "manifest.xml" }
-  let(:start_time) { current_collection_start_date }
+  let(:start_time) { Time.zone.local(2022, 5, 1) }
   let(:organisation) { create(:organisation, name: "MHCLG", housing_registration_no: 1234) }
   let(:user) { create(:user, email: "test1@example.com", organisation:) }
 
@@ -29,9 +29,6 @@ RSpec.describe Exports::LettingsLogExportService do
     export_template.sub!(/\{location_id\}/, lettings_log["location_id"].to_s) if lettings_log.needstype == 2
     export_template.sub!(/\{scheme_id\}/, lettings_log["scheme_id"].to_s) if lettings_log.needstype == 2
     export_template.sub!(/\{log_id\}/, lettings_log["id"].to_s)
-    export_template.sub!(/\{startdate\}/, lettings_log["startdate"].to_s)
-    export_template.sub!(/\{voiddate\}/, lettings_log["voiddate"].to_s)
-    export_template.sub!(/\{mrcdate\}/, lettings_log["mrcdate"].to_s)
   end
 
   def replace_record_number(export_template, record_number)
@@ -44,9 +41,9 @@ RSpec.describe Exports::LettingsLogExportService do
     allow(storage_service).to receive(:write_file)
 
     # Stub the form handler to use the real form
-    # allow(FormHandler.instance).to receive(:get_form).with("previous_lettings").and_return(real_2021_2022_form)
-    # allow(FormHandler.instance).to receive(:get_form).with("current_lettings").and_return(real_2022_2023_form)
-    # allow(FormHandler.instance).to receive(:get_form).with("next_lettings").and_return(real_2022_2023_form)
+    allow(FormHandler.instance).to receive(:get_form).with("previous_lettings").and_return(real_2021_2022_form)
+    allow(FormHandler.instance).to receive(:get_form).with("current_lettings").and_return(real_2022_2023_form)
+    allow(FormHandler.instance).to receive(:get_form).with("next_lettings").and_return(real_2022_2023_form)
   end
 
   after do
@@ -67,6 +64,15 @@ RSpec.describe Exports::LettingsLogExportService do
           :lettings_log,
           :completed,
           status: "pending",
+          propcode: "123",
+          ppostcode_full: "SE2 6RT",
+          postcode_full: "NW1 5TY",
+          tenancycode: "BZ737",
+          startdate: Time.zone.local(2022, 2, 2, 10, 36, 49),
+          voiddate: Time.zone.local(2019, 11, 3),
+          mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49),
+          tenancylength: 5,
+          underoccupation_benefitcap: 4,
         )
       end
 
@@ -121,24 +127,7 @@ RSpec.describe Exports::LettingsLogExportService do
     end
 
     context "and one lettings log with unknown user details is available for export" do
-      let!(:lettings_log) { FactoryBot.create(
-        :lettings_log,
-        :completed,
-        details_known_2: 1,
-        assigned_to: user,
-        age1: 35,
-        sex1: "F",
-        sexrab1: nil,
-        propcode: "123",
-        ppostcode_full: "SE2 6RT",
-        postcode_full: "NW1 5TY",
-        town_or_city: "London",
-        tenancycode: "BZ737",
-        startdate: Time.zone.local(current_collection, 2, 2, 10, 36, 49),
-        voiddate: Time.zone.local(2019, 11, 3),
-        mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49),
-        tenancylength: 5, underoccupation_benefitcap: 4)
-      }
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, details_known_2: 1, assigned_to: user, age1: 35, sex1: "F", sexrab1: nil, propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", town_or_city: "London", tenancycode: "BZ737", startdate: Time.zone.local(2022, 2, 2, 10, 36, 49), voiddate: Time.zone.local(2019, 11, 3), mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
 
       def replace_person_details(export_file)
         export_file.sub!("<age2>32</age2>", "<age2>-9</age2>")
@@ -210,66 +199,62 @@ RSpec.describe Exports::LettingsLogExportService do
     end
 
     context "and multiple lettings logs are available for export on different periods" do
-      let(:expected_zip_filename2) { "core_#{previous_collection_start_year}_#{previous_collection_end_year}_apr_mar_f0001_inc0001.zip" }
+      let(:expected_zip_filename2) { "core_2022_2023_apr_mar_f0001_inc0001.zip" }
 
       before do
-        FactoryBot.create(:lettings_log, startdate: Time.zone.local(previous_collection_end_year, 2, 1))
-        FactoryBot.create(:lettings_log, startdate: current_collection_start_date)
+        FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 2, 1))
+        FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 4, 1))
       end
 
       context "when lettings logs are across multiple quarters" do
         it "generates multiple ZIP export files with the expected filenames" do
           expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
           expect(storage_service).to receive(:write_file).with(expected_zip_filename2, any_args)
-          expect(Rails.logger).to receive(:info).with("Building export run for lettings #{previous_collection_start_year}")
-          expect(Rails.logger).to receive(:info).with("Creating core_#{previous_collection_start_year}_#{previous_collection_end_year}_apr_mar_f0001_inc0001 - 1 resources")
-          expect(Rails.logger).to receive(:info).with("Added core_#{previous_collection_start_year}_#{previous_collection_end_year}_apr_mar_f0001_inc0001_pt001.xml")
-          expect(Rails.logger).to receive(:info).with("Writing core_#{previous_collection_start_year}_#{previous_collection_end_year}_apr_mar_f0001_inc0001.zip")
-          expect(Rails.logger).to receive(:info).with("Building export run for lettings #{archived_collection_start_year}")
-          expect(Rails.logger).to receive(:info).with("Creating core_#{archived_collection_start_year}_#{archived_collection_end_year}_apr_mar_f0001_inc0001 - 0 resources")
-          expect(Rails.logger).to receive(:info).with("Building export run for lettings #{current_collection_start_year}")
-          expect(Rails.logger).to receive(:info).with("Creating core_#{current_collection_start_year}_#{current_collection_end_year}_apr_mar_f0001_inc0001 - 1 resources")
-          expect(Rails.logger).to receive(:info).with("Added core_#{current_collection_start_year}_#{current_collection_end_year}_apr_mar_f0001_inc0001_pt001.xml")
-          expect(Rails.logger).to receive(:info).with("Writing core_#{current_collection_start_year}_#{current_collection_end_year}_apr_mar_f0001_inc0001.zip")
-          expect(Rails.logger).to receive(:info).with("Building export run for lettings #{next_collection_start_year}")
-          expect(Rails.logger).to receive(:info).with("Creating core_#{next_collection_start_year}_#{next_collection_end_year}_apr_mar_f0001_inc0001 - 0 resources")
+          expect(Rails.logger).to receive(:info).with("Building export run for lettings 2021")
+          expect(Rails.logger).to receive(:info).with("Creating core_2021_2022_apr_mar_f0001_inc0001 - 1 resources")
+          expect(Rails.logger).to receive(:info).with("Added core_2021_2022_apr_mar_f0001_inc0001_pt001.xml")
+          expect(Rails.logger).to receive(:info).with("Writing core_2021_2022_apr_mar_f0001_inc0001.zip")
+          expect(Rails.logger).to receive(:info).with("Building export run for lettings 2022")
+          expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 resources")
+          expect(Rails.logger).to receive(:info).with("Added core_2022_2023_apr_mar_f0001_inc0001_pt001.xml")
+          expect(Rails.logger).to receive(:info).with("Writing core_2022_2023_apr_mar_f0001_inc0001.zip")
+          expect(Rails.logger).to receive(:info).with("Building export run for lettings 2023")
+          expect(Rails.logger).to receive(:info).with("Creating core_2023_2024_apr_mar_f0001_inc0001 - 0 resources")
 
           export_service.export_xml_lettings_logs
         end
 
         it "generates zip export files only for specified year" do
           expect(storage_service).to receive(:write_file).with(expected_zip_filename2, any_args)
-          expect(Rails.logger).to receive(:info).with("Building export run for lettings #{previous_collection_start_year}")
-          expect(Rails.logger).to receive(:info).with("Creating core_#{previous_collection_start_year}_#{previous_collection_end_year}_apr_mar_f0001_inc0001 - 1 resources")
-          expect(Rails.logger).to receive(:info).with("Added core_#{previous_collection_start_year}_#{previous_collection_end_year}_apr_mar_f0001_inc0001_pt001.xml")
-          expect(Rails.logger).to receive(:info).with("Writing core_#{previous_collection_start_year}_#{previous_collection_end_year}_apr_mar_f0001_inc0001.zip")
+          expect(Rails.logger).to receive(:info).with("Building export run for lettings 2022")
+          expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 resources")
+          expect(Rails.logger).to receive(:info).with("Added core_2022_2023_apr_mar_f0001_inc0001_pt001.xml")
+          expect(Rails.logger).to receive(:info).with("Writing core_2022_2023_apr_mar_f0001_inc0001.zip")
 
-          export_service.export_xml_lettings_logs(collection_year: previous_collection_start_year)
+          export_service.export_xml_lettings_logs(collection_year: 2022)
         end
 
         context "and previous full exports are different for previous years" do
-          let(:expected_zip_filename) { "core_#{previous_collection_start_year}_#{previous_collection_end_year}_apr_mar_f0007_inc0004.zip" }
-          let(:expected_zip_filename2) { "core_#{current_collection_start_year}_#{current_collection_end_year}_apr_mar_f0001_inc0001.zip" }
+          let(:expected_zip_filename) { "core_2021_2022_apr_mar_f0007_inc0004.zip" }
+          let(:expected_zip_filename2) { "core_2022_2023_apr_mar_f0001_inc0001.zip" }
 
           before do
-            Export.new(started_at: Time.zone.yesterday, base_number: 7, increment_number: 3, collection: "lettings", year: previous_collection_start_year).save!
+            Export.new(started_at: Time.zone.yesterday, base_number: 7, increment_number: 3, collection: "lettings", year: 2021).save!
           end
 
           it "generates multiple ZIP export files with different base numbers in the filenames" do
             expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
             expect(storage_service).to receive(:write_file).with(expected_zip_filename2, any_args)
-            expect(Rails.logger).to receive(:info).with("Building export run for lettings #{previous_collection_start_year}")
-            expect(Rails.logger).to receive(:info).with("Creating core_#{previous_collection_start_year}_#{previous_collection_end_year}_apr_mar_f0007_inc0004 - 1 resources")
-            expect(Rails.logger).to receive(:info).with("Added core_#{previous_collection_start_year}_#{previous_collection_end_year}_apr_mar_f0007_inc0004_pt001.xml")
-            expect(Rails.logger).to receive(:info).with("Writing core_#{previous_collection_start_year}_#{previous_collection_end_year}_apr_mar_f0007_inc0004.zip")
-            expect(Rails.logger).to receive(:info).with("Building export run for lettings #{archived_collection_start_year}")
-            expect(Rails.logger).to receive(:info).with("Creating core_#{archived_collection_start_year}_#{archived_collection_end_year}_apr_mar_f0001_inc0001 - 0 resources")
-            expect(Rails.logger).to receive(:info).with("Building export run for lettings #{current_collection_start_year}")
-            expect(Rails.logger).to receive(:info).with("Creating core_#{current_collection_start_year}_#{current_collection_end_year}_apr_mar_f0001_inc0001 - 1 resources")
-            expect(Rails.logger).to receive(:info).with("Added core_#{current_collection_start_year}_#{current_collection_end_year}_apr_mar_f0001_inc0001_pt001.xml")
-            expect(Rails.logger).to receive(:info).with("Writing core_#{current_collection_start_year}_#{current_collection_end_year}_apr_mar_f0001_inc0001.zip")
-            expect(Rails.logger).to receive(:info).with("Building export run for lettings #{next_collection_start_year}")
-            expect(Rails.logger).to receive(:info).with("Creating core_#{next_collection_start_year}_#{next_collection_end_year}_apr_mar_f0001_inc0001 - 0 resources")
+            expect(Rails.logger).to receive(:info).with("Building export run for lettings 2021")
+            expect(Rails.logger).to receive(:info).with("Creating core_2021_2022_apr_mar_f0007_inc0004 - 1 resources")
+            expect(Rails.logger).to receive(:info).with("Added core_2021_2022_apr_mar_f0007_inc0004_pt001.xml")
+            expect(Rails.logger).to receive(:info).with("Writing core_2021_2022_apr_mar_f0007_inc0004.zip")
+            expect(Rails.logger).to receive(:info).with("Building export run for lettings 2022")
+            expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 resources")
+            expect(Rails.logger).to receive(:info).with("Added core_2022_2023_apr_mar_f0001_inc0001_pt001.xml")
+            expect(Rails.logger).to receive(:info).with("Writing core_2022_2023_apr_mar_f0001_inc0001.zip")
+            expect(Rails.logger).to receive(:info).with("Building export run for lettings 2023")
+            expect(Rails.logger).to receive(:info).with("Creating core_2023_2024_apr_mar_f0001_inc0001 - 0 resources")
 
             export_service.export_xml_lettings_logs
           end
