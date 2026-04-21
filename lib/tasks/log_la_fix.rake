@@ -79,10 +79,10 @@ namespace :log_la_fix do
     File.readlines(file).each do |line|
       line = line.strip
       if line.start_with?("#lettings#")
-        row = CSV.parse_line(line.delete_prefix("#lettings#"))
+        row = CSV.parse_line(line.delete_prefix("#lettings#"), liberal_parsing: true)
         lettings_csv << row
       elsif line.start_with?("#sales#")
-        row = CSV.parse_line(line.delete_prefix("#sales#"))
+        row = CSV.parse_line(line.delete_prefix("#sales#"), liberal_parsing: true)
         sales_csv << row
       end
     end
