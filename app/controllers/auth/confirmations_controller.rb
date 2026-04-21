@@ -5,8 +5,8 @@ class Auth::ConfirmationsController < Devise::ConfirmationsController
     yield resource if block_given?
 
     if resource.errors.empty?
-      # previously we reset sign in count to indicate that a user was deactivated and so needs to reset their password on confirming their email post reactivation.
-      # now we have a specific flag for this.
+      # previously we reset sign_in_count to indicate that a user was deactivated and so needs to reset their password on confirming their email post reactivation.
+      # now we have a specific flag for this as resetting sign in count was difficult for auditing.
       # though for backwards compatability we need to ensure previous users with a reset sign in count still will see the password reset screen
       if resource.reset_password_on_confirmation || resource.sign_in_count.zero?
         token = resource.send(:set_reset_password_token)
