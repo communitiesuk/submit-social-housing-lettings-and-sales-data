@@ -339,6 +339,7 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
 
         describe "invalid fields" do
           context "when a field has been marked as invalid" do
+            # field_34 nationality is only shown if field_10 staircasing is no
             let(:attributes) { setup_section_params.merge({ field_10: 2, field_31: 0 }) }
 
             before do

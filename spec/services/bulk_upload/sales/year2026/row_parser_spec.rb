@@ -345,7 +345,8 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
 
         describe "invalid fields" do
           context "when a field has been marked as invalid" do
-            let(:attributes) { setup_section_params.merge({ field_10: "2", field_34: 0 }) }
+            # field_34 nationality is only shown if field_10 staircasing is no
+            let(:attributes) { setup_section_params.merge({ field_10: 2, field_34: 0 }) }
 
             before do
               parser.add_invalid_field("field_34")
@@ -359,7 +360,7 @@ RSpec.describe BulkUpload::Sales::Year2026::RowParser do
           end
 
           context "when a field has been marked as invalid but it is not routed to" do
-            let(:attributes) { setup_section_params.merge({ field_10: "1", field_34: 0 }) }
+            let(:attributes) { setup_section_params.merge({ field_10: 1, field_34: 0 }) }
 
             before do
               parser.add_invalid_field("field_34")
