@@ -159,15 +159,6 @@ module Validations::Sales::SoftValidations
     end
   end
 
-  def discounted_ownership_value_invalid?
-    return unless saledate && collection_start_year <= 2023
-    return unless value && deposit && ownershipsch
-    return unless mortgage || mortgageused == 2 || mortgageused == 3
-    return unless discount || grant || type == 29
-
-    mortgage_deposit_and_grant_total != value_with_discount && discounted_ownership_sale?
-  end
-
   def buyer1_livein_wrong_for_ownership_type?
     return unless ownershipsch && buy1livein
 
