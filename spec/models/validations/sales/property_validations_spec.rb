@@ -7,18 +7,6 @@ RSpec.describe Validations::Sales::PropertyValidations do
 
   let(:property_validator_class) { Class.new { include Validations::Sales::PropertyValidations } }
 
-  describe "#validate_postcodes_match_if_discounted_ownership" do
-    let(:record) { build(:sales_log, ownershipsch: 1, saledate: current_collection_start_date) }
-
-    it "is not validated for years >= 2024" do
-      record.postcode_full = "SW1A 1AA"
-      record.ppostcode_full = "SW1A 0AA"
-
-      property_validator.validate_postcodes_match_if_discounted_ownership(record)
-      expect(record.errors["postcode_full"]).to be_empty
-    end
-  end
-
   describe "#validate_property_unit_type" do
     context "when number of bedrooms is 1" do
       let(:record) { build(:sales_log, beds: 1, proptype: 2) }
@@ -85,54 +73,29 @@ RSpec.describe Validations::Sales::PropertyValidations do
   end
 
   describe "#validate_la_in_england" do
-    context "with a log on or after 2025" do
-      before do
-        allow(log.form).to receive(:start_year_2025_or_later?).and_return true
-      end
+    context "and the local authority is not in England" do
+      let(:log) { build(:sales_log, la: "S12000019") }
 
-      context "and the local authority is not in England" do
-        let(:log) { build(:sales_log, la: "S12000019") }
-
-        it "adds an error" do
-          property_validator.validate_la_in_england(log)
-          expect(log.errors["la"]).to include(I18n.t("validations.sales.property_information.la.not_in_england"))
-          expect(log.errors["postcode_full"]).to include(I18n.t("validations.sales.property_information.postcode_full.not_in_england"))
-          expect(log.errors["uprn"]).to include(I18n.t("validations.sales.property_information.uprn.not_in_england"))
-          expect(log.errors["uprn_selection"]).to include(I18n.t("validations.sales.property_information.uprn_selection.not_in_england"))
-          expect(log.errors["saledate"]).to include(I18n.t("validations.sales.property_information.saledate.postcode_not_in_england"))
-        end
-      end
-
-      context "and the local authority is in England" do
-        let(:log) { build(:sales_log, la: "E06000002") }
-
-        it "does not add an error" do
-          property_validator.validate_la_in_england(log)
-          expect(log.errors["la"]).to be_empty
-          expect(log.errors["postcode_full"]).to be_empty
-          expect(log.errors["uprn"]).to be_empty
-          expect(log.errors["uprn_selection"]).to be_empty
-          expect(log.errors["saledate"]).to be_empty
-        end
+      it "adds an error" do
+        property_validator.validate_la_in_england(log)
+        expect(log.errors["la"]).to include(I18n.t("validations.sales.property_information.la.not_in_england"))
+        expect(log.errors["postcode_full"]).to include(I18n.t("validations.sales.property_information.postcode_full.not_in_england"))
+        expect(log.errors["uprn"]).to include(I18n.t("validations.sales.property_information.uprn.not_in_england"))
+        expect(log.errors["uprn_selection"]).to include(I18n.t("validations.sales.property_information.uprn_selection.not_in_england"))
+        expect(log.errors["saledate"]).to include(I18n.t("validations.sales.property_information.saledate.postcode_not_in_england"))
       end
     end
 
-    context "with a log before 2025" do
-      before do
-        allow(log.form).to receive(:start_year_2025_or_later?).and_return false
-      end
+    context "and the local authority is in England" do
+      let(:log) { build(:sales_log, la: "E06000002") }
 
-      context "and the local authority is not in England" do
-        let(:log) { build(:sales_log, la: "S12000019") }
-
-        it "does not add an error" do
-          property_validator.validate_la_in_england(log)
-          expect(log.errors["la"]).to be_empty
-          expect(log.errors["postcode_full"]).to be_empty
-          expect(log.errors["uprn"]).to be_empty
-          expect(log.errors["uprn_selection"]).to be_empty
-          expect(log.errors["saledate"]).to be_empty
-        end
+      it "does not add an error" do
+        property_validator.validate_la_in_england(log)
+        expect(log.errors["la"]).to be_empty
+        expect(log.errors["postcode_full"]).to be_empty
+        expect(log.errors["uprn"]).to be_empty
+        expect(log.errors["uprn_selection"]).to be_empty
+        expect(log.errors["saledate"]).to be_empty
       end
     end
   end
@@ -143,54 +106,33 @@ RSpec.describe Validations::Sales::PropertyValidations do
     let(:local_authority_active) { LocalAuthority.find_by(code: la_ecode_active) }
     let(:local_authority_inactive) { LocalAuthority.find_by(code: la_ecode_inactive) }
 
-    context "with a log on or after 2025" do
-      before do
-        allow(log.form).to receive(:start_year_2025_or_later?).and_return true
-      end
+    before do
+      allow(log.form).to receive(:start_year_2025_or_later?).and_return true
+    end
 
-      context "and the local authority is active" do
-        let(:log) { build(:sales_log, :completed, la: la_ecode_active) }
+    context "and the local authority is active" do
+      let(:log) { build(:sales_log, :completed, la: la_ecode_active) }
 
-        it "adds an error" do
-          property_validator.validate_la_is_active(log)
-          expect(log.errors["la"]).to be_empty
-          expect(log.errors["postcode_full"]).to be_empty
-          expect(log.errors["uprn"]).to be_empty
-          expect(log.errors["uprn_selection"]).to be_empty
-          expect(log.errors["saledate"]).to be_empty
-        end
-      end
-
-      context "and the local authority is inactive" do
-        let(:log) { build(:sales_log, :completed, la: la_ecode_inactive) }
-
-        it "does not add an error" do
-          property_validator.validate_la_is_active(log)
-          expect(log.errors["la"]).to include(I18n.t("validations.sales.property_information.la.la_not_valid_for_date", la: local_authority_inactive.name))
-          expect(log.errors["postcode_full"]).to include(I18n.t("validations.sales.property_information.postcode_full.la_not_valid_for_date", la: local_authority_inactive.name))
-          expect(log.errors["uprn"]).to include(I18n.t("validations.sales.property_information.uprn.la_not_valid_for_date", la: local_authority_inactive.name))
-          expect(log.errors["uprn_selection"]).to include(I18n.t("validations.sales.property_information.uprn_selection.la_not_valid_for_date", la: local_authority_inactive.name))
-          expect(log.errors["saledate"]).to include(I18n.t("validations.sales.property_information.saledate.la_not_valid_for_date", la: local_authority_inactive.name))
-        end
+      it "adds an error" do
+        property_validator.validate_la_is_active(log)
+        expect(log.errors["la"]).to be_empty
+        expect(log.errors["postcode_full"]).to be_empty
+        expect(log.errors["uprn"]).to be_empty
+        expect(log.errors["uprn_selection"]).to be_empty
+        expect(log.errors["saledate"]).to be_empty
       end
     end
 
-    context "with a log before 2025" do
-      before do
-        allow(log.form).to receive(:start_year_2025_or_later?).and_return false
-      end
+    context "and the local authority is inactive" do
+      let(:log) { build(:sales_log, :completed, la: la_ecode_inactive) }
 
-      context "and the local authority is inactive" do
-        let(:log) { build(:sales_log, :completed, la: la_ecode_inactive) }
-
-        it "does not add an error" do
-          property_validator.validate_la_is_active(log)
-          expect(log.errors["la"]).to be_empty
-          expect(log.errors["postcode_full"]).to be_empty
-          expect(log.errors["uprn"]).to be_empty
-          expect(log.errors["uprn_selection"]).to be_empty
-          expect(log.errors["saledate"]).to be_empty
-        end
+      it "does not add an error" do
+        property_validator.validate_la_is_active(log)
+        expect(log.errors["la"]).to include(I18n.t("validations.sales.property_information.la.la_not_valid_for_date", la: local_authority_inactive.name))
+        expect(log.errors["postcode_full"]).to include(I18n.t("validations.sales.property_information.postcode_full.la_not_valid_for_date", la: local_authority_inactive.name))
+        expect(log.errors["uprn"]).to include(I18n.t("validations.sales.property_information.uprn.la_not_valid_for_date", la: local_authority_inactive.name))
+        expect(log.errors["uprn_selection"]).to include(I18n.t("validations.sales.property_information.uprn_selection.la_not_valid_for_date", la: local_authority_inactive.name))
+        expect(log.errors["saledate"]).to include(I18n.t("validations.sales.property_information.saledate.la_not_valid_for_date", la: local_authority_inactive.name))
       end
     end
   end
