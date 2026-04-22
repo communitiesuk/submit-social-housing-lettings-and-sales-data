@@ -30,7 +30,7 @@ module Validations::Sales::PropertyValidations
 
   # see also: this validation in validations/property_validations.rb
   def validate_la_in_england(record)
-    return unless record.la.present?
+    return if record.la.blank?
     return if record.la.in?(LocalAuthority.england.pluck(:code))
 
     record.errors.add :la, I18n.t("validations.sales.property_information.la.not_in_england")

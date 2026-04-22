@@ -179,5 +179,4 @@ private
   def tenant_is_economic_child?(economic_status)
     economic_status == 9
   end
-
 end

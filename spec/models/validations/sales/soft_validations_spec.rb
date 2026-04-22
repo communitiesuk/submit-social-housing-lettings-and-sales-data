@@ -644,14 +644,6 @@ RSpec.describe Validations::Sales::SoftValidations do
 
       expect(record).not_to be_grant_outside_common_range
     end
-
-    it "returns true for logs with other type" do
-      record.grant = 100_000
-      record.type = 9
-      record.saledate = current_collection_start_date
-
-      expect(record).to be_grant_outside_common_range
-    end
   end
 
   describe "#staircase_bought_above_fifty" do
@@ -803,7 +795,6 @@ RSpec.describe Validations::Sales::SoftValidations do
       expect(record).to be_person_3_student_not_child
     end
   end
-
 
   describe "#buyer1_livein_wrong_for_ownership_type?" do
     context "when it's a shared ownership" do

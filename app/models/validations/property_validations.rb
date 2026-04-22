@@ -93,7 +93,7 @@ module Validations::PropertyValidations
 
   # see also: this validation in sales/property_validations.rb
   def validate_la_is_active(record)
-    return unless record.startdate.present?
+    return if record.startdate.blank?
     return unless record.la
 
     la = LocalAuthority.england.find_by(code: record.la)
