@@ -70,7 +70,6 @@ module Validations::PropertyValidations
 
   # see also: this validation in sales/property_validations.rb
   def validate_la_in_england(record)
-    return unless record.form.start_year_2025_or_later?
     return unless record.la
     return if record.la.in?(LocalAuthority.england.pluck(:code))
 
@@ -94,7 +93,7 @@ module Validations::PropertyValidations
 
   # see also: this validation in sales/property_validations.rb
   def validate_la_is_active(record)
-    return unless record.form.start_year_2025_or_later? && record.startdate.present?
+    return unless record.startdate.present?
     return unless record.la
 
     la = LocalAuthority.england.find_by(code: record.la)
