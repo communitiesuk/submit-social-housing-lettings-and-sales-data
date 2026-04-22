@@ -16,6 +16,9 @@ class Form::Sales::Questions::Buyer2AgeKnown < ::Form::Question
         {
           "age2_known" => 1,
         },
+        {
+          "age2_known" => 2,
+        },
       ],
     }
     @check_answers_card_number = 2
@@ -25,7 +28,16 @@ class Form::Sales::Questions::Buyer2AgeKnown < ::Form::Question
   ANSWER_OPTIONS = {
     "0" => { "value" => "Yes" },
     "1" => { "value" => "No" },
+    "2" => { "value" => "Buyer prefers not to say" },
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 28, 2024 => 30, 2025 => 28, 2026 => 30 }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value.to_i == 2
+
+    super
+  end
 end
