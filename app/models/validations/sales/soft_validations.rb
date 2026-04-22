@@ -90,15 +90,6 @@ module Validations::Sales::SoftValidations
     type == 24 && stairowned.between?(76, 100)
   end
 
-  def shared_ownership_deposit_invalid?
-    return unless saledate && collection_start_year <= 2023
-    return unless mortgage || mortgageused == 2 || mortgageused == 3
-    return unless cashdis || !social_homebuy?
-    return unless deposit && value && equity
-
-    over_tolerance?(mortgage_deposit_and_discount_total, value * equity / 100, 1)
-  end
-
   def mortgage_plus_deposit_less_than_discounted_value?
     return unless mortgage && deposit && value && discount
     return if form.start_year_2026_or_later?
