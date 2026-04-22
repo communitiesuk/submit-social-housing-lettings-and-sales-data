@@ -765,7 +765,7 @@ RSpec.describe Validations::Sales::SoftValidations do
     it "returns true if grant is below 9000" do
       record.grant = 1_000
       record.type = 9
-      record.saledate = Time.zone.local(2024, 1, 1)
+      record.saledate = current_collection_start_date
 
       expect(record).to be_grant_outside_common_range
     end
@@ -773,7 +773,7 @@ RSpec.describe Validations::Sales::SoftValidations do
     it "returns true if grant is above 16000" do
       record.grant = 100_000
       record.type = 9
-      record.saledate = Time.zone.local(2024, 1, 1)
+      record.saledate = current_collection_start_date
 
       expect(record).to be_grant_outside_common_range
     end
@@ -781,31 +781,31 @@ RSpec.describe Validations::Sales::SoftValidations do
     it "returns false if grant is within expected range" do
       record.grant = 10_000
       record.type = 9
-      record.saledate = Time.zone.local(2024, 1, 1)
+      record.saledate = current_collection_start_date
 
       expect(record).not_to be_grant_outside_common_range
     end
 
-    it "returns false for logs after 2024 with RTA" do
+    it "returns false for logs with RTA" do
       record.grant = 100_000
       record.type = 8
-      record.saledate = Time.zone.local(2025, 1, 1)
+      record.saledate = current_collection_start_date
 
       expect(record).not_to be_grant_outside_common_range
     end
 
-    it "returns false for logs after 2024 with socialBuy" do
+    it "returns false for logs with socialBuy" do
       record.grant = 100_000
       record.type = 21
-      record.saledate = Time.zone.local(2025, 1, 1)
+      record.saledate = current_collection_start_date
 
       expect(record).not_to be_grant_outside_common_range
     end
 
-    it "returns true for logs after 2024 with other type" do
+    it "returns true for logs with other type" do
       record.grant = 100_000
       record.type = 9
-      record.saledate = Time.zone.local(2025, 1, 1)
+      record.saledate = current_collection_start_date
 
       expect(record).to be_grant_outside_common_range
     end
