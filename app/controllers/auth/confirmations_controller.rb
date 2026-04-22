@@ -9,7 +9,7 @@ class Auth::ConfirmationsController < Devise::ConfirmationsController
       # this would force a password reset both if it was your very first log in, and on your first login after reactivation.
       # now we have a specific flag for the latter case as resetting sign_in_count was difficult for auditing.
       # note that some deactivated users will have a sign_in_count of 0 and not have this flag set if they were deactivated before we made this change.
-      if resource.reset_password_on_confirmation || resource.sign_in_count.zero?
+      if resource.force_reset_password_on_confirmation || resource.sign_in_count.zero?
         token = resource.send(:set_reset_password_token)
         redirect_to "#{edit_user_password_url}?reset_password_token=#{token}&confirmation=true"
       else

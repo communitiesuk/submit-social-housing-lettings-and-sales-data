@@ -37,7 +37,7 @@ class Auth::PasswordsController < Devise::PasswordsController
 
     if resource.errors.empty?
       resource.unlock_access! if resource.respond_to?(:unlock_access!)
-      resource.reset_password_on_confirmation = false if resource.reset_password_on_confirmation
+      resource.force_reset_password_on_confirmation = false if resource.force_reset_password_on_confirmation
       if Devise.sign_in_after_reset_password
         set_flash_message!(:notice, password_update_flash_message)
         resource.after_database_authentication
