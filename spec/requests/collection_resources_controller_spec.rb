@@ -734,7 +734,7 @@ RSpec.describe CollectionResourcesController, type: :request do
   end
 
   describe "GET #edit_additional_collection_resource" do
-    let(:collection_resource) { create(:collection_resource, :additional, year: 2025, log_type: "sales", short_display_name: "additional resource", download_filename: "additional.pdf") }
+    let(:collection_resource) { create(:collection_resource, :additional, year: current_collection_start_year, log_type: "sales", short_display_name: "additional resource", download_filename: "additional.pdf") }
 
     context "when user is not signed in" do
       it "redirects to the sign in page" do
@@ -773,7 +773,7 @@ RSpec.describe CollectionResourcesController, type: :request do
       let(:user) { create(:user, :support) }
 
       before do
-        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 1, 8))
+        allow(Time.zone).to receive(:today).and_return(current_collection_after_crossover_start_date)
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
       end
@@ -786,7 +786,7 @@ RSpec.describe CollectionResourcesController, type: :request do
         it "displays update collection resources page content" do
           get collection_resource_edit_path(collection_resource)
 
-          expect(page).to have_content("Sales 2025 to 2026")
+          expect(page).to have_content("Sales #{current_collection_start_year} to #{current_collection_end_year}")
           expect(page).to have_content("Change the additional resource")
           expect(page).to have_content("This file will be available for all users to download.")
           expect(page).to have_content("Upload file")

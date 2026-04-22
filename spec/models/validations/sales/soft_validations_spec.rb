@@ -30,57 +30,8 @@ RSpec.describe Validations::Sales::SoftValidations do
         expect(record).not_to be_income2_outside_soft_range_for_ecstat
       end
 
-      context "when log year is before 2025" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2024, 12, 25)) }
-
-        it "does not trigger for low income1 if ecstat1 has no soft min" do
-          record.income1 = 50
-          record.ecstat1 = 4
-          expect(record).not_to be_income1_outside_soft_range_for_ecstat
-        end
-
-        it "returns true if income1 is below soft min for ecstat1" do
-          record.income1 = 4500
-          record.ecstat1 = 1
-          expect(record).to be_income1_outside_soft_range_for_ecstat
-        end
-
-        it "returns false if income1 is >= soft min for ecstat1" do
-          record.income1 = 1500
-          record.ecstat1 = 2
-          expect(record).not_to be_income1_outside_soft_range_for_ecstat
-        end
-
-        it "does not trigger for income2 if ecstat2 has no soft min" do
-          record.income2 = 50
-          record.ecstat2 = 8
-          expect(record).not_to be_income2_outside_soft_range_for_ecstat
-        end
-
-        it "returns true if income2 is below soft min for ecstat2" do
-          record.income2 = 999
-          record.ecstat2 = 3
-          expect(record).to be_income2_outside_soft_range_for_ecstat
-        end
-
-        it "returns false if income2 is >= soft min for ecstat2" do
-          record.income2 = 2500
-          record.ecstat2 = 5
-          expect(record).not_to be_income2_outside_soft_range_for_ecstat
-        end
-
-        it "does not trigger for being over maxima" do
-          record.ecstat1 = 1
-          record.income1 = 200_000
-          record.ecstat2 = 2
-          record.income2 = 100_000
-          expect(record).not_to be_income1_outside_soft_range_for_ecstat
-          expect(record).not_to be_income2_outside_soft_range_for_ecstat
-        end
-      end
-
       context "when log year is 2025" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2025, 12, 25)) }
+        let(:record) { build(:sales_log, saledate: collection_start_date_for_year(2025)) }
 
         it "returns true if income1 is below soft min for ecstat1" do
           record.income1 = 13_399

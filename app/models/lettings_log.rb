@@ -542,7 +542,7 @@ class LettingsLog < Log
     reason == 1
   end
 
-  def receives_housing_benefit_only?
+  def receives_housing_benefit?
     # 1: Housing benefit
     hb == 1
   end
@@ -551,13 +551,7 @@ class LettingsLog < Log
     hb == 3
   end
 
-  # Option 8 has been removed starting from 22/23
-  def receives_housing_benefit_and_universal_credit?
-    # 8: Housing benefit and Universal Credit (without housing element)
-    hb == 8
-  end
-
-  def receives_uc_with_housing_element_excl_housing_benefit?
+  def receives_universal_credit
     # 6: Universal Credit with housing element (excluding housing benefit)
     hb == 6
   end
@@ -572,12 +566,11 @@ class LettingsLog < Log
   end
 
   def receives_housing_related_benefits?
-    if collection_start_year <= 2021
-      receives_housing_benefit_only? || receives_uc_with_housing_element_excl_housing_benefit? ||
-        receives_housing_benefit_and_universal_credit?
-    else
-      receives_housing_benefit_only? || receives_uc_with_housing_element_excl_housing_benefit?
-    end
+    receives_housing_benefit? || receives_universal_credit
+  end
+
+  def no_household_income_comes_from_benefits?
+    benefits == 3
   end
 
   def local_housing_referral?

@@ -1,1 +1,5 @@
-You have given us the details for 0 of the <%= log.hholdcount %> other people in the household
+<% if log.form.start_year_2026_or_later? %>
+  You have given us the details for 1 of the <%= log.hholdcount %> people in the household
+<% else %>
+  You have given us the details for 0 of the <%= log.hholdcount %> other people in the household
+<% end %>

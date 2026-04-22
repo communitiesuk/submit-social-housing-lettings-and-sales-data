@@ -29,6 +29,10 @@ module CollectionTimeHelper
     Time.zone.local(current_collection_start_year, 4, 1)
   end
 
+  def current_collection_after_crossover_start_date
+    Form::DEADLINES[current_collection_start_year][:edit_end_date] + 1.day
+  end
+
   def collection_end_date(date)
     Time.zone.local(collection_start_year_for_date(date) + 1, 3, 31).end_of_day
   end

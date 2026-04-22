@@ -17,7 +17,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Lettings::Pages::LeadTenantAge.new(nil, nil, self),
       (Form::Lettings::Pages::NoFemalesPregnantHouseholdLeadAgeValueCheck.new(nil, nil, self) unless form.start_year_2026_or_later?),
       (Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdLeadAgeValueCheck.new(nil, nil, self) unless form.start_year_2026_or_later?),
-      (Form::Lettings::Pages::NoHouseholdMemberLikelyToBePregnantCheck.new("no_household_member_likely_to_be_pregnant_lead_age_check", nil, self) if form.start_year_2026_or_later?),
+      (Form::Lettings::Pages::NoHouseholdMemberLikelyToBePregnantCheck.new("no_household_member_likely_to_be_pregnant_lead_age_check", nil, self, person_index: 1) if form.start_year_2026_or_later?),
       Form::Lettings::Pages::LeadTenantUnderRetirementValueCheck.new("age_lead_tenant_under_retirement_value_check", nil, self),
       Form::Lettings::Pages::LeadTenantOverRetirementValueCheck.new("age_lead_tenant_over_retirement_value_check", nil, self),
       (Form::Lettings::Pages::LeadTenantSexRegisteredAtBirth.new(nil, nil, self) if form.start_year_2026_or_later?),
