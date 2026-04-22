@@ -49,39 +49,13 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
     end
 
-    context "when hodate less than 3 years before saledate" do
-      let(:record) { build(:sales_log, hodate: current_collection_start_date - 3.years + 1.day, saledate: current_collection_start_date) }
+    context "when hodate less than 5 years before saledate" do
+      let(:record) { build(:sales_log, hodate: current_collection_start_date - 5.years + 1.day, saledate: current_collection_start_date) }
 
       it "does not add an error" do
         sale_information_validator.validate_practical_completion_date(record)
 
         expect(record.errors).not_to be_present
-      end
-    end
-
-    context "when hodate 3 or more years before saledate" do
-      let(:record) { build(:sales_log, hodate: saledate - 3.years, saledate:) }
-
-      context "and form year is 2024 or earlier" do
-        let(:saledate) { collection_start_date_for_year(2024) }
-
-        it "does add an error" do
-          sale_information_validator.validate_practical_completion_date(record)
-
-          expect(record.errors[:hodate]).to be_present
-          expect(record.errors[:saledate]).to be_present
-        end
-      end
-
-      context "and form year is 2025 or later" do
-        let(:saledate) { collection_start_date_for_year_or_later(2025) }
-
-        it "does not add an error" do
-          sale_information_validator.validate_practical_completion_date(record)
-
-          expect(record.errors[:hodate]).to be_empty
-          expect(record.errors[:saledate]).to be_empty
-        end
       end
     end
 

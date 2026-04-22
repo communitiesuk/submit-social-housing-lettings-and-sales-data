@@ -52,51 +52,6 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
     end
   end
 
-  context "when 2024", metadata: { year: 24 } do
-    let(:start_year_2025_or_later?) { false }
-    let(:start_year_2026_or_later?) { false }
-
-    it "has correct pages" do
-      expect(discounted_ownership_scheme.pages.map(&:id)).to eq(
-        %w[
-          living_before_purchase_discounted_ownership_joint_purchase
-          living_before_purchase_discounted_ownership
-          purchase_price
-          discount
-          extra_borrowing_price_value_check
-          percentage_discount_value_check
-          grant
-          grant_value_check
-          purchase_price_discounted_ownership
-          discounted_sale_grant_value_check
-          about_price_discounted_ownership_value_check
-          discounted_ownership_deposit_and_mortgage_value_check_after_value_and_discount
-          mortgage_used_discounted_ownership
-          discounted_ownership_mortgage_used_mortgage_value_check
-          discounted_sale_mortgage_used_value_check
-          mortgage_amount_discounted_ownership
-          discounted_ownership_mortgage_amount_mortgage_value_check
-          discounted_sale_mortgage_value_check
-          extra_borrowing_mortgage_value_check
-          discounted_ownership_deposit_and_mortgage_value_check_after_mortgage
-          mortgage_lender_discounted_ownership
-          mortgage_lender_other_discounted_ownership
-          mortgage_length_discounted_ownership
-          extra_borrowing_discounted_ownership
-          extra_borrowing_value_check
-          deposit_discounted_ownership
-          extra_borrowing_deposit_value_check
-          discounted_ownership_deposit_joint_purchase_value_check
-          discounted_ownership_deposit_value_check
-          discounted_ownership_deposit_and_mortgage_value_check_after_deposit
-          discounted_sale_deposit_value_check
-          leasehold_charges_discounted_ownership
-          monthly_charges_discounted_ownership_value_check
-        ],
-      )
-    end
-  end
-
   context "when 2025", metadata: { year: 25 } do
     let(:start_year_2026_or_later?) { false }
 
@@ -107,31 +62,23 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
           living_before_purchase_discounted_ownership
           purchase_price
           discount
-          extra_borrowing_price_value_check
           percentage_discount_value_check
           grant
           grant_value_check
           purchase_price_discounted_ownership
-          discounted_sale_grant_value_check
           about_price_discounted_ownership_value_check
           discounted_ownership_deposit_and_mortgage_value_check_after_value_and_discount
           mortgage_used_discounted_ownership
           discounted_ownership_mortgage_used_mortgage_value_check
-          discounted_sale_mortgage_used_value_check
           mortgage_amount_discounted_ownership
           discounted_ownership_mortgage_amount_mortgage_value_check
-          discounted_sale_mortgage_value_check
-          extra_borrowing_mortgage_value_check
           discounted_ownership_deposit_and_mortgage_value_check_after_mortgage
           mortgage_length_discounted_ownership
           extra_borrowing_discounted_ownership
-          extra_borrowing_value_check
           deposit_discounted_ownership
-          extra_borrowing_deposit_value_check
           discounted_ownership_deposit_joint_purchase_value_check
           discounted_ownership_deposit_value_check
           discounted_ownership_deposit_and_mortgage_value_check_after_deposit
-          discounted_sale_deposit_value_check
           leasehold_charges_discounted_ownership
           monthly_charges_discounted_ownership_value_check
         ],
@@ -147,32 +94,24 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
           living_before_purchase_discounted_ownership
           purchase_price
           discount
-          extra_borrowing_price_value_check
           percentage_discount_value_check
           grant
           grant_value_check
           purchase_price_discounted_ownership
-          discounted_sale_grant_value_check
           about_price_discounted_ownership_value_check
           discounted_ownership_deposit_and_mortgage_value_check_after_value_and_discount
           mortgage_used_discounted_ownership
           discounted_ownership_mortgage_used_mortgage_value_check
-          discounted_sale_mortgage_used_value_check
           mortgage_amount_discounted_ownership
           discounted_ownership_mortgage_amount_mortgage_value_check
-          discounted_sale_mortgage_value_check
-          extra_borrowing_mortgage_value_check
           discounted_ownership_deposit_and_mortgage_value_check_after_mortgage
           mortgage_length_discounted_ownership_not_interviewed
           mortgage_length_discounted_ownership_interviewed
           extra_borrowing_discounted_ownership
-          extra_borrowing_value_check
           deposit_discounted_ownership
-          extra_borrowing_deposit_value_check
           discounted_ownership_deposit_joint_purchase_value_check
           discounted_ownership_deposit_value_check
           discounted_ownership_deposit_and_mortgage_value_check_after_deposit
-          discounted_sale_deposit_value_check
           leasehold_charges_discounted_ownership
           monthly_charges_discounted_ownership_value_check
         ],

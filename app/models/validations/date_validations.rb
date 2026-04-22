@@ -14,14 +14,9 @@ module Validations::DateValidations
       record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.after_major_repair_date")
     end
 
-    if record.form.start_year_2025_or_later?
-      if record["startdate"].to_date - 20.years > record["mrcdate"].to_date
-        record.errors.add :mrcdate, I18n.t("validations.lettings.date.mrcdate.twenty_years_before_tenancy_start")
-        record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.twenty_years_after_mrc_date")
-      end
-    elsif record["startdate"].to_date - 10.years > record["mrcdate"].to_date
-      record.errors.add :mrcdate, I18n.t("validations.lettings.date.mrcdate.ten_years_before_tenancy_start")
-      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.ten_years_after_mrc_date")
+    if record["startdate"].to_date - 20.years > record["mrcdate"].to_date
+      record.errors.add :mrcdate, I18n.t("validations.lettings.date.mrcdate.twenty_years_before_tenancy_start")
+      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.twenty_years_after_mrc_date")
     end
   end
 
@@ -39,14 +34,9 @@ module Validations::DateValidations
       record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.after_void_date")
     end
 
-    if record.form.start_year_2025_or_later?
-      if record["startdate"].to_date - 20.years > record["voiddate"].to_date
-        record.errors.add :voiddate, I18n.t("validations.lettings.date.void_date.twenty_years_before_tenancy_start")
-        record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.twenty_years_after_void_date")
-      end
-    elsif record["startdate"].to_date - 10.years > record["voiddate"].to_date
-      record.errors.add :voiddate, I18n.t("validations.lettings.date.void_date.ten_years_before_tenancy_start")
-      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.ten_years_after_void_date")
+    if record["startdate"].to_date - 20.years > record["voiddate"].to_date
+      record.errors.add :voiddate, I18n.t("validations.lettings.date.void_date.twenty_years_before_tenancy_start")
+      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.twenty_years_after_void_date")
     end
   end
 

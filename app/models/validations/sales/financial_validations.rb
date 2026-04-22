@@ -55,7 +55,7 @@ module Validations::Sales::FinancialValidations
 
   def validate_percentage_bought_not_equal_percentage_owned(record)
     return unless record.stairbought && record.stairowned
-    return unless record.saledate && record.form.start_year_2024_or_later?
+    return unless record.saledate
 
     if record.stairbought == record.stairowned
       record.errors.add :stairbought, I18n.t("validations.sales.financial.stairbought.percentage_bought_equal_percentage_owned", stairbought: sprintf("%g", record.stairbought), stairowned: sprintf("%g", record.stairowned))
@@ -91,9 +91,7 @@ module Validations::Sales::FinancialValidations
   def validate_equity_in_range_for_year_and_type(record)
     return unless record.type && record.equity && record.collection_start_year
 
-    ranges = EQUITY_RANGES_BY_YEAR.fetch(record.collection_start_year, DEFAULT_EQUITY_RANGES)
-
-    return unless (range = ranges[record.type])
+    return unless (range = DEFAULT_EQUITY_RANGES[record.type])
 
     if record.equity < range.min
       record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sales.financial.type.equity_under_min", min_equity: range.min)
@@ -107,7 +105,7 @@ module Validations::Sales::FinancialValidations
 
   def validate_staircase_difference(record)
     return unless record.equity && record.stairbought && record.stairowned
-    return unless record.saledate && record.form.start_year_2024_or_later?
+    return unless record.saledate
 
     percentage_left = record.stairowned - record.stairbought - record.equity
 
@@ -157,26 +155,6 @@ private
   def is_economic_status_child?(economic_status)
     economic_status == 9
   end
-
-  EQUITY_RANGES_BY_YEAR = {
-    2022 => {
-      2 => 25..75,
-      30 => 10..75,
-      18 => 25..75,
-      16 => 10..75,
-      24 => 25..75,
-      31 => 0..75,
-    },
-    2023 => {
-      2 => 25..75,
-      30 => 10..75,
-      18 => 25..75,
-      16 => 10..75,
-      24 => 25..75,
-      31 => 0..75,
-      32 => 0..75,
-    },
-  }.freeze
 
   DEFAULT_EQUITY_RANGES = {
     2 => 25..75,

@@ -87,13 +87,6 @@ module Validations::Sales::SoftValidations
     deposit > savings * 4 / 3
   end
 
-  def extra_borrowing_expected_but_not_reported?
-    return unless saledate && !form.start_year_2024_or_later?
-    return unless extrabor && mortgage && deposit && value && discount
-
-    extrabor != 1 && mortgage + deposit > value - value * discount / 100
-  end
-
   def purchase_price_out_of_soft_range?
     return unless value && beds && la && sale_range
 
@@ -104,15 +97,6 @@ module Validations::Sales::SoftValidations
     return unless type && stairowned
 
     type == 24 && stairowned.between?(76, 100)
-  end
-
-  def shared_ownership_deposit_invalid?
-    return unless saledate && collection_start_year <= 2023
-    return unless mortgage || mortgageused == 2 || mortgageused == 3
-    return unless cashdis || !social_homebuy?
-    return unless deposit && value && equity
-
-    over_tolerance?(mortgage_deposit_and_discount_total, value * equity / 100, 1)
   end
 
   def mortgage_plus_deposit_less_than_discounted_value?
@@ -166,15 +150,6 @@ module Validations::Sales::SoftValidations
 
       age.between?(16, 19) && ecstat == 7 && relat != "C"
     end
-  end
-
-  def discounted_ownership_value_invalid?
-    return unless saledate && collection_start_year <= 2023
-    return unless value && deposit && ownershipsch
-    return unless mortgage || mortgageused == 2 || mortgageused == 3
-    return unless discount || grant || type == 29
-
-    mortgage_deposit_and_grant_total != value_with_discount && discounted_ownership_sale?
   end
 
   def buyer1_livein_wrong_for_ownership_type?

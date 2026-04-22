@@ -43,11 +43,9 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
           value_shared_ownership
           about_price_shared_ownership_value_check
           initial_equity
-          shared_ownership_equity_value_check
           mortgage_used_shared_ownership
           mortgage_used_mortgage_value_check
           mortgage_amount_shared_ownership
-          shared_ownership_mortgage_amount_value_check
           mortgage_amount_mortgage_value_check
           mortgage_length_shared_ownership
           deposit_shared_ownership
@@ -56,7 +54,6 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
           deposit_value_check
           deposit_discount
           deposit_discount_optional
-          shared_ownership_deposit_value_check
           monthly_rent
           service_charge
           monthly_charges_initial_purchase_value_check
@@ -86,11 +83,9 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
           value_shared_ownership
           about_price_shared_ownership_value_check
           initial_equity
-          shared_ownership_equity_value_check
           mortgage_used_shared_ownership
           mortgage_used_mortgage_value_check
           mortgage_amount_shared_ownership
-          shared_ownership_mortgage_amount_value_check
           mortgage_amount_mortgage_value_check
           mortgage_length_shared_ownership
           deposit_shared_ownership
@@ -99,7 +94,6 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
           deposit_value_check
           deposit_discount
           deposit_discount_optional
-          shared_ownership_deposit_value_check
           monthly_rent
           service_charge
           monthly_charges_initial_purchase_value_check
@@ -128,11 +122,9 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
           value_shared_ownership
           about_price_shared_ownership_value_check
           initial_equity
-          shared_ownership_equity_value_check
           mortgage_used_shared_ownership
           mortgage_used_mortgage_value_check
           mortgage_amount_shared_ownership
-          shared_ownership_mortgage_amount_value_check
           mortgage_amount_mortgage_value_check
           mortgage_length_shared_ownership_not_interviewed
           mortgage_length_shared_ownership_interviewed
@@ -142,7 +134,6 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
           deposit_value_check
           deposit_discount
           deposit_discount_optional
-          shared_ownership_deposit_value_check
           monthly_rent
           service_charge
           monthly_charges_initial_purchase_value_check

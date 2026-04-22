@@ -1,11 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Pages::NetIncomeValueCheck, type: :model do
+  include CollectionTimeHelper
+
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
-  let(:page_id) { "shared_ownership_deposit_value_check" }
+  let(:page_id) { "net_income_value_check" }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1))) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: current_collection_start_date)) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -24,13 +26,13 @@ RSpec.describe Form::Lettings::Pages::NetIncomeValueCheck, type: :model do
   end
 
   it "has the correct title_text" do
-    expect(page.title_text).to eq({ "translation" => "forms.2024.lettings.soft_validations.net_income_value_check.title_text", "arguments" => [{ "i18n_template" => "incfreq", "key" => "incfreq", "label" => true }, { "arguments_for_key" => "earnings", "i18n_template" => "earnings", "key" => "field_formatted_as_currency" }] })
+    expect(page.title_text).to eq({ "translation" => "forms.#{current_collection_start_year}.lettings.soft_validations.net_income_value_check.title_text", "arguments" => [{ "i18n_template" => "incfreq", "key" => "incfreq", "label" => true }, { "arguments_for_key" => "earnings", "i18n_template" => "earnings", "key" => "field_formatted_as_currency" }] })
   end
 
   it "has the correct informative_text" do
     expect(page.informative_text).to eq({
       "arguments" => [{ "i18n_template" => "net_income_higher_or_lower_text", "key" => "net_income_higher_or_lower_text", "label" => false }],
-      "translation" => "forms.2024.lettings.soft_validations.net_income_value_check.informative_text",
+      "translation" => "forms.#{current_collection_start_year}.lettings.soft_validations.net_income_value_check.informative_text",
     })
   end
 end

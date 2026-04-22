@@ -210,71 +210,47 @@ RSpec.describe Validations::PropertyValidations do
   end
 
   describe "#validate_la_in_england" do
-    context "with a log on or after 2025" do
-      before do
-        allow(log.form).to receive(:start_year_2025_or_later?).and_return true
-      end
+    context "and the local authority is not in England for general needs log" do
+      let(:log) { build(:lettings_log, la: "S12000019", needstype: 1) }
 
-      context "and the local authority is not in England for general needs log" do
-        let(:log) { build(:lettings_log, la: "S12000019", needstype: 1) }
-
-        it "adds an error" do
-          property_validator.validate_la_in_england(log)
-          expect(log.errors["la"]).to include(I18n.t("validations.lettings.property.la.not_in_england"))
-          expect(log.errors["postcode_full"]).to include(I18n.t("validations.lettings.property.postcode_full.not_in_england"))
-          expect(log.errors["uprn"]).to include(I18n.t("validations.lettings.property.uprn.not_in_england"))
-          expect(log.errors["uprn_selection"]).to include(I18n.t("validations.lettings.property.uprn_selection.not_in_england"))
-          expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.postcode_not_in_england"))
-          expect(log.errors["scheme_id"]).to be_empty
-          expect(log.errors["location_id"]).to be_empty
-        end
-      end
-
-      context "and the local authority is not in England for supported housing log" do
-        let(:location) { create(:location, location_code: "S12000019") }
-        let(:log) { build(:lettings_log, la: "S12000019", needstype: 2, location:) }
-
-        it "adds an error" do
-          property_validator.validate_la_in_england(log)
-          expect(log.errors["scheme_id"]).to include(I18n.t("validations.lettings.property.scheme_id.not_in_england"))
-          expect(log.errors["location_id"]).to include(I18n.t("validations.lettings.property.location_id.not_in_england"))
-          expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.location_not_in_england"))
-          expect(log.errors["la"]).to include(I18n.t("validations.lettings.property.la.not_in_england"))
-          expect(log.errors["postcode_full"]).to include(I18n.t("validations.lettings.property.postcode_full.not_in_england"))
-          expect(log.errors["uprn"]).to include(I18n.t("validations.lettings.property.uprn.not_in_england"))
-          expect(log.errors["uprn_selection"]).to include(I18n.t("validations.lettings.property.uprn_selection.not_in_england"))
-        end
-      end
-
-      context "and the local authority is in England" do
-        let(:log) { build(:lettings_log, la: "E06000002") }
-
-        it "does not add an error" do
-          property_validator.validate_la_in_england(log)
-          expect(log.errors["la"]).to be_empty
-          expect(log.errors["postcode_full"]).to be_empty
-          expect(log.errors["uprn"]).to be_empty
-          expect(log.errors["uprn_selection"]).to be_empty
-          expect(log.errors["startdate"]).to be_empty
-        end
+      it "adds an error" do
+        property_validator.validate_la_in_england(log)
+        expect(log.errors["la"]).to include(I18n.t("validations.lettings.property.la.not_in_england"))
+        expect(log.errors["postcode_full"]).to include(I18n.t("validations.lettings.property.postcode_full.not_in_england"))
+        expect(log.errors["uprn"]).to include(I18n.t("validations.lettings.property.uprn.not_in_england"))
+        expect(log.errors["uprn_selection"]).to include(I18n.t("validations.lettings.property.uprn_selection.not_in_england"))
+        expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.postcode_not_in_england"))
+        expect(log.errors["scheme_id"]).to be_empty
+        expect(log.errors["location_id"]).to be_empty
       end
     end
 
-    context "with a log before 2025" do
-      before do
-        allow(log.form).to receive(:start_year_2025_or_later?).and_return false
+    context "and the local authority is not in England for supported housing log" do
+      let(:location) { create(:location, location_code: "S12000019") }
+      let(:log) { build(:lettings_log, la: "S12000019", needstype: 2, location:) }
+
+      it "adds an error" do
+        property_validator.validate_la_in_england(log)
+        expect(log.errors["scheme_id"]).to include(I18n.t("validations.lettings.property.scheme_id.not_in_england"))
+        expect(log.errors["location_id"]).to include(I18n.t("validations.lettings.property.location_id.not_in_england"))
+        expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.location_not_in_england"))
+        expect(log.errors["la"]).to include(I18n.t("validations.lettings.property.la.not_in_england"))
+        expect(log.errors["postcode_full"]).to include(I18n.t("validations.lettings.property.postcode_full.not_in_england"))
+        expect(log.errors["uprn"]).to include(I18n.t("validations.lettings.property.uprn.not_in_england"))
+        expect(log.errors["uprn_selection"]).to include(I18n.t("validations.lettings.property.uprn_selection.not_in_england"))
       end
+    end
 
-      context "and the local authority is not in England" do
-        let(:log) { build(:lettings_log, la: "S12000019") }
+    context "and the local authority is in England" do
+      let(:log) { build(:lettings_log, la: "E06000002") }
 
-        it "does not add an error" do
-          property_validator.validate_la_in_england(log)
-          expect(log.errors["la"]).to be_empty
-          expect(log.errors["postcode_full"]).to be_empty
-          expect(log.errors["uprn"]).to be_empty
-          expect(log.errors["uprn_selection"]).to be_empty
-        end
+      it "does not add an error" do
+        property_validator.validate_la_in_england(log)
+        expect(log.errors["la"]).to be_empty
+        expect(log.errors["postcode_full"]).to be_empty
+        expect(log.errors["uprn"]).to be_empty
+        expect(log.errors["uprn_selection"]).to be_empty
+        expect(log.errors["startdate"]).to be_empty
       end
     end
   end
@@ -285,47 +261,77 @@ RSpec.describe Validations::PropertyValidations do
     let(:local_authority_active) { LocalAuthority.find_by(code: la_ecode_active) }
     let(:local_authority_inactive) { LocalAuthority.find_by(code: la_ecode_inactive) }
 
-    context "with a log on or after 2025" do
-      before do
-        allow(log.form).to receive(:start_year_2025_or_later?).and_return true
-      end
+    before do
+      allow(log.form).to receive(:start_year_2025_or_later?).and_return true
+    end
 
-      context "and the local authority is active for general needs log" do
-        let(:log) { build(:lettings_log, :completed, la: la_ecode_active, needstype: 1) }
+    context "and the local authority is active for general needs log" do
+      let(:log) { build(:lettings_log, :completed, la: la_ecode_active, needstype: 1) }
+
+      it "does not add an error" do
+        property_validator.validate_la_is_active(log)
+        expect(log.errors["la"]).to be_empty
+        expect(log.errors["postcode_full"]).to be_empty
+        expect(log.errors["uprn"]).to be_empty
+        expect(log.errors["uprn_selection"]).to be_empty
+        expect(log.errors["startdate"]).to be_empty
+      end
+    end
+
+    context "and the local authority is inactive for general needs log" do
+      let(:log) { build(:lettings_log, :completed, la: la_ecode_inactive, needstype: 1) }
+
+      it "adds an error" do
+        property_validator.validate_la_is_active(log)
+        expect(log.errors["la"]).to include(I18n.t("validations.lettings.property.la.la_not_valid_for_date", la: local_authority_inactive.name))
+        expect(log.errors["postcode_full"]).to include(I18n.t("validations.lettings.property.postcode_full.la_not_valid_for_date", la: local_authority_inactive.name))
+        expect(log.errors["uprn"]).to include(I18n.t("validations.lettings.property.uprn.la_not_valid_for_date", la: local_authority_inactive.name))
+        expect(log.errors["uprn_selection"]).to include(I18n.t("validations.lettings.property.uprn_selection.la_not_valid_for_date", la: local_authority_inactive.name))
+        expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: local_authority_inactive.name))
+        expect(log.errors["scheme_id"]).to be_empty
+        expect(log.errors["location_id"]).to be_empty
+      end
+    end
+
+    context "when 2025", metadata: { year: 25 } do
+      let(:startdate) { collection_start_date_for_year(2025) }
+
+      context "and the local authority is active for supported housing log" do
+        let(:location) { create(:location, location_code: la_ecode_active) }
+        let(:log) { build(:lettings_log, :completed, startdate:, needstype: 2, location:) }
 
         it "does not add an error" do
           property_validator.validate_la_is_active(log)
+          expect(log.errors["scheme_id"]).to be_empty
+          expect(log.errors["location_id"]).to be_empty
+          expect(log.errors["startdate"]).to be_empty
           expect(log.errors["la"]).to be_empty
           expect(log.errors["postcode_full"]).to be_empty
           expect(log.errors["uprn"]).to be_empty
           expect(log.errors["uprn_selection"]).to be_empty
-          expect(log.errors["startdate"]).to be_empty
         end
       end
 
-      context "and the local authority is inactive for general needs log" do
-        let(:log) { build(:lettings_log, :completed, la: la_ecode_inactive, needstype: 1) }
+      context "and the local authority is inactive for supported housing log" do
+        let(:location) { create(:location, location_code: la_ecode_inactive) }
+        let(:log) { build(:lettings_log, :completed, startdate:, needstype: 2, location:) }
 
-        it "adds an error" do
-          property_validator.validate_la_is_active(log)
-          expect(log.errors["la"]).to include(I18n.t("validations.lettings.property.la.la_not_valid_for_date", la: local_authority_inactive.name))
-          expect(log.errors["postcode_full"]).to include(I18n.t("validations.lettings.property.postcode_full.la_not_valid_for_date", la: local_authority_inactive.name))
-          expect(log.errors["uprn"]).to include(I18n.t("validations.lettings.property.uprn.la_not_valid_for_date", la: local_authority_inactive.name))
-          expect(log.errors["uprn_selection"]).to include(I18n.t("validations.lettings.property.uprn_selection.la_not_valid_for_date", la: local_authority_inactive.name))
-          expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: local_authority_inactive.name))
-          expect(log.errors["scheme_id"]).to be_empty
-          expect(log.errors["location_id"]).to be_empty
+        context "and the inactive local authority is not linked to an active one" do
+          it "adds an error" do
+            property_validator.validate_la_is_active(log)
+            expect(log.errors["scheme_id"]).to include(I18n.t("validations.lettings.property.scheme_id.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["location_id"]).to include(I18n.t("validations.lettings.property.location_id.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["la"]).to include(I18n.t("validations.lettings.property.la.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["postcode_full"]).to include(I18n.t("validations.lettings.property.postcode_full.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["uprn"]).to include(I18n.t("validations.lettings.property.uprn.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["uprn_selection"]).to include(I18n.t("validations.lettings.property.uprn_selection.la_not_valid_for_date", la: local_authority_inactive.name))
+          end
         end
-      end
 
-      context "when 2025", metadata: { year: 25 } do
-        let(:startdate) { collection_start_date_for_year(2025) }
-
-        context "and the local authority is active for supported housing log" do
-          let(:location) { create(:location, location_code: la_ecode_active) }
-          let(:log) { build(:lettings_log, :completed, startdate:, needstype: 2, location:) }
-
+        context "and the inactive local authority is linked to an active one" do
           it "does not add an error" do
+            LocalAuthorityLink.create!(local_authority: local_authority_inactive, linked_local_authority: local_authority_active)
             property_validator.validate_la_is_active(log)
             expect(log.errors["scheme_id"]).to be_empty
             expect(log.errors["location_id"]).to be_empty
@@ -334,108 +340,58 @@ RSpec.describe Validations::PropertyValidations do
             expect(log.errors["postcode_full"]).to be_empty
             expect(log.errors["uprn"]).to be_empty
             expect(log.errors["uprn_selection"]).to be_empty
-          end
-        end
-
-        context "and the local authority is inactive for supported housing log" do
-          let(:location) { create(:location, location_code: la_ecode_inactive) }
-          let(:log) { build(:lettings_log, :completed, startdate:, needstype: 2, location:) }
-
-          context "and the inactive local authority is not linked to an active one" do
-            it "adds an error" do
-              property_validator.validate_la_is_active(log)
-              expect(log.errors["scheme_id"]).to include(I18n.t("validations.lettings.property.scheme_id.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["location_id"]).to include(I18n.t("validations.lettings.property.location_id.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["la"]).to include(I18n.t("validations.lettings.property.la.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["postcode_full"]).to include(I18n.t("validations.lettings.property.postcode_full.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["uprn"]).to include(I18n.t("validations.lettings.property.uprn.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["uprn_selection"]).to include(I18n.t("validations.lettings.property.uprn_selection.la_not_valid_for_date", la: local_authority_inactive.name))
-            end
-          end
-
-          context "and the inactive local authority is linked to an active one" do
-            it "does not add an error" do
-              LocalAuthorityLink.create!(local_authority: local_authority_inactive, linked_local_authority: local_authority_active)
-              property_validator.validate_la_is_active(log)
-              expect(log.errors["scheme_id"]).to be_empty
-              expect(log.errors["location_id"]).to be_empty
-              expect(log.errors["startdate"]).to be_empty
-              expect(log.errors["la"]).to be_empty
-              expect(log.errors["postcode_full"]).to be_empty
-              expect(log.errors["uprn"]).to be_empty
-              expect(log.errors["uprn_selection"]).to be_empty
-            end
-          end
-        end
-      end
-
-      context "when 2026 or later", metadata: { year: 26 } do
-        let(:startdate) { collection_start_date_for_year_or_later(2026) }
-
-        context "and the local authority is active for supported housing log" do
-          let(:log) { build(:lettings_log, :completed, startdate:, la: la_ecode_active, needstype: 2) }
-
-          it "does not add an error" do
-            property_validator.validate_la_is_active(log)
-            expect(log.errors["scheme_id"]).to be_empty
-            expect(log.errors["location_id"]).to be_empty
-            expect(log.errors["startdate"]).to be_empty
-            expect(log.errors["la"]).to be_empty
-            expect(log.errors["postcode_full"]).to be_empty
-            expect(log.errors["uprn"]).to be_empty
-            expect(log.errors["uprn_selection"]).to be_empty
-          end
-        end
-
-        context "and the local authority is inactive for supported housing log" do
-          let(:log) { build(:lettings_log, :completed, startdate:, la: la_ecode_inactive, needstype: 2) }
-
-          context "and the inactive local authority is not linked to an active one" do
-            it "adds an error" do
-              property_validator.validate_la_is_active(log)
-              expect(log.errors["scheme_id"]).to include(I18n.t("validations.lettings.property.scheme_id.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["location_id"]).to include(I18n.t("validations.lettings.property.location_id.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["la"]).to include(I18n.t("validations.lettings.property.la.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["postcode_full"]).to include(I18n.t("validations.lettings.property.postcode_full.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["uprn"]).to include(I18n.t("validations.lettings.property.uprn.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["uprn_selection"]).to include(I18n.t("validations.lettings.property.uprn_selection.la_not_valid_for_date", la: local_authority_inactive.name))
-            end
-          end
-
-          context "and the inactive local authority is linked to an active one" do
-            # the link code was only ever used if the LA was drawn from the location
-            it "adds an error" do
-              LocalAuthorityLink.create!(local_authority: local_authority_inactive, linked_local_authority: local_authority_active)
-              property_validator.validate_la_is_active(log)
-              expect(log.errors["scheme_id"]).to include(I18n.t("validations.lettings.property.scheme_id.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["location_id"]).to include(I18n.t("validations.lettings.property.location_id.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["la"]).to include(I18n.t("validations.lettings.property.la.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["postcode_full"]).to include(I18n.t("validations.lettings.property.postcode_full.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["uprn"]).to include(I18n.t("validations.lettings.property.uprn.la_not_valid_for_date", la: local_authority_inactive.name))
-              expect(log.errors["uprn_selection"]).to include(I18n.t("validations.lettings.property.uprn_selection.la_not_valid_for_date", la: local_authority_inactive.name))
-            end
           end
         end
       end
     end
 
-    context "with a log before 2025" do
-      before do
-        allow(log.form).to receive(:start_year_2025_or_later?).and_return false
-      end
+    context "when 2026 or later", metadata: { year: 26 } do
+      let(:startdate) { collection_start_date_for_year_or_later(2026) }
 
-      context "and the local authority is inactive" do
-        let(:log) { build(:lettings_log, :completed, la: la_ecode_inactive) }
+      context "and the local authority is active for supported housing log" do
+        let(:log) { build(:lettings_log, :completed, startdate:, la: la_ecode_active, needstype: 2) }
 
         it "does not add an error" do
           property_validator.validate_la_is_active(log)
+          expect(log.errors["scheme_id"]).to be_empty
+          expect(log.errors["location_id"]).to be_empty
+          expect(log.errors["startdate"]).to be_empty
           expect(log.errors["la"]).to be_empty
           expect(log.errors["postcode_full"]).to be_empty
           expect(log.errors["uprn"]).to be_empty
           expect(log.errors["uprn_selection"]).to be_empty
+        end
+      end
+
+      context "and the local authority is inactive for supported housing log" do
+        let(:log) { build(:lettings_log, :completed, startdate:, la: la_ecode_inactive, needstype: 2) }
+
+        context "and the inactive local authority is not linked to an active one" do
+          it "adds an error" do
+            property_validator.validate_la_is_active(log)
+            expect(log.errors["scheme_id"]).to include(I18n.t("validations.lettings.property.scheme_id.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["location_id"]).to include(I18n.t("validations.lettings.property.location_id.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["la"]).to include(I18n.t("validations.lettings.property.la.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["postcode_full"]).to include(I18n.t("validations.lettings.property.postcode_full.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["uprn"]).to include(I18n.t("validations.lettings.property.uprn.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["uprn_selection"]).to include(I18n.t("validations.lettings.property.uprn_selection.la_not_valid_for_date", la: local_authority_inactive.name))
+          end
+        end
+
+        context "and the inactive local authority is linked to an active one" do
+          # the link code was only ever used if the LA was drawn from the location
+          it "adds an error" do
+            LocalAuthorityLink.create!(local_authority: local_authority_inactive, linked_local_authority: local_authority_active)
+            property_validator.validate_la_is_active(log)
+            expect(log.errors["scheme_id"]).to include(I18n.t("validations.lettings.property.scheme_id.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["location_id"]).to include(I18n.t("validations.lettings.property.location_id.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["startdate"]).to include(I18n.t("validations.lettings.property.startdate.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["la"]).to include(I18n.t("validations.lettings.property.la.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["postcode_full"]).to include(I18n.t("validations.lettings.property.postcode_full.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["uprn"]).to include(I18n.t("validations.lettings.property.uprn.la_not_valid_for_date", la: local_authority_inactive.name))
+            expect(log.errors["uprn_selection"]).to include(I18n.t("validations.lettings.property.uprn_selection.la_not_valid_for_date", la: local_authority_inactive.name))
+          end
         end
       end
     end
