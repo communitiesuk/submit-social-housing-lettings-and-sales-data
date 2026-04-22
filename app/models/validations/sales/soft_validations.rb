@@ -2,16 +2,25 @@ module Validations::Sales::SoftValidations
   include Validations::Sales::SaleInformationValidations
 
   ALLOWED_INCOME_RANGES_SALES = {
-    1 => OpenStruct.new(soft_min: 13_400, soft_max: 150_000),
-    2 => OpenStruct.new(soft_min: 2_600, soft_max: 80_000),
-    3 => OpenStruct.new(soft_min: 2_080, soft_max: 30_000),
-    4 => OpenStruct.new(soft_min: 520, soft_max: 23_400),
-    5 => OpenStruct.new(soft_min: 520, soft_max: 80_000),
-    6 => OpenStruct.new(soft_min: 520, soft_max: 50_000),
-    7 => OpenStruct.new(soft_min: 520, soft_max: 30_000),
-    8 => OpenStruct.new(soft_min: 520, soft_max: 150_000),
-    9 => OpenStruct.new(soft_min: 520, soft_max: 150_000),
-    0 => OpenStruct.new(soft_min: 520, soft_max: 150_000),
+    2024 => {
+      1 => OpenStruct.new(soft_min: 5000),
+      2 => OpenStruct.new(soft_min: 1500),
+      3 => OpenStruct.new(soft_min: 1000),
+      5 => OpenStruct.new(soft_min: 2000),
+      0 => OpenStruct.new(soft_min: 2000),
+    },
+    2025 => {
+      1 => OpenStruct.new(soft_min: 13_400, soft_max: 150_000),
+      2 => OpenStruct.new(soft_min: 2_600, soft_max: 80_000),
+      3 => OpenStruct.new(soft_min: 2_080, soft_max: 30_000),
+      4 => OpenStruct.new(soft_min: 520, soft_max: 23_400),
+      5 => OpenStruct.new(soft_min: 520, soft_max: 80_000),
+      6 => OpenStruct.new(soft_min: 520, soft_max: 50_000),
+      7 => OpenStruct.new(soft_min: 520, soft_max: 30_000),
+      8 => OpenStruct.new(soft_min: 520, soft_max: 150_000),
+      9 => OpenStruct.new(soft_min: 520, soft_max: 150_000),
+      0 => OpenStruct.new(soft_min: 520, soft_max: 150_000),
+    },
   }.freeze
 
   def income1_outside_soft_range_for_ecstat?
@@ -67,7 +76,7 @@ module Validations::Sales::SoftValidations
   end
 
   def savings_over_soft_max?
-    soft_max = type == 24 ? 200_000 : 100_000
+    soft_max = form.start_year_2025_or_later? && type == 24 ? 200_000 : 100_000
 
     savings && savings > soft_max
   end
@@ -120,7 +129,7 @@ module Validations::Sales::SoftValidations
 
   def grant_outside_common_range?
     return unless grant && type && saledate
-    return if [21, 8].include?(type)
+    return if form.start_year_2024_or_later? && [21, 8].include?(type)
 
     !grant.between?(9_000, 16_000)
   end
@@ -188,9 +197,10 @@ private
   def income_under_soft_min?(income, ecstat)
     return unless income && ecstat
 
-    return false unless ALLOWED_INCOME_RANGES_SALES[ecstat]
+    income_ranges = form.start_year_2025_or_later? ? ALLOWED_INCOME_RANGES_SALES[2025] : ALLOWED_INCOME_RANGES_SALES[2024]
+    return false unless income_ranges[ecstat]
 
-    income < ALLOWED_INCOME_RANGES_SALES[ecstat][:soft_min]
+    income < income_ranges[ecstat][:soft_min]
   end
 
   def income1_over_soft_max_for_ecstat?
@@ -202,11 +212,11 @@ private
   end
 
   def income_over_soft_max?(income, ecstat)
-    return unless income && ecstat
+    return unless income && ecstat && form.start_year_2025_or_later?
 
-    return false unless ALLOWED_INCOME_RANGES_SALES[ecstat]
+    return false unless ALLOWED_INCOME_RANGES_SALES[2025][ecstat]
 
-    income > ALLOWED_INCOME_RANGES_SALES[ecstat][:soft_max]
+    income > ALLOWED_INCOME_RANGES_SALES[2025][ecstat][:soft_max]
   end
 
   def income_over_discounted_sale_soft_max?(income)
