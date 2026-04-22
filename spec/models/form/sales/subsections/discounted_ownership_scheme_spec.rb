@@ -62,7 +62,6 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
           living_before_purchase_discounted_ownership
           purchase_price
           discount
-          extra_borrowing_price_value_check
           percentage_discount_value_check
           grant
           grant_value_check
@@ -76,9 +75,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
           discounted_ownership_deposit_and_mortgage_value_check_after_mortgage
           mortgage_length_discounted_ownership
           extra_borrowing_discounted_ownership
-          extra_borrowing_value_check
           deposit_discounted_ownership
-          extra_borrowing_deposit_value_check
           discounted_ownership_deposit_joint_purchase_value_check
           discounted_ownership_deposit_value_check
           discounted_ownership_deposit_and_mortgage_value_check_after_deposit
@@ -97,7 +94,6 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
           living_before_purchase_discounted_ownership
           purchase_price
           discount
-          extra_borrowing_price_value_check
           percentage_discount_value_check
           grant
           grant_value_check
@@ -112,9 +108,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
           mortgage_length_discounted_ownership_not_interviewed
           mortgage_length_discounted_ownership_interviewed
           extra_borrowing_discounted_ownership
-          extra_borrowing_value_check
           deposit_discounted_ownership
-          extra_borrowing_deposit_value_check
           discounted_ownership_deposit_joint_purchase_value_check
           discounted_ownership_deposit_value_check
           discounted_ownership_deposit_and_mortgage_value_check_after_deposit

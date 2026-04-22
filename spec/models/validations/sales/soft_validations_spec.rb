@@ -372,20 +372,6 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
       end
     end
-
-    context "when validating extra borrowing" do
-      let(:saledate) { collection_start_date_for_year_or_later(2024) }
-
-      it "returns false for logs from 2024 onwards" do
-        record.extrabor = 2
-        record.mortgage = 50_000
-        record.deposit = 40_000
-        record.value = 100_000
-        record.discount = 11
-        expect(record)
-          .not_to be_extra_borrowing_expected_but_not_reported
-      end
-    end
   end
 
   describe "savings amount validations" do
