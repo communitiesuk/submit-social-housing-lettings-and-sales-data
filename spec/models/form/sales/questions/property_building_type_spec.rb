@@ -25,7 +25,7 @@ RSpec.describe Form::Sales::Questions::PropertyBuildingType, type: :model do
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
-      "1" => { "value" => "Purpose built" },
+      "1" => { "value" => "Purpose-built" },
       "2" => { "value" => "Converted from previous residential or non-residential property" },
     })
   end

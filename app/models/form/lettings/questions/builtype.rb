@@ -9,7 +9,7 @@ class Form::Lettings::Questions::Builtype < ::Form::Question
 
   ANSWER_OPTIONS = {
     "2" => { "value" => "Converted from previous residential or non-residential property" },
-    "1" => { "value" => "Purpose built" },
+    "1" => { "value" => "Purpose-built" },
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 20, 2024 => 20, 2025 => 20 }.freeze
