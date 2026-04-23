@@ -24,7 +24,7 @@ RSpec.describe Form::Lettings::Subsections::IncomeAndBenefits, type: :model do
         %w[
           income_known
           income_amount
-          net_income_value_check
+          income_amount_net_income_value_check
           housing_benefit
           benefits_proportion
           rent_or_other_charges
@@ -58,7 +58,7 @@ RSpec.describe Form::Lettings::Subsections::IncomeAndBenefits, type: :model do
         %w[
           income_known
           income_amount
-          net_income_value_check
+          income_amount_net_income_value_check
           housing_benefit
           benefits_proportion
           rent_or_other_charges
