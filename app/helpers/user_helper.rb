@@ -82,27 +82,17 @@ module UserHelper
 
     case attribute
     when "role"
-      current_user.data_coordinator? || current_user.support? ? edit_link("Select role", user, current_user) : "No role assigned"
+      current_user.data_coordinator? || current_user.support? ? govuk_link_to("Select role", aliased_user_edit(user, current_user), class: "govuk-link govuk-link--no-visited-state") : "No role assigned"
     when "phone"
-      edit_link("Enter telephone number", user, current_user)
+      govuk_link_to("Enter telephone number", aliased_user_edit(user, current_user), class: "govuk-link govuk-link--no-visited-state")
     else
       "No answer provided"
     end
   end
 
   def user_action_text(user, attribute)
-    return "Change" if (%w[role phone].include?(attribute) && user.send(attribute).present?) || attribute == "phone_extension"
+    return "Change" if attribute == "phone_extension" || (%w[role phone].include?(attribute) && user.send(attribute).present?)
 
     ""
-  end
-
-private
-
-  def edit_link(text, user, current_user)
-    govuk_link_to(
-      text,
-      aliased_user_edit(user, current_user),
-      class: "govuk-link govuk-link--no-visited-state",
-    )
   end
 end
