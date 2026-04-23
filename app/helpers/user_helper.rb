@@ -89,19 +89,13 @@ module UserHelper
       end
     when "phone"
       edit_link("Enter telephone number", user, current_user)
-    when "phone_extension"
-      if user == current_user || current_user.data_coordinator? || current_user.support?
-        edit_link("Enter extension number", user, current_user)
-      else
-        no_answer_provided_text
-      end
     else
       no_answer_provided_text
     end
   end
 
   def user_action_text(user, attribute)
-    return "Change" if %w[role phone phone_extension].include?(attribute) && user.send(attribute).present?
+    return "Change" if (%w[role phone].include?(attribute) && user.send(attribute).present?) || attribute == "phone_extension"
 
     ""
   end

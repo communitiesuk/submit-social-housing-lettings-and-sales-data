@@ -68,7 +68,7 @@
       <%= summary_list.with_row do |row|
         row.with_key { "Extension number" }
         row.with_value { user_details_html(@user, current_user, "phone_extension") }
-        if UserPolicy.new(current_user, @user).edit_extension_numbers? && @user.phone_extension.present?
+        if UserPolicy.new(current_user, @user).edit_extension_numbers?
           row.with_action(
             text: user_action_text(@user, "phone_extension"),
             visually_hidden_text: "extension number",
