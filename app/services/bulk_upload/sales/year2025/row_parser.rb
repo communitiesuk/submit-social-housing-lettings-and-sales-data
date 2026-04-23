@@ -763,7 +763,7 @@ private
       postcode_full: %i[field_21 field_22],
       wchair: %i[field_27],
 
-      type: type_fields,
+      type: sale_type_fields,
       resale: %i[field_78],
       hodate: %i[field_80 field_81 field_82],
 
@@ -1191,7 +1191,7 @@ private
     field_109 if staircasing?
   end
 
-  def type_fields
+  def sale_type_fields
     return %i[field_8 field_9] if shared_ownership?
     return %i[field_8 field_11] if discounted_ownership?
 
