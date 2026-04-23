@@ -66,6 +66,21 @@
           end %>
 
       <%= summary_list.with_row do |row|
+        row.with_key { "Extension number" }
+        row.with_value { user_details_html(@user, current_user, "phone_extension") }
+        if UserPolicy.new(current_user, @user).edit_extension_numbers? && @user.phone_extension.present?
+          row.with_action(
+            text: user_action_text(@user, "phone_extension"),
+            visually_hidden_text: "extension number",
+            href: aliased_user_edit(@user, current_user),
+            html_attributes: { "data-qa": "change-extension-number" },
+            )
+        else
+          row.with_action
+        end
+      end %>
+
+      <%= summary_list.with_row do |row|
             row.with_key { "Password" }
             row.with_value { "••••••••" }
             if UserPolicy.new(current_user, @user).edit_password?

@@ -335,6 +335,7 @@ class User < ApplicationRecord
   end
 
   def phone_with_extension
+    #use this
     return phone if phone_extension.blank?
 
     "#{phone}, Ext. #{phone_extension}"
