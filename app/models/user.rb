@@ -334,13 +334,6 @@ class User < ApplicationRecord
     save!(validate: false)
   end
 
-  def phone_with_extension
-    #use this
-    return phone if phone_extension.blank?
-
-    "#{phone}, Ext. #{phone_extension}"
-  end
-
   def assigned_to_lettings_logs
     lettings_logs.where(assigned_to: self)
   end
