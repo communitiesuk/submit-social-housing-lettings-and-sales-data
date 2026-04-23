@@ -102,6 +102,10 @@ module CollectionTimeHelper
   # useful for writing future tests that will also test the current time if it can or a future year if needed.
   # stops tests being frozen on a specific year.
   def collection_start_date_for_year_or_later(year)
-    collection_start_date_for_year([current_collection_start_year, year].max)
+    collection_start_date_for_year(collection_start_year_for_year_or_later(year))
+  end
+
+  def collection_start_year_for_year_or_later(year)
+    [current_collection_start_year, year].max
   end
 end
