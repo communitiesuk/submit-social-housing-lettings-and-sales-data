@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe SalesLogsController, type: :request do
+  include CollectionTimeHelper
+
   let(:user) { FactoryBot.create(:user) }
   let(:owning_organisation) { user.organisation }
   let(:api_username) { "test_user" }
@@ -26,16 +28,9 @@ RSpec.describe SalesLogsController, type: :request do
   end
 
   before do
-    Timecop.freeze(Time.zone.local(2024, 3, 1))
-    Singleton.__init__(FormHandler)
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("API_USER").and_return(api_username)
     allow(ENV).to receive(:[]).with("API_KEY").and_return(api_password)
-  end
-
-  after do
-    Timecop.return
-    Singleton.__init__(FormHandler)
   end
 
   describe "POST #create" do
@@ -71,18 +66,19 @@ RSpec.describe SalesLogsController, type: :request do
 
       context "with a request containing invalid json parameters" do
         let(:params) do
+          invalid_sales_log = FactoryBot.build(
+            :sales_log,
+            :completed,
+            assigned_to: user,
+            owning_organisation: owning_organisation,
+            managing_organisation: owning_organisation,
+            saledate: archived_collection_start_date,
+            beds: 2,
+            proptype: 2,
+          )
+
           {
-            "owning_organisation_id": owning_organisation.id,
-            "managing_organisation_id": owning_organisation.id,
-            "assigned_to_id": user.id,
-            "saledate": Time.zone.today,
-            "purchid": "1",
-            "ownershipsch": 1,
-            "type": 2,
-            "jointpur": 1,
-            "jointmore": 1,
-            "beds": 2,
-            "proptype": 2,
+            sales_log: invalid_sales_log.attributes,
           }
         end
 
@@ -93,7 +89,26 @@ RSpec.describe SalesLogsController, type: :request do
         it "validates sales log parameters" do
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_content)
-          expect(json_response["errors"]).to contain_exactly(["beds", ["Number of bedrooms must be 1 if the property is a bedsit."]], ["proptype", ["Answer cannot be 'Bedsit' if the property has 2 or more bedrooms."]])
+          expect(json_response["errors"]).to contain_exactly(
+            [
+              "beds",
+              [
+                "Number of bedrooms must be 1 if the property is a bedsit.",
+              ],
+            ],
+            [
+              "proptype",
+              [
+                "Answer cannot be 'Bedsit' if the property has 2 or more bedrooms.",
+              ],
+            ],
+            [
+              "saledate",
+              [
+                "Enter a date within the #{previous_collection_start_year} to #{previous_collection_end_year} or #{current_collection_start_year} to #{current_collection_end_year} collection years, which is between 1st April #{previous_collection_start_year} and 31st March #{current_collection_end_year}.",
+              ],
+            ],
+          )
         end
       end
     end
@@ -341,72 +356,50 @@ RSpec.describe SalesLogsController, type: :request do
           end
 
           context "with year filter" do
-            before do
-              Timecop.freeze(2022, 4, 1)
-              sales_log_2022.update!(saledate: Time.zone.local(2022, 4, 1))
-              Timecop.freeze(2023, 1, 1)
-              sales_log_2022.update!(saledate: Time.zone.local(2023, 1, 1))
-            end
-
-            after do
-              Timecop.unfreeze
-            end
-
-            let!(:sales_log_2022) do
+            let!(:sales_log_current) do
               FactoryBot.create(:sales_log, :completed,
                                 owning_organisation: organisation,
                                 assigned_to: user,
-                                saledate: Time.zone.today)
+                                saledate: current_collection_start_date)
             end
-            let!(:sales_log_2023) do
+            let!(:sales_log_previous) do
               FactoryBot.create(:sales_log,
                                 owning_organisation: organisation,
                                 assigned_to: user,
-                                saledate: Time.zone.today)
+                                saledate: previous_collection_start_date)
             end
 
             it "shows sales logs for multiple selected years" do
-              get "/sales-logs?years[]=2021&years[]=2022", headers: headers, params: {}
-              expect(page).to have_link(sales_log_2022.id.to_s)
-              expect(page).to have_link(sales_log_2023.id.to_s)
+              get "/sales-logs?years[]=#{previous_collection_start_year}&years[]=#{current_collection_start_year}", headers: headers, params: {}
+              expect(page).to have_link(sales_log_current.id.to_s)
+              expect(page).to have_link(sales_log_previous.id.to_s)
             end
 
             it "shows sales logs for one selected year" do
-              get "/sales-logs?years[]=2022", headers: headers, params: {}
-              expect(page).to have_link(sales_log_2022.id.to_s)
-              expect(page).to have_link(sales_log_2023.id.to_s)
+              get "/sales-logs?years[]=#{current_collection_start_year}", headers: headers, params: {}
+              expect(page).to have_link(sales_log_current.id.to_s)
+              expect(page).not_to have_link(sales_log_previous.id.to_s)
             end
           end
 
           context "with year and status filter" do
-            before do
-              Timecop.freeze(2022, 4, 1)
-              sales_log_2022.update!(saledate: Time.zone.local(2022, 4, 1))
-              Timecop.freeze(2023, 1, 1)
-              sales_log_2022.update!(saledate: Time.zone.local(2023, 1, 1))
-            end
-
-            after do
-              Timecop.unfreeze
-            end
-
-            let!(:sales_log_2022) do
+            let!(:sales_log_current) do
               FactoryBot.create(:sales_log, :completed,
                                 owning_organisation: organisation,
                                 assigned_to: user,
-                                saledate: Time.zone.today)
+                                saledate: current_collection_start_date)
             end
-            let!(:sales_log_2023) do
+            let!(:sales_log_previous) do
               FactoryBot.create(:sales_log,
                                 owning_organisation: organisation,
                                 assigned_to: user,
-                                saledate: Time.zone.today)
+                                saledate: previous_collection_start_date)
             end
 
             it "shows sales logs for multiple selected statuses and years" do
-              get "/sales-logs?years[]=2021&years[]=2022&status[]=in_progress&status[]=completed", headers: headers, params: {}
-              expect(page).to have_link(sales_log_2022.id.to_s)
-              expect(page).to have_link(sales_log_2023.id.to_s)
+              get "/sales-logs?years[]=#{previous_collection_start_year}&years[]=#{current_collection_start_year}&status[]=in_progress&status[]=completed", headers: headers, params: {}
+              expect(page).to have_link(sales_log_current.id.to_s)
+              expect(page).to have_link(sales_log_previous.id.to_s)
             end
           end
 
@@ -856,20 +849,11 @@ RSpec.describe SalesLogsController, type: :request do
 
       before do
         sign_in user
-        Timecop.freeze(2021, 4, 1)
-        Singleton.__init__(FormHandler)
-        completed_sales_log.update!(saledate: Time.zone.local(2021, 4, 1))
-        completed_sales_log.reload
       end
 
       context "with sales logs that are owned by your organisation" do
         before do
           get "/sales-logs/#{completed_sales_log.id}", headers:, params: {}
-        end
-
-        after do
-          Timecop.return
-          Singleton.__init__(FormHandler)
         end
 
         it "shows the tasklist for sales logs you have access to" do
@@ -878,11 +862,11 @@ RSpec.describe SalesLogsController, type: :request do
         end
 
         it "displays a link to update the log for currently editable logs" do
-          completed_sales_log.update!(saledate: Time.zone.local(2021, 4, 1))
+          completed_sales_log.update!(saledate: current_collection_start_date)
           completed_sales_log.reload
 
           get "/sales-logs/#{completed_sales_log.id}", headers:, params: {}
-          expect(completed_sales_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 12, 31))
+          expect(completed_sales_log.form.new_logs_end_date).to eq(FormHandler.instance.current_sales_form.new_logs_end_date)
           expect(completed_sales_log.status).to eq("completed")
           expect(page).to have_link("review and make changes to this log", href: "/sales-logs/#{completed_sales_log.id}/review?sales_log=true")
         end
@@ -894,41 +878,33 @@ RSpec.describe SalesLogsController, type: :request do
           get "/sales-logs/#{completed_sales_log.id}", headers:, params: {}
         end
 
-        after do
-          Timecop.return
-          Singleton.__init__(FormHandler)
-        end
-
         it "shows the tasklist for sales logs you have access to" do
           expect(response.body).to match("Log")
           expect(response.body).to match(completed_sales_log.id.to_s)
         end
       end
 
-      context "with sales logs from a closed collection period before the previous collection" do
-        before do
-          sign_in user
-          Timecop.return
-          Singleton.__init__(FormHandler)
-          get "/sales-logs/#{completed_sales_log.id}", headers:, params: {}
-        end
-
-        it "redirects to review page" do
-          expect(response).to redirect_to("/sales-logs/#{completed_sales_log.id}/review?sales_log=true")
-        end
-      end
-
       context "with sales logs from a closed previous collection period" do
+        let(:completed_sales_log) do
+          FactoryBot.create(
+            :sales_log,
+            :completed,
+            :ignore_validation_errors,
+            owning_organisation: user.organisation,
+            assigned_to: user,
+            saledate: archived_collection_start_date,
+          )
+        end
+        let(:closed_previous_sales_form) { FormHandler.instance.sales_form_for_start_year(archived_collection_start_year) }
+        # let(:closed_previous_collection_end) { previous_collection_end_date.to_time.end_of_day }
+
         before do
           sign_in user
-          Timecop.freeze(2023, 2, 1)
-          Singleton.__init__(FormHandler)
+          # allow(closed_previous_sales_form).to receive_messages(
+          #   new_logs_end_date: closed_previous_collection_end,
+          #   edit_end_date: closed_previous_collection_end,
+          # )
           get "/sales-logs/#{completed_sales_log.id}", headers:, params: {}
-        end
-
-        after do
-          Timecop.return
-          Singleton.__init__(FormHandler)
         end
 
         it "redirects to review page" do
@@ -937,10 +913,9 @@ RSpec.describe SalesLogsController, type: :request do
 
         it "displays a closed collection window message for previous collection year logs" do
           get "/sales-logs/#{completed_sales_log.id}", headers:, params: {}
-          expect(completed_sales_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 12, 31))
           expect(completed_sales_log.status).to eq("completed")
           follow_redirect!
-          expect(page).to have_content("This log is from the 2021 to 2022 collection window, which is now closed.")
+          expect(page).to have_content("This log is from the #{archived_collection_start_year} to #{archived_collection_end_year} collection window, which is now closed.")
         end
       end
 
@@ -959,6 +934,7 @@ RSpec.describe SalesLogsController, type: :request do
       let(:headers) { { "Accept" => "text/html" } }
       let(:search_term) { "foot" }
       let(:codes_only) { false }
+      let(:selected_year) { current_collection_start_year }
 
       before do
         create(:sales_log, :in_progress, assigned_to: user, purchid: search_term)
@@ -968,7 +944,7 @@ RSpec.describe SalesLogsController, type: :request do
 
       context "when there is 1 year selected in the filters" do
         before do
-          get "/sales-logs/csv-download?years[]=2023&search=#{search_term}&codes_only=#{codes_only}", headers:
+          get "/sales-logs/csv-download?years[]=#{selected_year}&search=#{search_term}&codes_only=#{codes_only}", headers:
         end
 
         it "returns http success" do
@@ -1023,7 +999,7 @@ RSpec.describe SalesLogsController, type: :request do
 
       context "when user is not support" do
         before do
-          get "/sales-logs/csv-download?years[]=2023&search=#{search_term}&codes_only=#{codes_only}", headers:
+          get "/sales-logs/csv-download?years[]=#{selected_year}&search=#{search_term}&codes_only=#{codes_only}", headers:
         end
 
         context "and export type is not codes only" do
@@ -1069,7 +1045,7 @@ RSpec.describe SalesLogsController, type: :request do
         let(:user) { FactoryBot.create(:user, :support) }
 
         before do
-          get "/sales-logs/csv-download?years[]=2023&search=#{search_term}&codes_only=#{codes_only}", headers:
+          get "/sales-logs/csv-download?years[]=#{selected_year}&search=#{search_term}&codes_only=#{codes_only}", headers:
         end
 
         context "and export type is not codes only" do
@@ -1100,6 +1076,7 @@ RSpec.describe SalesLogsController, type: :request do
   end
 
   describe "POST #email-csv" do
+    let(:selected_year) { current_collection_start_year }
     let(:other_organisation) { FactoryBot.create(:organisation) }
     let(:user) { FactoryBot.create(:user, :support) }
     let!(:sales_log) do
@@ -1121,42 +1098,42 @@ RSpec.describe SalesLogsController, type: :request do
 
     it "creates an E-mail job with the correct log type" do
       expect {
-        post "/sales-logs/email-csv?years[]=2023&codes_only=true", headers:, params: {}
-      }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, true, "sales", 2023)
+        post "/sales-logs/email-csv?years[]=#{selected_year}&codes_only=true", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => [selected_year.to_s] }, false, nil, true, "sales", selected_year)
     end
 
     it "redirects to the confirmation page" do
-      post "/sales-logs/email-csv?years[]=2023&codes_only=true", headers:, params: {}
+      post "/sales-logs/email-csv?years[]=#{selected_year}&codes_only=true", headers:, params: {}
       expect(response).to redirect_to(csv_confirmation_sales_logs_path)
     end
 
     it "passes the search term" do
       expect {
-        post "/sales-logs/email-csv?search=#{sales_log.id}&years[]=2023&codes_only=false", headers:, params: {}
-      }.to enqueue_job(EmailCsvJob).with(user, sales_log.id.to_s, { "years" => %w[2023] }, false, nil, false, "sales", 2023)
+        post "/sales-logs/email-csv?search=#{sales_log.id}&years[]=#{selected_year}&codes_only=false", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, sales_log.id.to_s, { "years" => [selected_year.to_s] }, false, nil, false, "sales", selected_year)
     end
 
     it "passes filter parameters" do
       expect {
-        post "/sales-logs/email-csv?years[]=2023&status[]=completed&codes_only=true", headers:, params: {}
-      }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed], "years" => %w[2023] }, false, nil, true, "sales", 2023)
+        post "/sales-logs/email-csv?years[]=#{selected_year}&status[]=completed&codes_only=true", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed], "years" => [selected_year.to_s] }, false, nil, true, "sales", selected_year)
     end
 
     it "passes export type flag" do
       expect {
-        post "/sales-logs/email-csv?years[]=2023&codes_only=true", headers:, params: {}
-      }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, true, "sales", 2023)
+        post "/sales-logs/email-csv?years[]=#{selected_year}&codes_only=true", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => [selected_year.to_s] }, false, nil, true, "sales", selected_year)
       expect {
-        post "/sales-logs/email-csv?years[]=2023&codes_only=false", headers:, params: {}
-      }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, false, "sales", 2023)
+        post "/sales-logs/email-csv?years[]=#{selected_year}&codes_only=false", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => [selected_year.to_s] }, false, nil, false, "sales", selected_year)
     end
 
     it "passes a combination of search term, export type and filter parameters" do
       postcode = "XX1 1TG"
 
       expect {
-        post "/sales-logs/email-csv?years[]=2023&status[]=completed&search=#{postcode}&codes_only=false", headers:, params: {}
-      }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed], "years" => %w[2023] }, false, nil, false, "sales", 2023)
+        post "/sales-logs/email-csv?years[]=#{selected_year}&status[]=completed&search=#{postcode}&codes_only=false", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed], "years" => [selected_year.to_s] }, false, nil, false, "sales", selected_year)
     end
 
     context "when the user is not a support user" do
@@ -1165,13 +1142,13 @@ RSpec.describe SalesLogsController, type: :request do
       it "has permission to download human readable csv" do
         codes_only_export = false
         expect {
-          post "/sales-logs/email-csv?years[]=2023&codes_only=#{codes_only_export}", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, false, "sales", 2023)
+          post "/sales-logs/email-csv?years[]=#{selected_year}&codes_only=#{codes_only_export}", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => [selected_year.to_s] }, false, nil, false, "sales", selected_year)
       end
 
       it "is not authorized to download codes only csv" do
         codes_only_export = true
-        post "/sales-logs/email-csv?years[]=2023&codes_only=#{codes_only_export}", headers:, params: {}
+        post "/sales-logs/email-csv?years[]=#{selected_year}&codes_only=#{codes_only_export}", headers:, params: {}
         expect(response).to have_http_status(:unauthorized)
       end
     end

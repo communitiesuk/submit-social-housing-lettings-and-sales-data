@@ -498,10 +498,11 @@ GEM
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     securerandom (0.4.1)
-    selenium-webdriver (4.18.1)
+    selenium-webdriver (4.43.0)
       base64 (~> 0.2)
+      logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
-      rubyzip (>= 1.2.2, < 3.0)
+      rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
     sentry-rails (5.16.1)
       railties (>= 5.0)
@@ -631,7 +632,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   ruby-openai
-  selenium-webdriver
+  selenium-webdriver (~> 4.43)
   sentry-rails
   sentry-ruby
   sidekiq

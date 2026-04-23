@@ -1,11 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Validations::Sales::SetupValidations do
+  include CollectionTimeHelper
+
   subject(:setup_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::Sales::SetupValidations } }
-  let(:current_year) { FormHandler.instance.current_sales_form.start_date.year }
-  let(:previous_year) { FormHandler.instance.previous_sales_form.start_date.year }
+  let(:current_year) { current_collection_start_year }
+  let(:previous_year) { previous_collection_start_year }
 
   describe "#validate_saledate_collection_year" do
     context "with sales_in_crossover_period == false" do
@@ -84,7 +86,7 @@ RSpec.describe Validations::Sales::SetupValidations do
       end
 
       context "when saledate is before an open collection year" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2020, 5, 1)) }
+        let(:record) { build(:sales_log, saledate: archived_collection_start_date) }
 
         before do
           allow(FormHandler.instance).to receive(:sales_in_crossover_period?).and_return(true)

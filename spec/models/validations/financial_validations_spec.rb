@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Validations::FinancialValidations do
+  include CollectionTimeHelper
+
   subject(:financial_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::FinancialValidations } }
@@ -198,7 +200,7 @@ RSpec.describe Validations::FinancialValidations do
   end
 
   describe "housing benefit rent shortfall validations" do
-    before { record.startdate = Time.zone.local(2022, 5, 1) }
+    before { record.startdate = current_collection_start_date }
 
     context "when shortfall is yes" do
       it "validates that housing benefit is not none" do
@@ -228,7 +230,7 @@ RSpec.describe Validations::FinancialValidations do
 
   describe "net income validations" do
     it "validates that the net income is within the expected range for the household’s employment status" do
-      record.startdate = Time.zone.local(2023, 5, 1)
+      record.startdate = current_collection_start_date
       record.earnings = 200
       record.incfreq = 1
       record.hhmemb = 1
@@ -239,7 +241,7 @@ RSpec.describe Validations::FinancialValidations do
 
     context "when the net income is higher than the hard max for their employment status" do
       it "adds an error" do
-        record.startdate = Time.zone.local(2023, 5, 1)
+        record.startdate = current_collection_start_date
         record.earnings = 5000
         record.incfreq = 1
         record.hhmemb = 1
@@ -256,7 +258,7 @@ RSpec.describe Validations::FinancialValidations do
 
     context "when the net income is lower than the hard min for their employment status" do
       it "adds an error" do
-        record.startdate = Time.zone.local(2023, 5, 1)
+        record.startdate = current_collection_start_date
         record.earnings = 50
         record.incfreq = 1
         record.hhmemb = 1
@@ -273,7 +275,7 @@ RSpec.describe Validations::FinancialValidations do
 
     context "when there is more than one household member" do
       it "allows income levels based on all working situations combined" do
-        record.startdate = Time.zone.local(2023, 5, 1)
+        record.startdate = current_collection_start_date
         record.earnings = 5000
         record.incfreq = 1
         record.hhmemb = 4
@@ -286,7 +288,7 @@ RSpec.describe Validations::FinancialValidations do
       end
 
       it "uses the combined value in error messages" do
-        record.startdate = Time.zone.local(2023, 5, 1)
+        record.startdate = current_collection_start_date
         record.earnings = 100
         record.incfreq = 1
         record.hhmemb = 3
@@ -299,7 +301,7 @@ RSpec.describe Validations::FinancialValidations do
       end
 
       it "adds errors to relevant fields for each tenant when income is too high" do
-        record.startdate = Time.zone.local(2023, 5, 1)
+        record.startdate = current_collection_start_date
         record.earnings = 5000
         record.incfreq = 1
         record.hhmemb = 3
@@ -323,7 +325,7 @@ RSpec.describe Validations::FinancialValidations do
       end
 
       it "adds errors to relevant fields for each tenant when income is too low" do
-        record.startdate = Time.zone.local(2023, 5, 1)
+        record.startdate = current_collection_start_date
         record.earnings = 50
         record.incfreq = 1
         record.hhmemb = 3
@@ -991,7 +993,7 @@ RSpec.describe Validations::FinancialValidations do
             soft_max: 89.54,
             hard_min: 9.87,
             hard_max: 100.99,
-            start_year: 2021,
+            start_year: current_collection_start_year,
           )
           LaRentRange.create!(
             ranges_rent_id: "2",
@@ -1002,7 +1004,7 @@ RSpec.describe Validations::FinancialValidations do
             soft_max: 89.54,
             hard_min: 9.87,
             hard_max: 100.99,
-            start_year: 2021,
+            start_year: current_collection_start_year,
           )
         end
 
@@ -1012,7 +1014,7 @@ RSpec.describe Validations::FinancialValidations do
           record.period = 1
           record.la = "E07000223"
           record.beds = 4
-          record.startdate = Time.zone.local(2021, 9, 17)
+          record.startdate = current_collection_start_date
           record.brent = 9.17
 
           financial_validator.validate_rent_amount(record)
@@ -1025,7 +1027,7 @@ RSpec.describe Validations::FinancialValidations do
           record.lettype = 2
           record.period = 1
           record.location = location
-          record.startdate = Time.zone.local(2021, 9, 17)
+          record.startdate = current_collection_start_date
           record.brent = 9.17
 
           financial_validator.validate_rent_amount(record)
@@ -1044,7 +1046,7 @@ RSpec.describe Validations::FinancialValidations do
           record.period = 1
           record.la = "E07000223"
           record.beds = 4
-          record.startdate = Time.zone.local(2021, 9, 17)
+          record.startdate = current_collection_start_date
           record.brent = 200
 
           financial_validator.validate_rent_amount(record)
@@ -1062,7 +1064,7 @@ RSpec.describe Validations::FinancialValidations do
           record.lettype = 2
           record.period = 1
           record.location = location
-          record.startdate = Time.zone.local(2021, 9, 17)
+          record.startdate = current_collection_start_date
           record.brent = 200
 
           financial_validator.validate_rent_amount(record)
@@ -1079,7 +1081,7 @@ RSpec.describe Validations::FinancialValidations do
           record.lettype = 1
           record.period = 1
           record.la = "E07000223"
-          record.startdate = Time.zone.local(2022, 2, 5)
+          record.startdate = current_collection_start_date
           record.beds = 4
           record.brent = 200
 
@@ -1095,7 +1097,7 @@ RSpec.describe Validations::FinancialValidations do
 
         it "does not error if some of the fields are missing" do
           record.managing_organisation.provider_type = 2
-          record.startdate = Time.zone.local(2021, 9, 17)
+          record.startdate = current_collection_start_date
           record.brent = 200
 
           financial_validator.validate_rent_amount(record)

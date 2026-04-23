@@ -611,8 +611,6 @@ RSpec.describe "bulk_update" do
                               supcharg: 50,
                               beds: 4,
                               lettype: 1,
-                              voiddate: Time.zone.local(2020, 4, 1),
-                              mrcdate: Time.zone.local(2020, 4, 1),
                               period: 1)
           end
 
