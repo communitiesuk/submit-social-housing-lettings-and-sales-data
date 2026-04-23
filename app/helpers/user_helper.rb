@@ -82,15 +82,11 @@ module UserHelper
 
     case attribute
     when "role"
-      if current_user.data_coordinator? || current_user.support?
-        edit_link("Select role", user, current_user)
-      else
-        "No role assigned"
-      end
+      current_user.data_coordinator? || current_user.support? ? edit_link("Select role", user, current_user) : "No role assigned"
     when "phone"
       edit_link("Enter telephone number", user, current_user)
     else
-      no_answer_provided_text
+      "No answer provided"
     end
   end
 
@@ -108,9 +104,5 @@ private
       aliased_user_edit(user, current_user),
       class: "govuk-link govuk-link--no-visited-state",
     )
-  end
-
-  def no_answer_provided_text
-    "No answer provided"
   end
 end
