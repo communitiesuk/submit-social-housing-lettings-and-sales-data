@@ -9,7 +9,7 @@
     <last_sign_in_at>2022-03-03T00:00:00+00:00</last_sign_in_at>
     <role>data_provider</role>
     <phone>1234512345123</phone>
-    <extension_number>ext. 123</extension_number>
+    <extension_number>123</extension_number>
     <is_dpo>false</is_dpo>
     <is_key_contact>false</is_key_contact>
     <active>true</active>
