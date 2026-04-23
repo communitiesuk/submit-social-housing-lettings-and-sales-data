@@ -14,11 +14,4 @@ class Form::Lettings::Pages::PersonKnown < ::Form::Page
   def questions
     @questions ||= [Form::Lettings::Questions::DetailsKnown.new(nil, nil, self, person_index: @person_index)]
   end
-
-  def depends_on
-    [{ "hhmemb" => {
-      "operator" => ">=",
-      "operand" => @person_index,
-    } }]
-  end
 end
