@@ -82,13 +82,21 @@ module UserHelper
 
     case attribute
     when "role"
-      current_user.data_coordinator? || current_user.support? ? govuk_link_to("Select role", aliased_user_edit(user, current_user), class: "govuk-link govuk-link--no-visited-state") : "No role assigned"
+      if current_user.data_coordinator? || current_user.support?
+        edit_link("Select role", user, current_user)
+      else
+        "No role assigned"
+      end
     when "phone"
-      govuk_link_to("Enter telephone number", aliased_user_edit(user, current_user), class: "govuk-link govuk-link--no-visited-state")
+      edit_link("Enter telephone number", user, current_user)
     when "phone_extension"
-      current_user.data_coordinator? || current_user.support? ? govuk_link_to("Enter extension number", aliased_user_edit(user, current_user), class: "govuk-link govuk-link--no-visited-state") : "No answer provided"
+      if user == current_user || current_user.data_coordinator? || current_user.support?
+        edit_link("Enter extension number", user, current_user)
+      else
+        no_answer_provided_text
+      end
     else
-      "No answer provided"
+      no_answer_provided_text
     end
   end
 
@@ -96,5 +104,19 @@ module UserHelper
     return "Change" if %w[role phone phone_extension].include?(attribute) && user.send(attribute).present?
 
     ""
+  end
+
+private
+
+  def edit_link(text, user, current_user)
+    govuk_link_to(
+      text,
+      aliased_user_edit(user, current_user),
+      class: "govuk-link govuk-link--no-visited-state",
+    )
+  end
+
+  def no_answer_provided_text
+    "No answer provided"
   end
 end
