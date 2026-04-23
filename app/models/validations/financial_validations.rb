@@ -41,7 +41,7 @@ module Validations::FinancialValidations
           :over_hard_max,
           message: I18n.t("validations.lettings.financial.hhmemb.earnings_over_hard_max", earnings: format_as_currency(record.earnings), frequency:),
         )
-        (1..record.hhmemb).each do |n|
+        (1..[record.hhmemb, 8].min).each do |n|
           record.errors.add(
             "ecstat#{n}",
             :over_hard_max,
@@ -70,7 +70,7 @@ module Validations::FinancialValidations
           :under_hard_min,
           message: I18n.t("validations.lettings.financial.hhmemb.earnings_under_hard_min", earnings: format_as_currency(record.earnings), frequency:),
         )
-        (1..record.hhmemb).each do |n|
+        (1..[record.hhmemb, 8].min).each do |n|
           record.errors.add(
             "ecstat#{n}",
             :under_hard_min,

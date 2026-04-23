@@ -258,17 +258,17 @@ private
   end
 
   def any_non_male_in_expected_pregnancy_age_range(min, max)
-    person_count = hhmemb || 8
+    max_person_with_details = [hhmemb || 8, 8].min
 
-    (1..person_count).any? do |n|
+    (1..max_person_with_details).any? do |n|
       person_in_expected_pregnancy_age_range(n, min, max) && person_is_non_male(n)
     end
   end
 
   def non_males_in_the_household?
-    person_count = hhmemb || 8
+    max_person_with_details = [hhmemb || 8, 8].min
 
-    (1..person_count).any? do |n|
+    (1..max_person_with_details).any? do |n|
       person_is_non_male(n)
     end
   end

@@ -284,7 +284,7 @@ class LettingsLog < Log
     range = ALLOWED_INCOME_RANGES[ecstat1].clone
 
     if hhmemb > 1
-      (2..hhmemb).each do |person_index|
+      (2..[hhmemb, 8].min).each do |person_index|
         ecstat = self["ecstat#{person_index}"]
 
         if ecstat.nil?
