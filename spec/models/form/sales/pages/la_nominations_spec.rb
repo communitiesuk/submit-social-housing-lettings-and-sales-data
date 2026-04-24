@@ -1,14 +1,15 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::LaNominations, type: :model do
+  include CollectionTimeHelper
+
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:log) { build(:sales_log, :completed) }
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:start_year_2024_or_later) { false }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2024_or_later?: start_year_2024_or_later) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date) }
   let(:subsection) { instance_double(Form::Subsection, form:) }
 
   before do
@@ -31,18 +32,7 @@ RSpec.describe Form::Sales::Pages::LaNominations, type: :model do
     expect(page.description).to be_nil
   end
 
-  context "with 23/24 log" do
-    let(:start_year_2024_or_later) { false }
-
-    it "has correct routed to" do
-      log.staircase = 1
-      expect(page.routed_to?(log, nil)).to be(true)
-    end
-  end
-
-  context "with 24/25 log" do
-    let(:start_year_2024_or_later) { true }
-
+  describe "routing" do
     it "has correct routed to when staircase is yes" do
       log.staircase = 1
       expect(page.routed_to?(log, nil)).to be(false)

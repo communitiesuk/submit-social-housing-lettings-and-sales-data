@@ -22,27 +22,7 @@ RSpec.describe Form::Lettings::Questions::TenancyOther, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
-  context "with 2024/25 form" do
-    let(:start_date) { Time.utc(2024, 4, 1) }
-
-    before do
-      allow(page.subsection.form).to receive(:start_year_2024_or_later?).and_return(true)
-    end
-
-    it "has the correct question number" do
-      expect(question.question_number).to eq(27)
-    end
-  end
-
-  context "with 2025/26 form" do
-    let(:start_date) { Time.utc(2025, 4, 1) }
-
-    before do
-      allow(page.subsection.form).to receive(:start_year_2024_or_later?).and_return(true)
-    end
-
-    it "has the correct question number" do
-      expect(question.question_number).to eq(28)
-    end
+  it "has the correct question number" do
+    expect(question.question_number).to eq(28)
   end
 end

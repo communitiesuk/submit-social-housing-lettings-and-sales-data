@@ -79,24 +79,18 @@ RSpec.describe Form::Lettings::Questions::Rsnvac, type: :model do
         "value" => "Any other reason",
       },
     })
-
-    it "has the correct question number" do
-      expect(question.question_number).to eq(18)
-    end
   end
 
   context "with 2024/25 form" do
+    let(:form) { instance_double(Form, start_date: collection_start_date_for_year(2024)) }
+
     it "has the correct question number" do
       expect(question.question_number).to eq(18)
     end
   end
 
   context "with 2025/26 form" do
-    let(:form) { instance_double(Form, start_date: Time.zone.local(2025, 4, 1)) }
-
-    before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-    end
+    let(:form) { instance_double(Form, start_date: collection_start_date_for_year(2025)) }
 
     it "has the correct question number" do
       expect(question.question_number).to eq(15)

@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
+  include ActiveSupport::Testing::TimeHelpers
+
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -21,6 +23,14 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
 
   describe "answer options" do
     let(:options) { { "" => "Select an option" } }
+    let(:now) { Time.zone.local(2024, 11, 10) }
+
+    around do |example|
+      travel_to(now) do
+        Singleton.__init__(FormHandler)
+        example.run
+      end
+    end
 
     context "when current_user nil" do
       it "shows default options" do
@@ -97,17 +107,15 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
         let(:options) do
           {
             "" => "Select an option",
-            user.organisation.id => "User org (Your organisation, active as of 2 February 2021)",
+            user.organisation.id => "User org (Your organisation)",
             owning_org_2.id => "Owning org 2",
             owning_org_1.id => "Owning org 1",
-            merged_organisation.id => "Merged org (inactive as of 2 February 2023)",
           }
         end
 
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
           user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
         end
 
         it "shows merged organisation as an option" do
@@ -124,14 +132,12 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
             user.organisation.id => "User org (Your organisation)",
             owning_org_2.id => "Owning org 2",
             owning_org_1.id => "Owning org 1",
-            merged_organisation.id => "Merged org (inactive as of 2 February 2023)",
           }
         end
 
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
           merged_deleted_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
         end
 
         it "shows merged organisation as an option" do
@@ -144,14 +150,12 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
         let(:options) do
           {
             "" => "Select an option",
-            user.organisation.id => "User org (Your organisation, active as of 2 February 2021)",
+            user.organisation.id => "User org (Your organisation)",
             owning_org_1.id => "Owning org 1",
-            merged_organisation.id => "Merged org (inactive as of 2 February 2023)",
           }
         end
 
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
           org_rel.update!(child_organisation: merged_organisation)
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
           user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
@@ -163,6 +167,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
       end
 
       context "when user's org has absorbed other orgs with parent organisations during closed collection periods" do
+        let(:now) { Time.zone.local(2024, 4, 2) }
         let(:merged_organisation) { create(:organisation, name: "Merged org") }
         let(:merged_deleted_organisation) { create(:organisation, name: "Merged deleted org", discarded_at: Time.zone.yesterday) }
         let(:options) do
@@ -174,7 +179,6 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
         end
 
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 4, 2))
           org_rel.update!(child_organisation: merged_organisation)
           merged_organisation.update!(merge_date: Time.zone.local(2021, 6, 2), absorbing_organisation: user.organisation)
           merged_deleted_organisation.update!(merge_date: Time.zone.local(2021, 6, 2), absorbing_organisation: user.organisation)
@@ -217,14 +221,12 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
             org.id => "User org",
             user.organisation.id => user.organisation.name,
             log.owning_organisation.id => log.owning_organisation.name,
-            merged_organisation.id => "Merged org (inactive as of 2 February 2023)",
           }
         end
 
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: org)
           merged_deleted_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: org)
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
         end
 
         it "shows merged organisation as an option" do
