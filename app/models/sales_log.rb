@@ -141,7 +141,7 @@ class SalesLog < Log
 
   def dynamically_not_required
     not_required = []
-    not_required << "deposit" if form.start_year_2024_or_later? && stairowned_100?
+    not_required << "deposit" if stairowned_100?
     not_required += %w[address_line2 county]
 
     not_required
@@ -472,7 +472,6 @@ class SalesLog < Log
   def should_process_address_change?
     return unless uprn_selection || select_best_address_match
     return unless saledate
-    return unless form.start_year_2024_or_later?
     return if skip_address_lookup
 
     if select_best_address_match
@@ -552,7 +551,7 @@ class SalesLog < Log
   end
 
   def soctenant_is_inferred?
-    form.start_year_2024_or_later?
+    true
   end
 
   def duplicates
