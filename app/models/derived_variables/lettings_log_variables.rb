@@ -339,7 +339,7 @@ private
   def infer_only_partner!(partner_number)
     return unless hhmemb
 
-    (2..[hhmemb, 8].min).each do |i|
+    (2..people_with_details).each do |i|
       next if i == partner_number
 
       if ["P", nil].include?(public_send("relat#{i}"))

@@ -208,8 +208,7 @@ module Validations::SoftValidations
   def multiple_partners?
     return unless hhmemb
 
-    max_person_with_details = sales? ? [hhmemb, 6].min : [hhmemb, 8].min
-    (2..max_person_with_details).many? { |n| public_send("relat#{n}") == "P" }
+    (2..people_with_details).many? { |n| public_send("relat#{n}") == "P" }
   end
 
   def at_least_one_working_situation_is_sickness_and_household_sickness_is_no?
@@ -219,22 +218,18 @@ module Validations::SoftValidations
 private
 
   def all_tenants_age_and_gender_information_completed?
-    return false if hhmemb.present? && hhmemb > 8
+    return false if hhmemb.present? && hhmemb > max_people_with_details
     return false unless all_tenants_gender_information_completed?
 
-    person_count = hhmemb || 8
-
-    (1..person_count).all? do |n|
+    (1..people_with_details).all? do |n|
       public_send("age#{n}").present? && public_send("age#{n}_known").present? && public_send("age#{n}_known").zero?
     end
   end
 
   def all_tenants_gender_information_completed?
-    return false if hhmemb.present? && hhmemb > 8
+    return false if hhmemb.present? && hhmemb > max_people_with_details
 
-    person_count = hhmemb || 8
-
-    (1..person_count).all? do |n|
+    (1..people_with_details).all? do |n|
       tenant_gender_information_completed?(n)
     end
   end
@@ -258,27 +253,21 @@ private
   end
 
   def any_non_male_in_expected_pregnancy_age_range(min, max)
-    max_person_with_details = [hhmemb || 8, 8].min
-
-    (1..max_person_with_details).any? do |n|
+    (1..people_with_details).any? do |n|
       person_in_expected_pregnancy_age_range(n, min, max) && person_is_non_male(n)
     end
   end
 
   def non_males_in_the_household?
-    max_person_with_details = [hhmemb || 8, 8].min
-
-    (1..max_person_with_details).any? do |n|
+    (1..people_with_details).any? do |n|
       person_is_non_male(n)
     end
   end
 
   def all_male_tenants_in_the_household?
-    return false if hhmemb.present? && hhmemb > 8
+    return false if hhmemb.present? && hhmemb > max_people_with_details
 
-    person_count = hhmemb || 8
-
-    (1..person_count).all? do |n|
+    (1..people_with_details).all? do |n|
       person_is_male(n)
     end
   end
@@ -344,11 +333,7 @@ private
   end
 
   def at_least_one_person_working_situation_is_illness?
-    return if hhmemb.present? && hhmemb > 8
-
-    person_count = hhmemb || 8
-
-    (1..person_count).any? { |n| public_send("ecstat#{n}") == 8 }
+    (1..people_with_details).any? { |n| public_send("ecstat#{n}") == 8 }
   end
 
   def no_one_in_household_with_illness?
