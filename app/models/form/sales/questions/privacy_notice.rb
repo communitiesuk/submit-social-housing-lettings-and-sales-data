@@ -10,22 +10,12 @@ class Form::Sales::Questions::PrivacyNotice < ::Form::Question
   end
 
   def answer_options
-    declaration_text = if form.start_year_2024_or_later?
-                         "The #{@joint_purchase ? 'buyers have' : 'buyer has'} seen or been given access to the MHCLG privacy notice"
-                       else
-                         "The #{@joint_purchase ? 'buyers have' : 'buyer has'} seen the MHCLG privacy notice"
-                       end
-
-    { "privacynotice" => { "value" => declaration_text } }.freeze
+    { "privacynotice" => { "value" => "The #{@joint_purchase ? 'buyers have' : 'buyer has'} seen or been given access to the MHCLG privacy notice" } }.freeze
   end
 
   def unanswered_error_message
     buyer_or_buyers = @joint_purchase ? "buyers" : "buyer"
-    if form.start_year_2024_or_later?
-      I18n.t("validations.privacynotice.missing.post_2024", buyer_or_buyers:)
-    else
-      I18n.t("validations.privacynotice.missing.pre_2024", buyer_or_buyers:)
-    end
+    I18n.t("validations.privacynotice.missing", buyer_or_buyers:)
   end
 
   def guidance

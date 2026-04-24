@@ -4,7 +4,7 @@ class Form::Sales::Questions::Discount < ::Form::Question
     @id = "discount"
     @type = "numeric"
     @min = 0
-    @max = form.start_year_2024_or_later? ? 70 : 100
+    @max = 70
     @step = 0.1
     @width = 5
     @suffix = "%"
