@@ -76,3 +76,12 @@ en:
           needs_type:
             title: "What does each need type mean?"
             content: "General needs housing includes both self-contained and shared housing without support or specific adaptations.<br><br>Supported housing is housing with special design facilities or features targeted at a specific client group requiring support, for example housing designed for older people, sheltered accommodation, extra care housing. It can include direct access hostels, group homes, and purpose-built self-contained housing. We do not require CORE logs for residential care or nursing homes."
+
+          building_height_class:
+            title: "What do these classifications mean?"
+            content: "<p>High-rise residential buildings are those containing 2 or more residential units and either:</p>
+                      <ul class=\"govuk-list govuk-list--bullet\">
+                        <li>have 7 or more stories</li>
+                        <li>are at least 18 metres in height</li>
+                      </ul>
+                      <p>If unsure, answer based on the number of storeys.</p>"

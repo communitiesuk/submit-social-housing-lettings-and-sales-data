@@ -3,6 +3,7 @@ class Form::Sales::Questions::BuildingHeightClass < ::Form::Question
     super
     @id = "buildheightclass"
     @type = "radio"
+    @top_guidance_partial = "building_height_class"
     @answer_options = ANSWER_OPTIONS
     @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
