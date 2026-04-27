@@ -57,7 +57,7 @@ en:
               check_answer_label: "Part of a back-to-back staircasing transaction"
               check_answer_prompt: "Tell us if this is part of a back-to-back staircasing transaction"
               hint_text: ""
-              question_text: "Is this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?"
+              question_text: "Was this part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?"
 
           resale:
             page_header: ""
