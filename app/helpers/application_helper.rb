@@ -32,6 +32,20 @@ module ApplicationHelper
     !request.path.match?(/\/notifications\/\d+$/) && (authenticated_user_has_notifications? || unauthenticated_user_has_notifications?)
   end
 
+  def notification_banner
+    govuk_notification_banner(
+      title_text: "Success",
+      success: true, title_heading_level: 3,
+      title_id: "flash-notice",
+      role: "alert"
+    ) do |notification_banner|
+      notification_banner.with_heading(text: flash.notice.html_safe)
+      if flash[:notification_banner_body]
+        tag.p flash[:notification_banner_body]&.html_safe
+      end
+    end
+  end
+
 private
 
   def paginated_title(title, pagy)
