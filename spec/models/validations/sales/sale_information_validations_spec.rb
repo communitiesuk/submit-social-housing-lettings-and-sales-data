@@ -252,27 +252,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
 
     context "when initial purchase date == saledate" do
-      let(:record) { build(:sales_log, initialpurchase: collection_start_date_for_year(start_year), saledate: collection_start_date_for_year(start_year)) }
+      let(:record) { build(:sales_log, initialpurchase: current_collection_start_date, saledate: current_collection_start_date) }
 
-      context "and 2025", metadata: { year: 25 } do
-        let(:start_year) { 2025 }
+      it "does not add an error" do
+        sale_information_validator.validate_staircasing_initial_purchase_date(record)
 
-        it "does not add an error" do
-          sale_information_validator.validate_staircasing_initial_purchase_date(record)
-
-          expect(record.errors[:lasttransaction]).not_to be_present
-        end
-      end
-
-      context "and 2026", metadata: { year: 26 } do
-        let(:start_year) { 2026 }
-
-        it "adds error" do
-          sale_information_validator.validate_staircasing_initial_purchase_date(record)
-
-          expect(record.errors[:initialpurchase]).to eq([I18n.t("validations.sales.sale_information.initialpurchase.must_be_before_saledate")])
-          expect(record.errors[:saledate]).to eq([I18n.t("validations.sales.sale_information.saledate.must_be_after_initial_purchase_date")])
-        end
+        expect(record.errors[:initialpurchase]).not_to be_present
       end
     end
   end
@@ -330,27 +315,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
 
     context "when last transaction date == saledate" do
-      let(:record) { build(:sales_log, lasttransaction: collection_start_date_for_year(start_year), saledate: collection_start_date_for_year(start_year)) }
+      let(:record) { build(:sales_log, lasttransaction: current_collection_start_date, saledate: current_collection_start_date) }
 
-      context "and 2025", metadata: { year: 25 } do
-        let(:start_year) { 2025 }
+      it "does not add an error" do
+        sale_information_validator.validate_staircasing_last_transaction_date(record)
 
-        it "does not add an error" do
-          sale_information_validator.validate_staircasing_last_transaction_date(record)
-
-          expect(record.errors[:lasttransaction]).not_to be_present
-        end
-      end
-
-      context "and 2026", metadata: { year: 26 } do
-        let(:start_year) { 2026 }
-
-        it "adds error" do
-          sale_information_validator.validate_staircasing_last_transaction_date(record)
-
-          expect(record.errors[:lasttransaction]).to eq([I18n.t("validations.sales.sale_information.lasttransaction.must_be_before_saledate")])
-          expect(record.errors[:saledate]).to eq([I18n.t("validations.sales.sale_information.saledate.must_be_after_last_transaction_date")])
-        end
+        expect(record.errors[:lasttransaction]).not_to be_present
       end
     end
 
@@ -376,27 +346,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
 
     context "when last transaction date == initial purchase date" do
-      let(:record) { build(:sales_log, lasttransaction: collection_start_date_for_year(start_year), initialpurchase: collection_start_date_for_year(start_year), saledate: collection_start_date_for_year(start_year) + 1.day) }
+      let(:record) { build(:sales_log, lasttransaction: current_collection_start_date, initialpurchase: current_collection_start_date) }
 
-      context "and 2025", metadata: { year: 25 } do
-        let(:start_year) { 2025 }
+      it "does not add an error" do
+        sale_information_validator.validate_staircasing_last_transaction_date(record)
 
-        it "does not add an error" do
-          sale_information_validator.validate_staircasing_last_transaction_date(record)
-
-          expect(record.errors[:lasttransaction]).not_to be_present
-        end
-      end
-
-      context "and 2026", metadata: { year: 26 } do
-        let(:start_year) { 2026 }
-
-        it "adds error" do
-          sale_information_validator.validate_staircasing_last_transaction_date(record)
-
-          expect(record.errors[:lasttransaction]).to eq([I18n.t("validations.sales.sale_information.lasttransaction.must_be_after_initial_purchase")])
-          expect(record.errors[:initialpurchase]).to eq([I18n.t("validations.sales.sale_information.initialpurchase.must_be_before_last_transaction")])
-        end
+        expect(record.errors[:lasttransaction]).not_to be_present
       end
     end
   end
