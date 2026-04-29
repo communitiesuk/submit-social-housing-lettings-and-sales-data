@@ -540,6 +540,53 @@ RSpec.describe User, type: :model do
           .to raise_error(ActiveRecord::RecordInvalid, error_message)
       end
     end
+
+    describe "#support_user_is_in_correct_organisation" do
+      let(:organisation) { create(:organisation) }
+
+      context "when the user is not a support user" do
+        let(:user) { build(:user, :data_coordinator, organisation:) }
+
+        it "is valid regardless of the allow list" do
+          allow(FeatureToggle).to receive(:support_organisation_allow_list).and_return([999])
+          expect(user).to be_valid
+        end
+      end
+
+      context "when the user is a support user" do
+        let(:user) { build(:user, :support, organisation:) }
+
+        context "and the allow list is nil" do
+          before do
+            allow(FeatureToggle).to receive(:support_organisation_allow_list).and_return(nil)
+          end
+
+          it "is valid" do
+            expect(user).to be_valid
+          end
+        end
+
+        context "and the organisation is in the allow list" do
+          before do
+            allow(FeatureToggle).to receive(:support_organisation_allow_list).and_return([organisation.id])
+          end
+
+          it "is valid" do
+            expect(user).to be_valid
+          end
+        end
+
+        context "and the organisation is not in the allow list" do
+          before do
+            allow(FeatureToggle).to receive(:support_organisation_allow_list).and_return([organisation.id + 1])
+          end
+
+          it "is not valid" do
+            expect(user).not_to be_valid
+          end
+        end
+      end
+    end
   end
 
   describe "delete" do
