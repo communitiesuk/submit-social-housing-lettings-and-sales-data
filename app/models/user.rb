@@ -179,7 +179,7 @@ class User < ApplicationRecord
     update!(
       active: false,
       confirmed_at: nil,
-      sign_in_count: 0,
+      force_reset_password_on_confirmation: true,
       initial_confirmation_sent: false,
       reactivate_with_organisation:,
       unconfirmed_email: nil,
