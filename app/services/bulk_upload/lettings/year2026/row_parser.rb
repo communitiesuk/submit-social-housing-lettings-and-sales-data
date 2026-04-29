@@ -496,7 +496,6 @@ class BulkUpload::Lettings::Year2026::RowParser
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log
   validate :validate_address_fields, on: :after_log
 
-  validate :validate_incomplete_soft_validations, on: :after_log
   validate :validate_nationality, on: :after_log
   validate :validate_reasonpref_reason_values, on: :after_log
   validate :validate_prevten_value_when_renewal, on: :after_log
@@ -540,6 +539,8 @@ class BulkUpload::Lettings::Year2026::RowParser
         end
       end
     end
+
+    validate_incomplete_soft_validations
 
     add_errors_for_invalid_fields
 

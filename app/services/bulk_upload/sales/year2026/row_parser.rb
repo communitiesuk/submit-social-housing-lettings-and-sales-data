@@ -493,7 +493,6 @@ class BulkUpload::Sales::Year2026::RowParser
   validate :validate_assigned_to_when_support, on: :after_log
   validate :validate_managing_org_related, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
-  validate :validate_incomplete_soft_validations, on: :after_log
 
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log
   validate :validate_address_fields, on: :after_log
@@ -560,6 +559,8 @@ class BulkUpload::Sales::Year2026::RowParser
         end
       end
     end
+
+    validate_incomplete_soft_validations
 
     add_errors_for_invalid_fields
 
@@ -1672,7 +1673,7 @@ private
         next if log.form.questions.none? { |q| q.id == interruption_screen_question_id && q.page.routed_to?(log, nil) }
 
         field_mapping_for_errors[interruption_screen_question_id.to_sym]&.each do |field|
-          if errors.none? { |e| e.options[:category] == :soft_validation && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
+          if errors.none? { |e| field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
             error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(" ")
             errors.add(field, message: error_message, category: :soft_validation)
           end
