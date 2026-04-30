@@ -10,16 +10,6 @@ RSpec.describe OrganisationsController, type: :request do
   let(:active) { nil }
   let(:params) { { id: organisation.id, organisation: { name: new_value, active:, rent_periods: [], all_rent_periods: [] } } }
 
-  before do
-    Timecop.freeze(Time.zone.local(2024, 3, 1))
-    Singleton.__init__(FormHandler)
-  end
-
-  after do
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
-
   context "when user is not signed in" do
     describe "#show" do
       it "does not let you see organisation details from org route" do
@@ -210,7 +200,7 @@ RSpec.describe OrganisationsController, type: :request do
 
         context "when organisation has absorbed other organisations" do
           before do
-            create(:organisation, merge_date: Time.zone.today, absorbing_organisation: organisation)
+            create(:organisation, :without_dpc, merge_date: Time.zone.today, absorbing_organisation: organisation)
           end
 
           context "and it has duplicate schemes or locations" do
@@ -505,9 +495,9 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "when the organisation has absorbed other organisations" do
-            let!(:absorbed_organisation) { create(:organisation, name: "First Absorbed Organisation", with_dsa: false, merge_date: Time.zone.local(2023, 4, 3), absorbing_organisation: organisation) }
-            let!(:other_absorbed_organisation) { create(:organisation, name: "Other Absorbed Organisation", with_dsa: false, merge_date: Time.zone.local(2023, 4, 3), absorbing_organisation: organisation) }
-            let!(:previously_absorbed_organisation) { create(:organisation, name: "Previously Absorbed Organisation", with_dsa: false, merge_date: Time.zone.local(2023, 4, 2), absorbing_organisation: organisation) }
+            let!(:absorbed_organisation) { create(:organisation, name: "First Absorbed Organisation", with_dsa: false, merge_date: Time.zone.today - 1.month, absorbing_organisation: organisation) }
+            let!(:other_absorbed_organisation) { create(:organisation, name: "Other Absorbed Organisation", with_dsa: false, merge_date: Time.zone.today - 1.month, absorbing_organisation: organisation) }
+            let!(:previously_absorbed_organisation) { create(:organisation, name: "Previously Absorbed Organisation", with_dsa: false, merge_date: Time.zone.today - 2.months, absorbing_organisation: organisation) }
 
             before do
               get "/organisations/#{organisation.id}/details", headers:, params: {}
@@ -2376,14 +2366,6 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         context "when the organisation does not have a confirmation" do
-          before do
-            Timecop.freeze(Time.zone.local(2022, 2, 1))
-          end
-
-          after do
-            Timecop.unfreeze
-          end
-
           let(:user) { create(:user, is_dpo: true, organisation:, with_dsa: false) }
 
           it "returns redirects to details page" do
@@ -2403,7 +2385,7 @@ RSpec.describe OrganisationsController, type: :request do
 
             expect(data_protection_confirmation.organisation).to eq(organisation)
             expect(data_protection_confirmation.data_protection_officer).to eq(user)
-            expect(data_protection_confirmation.signed_at).to eq(Time.zone.local(2022, 2, 1))
+            expect(data_protection_confirmation.signed_at).to be_within(1.minute).of(Time.zone.now)
             expect(data_protection_confirmation.organisation_name).to eq(organisation.name)
             expect(data_protection_confirmation.organisation_address).to eq(organisation.address_row)
             expect(data_protection_confirmation.organisation_phone_number).to eq(organisation.phone)
