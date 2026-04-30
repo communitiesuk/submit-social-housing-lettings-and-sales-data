@@ -169,30 +169,26 @@ RSpec.describe Csv::SalesLogCsvService do
   end
 
   context "when exporting with human readable labels" do
-    let(:year) { 2023 }
-    let(:fixed_time) { Time.zone.local(2023, 12, 8) }
+    let(:year) { current_collection_start_year }
+    let(:fixed_time) { Time.zone.local(current_collection_start_year, 12, 8) }
     let(:now) { fixed_time }
 
     it "gives answers to radio questions as their labels" do
-      national_column_index = attribute_line.index("NATIONAL")
-      national_value = content_line[national_column_index]
-      expect(national_value).to eq "United Kingdom"
+      nationality_all_column_index = attribute_line.index("NATIONALITYALL1")
+      nationality_all_value = content_line[nationality_all_column_index]
+      expect(nationality_all_value).to eq "United Kingdom"
       relat2_column_index = attribute_line.index("RELAT2")
       relat2_value = content_line[relat2_column_index]
-      expect(relat2_value).to eq "Partner"
+      expect(relat2_value).to eq "Yes"
     end
 
     it "gives answers to free input questions as the user input" do
       age1_column_index = attribute_line.index("AGE1")
       age1_value = content_line[age1_column_index]
       expect(age1_value).to eq 30.to_s
-      postcode_part1, postcode_part2 = log.postcode_full.split
-      postcode_part1_column_index = attribute_line.index("PCODE1")
-      postcode_part1_value = content_line[postcode_part1_column_index]
-      expect(postcode_part1_value).to eq postcode_part1
-      postcode_part2_column_index = attribute_line.index("PCODE2")
-      postcode_part2_value = content_line[postcode_part2_column_index]
-      expect(postcode_part2_value).to eq postcode_part2
+      town_or_city_column_index = attribute_line.index("TOWNCITY")
+      town_or_city_value = content_line[town_or_city_column_index]
+      expect(town_or_city_value).to eq "Town or city"
     end
 
     it "exports the code for the local authority under the heading 'la'" do
@@ -296,14 +292,14 @@ RSpec.describe Csv::SalesLogCsvService do
 
   context "when exporting values as codes" do
     let(:service) { described_class.new(user:, export_type: "codes", year:) }
-    let(:year) { 2023 }
-    let(:fixed_time) { Time.zone.local(2023, 12, 8) }
+    let(:year) { current_collection_start_year }
+    let(:fixed_time) { Time.zone.local(current_collection_start_year, 12, 8) }
     let(:now) { fixed_time }
 
     it "gives answers to radio questions as their codes" do
-      national_column_index = attribute_line.index("NATIONAL")
-      national_value = content_line[national_column_index]
-      expect(national_value).to eq 18.to_s
+      nationality_all_column_index = attribute_line.index("NATIONALITYALL1")
+      national_all_value = content_line[nationality_all_column_index]
+      expect(national_all_value).to eq 826.to_s
       relat2_column_index = attribute_line.index("RELAT2")
       relat2_value = content_line[relat2_column_index]
       expect(relat2_value).to eq "P"
@@ -313,13 +309,9 @@ RSpec.describe Csv::SalesLogCsvService do
       age1_column_index = attribute_line.index("AGE1")
       age1_value = content_line[age1_column_index]
       expect(age1_value).to eq 30.to_s
-      postcode_part1, postcode_part2 = log.postcode_full.split
-      postcode_part1_column_index = attribute_line.index("PCODE1")
-      postcode_part1_value = content_line[postcode_part1_column_index]
-      expect(postcode_part1_value).to eq postcode_part1
-      postcode_part2_column_index = attribute_line.index("PCODE2")
-      postcode_part2_value = content_line[postcode_part2_column_index]
-      expect(postcode_part2_value).to eq postcode_part2
+      town_or_city_column_index = attribute_line.index("TOWNCITY")
+      town_or_city_value = content_line[town_or_city_column_index]
+      expect(town_or_city_value).to eq "Town or city"
     end
 
     it "exports the code for the local authority under the heading 'la'" do
