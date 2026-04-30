@@ -4,15 +4,8 @@ RSpec.describe "logs/edit.html.erb" do
   let(:current_user) { create(:user, :support) }
 
   before do
-    Timecop.freeze(Time.zone.local(2024, 3, 1))
-    Singleton.__init__(FormHandler)
     assign(:log, log)
     sign_in current_user
-  end
-
-  after do
-    Timecop.return
-    Singleton.__init__(FormHandler)
   end
 
   context "when log is in progress" do
