@@ -408,16 +408,6 @@ RSpec.describe LettingsLogsController, type: :request do
         end
 
         context "when filtering" do
-          before do
-            Timecop.freeze(Time.utc(2024, 3, 3))
-            Singleton.__init__(FormHandler)
-          end
-
-          after do
-            Timecop.return
-            Singleton.__init__(FormHandler)
-          end
-
           context "with status filter" do
             let(:organisation_2) { FactoryBot.create(:organisation) }
             let(:user_2) { FactoryBot.create(:user, organisation: organisation_2) }
@@ -563,16 +553,6 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           context "with bulk_upload_id filter" do
-            before do
-              Timecop.freeze(2023, 4, 1)
-              Singleton.__init__(FormHandler)
-            end
-
-            after do
-              Timecop.unfreeze
-              Singleton.__init__(FormHandler)
-            end
-
             context "with bulk upload that belongs to current user" do
               let(:organisation) { create(:organisation) }
 
@@ -736,16 +716,6 @@ RSpec.describe LettingsLogsController, type: :request do
           let(:logs) { FactoryBot.create_list(:lettings_log, 3, :completed, owning_organisation: user.organisation, assigned_to: user) }
           let(:log_to_search) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, assigned_to: user) }
           let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
-
-          before do
-            Timecop.freeze(Time.utc(2024, 3, 3))
-            Singleton.__init__(FormHandler)
-          end
-
-          after do
-            Timecop.return
-            Singleton.__init__(FormHandler)
-          end
 
           it "has search results in the title" do
             get "/lettings-logs?search=#{log_to_search.id}", headers:, params: {}
@@ -1031,14 +1001,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
           context "when there are multiple sets of duplicates" do
             before do
-              Timecop.freeze(Time.zone.local(2024, 3, 1))
-              Singleton.__init__(FormHandler)
-              FactoryBot.create_list(:sales_log, 2, :duplicate, owning_organisation: user.organisation, assigned_to: user)
-            end
-
-            after do
-              Timecop.return
-              Singleton.__init__(FormHandler)
+              FactoryBot.create_list(:lettings_log, 2, :duplicate, owning_organisation: user.organisation, assigned_to: user, tenancycode: "different tenancy code", propcode: "different property code")
             end
 
             it "displays the correct copy in the banner" do
@@ -1688,15 +1651,8 @@ RSpec.describe LettingsLogsController, type: :request do
     let(:delete_request) { delete "/lettings-logs/#{id}", headers: }
 
     before do
-      Timecop.freeze(2024, 3, 1)
-      Singleton.__init__(FormHandler)
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
       sign_in user
-    end
-
-    after do
-      Timecop.return
-      Singleton.__init__(FormHandler)
     end
 
     context "when delete permitted" do

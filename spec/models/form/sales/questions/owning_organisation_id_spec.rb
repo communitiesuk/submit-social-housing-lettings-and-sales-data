@@ -1,12 +1,14 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:user) { FactoryBot.create(:user, :data_coordinator) }
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(current_collection_start_year, 4, 1)))) }
   let!(:organisation_1) { FactoryBot.create(:organisation, name: "first test org") }
   let!(:organisation_2) { FactoryBot.create(:organisation, name: "second test org") }
   let(:lettings_log) { FactoryBot.build(:lettings_log) }
@@ -99,13 +101,12 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
             "" => "Select an option",
             user.organisation.id => "User org (Your organisation)",
             owning_org_1.id => "Owning org 1",
-            merged_organisation.id => "Merged org (inactive as of 2 February 2023)",
+            merged_organisation.id => "Merged org (inactive as of 2 February #{current_collection_start_year})",
           }
         end
 
         before do
-          merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
+          merged_organisation.update!(merge_date: Time.zone.local(current_collection_start_year, 2, 2), absorbing_organisation: user.organisation)
         end
 
         it "shows merged organisation as an option" do
@@ -123,16 +124,15 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         let(:options) do
           {
             "" => "Select an option",
-            user.organisation.id => "User org (Your organisation, active as of 2 February 2021)",
+            user.organisation.id => "User org (Your organisation, active as of 2 February #{archived_collection_start_year})",
             owning_org_1.id => "Owning org 1",
-            merged_organisation.id => "Merged org (inactive as of 2 February 2023)",
+            merged_organisation.id => "Merged org (inactive as of 2 February #{current_collection_start_year})",
           }
         end
 
         before do
-          merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
-          user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
+          merged_organisation.update!(merge_date: Time.zone.local(current_collection_start_year, 2, 2), absorbing_organisation: user.organisation)
+          user.organisation.update!(available_from: Time.zone.local(archived_collection_start_year, 2, 2))
         end
 
         it "shows available from date if it is given" do
@@ -147,14 +147,13 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
             "" => "Select an option",
             user.organisation.id => "User org (Your organisation)",
             owning_org_1.id => "Owning org 1",
-            merged_organisation.id => "Merged org (inactive as of 2 February 2023)",
+            merged_organisation.id => "Merged org (inactive as of 2 February #{current_collection_start_year})",
           }
         end
 
         before do
           create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: merged_organisation)
-          merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
+          merged_organisation.update!(merge_date: Time.zone.local(current_collection_start_year, 2, 2), absorbing_organisation: user.organisation)
         end
 
         it "does not show merged organisations stock owners as options" do
@@ -174,10 +173,9 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         end
 
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 4, 2))
           create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: merged_organisation)
-          merged_organisation.update!(merge_date: Time.zone.local(2021, 6, 2), absorbing_organisation: user.organisation)
-          user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
+          merged_organisation.update!(merge_date: Time.zone.local(archived_collection_start_year, 6, 2), absorbing_organisation: user.organisation)
+          user.organisation.update!(available_from: Time.zone.local(archived_collection_start_year, 2, 2))
         end
 
         it "shows merged organisation as an option" do
@@ -212,16 +210,15 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         let(:options) do
           {
             "" => "Select an option",
-            organisation_1.id => "first test org (active as of 2 February 2021)",
+            organisation_1.id => "first test org (active as of 2 February #{archived_collection_start_year})",
             organisation_2.id => "second test org",
-            merged_organisation.id => "Merged org (inactive as of 2 February 2023)",
+            merged_organisation.id => "Merged org (inactive as of 2 February #{current_collection_start_year})",
           }
         end
 
         before do
-          merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: organisation_1)
-          organisation_1.update!(created_at: Time.zone.local(2021, 3, 2), available_from: Time.zone.local(2021, 2, 2))
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
+          merged_organisation.update!(merge_date: Time.zone.local(current_collection_start_year, 2, 2), absorbing_organisation: organisation_1)
+          organisation_1.update!(created_at: Time.zone.local(archived_collection_start_year, 3, 2), available_from: Time.zone.local(archived_collection_start_year, 2, 2))
         end
 
         it "shows merged organisation as an option" do
@@ -240,12 +237,11 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         end
 
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 4, 2))
-          merged_organisation.update!(merge_date: Time.zone.local(2021, 6, 2), absorbing_organisation: user.organisation)
-          user.organisation.update!(created_at: Time.zone.local(2021, 2, 2))
+          merged_organisation.update!(merge_date: Time.zone.local(archived_collection_start_year, 6, 2), absorbing_organisation: user.organisation)
+          user.organisation.update!(created_at: Time.zone.local(archived_collection_start_year, 2, 2))
         end
 
-        it "shows merged organisation as an option" do
+        it "does not show merged organisation as an option" do
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
       end
@@ -257,14 +253,13 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
             "" => "Select an option",
             organisation_1.id => "first test org",
             organisation_2.id => "second test org",
-            merged_organisation.id => "Merged org (inactive as of 2 February 2023)",
+            merged_organisation.id => "Merged org (inactive as of 2 February #{current_collection_start_year})",
           }
         end
 
         before do
-          merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: organisation_1)
-          organisation_1.update!(created_at: Time.zone.local(2021, 2, 2), available_from: nil)
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
+          merged_organisation.update!(merge_date: Time.zone.local(current_collection_start_year, 2, 2), absorbing_organisation: organisation_1)
+          organisation_1.update!(created_at: Time.zone.local(archived_collection_start_year, 2, 2), available_from: nil)
         end
 
         it "does not show abailable from for absorbing organisation" do

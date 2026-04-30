@@ -6,17 +6,10 @@ class Form::Sales::Questions::UprnConfirmation < ::Form::Question
   end
 
   def answer_options
-    if form.start_year_2024_or_later?
-      {
-        "1" => { "value" => "Yes" },
-        "0" => { "value" => "No, I want to search for the address instead" },
-      }.freeze
-    else
-      {
-        "1" => { "value" => "Yes" },
-        "0" => { "value" => "No, I want to enter the address manually" },
-      }.freeze
-    end
+    {
+      "1" => { "value" => "Yes" },
+      "0" => { "value" => "No, I want to search for the address instead" },
+    }.freeze
   end
 
   def notification_banner(log = nil)

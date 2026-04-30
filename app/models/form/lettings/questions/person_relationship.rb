@@ -10,26 +10,13 @@ class Form::Lettings::Questions::PersonRelationship < ::Form::Question
   end
 
   def answer_options
-    if form.start_year_2024_or_later?
-      {
-        "P" => { "value" => "Partner" },
-        "C" => { "value" => "Child" },
-        "X" => { "value" => "Other" },
-        "divider" => { "value" => true },
-        "R" => { "value" => "Person prefers not to say" },
-      }
-    else
-      {
-        "P" => { "value" => "Partner" },
-        "C" => {
-          "value" => "Child",
-          "hint" => "Must be eligible for child benefit: under age 16 or under 20 if still in full-time education.",
-        },
-        "X" => { "value" => "Other" },
-        "divider" => { "value" => true },
-        "R" => { "value" => "Person prefers not to say" },
-      }
-    end
+    {
+      "P" => { "value" => "Partner" },
+      "C" => { "value" => "Child" },
+      "X" => { "value" => "Other" },
+      "divider" => { "value" => true },
+      "R" => { "value" => "Person prefers not to say" },
+    }
   end
 
   def question_number

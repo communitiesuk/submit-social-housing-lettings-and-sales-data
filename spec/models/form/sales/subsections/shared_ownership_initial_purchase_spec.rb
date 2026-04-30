@@ -7,11 +7,10 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
 
   let(:subsection_id) { nil }
   let(:subsection_definition) { nil }
-  let(:start_year_2024_or_later?) { true }
   let(:start_year_2025_or_later?) { true }
   let(:start_year_2026_or_later?) { true }
   let(:start_date) { current_collection_start_date }
-  let(:form) { instance_double(Form, start_date:, start_year_2024_or_later?: start_year_2024_or_later?, start_year_2025_or_later?: start_year_2025_or_later?, start_year_2026_or_later?: start_year_2026_or_later?) }
+  let(:form) { instance_double(Form, start_date:, start_year_2025_or_later?: start_year_2025_or_later?, start_year_2026_or_later?: start_year_2026_or_later?) }
   let(:section) { instance_double(Form::Sales::Sections::SaleInformation) }
 
   before do
@@ -20,47 +19,6 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
 
   it "has correct section" do
     expect(shared_ownership_initial_purchase.section).to eq(section)
-  end
-
-  context "when 2024", metadata: { year: 24 } do
-    let(:start_year_2025_or_later?) { false }
-    let(:start_year_2026_or_later?) { false }
-    let(:start_date) { collection_start_date_for_year(2024) }
-
-    it "has correct pages" do
-      expect(shared_ownership_initial_purchase.pages.map(&:id)).to eq(
-        %w[
-          resale
-          living_before_purchase_shared_ownership_joint_purchase
-          living_before_purchase_shared_ownership
-          handover_date
-          handover_date_check
-          buyer_previous_joint_purchase
-          buyer_previous_not_joint_purchase
-          previous_bedrooms
-          previous_property_type
-          shared_ownership_previous_tenure
-          value_shared_ownership
-          about_price_shared_ownership_value_check
-          initial_equity
-          mortgage_used_shared_ownership
-          mortgage_used_mortgage_value_check
-          mortgage_amount_shared_ownership
-          mortgage_amount_mortgage_value_check
-          mortgage_length_shared_ownership
-          deposit_shared_ownership
-          deposit_shared_ownership_optional
-          deposit_joint_purchase_value_check
-          deposit_value_check
-          deposit_discount
-          deposit_discount_optional
-          monthly_rent
-          service_charge
-          monthly_charges_initial_purchase_value_check
-          estate_management_fee
-        ],
-      )
-    end
   end
 
   context "when 2025", metadata: { year: 25 } do

@@ -14,14 +14,14 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
     let(:form) { instance_double(Form, start_date:) }
 
     before do
-      allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true, start_year_2026_or_later?: true)
+      allow(form).to receive_messages(start_year_2025_or_later?: true, start_year_2026_or_later?: true)
     end
 
     context "when 2024" do
       let(:start_date) { Time.utc(2024, 4, 8) }
 
       before do
-        allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: false, start_year_2026_or_later?: false)
+        allow(form).to receive_messages(start_year_2025_or_later?: false, start_year_2026_or_later?: false)
       end
 
       it "has correct pages" do
@@ -61,7 +61,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
       let(:start_date) { Time.utc(2025, 4, 8) }
 
       before do
-        allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true, start_year_2026_or_later?: false)
+        allow(form).to receive_messages(start_year_2025_or_later?: true, start_year_2026_or_later?: false)
       end
 
       it "has correct pages" do
@@ -102,7 +102,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
       let(:start_date) { Time.utc(2026, 4, 8) }
 
       before do
-        allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true, start_year_2026_or_later?: true)
+        allow(form).to receive_messages(start_year_2025_or_later?: true, start_year_2026_or_later?: true)
       end
 
       it "has correct pages" do

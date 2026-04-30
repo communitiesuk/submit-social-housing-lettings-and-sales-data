@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Form::Sales::Subsections::HouseholdSituation, type: :model do
   subject(:household_characteristics) { described_class.new(nil, nil, section) }
 
-  let(:form) { instance_double(Form, start_year_2024_or_later?: true, start_year_2025_or_later?: false) }
+  let(:form) { instance_double(Form, start_year_2025_or_later?: false) }
   let(:section) { instance_double(Form::Sales::Sections::Household, form:) }
 
   it "has correct section" do
@@ -11,7 +11,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdSituation, type: :model do
   end
 
   context "when the start year is 2024" do
-    let(:form) { instance_double(Form, start_year_2024_or_later?: true, start_year_2025_or_later?: false) }
+    let(:form) { instance_double(Form, start_year_2025_or_later?: false) }
 
     it "has correct pages" do
       expect(household_characteristics.pages.map(&:id)).to eq(
@@ -36,7 +36,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdSituation, type: :model do
   end
 
   context "when the start year is 2025" do
-    let(:form) { instance_double(Form, start_year_2024_or_later?: true, start_year_2025_or_later?: true) }
+    let(:form) { instance_double(Form, start_year_2025_or_later?: true) }
 
     it "has correct pages" do
       expect(household_characteristics.pages.map(&:id)).to eq(

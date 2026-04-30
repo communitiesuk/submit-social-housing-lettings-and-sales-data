@@ -242,16 +242,6 @@ RSpec.describe "Lettings Log Features" do
     end
 
     context "when completing the setup lettings log section", :aggregate_failure do
-      before do
-        Timecop.freeze(Time.zone.local(2023, 4, 3))
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.return
-        Singleton.__init__(FormHandler)
-      end
-
       it "includes the owning organisation and assigned to questions" do
         visit("/lettings-logs")
         click_button("Create a new lettings log")
@@ -263,7 +253,7 @@ RSpec.describe "Lettings Log Features" do
         log_id = page.current_path.scan(/\d/).join
         visit("lettings-logs/#{log_id}/setup/check-answers")
         expect(page).to have_content("Stock owner User org", normalize_ws: true)
-        expect(page).to have_content("You have answered 2 of 8 questions")
+        expect(page).to have_content("You have answered 2 of 9 questions")
       end
     end
 
