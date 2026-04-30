@@ -1,3 +1,7 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link(href: :back) %>
+<% end %>
+
 <%= render partial: "bulk_upload_shared/moved_user_banner" %>
 
 <div class="govuk-grid-row">
@@ -34,4 +38,6 @@
   <% end %>
 </div>
 
-<%= govuk_button_link_to "Upload your file again", start_bulk_upload_sales_logs_path(organisation_id: @bulk_upload.organisation_id) %>
+<% if params[:hide_upload_button] != "true" %>
+  <%= govuk_button_link_to "Upload your file again", start_bulk_upload_sales_logs_path(organisation_id: @bulk_upload.organisation_id) %>
+<% end %>
