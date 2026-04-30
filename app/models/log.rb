@@ -392,6 +392,13 @@ private
     form.subsections.all? { |subsection| subsection.complete?(self) || subsection.not_displayed_in_tasklist?(self) }
   end
 
+  # useful for testing, call .send("incomplete_questions") to see why a log is not complete
+  def incomplete_questions
+    form.subsections
+        .filter { |subsection| !subsection.complete?(self) && subsection.displayed_in_tasklist?(self) }
+        .flat_map { |subsection| subsection.questions.filter { |question| !question.completed?(self) && question.displayed_to_user?(self)  && !question.derived?(self) } }
+  end
+
   def all_subsections_unstarted?
     not_started_statuses = %i[not_started cannot_start_yet]
     form.subsections.all? { |subsection| not_started_statuses.include? subsection.status(self) }
