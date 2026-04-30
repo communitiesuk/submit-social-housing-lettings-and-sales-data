@@ -35,7 +35,8 @@ module ApplicationHelper
   def notification_banner
     govuk_notification_banner(
       title_text: "Success",
-      success: true, title_heading_level: 3,
+      success: true,
+      title_heading_level: 3,
       title_id: "flash-notice",
       role: "alert"
     ) do |notification_banner|
