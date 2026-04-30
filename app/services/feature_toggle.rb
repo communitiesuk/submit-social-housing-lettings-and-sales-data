@@ -28,10 +28,16 @@ class FeatureToggle
   end
 
   def self.create_test_logs_enabled?
-    Rails.env.development? || Rails.env.review? || Rails.env.staging?
+    Rails.env.development? || Rails.env.review?
   end
 
   def self.sales_export_enabled?
     Time.zone.now >= Time.zone.local(2025, 4, 1) || (Rails.env.review? || Rails.env.staging?)
+  end
+
+  # IDs of organisations a user must be in to be allowed the support role
+  # if nil this feature will be disabled
+  def self.support_organisation_allow_list
+    [1] if Rails.env.production?
   end
 end

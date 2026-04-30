@@ -104,6 +104,7 @@ class SalesLog < Log
 
   OPTIONAL_FIELDS = %w[purchid othtype buyers_organisations].freeze
   DUPLICATE_LOG_ATTRIBUTES = %w[owning_organisation_id purchid saledate age1_known age1 sex1 sexrab1 ecstat1 postcode_full uprn address_line1].freeze
+  MAX_PEOPLE_WITH_DETAILS = 6 # This is not yet used in all sales validations etc. so check for other occurrences of this concept if updating this
 
   def lettings?
     false

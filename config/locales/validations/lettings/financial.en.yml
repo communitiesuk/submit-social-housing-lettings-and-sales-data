@@ -12,6 +12,7 @@ en:
           outstanding_amount_not_expected: "Answer must be ‘yes’ as you have answered the outstanding amount question."
         benefits:
           part_or_full_time: "Answer cannot be ‘all’ for income from Universal Credit, state pensions or benefits if the tenant or their partner works part-time or full-time."
+          housing_benefits_not_match_income_source: "You answered that none of the household’s income is from Universal Credit, state pensions or benefits, but also that the tenant is likely to be receiving Universal Credit or housing benefit."
         earnings:
           over_hard_max: "The household’s income cannot be greater than %{hard_max} per week given the household’s working situation."
           under_hard_min: "The household’s income cannot be less than %{hard_min} per week given the household’s working situation."
@@ -87,3 +88,5 @@ en:
         needstype:
           rent_below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this lettings type."
           rent_above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this lettings type."
+        hb:
+          housing_benefits_not_match_income_source: "You answered that none of the household’s income is from Universal Credit, state pensions or benefits, but also that the tenant is likely to be receiving Universal Credit or housing benefit."
