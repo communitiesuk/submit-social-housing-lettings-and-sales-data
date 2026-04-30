@@ -120,17 +120,11 @@
 
       <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
         <% if flash.notice && !flash.notice.include?("translation missing") %>
-          <%= govuk_notification_banner(
-            title_text: "Success",
-            success: true, title_heading_level: 3,
-            title_id: "flash-notice",
-            role: "alert"
-          ) do |notification_banner|
-            notification_banner.with_heading(text: flash.notice.html_safe)
-            if flash[:notification_banner_body]
-              tag.p flash[:notification_banner_body]&.html_safe
-            end
-          end %>
+          <div class="govuk-grid-row">
+            <div class="<%= flash[:notification_banner_two_thirds] ? 'govuk-grid-column-two-thirds-from-desktop' : 'govuk-grid-column-full' %>">
+              <%= notification_banner %>
+            </div>
+          </div>
         <% end %>
         <%= content_for?(:content) ? yield(:content) : yield %>
       </main>
