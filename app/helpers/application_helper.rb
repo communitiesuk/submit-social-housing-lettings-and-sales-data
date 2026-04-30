@@ -38,7 +38,7 @@ module ApplicationHelper
       success: true,
       title_heading_level: 3,
       title_id: "flash-notice",
-      role: "alert"
+      role: "alert",
     ) do |notification_banner|
       notification_banner.with_heading(text: flash.notice.html_safe)
       if flash[:notification_banner_body]
