@@ -120,15 +120,11 @@
 
       <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
         <% if flash.notice && !flash.notice.include?("translation missing") %>
-          <% if flash[:notification_banner_two_thirds] %>
-            <div class="govuk-grid-row">
-              <div class="govuk-grid-column-two-thirds-from-desktop">
-                <%= notification_banner %>
-              </div>
+          <div class="govuk-grid-row">
+            <div class="<%= flash[:notification_banner_two_thirds] ? 'govuk-grid-column-two-thirds-from-desktop' : 'govuk-grid-column-full' %>">
+              <%= notification_banner %>
             </div>
-          <% else %>
-            <%= notification_banner %>
-          <% end %>
+          </div>
         <% end %>
         <%= content_for?(:content) ? yield(:content) : yield %>
       </main>
