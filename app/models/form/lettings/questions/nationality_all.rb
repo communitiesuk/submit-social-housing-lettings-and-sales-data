@@ -21,7 +21,7 @@ class Form::Lettings::Questions::NationalityAll < ::Form::Question
 
   def label_from_value(value)
     return unless value
-    return "Tenant prefers not to say" if value.to_i.zero?
+    return "Prefers not to say" if value.to_i.zero?
 
     answer_options[value.to_s]["name"]
   end
