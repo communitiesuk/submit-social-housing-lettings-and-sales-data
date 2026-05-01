@@ -44,39 +44,22 @@ RSpec.describe Form::Lettings::Questions::Waityear, type: :model do
     expect(question.check_answers_card_number).to eq(0)
   end
 
-  describe "before 2025" do
-    it "has the correct answer_options" do
-      expect(question.answer_options).to eq({
-        "2" => { "value" => "Less than 1 year" },
-        "7" => { "value" => "1 year but under 2 years" },
-        "8" => { "value" => "2 years but under 3 years" },
-        "9" => { "value" => "3 years but under 4 years" },
-        "10" => { "value" => "4 years but under 5 years" },
-        "5" => { "value" => "5 years or more" },
-        "divider" => { "value" => true },
-        "6" => { "value" => "Don’t know" },
-      })
-    end
+  before do
+    allow(form).to receive(:start_year_2025_or_later?).and_return(true)
   end
 
-  context "with 2025/26 form" do
-    before do
-      allow(form).to receive(:start_year_2025_or_later?).and_return(true)
-    end
-
-    it "has the correct answer_options" do
-      expect(question.answer_options).to eq({
-        "13" => { "value" => "Household not on the housing register (or waiting list) in this area" },
-        "2" => { "value" => "Under 1 year" },
-        "7" => { "value" => "1 year but under 2 years" },
-        "8" => { "value" => "2 years but under 3 years" },
-        "9" => { "value" => "3 years but under 4 years" },
-        "10" => { "value" => "4 years but under 5 years" },
-        "11" => { "value" => "5 years but under 10 years" },
-        "12" => { "value" => "10 years or more" },
-        "divider" => { "value" => true },
-        "6" => { "value" => "Don’t know" },
-      })
-    end
+  it "has the correct answer_options" do
+    expect(question.answer_options).to eq({
+      "13" => { "value" => "Household not on the housing register (or waiting list) in this area" },
+      "2" => { "value" => "Under 1 year" },
+      "7" => { "value" => "1 year but under 2 years" },
+      "8" => { "value" => "2 years but under 3 years" },
+      "9" => { "value" => "3 years but under 4 years" },
+      "10" => { "value" => "4 years but under 5 years" },
+      "11" => { "value" => "5 years but under 10 years" },
+      "12" => { "value" => "10 years or more" },
+      "divider" => { "value" => true },
+      "6" => { "value" => "Don’t know" },
+    })
   end
 end

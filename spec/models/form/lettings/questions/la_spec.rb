@@ -1,13 +1,19 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Questions::La, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
+  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date) }
   let(:page) { instance_double(Form::Page, subsection:) }
-  let(:start_date) { Time.utc(2023, 4, 1) }
+
+  before do
+    allow(subsection).to receive(:form).and_return(form)
+  end
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
@@ -69,6 +75,12 @@ RSpec.describe Form::Lettings::Questions::La, type: :model do
       "E06000058" => "Bournemouth, Christchurch and Poole",
       "E06000059" => "Dorset",
       "E06000060" => "Buckinghamshire",
+      "E06000061" => "North Northamptonshire",
+      "E06000062" => "West Northamptonshire",
+      "E06000063" => "Cumberland",
+      "E06000064" => "Westmorland and Furness",
+      "E06000065" => "North Yorkshire",
+      "E06000066" => "Somerset",
       "E07000008" => "Cambridge",
       "E07000009" => "East Cambridgeshire",
       "E07000010" => "Fenland",
@@ -175,8 +187,6 @@ RSpec.describe Form::Lettings::Questions::La, type: :model do
       "E07000147" => "North Norfolk",
       "E07000148" => "Norwich",
       "E07000149" => "South Norfolk",
-      "E06000061" => "North Northamptonshire",
-      "E06000062" => "West Northamptonshire",
       "E07000170" => "Ashfield",
       "E07000171" => "Bassetlaw",
       "E07000172" => "Broxtowe",
@@ -250,10 +260,8 @@ RSpec.describe Form::Lettings::Questions::La, type: :model do
       "E08000013" => "St. Helens",
       "E08000014" => "Sefton",
       "E08000015" => "Wirral",
-      "E08000016" => "Barnsley",
       "E08000017" => "Doncaster",
       "E08000018" => "Rotherham",
-      "E08000019" => "Sheffield",
       "E08000021" => "Newcastle upon Tyne",
       "E08000022" => "North Tyneside",
       "E08000023" => "South Tyneside",
@@ -263,7 +271,6 @@ RSpec.describe Form::Lettings::Questions::La, type: :model do
       "E08000027" => "Dudley",
       "E08000028" => "Sandwell",
       "E08000029" => "Solihull",
-      "E06000066" => "Somerset",
       "E08000030" => "Walsall",
       "E08000031" => "Wolverhampton",
       "E08000032" => "Bradford",
@@ -272,6 +279,8 @@ RSpec.describe Form::Lettings::Questions::La, type: :model do
       "E08000035" => "Leeds",
       "E08000036" => "Wakefield",
       "E08000037" => "Gateshead",
+      "E08000038" => "Barnsley",
+      "E08000039" => "Sheffield",
       "E09000001" => "City of London",
       "E09000002" => "Barking and Dagenham",
       "E09000003" => "Barnet",
@@ -280,7 +289,6 @@ RSpec.describe Form::Lettings::Questions::La, type: :model do
       "E09000006" => "Bromley",
       "E09000007" => "Camden",
       "E09000008" => "Croydon",
-      "E06000063" => "Cumberland",
       "E09000009" => "Ealing",
       "E09000010" => "Enfield",
       "E09000011" => "Greenwich",
@@ -306,8 +314,6 @@ RSpec.describe Form::Lettings::Questions::La, type: :model do
       "E09000031" => "Waltham Forest",
       "E09000032" => "Wandsworth",
       "E09000033" => "Westminster",
-      "E06000064" => "Westmorland and Furness",
-      "E06000065" => "North Yorkshire",
     })
   end
 

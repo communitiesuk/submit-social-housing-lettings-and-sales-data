@@ -1,10 +1,17 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Questions::TenancyLength, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(nil, nil, page) }
 
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date:)), id: "tenancy_length") }
-  let(:start_date) { Time.utc(2023, 4, 1) }
+  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date) }
+  let(:page) { instance_double(Form::Page, subsection:, id: "tenancy_length") }
+
+  before do
+    allow(subsection).to receive(:form).and_return(form)
+  end
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -32,6 +39,6 @@ RSpec.describe Form::Lettings::Questions::TenancyLength, type: :model do
   end
 
   it "has the correct question number" do
-    expect(question.question_number).to eq(29)
+    expect(question.question_number).to eq(28)
   end
 end
