@@ -25,6 +25,7 @@ class FormController < ApplicationController
           updated_question = @page.questions.reject { |question| question.check_answer_label.blank? }.first
           updated_question_string = [updated_question&.question_number_string, updated_question&.check_answer_label.to_s.downcase].compact.join(": ")
           flash[:notice] = "You have successfully updated #{updated_question_string}"
+          flash[:notification_banner_two_thirds] = true
         end
 
         update_duplication_tracking
