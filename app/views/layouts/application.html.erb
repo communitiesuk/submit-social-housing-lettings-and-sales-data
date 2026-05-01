@@ -121,7 +121,7 @@
       <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
         <% if flash.notice && !flash.notice.include?("translation missing") %>
           <div class="govuk-grid-row">
-            <div class="<%= flash[:notification_banner_two_thirds] ? 'govuk-grid-column-two-thirds-from-desktop' : 'govuk-grid-column-full' %>">
+            <div class="<%= flash[:notification_banner_two_thirds] ? "govuk-grid-column-two-thirds-from-desktop" : "govuk-grid-column-full" %>">
               <%= notification_banner %>
             </div>
           </div>
