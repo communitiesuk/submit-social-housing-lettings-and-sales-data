@@ -14,6 +14,8 @@ RSpec.describe Form::Lettings::Questions::Waityear, type: :model do
     allow(form).to receive(:start_year_2025_or_later?).and_return(false)
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
+    allow(form).to receive(:start_year_2025_or_later?).and_return(true)
+    allow(form).to receive(:start_year_2025_or_later?).and_return(true)
   end
 
   it "has correct page" do
@@ -42,10 +44,6 @@ RSpec.describe Form::Lettings::Questions::Waityear, type: :model do
 
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to eq(0)
-  end
-
-  before do
-    allow(form).to receive(:start_year_2025_or_later?).and_return(true)
   end
 
   it "has the correct answer_options" do

@@ -71,8 +71,6 @@ RSpec.describe Form, type: :model do
 
   describe ".previous_page" do
     context "when the current page is not a value check page" do
-      let!(:subsection) { form.get_subsection("setup") }
-
       it "returns the previous page if the page is routed to" do
         page = form.get_page("rent_type")
         expect(form.previous_page_id(page, lettings_log, user)).to eq("tenancy_start_date")
