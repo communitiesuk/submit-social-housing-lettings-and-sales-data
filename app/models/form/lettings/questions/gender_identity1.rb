@@ -17,4 +17,12 @@ class Form::Lettings::Questions::GenderIdentity1 < ::Form::Question
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 33, 2024 => 32, 2025 => 32 }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "R"
+
+    super
+  end
 end
