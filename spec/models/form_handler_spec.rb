@@ -1,8 +1,10 @@
 require "rails_helper"
 
 RSpec.describe FormHandler do
+  include CollectionTimeHelper
+
   let(:form_handler) { described_class.instance }
-  let(:now) { Time.utc(2022, 9, 20) }
+  let(:now) { current_collection_start_date }
 
   around do |example|
     Timecop.freeze(now) do
@@ -12,8 +14,6 @@ RSpec.describe FormHandler do
   end
 
   context "when accessing a form in a different year" do
-    let(:now) { Time.utc(2021, 8, 3) }
-
     it "is able to load a current lettings form" do
       form = form_handler.get_form("current_lettings")
       expect(form).to be_a(Form)
@@ -34,65 +34,59 @@ RSpec.describe FormHandler do
       expect(all_forms["current_sales"]).to be_a(Form)
     end
 
-    context "when in 23/24 period or later" do
-      let(:now) { Time.utc(2023, 6, 7) }
+    it "does not load outdated forms" do
+      all_forms = form_handler.forms
+      expect(all_forms.keys).not_to include nil
+    end
 
-      it "does not load outdated forms" do
-        all_forms = form_handler.forms
-        expect(all_forms.keys).not_to include nil
-      end
-
-      it "loads archived forms" do
-        all_forms = form_handler.forms
-        expect(all_forms.keys).to include("archived_sales")
-        expect(all_forms.keys).to include("archived_lettings")
-      end
+    it "loads archived forms" do
+      all_forms = form_handler.forms
+      expect(all_forms.keys).to include("archived_sales")
+      expect(all_forms.keys).to include("archived_lettings")
     end
   end
 
   describe "Get specific form" do
-    let(:now) { Time.utc(2023, 9, 20) }
-
     it "is able to load a current lettings form" do
       form = form_handler.get_form("current_lettings")
       expect(form).to be_a(Form)
       expect(form.pages.count).to be_positive
-      expect(form.name).to eq("2023_2024_lettings")
+      expect(form.name).to eq("#{current_collection_start_year}_#{current_collection_end_year}_lettings")
     end
 
     it "is able to load a previous lettings form" do
       form = form_handler.get_form("previous_lettings")
       expect(form).to be_a(Form)
       expect(form.pages.count).to be_positive
-      expect(form.name).to eq("2022_2023_lettings")
+      expect(form.name).to eq("#{previous_collection_start_year}_#{previous_collection_end_year}_lettings")
     end
 
     it "is able to load a archived lettings form" do
       form = form_handler.get_form("archived_lettings")
       expect(form).to be_a(Form)
       expect(form.pages.count).to be_positive
-      expect(form.name).to eq("2021_2022_lettings")
+      expect(form.name).to eq("#{archived_collection_start_year}_#{archived_collection_end_year}_lettings")
     end
 
     it "is able to load a current sales form" do
       form = form_handler.get_form("current_sales")
       expect(form).to be_a(Form)
       expect(form.pages.count).to be_positive
-      expect(form.name).to eq("2023_2024_sales")
+      expect(form.name).to eq("#{current_collection_start_year}_#{current_collection_end_year}_sales")
     end
 
     it "is able to load a previous sales form" do
       form = form_handler.get_form("previous_sales")
       expect(form).to be_a(Form)
       expect(form.pages.count).to be_positive
-      expect(form.name).to eq("2022_2023_sales")
+      expect(form.name).to eq("#{previous_collection_start_year}_#{previous_collection_end_year}_sales")
     end
 
     it "is able to load a archived sales form" do
       form = form_handler.get_form("archived_sales")
       expect(form).to be_a(Form)
       expect(form.pages.count).to be_positive
-      expect(form.name).to eq("2021_2022_sales")
+      expect(form.name).to eq("#{archived_collection_start_year}_#{archived_collection_end_year}_sales")
     end
   end
 
@@ -100,92 +94,92 @@ RSpec.describe FormHandler do
     it "returns the latest form by date" do
       form = form_handler.current_lettings_form
       expect(form).to be_a(Form)
-      expect(form.start_date.year).to eq(2022)
+      expect(form.start_date.year).to eq(current_collection_start_year)
     end
   end
 
   describe "Current collection start year" do
     context "when the date is after 1st of April" do
-      let(:now) { Time.utc(2023, 8, 3) }
+      let(:now) { Time.utc(current_collection_start_year, 8, 3) }
 
       it "returns the same year as the current start year" do
-        expect(form_handler.current_collection_start_year).to eq(2023)
+        expect(form_handler.current_collection_start_year).to eq(current_collection_start_year)
       end
 
       it "returns the correct current lettings form name" do
-        expect(form_handler.form_name_from_start_year(2023, "lettings")).to eq("current_lettings")
+        expect(form_handler.form_name_from_start_year(current_collection_start_year, "lettings")).to eq("current_lettings")
       end
 
       it "returns the correct previous lettings form name" do
-        expect(form_handler.form_name_from_start_year(2022, "lettings")).to eq("previous_lettings")
+        expect(form_handler.form_name_from_start_year(previous_collection_start_year, "lettings")).to eq("previous_lettings")
       end
 
       it "returns the correct next lettings form name" do
-        expect(form_handler.form_name_from_start_year(2024, "lettings")).to eq("next_lettings")
+        expect(form_handler.form_name_from_start_year(next_collection_start_year, "lettings")).to eq("next_lettings")
       end
 
       it "returns the correct archived lettings form name" do
-        expect(form_handler.form_name_from_start_year(2021, "lettings")).to eq("archived_lettings")
+        expect(form_handler.form_name_from_start_year(archived_collection_start_year, "lettings")).to eq("archived_lettings")
       end
 
       it "returns the correct current sales form name" do
-        expect(form_handler.form_name_from_start_year(2023, "sales")).to eq("current_sales")
+        expect(form_handler.form_name_from_start_year(current_collection_start_year, "sales")).to eq("current_sales")
       end
 
       it "returns the correct previous sales form name" do
-        expect(form_handler.form_name_from_start_year(2022, "sales")).to eq("previous_sales")
+        expect(form_handler.form_name_from_start_year(previous_collection_start_year, "sales")).to eq("previous_sales")
       end
 
       it "returns the correct next sales form name" do
-        expect(form_handler.form_name_from_start_year(2024, "sales")).to eq("next_sales")
+        expect(form_handler.form_name_from_start_year(next_collection_start_year, "sales")).to eq("next_sales")
       end
 
       it "returns the correct archived sales form name" do
-        expect(form_handler.form_name_from_start_year(2021, "sales")).to eq("archived_sales")
+        expect(form_handler.form_name_from_start_year(archived_collection_start_year, "sales")).to eq("archived_sales")
       end
 
       it "returns the correct current start date" do
-        expect(form_handler.current_collection_start_date).to eq(Time.zone.local(2023, 4, 1))
+        expect(form_handler.current_collection_start_date).to eq(current_collection_start_date)
       end
     end
 
     context "with the date before 1st of April" do
-      let(:now) { Time.utc(2023, 2, 3) }
+      let(:now) { Time.utc(current_collection_end_year, 2, 3) }
 
       it "returns the previous year as the current start year" do
-        expect(form_handler.current_collection_start_year).to eq(2022)
+        expect(form_handler.current_collection_start_year).to eq(current_collection_start_year)
       end
 
       it "returns the correct current lettings form name" do
-        expect(form_handler.form_name_from_start_year(2022, "lettings")).to eq("current_lettings")
+        expect(form_handler.form_name_from_start_year(current_collection_start_year, "lettings")).to eq("current_lettings")
       end
 
       it "returns the correct previous lettings form name" do
-        expect(form_handler.form_name_from_start_year(2021, "lettings")).to eq("previous_lettings")
+        expect(form_handler.form_name_from_start_year(previous_collection_start_year, "lettings")).to eq("previous_lettings")
       end
 
       it "returns the correct next lettings form name" do
-        expect(form_handler.form_name_from_start_year(2023, "lettings")).to eq("next_lettings")
+        expect(form_handler.form_name_from_start_year(next_collection_start_year, "lettings")).to eq("next_lettings")
       end
 
       it "returns the correct archived lettings form name" do
-        expect(form_handler.form_name_from_start_year(2020, "lettings")).to eq("archived_lettings")
+        expect(form_handler.form_name_from_start_year(archived_collection_start_year, "lettings")).to eq("archived_lettings")
       end
 
       it "returns the correct current sales form name" do
-        expect(form_handler.form_name_from_start_year(2022, "sales")).to eq("current_sales")
+        expect(form_handler.form_name_from_start_year(current_collection_start_year, "sales")).to eq("current_sales")
       end
 
       it "returns the correct previous sales form name" do
-        expect(form_handler.form_name_from_start_year(2021, "sales")).to eq("previous_sales")
+        expect(form_handler.form_name_from_start_year(previous_collection_start_year, "sales")).to eq("previous_sales")
       end
 
       it "returns the correct next sales form name" do
-        expect(form_handler.form_name_from_start_year(2023, "sales")).to eq("next_sales")
+        expect(form_handler.form_name_from_start_year(next_collection_start_year, "sales")).to eq("next_sales")
       end
 
       it "returns the correct archived sales form name" do
-        expect(form_handler.form_name_from_start_year(2020, "sales")).to eq("archived_sales")
+        expect(form_handler.form_name_from_start_year(archived_collection_start_year, "sales")).to eq("archived_sales")
       end
     end
   end
@@ -199,65 +193,20 @@ RSpec.describe FormHandler do
   it "correctly sets form type and start year" do
     form = form_handler.forms["current_lettings"]
     expect(form.type).to eq("lettings")
-    expect(form.start_date.year).to eq(2022)
+    expect(form.start_date.year).to eq(current_collection_start_year)
   end
 
   # rubocop:disable RSpec/PredicateMatcher
   describe "#in_crossover_period?" do
     context "when not in overlapping period" do
       it "returns false" do
-        expect(form_handler.in_crossover_period?(now: Date.new(2023, 1, 1))).to be_falsey
+        expect(form_handler.in_crossover_period?(now: Date.new(current_collection_start_year, 1, 1))).to be_falsey
       end
     end
 
     context "when in overlapping period" do
       it "returns true" do
-        expect(form_handler.in_crossover_period?(now: Date.new(2022, 6, 1))).to be_truthy
-      end
-    end
-  end
-
-  describe "lettings_forms" do
-    context "when current and previous forms are defined in JSON (current collection start year before 2023)" do
-      let(:now) { Time.utc(2022, 9, 20) }
-
-      it "creates a next_lettings form from ruby form objects" do
-        expect(form_handler.lettings_forms["previous_lettings"]).to be_present
-        expect(form_handler.lettings_forms["previous_lettings"].start_date.year).to eq(2021)
-        expect(form_handler.lettings_forms["current_lettings"]).to be_present
-        expect(form_handler.lettings_forms["current_lettings"].start_date.year).to eq(2022)
-        expect(form_handler.lettings_forms["next_lettings"]).to be_present
-        expect(form_handler.lettings_forms["next_lettings"].start_date.year).to eq(2023)
-      end
-    end
-
-    context "when only previous form is defined in JSON (current collection start year 2023)" do
-      let(:now) { Time.utc(2023, 9, 20) }
-
-      it "creates current_lettings and next_lettings forms from ruby form objects" do
-        expect(form_handler.lettings_forms["archived_lettings"]).to be_present
-        expect(form_handler.lettings_forms["archived_lettings"].start_date.year).to eq(2021)
-        expect(form_handler.lettings_forms["previous_lettings"]).to be_present
-        expect(form_handler.lettings_forms["previous_lettings"].start_date.year).to eq(2022)
-        expect(form_handler.lettings_forms["current_lettings"]).to be_present
-        expect(form_handler.lettings_forms["current_lettings"].start_date.year).to eq(2023)
-        expect(form_handler.lettings_forms["next_lettings"]).to be_present
-        expect(form_handler.lettings_forms["next_lettings"].start_date.year).to eq(2024)
-      end
-    end
-
-    context "when only archived form is defined in JSON (current collection start year 2024 onwards)" do
-      let(:now) { Time.utc(2024, 5, 20) }
-
-      it "creates previous_lettings, current_lettings and next_lettings forms from ruby form objects and archived form from json" do
-        expect(form_handler.lettings_forms["archived_lettings"]).to be_present
-        expect(form_handler.lettings_forms["archived_lettings"].start_date.year).to eq(2022)
-        expect(form_handler.lettings_forms["previous_lettings"]).to be_present
-        expect(form_handler.lettings_forms["previous_lettings"].start_date.year).to eq(2023)
-        expect(form_handler.lettings_forms["current_lettings"]).to be_present
-        expect(form_handler.lettings_forms["current_lettings"].start_date.year).to eq(2024)
-        expect(form_handler.lettings_forms["next_lettings"]).to be_present
-        expect(form_handler.lettings_forms["next_lettings"].start_date.year).to eq(2025)
+        expect(form_handler.in_crossover_period?(now: Date.new(current_collection_start_year, 6, 1))).to be_truthy
       end
     end
   end

@@ -18,7 +18,7 @@ RSpec.describe Validations::DateValidations do
     end
 
     it "does not raise an error when valid" do
-      record.startdate = Time.zone.local(2022, 1, 1)
+      record.startdate = current_collection_start_date + 1.month
       date_validator.validate_startdate(record)
       expect(record.errors["startdate"]).to be_empty
     end
@@ -40,8 +40,8 @@ RSpec.describe Validations::DateValidations do
 
   describe "major repairs date" do
     it "cannot be after the tenancy start date" do
-      record.startdate = Time.zone.local(2022, 1, 1)
-      record.mrcdate = Time.zone.local(2022, 2, 1)
+      record.startdate = current_collection_start_date + 1.month
+      record.mrcdate = current_collection_start_date + 2.months
       date_validator.validate_property_major_repairs(record)
       expect(record.errors["mrcdate"])
         .to include(match I18n.t("validations.lettings.date.mrcdate.before_tenancy_start"))
@@ -50,8 +50,8 @@ RSpec.describe Validations::DateValidations do
     end
 
     it "must be before the tenancy start date" do
-      record.startdate = Time.zone.local(2022, 2, 1)
-      record.mrcdate = Time.zone.local(2022, 1, 1)
+      record.startdate = current_collection_start_date + 2.months
+      record.mrcdate = current_collection_start_date + 1.month
       date_validator.validate_property_major_repairs(record)
       expect(record.errors["mrcdate"]).to be_empty
     end
@@ -77,7 +77,7 @@ RSpec.describe Validations::DateValidations do
     context "when reason for vacancy is first let of property" do
       it "validates that no major repair date is provided for a new build" do
         record.rsnvac = 15
-        record.mrcdate = Time.zone.local(2022, 1, 1)
+        record.mrcdate = current_collection_start_date + 1.month
         date_validator.validate_property_major_repairs(record)
         expect(record.errors["mrcdate"])
           .to include(match I18n.t("validations.lettings.date.mrcdate.not_first_let"))
@@ -85,7 +85,7 @@ RSpec.describe Validations::DateValidations do
 
       it "validates that no major repair date is provided for a conversion" do
         record.rsnvac = 16
-        record.mrcdate = Time.zone.local(2022, 1, 1)
+        record.mrcdate = current_collection_start_date + 1.month
         date_validator.validate_property_major_repairs(record)
         expect(record.errors["mrcdate"])
           .to include(match I18n.t("validations.lettings.date.mrcdate.not_first_let"))
@@ -93,7 +93,7 @@ RSpec.describe Validations::DateValidations do
 
       it "validates that no major repair date is provided for a leased property" do
         record.rsnvac = 17
-        record.mrcdate = Time.zone.local(2022, 1, 1)
+        record.mrcdate = current_collection_start_date + 1.month
         date_validator.validate_property_major_repairs(record)
         expect(record.errors["mrcdate"])
           .to include(match I18n.t("validations.lettings.date.mrcdate.not_first_let"))
@@ -103,7 +103,7 @@ RSpec.describe Validations::DateValidations do
     context "when the reason for vacancy is not the first let of property" do
       it "expects that major repairs can have been done" do
         record.rsnvac = "Tenant moved to care home"
-        record.mrcdate = Time.zone.local(2022, 1, 1)
+        record.mrcdate = current_collection_start_date + 1.month
         date_validator.validate_property_major_repairs(record)
         expect(record.errors["mrcdate"]).to be_empty
       end
@@ -112,8 +112,8 @@ RSpec.describe Validations::DateValidations do
 
   describe "property void date" do
     it "cannot be after the tenancy start date" do
-      record.startdate = Time.zone.local(2022, 1, 1)
-      record.voiddate = Time.zone.local(2022, 2, 1)
+      record.startdate = current_collection_start_date + 1.month
+      record.voiddate = current_collection_start_date + 2.months
       date_validator.validate_property_void_date(record)
       expect(record.errors["voiddate"])
         .to include(match I18n.t("validations.lettings.date.void_date.before_tenancy_start"))
@@ -122,8 +122,8 @@ RSpec.describe Validations::DateValidations do
     end
 
     it "must be before the tenancy start date" do
-      record.startdate = Time.zone.local(2022, 2, 1)
-      record.voiddate = Time.zone.local(2022, 1, 1)
+      record.startdate = current_collection_start_date + 2.months
+      record.voiddate = current_collection_start_date + 1.month
       date_validator.validate_property_void_date(record)
       expect(record.errors["voiddate"]).to be_empty
     end
@@ -149,8 +149,8 @@ RSpec.describe Validations::DateValidations do
 
     context "when major repairs have been carried out" do
       it "void_date cannot be after major repairs date" do
-        record.mrcdate = Time.zone.local(2022, 1, 1)
-        record.voiddate = Time.zone.local(2022, 2, 1)
+        record.mrcdate = current_collection_start_date + 1.month
+        record.voiddate = current_collection_start_date + 2.months
         date_validator.validate_property_void_date(record)
         expect(record.errors["voiddate"])
           .to include(match I18n.t("validations.lettings.date.void_date.after_mrcdate"))
@@ -159,8 +159,8 @@ RSpec.describe Validations::DateValidations do
       end
 
       it "must be before major repairs date" do
-        record.mrcdate = Time.zone.local(2022, 2, 1)
-        record.voiddate = Time.zone.local(2022, 1, 1)
+        record.mrcdate = current_collection_start_date + 2.months
+        record.voiddate = current_collection_start_date + 1.month
         date_validator.validate_property_void_date(record)
         expect(record.errors["voiddate"]).to be_empty
       end

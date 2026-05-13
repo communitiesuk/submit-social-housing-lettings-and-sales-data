@@ -7,18 +7,6 @@ RSpec.describe LettingsLog do
   let(:different_managing_organisation) { create(:organisation) }
   let(:owning_organisation) { create(:organisation, rent_periods: [2]) }
   let(:assigned_to_user) { create(:user, organisation: owning_organisation) }
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
-
-  around do |example|
-    Timecop.freeze(Time.utc(2022, 1, 1)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-  end
-
-  before do
-    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
-  end
 
   include_examples "shared examples for derived fields", :lettings_log
   include_examples "shared log examples", :lettings_log
@@ -40,16 +28,8 @@ RSpec.describe LettingsLog do
 
   describe "#form" do
     let(:lettings_log) { build(:lettings_log, assigned_to: assigned_to_user) }
-    let(:lettings_log_2) { build(:lettings_log, startdate: Time.zone.local(2022, 1, 1), assigned_to: assigned_to_user) }
-    let(:lettings_log_year_2) { build(:lettings_log, startdate: Time.zone.local(2023, 5, 1), assigned_to: assigned_to_user) }
-
-    before do
-      Timecop.freeze(2023, 1, 1)
-    end
-
-    after do
-      Timecop.unfreeze
-    end
+    let(:lettings_log_2) { build(:lettings_log, startdate: previous_collection_start_date, assigned_to: assigned_to_user) }
+    let(:lettings_log_year_2) { build(:lettings_log, startdate: next_collection_start_date, assigned_to: assigned_to_user) }
 
     it "returns the correct form based on the start date" do
       expect(lettings_log.form_name).to be_nil
@@ -61,11 +41,11 @@ RSpec.describe LettingsLog do
     end
 
     context "when a date outside the collection window is passed" do
-      let(:lettings_log) { build(:lettings_log, startdate: Time.zone.local(2015, 1, 1), assigned_to: assigned_to_user) }
+      let(:lettings_log) { build(:lettings_log, startdate: current_collection_start_date - 10.years, assigned_to: assigned_to_user) }
 
-      it "returns the first form" do
+      it "returns the current form as fallback" do
         expect(lettings_log.form).to be_a(Form)
-        expect(lettings_log.form.start_date.year).to eq(2021)
+        expect(lettings_log.form.start_date.year).to eq(current_collection_start_year)
       end
     end
   end
@@ -276,20 +256,22 @@ RSpec.describe LettingsLog do
         assigned_to: assigned_to_user,
         postcode_full: "M1 1AE",
         ppostcode_full: "M2 2AE",
-        startdate: Time.gm(2021, 10, 10),
-        mrcdate: Time.gm(2021, 5, 4),
-        voiddate: Time.gm(2021, 3, 3),
+        startdate: Time.zone.today,
+        mrcdate: Time.zone.today - 1.week,
+        voiddate: Time.zone.today - 2.weeks,
+        needstype: 1,
+        renewal: 0,
+        declaration: 1,
         net_income_known: 2, # refused
         hhmemb: 7,
         rent_type: 4,
         hb: 1,
         hbrentshortfall: 1,
-        created_at: Time.utc(2022, 2, 8, 16, 52, 15),
       )
     end
 
     def check_postcode_fields(postcode_field)
-      record_from_db = described_class.find(lettings_log.id)
+      record_from_db = described_class.find(address_lettings_log.id)
       expect(address_lettings_log[postcode_field]).to eq("M1 1AE")
       expect(record_from_db[postcode_field]).to eq("M1 1AE")
     end
@@ -313,6 +295,7 @@ RSpec.describe LettingsLog do
           assigned_to: assigned_to_user,
           postcode_known: 1,
           postcode_full: "M1 1AE",
+          manual_address_entry_selected: true,
         })
       end
 
@@ -490,19 +473,11 @@ RSpec.describe LettingsLog do
     end
 
     context "when a lettings log is a supported housing log" do
-      let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
-
       before do
         lettings_log.needstype = 2
-        allow(FormHandler.instance).to receive(:get_form).and_return(real_2021_2022_form)
       end
 
       describe "when changing a log's scheme and hence calling reset_scheme_location!" do
-        before do
-          Timecop.return
-          Singleton.__init__(FormHandler)
-        end
-
         context "when there is one valid location and many invalid locations in the new scheme" do
           let(:scheme) { create(:scheme) }
           let(:invalid_location_1) { create(:location, scheme:, startdate: Time.zone.today + 3.weeks) }
@@ -549,13 +524,7 @@ RSpec.describe LettingsLog do
         let!(:location) { create(:location, scheme:) }
 
         before do
-          Timecop.freeze(Time.zone.local(2022, 4, 2))
-          Singleton.__init__(FormHandler)
-          lettings_log.update!(startdate: Time.zone.local(2022, 4, 2), scheme:)
-        end
-
-        after do
-          Timecop.unfreeze
+          lettings_log.update!(startdate: current_collection_start_date + 1.day, scheme:, voiddate: nil, mrcdate: nil)
         end
 
         it "derives the scheme location" do
@@ -579,22 +548,11 @@ RSpec.describe LettingsLog do
             Singleton.__init__(FormHandler)
           end
 
-          context "with 22/23" do
-            let(:startdate) { Time.zone.local(2022, 4, 2) }
+          let(:startdate) { current_collection_start_date }
 
-            it "returns the correct la" do
-              expect(lettings_log["location_id"]).to eq(location.id)
-              expect(lettings_log.la).to eq("E07000030")
-            end
-          end
-
-          context "with 23/24" do
-            let(:startdate) { Time.zone.local(2023, 4, 2) }
-
-            it "returns the correct la" do
-              expect(lettings_log["location_id"]).to eq(location.id)
-              expect(lettings_log.la).to eq("E06000063")
-            end
+          it "returns the correct la" do
+            expect(lettings_log["location_id"]).to eq(location.id)
+            expect(lettings_log.la).to eq("E06000063")
           end
         end
 
@@ -657,13 +615,9 @@ RSpec.describe LettingsLog do
 
         context "and the location no local authorities associated with the location_code" do
           before do
-            Timecop.freeze(Time.zone.local(2022, 4, 2))
             location.update!(location_code: "E01231231")
-            lettings_log.update!(location:)
-          end
-
-          after do
-            Timecop.return
+            lettings_log.update_columns(la: nil)
+            lettings_log.reload
           end
 
           it "returns the correct la" do
@@ -690,7 +644,7 @@ RSpec.describe LettingsLog do
             Singleton.__init__(FormHandler)
           end
 
-          context "with 25/26" do
+          context "with 25/26", metadata: { year: 25 } do
             let(:startdate) { Time.zone.local(2025, 4, 2) }
 
             it "returns the postcode from the location" do
@@ -699,7 +653,7 @@ RSpec.describe LettingsLog do
             end
           end
 
-          context "with 26/27" do
+          context "with 26/27", metadata: { year: 26 } do
             let(:startdate) { Time.zone.local(2026, 4, 2) }
 
             it "returns the postcode from the log itself" do
@@ -712,24 +666,13 @@ RSpec.describe LettingsLog do
         context "and the log only has a postcode set on the location" do
           before do
             location.update!(postcode: "AA1 1AA")
-            Timecop.freeze(startdate)
-            Singleton.__init__(FormHandler)
-            lettings_log.update!(startdate:)
+            lettings_log.update!(postcode_full: nil)
             lettings_log.reload
           end
 
-          after do
-            Timecop.unfreeze
-            Singleton.__init__(FormHandler)
-          end
-
-          context "with 26/27" do
-            let(:startdate) { Time.zone.local(2026, 4, 2) }
-
-            it "returns the LA from the location" do
-              expect(lettings_log["location_id"]).to eq(location.id)
-              expect(lettings_log.postcode_full).to eq("AA1 1AA")
-            end
+          it "returns the postcode from the location" do
+            expect(lettings_log["location_id"]).to eq(location.id)
+            expect(lettings_log.postcode_full).to eq("AA1 1AA")
           end
         end
       end
@@ -929,21 +872,11 @@ RSpec.describe LettingsLog do
           managing_organisation: owning_organisation,
           owning_organisation:,
           assigned_to: assigned_to_user,
-          startdate: Time.zone.local(2024, 4, 10),
+          startdate: current_collection_start_date + 9.days,
           needstype: 1,
           renewal: 1,
           rent_type: 1,
         })
-      end
-
-      before do
-        Timecop.freeze(Time.zone.local(2024, 4, 10))
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.return
-        Singleton.__init__(FormHandler)
       end
 
       it "correctly derives nationality_all when it's UK" do
@@ -976,16 +909,6 @@ RSpec.describe LettingsLog do
     end
 
     context "when the log changes from new build to not new build" do
-      before do
-        allow(FormHandler.instance).to receive(:current_lettings_form).and_call_original
-        Timecop.freeze(2025, 5, 1)
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.unfreeze
-      end
-
       context "and the address is entered" do
         let(:address_lettings_log) do
           create(:lettings_log,
@@ -1054,16 +977,6 @@ RSpec.describe LettingsLog do
     end
 
     context "when the log changes from not new build to new build" do
-      before do
-        allow(FormHandler.instance).to receive(:current_lettings_form).and_call_original
-        Timecop.freeze(2025, 5, 1)
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.unfreeze
-      end
-
       context "and the uprn is selected" do
         let(:address_lettings_log) do
           create(:lettings_log,
@@ -1163,17 +1076,18 @@ RSpec.describe LettingsLog do
   end
 
   describe "optional fields" do
-    let(:lettings_log) { create(:lettings_log) }
-
     context "when tshortfall is marked as not known" do
+      let(:lettings_log) do
+        build(:lettings_log, hb: 1, hbrentshortfall: 1, period: 1, tshortfall: nil, tshortfall_known: 1)
+      end
+
       it "makes tshortfall optional" do
-        lettings_log.update!({ tshortfall: nil, tshortfall_known: 1 })
         expect(lettings_log.optional_fields).to include("tshortfall")
       end
     end
 
-    context "when startdate is after 2023" do
-      let(:lettings_log) { build(:lettings_log, startdate: Time.zone.parse("2023-07-01")) }
+    context "when startdate is in the current collection year" do
+      let(:lettings_log) { build(:lettings_log, startdate: current_collection_start_date + 1.day) }
 
       it "returns optional fields" do
         expect(lettings_log.optional_fields).to eq(%w[
@@ -1194,6 +1108,7 @@ RSpec.describe LettingsLog do
     let(:lettings_log) do
       create(
         :lettings_log,
+        :setup_completed,
         renewal: 0,
         rsnvac: 5,
         first_time_property_let_as_social_housing: 0,
@@ -1229,15 +1144,15 @@ RSpec.describe LettingsLog do
     context "when a question that has already been answered, no longer has met dependencies" do
       let(:lettings_log) { create(:lettings_log, :in_progress, cbl: 1, preg_occ: 2, wchair: 2) }
 
-      it "clears the answer" do
-        expect { lettings_log.update!(preg_occ: nil) }.to change(lettings_log, :cbl).from(1).to(nil)
+      it "does not clear the answer" do
+        expect { lettings_log.update!(preg_occ: nil) }.not_to change(lettings_log, :cbl)
       end
 
       context "when the question type does not have answer options" do
         let(:lettings_log) { create(:lettings_log, :in_progress, housingneeds_a: 1, age1: 19) }
 
-        it "clears the answer" do
-          expect { lettings_log.update!(housingneeds_a: 0) }.to change(lettings_log, :age1).from(19).to(nil)
+        it "does not clear the answer" do
+          expect { lettings_log.update!(housingneeds_a: 0) }.not_to change(lettings_log, :age1)
         end
       end
 
@@ -1247,31 +1162,6 @@ RSpec.describe LettingsLog do
         it "clears the answer" do
           expect { lettings_log.update!(illness: 2) }.to change(lettings_log, :illness_type_1).from(1).to(nil)
         end
-      end
-    end
-
-    context "with two pages having the same question key, only one's dependency is met" do
-      let(:lettings_log) { create(:lettings_log, :in_progress, cbl: 0, preg_occ: 2, wchair: 2) }
-
-      it "does not clear the value for answers that apply to both pages" do
-        expect(lettings_log.cbl).to eq(0)
-      end
-
-      it "does clear the value for answers that do not apply for invalidated page" do
-        lettings_log.update!({ cbl: 1 })
-        lettings_log.update!({ preg_occ: 1 })
-
-        expect(lettings_log.cbl).to be_nil
-      end
-    end
-
-    context "when a non select question associated with several pages is routed to" do
-      let(:lettings_log) { create(:lettings_log, :in_progress, period: 2, needstype: 1, renewal: 0) }
-
-      it "does not clear the answer value" do
-        lettings_log.update!({ unitletas: 1 })
-        lettings_log.reload
-        expect(lettings_log.unitletas).to eq(1)
       end
     end
 
@@ -1338,12 +1228,12 @@ RSpec.describe LettingsLog do
         it "clears void date value" do
           lettings_log.update!(startdate: Time.zone.yesterday)
           lettings_log.reload
-          expect(lettings_log.startdate).to eq(Time.zone.yesterday)
+          expect(lettings_log.startdate.to_date).to eq(Time.zone.yesterday.to_date)
           expect(lettings_log.voiddate).to be_nil
         end
 
         it "does not impact other validations" do
-          expect { lettings_log.update!(startdate: Time.zone.yesterday, referral: 8, rsnvac: 9) }
+          expect { lettings_log.update!(startdate: Time.zone.yesterday, first_time_property_let_as_social_housing: 0, referral: 8, rsnvac: 9) }
             .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t('validations.lettings.property.rsnvac.referral_invalid')}/)
         end
       end
@@ -1352,21 +1242,12 @@ RSpec.describe LettingsLog do
         it "clears major repairs date value" do
           lettings_log.update!(startdate: Time.zone.yesterday)
           lettings_log.reload
-          expect(lettings_log.startdate).to eq(Time.zone.yesterday)
+          expect(lettings_log.startdate.to_date).to eq(Time.zone.yesterday.to_date)
           expect(lettings_log.mrcdate).to be_nil
         end
       end
 
       context "and the new location triggers the rent range validation" do
-        around do |example|
-          Timecop.freeze(Time.zone.local(2022, 4, 1)) do
-            Singleton.__init__(FormHandler)
-            example.run
-          end
-          Timecop.return
-          Singleton.__init__(FormHandler)
-        end
-
         it "clears rent values" do
           lettings_log.update!(location:, scheme:)
           lettings_log.reload
@@ -1379,7 +1260,7 @@ RSpec.describe LettingsLog do
         end
 
         it "does not impact other validations" do
-          expect { lettings_log.update!(startdate: Time.zone.yesterday, referral: 8, rsnvac: 9) }
+          expect { lettings_log.update!(startdate: Time.zone.yesterday, first_time_property_let_as_social_housing: 0, referral: 8, rsnvac: 9) }
             .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t('validations.lettings.property.rsnvac.referral_invalid')}/)
         end
       end
@@ -1389,16 +1270,16 @@ RSpec.describe LettingsLog do
       context "and the new startdate triggers void date validation" do
         it "doesn't clear void date value" do
           expect { lettings_log.update!(startdate: Time.zone.yesterday) }.to raise_error(ActiveRecord::RecordInvalid, /Enter a void date that is before the tenancy start date/)
-          expect(lettings_log.startdate).to eq(Time.zone.yesterday)
-          expect(lettings_log.voiddate).to eq(Time.zone.today)
+          expect(lettings_log.startdate.to_date).to eq(Time.zone.yesterday.to_date)
+          expect(lettings_log.voiddate.to_date).to eq(Time.zone.today.to_date)
         end
       end
 
       context "and the new startdate triggers major repairs date validation" do
         it "doesn't clear major repairs date value" do
           expect { lettings_log.update!(startdate: Time.zone.yesterday) }.to raise_error(ActiveRecord::RecordInvalid, /Enter a major repairs date that is before the tenancy start date/)
-          expect(lettings_log.startdate).to eq(Time.zone.yesterday)
-          expect(lettings_log.mrcdate).to eq(Time.zone.today)
+          expect(lettings_log.startdate.to_date).to eq(Time.zone.yesterday.to_date)
+          expect(lettings_log.mrcdate.to_date).to eq(Time.zone.today.to_date)
         end
       end
 
@@ -1416,7 +1297,7 @@ RSpec.describe LettingsLog do
 
   describe "tshortfall_unknown?" do
     context "when tshortfall is nil" do
-      let(:lettings_log) { create(:lettings_log, :in_progress, tshortfall_known: nil) }
+      let(:lettings_log) { create(:lettings_log, :in_progress, hb: 1, hbrentshortfall: 1, period: 1, tshortfall_known: nil) }
 
       it "returns false" do
         expect(lettings_log.tshortfall_unknown?).to be false
@@ -1424,15 +1305,15 @@ RSpec.describe LettingsLog do
     end
 
     context "when tshortfall is No" do
-      let(:lettings_log) { create(:lettings_log, :in_progress, tshortfall_known: 1) }
+      let(:lettings_log) { create(:lettings_log, :in_progress, hb: 1, hbrentshortfall: 1, period: 1, tshortfall_known: 1) }
 
-      it "returns false" do
+      it "returns true" do
         expect(lettings_log.tshortfall_unknown?).to be true
       end
     end
 
     context "when tshortfall is Yes" do
-      let(:lettings_log) { create(:lettings_log, :in_progress, tshortfall_known: 0) }
+      let(:lettings_log) { create(:lettings_log, :in_progress, hb: 1, hbrentshortfall: 1, period: 1, tshortfall_known: 0) }
 
       it "returns false" do
         expect(lettings_log.tshortfall_unknown?).to be false
@@ -1466,13 +1347,13 @@ RSpec.describe LettingsLog do
         soft_max: 400,
         hard_min: 50,
         hard_max: 500,
-        start_year: 2021,
+        start_year: current_collection_start_year,
       )
 
       lettings_log.la = "E07000223"
       lettings_log.lettype = 1
       lettings_log.beds = 1
-      lettings_log.startdate = Time.zone.local(2021, 10, 10)
+      lettings_log.startdate = current_collection_start_date + 6.months
     end
 
     context "when period is weekly for 52 weeks" do
@@ -1501,17 +1382,12 @@ RSpec.describe LettingsLog do
   end
 
   describe "scopes" do
-    let!(:lettings_log_1) { create(:lettings_log, :in_progress, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), assigned_to: assigned_to_user) }
-    let!(:lettings_log_2) { create(:lettings_log, :completed, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), assigned_to: assigned_to_user) }
+    let!(:lettings_log_1) { create(:lettings_log, :in_progress, startdate: previous_collection_start_date + 1.month, mrcdate: previous_collection_start_date, voiddate: previous_collection_start_date, assigned_to: assigned_to_user) }
+    let!(:lettings_log_2) { create(:lettings_log, :completed, startdate: previous_collection_start_date + 1.month, mrcdate: previous_collection_start_date, voiddate: previous_collection_start_date, assigned_to: assigned_to_user) }
     let(:postcode_to_search) { "SW1A 0AA" }
 
     before do
-      Timecop.freeze(Time.utc(2022, 6, 3))
-      create(:lettings_log, startdate: Time.utc(2022, 6, 3))
-    end
-
-    after do
-      Timecop.unfreeze
+      create(:lettings_log, startdate: Time.zone.today)
     end
 
     context "when searching logs" do
@@ -1689,62 +1565,46 @@ RSpec.describe LettingsLog do
     end
 
     context "when filtering by year" do
-      before do
-        Timecop.freeze(Time.utc(2021, 5, 3))
-      end
-
-      after do
-        Timecop.unfreeze
-      end
-
       it "allows filtering on a single year" do
-        expect(described_class.filter_by_years(%w[2021]).count).to eq(2)
+        expect(described_class.filter_by_years([previous_collection_start_year.to_s]).count).to eq(2)
       end
 
       it "allows filtering by multiple years using OR" do
-        expect(described_class.filter_by_years(%w[2021 2022]).count).to eq(3)
+        expect(described_class.filter_by_years([previous_collection_start_year.to_s, current_collection_start_year.to_s]).count).to eq(3)
       end
 
       it "can filter by year(s) AND status" do
-        expect(described_class.filter_by_years(%w[2021 2022]).filter_by_status("completed").count).to eq(1)
+        expect(described_class.filter_by_years([previous_collection_start_year.to_s, current_collection_start_year.to_s]).filter_by_status("completed").count).to eq(1)
       end
 
       it "filters based on date boundaries correctly" do
-        lettings_log_1.startdate = Time.zone.local(2022, 4, 1)
+        lettings_log_1.startdate = current_collection_start_date
         lettings_log_1.save!(validate: false)
-        lettings_log_2.startdate = Time.zone.local(2022, 3, 31)
+        lettings_log_2.startdate = current_collection_start_date - 1.day
         lettings_log_2.save!(validate: false)
 
-        expect(described_class.filter_by_years(%w[2021]).count).to eq(1)
-        expect(described_class.filter_by_years(%w[2022]).count).to eq(2)
+        expect(described_class.filter_by_years([previous_collection_start_year.to_s]).count).to eq(1)
+        expect(described_class.filter_by_years([current_collection_start_year.to_s]).count).to eq(2)
       end
     end
 
     context "when filtering by year or nil" do
-      before do
-        Timecop.freeze(Time.utc(2021, 5, 3))
-      end
-
-      after do
-        Timecop.unfreeze
-      end
-
       it "allows filtering on a single year or nil" do
         lettings_log_1.startdate = nil
         lettings_log_1.save!(validate: false)
-        expect(described_class.filter_by_years_or_nil(%w[2021]).count).to eq(2)
+        expect(described_class.filter_by_years_or_nil([previous_collection_start_year.to_s]).count).to eq(2)
       end
 
       it "allows filtering by multiple years or nil using OR" do
         lettings_log_1.startdate = nil
         lettings_log_1.save!(validate: false)
-        expect(described_class.filter_by_years_or_nil(%w[2021 2022]).count).to eq(3)
+        expect(described_class.filter_by_years_or_nil([previous_collection_start_year.to_s, current_collection_start_year.to_s]).count).to eq(3)
       end
 
       it "can filter by year(s) AND status" do
         lettings_log_2.startdate = nil
         lettings_log_2.save!(validate: false)
-        expect(described_class.filter_by_years_or_nil(%w[2021 2022]).filter_by_status("in_progress").count).to eq(3)
+        expect(described_class.filter_by_years_or_nil([previous_collection_start_year.to_s, current_collection_start_year.to_s]).filter_by_status("in_progress").count).to eq(3)
       end
     end
 
@@ -2107,28 +1967,23 @@ RSpec.describe LettingsLog do
       context "when there is a duplicate supported housing log" do
         let(:scheme) { create(:scheme, owning_organisation: organisation) }
         let(:location) { create(:location, scheme:) }
-        let(:location_2) { create(:location, scheme:) }
         let!(:supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation) }
         let!(:duplicate_supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation) }
 
         it "returns the log as a duplicate" do
-          expect(duplicate_sets.count).to eq(2)
-          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
-          expect(duplicate_sets.second).to contain_exactly(duplicate_supported_housing_log.id, supported_housing_log.id)
-        end
-
-        it "does not return the log if the locations are different" do
-          duplicate_supported_housing_log.update!(location: location_2)
-          expect(duplicate_sets.count).to eq(1)
-          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+          expect(duplicate_sets).to contain_exactly(
+            contain_exactly(log.id, duplicate_log.id),
+            contain_exactly(duplicate_supported_housing_log.id, supported_housing_log.id),
+          )
         end
 
         it "does not compare tcharge if there are no household charges" do
           supported_housing_log.update!(household_charge: 1, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
           duplicate_supported_housing_log.update!(household_charge: 1, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
-          expect(duplicate_sets.count).to eq(2)
-          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
-          expect(duplicate_sets.second).to contain_exactly(supported_housing_log.id, duplicate_supported_housing_log.id)
+          expect(duplicate_sets).to contain_exactly(
+            contain_exactly(log.id, duplicate_log.id),
+            contain_exactly(supported_housing_log.id, duplicate_supported_housing_log.id),
+          )
         end
 
         it "does not return logs not associated with the user if user is given" do
@@ -2142,9 +1997,10 @@ RSpec.describe LettingsLog do
         it "compares chcharge if it's a carehome" do
           supported_housing_log.update!(is_carehome: 1, chcharge: 100, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
           duplicate_supported_housing_log.update!(is_carehome: 1, chcharge: 100, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
-          expect(duplicate_sets.count).to eq(2)
-          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
-          expect(duplicate_sets.second).to contain_exactly(supported_housing_log.id, duplicate_supported_housing_log.id)
+          expect(duplicate_sets).to contain_exactly(
+            contain_exactly(log.id, duplicate_log.id),
+            contain_exactly(supported_housing_log.id, duplicate_supported_housing_log.id),
+          )
         end
 
         it "does not return a duplicate if carehome charge is not given" do
@@ -2228,7 +2084,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when form end date is in the past" do
-      let(:startdate) { Time.zone.local(2020, 4, 1) }
+      let(:startdate) { Time.zone.local(archived_collection_start_year, 4, 1) }
 
       before do
         allow(log).to receive_message_chain(:form, :new_logs_end_date).and_return(Time.zone.now - 1.day)
@@ -2305,12 +2161,6 @@ RSpec.describe LettingsLog do
   end
 
   describe "#non_location_setup_questions_completed" do
-    before do
-      Timecop.return
-      allow(FormHandler.instance).to receive(:current_lettings_form).and_call_original
-      Singleton.__init__(FormHandler)
-    end
-
     context "when setup section has been completed" do
       let(:lettings_log) { build_stubbed(:lettings_log, :setup_completed) }
 

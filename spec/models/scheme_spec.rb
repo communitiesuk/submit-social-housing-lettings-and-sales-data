@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Scheme, type: :model do
+  include CollectionTimeHelper
+
   describe "#new" do
     let(:scheme) { FactoryBot.create(:scheme) }
 
@@ -483,35 +485,19 @@ RSpec.describe Scheme, type: :model do
   end
 
   describe "available_from" do
-    context "when the scheme was created at the start of the 2022/23 collection window" do
-      let(:scheme) { FactoryBot.build(:scheme, created_at: Time.zone.local(2022, 4, 6)) }
+    context "when the scheme was created at the start of the collection window" do
+      let(:scheme) { FactoryBot.build(:scheme, created_at: current_collection_start_date) }
 
-      it "returns the beginning of 22/23 collection window" do
-        expect(scheme.available_from).to eq(Time.zone.local(2021, 4, 1))
+      it "returns the beginning of previous collection window" do
+        expect(scheme.available_from).to eq(previous_collection_start_date)
       end
     end
 
-    context "when the scheme was created at the end of the 2022/23 collection window" do
-      let(:scheme) { FactoryBot.build(:scheme, created_at: Time.zone.local(2023, 2, 6)) }
+    context "when the scheme was created after the crossover date" do
+      let(:scheme) { FactoryBot.build(:scheme, created_at: current_collection_after_crossover_start_date) }
 
-      it "returns the beginning of 22/23 collection window" do
-        expect(scheme.available_from).to eq(Time.zone.local(2022, 4, 1))
-      end
-    end
-
-    context "when the scheme was created at the start of the 2021/22 collection window" do
-      let(:scheme) { FactoryBot.build(:scheme, created_at: Time.zone.local(2021, 4, 6)) }
-
-      it "returns the beginning of 21/22 collection window" do
-        expect(scheme.available_from).to eq(Time.zone.local(2020, 4, 1))
-      end
-    end
-
-    context "when the scheme was created at the end of the 2021/22 collection window" do
-      let(:scheme) { FactoryBot.build(:scheme, created_at: Time.zone.local(2022, 2, 6)) }
-
-      it "returns the beginning of 21/22 collection window" do
-        expect(scheme.available_from).to eq(Time.zone.local(2020, 4, 1))
+      it "returns the beginning of current collection window" do
+        expect(scheme.available_from).to eq(current_collection_start_date)
       end
     end
   end

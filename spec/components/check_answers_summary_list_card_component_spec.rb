@@ -64,16 +64,4 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
       expect(rendered).to have_link(log.form.get_question("tenancycode", log).check_answer_prompt, href: "/lettings-logs/#{log.id}/tenant-code?referrer=check_answers_new_answer", class: "govuk-link govuk-link--no-visited-state")
     end
   end
-
-  context "when before 23/24 collection" do
-    context "when given a set of questions" do
-      let(:log) { create(:lettings_log, :completed, :ignore_validation_errors, age2: 99, startdate: Time.zone.local(2021, 5, 1), assigned_to: create(:user)) }
-
-      it "renders a summary list card without question numbers for the answers to those questions" do
-        expect(rendered).to have_content(questions.first.answer_label(log))
-        expect(rendered).to have_content("Lead tenant’s age")
-        expect(rendered).not_to include(" - Lead tenant’s age")
-      end
-    end
-  end
 end

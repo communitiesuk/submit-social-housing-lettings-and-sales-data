@@ -96,17 +96,7 @@ RSpec.describe SalesLog, type: :model do
 
   describe "#form" do
     let(:sales_log) { build(:sales_log, assigned_to: assigned_to_user) }
-    let(:sales_log_2) { build(:sales_log, saledate: Time.zone.local(2022, 5, 1), assigned_to: assigned_to_user) }
-
-    before do
-      Timecop.freeze(Time.zone.local(2023, 1, 10))
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
+    let(:sales_log_2) { build(:sales_log, saledate: current_collection_start_date, assigned_to: assigned_to_user) }
 
     it "has returns the correct form based on the start date" do
       expect(sales_log.form_name).to be_nil
@@ -120,12 +110,8 @@ RSpec.describe SalesLog, type: :model do
     let(:completed_sales_log) { create(:sales_log, :completed) }
 
     context "when proplen is not given" do
-      before do
-        allow(Time).to receive(:now).and_return(Time.zone.local(2023, 5, 1))
-      end
-
-      it "is set to in_progress for a log with a saledate after 23/24" do
-        completed_sales_log.update!(proplen: nil, proplen_asked: 0, saledate: Time.zone.local(2023, 5, 1))
+      it "is set to in_progress for a log" do
+        completed_sales_log.update!(proplen: nil, proplen_asked: 0)
         expect(completed_sales_log.in_progress?).to be(true)
         expect(completed_sales_log.not_started?).to be(false)
         expect(completed_sales_log.completed?).to be(false)
@@ -204,27 +190,25 @@ RSpec.describe SalesLog, type: :model do
   end
 
   context "when filtering by year or nil" do
+    let(:previous_year) { previous_collection_start_year.to_s }
+    let(:current_year) { current_collection_start_year.to_s }
+
     before do
       create(:sales_log, :in_progress, saledate: nil)
-      sales_log_2021 = build(:sales_log, :in_progress)
-      sales_log_2021.saledate = Time.zone.local(2021, 4, 1)
-      sales_log_2021.save!(validate: false)
-
-      sales_log_3 = build(:sales_log, :in_progress)
-      sales_log_3.saledate = Time.zone.local(2022, 5, 1)
-      sales_log_3.save!(validate: false)
+      create(:sales_log, :in_progress, saledate: previous_collection_start_date)
+      create(:sales_log, :in_progress, saledate: current_collection_start_date)
     end
 
     it "allows filtering on a single year or nil" do
-      expect(described_class.filter_by_years_or_nil(%w[2021]).count).to eq(2)
+      expect(described_class.filter_by_years_or_nil([previous_year]).count).to eq(2)
     end
 
     it "allows filtering by multiple years or nil using OR" do
-      expect(described_class.filter_by_years_or_nil(%w[2021 2022]).count).to eq(3)
+      expect(described_class.filter_by_years_or_nil([previous_year, current_year]).count).to eq(3)
     end
 
     it "can filter by year(s) AND status" do
-      expect(described_class.filter_by_years_or_nil(%w[2021 2022]).filter_by_status("in_progress").count).to eq(3)
+      expect(described_class.filter_by_years_or_nil([previous_year, current_year]).filter_by_status("in_progress").count).to eq(3)
     end
   end
 
@@ -277,17 +261,9 @@ RSpec.describe SalesLog, type: :model do
       end
     end
 
-    context "when there is a 2024 log with a different ecstat1" do
-      let!(:different_ecstat1) { create(:sales_log, :duplicate, ecstat1: 0, owning_organisation: organisation) }
-
-      before do
-        Timecop.freeze(Time.zone.local(2024, 5, 2))
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.return
-      end
+    context "when there is a log with a different ecstat1" do
+      let(:log) { create(:sales_log, :duplicate, staircase: 2, owning_organisation: organisation) }
+      let!(:different_ecstat1) { create(:sales_log, :duplicate, staircase: 2, ecstat1: 0, owning_organisation: organisation) }
 
       it "does not return a log with a different ecstat1 as a duplicate" do
         expect(described_class.duplicate_logs(log)).not_to include(different_ecstat1)
@@ -944,7 +920,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     context "when form end date is in the past" do
-      let(:saledate) { Time.zone.local(2020, 4, 1) }
+      let(:saledate) { Time.zone.local(archived_collection_start_year, 4, 1) }
 
       before do
         allow(log).to receive_message_chain(:form, :new_logs_end_date).and_return(Time.zone.now - 1.day)
