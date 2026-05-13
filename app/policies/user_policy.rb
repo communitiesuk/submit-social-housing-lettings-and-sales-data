@@ -26,6 +26,7 @@ class UserPolicy
   %w[
     edit_emails?
     edit_telephone_numbers?
+    edit_extension_numbers?
     edit_names?
   ].each do |method_name|
     define_method method_name do

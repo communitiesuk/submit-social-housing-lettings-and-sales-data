@@ -6,6 +6,7 @@ module Exports::UserExportConstants
     "email",
     "name",
     "phone",
+    "extension_number",
     "organisation_id",
     "organisation_name",
     "role",
