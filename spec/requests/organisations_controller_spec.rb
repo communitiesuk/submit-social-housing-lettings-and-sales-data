@@ -495,9 +495,11 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "when the organisation has absorbed other organisations" do
-            let!(:absorbed_organisation) { create(:organisation, name: "First Absorbed Organisation", with_dsa: false, merge_date: Time.zone.today - 1.month, absorbing_organisation: organisation) }
-            let!(:other_absorbed_organisation) { create(:organisation, name: "Other Absorbed Organisation", with_dsa: false, merge_date: Time.zone.today - 1.month, absorbing_organisation: organisation) }
-            let!(:previously_absorbed_organisation) { create(:organisation, name: "Previously Absorbed Organisation", with_dsa: false, merge_date: Time.zone.today - 2.months, absorbing_organisation: organisation) }
+            let(:one_month_ago) { Time.zone.today - 1.month }
+            let(:two_months_ago) { Time.zone.today - 2.months }
+            let!(:absorbed_organisation) { create(:organisation, name: "First Absorbed Organisation", with_dsa: false, merge_date: one_month_ago, absorbing_organisation: organisation) }
+            let!(:other_absorbed_organisation) { create(:organisation, name: "Other Absorbed Organisation", with_dsa: false, merge_date: one_month_ago, absorbing_organisation: organisation) }
+            let!(:previously_absorbed_organisation) { create(:organisation, name: "Previously Absorbed Organisation", with_dsa: false, merge_date: two_months_ago, absorbing_organisation: organisation) }
 
             before do
               get "/organisations/#{organisation.id}/details", headers:, params: {}
@@ -505,13 +507,13 @@ RSpec.describe OrganisationsController, type: :request do
 
             it "displays separate lists of absorbed organisations" do
               expect(page).to have_content("View all organisations that were merged into #{organisation.name}")
-              expect(page).to have_content("Merge date: 3 April 2023")
+              expect(page).to have_content("Merge date: #{one_month_ago.to_fs(:govuk_date)}")
               expect(page).to have_content("First Absorbed Organisation")
               expect(page).to have_content("Other Absorbed Organisation")
               expect(page).to have_content("Previously Absorbed Organisation")
               expect(page).to have_content("ORG#{absorbed_organisation.id}")
               expect(page).to have_content("ORG#{other_absorbed_organisation.id}")
-              expect(page).to have_content("Merge date: 2 April 2023")
+              expect(page).to have_content("Merge date: #{two_months_ago.to_fs(:govuk_date)}")
               expect(page).to have_content("ORG#{previously_absorbed_organisation.id}")
             end
           end
@@ -531,15 +533,17 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "when the organisation has absorbed other organisations during a collection period before archived" do
+            let(:one_month_ago) { Time.zone.today - 3.years }
+
             before do
-              create(:organisation, name: "First Absorbed Organisation", with_dsa: false, merge_date: Time.zone.today - 3.years, absorbing_organisation: organisation)
-              create(:organisation, name: "Other Absorbed Organisation", with_dsa: false, merge_date: Time.zone.today - 3.years, absorbing_organisation: organisation)
+              create(:organisation, name: "First Absorbed Organisation", with_dsa: false, merge_date: one_month_ago, absorbing_organisation: organisation)
+              create(:organisation, name: "Other Absorbed Organisation", with_dsa: false, merge_date: one_month_ago, absorbing_organisation: organisation)
               get "/organisations/#{organisation.id}/details", headers:, params: {}
             end
 
             it "does not display absorbed organisations" do
               expect(page).not_to have_content("View all organisations that were merged into #{organisation.name}")
-              expect(page).not_to have_content("Merge date: 3 April 2021")
+              expect(page).not_to have_content("Merge date: #{one_month_ago.to_fs(:govuk_date)}")
               expect(page).not_to have_content("First Absorbed Organisation")
               expect(page).not_to have_content("Other Absorbed Organisation")
             end
