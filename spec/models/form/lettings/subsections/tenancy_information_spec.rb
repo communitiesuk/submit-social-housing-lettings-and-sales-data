@@ -16,28 +16,14 @@ RSpec.describe Form::Lettings::Subsections::TenancyInformation, type: :model do
     let(:form) { instance_double(Form, start_date:) }
 
     before do
-      allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: false, start_year_2026_or_later?: false)
-    end
-
-    context "when 2023" do
-      let(:start_date) { Time.utc(2023, 2, 8) }
-
-      before do
-        allow(form).to receive_messages(start_year_2024_or_later?: false, start_year_2025_or_later?: false, start_year_2026_or_later?: false)
-      end
-
-      it "has correct pages" do
-        expect(tenancy_information.pages.map(&:id)).to eq(
-          %w[joint starter_tenancy tenancy_type starter_tenancy_type tenancy_length tenancy_length_affordable_rent tenancy_length_intermediate_rent sheltered_accommodation],
-        )
-      end
+      allow(form).to receive_messages(start_year_2025_or_later?: false, start_year_2026_or_later?: false)
     end
 
     context "when 2024" do
       let(:start_date) { Time.utc(2024, 2, 8) }
 
       before do
-        allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: false, start_year_2026_or_later?: false)
+        allow(form).to receive_messages(start_year_2025_or_later?: false, start_year_2026_or_later?: false)
       end
 
       it "has correct pages" do
@@ -51,7 +37,7 @@ RSpec.describe Form::Lettings::Subsections::TenancyInformation, type: :model do
       let(:start_date) { Time.utc(2025, 2, 8) }
 
       before do
-        allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true, start_year_2026_or_later?: false)
+        allow(form).to receive_messages(start_year_2025_or_later?: true, start_year_2026_or_later?: false)
       end
 
       it "has correct pages" do
@@ -65,7 +51,7 @@ RSpec.describe Form::Lettings::Subsections::TenancyInformation, type: :model do
       let(:start_date) { Time.utc(2026, 2, 8) }
 
       before do
-        allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true, start_year_2026_or_later?: true)
+        allow(form).to receive_messages(start_year_2025_or_later?: true, start_year_2026_or_later?: true)
       end
 
       it "has correct pages" do

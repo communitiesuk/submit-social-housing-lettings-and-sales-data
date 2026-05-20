@@ -178,6 +178,7 @@ FactoryBot.define do
       town_or_city { Faker::Address.city }
       ppcodenk { 1 }
       tshortfall_known { 1 }
+      nationality_all_group { 826 }
       after(:build) do |log, evaluator|
         if log.startdate >= Time.zone.local(2024, 4, 1)
           log.nationality_all_group = 826

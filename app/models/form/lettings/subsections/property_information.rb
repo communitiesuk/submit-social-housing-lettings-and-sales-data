@@ -28,22 +28,14 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
   end
 
   def uprn_questions
-    if form.start_year_2024_or_later?
-      [
-        Form::Lettings::Pages::AddressSearch.new(nil, nil, self),
-        Form::Lettings::Pages::AddressFallback.new(nil, nil, self),
-      ]
-    else
-      [
-        Form::Lettings::Pages::Uprn.new(nil, nil, self),
-        Form::Lettings::Pages::UprnConfirmation.new(nil, nil, self),
-        Form::Lettings::Pages::Address.new(nil, nil, self),
-      ]
-    end
+    [
+      Form::Lettings::Pages::AddressSearch.new(nil, nil, self),
+      Form::Lettings::Pages::AddressFallback.new(nil, nil, self),
+    ]
   end
 
   def number_of_times_relet
-    Form::Lettings::Pages::PropertyNumberOfTimesRelet.new(nil, nil, self) unless form.start_year_2024_or_later?
+    nil
   end
 
   def first_let_questions

@@ -6,7 +6,7 @@ RSpec.describe Form::Sales::Pages::Deposit, type: :model do
   let(:page_id) { nil }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection, enabled?: true, depends_on: true, id: "shared_ownership_initial_purchase") }
-  let(:form) { instance_double(Form, start_year_2024_or_later?: false, start_date: Time.zone.local(2023, 4, 1), depends_on_met: true, start_year_2026_or_later?: false) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), depends_on_met: true, start_year_2026_or_later?: false) }
   let(:optional) { false }
 
   before do
@@ -29,11 +29,7 @@ RSpec.describe Form::Sales::Pages::Deposit, type: :model do
     expect(page.description).to be_nil
   end
 
-  context "when routing with start year after 2024" do
-    before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-    end
-
+  describe "when routing" do
     context "and optional is false" do
       context "and the log is shared ownership, not social homembuy and stairowned is not 100" do
         let(:log) { build(:sales_log, ownershipsch: 1, type: 16, stairowned: 70) }
@@ -116,106 +112,6 @@ RSpec.describe Form::Sales::Pages::Deposit, type: :model do
 
         it "does not route to the page" do
           expect(page).not_to be_routed_to(log, nil)
-        end
-      end
-
-      context "and the log is shared ownership, social homebuy and stairowned is 100" do
-        let(:log) { build(:sales_log, ownershipsch: 1, type: 18, stairowned: 100) }
-
-        it "routes to the page" do
-          expect(page).to be_routed_to(log, nil)
-        end
-      end
-    end
-  end
-
-  context "when routing with start year before 2024" do
-    before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(false)
-    end
-
-    context "and optional is false" do
-      context "and the log is shared ownership, not social homembuy and stairowned is not 100" do
-        let(:log) { build(:sales_log, ownershipsch: 1, type: 16, stairowned: 70) }
-
-        it "routes to the page" do
-          expect(page).to be_routed_to(log, nil)
-        end
-      end
-
-      context "and the log is shared ownership, not social homembuy and stairowned is 100" do
-        let(:log) { build(:sales_log, ownershipsch: 1, type: 16, stairowned: 100) }
-
-        it "routes to the page" do
-          expect(page).to be_routed_to(log, nil)
-        end
-      end
-
-      context "and the log is shared ownership, social homebuy and stairowned is not 100" do
-        let(:log) { build(:sales_log, ownershipsch: 1, type: 18, stairowned: 80) }
-
-        it "routes to the page" do
-          expect(page).to be_routed_to(log, nil)
-        end
-      end
-
-      context "and the log is shared ownership, social homebuy and stairowned is 100" do
-        let(:log) { build(:sales_log, ownershipsch: 1, type: 18, stairowned: 100) }
-
-        it "routes to the page" do
-          expect(page).to be_routed_to(log, nil)
-        end
-      end
-
-      context "and the log is discounted ownership" do
-        let(:log) { build(:sales_log, ownershipsch: 2, type: 18) }
-
-        it "routes to the page" do
-          expect(page).to be_routed_to(log, nil)
-        end
-      end
-
-      context "and the log is outright ownership and mortgage used is yes" do
-        let(:log) { build(:sales_log, ownershipsch: 3, mortgageused: 1) }
-
-        it "routes to the page" do
-          expect(page).to be_routed_to(log, nil)
-        end
-      end
-
-      context "and ownership is outright sale and mortgage used is not yes" do
-        let(:log) { build(:sales_log, ownershipsch: 3, mortgageused: 2) }
-
-        it "doesn't route to the page" do
-          expect(page).not_to be_routed_to(log, nil)
-        end
-      end
-    end
-
-    context "and optional is true" do
-      let(:optional) { true }
-
-      context "and the log is shared ownership, not social homembuy and stairowned is not 100" do
-        let(:log) { build(:sales_log, ownershipsch: 1, type: 16, stairowned: 70) }
-
-        it "does routes to the page" do
-          expect(page).to be_routed_to(log, nil)
-        end
-      end
-
-      context "and the log is shared ownership, not social homembuy and stairowned is 100" do
-        let(:log) { build(:sales_log, ownershipsch: 1, type: 16, stairowned: 100) }
-
-        it "routes to the page" do
-          expect(page).to be_routed_to(log, nil)
-        end
-      end
-
-      context "and the log is shared ownership, social homebuy and stairowned is not 100" do
-        let(:log) { build(:sales_log, ownershipsch: 1, type: 18, stairowned: 80) }
-
-        it "does routes to the page" do
-          expect(page).to be_routed_to(log, nil)
         end
       end
 

@@ -438,7 +438,7 @@ class LettingsLog < Log
   end
 
   def is_beds_inferred?
-    form.start_year_2024_or_later? && is_bedsit?
+    is_bedsit?
   end
 
   def bedsit_changed_to_not_bedsit?
@@ -1017,7 +1017,6 @@ private
   def should_process_address_change?
     return unless uprn_selection || select_best_address_match
     return unless startdate
-    return unless form.start_year_2024_or_later?
     return if skip_address_lookup
 
     if select_best_address_match

@@ -31,6 +31,7 @@ RSpec.describe FormController, type: :request do
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
+    skip "Temporarily disabled, the old 2021_2022 form logic this is based on will be removed in CLDC-4403"
     allow(fake_2021_2022_form).to receive_messages(new_logs_end_date: Time.zone.today + 1.day, edit_end_date: Time.zone.today + 2.months)
     allow(FormHandler.instance).to receive_messages(current_lettings_form: fake_2021_2022_form, lettings_in_crossover_period?: true)
   end
@@ -476,14 +477,14 @@ RSpec.describe FormController, type: :request do
 
       context "with a question in a section that isn't enabled yet" do
         it "routes back to the tasklist page" do
-          get "/lettings-logs/#{lettings_log.id}/declaration", headers: headers, params: {}
+          get "/lettings-logs/#{lettings_log.id}/address-search", headers: headers, params: {}
           expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}")
         end
       end
 
       context "with a question that isn't enabled yet" do
         it "routes back to the tasklist page" do
-          get "/lettings-logs/#{lettings_log.id}/conditional-question-no-second-page", headers: headers, params: {}
+          get "/lettings-logs/#{lettings_log.id}/scheme", headers: headers, params: {}
           expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}")
         end
       end

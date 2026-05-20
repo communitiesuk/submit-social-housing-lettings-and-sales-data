@@ -13,39 +13,9 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
 
   describe "pages" do
     let(:section) { instance_double(Form::Sales::Sections::Household, form:) }
-    let(:start_year_2024_or_later?) { true }
     let(:start_year_2025_or_later?) { true }
     let(:start_year_2026_or_later?) { true }
-    let(:form) { instance_double(Form, start_date:, start_year_2024_or_later?: start_year_2024_or_later?, start_year_2025_or_later?: start_year_2025_or_later?, start_year_2026_or_later?: start_year_2026_or_later?) }
-
-    context "when 2023" do
-      let(:start_date) { collection_start_date_for_year(2023) }
-      let(:start_year_2024_or_later?) { false }
-      let(:start_year_2025_or_later?) { false }
-      let(:start_year_2026_or_later?) { false }
-
-      it "has correct pages" do
-        expect(property_information.pages.map(&:id)).to eq(
-          %w[
-            property_number_of_bedrooms
-            about_price_bedrooms_value_check
-            property_unit_type
-            monthly_charges_property_type_value_check
-            percentage_discount_proptype_value_check
-            property_building_type
-            uprn
-            uprn_confirmation
-            address
-            property_local_authority
-            local_authority_buyer_1_income_max_value_check
-            local_authority_buyer_2_income_max_value_check
-            local_authority_combined_income_max_value_check
-            about_price_la_value_check
-            property_wheelchair_accessible
-          ],
-        )
-      end
-    end
+    let(:form) { instance_double(Form, start_date:, start_year_2025_or_later?: start_year_2025_or_later?, start_year_2026_or_later?: start_year_2026_or_later?) }
 
     context "when 2024" do
       let(:start_date) { collection_start_date_for_year(2024) }

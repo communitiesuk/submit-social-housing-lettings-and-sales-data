@@ -1,12 +1,14 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
+  include CollectionTimeHelper
+
   subject(:setup) { described_class.new(subsection_id, subsection_definition, section) }
 
   let(:subsection_id) { nil }
   let(:subsection_definition) { nil }
   let(:section) { instance_double(Form::Lettings::Sections::Setup) }
-  let(:form) { instance_double(Form) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date) }
 
   before do
     allow(section).to receive(:form).and_return(form)
@@ -16,36 +18,7 @@ RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
     expect(setup.section).to eq(section)
   end
 
-  context "with start year before 2024" do
-    before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(false)
-    end
-
-    it "has correct pages" do
-      expect(setup.pages.map(&:id)).to eq(
-        %w[
-          stock_owner
-          managing_organisation
-          assigned_to
-          needs_type
-          scheme
-          location
-          location_search
-          renewal
-          tenancy_start_date
-          rent_type
-          tenant_code
-          property_reference
-        ],
-      )
-    end
-  end
-
-  context "with start year >= 2024" do
-    before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-    end
-
+  describe "pages" do
     it "has correct pages" do
       expect(setup.pages.map(&:id)).to eq(
         %w[

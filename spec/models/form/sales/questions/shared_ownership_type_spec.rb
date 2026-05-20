@@ -12,10 +12,6 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
   let(:subsection) { instance_double(Form::Subsection, form:) }
   let(:page) { instance_double(Form::Page, subsection:) }
 
-  before do
-    allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-  end
-
   it "has correct page" do
     expect(question.page).to eq(page)
   end
@@ -32,38 +28,7 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
-  context "when form start date is 2023/24" do
-    let(:start_date) { Time.zone.local(2023, 4, 2) }
-
-    before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(false)
-    end
-
-    it "has the correct answer_options" do
-      expect(question.answer_options).to eq({
-        "2" => { "value" => "Shared Ownership (old model lease)" },
-        "30" => { "value" => "Shared Ownership (new model lease)" },
-        "18" => { "value" => "Social HomeBuy — shared ownership purchase" },
-        "16" => { "value" => "Home Ownership for people with Long-Term Disabilities (HOLD)" },
-        "24" => { "value" => "Older Persons Shared Ownership" },
-        "28" => { "value" => "Rent to Buy — Shared Ownership" },
-        "31" => { "value" => "Right to Shared Ownership (RtSO)" },
-        "32" => { "value" => "London Living Rent — Shared Ownership" },
-      })
-    end
-
-    it "shows shows correct top_guidance_partial" do
-      expect(question.top_guidance_partial).to eq("shared_ownership_type_definitions")
-    end
-  end
-
-  context "when form start date is on or after 2024/25" do
-    before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-    end
-
-    it "shows shows correct top_guidance_partial" do
-      expect(question.top_guidance_partial).to eq("shared_ownership_type_definitions")
-    end
+  it "shows shows correct top_guidance_partial" do
+    expect(question.top_guidance_partial).to eq("shared_ownership_type_definitions")
   end
 end

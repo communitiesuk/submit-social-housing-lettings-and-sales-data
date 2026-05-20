@@ -8,24 +8,14 @@ class Form::Lettings::Questions::LettingAllocation < ::Form::Question
   end
 
   def answer_options
-    if form.start_year_2024_or_later?
-      {
-        "cbl" => { "value" => "Choice-based lettings (CBL)", "hint" => "Where available vacant properties are advertised and applicants are able to bid for specific properties." },
-        "cap" => { "value" => "Common Allocation Policy (CAP)", "hint" => "Where a common system agreed between a group of housing providers is used to determine applicant’s priority for housing." },
-        "chr" => { "value" => "Common housing register (CHR)", "hint" => "Where a single waiting list is used by a group of housing providers to receive and process housing applications. Providers may use different approaches to determine priority." },
-        "accessible_register" => { "value" => "Accessible housing register", "hint" => "Where the ‘access category’ or another descriptor of whether an available vacant property meets a range of access needs is displayed to applicants during the allocations process." },
-        "divider" => { "value" => true },
-        "letting_allocation_unknown" => { "value" => "None of these allocation systems" },
-      }.freeze
-    else
-      {
-        "cbl" => { "value" => "Choice-based lettings (CBL)" },
-        "cap" => { "value" => "Common Allocation Policy (CAP)" },
-        "chr" => { "value" => "Common housing register (CHR)" },
-        "divider" => { "value" => true },
-        "letting_allocation_unknown" => { "value" => "None of these allocation systems" },
-      }.freeze
-    end
+    {
+      "cbl" => { "value" => "Choice-based lettings (CBL)", "hint" => "Where available vacant properties are advertised and applicants are able to bid for specific properties." },
+      "cap" => { "value" => "Common Allocation Policy (CAP)", "hint" => "Where a common system agreed between a group of housing providers is used to determine applicant’s priority for housing." },
+      "chr" => { "value" => "Common housing register (CHR)", "hint" => "Where a single waiting list is used by a group of housing providers to receive and process housing applications. Providers may use different approaches to determine priority." },
+      "accessible_register" => { "value" => "Accessible housing register", "hint" => "Where the ‘access category’ or another descriptor of whether an available vacant property meets a range of access needs is displayed to applicants during the allocations process." },
+      "divider" => { "value" => true },
+      "letting_allocation_unknown" => { "value" => "None of these allocation systems" },
+    }.freeze
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 84, 2024 => 83, 2025 => 83, 2026 => 90 }.freeze

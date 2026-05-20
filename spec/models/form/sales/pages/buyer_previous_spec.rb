@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::BuyerPrevious, type: :model do
+  include CollectionTimeHelper
+
   subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase:) }
 
   let(:log) { build(:sales_log, :completed) }
@@ -8,8 +10,7 @@ RSpec.describe Form::Sales::Pages::BuyerPrevious, type: :model do
   let(:page_id) { "example" }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection, depends_on: nil, enabled?: true, form:) }
-  let(:start_date_after_2024) { false }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2024_or_later?: start_date_after_2024, depends_on_met: true) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date, depends_on_met: true) }
   let(:joint_purchase) { false }
 
   it "has correct subsection" do
@@ -42,18 +43,7 @@ RSpec.describe Form::Sales::Pages::BuyerPrevious, type: :model do
     end
   end
 
-  context "with 23/24 log" do
-    let(:start_date_after_2024) { false }
-
-    it "has correct routed to" do
-      log.staircase = 1
-      expect(page.routed_to?(log, nil)).to be(true)
-    end
-  end
-
-  context "with 24/25 log" do
-    let(:start_date_after_2024) { true }
-
+  describe "routing" do
     it "has correct routed to when staircase is yes" do
       log.staircase = 1
       expect(page.routed_to?(log, nil)).to be(false)

@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
+  include CollectionTimeHelper
+
   subject(:shared_ownership_scheme) { described_class.new(subsection_id, subsection_definition, section) }
 
   let(:subsection_id) { nil }
@@ -8,7 +10,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
   let(:section) { instance_double(Form::Sales::Sections::SaleInformation) }
 
   before do
-    allow(section).to receive(:form).and_return(instance_double(Form, start_year_2024_or_later?: false, start_year_2025_or_later?: false, start_date: Time.zone.local(2023, 4, 1)))
+    allow(section).to receive(:form).and_return(instance_double(Form, start_year_2025_or_later?: false, start_date: current_collection_start_date))
   end
 
   it "has correct section" do
@@ -48,9 +50,11 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         mortgage_length_shared_ownership
         extra_borrowing_shared_ownership
         deposit_shared_ownership
+        deposit_shared_ownership_optional
         deposit_joint_purchase_value_check
         deposit_value_check
         deposit_discount
+        deposit_discount_optional
         monthly_rent
         leasehold_charges_shared_ownership
         monthly_charges_shared_ownership_value_check

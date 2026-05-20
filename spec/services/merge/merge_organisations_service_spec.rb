@@ -3,15 +3,8 @@ require "rails_helper"
 RSpec.describe Merge::MergeOrganisationsService do
   describe "#call" do
     before do
-      Timecop.freeze(Time.zone.local(2024, 3, 1))
-      Singleton.__init__(FormHandler)
       mail_double = instance_double(ActionMailer::MessageDelivery, deliver_later: nil)
       allow(MergeCompletionMailer).to receive_messages(send_merged_organisation_success_mail: mail_double, send_absorbing_organisation_success_mail: mail_double)
-    end
-
-    after do
-      Timecop.return
-      Singleton.__init__(FormHandler)
     end
 
     context "when merging a single organisation into an existing organisation" do
@@ -170,12 +163,12 @@ RSpec.describe Merge::MergeOrganisationsService do
             expect(absorbed_scheme.service_name).to eq(scheme.service_name)
             expect(absorbed_scheme.old_id).to be_nil
             expect(absorbed_scheme.old_visible_id).to be_nil
-            expect(absorbed_scheme.startdate).to eq(Time.zone.today)
+            expect(absorbed_scheme.startdate.to_date).to eq(Time.zone.today)
 
             expect(absorbed_location.postcode).to eq(location.postcode)
             expect(absorbed_location.old_id).to be_nil
             expect(absorbed_location.old_visible_id).to be_nil
-            expect(absorbed_location.startdate).to eq(Time.zone.today)
+            expect(absorbed_location.startdate.to_date).to eq(Time.zone.today)
           end
 
           it "deactivates schemes and locations on the merged organisation" do
@@ -183,9 +176,9 @@ RSpec.describe Merge::MergeOrganisationsService do
             expect(scheme.owning_organisation).to eq(merging_organisation)
             expect(location.scheme).to eq(scheme)
             expect(scheme.scheme_deactivation_periods.count).to eq(1)
-            expect(scheme.scheme_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+            expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
             expect(location.location_deactivation_periods.count).to eq(1)
-            expect(location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+            expect(location.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
           end
         end
 
@@ -204,8 +197,8 @@ RSpec.describe Merge::MergeOrganisationsService do
               expect(absorbed_scheme.locations.count).to eq(1)
               absorbed_location = absorbed_scheme.locations.first
 
-              expect(absorbed_scheme.startdate).to eq(Time.zone.today)
-              expect(absorbed_location.startdate).to eq(Time.zone.today)
+              expect(absorbed_scheme.startdate.to_date).to eq(Time.zone.today)
+              expect(absorbed_location.startdate.to_date).to eq(Time.zone.today)
             end
 
             it "deactivates schemes and locations on the merged organisation" do
@@ -215,9 +208,9 @@ RSpec.describe Merge::MergeOrganisationsService do
               expect(scheme.owning_organisation).to eq(merging_organisation)
               expect(location.scheme).to eq(scheme)
               expect(scheme.scheme_deactivation_periods.count).to eq(1)
-              expect(scheme.scheme_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+              expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
               expect(location.location_deactivation_periods.count).to eq(1)
-              expect(location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+              expect(location.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
             end
           end
 
@@ -276,10 +269,10 @@ RSpec.describe Merge::MergeOrganisationsService do
               expect(absorbed_scheme.locations.count).to eq(1)
               absorbed_location = absorbed_scheme.locations.first
 
-              expect(absorbed_scheme.startdate).to eq(Time.zone.today)
+              expect(absorbed_scheme.startdate.to_date).to eq(Time.zone.today)
               expect(absorbed_scheme.scheme_deactivation_periods.count).to eq(0)
 
-              expect(absorbed_location.startdate).to eq(Time.zone.today)
+              expect(absorbed_location.startdate.to_date).to eq(Time.zone.today)
               expect(absorbed_location.location_deactivation_periods.count).to eq(0)
             end
 
@@ -287,9 +280,9 @@ RSpec.describe Merge::MergeOrganisationsService do
               expect(scheme.owning_organisation).to eq(merging_organisation)
               expect(location.scheme).to eq(scheme)
               expect(scheme.scheme_deactivation_periods.count).to eq(2)
-              expect(scheme.scheme_deactivation_periods.last.deactivation_date).to eq(Time.zone.today)
+              expect(scheme.scheme_deactivation_periods.last.deactivation_date.to_date).to eq(Time.zone.today)
               expect(location.location_deactivation_periods.count).to eq(2)
-              expect(location.location_deactivation_periods.last.deactivation_date).to eq(Time.zone.today)
+              expect(location.location_deactivation_periods.last.deactivation_date.to_date).to eq(Time.zone.today)
             end
           end
 
@@ -313,10 +306,10 @@ RSpec.describe Merge::MergeOrganisationsService do
               expect(absorbed_scheme.locations.count).to eq(1)
               absorbed_location = absorbed_scheme.locations.first
 
-              expect(absorbed_scheme.startdate).to eq(Time.zone.today)
+              expect(absorbed_scheme.startdate.to_date).to eq(Time.zone.today)
               expect(absorbed_scheme.scheme_deactivation_periods.count).to eq(1)
 
-              expect(absorbed_location.startdate).to eq(Time.zone.today)
+              expect(absorbed_location.startdate.to_date).to eq(Time.zone.today)
               expect(absorbed_location.location_deactivation_periods.count).to eq(1)
             end
 
@@ -324,9 +317,9 @@ RSpec.describe Merge::MergeOrganisationsService do
               expect(scheme.owning_organisation).to eq(merging_organisation)
               expect(location.scheme).to eq(scheme)
               expect(scheme.scheme_deactivation_periods.count).to eq(1)
-              expect(scheme.scheme_deactivation_periods.last.deactivation_date).to eq(Time.zone.today)
+              expect(scheme.scheme_deactivation_periods.last.deactivation_date.to_date).to eq(Time.zone.today)
               expect(location.location_deactivation_periods.count).to eq(1)
-              expect(location.location_deactivation_periods.last.deactivation_date).to eq(Time.zone.today)
+              expect(location.location_deactivation_periods.last.deactivation_date.to_date).to eq(Time.zone.today)
             end
           end
 
@@ -397,14 +390,14 @@ RSpec.describe Merge::MergeOrganisationsService do
               absorbed_location = absorbed_scheme.locations.first
 
               expected_reactivation_date = Time.zone.today + 1.month
-              expect(absorbed_scheme.startdate).to eq(Time.zone.today)
+              expect(absorbed_scheme.startdate.to_date).to eq(Time.zone.today)
               expect(absorbed_scheme.scheme_deactivation_periods.count).to eq(1)
-              expect(absorbed_scheme.scheme_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+              expect(absorbed_scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
               expect(absorbed_scheme.scheme_deactivation_periods.first.reactivation_date).to eq(expected_reactivation_date.in_time_zone)
 
-              expect(absorbed_location.startdate).to eq(Time.zone.today)
+              expect(absorbed_location.startdate.to_date).to eq(Time.zone.today)
               expect(absorbed_location.location_deactivation_periods.count).to eq(1)
-              expect(absorbed_location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+              expect(absorbed_location.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
               expect(absorbed_location.location_deactivation_periods.first.reactivation_date).to eq(expected_reactivation_date.in_time_zone)
             end
 
@@ -441,14 +434,14 @@ RSpec.describe Merge::MergeOrganisationsService do
               expect(absorbed_scheme.locations.count).to eq(1)
               absorbed_location = absorbed_scheme.locations.first
 
-              expect(absorbed_scheme.startdate).to eq(Time.zone.today)
+              expect(absorbed_scheme.startdate.to_date).to eq(Time.zone.today)
               expect(absorbed_scheme.scheme_deactivation_periods.count).to eq(1)
-              expect(absorbed_scheme.scheme_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+              expect(absorbed_scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
               expect(absorbed_scheme.scheme_deactivation_periods.first.reactivation_date).to be_nil
 
-              expect(absorbed_location.startdate).to eq(Time.zone.today)
+              expect(absorbed_location.startdate.to_date).to eq(Time.zone.today)
               expect(absorbed_location.location_deactivation_periods.count).to eq(1)
-              expect(absorbed_location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+              expect(absorbed_location.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
               expect(absorbed_location.location_deactivation_periods.first.reactivation_date).to be_nil
 
               expect(scheme.owning_organisation).to eq(merging_organisation)
@@ -826,8 +819,8 @@ RSpec.describe Merge::MergeOrganisationsService do
                 absorbed_active_scheme = absorbing_organisation.owned_schemes.find_by(service_name: scheme.service_name)
                 absorbed_active_location = absorbed_active_scheme.locations.find_by(postcode: location.postcode)
                 expect(absorbed_active_scheme.locations.map(&:postcode)).to match_array([location, deactivated_location, location_without_startdate, location_with_past_startdate, location_with_future_startdate].map(&:postcode))
-                expect(absorbed_active_scheme.locations.find_by(postcode: location_without_startdate.postcode).startdate).to eq(Time.zone.yesterday)
-                expect(absorbed_active_scheme.locations.find_by(postcode: location_with_past_startdate.postcode).startdate).to eq(Time.zone.yesterday)
+                expect(absorbed_active_scheme.locations.find_by(postcode: location_without_startdate.postcode).startdate.to_date).to eq(Time.zone.yesterday)
+                expect(absorbed_active_scheme.locations.find_by(postcode: location_with_past_startdate.postcode).startdate.to_date).to eq(Time.zone.yesterday)
                 expect(absorbed_active_scheme.locations.find_by(postcode: location_with_future_startdate.postcode).startdate.to_date).to eq(Time.zone.today + 2.months)
                 expect(absorbed_active_scheme.service_name).to eq(scheme.service_name)
                 expect(absorbed_active_scheme.old_id).to be_nil

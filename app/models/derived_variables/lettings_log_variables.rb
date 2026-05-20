@@ -68,7 +68,7 @@ module DerivedVariables::LettingsLogVariables
     self.has_benefits = get_has_benefits
     self.tshortfall_known = 0 if tshortfall
     self.nocharge = household_charge # Nocharge: 0 = No, 1 = Yes, Household charge: 0 = Yes, 1 = No
-    if form.start_year_2024_or_later? && is_bedsit?
+    if is_bedsit?
       self.beds = 1
     end
     if bedsit_changed_to_not_bedsit? # make user answer num of bedrooms again
@@ -127,18 +127,16 @@ module DerivedVariables::LettingsLogVariables
       self.previous_la_known = nil if is_renewal?
     end
 
-    if form.start_year_2024_or_later?
-      if manual_address_entry_selected
-        self.uprn_known = 0
-        self.uprn_selection = nil
-        self.uprn_confirmed = nil
-      else
-        self.uprn_confirmed = 1 if uprn.present?
-        self.uprn_known = 1 if uprn.present?
-        reset_address_fields! if uprn.blank?
-        if uprn_changed?
-          self.uprn_selection = uprn
-        end
+    if manual_address_entry_selected
+      self.uprn_known = 0
+      self.uprn_selection = nil
+      self.uprn_confirmed = nil
+    else
+      self.uprn_confirmed = 1 if uprn.present?
+      self.uprn_known = 1 if uprn.present?
+      reset_address_fields! if uprn.blank?
+      if uprn_changed?
+        self.uprn_selection = uprn
       end
     end
 
@@ -274,7 +272,7 @@ private
       self.wchair = nil
       self.location_id = nil
     end
-    if form.start_year_2024_or_later? && unittype_gn_changed? && unittype_gn_was == 2
+    if unittype_gn_changed? && unittype_gn_was == 2
       self.beds = nil
     end
   end
