@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_04_15_101455) do
+ActiveRecord::Schema[7.2].define(version: 2026_04_20_151627) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -104,18 +104,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_15_101455) do
     t.string "data_protection_officer_name"
     t.index ["data_protection_officer_id"], name: "dpo_user_id"
     t.index ["organisation_id"], name: "index_data_protection_confirmations_on_organisation_id"
-  end
-
-  create_table "download_records", force: :cascade do |t|
-    t.integer "download_type", null: false
-    t.string "download_filters", null: false
-    t.bigint "user_id", null: false
-    t.bigint "user_organisation_id", null: false
-    t.integer "user_role", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_download_records_on_user_id"
-    t.index ["user_organisation_id"], name: "index_download_records_on_user_organisation_id"
   end
 
   create_table "exports", force: :cascade do |t|
@@ -936,6 +924,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_15_101455) do
     t.datetime "discarded_at"
     t.string "phone_extension"
     t.datetime "values_updated_at"
+    t.boolean "force_reset_password_on_confirmation", default: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true
@@ -955,8 +944,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_15_101455) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
-  add_foreign_key "download_records", "organisations", column: "user_organisation_id"
-  add_foreign_key "download_records", "users"
   add_foreign_key "lettings_logs", "locations"
   add_foreign_key "lettings_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "lettings_logs", "schemes"
