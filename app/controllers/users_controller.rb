@@ -24,6 +24,7 @@ class UsersController < ApplicationController
       format.html
       format.csv do
         if current_user.support?
+          DownloadRecord.build_from_user(download_type: :user, download_filters: session_filters.to_s, user: current_user).save!
           send_data byte_order_mark + filtered_users.to_csv, filename: "users-#{Time.zone.now}.csv"
         else
           head :unauthorized

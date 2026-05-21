@@ -106,6 +106,18 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_20_151627) do
     t.index ["organisation_id"], name: "index_data_protection_confirmations_on_organisation_id"
   end
 
+  create_table "download_records", force: :cascade do |t|
+    t.integer "download_type", null: false
+    t.string "download_filters", null: false
+    t.bigint "user_id", null: false
+    t.bigint "user_organisation_id", null: false
+    t.integer "user_role", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_download_records_on_user_id"
+    t.index ["user_organisation_id"], name: "index_download_records_on_user_organisation_id"
+  end
+
   create_table "exports", force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
     t.datetime "started_at", null: false
@@ -944,6 +956,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_20_151627) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "download_records", "organisations", column: "user_organisation_id"
+  add_foreign_key "download_records", "users"
   add_foreign_key "lettings_logs", "locations"
   add_foreign_key "lettings_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "lettings_logs", "schemes"
