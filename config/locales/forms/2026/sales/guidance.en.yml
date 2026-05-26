@@ -55,3 +55,12 @@ en:
             title: "What is a UPRN?"
             content: "<p>The Unique Property Reference Number (UPRN) is a unique number system created by Ordnance Survey and used by housing providers and various industries across the UK. An example is 0010457355.</p>
               <p>The UPRN may not be the same as the property reference assigned by your organisation.</p>"
+
+          building_height_class:
+            title: "What do these classifications mean?"
+            content: "<p>High-rise residential buildings are those containing 2 or more residential units and either:</p>
+                      <ul class=\"govuk-list govuk-list--bullet\">
+                        <li>have 7 or more stories</li>
+                        <li>are at least 18 metres in height</li>
+                      </ul>
+                      <p>If unsure, answer based on the number of storeys.</p>"

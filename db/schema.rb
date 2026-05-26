@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_03_05_095832) do
+ActiveRecord::Schema[7.2].define(version: 2026_04_20_151627) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -924,6 +924,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_05_095832) do
     t.datetime "discarded_at"
     t.string "phone_extension"
     t.datetime "values_updated_at"
+    t.boolean "force_reset_password_on_confirmation", default: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true
