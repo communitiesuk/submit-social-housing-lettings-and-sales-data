@@ -7,7 +7,7 @@ en:
             page_header: ""
             check_answer_label: "Number of household members"
             check_answer_prompt: "Enter total number of household members"
-            hint_text: "You can provide details for a maximum of 8 people."
+            hint_text: "You can answer up to 15 people. You will be asked to add details for a maximum of 8 people in the next questions."
             question_text: "How many people live in the household for this letting?"
 
           age1:

@@ -646,9 +646,9 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
         end
 
         describe "invalid fields" do
-          let(:attributes) { setup_section_params.merge({ field_45: 0 }) }
-
           context "when a field has been marked as invalid" do
+            let(:attributes) { setup_section_params.merge({ field_45: 0 }) }
+
             before do
               parser.add_invalid_field("field_45")
             end
@@ -657,6 +657,19 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
               parser.valid?
               expect(parser.errors[:field_45].size).to eq(1)
               expect(parser.errors[:field_45]).to include(I18n.t("validations.lettings.2025.bulk_upload.invalid_option", question: "What is the lead tenant’s nationality?"))
+            end
+          end
+
+          context "when a field has been marked as invalid but it is not routed to" do
+            let(:attributes) { setup_section_params.merge({ field_117: 2 }) }
+
+            before do
+              parser.add_invalid_field("field_118")
+            end
+
+            it "does not set an error on that field" do
+              parser.valid?
+              expect(parser.errors[:field_118].size).to eq(0)
             end
           end
         end

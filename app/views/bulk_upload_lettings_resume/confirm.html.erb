@@ -9,7 +9,7 @@
 
     <p class="govuk-body">
       <%= logs_and_errors_warning(@bulk_upload) %>
-      <%= govuk_link_to "View the error report", @form.error_report_path %>
+      <%= govuk_link_to "View the error report", @form.error_report_path(read_only: true) %>
     </p>
 
     <% if unique_answers_to_be_cleared(@bulk_upload).present? %>
