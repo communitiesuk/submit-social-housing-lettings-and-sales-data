@@ -5,7 +5,7 @@
   <% items.each do |item| %>
     <div class="app-document-list__item">
       <dt class="app-document-list__item-title">
-        <%= govuk_link_to item[:name], item[:href] %>
+        <%= helpers.govuk_link_to item[:name], item[:href] %>
       </dt>
       <% if item[:description] %>
         <dd class="app-document-list__item-description"><%= item[:description] %></dd>

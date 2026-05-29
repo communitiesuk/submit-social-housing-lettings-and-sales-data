@@ -2,9 +2,8 @@ class BulkUploadErrorRowComponent < ViewComponent::Base
   attr_reader :bulk_upload_errors
 
   def initialize(bulk_upload_errors:)
+    super()
     @bulk_upload_errors = bulk_upload_errors
-
-    super
   end
 
   def row

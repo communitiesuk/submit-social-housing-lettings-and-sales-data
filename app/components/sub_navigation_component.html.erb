@@ -3,11 +3,11 @@
     <% items.each do |item| %>
       <% if item.current %>
         <li class="app-sub-navigation__item app-sub-navigation__item--current">
-          <%= govuk_link_to item[:text], item[:href], class: "app-sub-navigation__link", aria: { current: "page" } %>
+          <%= helpers.govuk_link_to item[:text], item[:href], class: "app-sub-navigation__link", aria: { current: "page" } %>
         </li>
       <% else %>
         <li class="app-sub-navigation__item">
-          <%= govuk_link_to item[:text], item[:href], class: "app-sub-navigation__link" %>
+          <%= helpers.govuk_link_to item[:text], item[:href], class: "app-sub-navigation__link" %>
         </li>
       <% end %>
     <% end %>

@@ -11,6 +11,6 @@
       class: "app-search__input" %>
 
     <%= f.govuk_submit "Search", class: "app-search__button" %>
-    <%= govuk_button_link_to "Clear search", path(current_user), secondary: true, class: "app-search__button" %>
+    <%= helpers.govuk_button_link_to "Clear search", path(current_user), secondary: true, class: "app-search__button" %>
   </div>
 <% end %>

@@ -2,12 +2,11 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
   attr_reader :questions, :log, :user
 
   def initialize(questions:, log:, user:, correcting_hard_validation: false)
+    super()
     @questions = questions
     @log = log
     @user = user
     @correcting_hard_validation = correcting_hard_validation
-
-    super
   end
 
   def applicable_questions
