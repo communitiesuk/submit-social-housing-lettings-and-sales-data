@@ -187,7 +187,7 @@ GEM
     drb (2.2.3)
     dumb_delegator (1.0.0)
     encryptor (3.0.0)
-    erb (6.0.2)
+    erb (6.0.4)
     erb_lint (0.9.0)
       activesupport
       better_html (>= 2.0.1)
@@ -252,7 +252,7 @@ GEM
     json (2.19.2)
     json-schema (4.1.1)
       addressable (>= 2.8)
-    jwt (2.8.0)
+    jwt (3.2.0)
       base64
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -292,7 +292,7 @@ GEM
     nested_form (0.3.2)
     net-http (0.4.1)
       uri
-    net-imap (0.5.7)
+    net-imap (0.6.4)
       date
       net-protocol
     net-pop (0.1.2)
@@ -302,16 +302,16 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.4)
-    nokogiri (1.19.1-arm64-darwin)
+    nokogiri (1.19.3-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.19.1-x86_64-darwin)
+    nokogiri (1.19.3-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.19.1-x86_64-linux-gnu)
+    nokogiri (1.19.3-x86_64-linux-gnu)
       racc (~> 1.4)
-    nokogiri (1.19.1-x86_64-linux-musl)
+    nokogiri (1.19.3-x86_64-linux-musl)
       racc (~> 1.4)
-    notifications-ruby-client (6.0.0)
-      jwt (>= 1.5, < 3)
+    notifications-ruby-client (6.4.0)
+      jwt (>= 1.5, < 4)
     orm_adapter (0.5.0)
     overcommit (0.63.0)
       childprocess (>= 0.6.3, < 6)
@@ -530,7 +530,7 @@ GEM
     thor (1.4.0)
     thread_safe (0.3.6)
     timecop (0.9.8)
-    timeout (0.4.3)
+    timeout (0.6.1)
     tsort (0.2.0)
     turbo-rails (2.0.13)
       actionpack (>= 7.1.0)
