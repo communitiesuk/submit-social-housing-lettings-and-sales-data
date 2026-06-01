@@ -5,11 +5,10 @@ class CreateLogActionsComponent < ViewComponent::Base
   attr_reader :bulk_upload, :user, :log_type
 
   def initialize(user:, log_type:, bulk_upload: nil)
+    super()
     @bulk_upload = bulk_upload
     @user = user
     @log_type = log_type
-
-    super
   end
 
   def display_actions?

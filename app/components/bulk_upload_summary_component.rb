@@ -2,9 +2,9 @@ class BulkUploadSummaryComponent < ViewComponent::Base
   attr_reader :bulk_upload
 
   def initialize(bulk_upload:)
+    super()
     @bulk_upload = bulk_upload
     @bulk_upload_errors = bulk_upload.bulk_upload_errors
-    super
   end
 
   def upload_status

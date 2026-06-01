@@ -81,20 +81,24 @@
     <%= govuk_skip_link %>
 
     <%= govuk_header(
-      classes: govuk_header_classes(current_user),
+      classes: "app-header",
       homepage_url: root_path,
-      navigation_classes: "govuk-header__navigation--end",
-    ) do |component|
-      component.with_product_name(name: t("service_name"))
-      unless FeatureToggle.service_moved? || FeatureToggle.service_unavailable?
-        if current_user.nil?
-          component.with_navigation_item(text: "Sign in", href: user_session_path)
-        else
-          component.with_navigation_item(text: "Your account", href: account_path)
-          component.with_navigation_item(text: "Sign out", href: destroy_user_session_path)
-        end
-      end
-    end %>
+    ) %>
+
+    <%= govuk_service_navigation(
+      service_name: t("service_name"),
+      service_url: root_path,
+      classes: "app-main-service-navigation #{govuk_service_navigation_classes(current_user)}",
+    ) do |component| %>
+      <% unless FeatureToggle.service_moved? || FeatureToggle.service_unavailable? %>
+        <% if current_user.nil? %>
+          <%= component.with_navigation_item(text: "Sign in", href: user_session_path) %>
+        <% else %>
+          <%= component.with_navigation_item(text: "Your account", href: account_path) %>
+          <%= component.with_navigation_item(text: "Sign out", href: destroy_user_session_path) %>
+        <% end %>
+      <% end %>
+    <% end %>
 
     <% if notifications_to_display? %>
       <%= render "notifications/notification_banner" %>

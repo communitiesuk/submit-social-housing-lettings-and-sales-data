@@ -1,6 +1,4 @@
 .app-header {
-  border-bottom: govuk-spacing(2) solid $govuk-brand-colour;
-
   .govuk-header__logo {
     @include govuk-media-query($from: desktop) {
       width: 60%;
@@ -22,11 +20,3 @@
   }
 }
 
-.app-header--orange,
-.app-header--orange .govuk-header__container {
-  border-bottom-color: govuk-colour("orange");
-}
-
-.app-header__no-border-bottom {
-  border-bottom: 0;
-}

@@ -40,8 +40,8 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'govuk-frontend-styles': path.resolve(__dirname, 'node_modules/govuk-frontend/dist/govuk/all.scss'),
-      'govuk-prototype-styles': path.resolve(__dirname, 'node_modules/@x-govuk/govuk-prototype-components/x-govuk/all.scss'),
+      'govuk-frontend-styles': path.resolve(__dirname, 'node_modules/govuk-frontend/dist/govuk/index.scss'),
+      'govuk-prototype-styles': path.resolve(__dirname, 'node_modules/@x-govuk/govuk-prototype-components/dist/govuk-prototype-components.scss'),
       'moj-frontend': path.resolve(__dirname, 'node_modules/@ministryofjustice/frontend/moj/all.js')
     },
     modules: ['node_modules', 'node_modules/govuk-frontend/dist/govuk']

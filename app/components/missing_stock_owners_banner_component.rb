@@ -4,10 +4,9 @@ class MissingStockOwnersBannerComponent < ViewComponent::Base
   attr_reader :user, :organisation
 
   def initialize(user:, organisation: nil)
+    super()
     @user = user
     @organisation = organisation || user.organisation
-
-    super
   end
 
   def display_banner?

@@ -7,12 +7,12 @@
     <% end %>
 
     <div class="govuk-summary-card__content">
-      <%= govuk_summary_list do |summary_list| %>
+      <%= helpers.govuk_summary_list do |summary_list| %>
         <% applicable_questions.each do |question| %>
           <% summary_list.with_row do |row| %>
             <% row.with_key { get_question_label(question) } %>
             <% row.with_value do %>
-              <%= simple_format(
+              <%= helpers.simple_format(
                 get_answer_label(question),
                 wrapper_tag: "span",
                 class: "govuk-!-margin-right-4",
@@ -21,7 +21,7 @@
               <% extra_value = question.get_extra_check_answer_value(log) %>
 
               <% if extra_value && question.answer_label(log).present? %>
-                <%= simple_format(
+                <%= helpers.simple_format(
                   extra_value,
                   wrapper_tag: "span",
                   class: "govuk-!-font-weight-regular app-!-colour-muted",
