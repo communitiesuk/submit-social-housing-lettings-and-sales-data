@@ -9,9 +9,13 @@ RSpec.describe ApplicationHelper do
   let(:current_user) { FactoryBot.create(:user) }
 
   describe "govuk_service_navigation_classes" do
+    before do
+      allow(helper).to receive(:notifications_to_display?).and_return(false)
+    end
+
     context "with non-support user" do
       it "returns empty string for blue border (default)" do
-        expect(govuk_service_navigation_classes(current_user)).to eq("")
+        expect(helper.govuk_service_navigation_classes(current_user)).to eq("")
       end
 
       context "when notifications are displayed" do
@@ -20,7 +24,7 @@ RSpec.describe ApplicationHelper do
         end
 
         it "returns no-border class to hide the border (notification banner shows instead)" do
-          expect(govuk_service_navigation_classes(current_user)).to eq("app-service-navigation--no-border")
+          expect(helper.govuk_service_navigation_classes(current_user)).to eq("app-service-navigation--no-border")
         end
       end
     end
@@ -29,7 +33,7 @@ RSpec.describe ApplicationHelper do
       let(:current_user) { FactoryBot.create(:user, :support) }
 
       it "always returns orange class for orange border" do
-        expect(govuk_service_navigation_classes(current_user)).to eq("app-service-navigation--orange")
+        expect(helper.govuk_service_navigation_classes(current_user)).to eq("app-service-navigation--orange")
       end
 
       context "when notifications are displayed" do
@@ -38,7 +42,7 @@ RSpec.describe ApplicationHelper do
         end
 
         it "still returns orange class (support users always see orange border)" do
-          expect(govuk_service_navigation_classes(current_user)).to eq("app-service-navigation--orange")
+          expect(helper.govuk_service_navigation_classes(current_user)).to eq("app-service-navigation--orange")
         end
       end
     end
