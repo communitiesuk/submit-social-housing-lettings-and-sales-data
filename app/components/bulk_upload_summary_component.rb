@@ -28,8 +28,8 @@ class BulkUploadSummaryComponent < ViewComponent::Base
 
     text = count > 1 ? (plural_text || singular_text.pluralize(count)) : singular_text
     helpers.content_tag(:p, class: "govuk-!-font-size-16 govuk-!-margin-bottom-1") do
-      concat(helpers.content_tag(:strong, count))
-      concat(" #{text}")
+      helpers.concat(helpers.content_tag(:strong, count))
+      helpers.concat(" #{text}")
     end
   end
 
