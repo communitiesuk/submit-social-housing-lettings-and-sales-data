@@ -31,7 +31,7 @@ class DataProtectionConfirmationBannerComponent < ViewComponent::Base
 
   def banner_text
     if show_no_dpo_message? || user.is_dpo? || !org_or_user_org.holds_own_stock?
-      govuk_link_to(
+      helpers.govuk_link_to(
         link_text,
         link_href,
         class: "govuk-notification-banner__link govuk-!-font-weight-bold",

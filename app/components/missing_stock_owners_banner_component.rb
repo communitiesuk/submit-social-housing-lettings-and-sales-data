@@ -35,7 +35,7 @@ class MissingStockOwnersBannerComponent < ViewComponent::Base
 private
 
   def add_stock_owner_link
-    govuk_link_to(
+    helpers.govuk_link_to(
       "add a stock owner",
       stock_owners_add_organisation_path(id: organisation.id),
       class: "govuk-notification-banner__link govuk-!-font-weight-bold",
@@ -43,7 +43,7 @@ private
   end
 
   def contact_helpdesk_link
-    govuk_link_to(
+    helpers.govuk_link_to(
       "contact the helpdesk",
       GlobalConstants::HELPDESK_URL,
       class: "govuk-notification-banner__link govuk-!-font-weight-bold",
@@ -51,7 +51,7 @@ private
   end
 
   def users_link
-    govuk_link_to(
+    helpers.govuk_link_to(
       "users page",
       users_path,
       class: "govuk-notification-banner__link govuk-!-font-weight-bold",

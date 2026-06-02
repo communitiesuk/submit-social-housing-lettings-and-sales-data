@@ -23,7 +23,7 @@ class CreateLogActionsComponent < ViewComponent::Base
   end
 
   def create_button_href
-    send("#{log_type}_logs_path")
+    helpers.send("#{log_type}_logs_path")
   end
 
   def upload_button_copy
@@ -31,23 +31,23 @@ class CreateLogActionsComponent < ViewComponent::Base
   end
 
   def upload_button_href
-    send("bulk_upload_#{log_type}_log_path", id: "start")
+    helpers.send("bulk_upload_#{log_type}_log_path", id: "start")
   end
 
   def create_test_log_href
-    send("create_test_#{log_type}_log_path")
+    helpers.send("create_test_#{log_type}_log_path")
   end
 
   def create_next_year_test_log_href
-    send("create_next_year_test_#{log_type}_log_path")
+    helpers.send("create_next_year_test_#{log_type}_log_path")
   end
 
   def create_setup_test_log_href
-    send("create_setup_test_#{log_type}_log_path")
+    helpers.send("create_setup_test_#{log_type}_log_path")
   end
 
   def create_next_year_setup_test_log_href
-    send("create_next_year_setup_test_#{log_type}_log_path")
+    helpers.send("create_next_year_setup_test_#{log_type}_log_path")
   end
 
   def current_collection_year_label
@@ -59,7 +59,7 @@ class CreateLogActionsComponent < ViewComponent::Base
   end
 
   def create_test_bulk_upload_href(year)
-    send("create_#{year}_test_#{log_type}_bulk_upload_path")
+    helpers.send("create_#{year}_test_#{log_type}_bulk_upload_path")
   end
 
   def view_uploads_button_copy
@@ -67,6 +67,6 @@ class CreateLogActionsComponent < ViewComponent::Base
   end
 
   def view_uploads_button_href
-    send("bulk_uploads_#{log_type}_logs_path")
+    helpers.send("bulk_uploads_#{log_type}_logs_path")
   end
 end
