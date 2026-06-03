@@ -76,7 +76,7 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "title link" do
-      context "for a non-support user" do
+      context "with a non-support user" do
         before do
           sign_in user
         end
@@ -93,7 +93,7 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
-      context "for a support user" do
+      context "with a support user" do
         let(:support_user) { create(:user, :support) }
 
         before do
