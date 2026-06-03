@@ -6,9 +6,8 @@ class BulkUploadErrorSummaryTableComponent < ViewComponent::Base
   delegate :question_for_field, to: :row_parser_class
 
   def initialize(bulk_upload:)
+    super()
     @bulk_upload = bulk_upload
-
-    super
   end
 
   def sorted_errors

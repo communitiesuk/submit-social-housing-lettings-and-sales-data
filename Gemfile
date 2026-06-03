@@ -18,7 +18,7 @@ gem "jsbundling-rails"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.4", require: false
 # GOV UK frontend components
-gem "govuk-components", "~> 5.7"
+gem "govuk-components", "~> 6.2"
 # GOV UK component form builder DSL
 gem "govuk_design_system_formbuilder", "~> 5.7"
 # Convert Markdown into GOV.UK frontend-styled HTML
@@ -40,7 +40,7 @@ gem "devise_two_factor_authentication"
 gem "uk_postcode"
 # Get rich data from postcode lookups. Wraps postcodes.io
 # Use Ruby objects to build reusable markup. A React inspired evolution of the presenter pattern
-gem "view_component", "~> 3.9"
+gem "view_component", "~> 4.9"
 # Use the AWS S3 SDK as storage mechanism
 gem "aws-sdk-s3"
 # Track changes to models for auditing or versioning.

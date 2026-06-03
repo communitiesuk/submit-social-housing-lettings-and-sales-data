@@ -10,14 +10,11 @@ module ApplicationHelper
     end
   end
 
-  def govuk_header_classes(current_user)
-    if current_user&.support?
-      "app-header app-header--orange"
-    elsif notifications_to_display?
-      "app-header app-header__no-border-bottom"
-    else
-      "app-header"
-    end
+  def govuk_service_navigation_classes(current_user)
+    return "app-service-navigation--orange" if current_user&.support?
+    return "app-service-navigation--no-border" if notifications_to_display?
+
+    ""
   end
 
   def govuk_phase_banner_tag(current_user)

@@ -2,9 +2,9 @@ class BulkUploadSummaryComponent < ViewComponent::Base
   attr_reader :bulk_upload
 
   def initialize(bulk_upload:)
+    super()
     @bulk_upload = bulk_upload
     @bulk_upload_errors = bulk_upload.bulk_upload_errors
-    super
   end
 
   def upload_status
@@ -27,9 +27,9 @@ class BulkUploadSummaryComponent < ViewComponent::Base
     return if count.nil? || count <= 0
 
     text = count > 1 ? (plural_text || singular_text.pluralize(count)) : singular_text
-    content_tag(:p, class: "govuk-!-font-size-16 govuk-!-margin-bottom-1") do
-      concat(content_tag(:strong, count))
-      concat(" #{text}")
+    helpers.content_tag(:p, class: "govuk-!-font-size-16 govuk-!-margin-bottom-1") do
+      helpers.concat(helpers.content_tag(:strong, count))
+      helpers.concat(" #{text}")
     end
   end
 
@@ -44,11 +44,11 @@ class BulkUploadSummaryComponent < ViewComponent::Base
   end
 
   def download_lettings_file_link(bulk_upload)
-    govuk_link_to "Download file", download_lettings_bulk_upload_path(bulk_upload), class: "govuk-link govuk-!-margin-right-2"
+    helpers.govuk_link_to "Download file", download_lettings_bulk_upload_path(bulk_upload), class: "govuk-link govuk-!-margin-right-2"
   end
 
   def download_sales_file_link(bulk_upload)
-    govuk_link_to "Download file", download_sales_bulk_upload_path(bulk_upload), class: "govuk-link govuk-!-margin-right-2"
+    helpers.govuk_link_to "Download file", download_sales_bulk_upload_path(bulk_upload), class: "govuk-link govuk-!-margin-right-2"
   end
 
   def view_error_report_link(bulk_upload)
@@ -61,12 +61,12 @@ class BulkUploadSummaryComponent < ViewComponent::Base
              "bulk_upload_#{bulk_upload.log_type}_result_path"
            end
 
-    govuk_link_to "View error report", send(path, bulk_upload), class: "govuk-link"
+    helpers.govuk_link_to "View error report", helpers.send(path, bulk_upload), class: "govuk-link"
   end
 
   def view_logs_link(bulk_upload)
     return unless bulk_upload.status.to_s == "logs_uploaded_with_errors"
 
-    govuk_link_to "View logs with errors", send("#{bulk_upload.log_type}_logs_path", bulk_upload_id: [bulk_upload.id]), class: "govuk-link"
+    helpers.govuk_link_to "View logs with errors", helpers.send("#{bulk_upload.log_type}_logs_path", bulk_upload_id: [bulk_upload.id]), class: "govuk-link"
   end
 end
