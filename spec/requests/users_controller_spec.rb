@@ -76,28 +76,39 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "title link" do
-      it "has GOV.UK header and service navigation both linking to home page for non-support user" do
-        sign_in user
-        get "/", headers:, params: {}
-        expect(path).to eq("/")
-        expect(page).to have_content("Welcome back")
+      context "for a non-support user" do
+        before do
+          sign_in user
+        end
 
-        govuk_header_link = '<a class="govuk-header__link govuk-header__homepage-link" href="/">'
-        expect(CGI.unescape_html(response.body)).to include(govuk_header_link)
+        it "has GOV.UK header and service navigation both linking to home page" do
+          get "/", headers:, params: {}
+          expect(path).to eq("/")
+          expect(page).to have_content("Welcome back")
 
-        expect(page).to have_css(".govuk-service-navigation__link[href='/']", text: "Submit social housing lettings and sales data (CORE)")
+          govuk_header_link = '<a class="govuk-header__link govuk-header__homepage-link" href="/">'
+          expect(CGI.unescape_html(response.body)).to include(govuk_header_link)
+
+          expect(page).to have_css(".govuk-service-navigation__link[href='/']", text: "Submit social housing lettings and sales data (CORE)")
+        end
       end
 
-      it "has GOV.UK header and service navigation both linking to home page for support user" do
-        support_user = create(:user, :support)
-        sign_in support_user
-        get "/", headers:, params: {}
-        follow_redirect!
+      context "for a support user" do
+        let(:support_user) { create(:user, :support) }
 
-        govuk_header_link = '<a class="govuk-header__link govuk-header__homepage-link" href="/">'
-        expect(CGI.unescape_html(response.body)).to include(govuk_header_link)
+        before do
+          sign_in support_user
+        end
 
-        expect(page).to have_css(".govuk-service-navigation__link[href='/']", text: "Submit social housing lettings and sales data (CORE)")
+        it "has GOV.UK header and service navigation both linking to home page" do
+          get "/", headers:, params: {}
+          follow_redirect!
+
+          govuk_header_link = '<a class="govuk-header__link govuk-header__homepage-link" href="/">'
+          expect(CGI.unescape_html(response.body)).to include(govuk_header_link)
+
+          expect(page).to have_css(".govuk-service-navigation__link[href='/']", text: "Submit social housing lettings and sales data (CORE)")
+        end
       end
     end
 
