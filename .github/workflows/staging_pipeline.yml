@@ -32,6 +32,15 @@ jobs:
     permissions:
       id-token: write
 
+  sbom:
+    name: Upload SBOM
+    needs: [aws_deploy]
+    uses: ./.github/workflows/upload-sbom.yml
+    with:
+      projectversion: staging
+    secrets:
+      DTRACK_API_KEY: ${{ secrets.DTRACK_API_KEY }}
+
   performance:
     needs: [aws_deploy]
     runs-on: ubuntu-latest

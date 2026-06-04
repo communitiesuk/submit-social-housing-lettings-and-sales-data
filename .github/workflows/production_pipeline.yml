@@ -20,3 +20,12 @@ jobs:
       release_tag: ${{ needs.test.outputs.releasetag }}
     permissions:
       id-token: write
+
+  sbom:
+    name: Upload SBOM
+    needs: [aws_deploy]
+    uses: ./.github/workflows/upload-sbom.yml
+    with:
+      projectversion: prod
+    secrets:
+      DTRACK_API_KEY: ${{ secrets.DTRACK_API_KEY }}
