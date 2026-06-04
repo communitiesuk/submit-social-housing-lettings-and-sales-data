@@ -67,7 +67,7 @@ gem "faker"
 gem "method_source", "~> 1.1"
 gem "rails_admin", "~> 3.1"
 gem "ruby-openai"
-gem "sidekiq"
+gem "sidekiq", "~> 7.2.4"
 gem "sidekiq-cron"
 gem "unread"
 
