@@ -24,6 +24,8 @@ jobs:
   sbom:
     name: Upload SBOM
     needs: [aws_deploy]
+    permissions:
+      contents: read
     uses: ./.github/workflows/upload-sbom.yml
     with:
       projectversion: prod
