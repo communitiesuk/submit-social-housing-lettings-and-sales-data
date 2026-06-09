@@ -6,81 +6,145 @@ nav_order: 4
 
 # Question
 
+_Updated for 2026._
+
 Questions are under the page level of the form definition.
 
 An example question might look something like this:
 
-```
-class Form::Sales::Questions::PostcodeKnown < ::Form::Question
+```ruby
+class Form::Sales::Questions::PreviousPostcodeKnown < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = postcode_known
-    @hint_text = ""
-    @header =  "Do you know the property postcode?"
-    @check_answer_label =  "Do you know the property postcode?"
+    @id = "ppcodenk"
+    @copy_key = "sales.household_situation.last_accommodation.ppcodenk"
     @type = "radio"
-    @answer_options = {
-      "1" => { "value" => "Yes" },
-      "0" => { "value" => "No" }
-    },
+    @answer_options = ANSWER_OPTIONS
     @conditional_for = {
-      "postcode_full" => [1]
-    },
-    @hidden_in_check_answers = true
+      "ppostcode_full" => [0],
+    }
+    @hidden_in_check_answers = {
+      "depends_on" => [
+        {
+          "ppcodenk" => 0,
+        },
+        {
+          "ppcodenk" => 1,
+        },
+      ],
+    }
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
+
+  ANSWER_OPTIONS = {
+    "0" => { "value" => "Yes" },
+    "1" => { "value" => "No" },
+  }.freeze
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 57, 2024 => 59, 2025 => 57 }.freeze
 end
 ```
 
-In the above example the the question has the id `postcode_known`.
+## Useful Properties
 
-The `check_answer_label` contains the text that will be displayed in the label of the table on the check answers page.
+<dl>
+<dt>id</dt>
+<dd>The name of the field. This should correspond to a column in the database. In the example, the id is 'ppcodenk'.</dd>
 
-The header is text that is displayed for the question.
+<dt>copy_key</dt>
+<dd>This specifies copy from <code>config/locales/forms/...</code> that should be associated with the question. Not normally needed, will be inferred as <code>#{form.type}.#{subsection.copy_key}.#{id}</code>.</dd>
 
-Hint text is optional, but if provided it sits under the header and is normally given to provide the data inputters with guidance when answering the question, for example it might inform them about terms used in the question.
+<dt>type</dt>
+<dd>Determines what type of question is rendered on the page. In the example, the question is a Radio Form so the <code>app/views/form/_radio_question.html.erb</code> partial will be rendered on the page when this question is displayed to the user</dd>
 
-The type is question type, which is used to determine the view rendered for the question. In the above example the question is a radio type so the `app/views/form/_radio_question.html.erb` partial will be rendered on the page when this question is displayed to the user.
+<dt>answer_options</dt>
+<dd>Some types of question offer multiple options to pick from, which can be defined here. In the example, there are two options. The option that will be rendered with the label 'Yes' has the underlying value 0. The option with the label 'No' has the underlying value 1.</dd>
 
-The `conditional_for` contains the value needed to be selected by the data inputter in order to display another question that appears on the same page. In the example above the `postcode_full` question depends on the answer to `postcode_known` being selected as `1` or `Yes`, this would then display the `postcode_full` underneath the `Yes` option on the page, allowing the provide the provide the postcode if they have indicated they know it. If the user has JavaScript enabled then this realtime conditional display is handled by the `app/frontend/controllers/conditional_question_controller.js` file.
+<dt>conditional_for</dt>
+<dd>Allows for additional questions to be rendered on the page if a certain value is chosen for the current question. In the example, if the value of this question is 0 (the 'Yes' option is selected), then the question with id 'ppostcode_full' will be rendered beneath the selected option.<br/>If the user has JavaScript enabled then this realtime conditional display is handled by the <code>app/frontend/controllers/conditional_question_controller.js</code> file.</dd>
 
-the `hidden_in_check_answers` is used to hide a value from displaying on the check answers page. You only need to provide this if you want to set it to true in order to hide the value for some reason e.g. it's one of two questions appearing on a page and the other question is displayed on the check answers page. It's also worth noting that you can declare this as a with a `depends_on` which can be useful for conditionally displaying values on the check answers page. For example:
+<dt>hidden_in_check_answers</dt>
+<dd>
+  Allows us to hide the question on the 'check your answers' page. You only need to provide this if you want to set it to true in order to hide the value for some reason e.g. it's one of two questions appearing on a page and the other question is displayed on the check answers page.
+  <br/>
+  If <code>depends_on</code> is supplied, then whether this question is hidden can be made conditional on the answers provided to any question. In the example, the question is hidden if 'ppcodenk' (this question) has value 0 or 1. (As these are the only two possible answers, the question will always be hidden.)
+</dd>
 
-```
-@hidden_in_check_answers = {
-  "depends_on" => [
-    { "age6_known" => 0 },
-    { "age6_known" => 1 }
-  ]
-}
-```
+<dt>question_number</dt>
+<dd>
+  Determines which number gets rendered next to the question text on the question page and in the 'check your answers' page.
+  <br/>
+  The convention that we use for the question number is that the hash should contain all years explicitly, even if it doesn't change between years. When building a new year's forms we should add the question number for the new year to all questions. See the `add_new_year_to_questions` rake.
+</dd>
 
-Would mean the question the above is attached to would be hidden in the check answers page if the value of age6_known is either `0` or `1`.
+<dt>disable_clearing_if_not_routed_or_dynamic_answer_options</dt>
+<dd>
+  Questions that are not routed to will be cleared. Setting this to true will prevent this from happening. Normally can be replaced with implementing <code>derived?</code>.
+</dd>
 
-The answer the data inputter provides to some questions allows us to infer the values of other questions we might have asked in the form, allowing us to save the data inputters some time. An example of how this might look is as follows:
+<dt>check_answers_card_number</dt>
+<dd>
+  Is used only for the household characteristics section as each person gets their own card on the CYA page. If you're looking to add a custom CYA card somewhere else in the form, see <code>check_answers_card_title</code>
+</dd>
 
-```
-class Form::Sales::Questions::PostcodeFull < ::Form::Question
+<dt>check_answers_card_title</dt>
+<dd>
+  If set to non nil, on the CYA this question will be put in a box with this title. If multiple questions set the same <code>check_answers_card_title</code>, they will be grouped.
+</dd>
+</dl>
+
+Another example shows us some fields that are used when we want to infer the answers to one question based on a user's answers to another question. This can allow the user to have to answer fewer questions, lowering their total number of clicks.
+
+```ruby
+class Form::Sales::Questions::PostcodeForFullAddress < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = postcode_full
-    @hint_text = ""
-    @header =  "What is the property’s postcode?""
-    @check_answer_label =  "Postcode""
-    @type = "text"
-    @width = 5
-    @inferred_answers = {
-      "la" => { "is_la_inferred" => true }
-    }
-    @inferred_check_answers_value => [{
-      "condition" => { "postcode_known" => 0 },
-      "value": "Not known"
+    @id = "postcode_full"
+    @inferred_check_answers_value = [{
+      "condition" => {
+        "pcodenk" => 1,
+      },
+      "value" => "Not known",
     }]
+    @inferred_answers = {
+      "la" => {
+        "is_la_inferred" => true,
+      },
+    }
+    # Other fields omitted for brevity
   end
 end
 ```
 
-In the above example the width is an optional attribute and can be provided for text type questions to determine the width of the text box on the page when when the question is displayed to a user (this allows you to match the width of the text box on the page to that of the design for a question).
+<dl>
+<dt>inferred_check_answers_value</dt>
+<dd>Determines what gets shown on the 'check your answers' page if we infer the answer to this question. In the example, if the question 'pcodenk' has value 1 (indicating that the postcode is not known), then the answer shown for this question will be 'Not known'.</dd>
 
-The above example links to the first example as both of these questions would be on the same page. The `inferred_check_answers_value` is what should be displayed on the check answers page for this question if we infer it. If the value of `postcode_known` was given as `0` (which is a no), as seen in the condition part of `inferred_check_answers_value` then we can infer that the data inputter does not know the postcode and so we would display the value of `Not known` on the check answers page for the postcode.
+<dt>inferred_answers</dt>
+<dd>Determines any questions whose answers can be inferred based on the answer to this question. In the example, the 'la' question (Local Authority) can be inferred from the Postcode. We set a property 'is_la_inferred' on the log to record this inferrance.</dd>
+</dl>
 
-In the above example the `inferred_answers` refers to a question where we can infer the answer based on the answer of this question. In this case the `la` question can be inferred from the postcode value given by the data inputter as we are able to lookup the local authority based on the postcode given. We then set a property on the lettings log `is_la_inferred` to true to indicate that this is an answer we've inferred.
+## Useful methods
+
+<dl>
+<dt>derived?</dt>
+<dd>This is function that should return true if the question is to be derived, such as where it's answer can be inferred based on another question. Setting this to true will cause the question to not be shown in CYA. The user will still be shown the question. This method is very similar to a depends_on method, but a depends_on block is used to always infer an answer of "". derived? is reliant on other code setting the answer, such as <code>set_derived_fields!</code></dd>
+
+<dt>get_extra_check_answer_value</dt>
+<dd>Used for putting extra lines below the main answer in the CYA page. Used on the address search to show the full address below the UPRN</dd>
+
+<dt>label_from_value</dt>
+<dd>Used for custom labels that differ from the main site. Normally will use the labels on the page, Useful for instance changing "No, enter xyz" to just "No".</dd>
+
+<dt>skip_question_in_form_flow?</dt>
+<dd>Similar to derived, but the user is still able to go back and edit the question later. Will not cause question to be hidden from CYA.</dd>
+</dl>
+
+## Question visibility
+
+There are broadly 3 reasons to hide a question. Here's how to handle them.
+
+1. The question should not be asked, answer should be derived as nil and user should not be able to change this. If so, set up a `depends_on` on the page.
+2. The question should not be asked, answer should be derived as some value and user should not be able to change this. If so, set up a `depends_on` on the page and set up a `derived?`. Use a method like `set_derived_fields!` to set the answer.
+3. The question should not be asked, answer should be derived as some value and user should be able to change this. If so, set up a `skip_question_in_form_flow?` method.
