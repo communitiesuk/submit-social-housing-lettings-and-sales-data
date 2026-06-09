@@ -10,7 +10,7 @@ gem "rails", "~> 7.2.2"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use Puma as the app server
-gem "puma", "~> 6.4"
+gem "puma", "~> 7.2.1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
@@ -67,7 +67,7 @@ gem "faker"
 gem "method_source", "~> 1.1"
 gem "rails_admin", "~> 3.1"
 gem "ruby-openai"
-gem "sidekiq"
+gem "sidekiq", "~> 7.2.4"
 gem "sidekiq-cron"
 gem "unread"
 
