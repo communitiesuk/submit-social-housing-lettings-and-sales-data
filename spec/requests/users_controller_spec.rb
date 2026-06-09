@@ -76,13 +76,39 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "title link" do
-      it "routes user to the home page" do
-        sign_in user
-        get "/", headers:, params: {}
-        expect(path).to eq("/")
-        expect(page).to have_content("Welcome back")
-        expected_link = "<a class=\"govuk-header__link govuk-header__link--homepage\" href=\"/\">"
-        expect(CGI.unescape_html(response.body)).to include(expected_link)
+      context "with a non-support user" do
+        before do
+          sign_in user
+        end
+
+        it "has GOV.UK header and service navigation both linking to home page" do
+          get "/", headers:, params: {}
+          expect(path).to eq("/")
+          expect(page).to have_content("Welcome back")
+
+          govuk_header_link = '<a class="govuk-header__link govuk-header__homepage-link" href="/">'
+          expect(CGI.unescape_html(response.body)).to include(govuk_header_link)
+
+          expect(page).to have_css(".govuk-service-navigation__link[href='/']", text: "Submit social housing lettings and sales data (CORE)")
+        end
+      end
+
+      context "with a support user" do
+        let(:support_user) { create(:user, :support) }
+
+        before do
+          sign_in support_user
+        end
+
+        it "has GOV.UK header and service navigation both linking to home page" do
+          get "/", headers:, params: {}
+          follow_redirect!
+
+          govuk_header_link = '<a class="govuk-header__link govuk-header__homepage-link" href="/">'
+          expect(CGI.unescape_html(response.body)).to include(govuk_header_link)
+
+          expect(page).to have_css(".govuk-service-navigation__link[href='/']", text: "Submit social housing lettings and sales data (CORE)")
+        end
       end
     end
 
@@ -2595,20 +2621,6 @@ RSpec.describe UsersController, type: :request do
           end
         end
       end
-    end
-  end
-
-  describe "title link" do
-    before do
-      sign_in user
-    end
-
-    it "routes user to the home page" do
-      get "/", headers:, params: {}
-      expect(path).to eq("/")
-      expect(page).to have_content("Welcome back")
-      expected_link = "<a class=\"govuk-header__link govuk-header__link--homepage\" href=\"/\">"
-      expect(CGI.unescape_html(response.body)).to include(expected_link)
     end
   end
 end

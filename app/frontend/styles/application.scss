@@ -130,3 +130,15 @@ $govuk-breakpoints: (
   left: -15px;
   position: relative;
 }
+
+.app-main-service-navigation {
+  border-bottom: govuk-spacing(2) solid $govuk-brand-colour;
+}
+
+.app-service-navigation--orange {
+  border-bottom-color: govuk-colour("orange");
+}
+
+.app-service-navigation--no-border {
+  border-bottom: 0;
+}
