@@ -169,6 +169,7 @@ class BulkUpload::Sales::Year2026::RowParser
     :field_61, # Person 5's sex, as registered at birth
     :field_67, # Person 6's sex, as registered at birth
 
+    :field_71, # What was buyer 1’s previous tenure?
     :field_77, # What was buyer 2’s previous tenure?
 
     :field_88, # What is the total amount the buyers had in savings before they paid any deposit for the property?
@@ -263,7 +264,7 @@ class BulkUpload::Sales::Year2026::RowParser
   attribute :field_69, :string
   attribute :field_70, :integer
 
-  attribute :field_71, :integer
+  attribute :field_71, :string
   attribute :field_72, :integer
   attribute :field_73, :string
   attribute :field_74, :string
@@ -492,7 +493,6 @@ class BulkUpload::Sales::Year2026::RowParser
   validate :validate_assigned_to_when_support, on: :after_log
   validate :validate_managing_org_related, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
-  validate :validate_incomplete_soft_validations, on: :after_log
 
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log
   validate :validate_address_fields, on: :after_log
@@ -560,6 +560,8 @@ class BulkUpload::Sales::Year2026::RowParser
       end
     end
 
+    validate_incomplete_soft_validations
+
     add_errors_for_invalid_fields
 
     errors.blank?
@@ -618,6 +620,15 @@ private
     CASE_INSENSITIVE_FIELDS.each do |field|
       value = send(field)
       send("#{field}=", value.upcase) if value.present?
+    end
+  end
+
+  def prevten
+    case field_71
+    when "R"
+      0
+    else
+      field_71
     end
   end
 
@@ -750,6 +761,14 @@ private
 
   def add_errors_for_invalid_fields
     invalid_fields.each do |field|
+      # ensure questions not routed to are not included in error report
+      error_questions_ids = field_mapping_for_errors
+                              .select { |_k, fields| fields.map(&:to_s).include?(field.to_s) }
+                              .keys
+                              .map(&:to_s)
+      error_questions = questions.select { |question| error_questions_ids.include?(question.id) }
+      next if error_questions.none? { |question| question.page.routed_to?(log, nil) }
+
       errors.delete(field) # take precedence over any other errors as this is a BU format issue
       errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: QUESTIONS[field.to_sym]))
     end
@@ -995,7 +1014,7 @@ private
     attributes["savings"] = field_88.to_i if attributes["savingsnk"]&.zero? && field_88&.match(/\A\d+\z/)
     attributes["prevown"] = field_89
 
-    attributes["prevten"] = field_71
+    attributes["prevten"] = prevten
     attributes["prevloc"] = field_75
     attributes["previous_la_known"] = previous_la_known
     attributes["ppcodenk"] = previous_postcode_known
@@ -1416,7 +1435,7 @@ private
   def infer_soctenant_from_prevten_and_prevtenbuy2
     return unless shared_ownership?
 
-    if [1, 2].include?(field_71) || [1, 2].include?(field_77.to_i)
+    if [1, 2].include?(field_71.to_i) || [1, 2].include?(field_77.to_i)
       1
     else
       2
@@ -1654,7 +1673,7 @@ private
         next if log.form.questions.none? { |q| q.id == interruption_screen_question_id && q.page.routed_to?(log, nil) }
 
         field_mapping_for_errors[interruption_screen_question_id.to_sym]&.each do |field|
-          if errors.none? { |e| e.options[:category] == :soft_validation && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
+          if errors.none? { |e| field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
             error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(" ")
             errors.add(field, message: error_message, category: :soft_validation)
           end

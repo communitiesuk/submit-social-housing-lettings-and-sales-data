@@ -58,4 +58,13 @@ RSpec.describe "Accessible Autocomplete" do
     fill_in("lettings-log-supcharg-field-error", with: 50)
     expect(find("#lettings-log-tcharge-field").value).to eq("550.00")
   end
+
+  it "does not show 'NaN' if one of the inputs is not a number", :js do
+    visit("/lettings-logs/#{lettings_log.id}/rent")
+    expect(page).to have_selector("#tcharge_div")
+    fill_in("lettings-log-brent-field", with: 5)
+    expect(find("#lettings-log-tcharge-field").value).to eq("5.00")
+    fill_in("lettings-log-pscharge-field", with: "something else")
+    expect(find("#lettings-log-tcharge-field").value).to eq("5.00")
+  end
 end

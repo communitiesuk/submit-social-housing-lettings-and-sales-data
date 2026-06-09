@@ -1,1 +1,5 @@
-You have given us the details for <%= log.joint_purchase? ? 3 : 4 %> of the <%= log.hholdcount %> other people in the household
+<% if log.form.start_year_2026_or_later? %>
+  You have given us the details for 5 of the <%= log.hholdcount %> people in the household
+<% else %>
+  You have given us the details for <%= log.joint_purchase? ? 3 : 4 %> of the <%= log.hholdcount %> other people in the household
+<% end %>

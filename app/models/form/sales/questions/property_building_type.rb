@@ -9,7 +9,7 @@ class Form::Sales::Questions::PropertyBuildingType < ::Form::Question
   end
 
   ANSWER_OPTIONS = {
-    "1" => { "value" => "Purpose built" },
+    "1" => { "value" => "Purpose-built" },
     "2" => { "value" => "Converted from previous residential or non-residential property" },
   }.freeze
 

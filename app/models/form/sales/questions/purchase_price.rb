@@ -4,7 +4,8 @@ class Form::Sales::Questions::PurchasePrice < ::Form::Question
     @id = "value"
     @type = "numeric"
     @min = form.start_year_2026_or_later? ? 15_000 : 0
-    @step = 0.01
+    @max = form.start_year_2025_or_later? ? 999_999 : nil
+    @step = form.start_year_2026_or_later? ? 1 : 0.01 # 0.01 was a mistake that was fixed in 2026
     @width = 5
     @prefix = "£"
     @ownership_sch = ownershipsch

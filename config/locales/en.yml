@@ -260,6 +260,10 @@ en:
       blank: "Enter an email address."
     role:
       invalid: "Role must be data accessor, data provider or data coordinator."
+    user:
+      support_user_in_wrong_organisation:
+        change_role: "You cannot create a support account type for a user in this organisation. Support accounts should only be created for MHCLG and contractor staff as they are administrator level accounts with access to all organisations' data. Any support accounts for housing organisations would be a data protection breach."
+        change_organisation: "You cannot move a user with a support account to a non-MHCLG organisation. If you need to move the user, change their role type to data coordinator or data provider."
 
     setup:
       saledate:

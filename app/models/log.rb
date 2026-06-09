@@ -204,6 +204,14 @@ class Log < ApplicationRecord
     false
   end
 
+  def people_with_details
+    [hhmemb || max_people_with_details, max_people_with_details].min
+  end
+
+  def max_people_with_details
+    self.class::MAX_PEOPLE_WITH_DETAILS
+  end
+
   def ethnic_refused?
     ethnic_group == 17
   end

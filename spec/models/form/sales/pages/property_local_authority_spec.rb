@@ -17,18 +17,8 @@ RSpec.describe Form::Sales::Pages::PropertyLocalAuthority, type: :model do
     expect(page.subsection).to eq(subsection)
   end
 
-  describe "has correct questions" do
-    context "when 2023" do
-      let(:start_date) { Time.utc(2023, 2, 8) }
-
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(
-          %w[
-            la
-          ],
-        )
-      end
-    end
+  it "has correct questions" do
+    expect(page.questions.map(&:id)).to eq(%w[la])
   end
 
   it "has the correct id" do
@@ -42,47 +32,18 @@ RSpec.describe Form::Sales::Pages::PropertyLocalAuthority, type: :model do
   context "when routing to the page" do
     let(:log) { build(:sales_log) }
 
-    context "with form before 2024" do
-      before do
-        allow(form).to receive(:start_year_2024_or_later?).and_return(false)
-      end
-
-      it "is routed to when la is not inferred" do
-        log.is_la_inferred = false
-        expect(page).to be_routed_to(log, nil)
-      end
-
-      it "is not routed to when la is inferred" do
-        log.is_la_inferred = true
-        expect(page).not_to be_routed_to(log, nil)
-      end
+    before do
+      allow(form).to receive(:start_year_2025_or_later?).and_return(true)
     end
 
-    context "with form after 2024" do
-      before do
-        allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-      end
+    it "is routed to when la is not inferred" do
+      log.is_la_inferred = false
+      expect(page).to be_routed_to(log, nil)
+    end
 
-      it "is routed to when la is not inferred and address search has been given" do
-        log.is_la_inferred = false
-        log.address_line1_input = "1"
-        log.postcode_full_input = "A11AA"
-        expect(page).to be_routed_to(log, nil)
-      end
-
-      it "is not routed to when la is inferred" do
-        log.is_la_inferred = true
-        log.address_line1_input = "1"
-        log.postcode_full_input = "A11AA"
-        expect(page).not_to be_routed_to(log, nil)
-      end
-
-      it "is not routed to when address search is not given" do
-        log.is_la_inferred = false
-        log.address_line1_input = nil
-        log.postcode_full_input = "A11AA"
-        expect(page).not_to be_routed_to(log, nil)
-      end
+    it "is not routed to when la is inferred" do
+      log.is_la_inferred = true
+      expect(page).not_to be_routed_to(log, nil)
     end
   end
 end
