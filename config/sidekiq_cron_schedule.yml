@@ -1,4 +1,4 @@
 data_export_xml:
-  cron: "every day at 5am"
+  cron: "every day at 4am"
   class: "DataExportXmlJob"
   queue: default
