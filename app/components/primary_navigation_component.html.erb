@@ -1,4 +1,4 @@
-<%= govuk_service_navigation(navigation_id: "primary-navigation", classes: "app-service-navigation") do |sn|
+<%= helpers.govuk_service_navigation(navigation_id: "primary-navigation", classes: "app-service-navigation") do |sn|
       items.each do |item|
         sn.with_navigation_item(text: item[:text], href: item[:href], classes: "", current: item[:current])
       end
