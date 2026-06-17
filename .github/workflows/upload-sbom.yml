@@ -1,0 +1,52 @@
+name: Upload SBOM
+
+# Generates a CycloneDX SBOM with Syft (auto-detects both the Ruby gems in
+# Gemfile.lock and the Node packages in yarn.lock) and uploads it to
+# Dependency-Track. Called from the staging and production pipelines after a
+# successful deploy.
+
+on:
+  workflow_call:
+    inputs:
+      projectversion:
+        required: true
+        type: string
+    secrets:
+      DTRACK_API_KEY:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  sbom:
+    name: Generate and upload SBOM
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          echo "SYFT_VERSION=v1.45.0" >> "$GITHUB_ENV"
+          echo "SYFT_SCRIPT_SHA=9673f867e50398b5d25ec97ff051a451c46d262c" >> "$GITHUB_ENV"
+
+      - uses: actions/cache@v4
+        with:
+          path: /usr/local/bin/syft
+          key: syft-${{ env.SYFT_VERSION }}
+
+      - name: Install Syft
+        run: |
+          [ -f /usr/local/bin/syft ] || \
+            curl -sSfL "https://raw.githubusercontent.com/anchore/syft/${SYFT_SCRIPT_SHA}/install.sh" | sh -s -- -b /usr/local/bin "$SYFT_VERSION"
+
+      - run: syft . -o cyclonedx-xml=bom.xml
+
+      - uses: DependencyTrack/gh-upload-sbom@v3
+        with:
+          serverhostname: api-deps.softwire.com
+          apikey: ${{ secrets.DTRACK_API_KEY }}
+          autocreate: true
+          projectname: CORE
+          projectversion: ${{ inputs.projectversion }}
+          parentname: Support
+          bomfilename: bom.xml
