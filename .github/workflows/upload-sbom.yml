@@ -41,12 +41,15 @@ jobs:
 
       - run: syft . -o cyclonedx-xml=bom.xml
 
-      - uses: DependencyTrack/gh-upload-sbom@v3
-        with:
-          serverhostname: api-deps.softwire.com
-          apikey: ${{ secrets.DTRACK_API_KEY }}
-          autocreate: true
-          projectname: CORE
-          projectversion: ${{ inputs.projectversion }}
-          parentname: Support
-          bomfilename: bom.xml
+      - name: Upload SBOM to Dependency-Track
+        env:
+          DTRACK_API_KEY: ${{ secrets.DTRACK_API_KEY }}
+          SBOM_VERSION: ${{ inputs.projectversion }}
+        run: |
+          curl -sSf -X POST "https://api-deps.softwire.com/api/v1/bom" \
+            -H "X-Api-Key: $DTRACK_API_KEY" \
+            -F "autoCreate=true" \
+            -F "projectName=CORE" \
+            -F "projectVersion=$SBOM_VERSION" \
+            -F "parentName=Support" \
+            -F "bom=@bom.xml"
