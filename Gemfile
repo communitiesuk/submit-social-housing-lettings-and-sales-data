@@ -121,5 +121,5 @@ gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
 gem "excon", ">= 1.5.0"
 
-# faraday is a transitive dependency, but we need to force the version to 2.14.1 to avoid a vulnerability.
-gem "faraday", ">= 2.14.1"
+# faraday is a transitive dependency, but we need to force the version to 2.14.3 to avoid a vulnerability.
+gem "faraday", ">= 2.14.3"
