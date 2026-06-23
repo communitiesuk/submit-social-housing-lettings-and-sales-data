@@ -202,7 +202,8 @@ GEM
     et-orbi (1.4.0)
       tzinfo
     event_stream_parser (1.0.0)
-    excon (0.111.0)
+    excon (1.5.0)
+      logger
     factory_bot (6.5.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.4.4)
@@ -305,13 +306,13 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.5)
-    nokogiri (1.19.3-arm64-darwin)
+    nokogiri (1.19.4-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.19.3-x86_64-darwin)
+    nokogiri (1.19.4-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.19.3-x86_64-linux-gnu)
+    nokogiri (1.19.4-x86_64-linux-gnu)
       racc (~> 1.4)
-    nokogiri (1.19.3-x86_64-linux-musl)
+    nokogiri (1.19.4-x86_64-linux-musl)
       racc (~> 1.4)
     notifications-ruby-client (6.4.0)
       jwt (>= 1.5, < 4)
@@ -600,7 +601,7 @@ DEPENDENCIES
   devise_two_factor_authentication
   dotenv-rails
   erb_lint
-  excon (~> 0.111.0)
+  excon (>= 1.5.0)
   factory_bot_rails
   faker
   faraday (>= 2.14.1)
