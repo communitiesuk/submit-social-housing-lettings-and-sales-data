@@ -1,4 +1,7 @@
 {
+  "enabledPlugins": {
+    "dependency-track@skillwire": true,
+  },
   "permissions": {
     "allow": [
       "WebSearch",

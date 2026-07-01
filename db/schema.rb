@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_04_20_151627) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_18_101455) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -104,6 +104,18 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_20_151627) do
     t.string "data_protection_officer_name"
     t.index ["data_protection_officer_id"], name: "dpo_user_id"
     t.index ["organisation_id"], name: "index_data_protection_confirmations_on_organisation_id"
+  end
+
+  create_table "download_records", force: :cascade do |t|
+    t.integer "download_type", null: false
+    t.string "download_filters", null: false
+    t.bigint "user_id", null: false
+    t.bigint "user_organisation_id", null: false
+    t.integer "user_role", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_download_records_on_user_id"
+    t.index ["user_organisation_id"], name: "index_download_records_on_user_organisation_id"
   end
 
   create_table "exports", force: :cascade do |t|
@@ -825,9 +837,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_20_151627) do
     t.string "sexrab5"
     t.string "sexrab6"
     t.integer "buildheightclass"
-    t.integer "mortlen_known"
-    t.integer "hasservicechargeschanged"
-    t.decimal "newservicecharges", precision: 10, scale: 2
     t.integer "gender_same_as_sex1"
     t.integer "gender_same_as_sex2"
     t.integer "gender_same_as_sex3"
@@ -840,6 +849,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_20_151627) do
     t.string "gender_description4"
     t.string "gender_description5"
     t.string "gender_description6"
+    t.integer "mortlen_known"
+    t.integer "hasservicechargeschanged"
+    t.decimal "newservicecharges", precision: 10, scale: 2
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
@@ -944,6 +956,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_20_151627) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "download_records", "organisations", column: "user_organisation_id"
+  add_foreign_key "download_records", "users"
   add_foreign_key "lettings_logs", "locations"
   add_foreign_key "lettings_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "lettings_logs", "schemes"

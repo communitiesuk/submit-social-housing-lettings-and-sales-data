@@ -70,6 +70,7 @@ class SalesLogsController < LogsController
   end
 
   def email_csv
+    DownloadRecord.build_from_user(download_type: :sales_log, download_filters: session_filters.to_s, user: current_user).save!
     all_orgs = params["organisation_select"] == "all"
     EmailCsvJob.perform_later(current_user, search_term, session_filters, all_orgs, nil, codes_only_export?, "sales", session_filters["years"].first.to_i)
     redirect_to csv_confirmation_sales_logs_path
