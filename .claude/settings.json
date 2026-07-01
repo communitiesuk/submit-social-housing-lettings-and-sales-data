@@ -1,6 +1,6 @@
 {
   "enabledPlugins": {
-    "dependency-track@skillwire": true,
+    "dependency-track@skillwire": true
   },
   "permissions": {
     "allow": [
