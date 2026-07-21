@@ -183,6 +183,20 @@ module DerivedVariables::LettingsLogVariables
 
     clear_gender_description_unless_gender_not_same_as_sex! if form.start_year_2026_or_later?
 
+    if scheme_has_confidential_information?
+      reset_address_fields!
+      self.uprn_selection = nil
+      self.postcode_known = nil
+      self.manual_address_entry_selected = nil
+      location_la = location&.linked_local_authorities&.active(form.start_date)&.first&.code || location&.location_code
+      if location_la.present?
+        self.la = location_la
+        self.is_la_inferred = true
+      else
+        self.is_la_inferred = false
+      end
+    end
+
     set_checkbox_values!
   end
 

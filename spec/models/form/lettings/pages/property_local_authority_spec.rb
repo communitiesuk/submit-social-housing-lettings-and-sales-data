@@ -56,5 +56,19 @@ RSpec.describe Form::Lettings::Pages::PropertyLocalAuthority, type: :model do
       log.is_la_inferred = false
       expect(page).not_to be_routed_to(log, nil)
     end
+
+    context "when the scheme is confidential" do
+      let(:log) { build(:lettings_log, needstype: 2, scheme: build(:scheme, sensitive: 1)) }
+
+      it "is routed to when the LA could not be inferred, even for supported housing" do
+        log.is_la_inferred = false
+        expect(page).to be_routed_to(log, nil)
+      end
+
+      it "is not routed to when the LA was inferred from the location" do
+        log.is_la_inferred = true
+        expect(page).not_to be_routed_to(log, nil)
+      end
+    end
   end
 end

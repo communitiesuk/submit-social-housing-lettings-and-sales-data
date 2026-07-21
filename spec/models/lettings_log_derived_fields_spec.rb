@@ -1585,6 +1585,109 @@ RSpec.describe LettingsLog, type: :model do
     end
   end
 
+  describe "deriving address fields and LA for a confidential scheme", metadata: { year: 26 } do
+    let(:startdate) { collection_start_date_for_year(2026) }
+    let(:confidential_scheme) { create(:scheme, sensitive: 1) }
+    let(:location) { create(:location, scheme: confidential_scheme) }
+
+    let(:uprn) { "123456789" }
+    let(:uprn_known) { 1 }
+    let(:uprn_confirmed) { 1 }
+    let(:address_line1) { "1 Test Street" }
+    let(:address_line2) { "Testville" }
+    let(:town_or_city) { "Testford" }
+    let(:county) { "Testshire" }
+    let(:postcode_full) { "SW1 1AA" }
+    let(:la) { "E07000105" }
+
+    around do |example|
+      Timecop.freeze(collection_start_date_for_year(2026)) do
+        Singleton.__init__(FormHandler)
+        example.run
+      end
+    end
+
+    before do
+      log.needstype = 2
+      log.scheme = confidential_scheme
+      log.location = location
+      log.assign_attributes(uprn:, uprn_known:, uprn_confirmed:, address_line1:, address_line2:, town_or_city:, county:, postcode_full:, la:)
+    end
+
+    it "does not ask the address or UPRN question" do
+      expect(log.is_address_asked?).to be false
+    end
+
+    it "still asks the address question when the scheme is not confidential" do
+      log.scheme = create(:scheme, sensitive: 0)
+      expect(log.is_address_asked?).to be true
+    end
+
+    it "resets all the address and UPRN fields to nil" do
+      expect { log.set_derived_fields! }
+        .to change { log.read_attribute(:uprn) }.from(uprn).to(nil)
+        .and change { log.read_attribute(:uprn_known) }.from(uprn_known).to(nil)
+        .and change { log.read_attribute(:uprn_confirmed) }.from(uprn_confirmed).to(nil)
+        .and change { log.read_attribute(:address_line1) }.from(address_line1).to(nil)
+        .and change { log.read_attribute(:address_line2) }.from(address_line2).to(nil)
+        .and change { log.read_attribute(:town_or_city) }.from(town_or_city).to(nil)
+        .and change { log.read_attribute(:county) }.from(county).to(nil)
+        .and change { log.read_attribute(:postcode_full) }.from(postcode_full).to(nil)
+    end
+
+    context "when the location postcode resolves to a local authority" do
+      it "derives the LA from the location and marks it as inferred" do
+        log.set_derived_fields!
+
+        expect(log.read_attribute(:la)).to eq(location.location_code)
+        expect(log.is_la_inferred).to be true
+      end
+    end
+
+    context "when the location postcode does not resolve to a local authority" do
+      before do
+        location.update_column(:location_code, nil)
+      end
+
+      it "does not infer an LA, so the user is routed to the LA drop-down" do
+        log.la = nil
+        log.set_derived_fields!
+
+        expect(log.read_attribute(:la)).to be_nil
+        expect(log.is_la_inferred).to be false
+      end
+
+      it "keeps a manually chosen LA when one has been provided" do
+        # In the real edit flow the log is persisted, so the location/startdate have not
+        # "changed" and the earlier LA-reset branches do not fire. Stub those guards to
+        # isolate the confidential handling, which must not clobber the drop-down answer.
+        allow(log).to receive_messages(startdate_changed?: false, location_changed?: false)
+        log.la = "E07000105"
+        log.set_derived_fields!
+
+        expect(log.read_attribute(:la)).to eq("E07000105")
+        expect(log.is_la_inferred).to be false
+      end
+    end
+
+    context "when the log is also a new-build first let" do
+      before do
+        log.rsnvac = 15
+      end
+
+      it "still does not ask the address or UPRN question (confidential overrides new-build)" do
+        expect(log.is_address_asked?).to be false
+      end
+
+      it "resets the address and UPRN fields to nil" do
+        expect { log.set_derived_fields! }
+          .to change { log.read_attribute(:uprn) }.from(uprn).to(nil)
+          .and change { log.read_attribute(:address_line1) }.from(address_line1).to(nil)
+          .and(change { log.read_attribute(:postcode_full) }.from(postcode_full).to(nil))
+      end
+    end
+  end
+
   describe "#infer_at_most_one_relationship!" do
     context "when 2025", metadata: { year: 25 } do
       before do

@@ -2373,5 +2373,24 @@ RSpec.describe LettingsLog do
       end
     end
   end
+
+  describe "#scheme_has_confidential_information?" do
+    let(:log) { build(:lettings_log) }
+
+    it "returns false when there is no scheme" do
+      log.scheme = nil
+      expect(log.scheme_has_confidential_information?).to be false
+    end
+
+    it "returns false when the scheme is not confidential" do
+      log.scheme = build(:scheme, sensitive: 0)
+      expect(log.scheme_has_confidential_information?).to be false
+    end
+
+    it "returns true when the scheme is confidential" do
+      log.scheme = build(:scheme, sensitive: 1)
+      expect(log.scheme_has_confidential_information?).to be true
+    end
+  end
 end
 # rubocop:enable RSpec/MessageChain
