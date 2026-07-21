@@ -1,42 +1,44 @@
-<%= govuk_footer do |footer| %>
-  <%= footer.with_meta do %>
-    <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
-      <h2 class="govuk-heading-m">Get help with this service</h2>
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-third-from-desktop">
-          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Online helpdesk</h3>
-          <p class="govuk-body govuk-!-font-size-16">
-            <%= govuk_link_to("CORE helpdesk (opens in a new tab)", GlobalConstants::HELPDESK_URL, class: "govuk-footer__link", rel: "noreferrer noopener", target: "_blank") %>
-          </p>
+<footer class="govuk-footer" role="contentinfo">
+  <div class="govuk-width-container">
+    <div class="govuk-footer__meta">
+      <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+        <h2 class="govuk-heading-m">Get help with this service</h2>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-one-third-from-desktop">
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Online helpdesk</h3>
+            <p class="govuk-body govuk-!-font-size-16">
+              <%= govuk_link_to("CORE helpdesk (opens in a new tab)", GlobalConstants::HELPDESK_URL, class: "govuk-footer__link", rel: "noreferrer noopener", target: "_blank") %>
+            </p>
+          </div>
+
+          <div class="govuk-grid-column-one-third-from-desktop">
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Telephone</h3>
+            <ul class="govuk-list govuk-!-font-size-16">
+              <li>0333 202 5084</li>
+              <li>Monday to Friday, 9am to 5:30pm<br>(except public holidays)</li>
+            </ul>
+          </div>
         </div>
 
-        <div class="govuk-grid-column-one-third-from-desktop">
-          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Telephone</h3>
-          <ul class="govuk-list govuk-!-font-size-16">
-            <li>0333 202 5084</li>
-            <li>Monday to Friday, 9am to 5:30pm<br>(except public holidays)</li>
-          </ul>
-        </div>
+        <h2 class="govuk-visually-hidden">Helpful links</h2>
+        <ul class="govuk-footer__inline-list govuk-!-margin-top-6 govuk-!-margin-bottom-0">
+          <li class="govuk-footer__inline-list-item">
+            <%= govuk_link_to("Accessibility statement", accessibility_statement_path, class: "govuk-footer__link") %>
+          </li>
+          <li class="govuk-footer__inline-list-item">
+            <%= govuk_link_to("Privacy notice", privacy_notice_path, class: "govuk-footer__link") %>
+          </li>
+          <li class="govuk-footer__inline-list-item">
+            <%= govuk_link_to("View source code", "https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data", class: "govuk-footer__link") %>
+          </li>
+          <li class="govuk-footer__inline-list-item">
+            <%= govuk_link_to("Cookies", cookies_path, class: "govuk-footer__link") %>
+          </li>
+        </ul>
       </div>
-
-      <h2 class="govuk-visually-hidden">Helpful links</h2>
-      <ul class="govuk-footer__inline-list govuk-!-margin-top-6 govuk-!-margin-bottom-0">
-        <li class="govuk-footer__inline-list-item">
-          <%= govuk_link_to("Accessibility statement", accessibility_statement_path, class: "govuk-footer__link") %>
-        </li>
-        <li class="govuk-footer__inline-list-item">
-          <%= govuk_link_to("Privacy notice", privacy_notice_path, class: "govuk-footer__link") %>
-        </li>
-        <li class="govuk-footer__inline-list-item">
-          <%= govuk_link_to("View source code", "https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data", class: "govuk-footer__link") %>
-        </li>
-        <li class="govuk-footer__inline-list-item">
-          <%= govuk_link_to("Cookies", cookies_path, class: "govuk-footer__link") %>
-        </li>
-      </ul>
+      <div class="govuk-footer__meta-item">
+        <a class="govuk-footer__link govuk-footer__copyright-logo govuk-!-margin-bottom-1" href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">© Crown copyright</a>
+      </div>
     </div>
-    <div class="govuk-footer__meta-item">
-      <a class="govuk-footer__link govuk-footer__copyright-logo govuk-!-margin-bottom-1" href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">© Crown copyright</a>
-    </div>
-  <% end %>
-<% end %>
+  </div>
+</footer>
