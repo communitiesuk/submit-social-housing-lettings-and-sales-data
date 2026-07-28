@@ -11,7 +11,11 @@ class UsersController < ApplicationController
   before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index]
 
   def index
-    redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
+    # CSV requests fall through to the respond_to block below, which returns 401
+    # for non-support users. Only HTML non-support users are redirected. The
+    # redirect must `return`: Rails 8 raises DoubleRenderError if the action then
+    # also renders/heads (previously the later render silently won).
+    return redirect_to users_organisation_path(current_user.organisation) unless current_user.support? || request.format.csv?
 
     all_users = User.visible.sorted_by_organisation_and_role
     filtered_users = filter_manager.filtered_users(all_users, search_term, session_filters)

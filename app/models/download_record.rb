@@ -11,8 +11,8 @@ class DownloadRecord < ApplicationRecord
     scheme_location: 3,
   }.freeze
 
-  enum download_type: DOWNLOAD_TYPE
-  enum user_role: User::ROLES
+  enum :download_type, DOWNLOAD_TYPE
+  enum :user_role, User::ROLES
 
   def self.build_from_user(user:, **attrs)
     new(
