@@ -172,9 +172,6 @@ class Location < ApplicationRecord
   LOCAL_AUTHORITIES = LocalAuthority.all.map { |la| [la.name, la.code] }.to_h
 
   attribute :local_authorities, :string
-  # LOCAL_AUTHORITIES is derived from a class-load-time DB query, so it can be
-  # empty on a fresh/unseeded database. Rails 8.1's `enum` raises on empty
-  # values (7.2 treated it as a no-op), so only declare it when populated.
   enum :local_authorities, LOCAL_AUTHORITIES if LOCAL_AUTHORITIES.present?
   def self.local_authorities_for_current_year
     LocalAuthority.all.active(Time.zone.today).england.map { |la| [la.code, la.name] }.to_h
