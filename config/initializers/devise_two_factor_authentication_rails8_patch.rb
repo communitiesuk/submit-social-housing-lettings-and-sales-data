@@ -5,13 +5,7 @@
 # The gem's route mapper passes the non-standard :resend_code action into
 # `resource ... only: [...]`. Rails 8.1 tightened `resource`/`resources` to raise
 # an ArgumentError when :only/:except contain anything outside the standard REST
-# actions, so route drawing blows up before the app can boot.
-#
-# The `resend_code` route is actually created by the `collection { ... }` block
-# inside the resource, so listing :resend_code in :only was always a no-op.
-# We redefine the mapper method to drop it, leaving behaviour identical.
-#
-# Remove this file if the gem publishes a Rails 8.1-compatible release.
+# actions. So, we redefine the mapper method to drop it now we are on Rails 8.1+.
 module ActionDispatch::Routing
   class Mapper
   protected
