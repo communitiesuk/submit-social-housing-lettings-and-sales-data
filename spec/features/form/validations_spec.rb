@@ -115,7 +115,7 @@ RSpec.describe "validations" do
       end
 
       it "prompts the user to confirm the value is correct with an interruption screen" do
-        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/income-amount-net-income-value-check")
         expect(page).to have_content("You told us that the household’s income is £750.00 weekly")
         expect(page).to have_content("This is higher than we would expect for the household’s working situation.")
         expect(page).not_to have_button("Save changes")
@@ -124,30 +124,30 @@ RSpec.describe "validations" do
       end
 
       it "allows to fix the questions that trigger the soft validation" do
-        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/income-amount-net-income-value-check")
         expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/income-amount?referrer=interruption_screen").twice
         expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/lead-tenant-working-situation?referrer=interruption_screen")
-        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/income-amount-net-income-value-check")
         click_link("Change", href: "/lettings-logs/#{lettings_log.id}/income-amount?referrer=interruption_screen", match: :first)
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/income-amount?referrer=interruption_screen")
         fill_in("lettings-log-earnings-field", with: income_under_soft_limit)
         choose("lettings-log-incfreq-1-field", allow_label_click: true)
         click_button("Save and continue")
-        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/income-amount-net-income-value-check")
         expect(page).not_to have_content("You told us that the household’s income is £750.00 weekly")
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       end
 
       it "allows to fix the questions from different sections" do
-        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/income-amount-net-income-value-check")
         expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/income-amount?referrer=interruption_screen").twice
         expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/lead-tenant-working-situation?referrer=interruption_screen")
-        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/income-amount-net-income-value-check")
         click_link("Change", href: "/lettings-logs/#{lettings_log.id}/lead-tenant-working-situation?referrer=interruption_screen")
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/lead-tenant-working-situation?referrer=interruption_screen")
         choose("lettings-log-ecstat1-10-field", allow_label_click: true)
         click_button("Save and continue")
-        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/income-amount-net-income-value-check")
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       end
 
@@ -158,12 +158,12 @@ RSpec.describe "validations" do
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/income-amount?referrer=check_answers")
         fill_in("lettings-log-earnings-field", with: income_over_soft_limit)
         click_button("Save changes")
-        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check?referrer=check_answers")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/income-amount-net-income-value-check?referrer=check_answers")
         click_link("Change", href: "/lettings-logs/#{lettings_log.id}/income-amount?referrer=interruption_screen", match: :first)
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/income-amount?referrer=interruption_screen")
         fill_in("lettings-log-earnings-field", with: income_under_soft_limit)
         click_button("Save and continue")
-        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check?referrer=check_answers")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/income-amount-net-income-value-check?referrer=check_answers")
         click_button("Confirm and continue")
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/income-and-benefits/check-answers")
       end

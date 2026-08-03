@@ -174,6 +174,16 @@ RSpec.describe SalesLog, type: :model do
   end
 
   context "when filtering by year or nil" do
+    # These examples need logs in both the previous and the current collection year,
+    # so we have to enforce we are in the crossover period
+    around do |example|
+      Timecop.freeze(current_collection_start_date) do
+        Singleton.__init__(FormHandler)
+        example.run
+      end
+      Singleton.__init__(FormHandler)
+    end
+
     let(:previous_year) { previous_collection_start_year.to_s }
     let(:current_year) { current_collection_start_year.to_s }
 

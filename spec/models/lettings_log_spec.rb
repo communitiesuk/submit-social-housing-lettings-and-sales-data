@@ -1370,6 +1370,16 @@ RSpec.describe LettingsLog do
   end
 
   describe "scopes" do
+    # These examples need logs in both the previous and the current collection year,
+    # so we have to enforce we are in the crossover period
+    around do |example|
+      Timecop.freeze(current_collection_start_date) do
+        Singleton.__init__(FormHandler)
+        example.run
+      end
+      Singleton.__init__(FormHandler)
+    end
+
     let!(:lettings_log_1) { create(:lettings_log, :in_progress, startdate: previous_collection_start_date + 1.month, mrcdate: previous_collection_start_date, voiddate: previous_collection_start_date, assigned_to: assigned_to_user) }
     let!(:lettings_log_2) { create(:lettings_log, :completed, startdate: previous_collection_start_date + 1.month, mrcdate: previous_collection_start_date, voiddate: previous_collection_start_date, assigned_to: assigned_to_user) }
     let(:postcode_to_search) { "SW1A 0AA" }

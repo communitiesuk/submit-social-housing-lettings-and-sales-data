@@ -65,6 +65,16 @@ RSpec.describe SalesLogsController, type: :request do
       end
 
       context "with a request containing invalid json parameters" do
+        # These examples need logs in both the previous and the current collection year,
+        # so we have to enforce we are in the crossover period
+        around do |example|
+          Timecop.freeze(current_collection_start_date) do
+            Singleton.__init__(FormHandler)
+            example.run
+          end
+          Singleton.__init__(FormHandler)
+        end
+
         let(:params) do
           invalid_sales_log = FactoryBot.build(
             :sales_log,
@@ -356,6 +366,16 @@ RSpec.describe SalesLogsController, type: :request do
           end
 
           context "with year filter" do
+            # Needs logs in both the previous and the current collection year, so must run inside
+            # the crossover period, when new logs can still be created for both.
+            around do |example|
+              Timecop.freeze(current_collection_start_date) do
+                Singleton.__init__(FormHandler)
+                example.run
+              end
+              Singleton.__init__(FormHandler)
+            end
+
             let!(:sales_log_current) do
               FactoryBot.create(:sales_log, :completed,
                                 owning_organisation: organisation,
@@ -383,6 +403,16 @@ RSpec.describe SalesLogsController, type: :request do
           end
 
           context "with year and status filter" do
+            # Needs logs in both the previous and the current collection year, so must run inside
+            # the crossover period, when new logs can still be created for both.
+            around do |example|
+              Timecop.freeze(current_collection_start_date) do
+                Singleton.__init__(FormHandler)
+                example.run
+              end
+              Singleton.__init__(FormHandler)
+            end
+
             let!(:sales_log_current) do
               FactoryBot.create(:sales_log, :completed,
                                 owning_organisation: organisation,
