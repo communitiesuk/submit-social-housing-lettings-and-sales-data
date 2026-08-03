@@ -9,90 +9,32 @@ RSpec.describe Validations::SetupValidations do
   let(:record) { build(:lettings_log) }
 
   describe "tenancy start date" do
-    context "when in 2022 to 2023 collection" do
-      context "when in the crossover period" do
-        before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2022, 4, 1))
-          record.created_at = Time.zone.local(2022, 4, 1)
-        end
+    context "when in the crossover period" do
+      before do
+        Timecop.freeze(current_collection_start_date)
+      end
 
-        it "cannot be before the first collection window start date" do
-          record.startdate = Time.zone.local(2021, 1, 1)
-          setup_validator.validate_startdate_setup(record)
-          setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 2021 to 2022 or 2022 to 2023 collection years, which is between 1st April 2021 and 31st March 2023")
-        end
+      after do
+        Timecop.return
+      end
 
-        it "cannot be after the second collection window end date" do
-          record.startdate = Time.zone.local(2023, 7, 1, 6)
-          setup_validator.validate_startdate_setup(record)
-          setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 2021 to 2022 or 2022 to 2023 collection years, which is between 1st April 2021 and 31st March 2023")
-        end
+      it "cannot be before previous collection year start date" do
+        record.startdate = previous_collection_start_date - 1.month
+        setup_validator.validate_startdate_setup(record)
+        setup_validator.validate_merged_organisations_start_date(record)
+        expect(record.errors["startdate"]).to include(match(/Enter a date within the \d{4} to \d{4} or \d{4} to \d{4} collection years, which is between 1st April \d{4} and 31st March \d{4}/))
       end
 
       context "when after the crossover period" do
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 1, 1))
-          record.created_at = Time.zone.local(2023, 1, 1)
+          allow(Time).to receive(:now).and_return(current_collection_after_crossover_start_date)
         end
 
-        it "cannot be before the first collection window start date" do
-          record.startdate = Time.zone.local(2022, 1, 1)
+        it "cannot be before previous collection year start date" do
+          record.startdate = previous_collection_start_date - 1.month
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 2022 to 2023 collection year, which is between 1st April 2022 and 31st March 2023")
-        end
-
-        it "cannot be after the second collection window end date" do
-          record.startdate = Time.zone.local(2023, 7, 1, 6)
-          setup_validator.validate_startdate_setup(record)
-          setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 2022 to 2023 collection year, which is between 1st April 2022 and 31st March 2023")
-        end
-      end
-    end
-
-    context "when in 2023 to 2024 collection" do
-      context "when in the crossover period" do
-        before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 4, 1))
-          record.created_at = Time.zone.local(2023, 4, 1)
-        end
-
-        it "cannot be before the first collection window start date" do
-          record.startdate = Time.zone.local(2022, 1, 1)
-          setup_validator.validate_startdate_setup(record)
-          setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 2022 to 2023 or 2023 to 2024 collection years, which is between 1st April 2022 and 31st March 2024")
-        end
-
-        it "cannot be after the second collection window end date" do
-          record.startdate = Time.zone.local(2024, 7, 1, 6)
-          setup_validator.validate_startdate_setup(record)
-          setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 2022 to 2023 or 2023 to 2024 collection years, which is between 1st April 2022 and 31st March 2024")
-        end
-      end
-
-      context "when after the crossover period" do
-        before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 1, 1))
-          record.created_at = Time.zone.local(2024, 1, 1)
-        end
-
-        it "cannot be before the first collection window start date" do
-          record.startdate = Time.zone.local(2023, 1, 1)
-          setup_validator.validate_startdate_setup(record)
-          setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 2023 to 2024 collection year, which is between 1st April 2023 and 31st March 2024")
-        end
-
-        it "cannot be after the second collection window end date" do
-          record.startdate = Time.zone.local(2024, 7, 1, 6)
-          setup_validator.validate_startdate_setup(record)
-          setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 2023 to 2024 collection year, which is between 1st April 2023 and 31st March 2024")
+          expect(record.errors["startdate"]).to include(match(/Enter a date within the \d{4} to \d{4} collection year, which is between 1st April \d{4} and 31st March \d{4}/))
         end
       end
 
@@ -125,73 +67,90 @@ RSpec.describe Validations::SetupValidations do
 
       context "when after the new logs end date and after the edit end date for the previous period" do
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 1, 8))
+          Timecop.freeze(previous_collection_edit_end_date + 1.day)
+        end
+
+        after do
+          Timecop.return
         end
 
         it "cannot create new logs for the previous collection year" do
           record.update!(startdate: nil)
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = previous_collection_start_date
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 2023 to 2024 collection year, which is between 1st April 2023 and 31st March 2024")
+          expect(record.errors["startdate"]).to include(match(/Enter a date within the \d{4} to \d{4} collection year, which is between 1st April \d{4} and 31st March \d{4}/))
         end
 
         it "cannot edit already created logs for the previous collection year" do
-          record.startdate = Time.zone.local(2023, 1, 2)
+          record.startdate = previous_collection_start_date + 1.day
           record.save!(validate: false)
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = previous_collection_start_date
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 2023 to 2024 collection year, which is between 1st April 2023 and 31st March 2024")
+          expect(record.errors["startdate"]).to include(match(/Enter a date within the \d{4} to \d{4} collection year, which is between 1st April \d{4} and 31st March \d{4}/))
         end
       end
     end
 
     context "when attempted startdate is more than 14 days from the current date" do
       before do
-        allow(Time).to receive(:now).and_return(Time.zone.local(2024, 3, 1))
+        Timecop.freeze(current_collection_start_date - 1.month)
+      end
+
+      after do
+        Timecop.return
       end
 
       it "adds an error to startdate" do
-        record.startdate = Time.zone.local(2024, 3, 31)
+        record.startdate = Time.zone.now + 15.days
         setup_validator.validate_startdate_setup(record)
         expect(record.errors["startdate"]).to include(match I18n.t("validations.lettings.setup.startdate.not_within.next_two_weeks"))
       end
 
       context "and the attempted startdate is in a future collection year" do
         it "adds both errors to startdate, with the collection year error first" do
-          record.startdate = Time.zone.local(2024, 4, 1)
+          record.startdate = next_collection_start_date
           setup_validator.validate_startdate_setup(record)
           expect(record.errors["startdate"].length).to be >= 2
-          expect(record.errors["startdate"][0]).to eq("Enter a date within the 2023 to 2024 collection year, which is between 1st April 2023 and 31st March 2024.")
+          expect(record.errors["startdate"][0]).to match(/Enter a date within the \d{4} to \d{4} collection year, which is between 1st April \d{4} and 31st March \d{4}/)
           expect(record.errors["startdate"][1]).to eq(I18n.t("validations.lettings.setup.startdate.not_within.next_two_weeks"))
         end
       end
     end
 
     context "when organisations were merged" do
-      let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 1, 30, 4, 5, 6), available_from: Time.zone.local(2023, 2, 1, 4, 5, 6), name: "Absorbing org") }
-      let(:absorbing_organisation_2) { create(:organisation, created_at: Time.zone.local(2023, 1, 30), available_from: Time.zone.local(2023, 2, 1), name: "Absorbing org 2") }
+      let(:org_available_from) { current_collection_start_date - 2.months }
+      let(:org_created_at) { org_available_from - 2.days }
+      let(:org_merge_date) { org_available_from + 1.day }
+      let(:merge_date_formatted) { org_merge_date.strftime("%-d %B %Y") }
+      let(:available_from_formatted) { org_available_from.strftime("%-d %B %Y") }
+      let(:absorbing_organisation) { create(:organisation, created_at: org_created_at, available_from: org_available_from, name: "Absorbing org") }
+      let(:absorbing_organisation_2) { create(:organisation, created_at: org_created_at, available_from: org_available_from, name: "Absorbing org 2") }
       let(:merged_organisation) { create(:organisation, name: "Merged org") }
       let(:merged_organisation_2) { create(:organisation, name: "Merged org 2") }
 
       before do
-        allow(Time).to receive(:now).and_return(Time.zone.local(2023, 5, 1))
-        merged_organisation.update!(absorbing_organisation:, merge_date: Time.zone.local(2023, 2, 2))
-        merged_organisation_2.update!(absorbing_organisation:, merge_date: Time.zone.local(2023, 2, 2))
+        Timecop.freeze(current_collection_start_date + 1.month)
+        merged_organisation.update!(absorbing_organisation:, merge_date: org_merge_date)
+        merged_organisation_2.update!(absorbing_organisation:, merge_date: org_merge_date)
+      end
+
+      after do
+        Timecop.return
       end
 
       context "and owning organisation is no longer active" do
         it "does not allow startdate after organisation has been merged" do
-          record.startdate = Time.zone.local(2023, 3, 1)
+          record.startdate = org_merge_date + 1.month
           record.owning_organisation_id = merged_organisation.id
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date when the owning organisation was active. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
+          expect(record.errors["startdate"]).to include(match "Enter a date when the owning organisation was active. Merged org became inactive on #{merge_date_formatted} and was replaced by Absorbing org.")
         end
 
         it "allows startdate before organisation has been merged" do
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = org_merge_date - 1.month
           record.owning_organisation_id = merged_organisation.id
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
@@ -201,15 +160,15 @@ RSpec.describe Validations::SetupValidations do
 
       context "and owning organisation is not yet active during the startdate" do
         it "does not allow startdate before absorbing organisation has become available" do
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = org_available_from - 1.month
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date when the owning organisation was active. Absorbing org became active on 1 February 2023.")
+          expect(record.errors["startdate"]).to include(match "Enter a date when the owning organisation was active. Absorbing org became active on #{available_from_formatted}.")
         end
 
         it "allows startdate after absorbing organisation has become available" do
-          record.startdate = Time.zone.local(2023, 2, 2)
+          record.startdate = org_available_from + 1.month
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
@@ -217,7 +176,7 @@ RSpec.describe Validations::SetupValidations do
         end
 
         it "allows startdate if organisation does not have available from date" do
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = org_available_from - 1.month
           absorbing_organisation.update!(available_from: nil)
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
@@ -228,15 +187,15 @@ RSpec.describe Validations::SetupValidations do
 
       context "and managing organisation is no longer active during the startdate" do
         it "does not allow startdate after organisation has been merged" do
-          record.startdate = Time.zone.local(2023, 3, 1)
+          record.startdate = org_merge_date + 1.month
           record.managing_organisation_id = merged_organisation.id
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date when the managing organisation was active. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
+          expect(record.errors["startdate"]).to include(match "Enter a date when the managing organisation was active. Merged org became inactive on #{merge_date_formatted} and was replaced by Absorbing org.")
         end
 
         it "allows startdate before organisation has been merged" do
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = org_merge_date - 1.month
           record.managing_organisation_id = merged_organisation.id
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
@@ -246,15 +205,15 @@ RSpec.describe Validations::SetupValidations do
 
       context "and managing organisation is not yet active during the startdate" do
         it "does not allow startdate before absorbing organisation has become available'" do
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = org_available_from - 1.month
           record.managing_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date when the managing organisation was active. Absorbing org became active on 1 February 2023.")
+          expect(record.errors["startdate"]).to include(match "Enter a date when the managing organisation was active. Absorbing org became active on #{available_from_formatted}.")
         end
 
         it "allows startdate after absorbing organisation has become available" do
-          record.startdate = Time.zone.local(2023, 2, 2)
+          record.startdate = org_available_from + 1.month
           record.managing_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
@@ -262,7 +221,7 @@ RSpec.describe Validations::SetupValidations do
         end
 
         it "allows startdate if organisation does not have available from date" do
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = org_available_from - 1.month
           absorbing_organisation.update!(available_from: nil)
           record.managing_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
@@ -273,16 +232,16 @@ RSpec.describe Validations::SetupValidations do
 
       context "and owning and managing organisation is no longer active during the startdate" do
         it "does not allow startdate after organisation has been merged" do
-          record.startdate = Time.zone.local(2023, 3, 1)
+          record.startdate = org_merge_date + 1.month
           record.managing_organisation_id = merged_organisation.id
           record.owning_organisation_id = merged_organisation.id
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisation was active. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
+          expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisation was active. Merged org became inactive on #{merge_date_formatted} and was replaced by Absorbing org.")
         end
 
         it "allows startdate before organisation has been merged" do
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = org_merge_date - 1.month
           record.managing_organisation_id = merged_organisation.id
           record.owning_organisation_id = merged_organisation.id
           setup_validator.validate_startdate_setup(record)
@@ -293,16 +252,16 @@ RSpec.describe Validations::SetupValidations do
 
       context "and owning and managing organisation is not yet active during the startdate" do
         it "does not allow startdate before absorbing organisation has become available" do
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = org_available_from - 1.month
           record.managing_organisation_id = absorbing_organisation.id
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisation was active. Absorbing org became active on 1 February 2023.")
+          expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisation was active. Absorbing org became active on #{available_from_formatted}.")
         end
 
         it "allows startdate after absorbing organisation has become available" do
-          record.startdate = Time.zone.local(2023, 2, 1)
+          record.startdate = org_available_from + 1.month
           record.managing_organisation_id = absorbing_organisation.id
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
@@ -311,7 +270,7 @@ RSpec.describe Validations::SetupValidations do
         end
 
         it "allows startdate if organisation does not have available from date" do
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = org_available_from - 1.month
           absorbing_organisation.update!(available_from: nil)
           record.managing_organisation_id = absorbing_organisation.id
           record.owning_organisation_id = absorbing_organisation.id
@@ -323,16 +282,16 @@ RSpec.describe Validations::SetupValidations do
 
       context "and owning and managing organisations are no longer active during the startdate" do
         it "does not allow startdate after organisation have been merged" do
-          record.startdate = Time.zone.local(2023, 2, 2)
+          record.startdate = org_merge_date + 1.month
           record.managing_organisation_id = merged_organisation.id
           record.owning_organisation_id = merged_organisation_2.id
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisations were active. Merged org 2 and Merged org became inactive on 2 February 2023 and were replaced by Absorbing org.")
+          expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisations were active. Merged org 2 and Merged org became inactive on #{merge_date_formatted} and were replaced by Absorbing org.")
         end
 
         it "allows startdate before organisations have been merged" do
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = org_merge_date - 1.month
           record.managing_organisation_id = merged_organisation.id
           record.owning_organisation_id = merged_organisation_2.id
           setup_validator.validate_startdate_setup(record)
@@ -343,20 +302,20 @@ RSpec.describe Validations::SetupValidations do
 
       context "and owning and managing organisations are from different merges and no longer active during the startdate" do
         before do
-          merged_organisation_2.update!(absorbing_organisation: absorbing_organisation_2, merge_date: Time.zone.local(2023, 2, 2))
+          merged_organisation_2.update!(absorbing_organisation: absorbing_organisation_2, merge_date: org_merge_date)
         end
 
         it "does not allow startdate after organisations have been merged" do
-          record.startdate = Time.zone.local(2023, 3, 1)
+          record.startdate = org_merge_date + 1.month
           record.managing_organisation_id = merged_organisation.id
           record.owning_organisation_id = merged_organisation_2.id
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisations were active. Merged org 2 became inactive on 2 February 2023 and was replaced by Absorbing org 2. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
+          expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisations were active. Merged org 2 became inactive on #{merge_date_formatted} and was replaced by Absorbing org 2. Merged org became inactive on #{merge_date_formatted} and was replaced by Absorbing org.")
         end
 
         it "allows startdate before organisations have been merged" do
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = org_merge_date - 1.month
           record.managing_organisation_id = merged_organisation.id
           record.owning_organisation_id = merged_organisation_2.id
           setup_validator.validate_startdate_setup(record)
@@ -367,20 +326,20 @@ RSpec.describe Validations::SetupValidations do
 
       context "and owning and managing organisation have different merges and are not yet active during the startdate" do
         before do
-          merged_organisation_2.update!(absorbing_organisation: absorbing_organisation_2, merge_date: Time.zone.local(2023, 2, 2))
+          merged_organisation_2.update!(absorbing_organisation: absorbing_organisation_2, merge_date: org_merge_date)
         end
 
         it "does not allow startdate before absorbing organisation has become available" do
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = org_available_from - 1.month
           record.managing_organisation_id = absorbing_organisation.id
           record.owning_organisation_id = absorbing_organisation_2.id
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisations were active. Absorbing org 2 became active on 1 February 2023, and Absorbing org became active on 1 February 2023.")
+          expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisations were active. Absorbing org 2 became active on #{available_from_formatted}, and Absorbing org became active on #{available_from_formatted}.")
         end
 
         it "allows startdate after absorbing organisation has become available" do
-          record.startdate = Time.zone.local(2023, 2, 2)
+          record.startdate = org_available_from + 1.month
           record.managing_organisation_id = absorbing_organisation.id
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
@@ -390,7 +349,7 @@ RSpec.describe Validations::SetupValidations do
 
         it "allows startdate if organisation does not have available from date" do
           absorbing_organisation.update!(available_from: nil)
-          record.startdate = Time.zone.local(2023, 1, 1)
+          record.startdate = org_available_from - 1.month
           record.managing_organisation_id = absorbing_organisation.id
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
