@@ -36,4 +36,8 @@ RSpec.describe Form::Sales::Questions::BuildingHeightClass, type: :model do
   it "has the correct question_number" do
     expect(question.question_number).to eq(17)
   end
+
+  it "has correct guidance partial" do
+    expect(question.top_guidance_partial).to eq("building_height_class")
+  end
 end

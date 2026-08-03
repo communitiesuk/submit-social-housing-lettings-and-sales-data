@@ -11,7 +11,7 @@ class UsersController < ApplicationController
   before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index]
 
   def index
-    redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
+    return redirect_to users_organisation_path(current_user.organisation) unless current_user.support? || request.format.csv?
 
     all_users = User.visible.sorted_by_organisation_and_role
     filtered_users = filter_manager.filtered_users(all_users, search_term, session_filters)
@@ -24,6 +24,7 @@ class UsersController < ApplicationController
       format.html
       format.csv do
         if current_user.support?
+          DownloadRecord.build_from_user(download_type: :user, download_filters: session_filters.to_s, user: current_user).save!
           send_data byte_order_mark + filtered_users.to_csv, filename: "users-#{Time.zone.now}.csv"
         else
           head :unauthorized
@@ -221,8 +222,14 @@ private
       @user.errors.add :phone
     end
 
-    if user_params.key?(:organisation_id) && user_params[:organisation_id].blank?
-      @user.errors.add :organisation_id, :blank
+    if user_params.key?(:organisation_id)
+      if user_params[:organisation_id].blank?
+        @user.errors.add :organisation_id, :blank
+      elsif !@user.role_is_allowed_to_be_in_organisation?(override_organisation_id: user_params[:organisation_id].to_i) && @user.id.present?
+        # this will also be flagged by the validation in user.rb.
+        # for convenience we show the error early before they go through the change org flow (involves reassigning logs).
+        @user.errors.add :organisation_id, I18n.t("validations.user.support_user_in_wrong_organisation.change_organisation")
+      end
     end
   end
 

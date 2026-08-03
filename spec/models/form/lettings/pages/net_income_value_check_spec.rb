@@ -15,10 +15,6 @@ RSpec.describe Form::Lettings::Pages::NetIncomeValueCheck, type: :model do
     expect(page.questions.map(&:id)).to eq(%w[net_income_value_check])
   end
 
-  it "has the correct id" do
-    expect(page.id).to eq("net_income_value_check")
-  end
-
   it "has correct depends_on" do
     expect(page.depends_on).to eq([{ "net_income_soft_validation_triggered?" => true }])
   end

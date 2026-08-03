@@ -1,9 +1,9 @@
 class Form::Lettings::Pages::NetIncomeValueCheck < ::Form::Page
-  def initialize(id, hsh, subsection)
-    super
-    @id = "net_income_value_check"
+  def initialize(id, hsh, subsection, person_index: nil)
+    super(id, hsh, subsection)
     @copy_key = "lettings.soft_validations.net_income_value_check"
-    @depends_on = [{ "net_income_soft_validation_triggered?" => true }]
+    @person_index = person_index
+    @depends_on = depends_on
     @title_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
@@ -30,6 +30,23 @@ class Form::Lettings::Pages::NetIncomeValueCheck < ::Form::Page
         },
       ],
     }
+  end
+
+  def depends_on
+    if @person_index.present?
+      [
+        {
+          "net_income_soft_validation_triggered?" => true,
+          "details_known_#{@person_index}" => 0,
+        },
+      ]
+    else
+      [
+        {
+          "net_income_soft_validation_triggered?" => true,
+        },
+      ]
+    end
   end
 
   def questions

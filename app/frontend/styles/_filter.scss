@@ -109,7 +109,7 @@
   }
 
   .autocomplete__option__hint {
-    @include govuk-font(14);
+    @include govuk-font(16);
     word-break: break-all;
   }
 }

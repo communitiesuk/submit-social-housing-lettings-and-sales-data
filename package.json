@@ -2,17 +2,17 @@
   "name": "data-collector",
   "private": true,
   "engines": {
-    "node": "^20.0.0"
+    "node": "^24.0.0"
   },
   "dependencies": {
-    "@babel/core": "^7.17.7",
+    "@babel/core": "^7.29.6",
     "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
     "@hotwired/stimulus": "^3.0.0",
     "@ministryofjustice/frontend": "^3.3.0",
     "@stimulus/polyfills": "^2.0.0",
     "@webcomponents/webcomponentsjs": "^2.6.0",
-    "@x-govuk/govuk-prototype-components": "^3.0.9",
+    "@x-govuk/govuk-prototype-components": "^6.0.0",
     "accessible-autocomplete": "^2.0.3",
     "babel-loader": "^8.2.3",
     "babel-plugin-macros": "^3.1.0",
@@ -21,7 +21,7 @@
     "css-loader": "^6.7.1",
     "custom-event-polyfill": "^1.0.7",
     "file-loader": "^6.2.0",
-    "govuk-frontend": "5.7.1",
+    "govuk-frontend": "6.0.0",
     "html5shiv": "^3.7.3",
     "intersection-observer": "^0.12.0",
     "jquery": "^3.7.1",

@@ -1231,4 +1231,100 @@ RSpec.describe Validations::FinancialValidations do
       end
     end
   end
+
+  describe "universal credit and income sources validations" do
+    before do
+      record.hb = hb
+      record.benefits = benefits
+    end
+
+    context "with a 2025 form", metadata: { year: 25 } do
+      before do
+        allow(record.form).to receive(:start_year_2026_or_later?).and_return(false)
+      end
+
+      context "when tenant receives universal credit and no household income comes from benefits" do
+        let(:hb) { 6 }
+        let(:benefits) { 3 }
+
+        it "does not add errors" do
+          financial_validator.validate_housing_benefits_matches_income_proportion(record)
+          expect(record.errors["hb"]).to be_empty
+          expect(record.errors["benefits"]).to be_empty
+        end
+      end
+    end
+
+    context "with a 2026 form", metadata: { year: 26 } do
+      before do
+        allow(record.form).to receive(:start_year_2026_or_later?).and_return(true)
+      end
+
+      context "when tenant receives universal credit and no household income comes from benefits" do
+        let(:hb) { 6 }
+        let(:benefits) { 3 }
+
+        it "adds errors to hb and benefits" do
+          financial_validator.validate_housing_benefits_matches_income_proportion(record)
+          expect(record.errors["hb"]).to include(match I18n.t("validations.lettings.financial.hb.housing_benefits_not_match_income_source"))
+          expect(record.errors["benefits"]).to include(match I18n.t("validations.lettings.financial.benefits.housing_benefits_not_match_income_source"))
+        end
+      end
+
+      context "when tenant receives universal credit and some household income comes from benefits" do
+        let(:hb) { 6 }
+        let(:benefits) { 2 }
+
+        it "does not add errors" do
+          financial_validator.validate_housing_benefits_matches_income_proportion(record)
+          expect(record.errors["hb"]).to be_empty
+          expect(record.errors["benefits"]).to be_empty
+        end
+      end
+
+      context "when tenant receives housing benefit and no household income comes from benefits" do
+        let(:hb) { 1 }
+        let(:benefits) { 3 }
+
+        it "adds errors to hb and benefits" do
+          financial_validator.validate_housing_benefits_matches_income_proportion(record)
+          expect(record.errors["hb"]).to include(match I18n.t("validations.lettings.financial.hb.housing_benefits_not_match_income_source"))
+          expect(record.errors["benefits"]).to include(match I18n.t("validations.lettings.financial.benefits.housing_benefits_not_match_income_source"))
+        end
+      end
+
+      context "when tenant receives housing benefit and some household income comes from benefits" do
+        let(:hb) { 1 }
+        let(:benefits) { 2 }
+
+        it "does not add errors" do
+          financial_validator.validate_housing_benefits_matches_income_proportion(record)
+          expect(record.errors["hb"]).to be_empty
+          expect(record.errors["benefits"]).to be_empty
+        end
+      end
+
+      context "when hb is not set" do
+        let(:hb) { nil }
+        let(:benefits) { 3 }
+
+        it "does not add errors" do
+          financial_validator.validate_housing_benefits_matches_income_proportion(record)
+          expect(record.errors["hb"]).to be_empty
+          expect(record.errors["benefits"]).to be_empty
+        end
+      end
+
+      context "when benefits is not set" do
+        let(:hb) { 6 }
+        let(:benefits) { nil }
+
+        it "does not add errors" do
+          financial_validator.validate_housing_benefits_matches_income_proportion(record)
+          expect(record.errors["hb"]).to be_empty
+          expect(record.errors["benefits"]).to be_empty
+        end
+      end
+    end
+  end
 end

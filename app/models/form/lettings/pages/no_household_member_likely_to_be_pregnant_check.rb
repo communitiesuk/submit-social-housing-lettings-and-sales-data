@@ -2,7 +2,8 @@ class Form::Lettings::Pages::NoHouseholdMemberLikelyToBePregnantCheck < ::Form::
   def initialize(id, hsh, subsection, person_index: 0)
     super(id, hsh, subsection)
     @copy_key = "lettings.soft_validations.pregnancy_value_check.no_household_member_likely_to_be_pregnant_check"
-    @depends_on = [{ "no_household_member_likely_to_be_pregnant?" => true }]
+    @person_index = person_index
+    @depends_on = depends_on
     @title_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [],
@@ -11,7 +12,14 @@ class Form::Lettings::Pages::NoHouseholdMemberLikelyToBePregnantCheck < ::Form::
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
-    @person_index = person_index
+  end
+
+  def depends_on
+    if @person_index >= 2
+      [{ "no_household_member_likely_to_be_pregnant?" => true, "details_known_#{@person_index}" => 0 }]
+    else
+      [{ "no_household_member_likely_to_be_pregnant?" => true }]
+    end
   end
 
   def questions

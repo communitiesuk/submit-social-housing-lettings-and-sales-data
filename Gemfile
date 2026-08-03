@@ -3,14 +3,14 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.4.4"
+ruby "3.4.9"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem "rails", "~> 7.2.2"
+gem "rails", "~> 8.1.3"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use Puma as the app server
-gem "puma", "~> 6.4"
+gem "puma", "~> 7.2.1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
@@ -18,7 +18,7 @@ gem "jsbundling-rails"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.4", require: false
 # GOV UK frontend components
-gem "govuk-components", "~> 5.7"
+gem "govuk-components", "~> 6.2"
 # GOV UK component form builder DSL
 gem "govuk_design_system_formbuilder", "~> 5.7"
 # Convert Markdown into GOV.UK frontend-styled HTML
@@ -40,11 +40,11 @@ gem "devise_two_factor_authentication"
 gem "uk_postcode"
 # Get rich data from postcode lookups. Wraps postcodes.io
 # Use Ruby objects to build reusable markup. A React inspired evolution of the presenter pattern
-gem "view_component", "~> 3.9"
+gem "view_component", "~> 4.9"
 # Use the AWS S3 SDK as storage mechanism
 gem "aws-sdk-s3"
 # Track changes to models for auditing or versioning.
-gem "paper_trail", "~> 15.2"
+gem "paper_trail", "~> 17.0"
 # Store active record objects in version whodunnits
 gem "paper_trail-globalid"
 
@@ -67,16 +67,13 @@ gem "faker"
 gem "method_source", "~> 1.1"
 gem "rails_admin", "~> 3.1"
 gem "ruby-openai"
-gem "sidekiq"
+gem "sidekiq", "~> 7.2.4"
 gem "sidekiq-cron"
 gem "unread"
 
 # Pinning versions to address vulnerabilities
 gem "nokogiri", "~> 1.19.1"
 gem "thor", "~> 1.4.0"
-
-# Pinning until activesupport is updated to v8.1.2
-gem "connection_pool", "~> 2.5"
 
 group :development, :test do
   # Check gems for known vulnerabilities
@@ -119,7 +116,7 @@ end
 gem "cssbundling-rails"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
-gem "excon", "~> 0.111.0"
+gem "excon", ">= 1.5.0"
 
-# faraday is a transitive dependency, but we need to force the version to 2.14.1 to avoid a vulnerability.
-gem "faraday", ">= 2.14.1"
+# faraday is a transitive dependency, but we need to force the version to 2.14.3 to avoid a vulnerability.
+gem "faraday", ">= 2.14.3"
