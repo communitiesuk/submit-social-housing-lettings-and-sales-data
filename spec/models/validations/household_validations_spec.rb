@@ -270,9 +270,25 @@ RSpec.describe Validations::HouseholdValidations do
   end
 
   describe "#validate_person_age_matches_economic_status" do
+    it "does add errors when the person marked as a child but is not under 16" do
+      record.age2 = 17
+      record.ecstat2 = 9
+      household_validator.validate_person_age_matches_economic_status(record)
+      expect(record.errors["ecstat2"]).to include(match I18n.t("validations.sales.household.ecstat.child_over_16", person_num: 2))
+      expect(record.errors["age2"]).to include(match I18n.t("validations.sales.household.age.child_over_16", person_num: 2))
+    end
+
     it "does not add errors when the person is under 16 but not marked as a child" do
       record.age2 = 14
       record.ecstat2 = 1
+      household_validator.validate_person_age_matches_economic_status(record)
+      expect(record.errors["ecstat2"]).to be_empty
+      expect(record.errors["age2"]).to be_empty
+    end
+
+    it "does not add errors when the person is marked as a child and under 16" do
+      record.age2 = 14
+      record.ecstat2 = 9
       household_validator.validate_person_age_matches_economic_status(record)
       expect(record.errors["ecstat2"]).to be_empty
       expect(record.errors["age2"]).to be_empty
