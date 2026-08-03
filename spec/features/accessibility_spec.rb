@@ -69,6 +69,7 @@ RSpec.describe "Accessibility", :js do
   context "when viewing organisation pages" do
     let(:parent_relationship) { create(:organisation_relationship, parent_organisation: other_user.organisation) }
     let(:child_relationship) { create(:organisation_relationship, child_organisation: other_user.organisation) }
+    let(:name_change) { create(:organisation_name_change, organisation: other_user.organisation) }
     let(:organisation_paths) do
       routes = find_routes("organisation", other_user.organisation, other_user.organisation).reject do |route|
         route.match?(/\A\/organisations\/#{other_user.organisation_id}\z/) ||
@@ -81,12 +82,15 @@ RSpec.describe "Accessibility", :js do
         "filters/update" => "?codes_only=false",
         "stock-owners/remove" => "?target_organisation_id=#{child_relationship.parent_organisation.id}",
         "managing-agents/remove" => "?target_organisation_id=#{parent_relationship.child_organisation.id}",
+        "organisations/search" => "?query=test",
       }
 
       routes.map do |route|
         additional_params = route_mappings.find { |pattern, _| route.include?(pattern) }&.last
         route += additional_params if additional_params
-        route
+        # find_routes does not substitute :change_id, so provide a real record id
+        # to visit the actual cancel-name-change page instead of an error page.
+        route.gsub(":change_id", name_change.id.to_s)
       end
     end
 

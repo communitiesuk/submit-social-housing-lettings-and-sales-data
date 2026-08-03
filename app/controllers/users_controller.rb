@@ -11,7 +11,7 @@ class UsersController < ApplicationController
   before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index]
 
   def index
-    redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
+    return redirect_to users_organisation_path(current_user.organisation) unless current_user.support? || request.format.csv?
 
     all_users = User.visible.sorted_by_organisation_and_role
     filtered_users = filter_manager.filtered_users(all_users, search_term, session_filters)

@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.4.9"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem "rails", "~> 7.2.2"
+gem "rails", "~> 8.1.3"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use Puma as the app server
@@ -44,7 +44,7 @@ gem "view_component", "~> 4.9"
 # Use the AWS S3 SDK as storage mechanism
 gem "aws-sdk-s3"
 # Track changes to models for auditing or versioning.
-gem "paper_trail", "~> 15.2"
+gem "paper_trail", "~> 17.0"
 # Store active record objects in version whodunnits
 gem "paper_trail-globalid"
 
@@ -74,9 +74,6 @@ gem "unread"
 # Pinning versions to address vulnerabilities
 gem "nokogiri", "~> 1.19.1"
 gem "thor", "~> 1.4.0"
-
-# Pinning until activesupport is updated to v8.1.2
-gem "connection_pool", "~> 2.5"
 
 group :development, :test do
   # Check gems for known vulnerabilities
