@@ -50,7 +50,6 @@ class Log < ApplicationRecord
   scope :has_old_form_id, -> { where.not(old_form_id: nil) }
   scope :imported_2023_with_old_form_id, -> { imported.filter_by_year(2023).has_old_form_id }
   scope :imported_2023, -> { imported.filter_by_year(2023) }
-  # TODO: CLDC-4273: use .union in filter_by_organisation rather than raw SQL
   scope :filter_by_organisation, lambda { |orgs, _user = nil|
     owned = unscoped { where(owning_organisation: orgs).select(:id) }
     managed = unscoped { where(managing_organisation: orgs).select(:id) }
@@ -202,6 +201,14 @@ class Log < ApplicationRecord
 
   def sales?
     false
+  end
+
+  def people_with_details
+    [hhmemb || max_people_with_details, max_people_with_details].min
+  end
+
+  def max_people_with_details
+    self.class::MAX_PEOPLE_WITH_DETAILS
   end
 
   def ethnic_refused?

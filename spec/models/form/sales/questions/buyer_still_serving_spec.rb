@@ -32,10 +32,21 @@ RSpec.describe Form::Sales::Questions::BuyerStillServing, type: :model do
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
         "4" => { "value" => "Yes" },
-        "5" => { "value" => "No" },
-        "6" => { "value" => "Buyer prefers not to say" },
+        "5" => { "value" => "No - they left up to and including 2 years ago" },
+        "6" => { "value" => "No - they left more than 2 years ago" },
         "divider" => { "value" => true },
-        "7" => { "value" => "Don’t know" },
+        "9" => { "value" => "Don’t know" },
+        "10" => { "value" => "No" },
+      })
+    end
+
+    it "has the correct displayed_answer_options" do
+      expect(question.displayed_answer_options(nil)).to eq({
+        "4" => { "value" => "Yes" },
+        "5" => { "value" => "No - they left up to and including 2 years ago" },
+        "6" => { "value" => "No - they left more than 2 years ago" },
+        "divider" => { "value" => true },
+        "9" => { "value" => "Don’t know" },
       })
     end
   end
@@ -45,6 +56,16 @@ RSpec.describe Form::Sales::Questions::BuyerStillServing, type: :model do
 
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
+        "4" => { "value" => "Yes" },
+        "5" => { "value" => "No - they left up to and including 2 years ago" },
+        "6" => { "value" => "No - they left more than 2 years ago" },
+        "divider" => { "value" => true },
+        "9" => { "value" => "Don’t know" },
+      })
+    end
+
+    it "has the correct displayed_answer_options" do
+      expect(question.displayed_answer_options(nil)).to eq({
         "4" => { "value" => "Yes" },
         "5" => { "value" => "No - they left up to and including 2 years ago" },
         "6" => { "value" => "No - they left more than 2 years ago" },

@@ -5,7 +5,7 @@ class Form::Lettings::Questions::Hhmemb < ::Form::Question
     @type = "numeric"
     @width = 2
     @check_answers_card_number = 0
-    @max = 8
+    @max = 15
     @min = 1
     @step = 1
     @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)

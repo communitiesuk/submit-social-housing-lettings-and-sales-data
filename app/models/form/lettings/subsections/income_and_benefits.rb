@@ -10,7 +10,7 @@ class Form::Lettings::Subsections::IncomeAndBenefits < ::Form::Subsection
     @pages ||= [
       Form::Lettings::Pages::IncomeKnown.new(nil, nil, self),
       Form::Lettings::Pages::IncomeAmount.new(nil, nil, self),
-      Form::Lettings::Pages::NetIncomeValueCheck.new(nil, nil, self),
+      Form::Lettings::Pages::NetIncomeValueCheck.new("income_amount_net_income_value_check", nil, self),
       Form::Lettings::Pages::HousingBenefit.new("housing_benefit", nil, self),
       Form::Lettings::Pages::BenefitsProportion.new("benefits_proportion", nil, self),
       Form::Lettings::Pages::RentOrOtherCharges.new(nil, nil, self),

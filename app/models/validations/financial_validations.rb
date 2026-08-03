@@ -41,7 +41,7 @@ module Validations::FinancialValidations
           :over_hard_max,
           message: I18n.t("validations.lettings.financial.hhmemb.earnings_over_hard_max", earnings: format_as_currency(record.earnings), frequency:),
         )
-        (1..record.hhmemb).each do |n|
+        (1..record.people_with_details).each do |n|
           record.errors.add(
             "ecstat#{n}",
             :over_hard_max,
@@ -70,7 +70,7 @@ module Validations::FinancialValidations
           :under_hard_min,
           message: I18n.t("validations.lettings.financial.hhmemb.earnings_under_hard_min", earnings: format_as_currency(record.earnings), frequency:),
         )
-        (1..record.hhmemb).each do |n|
+        (1..record.people_with_details).each do |n|
           record.errors.add(
             "ecstat#{n}",
             :under_hard_min,
@@ -172,6 +172,15 @@ module Validations::FinancialValidations
         record.errors.add :period, I18n.t("validations.lettings.financial.period.chcharge_out_of_range", period:, min_chcharge:, max_chcharge:)
         record.errors.add :chcharge, :out_of_range, message: I18n.t("validations.lettings.financial.chcharge.out_of_range", period:, min_chcharge:, max_chcharge:)
       end
+    end
+  end
+
+  def validate_housing_benefits_matches_income_proportion(record)
+    return unless record.hb && record.benefits && record.form.start_year_2026_or_later?
+
+    if (record.receives_universal_credit || record.receives_housing_benefit?) && record.no_household_income_comes_from_benefits?
+      record.errors.add :hb, I18n.t("validations.lettings.financial.hb.housing_benefits_not_match_income_source")
+      record.errors.add :benefits, I18n.t("validations.lettings.financial.benefits.housing_benefits_not_match_income_source")
     end
   end
 

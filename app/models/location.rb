@@ -172,7 +172,7 @@ class Location < ApplicationRecord
   LOCAL_AUTHORITIES = LocalAuthority.all.map { |la| [la.name, la.code] }.to_h
 
   attribute :local_authorities, :string
-  enum :local_authorities, LOCAL_AUTHORITIES
+  enum :local_authorities, LOCAL_AUTHORITIES if LOCAL_AUTHORITIES.present?
   def self.local_authorities_for_current_year
     LocalAuthority.all.active(Time.zone.today).england.map { |la| [la.code, la.name] }.to_h
   end

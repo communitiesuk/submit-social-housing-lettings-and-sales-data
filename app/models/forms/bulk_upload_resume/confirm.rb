@@ -20,11 +20,11 @@ module Forms
         send("resume_bulk_upload_#{log_type}_result_path", bulk_upload)
       end
 
-      def error_report_path
+      def error_report_path(read_only: false)
         if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
-          send("summary_bulk_upload_#{log_type}_result_path", bulk_upload)
+          send("summary_bulk_upload_#{log_type}_result_path", bulk_upload, hide_upload_button: read_only ? "true" : nil)
         else
-          send("bulk_upload_#{log_type}_result_path", bulk_upload)
+          send("bulk_upload_#{log_type}_result_path", bulk_upload, hide_upload_button: read_only ? "true" : nil)
         end
       end
 

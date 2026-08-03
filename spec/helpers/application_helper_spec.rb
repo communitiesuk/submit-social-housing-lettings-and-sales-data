@@ -8,18 +8,50 @@ RSpec.describe ApplicationHelper do
   let(:pagy) { nil }
   let(:current_user) { FactoryBot.create(:user) }
 
-  describe "govuk_header_classes" do
-    context "with external user" do
-      it "shows the standard app header" do
-        expect(govuk_header_classes(current_user)).to eq("app-header")
+  describe "govuk_service_navigation_classes" do
+    context "with non-support user" do
+      context "when no notifications are displayed" do
+        before do
+          allow(helper).to receive(:notifications_to_display?).and_return(false)
+        end
+
+        it "returns empty string for blue border (default)" do
+          expect(helper.govuk_service_navigation_classes(current_user)).to eq("")
+        end
+      end
+
+      context "when notifications are displayed" do
+        before do
+          allow(helper).to receive(:notifications_to_display?).and_return(true)
+        end
+
+        it "returns no-border class to hide the border (notification banner shows instead)" do
+          expect(helper.govuk_service_navigation_classes(current_user)).to eq("app-service-navigation--no-border")
+        end
       end
     end
 
-    context "with internal support user" do
+    context "with support user" do
       let(:current_user) { FactoryBot.create(:user, :support) }
 
-      it "shows an orange header" do
-        expect(govuk_header_classes(current_user)).to eq("app-header app-header--orange")
+      context "when no notifications are displayed" do
+        before do
+          allow(helper).to receive(:notifications_to_display?).and_return(false)
+        end
+
+        it "always returns orange class for orange border" do
+          expect(helper.govuk_service_navigation_classes(current_user)).to eq("app-service-navigation--orange")
+        end
+      end
+
+      context "when notifications are displayed" do
+        before do
+          allow(helper).to receive(:notifications_to_display?).and_return(true)
+        end
+
+        it "still returns orange class (support users always see orange border)" do
+          expect(helper.govuk_service_navigation_classes(current_user)).to eq("app-service-navigation--orange")
+        end
       end
     end
   end

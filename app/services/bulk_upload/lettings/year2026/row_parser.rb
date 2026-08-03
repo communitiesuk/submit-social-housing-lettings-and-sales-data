@@ -496,7 +496,6 @@ class BulkUpload::Lettings::Year2026::RowParser
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log
   validate :validate_address_fields, on: :after_log
 
-  validate :validate_incomplete_soft_validations, on: :after_log
   validate :validate_nationality, on: :after_log
   validate :validate_reasonpref_reason_values, on: :after_log
   validate :validate_prevten_value_when_renewal, on: :after_log
@@ -540,6 +539,8 @@ class BulkUpload::Lettings::Year2026::RowParser
         end
       end
     end
+
+    validate_incomplete_soft_validations
 
     add_errors_for_invalid_fields
 
@@ -1113,6 +1114,14 @@ private
 
   def add_errors_for_invalid_fields
     invalid_fields.each do |field|
+      # ensure questions not routed to are not included in error report
+      error_questions_ids = field_mapping_for_errors
+                       .select { |_k, fields| fields.map(&:to_s).include?(field.to_s) }
+                       .keys
+                       .map(&:to_s)
+      error_questions = questions.select { |question| error_questions_ids.include?(question.id) }
+      next if error_questions.none? { |question| question.page.routed_to?(log, nil) }
+
       errors.delete(field) # take precedence over any other errors as this is a BU format issue
       errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: QUESTIONS[field.to_sym]))
     end

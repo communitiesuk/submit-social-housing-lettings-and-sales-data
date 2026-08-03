@@ -5,6 +5,7 @@ class Form::Sales::Questions::ManagementFee < ::Form::Question
     @copy_key = "sales.sale_information.management_fee.management_fee"
     @type = "numeric"
     @min = 1
+    @max = form.start_year_2025_or_later? ? 9_999 : nil
     @step = 0.01
     @width = 5
     @prefix = "£"
