@@ -1,17 +1,4 @@
 module Validations::Sales::PropertyValidations
-  def validate_postcodes_match_if_discounted_ownership(record)
-    return unless record.saledate && !record.form.start_year_2024_or_later?
-    return unless record.ppostcode_full.present? && record.postcode_full.present?
-
-    if record.discounted_ownership_sale? && record.ppostcode_full != record.postcode_full
-      joint_purchase_id = record.joint_purchase? ? "joint_purchase" : "not_joint_purchase"
-      record.errors.add :postcode_full, I18n.t("validations.sales.property_information.postcode_full.postcode_must_match_previous.#{joint_purchase_id}")
-      record.errors.add :ppostcode_full, I18n.t("validations.sales.property_information.ppostcode_full.postcode_must_match_previous.#{joint_purchase_id}")
-      record.errors.add :ownershipsch, I18n.t("validations.sales.property_information.ownershipsch.postcode_must_match_previous.#{joint_purchase_id}")
-      record.errors.add :uprn, I18n.t("validations.sales.property_information.uprn.postcode_must_match_previous.#{joint_purchase_id}")
-    end
-  end
-
   def validate_bedsit_number_of_beds(record)
     return unless record.proptype.present? && record.beds.present?
 
@@ -43,7 +30,7 @@ module Validations::Sales::PropertyValidations
 
   # see also: this validation in validations/property_validations.rb
   def validate_la_in_england(record)
-    return unless record.form.start_year_2025_or_later? && record.la.present?
+    return if record.la.blank?
     return if record.la.in?(LocalAuthority.england.pluck(:code))
 
     record.errors.add :la, I18n.t("validations.sales.property_information.la.not_in_england")
@@ -59,7 +46,7 @@ module Validations::Sales::PropertyValidations
 
   # see also: this validation in validations/property_validations.rb
   def validate_la_is_active(record)
-    return unless record.form.start_year_2025_or_later? && record.la.present? && record.startdate.present?
+    return unless record.la.present? && record.startdate.present?
 
     la = LocalAuthority.england.find_by(code: record.la)
 

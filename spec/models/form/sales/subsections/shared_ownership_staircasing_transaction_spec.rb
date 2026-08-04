@@ -44,7 +44,6 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipStaircasingTransaction, 
           value_shared_ownership_staircase
           about_price_shared_ownership_value_check_staircasing
           staircase_equity
-          shared_ownership_equity_value_check_staircasing
           staircase_mortgage_used_shared_ownership
           monthly_rent_staircasing_owned
           monthly_rent_staircasing
@@ -72,7 +71,6 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipStaircasingTransaction, 
           value_shared_ownership_staircase
           about_price_shared_ownership_value_check_staircasing
           staircase_equity
-          shared_ownership_equity_value_check_staircasing
           staircase_mortgage_used_shared_ownership
           monthly_rent_staircasing_owned
           monthly_rent_staircasing

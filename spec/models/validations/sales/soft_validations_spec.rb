@@ -372,20 +372,6 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
       end
     end
-
-    context "when validating extra borrowing" do
-      let(:saledate) { collection_start_date_for_year_or_later(2024) }
-
-      it "returns false for logs from 2024 onwards" do
-        record.extrabor = 2
-        record.mortgage = 50_000
-        record.deposit = 40_000
-        record.value = 100_000
-        record.discount = 11
-        expect(record)
-          .not_to be_extra_borrowing_expected_but_not_reported
-      end
-    end
   end
 
   describe "savings amount validations" do
@@ -477,149 +463,6 @@ RSpec.describe Validations::Sales::SoftValidations do
         record.savings = 6_000
         expect(record)
           .not_to be_deposit_over_soft_max
-      end
-    end
-
-    context "when validating shared ownership deposit" do
-      before do
-        record.saledate = Time.zone.local(2023, 4, 3)
-      end
-
-      it "returns false if MORTGAGE + DEPOSIT + CASHDIS are equal VALUE * EQUITY/100" do
-        record.mortgage = 1000
-        record.deposit = 1000
-        record.cashdis = 1000
-        record.value = 3000
-        record.equity = 100
-
-        expect(record)
-          .not_to be_shared_ownership_deposit_invalid
-      end
-
-      it "returns false if MORTGAGE + DEPOSIT + CASHDIS are within 1£ of VALUE * EQUITY/100" do
-        record.mortgage = 500
-        record.deposit = 500
-        record.cashdis = 500
-        record.value = 3001
-        record.equity = 50
-
-        expect(record)
-          .not_to be_shared_ownership_deposit_invalid
-      end
-
-      it "returns false if mortgage is used and no mortgage is given" do
-        record.mortgage = nil
-        record.deposit = 1000
-        record.cashdis = 1000
-        record.value = 3000
-        record.equity = 100
-
-        expect(record)
-          .not_to be_shared_ownership_deposit_invalid
-      end
-
-      it "returns true if mortgage is not used and no mortgage is given" do
-        record.mortgage = nil
-        record.mortgageused = 2
-        record.deposit = 1000
-        record.cashdis = 1000
-        record.value = 3000
-        record.equity = 100
-
-        expect(record)
-          .to be_shared_ownership_deposit_invalid
-      end
-
-      it "returns false if no deposit is given" do
-        record.mortgage = 1000
-        record.deposit = nil
-        record.cashdis = 1000
-        record.value = 3000
-        record.equity = 100
-
-        expect(record)
-          .not_to be_shared_ownership_deposit_invalid
-      end
-
-      it "returns false if no cashdis is given and cashdis is routed to" do
-        record.mortgage = 1000
-        record.deposit = 1000
-        record.type = 18
-        record.cashdis = nil
-        record.value = 3000
-        record.equity = 100
-
-        expect(record)
-          .not_to be_shared_ownership_deposit_invalid
-      end
-
-      it "returns true if no cashdis is given and cashdis is not routed to" do
-        record.mortgage = 1000
-        record.deposit = 1000
-        record.type = 2
-        record.cashdis = nil
-        record.value = 3000
-        record.equity = 100
-
-        expect(record)
-          .to be_shared_ownership_deposit_invalid
-      end
-
-      it "returns false if no cashdis not routed to and MORTGAGE + DEPOSIT are within 1£ of VALUE * EQUITY/100" do
-        record.mortgage = 500
-        record.deposit = 500
-        record.type = 2
-        record.cashdis = nil
-        record.value = 1999
-        record.equity = 50
-
-        expect(record)
-          .not_to be_shared_ownership_deposit_invalid
-      end
-
-      it "returns false if no value is given" do
-        record.mortgage = 1000
-        record.deposit = 1000
-        record.cashdis = 1000
-        record.value = nil
-        record.equity = 100
-
-        expect(record)
-          .not_to be_shared_ownership_deposit_invalid
-      end
-
-      it "returns false if no equity is given" do
-        record.mortgage = 1000
-        record.deposit = 1000
-        record.cashdis = 1000
-        record.value = 3000
-        record.equity = nil
-
-        expect(record)
-          .not_to be_shared_ownership_deposit_invalid
-      end
-
-      it "returns true if MORTGAGE + DEPOSIT + CASHDIS are not equal VALUE * EQUITY/100" do
-        record.mortgage = 1000
-        record.deposit = 1000
-        record.cashdis = 1000
-        record.value = 4323
-        record.equity = 100
-
-        expect(record)
-          .to be_shared_ownership_deposit_invalid
-      end
-
-      it "returns false if startyear is after 2024" do
-        record.saledate = Time.zone.local(2025, 1, 1)
-        record.mortgage = 1000
-        record.deposit = 1000
-        record.cashdis = 1000
-        record.value = 4323
-        record.equity = 100
-
-        expect(record)
-          .not_to be_shared_ownership_deposit_invalid
       end
     end
   end
@@ -765,7 +608,7 @@ RSpec.describe Validations::Sales::SoftValidations do
     it "returns true if grant is below 9000" do
       record.grant = 1_000
       record.type = 9
-      record.saledate = Time.zone.local(2024, 1, 1)
+      record.saledate = current_collection_start_date
 
       expect(record).to be_grant_outside_common_range
     end
@@ -773,7 +616,7 @@ RSpec.describe Validations::Sales::SoftValidations do
     it "returns true if grant is above 16000" do
       record.grant = 100_000
       record.type = 9
-      record.saledate = Time.zone.local(2024, 1, 1)
+      record.saledate = current_collection_start_date
 
       expect(record).to be_grant_outside_common_range
     end
@@ -781,33 +624,25 @@ RSpec.describe Validations::Sales::SoftValidations do
     it "returns false if grant is within expected range" do
       record.grant = 10_000
       record.type = 9
-      record.saledate = Time.zone.local(2024, 1, 1)
+      record.saledate = current_collection_start_date
 
       expect(record).not_to be_grant_outside_common_range
     end
 
-    it "returns false for logs after 2024 with RTA" do
+    it "returns false for logs with RTA" do
       record.grant = 100_000
       record.type = 8
-      record.saledate = Time.zone.local(2025, 1, 1)
+      record.saledate = current_collection_start_date
 
       expect(record).not_to be_grant_outside_common_range
     end
 
-    it "returns false for logs after 2024 with socialBuy" do
+    it "returns false for logs with socialBuy" do
       record.grant = 100_000
       record.type = 21
-      record.saledate = Time.zone.local(2025, 1, 1)
+      record.saledate = current_collection_start_date
 
       expect(record).not_to be_grant_outside_common_range
-    end
-
-    it "returns true for logs after 2024 with other type" do
-      record.grant = 100_000
-      record.type = 9
-      record.saledate = Time.zone.local(2025, 1, 1)
-
-      expect(record).to be_grant_outside_common_range
     end
   end
 
@@ -958,130 +793,6 @@ RSpec.describe Validations::Sales::SoftValidations do
       record.ecstat3 = 7
 
       expect(record).to be_person_3_student_not_child
-    end
-  end
-
-  describe "#discounted_ownership_value_invalid?" do
-    context "when grant is routed to" do
-      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, value: 30_000, ownershipsch: 2, type: 8, saledate: Time.zone.local(2023, 4, 3)) }
-
-      context "and not provided" do
-        before do
-          record.grant = nil
-        end
-
-        it "returns false" do
-          expect(record).not_to be_discounted_ownership_value_invalid
-        end
-      end
-
-      context "and is provided" do
-        it "returns true if mortgage, deposit and grant total does not equal market value" do
-          record.grant = 3_000
-          expect(record).to be_discounted_ownership_value_invalid
-        end
-
-        it "returns false if mortgage, deposit and grant total equals market value" do
-          record.grant = 15_000
-          expect(record).not_to be_discounted_ownership_value_invalid
-        end
-      end
-    end
-
-    context "when discount is routed to" do
-      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, value: 30_000, ownershipsch: 2, type: 9, saledate: Time.zone.local(2023, 4, 3)) }
-
-      context "and not provided" do
-        before do
-          record.discount = nil
-        end
-
-        it "returns false" do
-          expect(record).not_to be_discounted_ownership_value_invalid
-        end
-      end
-
-      context "and is provided" do
-        it "returns true if mortgage and deposit total does not equal market value - discount" do
-          record.discount = 10
-          expect(record).to be_discounted_ownership_value_invalid
-        end
-
-        it "returns false if mortgage and deposit total equals market value - discount" do
-          record.discount = 50
-          expect(record).not_to be_discounted_ownership_value_invalid
-        end
-      end
-    end
-
-    context "when neither discount nor grant is routed to" do
-      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, value: 30_000, ownershipsch: 2, type: 29, saledate: Time.zone.local(2023, 4, 3)) }
-
-      it "returns true if mortgage and deposit total does not equal market value" do
-        record.deposit = 2_000
-        expect(record).to be_discounted_ownership_value_invalid
-      end
-
-      it "returns false if mortgage and deposit total equals market value" do
-        record.deposit = 20_000
-        expect(record).not_to be_discounted_ownership_value_invalid
-      end
-    end
-
-    context "when mortgage is routed to" do
-      let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 2, saledate: Time.zone.local(2023, 4, 3)) }
-
-      context "and not provided" do
-        before do
-          record.mortgage = nil
-        end
-
-        it "returns false" do
-          expect(record).not_to be_discounted_ownership_value_invalid
-        end
-      end
-
-      context "and is provided" do
-        it "returns true if mortgage, grant and deposit total does not equal market value - discount" do
-          record.mortgage = 10
-          expect(record).to be_discounted_ownership_value_invalid
-        end
-
-        it "returns false if mortgage, grant and deposit total equals market value - discount" do
-          record.mortgage = 10_000
-          expect(record).not_to be_discounted_ownership_value_invalid
-        end
-      end
-    end
-
-    context "when mortgage is not routed to" do
-      let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 2, saledate: Time.zone.local(2023, 4, 3)) }
-
-      it "returns true if grant and deposit total does not equal market value - discount" do
-        expect(record).to be_discounted_ownership_value_invalid
-      end
-
-      it "returns false if mortgage, grant and deposit total equals market value - discount" do
-        record.grant = 13_000
-        expect(record).not_to be_discounted_ownership_value_invalid
-      end
-    end
-
-    context "when ownership is not discounted" do
-      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 1, saledate: Time.zone.local(2023, 4, 3)) }
-
-      it "returns false" do
-        expect(record).not_to be_discounted_ownership_value_invalid
-      end
-    end
-
-    context "when it is a 2024 log" do
-      let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 2, saledate: Time.zone.local(2024, 4, 3)) }
-
-      it "returns true if mortgage, grant and deposit total does not equal market value - discount" do
-        record.mortgage = 10
-        expect(record).not_to be_discounted_ownership_value_invalid
-      end
     end
   end
 

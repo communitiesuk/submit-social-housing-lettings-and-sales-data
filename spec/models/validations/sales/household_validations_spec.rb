@@ -9,39 +9,6 @@ RSpec.describe Validations::Sales::HouseholdValidations do
   let(:record) { build(:sales_log, saledate:) }
   let(:saledate) { Time.zone.now }
 
-  describe "#validate_partner_count" do
-    let(:saledate) { current_collection_start_date }
-
-    it "does not validate for years >= 2024" do
-      record.relat2 = "P"
-      record.relat3 = "P"
-      household_validator.validate_partner_count(record)
-      expect(record.errors["relat2"]).to be_empty
-      expect(record.errors["relat3"]).to be_empty
-      expect(record.errors["relat4"]).to be_empty
-    end
-  end
-
-  describe "#validate_person_age_matches_relationship" do
-    let(:saledate) { current_collection_start_date }
-
-    it "does not add error if person under 16 is a partner" do
-      record.age2 = 14
-      record.relat2 = "P"
-      household_validator.validate_person_age_matches_relationship(record)
-      expect(record.errors["relat2"]).to be_empty
-      expect(record.errors["age2"]).to be_empty
-    end
-
-    it "does not add error if person over 19 is a child" do
-      record.age2 = 20
-      record.relat2 = "C"
-      household_validator.validate_person_age_matches_relationship(record)
-      expect(record.errors["age2"]).to be_empty
-      expect(record.errors["relat2"]).to be_empty
-    end
-  end
-
   describe "#validate_person_age_matches_economic_status" do
     let(:saledate) { current_collection_start_date }
 
@@ -53,69 +20,6 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         .to include(match I18n.t("validations.sales.household.ecstat.child_over_16", person_num: 2))
       expect(record.errors["age2"])
         .to include(match I18n.t("validations.sales.household.age.child_over_16", person_num: 2))
-    end
-  end
-
-  describe "#validate_child_12_years_younger" do
-    let(:saledate) { current_collection_start_date }
-
-    it "does not validate that child is at least 12 year younger than buyer" do
-      record.age1 = 20
-      record.age2 = 17
-      record.relat2 = "C"
-      household_validator.validate_child_12_years_younger(record)
-      expect(record.errors["age1"]).to be_empty
-      expect(record.errors["age2"]).to be_empty
-      expect(record.errors["relat2"]).to be_empty
-    end
-  end
-
-  describe "#validate_person_age_and_relationship_matches_economic_status" do
-    let(:saledate) { current_collection_start_date }
-
-    context "when the household contains a tenant’s child between the ages of 16 and 19" do
-      it "does not add an error" do
-        record.age2 = 17
-        record.relat2 = "C"
-        record.ecstat2 = 1
-        household_validator.validate_person_age_and_relationship_matches_economic_status(record)
-        expect(record.errors["ecstat2"])
-          .to be_empty
-        expect(record.errors["age2"])
-          .to be_empty
-        expect(record.errors["relat2"])
-          .to be_empty
-      end
-    end
-
-    it "does not add an error for a person not aged 16-19 who is a student but not a child of the buyer" do
-      record.age2 = 20
-      record.ecstat2 = "7"
-      record.relat2 = "P"
-      household_validator.validate_person_age_and_relationship_matches_economic_status(record)
-      expect(record.errors["relat2"]).to be_empty
-      expect(record.errors["ecstat2"]).to be_empty
-      expect(record.errors["age2"]).to be_empty
-    end
-
-    it "does not add errors" do
-      record.age2 = 14
-      record.ecstat2 = "7"
-      record.relat2 = "C"
-      household_validator.validate_person_age_and_relationship_matches_economic_status(record)
-      expect(record.errors["relat2"]).to be_empty
-      expect(record.errors["ecstat2"]).to be_empty
-      expect(record.errors["age2"]).to be_empty
-    end
-
-    it "does not add errors for a person who is a student and aged 16-19 but not child" do
-      record.age2 = 17
-      record.ecstat2 = "7"
-      record.relat2 = "X"
-      household_validator.validate_person_age_and_relationship_matches_economic_status(record)
-      expect(record.errors["relat2"]).to be_empty
-      expect(record.errors["ecstat2"]).to be_empty
-      expect(record.errors["age2"]).to be_empty
     end
   end
 
@@ -224,8 +128,6 @@ RSpec.describe Validations::Sales::HouseholdValidations do
   end
 
   describe "#validate_buyer_not_child" do
-    let(:saledate) { current_collection_start_date }
-
     it "validates buyer 1 isn't a child" do
       record.ecstat1 = 9
       household_validator.validate_buyer_not_child(record)

@@ -12,12 +12,9 @@ module Validations::Sales::SaleInformationValidations
       record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.must_be_after_hodate")
     end
 
-    if (record.saledate - 5.years) >= record.hodate && record.form.start_year_2025_or_later?
+    if (record.saledate - 5.years) >= record.hodate
       record.errors.add :hodate, I18n.t("validations.sales.sale_information.hodate.must_be_less_than_5_years_from_saledate")
       record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.must_be_less_than_5_years_from_hodate")
-    elsif (record.saledate - 3.years) >= record.hodate && record.startdate.year <= 2024
-      record.errors.add :hodate, I18n.t("validations.sales.sale_information.hodate.must_be_less_than_3_years_from_saledate")
-      record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.must_be_less_than_3_years_from_hodate")
     end
   end
 
@@ -75,7 +72,7 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_discounted_ownership_value(record)
-    return unless record.saledate && record.form.start_year_2024_or_later?
+    return unless record.saledate
     return unless record.value && record.deposit && record.ownershipsch
     return unless record.mortgage || record.mortgageused == 2
     return unless record.discount || record.grant || record.type == 29
@@ -103,7 +100,7 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_outright_sale_value_matches_mortgage_plus_deposit(record)
-    return unless record.saledate && record.form.start_year_2024_or_later?
+    return unless record.saledate
     return unless record.outright_sale?
     return unless record.mortgage_used? && record.mortgage
     return unless record.deposit && record.value
@@ -134,7 +131,7 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_grant_amount(record)
-    return unless record.saledate && record.form.start_year_2024_or_later?
+    return unless record.saledate
     return unless record.grant && [8, 21].include?(record.type)
 
     unless record.grant.between?(9_000, 16_000)
@@ -144,7 +141,7 @@ module Validations::Sales::SaleInformationValidations
 
   def validate_stairbought(record)
     return unless record.stairbought && record.type
-    return unless record.saledate && record.form.start_year_2024_or_later?
+    return unless record.saledate
 
     max_stairbought = case record.type
                       when 30, 16, 28, 31, 32
@@ -162,7 +159,7 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_discount_and_value(record)
-    return unless record.saledate && record.form.start_year_2024_or_later?
+    return unless record.saledate
     return unless record.discount && record.value && record.la
 
     if record.london_property? && record.discount_value > 137_400
@@ -177,7 +174,7 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_non_staircasing_mortgage(record)
-    return unless record.saledate && record.form.start_year_2024_or_later?
+    return unless record.saledate
     return unless record.value && record.deposit && record.equity
     return unless record.shared_ownership_scheme? && record.type && record.mortgageused && record.is_not_staircasing?
 
@@ -189,7 +186,7 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_staircasing_mortgage(record)
-    return unless record.saledate && record.form.start_year_2024_or_later?
+    return unless record.saledate
     return unless record.value && record.deposit && record.stairbought
     return unless record.shared_ownership_scheme? && record.type && record.mortgageused && record.is_staircase?
 
