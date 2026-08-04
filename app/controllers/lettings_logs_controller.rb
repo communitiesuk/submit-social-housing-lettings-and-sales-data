@@ -150,7 +150,7 @@ class LettingsLogsController < LogsController
     end
   end
 
-  private
+private
 
   def session_filters
     filter_manager.session_filters
