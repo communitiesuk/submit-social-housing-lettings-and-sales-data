@@ -150,7 +150,7 @@ class LettingsLogsController < LogsController
     end
   end
 
-private
+  private
 
   def session_filters
     filter_manager.session_filters
@@ -183,7 +183,11 @@ private
   end
 
   def find_resource
-    @log = LettingsLog.visible.find_by(id: params[:id])
+    @log = if current_user
+             current_user.lettings_logs.visible.find_by(id: params[:id])
+           else
+             LettingsLog.visible.find_by(id: params[:id])
+           end
   end
 
   def post_create_redirect_url(log)

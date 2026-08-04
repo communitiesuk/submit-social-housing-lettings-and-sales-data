@@ -1633,6 +1633,27 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(response).to have_http_status(:unauthorized)
       end
     end
+
+    context "when signed in as a user from a different organisation (not using the API)" do
+      let(:other_user) { create(:user) }
+      let(:headers) { { "Content-Type" => "application/json", "Accept" => "text/html" } }
+      let(:params) { { lettings_log: { tenancycode: "New Value" } } }
+
+      before do
+        allow(other_user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in other_user
+        patch "/lettings-logs/#{id}", headers:, params: params.to_json
+      end
+
+      it "does not update the lettings log" do
+        lettings_log.reload
+        expect(lettings_log.tenancycode).to eq("Old Value")
+      end
+
+      it "returns a not found response" do
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   # We don't really have any meaningful distinction between PUT and PATCH here since you can update some or all
