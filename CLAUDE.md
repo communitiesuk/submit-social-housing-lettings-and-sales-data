@@ -44,6 +44,8 @@ yarn prettier . --check      # --write to autocorrect
 
 Database: `bundle exec rake db:create db:migrate db:seed`. Seeded users use the password from `REVIEW_APP_USER_PASSWORD` in `.env` (default `password`).
 
+`.yarnrc` sets `ignore-scripts true` — a supply-chain safeguard disallowing `preinstall`/`postinstall`/etc. lifecycle scripts for any yarn-installed package. Don't remove it, and avoid adding dependencies that require install-time scripts to function.
+
 ## Architecture
 
 ### The form system (core abstraction)
