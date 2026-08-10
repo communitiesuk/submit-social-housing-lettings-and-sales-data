@@ -22,7 +22,7 @@ class Form::Sales::Questions::BuyerPrevious < ::Form::Question
   end
 
   def derived?(_log)
-    form.start_year_2024_or_later?
+    true
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 84 }.freeze
