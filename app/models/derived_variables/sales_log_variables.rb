@@ -29,7 +29,7 @@ module DerivedVariables::SalesLogVariables
       end
     end
 
-    if saledate && form.start_year_2024_or_later? && discounted_ownership_sale?
+    if saledate && discounted_ownership_sale?
       self.ppostcode_full = postcode_full
       self.ppcodenk = pcodenk
       self.prevloc = la
@@ -44,7 +44,7 @@ module DerivedVariables::SalesLogVariables
     self.hhmemb = number_of_household_members
     self.hhtype = household_type
 
-    if saledate && form.start_year_2024_or_later?
+    if saledate
       self.soctenant = soctenant_from_prevten_values
       clear_child_ecstat_for_age_changes!
       child_under_16_constraints!
