@@ -34,7 +34,11 @@ module.exports = {
       },
       {
         test: /\.(scss|css)/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          { loader: 'sass-loader', options: { sassOptions: { charset: false } } }
+        ]
       }
     ]
   },
