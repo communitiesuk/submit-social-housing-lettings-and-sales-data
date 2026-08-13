@@ -185,7 +185,6 @@ module DerivedVariables::LettingsLogVariables
       reset_address_fields!
       self.uprn_selection = nil
       self.postcode_known = nil
-      self.manual_address_entry_selected = nil
     end
 
     clear_gender_description_unless_gender_not_same_as_sex! if form.start_year_2026_or_later?
