@@ -12,7 +12,7 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
   let(:owning_org) { create(:organisation, :with_old_visible_id) }
   let(:managing_org) { create(:organisation, :with_old_visible_id, rent_periods: [4, 1]) }
   # Pinned non-confidential so the address/UPRN validations run as these tests expect;
-  # the confidential-scheme behaviour is covered by its own describe below (sensitive: 1).
+  # the confidential scheme behaviour is covered by its own describe below (sensitive: 1).
   let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org, sensitive: 0) }
   let(:postcode_first_part) { "AA1".freeze }
   let(:postcode_second_part) { "1AA".freeze }
@@ -1887,11 +1887,11 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
       end
 
       context "when no UPRN or address fields are provided" do
-        let(:attributes) { base_attributes.merge({ field_18: nil, field_19: nil, field_21: nil, field_23: nil, field_24: nil }) }
+        let(:attributes) { base_attributes.merge({ field_18: nil, field_19: nil, field_20: nil, field_21: nil, field_22: nil, field_23: nil, field_24: nil }) }
 
         it "does not require the address or UPRN (no not answered errors)" do
           parser.valid?
-          %i[field_18 field_19 field_21 field_23 field_24].each do |field|
+          %i[field_18 field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
             expect(parser.errors[field]).to be_empty
           end
         end
@@ -1901,7 +1901,9 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
           log.valid?
           expect(log.read_attribute(:uprn)).to be_nil
           expect(log.read_attribute(:address_line1)).to be_nil
+          expect(log.read_attribute(:address_line2)).to be_nil
           expect(log.read_attribute(:town_or_city)).to be_nil
+          expect(log.read_attribute(:county)).to be_nil
           expect(log.read_attribute(:postcode_full)).to be_nil
         end
 
@@ -1917,7 +1919,9 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
           base_attributes.merge({
             field_18: "123456789012",
             field_19: "1 Test Street",
+            field_20: "Test District",
             field_21: "Testville",
+            field_22: "Testshire",
             field_23: postcode_first_part,
             field_24: postcode_second_part,
             field_25: "E09000008",
@@ -1929,6 +1933,9 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
           log.valid?
           expect(log.read_attribute(:uprn)).to be_nil
           expect(log.read_attribute(:address_line1)).to be_nil
+          expect(log.read_attribute(:address_line2)).to be_nil
+          expect(log.read_attribute(:town_or_city)).to be_nil
+          expect(log.read_attribute(:county)).to be_nil
           expect(log.read_attribute(:postcode_full)).to be_nil
         end
 

@@ -26,4 +26,77 @@ RSpec.describe Form::Lettings::Pages::AddressFallback, type: :model do
   it "has correct depends_on" do
     expect(page.depends_on).to eq([{ "manual_address_entry_selected" => true, "is_address_asked?" => true }])
   end
+
+  context "when routing to the page" do
+    let(:form) { FormHandler.instance.forms["current_lettings"] }
+    let(:subsection) { instance_double(Form::Subsection, form:, enabled?: true) }
+
+    context "when the log is general needs" do
+      let(:log) { build(:lettings_log, needstype: 1) }
+
+      it "is routed to when the address is being entered manually" do
+        log.manual_address_entry_selected = true
+        expect(page).to be_routed_to(log, nil)
+      end
+
+      it "is not routed to when the address is not being entered manually" do
+        log.manual_address_entry_selected = false
+        expect(page).not_to be_routed_to(log, nil)
+      end
+
+      it "is not routed to when `manual_address_entry_selected` is nil" do
+        log.manual_address_entry_selected = nil
+        expect(page).not_to be_routed_to(log, nil)
+      end
+    end
+
+    context "when the log is supported housing" do
+      let(:log) { build(:lettings_log, needstype: 2) }
+
+      context "and the collection year is 2026 or later" do
+        before do
+          allow(form).to receive(:start_year_2026_or_later?).and_return(true)
+        end
+
+        it "is routed to when the address is being entered manually" do
+          log.manual_address_entry_selected = true
+          expect(page).to be_routed_to(log, nil)
+        end
+
+        it "is not routed to when the address is not being entered manually" do
+          log.manual_address_entry_selected = false
+          expect(page).not_to be_routed_to(log, nil)
+        end
+
+        it "is not routed to when `manual_address_entry_selected` is nil" do
+          log.manual_address_entry_selected = nil
+          expect(page).not_to be_routed_to(log, nil)
+        end
+      end
+
+      context "and the collection year is before 2026" do
+        before do
+          allow(form).to receive(:start_year_2026_or_later?).and_return(false)
+        end
+
+        it "is not routed to, even when the address is being entered manually" do
+          log.manual_address_entry_selected = true
+          expect(page).not_to be_routed_to(log, nil)
+        end
+      end
+
+      context "when the scheme has confidential information" do
+        let(:log) { build(:lettings_log, needstype: 2, scheme: build(:scheme, sensitive: 1)) }
+
+        before do
+          allow(form).to receive(:start_year_2026_or_later?).and_return(true)
+        end
+
+        it "is not routed to, even when the address is being entered manually" do
+          log.manual_address_entry_selected = true
+          expect(page).not_to be_routed_to(log, nil)
+        end
+      end
+    end
+  end
 end
