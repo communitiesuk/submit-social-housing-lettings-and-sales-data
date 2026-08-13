@@ -194,11 +194,13 @@ RSpec.describe Csv::LettingsLogCsvService do
     end
 
     # TODO: (CLDC-4462): delete once address data for logs in confidential schemes is wiped.
-    context "when a log's scheme is confidential" do
+    describe "confidential scheme behaviour" do
       let(:year) { 2026 }
       let(:owning_organisation) { create(:organisation) }
       let(:scheme) { create(:scheme, sensitive: 1, owning_organisation:) }
       let(:location) { create(:location, scheme:) }
+      # Every hidden field that actually appears as a column in this export.
+      let(:hidden_columns) { described_class::ADDRESS_FIELDS_HIDDEN_FOR_CONFIDENTIAL_SCHEME & attribute_line }
       let(:log) do
         create(
           :lettings_log,
@@ -212,15 +214,27 @@ RSpec.describe Csv::LettingsLogCsvService do
           startdate: Time.zone.local(2026, 5, 1),
         ).tap do |confidential_log|
           # Simulate a log created before the confidential address feature that still holds
-          # property address data in the database.
+          # property address data in the database. Populate every hidden address column so
+          # that the blanking is observable (a nil column would pass the assertion vacuously).
           confidential_log.update_columns(
             uprn: "123456789012",
+            uprn_known: 1,
+            uprn_confirmed: 1,
+            uprn_selection: "123456789012",
             address_line1: "1 Secret Street",
-            address_line2: "Hidden",
+            address_line2: "Flat 2",
             town_or_city: "Secretville",
             county: "Secretshire",
             postcode_full: "AB1 2CD",
             postcode_known: 1,
+            address_line1_input: "1 Secret Street input",
+            postcode_full_input: "AB1 2CD",
+            address_line1_as_entered: "1 Secret Street as entered",
+            address_line2_as_entered: "Flat 2 as entered",
+            town_or_city_as_entered: "Secretville as entered",
+            county_as_entered: "Secretshire as entered",
+            postcode_full_as_entered: "AB1 2CD",
+            la_as_entered: "la as entered",
             la: "E09000003",
           )
         end
@@ -230,22 +244,27 @@ RSpec.describe Csv::LettingsLogCsvService do
         content_line[attribute_line.index(attribute)]
       end
 
-      it "blanks the property address and UPRN columns" do
-        %w[uprn address_line1 address_line2 town_or_city county postcode_full].each do |attribute|
-          expect(csv_value(attribute)).to be_nil, "expected the #{attribute} column to be blank for a confidential-scheme log"
+      context "when a log's scheme is confidential" do
+        it "blanks every hidden address and UPRN column" do
+          expect(hidden_columns).not_to be_empty
+          hidden_columns.each do |attribute|
+            expect(csv_value(attribute)).to be_nil, "expected the #{attribute} column to be blank for a confidential-scheme log"
+          end
         end
-      end
 
-      it "still exports the local authority" do
-        expect(csv_value("la")).to eq("E09000003")
+        it "still exports the local authority" do
+          expect(csv_value("la")).to eq("E09000003")
+        end
       end
 
       context "when the scheme is not confidential" do
         let(:scheme) { create(:scheme, sensitive: 0, owning_organisation:) }
 
-        it "exports the property address as normal" do
-          expect(csv_value("address_line1")).to eq("1 Secret Street")
-          expect(csv_value("postcode_full")).to eq("AB1 2CD")
+        it "exports every one of those columns as normal" do
+          expect(hidden_columns).not_to be_empty
+          hidden_columns.each do |attribute|
+            expect(csv_value(attribute)).not_to be_nil, "expected the #{attribute} column to be populated for a non-confidential-scheme log"
+          end
         end
       end
     end

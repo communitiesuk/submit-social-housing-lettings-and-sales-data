@@ -303,6 +303,7 @@ module Csv
       town_or_city_as_entered
       county_as_entered
       postcode_full_as_entered
+      la_as_entered
     ].freeze
 
     def lettings_log_attributes
