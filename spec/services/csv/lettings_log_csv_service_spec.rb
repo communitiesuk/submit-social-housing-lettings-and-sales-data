@@ -211,7 +211,7 @@ RSpec.describe Csv::LettingsLogCsvService do
           location:,
           startdate: Time.zone.local(2026, 5, 1),
         ).tap do |confidential_log|
-          # Simulate a log created before the confidential-address feature that still holds
+          # Simulate a log created before the confidential address feature that still holds
           # property address data in the database.
           confidential_log.update_columns(
             uprn: "123456789012",

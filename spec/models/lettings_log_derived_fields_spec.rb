@@ -1640,7 +1640,7 @@ RSpec.describe LettingsLog, type: :model do
           .and(change { log.read_attribute(:postcode_known) }.from(postcode_known).to(nil))
       end
 
-      it "does not reset `manual_address_entry_selected`;" do
+      it "does not reset `manual_address_entry_selected`" do
         expect { log.set_derived_fields! }
           .not_to(change { log.read_attribute(:manual_address_entry_selected) })
       end
@@ -1671,7 +1671,7 @@ RSpec.describe LettingsLog, type: :model do
             .and(change { log.read_attribute(:postcode_known) }.from(postcode_known).to(nil))
         end
 
-        it "does not reset `manual_address_entry_selected`;" do
+        it "does not reset `manual_address_entry_selected`" do
           expect { log.set_derived_fields! }
             .not_to(change { log.read_attribute(:manual_address_entry_selected) })
         end
@@ -1701,7 +1701,7 @@ RSpec.describe LettingsLog, type: :model do
 
     context "when a log is changed from a confidential to a non-confidential scheme" do
       # The confidential logic must leave manual_address_entry_selected in a
-      # routable state (default false), otherwise neither address page routes after the
+      # routable state (either true or false), otherwise neither address page routes after the
       # switch and the address question is never shown again.
       let(:confidential_scheme) { create(:scheme, sensitive: 1) }
       let(:non_confidential_scheme) { create(:scheme, sensitive: 0) }
@@ -1709,7 +1709,7 @@ RSpec.describe LettingsLog, type: :model do
       let(:non_confidential_location) { create(:location, scheme: non_confidential_scheme) }
 
       before do
-        log.assign_attributes(manual_address_entry_selected: false)
+        log.assign_attributes(manual_address_entry_selected: true)
         log.scheme = confidential_scheme
         log.location = confidential_location
         log.set_derived_fields!
@@ -1721,7 +1721,7 @@ RSpec.describe LettingsLog, type: :model do
 
       it "asks the address question again with a routable value for `manual_address_entry_selected` (i.e., not nil)" do
         expect(log.is_address_asked?).to be true
-        expect(log.manual_address_entry_selected).to be false
+        expect(log.manual_address_entry_selected).to be true
       end
     end
   end
