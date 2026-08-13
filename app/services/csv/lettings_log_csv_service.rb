@@ -280,6 +280,31 @@ module Csv
 
     SCHEME_AND_LOCATION_ATTRIBUTES = %w[scheme_code scheme_service_name scheme_confidential SCHTYPE scheme_registered_under_care_act scheme_owning_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at location_code location_postcode location_name location_units location_type_of_unit location_mobility_type location_local_authority location_startdate].freeze
 
+    # TODO: (CLDC-4462): delete once address data for logs in confidential schemes is wiped.
+    # Interim measure: logs in a confidential scheme that were created before the
+    # confidential address feature may still hold property address/UPRN data that is no
+    # longer collected. Blank those columns in the download until the data is wiped (the
+    # local authority, derived from the scheme location, is intentionally retained).
+    ADDRESS_FIELDS_HIDDEN_FOR_CONFIDENTIAL_SCHEME = %w[
+      uprn
+      uprn_known
+      uprn_confirmed
+      uprn_selection
+      address_line1
+      address_line2
+      town_or_city
+      county
+      postcode_full
+      postcode_known
+      address_line1_input
+      postcode_full_input
+      address_line1_as_entered
+      address_line2_as_entered
+      town_or_city_as_entered
+      county_as_entered
+      postcode_full_as_entered
+    ].freeze
+
     def lettings_log_attributes
       ordered_questions = FormHandler.instance.ordered_questions_for_year(@year, "lettings")
       soft_validations_attributes = soft_validations_attributes(ordered_questions)
@@ -344,6 +369,8 @@ module Csv
 
     def value(attribute, log)
       attribute = "rent_type" if attribute == "rent_type_detail" # rent_type_detail is the requested column header for rent_type, so as not to confuse with renttype. It can be exported as label or code.
+      return nil if hide_confidential_scheme_address?(attribute, log) # TODO: (CLDC-4462): delete once address data for logs in confidential schemes is wiped.
+
       if CUSTOM_CALL_CHAINS.key? attribute.to_sym
         call_chain = CUSTOM_CALL_CHAINS[attribute.to_sym][@export_type.to_sym]
         call_chain.reduce(log) { |object, next_call| object&.public_send(next_call) }
@@ -374,6 +401,16 @@ module Csv
           answer_label || label_if_boolean_value(value) || (YES_OR_BLANK_ATTRIBUTES.include?(attribute) && value != 1 ? nil : value)
         end
       end
+    end
+
+    # TODO: (CLDC-4462): delete once address data for logs in confidential schemes is wiped.
+    def hide_confidential_scheme_address?(attribute, log)
+      ADDRESS_FIELDS_HIDDEN_FOR_CONFIDENTIAL_SCHEME.include?(attribute) && confidential_scheme_ids.include?(log.scheme_id)
+    end
+
+    # TODO: (CLDC-4462): delete once address data for logs in confidential schemes is wiped.
+    def confidential_scheme_ids
+      @confidential_scheme_ids ||= Scheme.where(sensitive: "Yes").pluck(:id).to_set
     end
 
     def person_details_not_known?(log, attribute)

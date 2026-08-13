@@ -193,6 +193,63 @@ RSpec.describe Csv::LettingsLogCsvService do
       end
     end
 
+    # TODO: (CLDC-4462): delete once address data for logs in confidential schemes is wiped.
+    context "when a log's scheme is confidential" do
+      let(:year) { 2026 }
+      let(:owning_organisation) { create(:organisation) }
+      let(:scheme) { create(:scheme, sensitive: 1, owning_organisation:) }
+      let(:location) { create(:location, scheme:) }
+      let(:log) do
+        create(
+          :lettings_log,
+          :ignore_validation_errors,
+          needstype: 2,
+          owning_organisation:,
+          managing_organisation: owning_organisation,
+          assigned_to: user,
+          scheme:,
+          location:,
+          startdate: Time.zone.local(2026, 5, 1),
+        ).tap do |confidential_log|
+          # Simulate a log created before the confidential-address feature that still holds
+          # property address data in the database.
+          confidential_log.update_columns(
+            uprn: "123456789012",
+            address_line1: "1 Secret Street",
+            address_line2: "Hidden",
+            town_or_city: "Secretville",
+            county: "Secretshire",
+            postcode_full: "AB1 2CD",
+            postcode_known: 1,
+            la: "E09000003",
+          )
+        end
+      end
+
+      def csv_value(attribute)
+        content_line[attribute_line.index(attribute)]
+      end
+
+      it "blanks the property address and UPRN columns" do
+        %w[uprn address_line1 address_line2 town_or_city county postcode_full].each do |attribute|
+          expect(csv_value(attribute)).to be_nil, "expected the #{attribute} column to be blank for a confidential-scheme log"
+        end
+      end
+
+      it "still exports the local authority" do
+        expect(csv_value("la")).to eq("E09000003")
+      end
+
+      context "when the scheme is not confidential" do
+        let(:scheme) { create(:scheme, sensitive: 0, owning_organisation:) }
+
+        it "exports the property address as normal" do
+          expect(csv_value("address_line1")).to eq("1 Secret Street")
+          expect(csv_value("postcode_full")).to eq("AB1 2CD")
+        end
+      end
+    end
+
     describe "the full CSV output" do
       context "when the requested log year is 2026" do
         let(:year) { 2026 }
