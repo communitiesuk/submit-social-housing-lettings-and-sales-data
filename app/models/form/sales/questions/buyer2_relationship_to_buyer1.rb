@@ -16,21 +16,12 @@ class Form::Sales::Questions::Buyer2RelationshipToBuyer1 < ::Form::Question
   end
 
   def answer_options
-    if form.start_year_2024_or_later?
-      {
-        "P" => { "value" => "Partner" },
-        "C" => { "value" => "Child" },
-        "X" => { "value" => "Other" },
-        "R" => { "value" => "Buyer prefers not to say" },
-      }
-    else
-      {
-        "P" => { "value" => "Partner" },
-        "C" => { "value" => "Child", "hint" => "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education." },
-        "X" => { "value" => "Other" },
-        "R" => { "value" => "Buyer prefers not to say" },
-      }
-    end
+    {
+      "P" => { "value" => "Partner" },
+      "C" => { "value" => "Child" },
+      "X" => { "value" => "Other" },
+      "R" => { "value" => "Buyer prefers not to say" },
+    }
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 27, 2024 => 29, 2025 => 27, 2026 => 29 }.freeze
