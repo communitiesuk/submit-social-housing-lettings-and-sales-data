@@ -1,10 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::PersonRelationshipToBuyer1, type: :model do
+  include CollectionTimeHelper
+
   subject(:page) { described_class.new(page_id, page_definition, subsection, person_index:) }
 
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2024_or_later?: false, person_question_count: 4)) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: current_collection_start_date, person_question_count: 4)) }
   let(:person_index) { 1 }
 
   let(:page_id) { "person_1_relationship_to_buyer_1" }

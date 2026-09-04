@@ -1,16 +1,17 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :model do
+  include CollectionTimeHelper
+
   subject(:household_characteristics) { described_class.new(subsection_id, subsection_definition, section) }
 
   let(:subsection_id) { nil }
   let(:subsection_definition) { nil }
   let(:section) { instance_double(Form::Lettings::Sections::Household) }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date) }
 
   before do
     allow(section).to receive(:form).and_return(form)
-    allow(form).to receive_messages(start_year_2024_or_later?: false, start_year_2025_or_later?: false, start_year_2026_or_later?: false)
   end
 
   it "has correct section" do
@@ -19,7 +20,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
 
   context "with start year 2024", metadata: { year: 24 } do
     before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
+      allow(form).to receive_messages(start_year_2025_or_later?: false, start_year_2026_or_later?: false)
     end
 
     it "has correct pages" do
@@ -189,7 +190,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
 
   context "with start year 2025", metadata: { year: 25 } do
     before do
-      allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true)
+      allow(form).to receive_messages(start_year_2025_or_later?: true, start_year_2026_or_later?: false)
     end
 
     it "has correct pages" do
@@ -359,7 +360,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
 
   context "with start year 2026", metadata: { year: 26 } do
     before do
-      allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true, start_year_2026_or_later?: true)
+      allow(form).to receive_messages(start_year_2025_or_later?: true, start_year_2026_or_later?: true)
     end
 
     it "has correct pages" do

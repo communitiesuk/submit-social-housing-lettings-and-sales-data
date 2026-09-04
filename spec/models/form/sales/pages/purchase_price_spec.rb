@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::PurchasePrice, type: :model do
+  include CollectionTimeHelper
+
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
@@ -8,7 +10,7 @@ RSpec.describe Form::Sales::Pages::PurchasePrice, type: :model do
   let(:subsection) { instance_double(Form::Subsection) }
 
   before do
-    allow(subsection).to receive_messages(form: instance_double(Form, start_year_2024_or_later?: true, start_date: Time.zone.local(2023, 4, 1), start_year_2025_or_later?: true, start_year_2026_or_later?: false), id: "discounted_ownership_scheme")
+    allow(subsection).to receive_messages(form: instance_double(Form, start_date: current_collection_start_date, start_year_2025_or_later?: true, start_year_2026_or_later?: true), id: "discounted_ownership_scheme")
   end
 
   it "has correct subsection" do
