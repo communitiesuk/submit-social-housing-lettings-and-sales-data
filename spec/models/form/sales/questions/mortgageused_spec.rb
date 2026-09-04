@@ -11,11 +11,10 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
   let(:staircase) { nil }
   let(:saledate) { Time.zone.today }
   let(:log) { build(:sales_log, :in_progress, ownershipsch:, stairowned:, staircase:) }
-  let(:start_year_2024_or_later?) { true }
   let(:start_year_2025_or_later?) { true }
   let(:start_year_2026_or_later?) { true }
   let(:subsection_id) { "shared_ownership_initial_purchase" }
-  let(:form) { instance_double(Form, type: "sales", start_date: saledate, start_year_2024_or_later?: start_year_2024_or_later?, start_year_2025_or_later?: start_year_2025_or_later?, start_year_2026_or_later?: start_year_2026_or_later?) }
+  let(:form) { instance_double(Form, type: "sales", start_date: saledate, start_year_2025_or_later?: start_year_2025_or_later?, start_year_2026_or_later?: start_year_2026_or_later?) }
   let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: subsection_id, copy_key: subsection_id)) }
 
   context "when it is a shared ownership scheme" do
