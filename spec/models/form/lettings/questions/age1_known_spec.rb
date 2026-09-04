@@ -30,6 +30,7 @@ RSpec.describe Form::Lettings::Questions::Age1Known, type: :model do
     expect(question.answer_options).to eq({
       "0" => { "value" => "Yes" },
       "1" => { "value" => "No" },
+      "2" => { "value" => "Tenant prefers not to say" },
     })
   end
 
@@ -52,6 +53,9 @@ RSpec.describe Form::Lettings::Questions::Age1Known, type: :model do
           },
           {
             "age1_known" => 1,
+          },
+          {
+            "age1_known" => 2,
           },
         ],
       },

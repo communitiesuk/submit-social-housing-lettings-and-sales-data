@@ -5,7 +5,10 @@ class Form::Lettings::Questions::Age < ::Form::Question
     @copy_key = "lettings.household_characteristics.age#{person_index}.age#{person_index}"
     @type = "numeric"
     @width = 2
-    @inferred_check_answers_value = [{ "condition" => { "age#{person_index}_known" => 1 }, "value" => "Not known" }]
+    @inferred_check_answers_value = [
+      { "condition" => { "age#{person_index}_known" => 1 }, "value" => "Not known" },
+      { "condition" => { "age#{person_index}_known" => 2 }, "value" => "Prefers not to say" },
+    ]
     @check_answers_card_number = person_index
     @max = 120
     @min = 1

@@ -27,6 +27,7 @@ RSpec.describe Form::Sales::Questions::Buyer2AgeKnown, type: :model do
     expect(question.answer_options).to eq({
       "0" => { "value" => "Yes" },
       "1" => { "value" => "No" },
+      "2" => { "value" => "Buyer prefers not to say" },
     })
   end
 
@@ -38,10 +39,11 @@ RSpec.describe Form::Sales::Questions::Buyer2AgeKnown, type: :model do
 
   it "has correct hidden in check answers" do
     expect(question.hidden_in_check_answers).to eq({
-      "depends_on" => [{
-        "age2_known" => 0,
-      },
-                       { "age2_known" => 1 }],
+      "depends_on" => [
+        { "age2_known" => 0 },
+        { "age2_known" => 1 },
+        { "age2_known" => 2 },
+      ],
     })
   end
 

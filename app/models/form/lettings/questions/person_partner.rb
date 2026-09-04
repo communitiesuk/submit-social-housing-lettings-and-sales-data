@@ -41,4 +41,12 @@ class Form::Lettings::Questions::PersonPartner < ::Form::Question
   def skip_question_in_form_flow?(log)
     form.start_year_2026_or_later? && log.is_any_person_partner?
   end
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "R"
+
+    super
+  end
 end
