@@ -5,6 +5,7 @@ class Form::Lettings::Pages::PropertyLocalAuthority < ::Form::Page
     @depends_on = [
       { "is_la_inferred" => false, "is_general_needs?" => true, "form.start_year_2025_or_later?" => false, "address_search_given?" => true },
       { "is_la_inferred" => false, "is_general_needs?" => true, "form.start_year_2025_or_later?" => true },
+      { "is_la_inferred" => false, "is_supported_housing?" => true, "form.start_year_2026_or_later?" => true },
     ]
   end
 
