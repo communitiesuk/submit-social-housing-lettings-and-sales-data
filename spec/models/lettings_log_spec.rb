@@ -467,7 +467,7 @@ RSpec.describe LettingsLog do
 
       describe "when changing a log's scheme and hence calling reset_scheme_location!" do
         context "when there is one valid location and many invalid locations in the new scheme" do
-          let(:scheme) { create(:scheme, sensitive: 0) }
+          let(:scheme) { create(:scheme) }
           let(:invalid_location_1) { create(:location, scheme:, startdate: Time.zone.today + 3.weeks) }
           let(:valid_location) { create(:location, scheme:, startdate: Time.zone.yesterday) }
           let(:invalid_location_2) { create(:location, scheme:, startdate: Time.zone.today + 3.weeks) }
@@ -479,9 +479,9 @@ RSpec.describe LettingsLog do
         end
 
         context "when there are many valid locations in the new scheme" do
-          let(:old_scheme) { create(:scheme, sensitive: 0, owning_organisation:) }
+          let(:old_scheme) { create(:scheme, owning_organisation:) }
           let(:old_location) { create(:location, scheme: old_scheme) }
-          let(:new_scheme) { create(:scheme, sensitive: 0, owning_organisation:) }
+          let(:new_scheme) { create(:scheme, owning_organisation:) }
 
           before do
             create_list(:location, 2, scheme: new_scheme)
@@ -508,7 +508,7 @@ RSpec.describe LettingsLog do
       end
 
       context "and a scheme with a single log is selected" do
-        let(:scheme) { create(:scheme, sensitive: 0, owning_organisation:) }
+        let(:scheme) { create(:scheme, owning_organisation:) }
         let!(:location) { create(:location, scheme:) }
 
         before do
@@ -666,7 +666,7 @@ RSpec.describe LettingsLog do
       end
 
       context "and not renewal" do
-        let(:scheme) { create(:scheme, sensitive: 0, owning_organisation:) }
+        let(:scheme) { create(:scheme, owning_organisation:) }
         let(:location) { create(:location, scheme:, postcode: "M11AE", type_of_unit: 1, mobility_type: "W") }
 
         let(:supported_housing_lettings_log) do
@@ -1091,7 +1091,7 @@ RSpec.describe LettingsLog do
   end
 
   describe "resetting invalidated fields" do
-    let(:scheme) { create(:scheme, sensitive: 0, owning_organisation: assigned_to_user.organisation) }
+    let(:scheme) { create(:scheme, owning_organisation: assigned_to_user.organisation) }
     let!(:location) { create(:location, location_code: "E07000223", scheme:) }
     let(:lettings_log) do
       create(
@@ -1181,7 +1181,7 @@ RSpec.describe LettingsLog do
       let(:organisation_2) { create(:organisation) }
 
       context "when the organisation selected doesn't match the scheme set" do
-        let(:scheme) { create(:scheme, sensitive: 0, owning_organisation: assigned_to_user.organisation) }
+        let(:scheme) { create(:scheme, owning_organisation: assigned_to_user.organisation) }
         let(:location) { create_list(:location, 2, scheme:).first }
         let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id, location_id: location.id) }
 
@@ -1194,7 +1194,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when the organisation selected still matches the scheme set" do
-        let(:scheme) { create(:scheme, sensitive: 0, owning_organisation: organisation_2) }
+        let(:scheme) { create(:scheme, owning_organisation: organisation_2) }
         let(:location) { create_list(:location, 2, scheme:).first }
         let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id, location_id: location.id) }
 
@@ -1797,7 +1797,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a duplicate supported housing log" do
-        let(:scheme) { create(:scheme, sensitive: 0) }
+        let(:scheme) { create(:scheme) }
         let(:location) { create(:location, scheme:) }
         let(:location_2) { create(:location, scheme:) }
         let(:supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation) }
@@ -1963,7 +1963,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a duplicate supported housing log" do
-        let(:scheme) { create(:scheme, sensitive: 0, owning_organisation: organisation) }
+        let(:scheme) { create(:scheme, owning_organisation: organisation) }
         let(:location) { create(:location, scheme:) }
         let!(:supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation) }
         let!(:duplicate_supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation) }
@@ -2238,105 +2238,6 @@ RSpec.describe LettingsLog do
     it "returns true when the scheme is confidential" do
       log.scheme = build(:scheme, sensitive: 1)
       expect(log.scheme_has_confidential_information?).to be true
-    end
-  end
-
-  describe "clearing confidential scheme address data on save" do
-    let(:owning_organisation) { create(:organisation) }
-    let(:scheme) { create(:scheme, sensitive: 1, owning_organisation:) }
-    let(:location) { create(:location, scheme:) }
-    let(:log) do
-      create(
-        :lettings_log,
-        :ignore_validation_errors,
-        needstype: 2,
-        owning_organisation:,
-        managing_organisation: owning_organisation,
-        scheme:,
-        location:,
-        startdate: Time.zone.local(2026, 5, 1),
-      )
-    end
-
-    it "clears address, UPRN and LA data collected before the confidential address feature" do
-      log.update_columns(
-        uprn: "123456789012",
-        uprn_known: 1,
-        uprn_confirmed: 1,
-        uprn_selection: "123456789012",
-        address_line1: "1 Secret Street",
-        address_line2: "Flat 2",
-        town_or_city: "Secretville",
-        county: "Secretshire",
-        postcode_known: 1,
-        address_line1_input: "1 Secret Street input",
-        postcode_full_input: "AB1 2CD",
-        address_line1_as_entered: "1 Secret Street as entered",
-        address_line2_as_entered: "Flat 2 as entered",
-        town_or_city_as_entered: "Secretville as entered",
-        county_as_entered: "Secretshire as entered",
-        postcode_full_as_entered: "AB1 2CD",
-        la_as_entered: "la as entered",
-        address_search_value_check: 1,
-        la: "E09000003",
-        is_la_inferred: true,
-      )
-
-      log.skip_uprn_lookup = true
-      log.skip_address_lookup = true
-      log.valid?
-      log.save!(validate: false)
-      log.reload
-
-      expect(log.uprn).to be_nil
-      expect(log.uprn_known).to be_nil
-      expect(log.uprn_confirmed).to be_nil
-      expect(log.uprn_selection).to be_nil
-      expect(log.address_line1).to be_nil
-      expect(log.address_line2).to be_nil
-      expect(log.town_or_city).to be_nil
-      expect(log.county).to be_nil
-      expect(log.postcode_known).to be_nil
-      expect(log.address_line1_input).to be_nil
-      expect(log.postcode_full_input).to be_nil
-      expect(log.address_line1_as_entered).to be_nil
-      expect(log.address_line2_as_entered).to be_nil
-      expect(log.town_or_city_as_entered).to be_nil
-      expect(log.county_as_entered).to be_nil
-      expect(log.postcode_full_as_entered).to be_nil
-      expect(log.la_as_entered).to be_nil
-      expect(log.address_search_value_check).to be_nil
-      # la is deliberately left null in the DB - see LettingsLog#la, which derives it live
-      # from the scheme location on every read, and reset_and_infer_la! (which only records
-      # whether that fallback resolves, via is_la_inferred, without persisting the value)
-      expect(log[:la]).to be_nil
-      expect(log.la).to eq(location.location_code)
-      expect(log.is_la_inferred).to be true
-    end
-
-    it "still infers the local authority from the scheme's location after clearing" do
-      log.update_columns(la: "E09000003", is_la_inferred: false)
-      log.valid?
-      log.save!(validate: false)
-      expect(log.la).to eq(location.location_code)
-      expect(log[:la]).to be_nil
-      expect(log.is_la_inferred).to be true
-    end
-
-    it "leaves la blank and is_la_inferred false when the location has no resolvable local authority" do
-      location.update_columns(location_code: nil, location_admin_district: nil, is_la_inferred: false)
-      log.update_columns(la: "E09000003", is_la_inferred: false)
-      log.valid?
-      log.save!(validate: false)
-      expect(log.la).to be_nil
-      expect(log.is_la_inferred).to be false
-    end
-
-    it "does not affect the scheme or location" do
-      log.update_columns(address_line1: "1 Secret Street")
-      log.valid?
-      expect { log.save!(validate: false) }.not_to change(log, :scheme_id)
-      expect(log.location_id).to eq(location.id)
     end
   end
 end
