@@ -13,7 +13,7 @@ RSpec.describe Storage::ArchiveService do
     file
   end
   let(:archive_content) do
-    zip_file = Zip::File.open_buffer(StringIO.new)
+    zip_file = Zip::File.open_buffer(StringIO.new, create: true)
     zip_file.mkdir(compressed_folder)
     zip_file.add(compressed_filepath, compressed_file)
     zip_file.write_buffer
@@ -51,7 +51,7 @@ RSpec.describe Storage::ArchiveService do
 
     it "raises an error if the file exists but is too large" do
       archive = archive_service.instance_variable_get(:@archive)
-      allow(archive).to receive(:get_entry).and_return(Zip::Entry.new(nil, "", nil, nil, nil, nil, nil, 100_000_000, nil))
+      allow(archive).to receive(:get_entry).and_return(Zip::Entry.new(nil, "", size: 100_000_000))
 
       expect { archive_service.get_file_io(compressed_filepath) }
         .to raise_error(RuntimeError, "File too large to be extracted")

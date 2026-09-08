@@ -48,7 +48,7 @@ module Exports
       @logger.info("Creating #{archive} - #{initial_count} resources")
       return {} if initial_count.zero?
 
-      zip_file = Zip::File.open_buffer(StringIO.new)
+      zip_file = Zip::File.open_buffer(StringIO.new, create: true)
 
       part_number = 1
       last_processed_marker = nil
