@@ -9,7 +9,7 @@ RSpec.describe Form::Lettings::Questions::Age, type: :model do
   let(:start_year_2026_or_later?) { false }
   let(:person_question_count) { 5 }
   let(:start_year) { current_collection_start_year }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: collection_start_date_for_year(start_year), start_year_2024_or_later?: true, start_year_2026_or_later?: start_year_2026_or_later?, person_question_count:))) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: collection_start_date_for_year(start_year), start_year_2026_or_later?: start_year_2026_or_later?, person_question_count:))) }
   let(:person_index) { 2 }
 
   it "has correct page" do

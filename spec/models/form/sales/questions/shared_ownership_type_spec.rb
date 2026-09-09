@@ -12,10 +12,6 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
   let(:subsection) { instance_double(Form::Subsection, form:) }
   let(:page) { instance_double(Form::Page, subsection:) }
 
-  before do
-    allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-  end
-
   it "has correct page" do
     expect(question.page).to eq(page)
   end
@@ -34,10 +30,6 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
 
   context "when form start date is 2023/24" do
     let(:start_date) { Time.zone.local(2023, 4, 2) }
-
-    before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(false)
-    end
 
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
@@ -58,10 +50,6 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
   end
 
   context "when form start date is on or after 2024/25" do
-    before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-    end
-
     it "shows shows correct top_guidance_partial" do
       expect(question.top_guidance_partial).to eq("shared_ownership_type_definitions")
     end

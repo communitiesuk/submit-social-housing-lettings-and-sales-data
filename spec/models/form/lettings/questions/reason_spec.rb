@@ -1,16 +1,17 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Questions::Reason, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page, id: "reason") }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date) }
 
   before do
-    allow(form).to receive_messages(start_year_2024_or_later?: false, start_year_2025_or_later?: false, start_year_2026_or_later?: false)
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
   end
@@ -41,7 +42,7 @@ RSpec.describe Form::Lettings::Questions::Reason, type: :model do
 
   context "with 2024/25 form" do
     before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
+      allow(form).to receive_messages(start_year_2025_or_later?: false, start_year_2026_or_later?: false)
     end
 
     it "has the correct answer_options" do
@@ -84,7 +85,7 @@ RSpec.describe Form::Lettings::Questions::Reason, type: :model do
 
   context "with 2025/26 form" do
     before do
-      allow(form).to receive(:start_year_2025_or_later?).and_return(true)
+      allow(form).to receive_messages(start_year_2025_or_later?: true, start_year_2026_or_later?: false)
     end
 
     it "has the correct answer_options" do
@@ -128,7 +129,7 @@ RSpec.describe Form::Lettings::Questions::Reason, type: :model do
 
   context "with 2026/27 form" do
     before do
-      allow(form).to receive(:start_year_2026_or_later?).and_return(true)
+      allow(form).to receive_messages(start_year_2025_or_later?: true, start_year_2026_or_later?: true)
     end
 
     it "has the correct answer_options" do

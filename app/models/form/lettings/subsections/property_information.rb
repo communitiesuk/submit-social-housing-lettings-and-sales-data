@@ -13,7 +13,6 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
       Form::Lettings::Pages::PropertyLocalAuthority.new(nil, nil, self),
       Form::Lettings::Pages::RentValueCheck.new("local_authority_rent_value_check", nil, self),
       (first_let_questions unless form.start_year_2025_or_later?),
-      number_of_times_relet,
       Form::Lettings::Pages::PropertyUnitType.new(nil, nil, self),
       (Form::Lettings::Pages::PropertyBuildingType.new(nil, nil, self) unless form.start_year_2026_or_later?),
       Form::Lettings::Pages::PropertyWheelchairAccessible.new(nil, nil, self),
@@ -40,10 +39,6 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
         Form::Lettings::Pages::Address.new(nil, nil, self),
       ]
     end
-  end
-
-  def number_of_times_relet
-    Form::Lettings::Pages::PropertyNumberOfTimesRelet.new(nil, nil, self) unless form.start_year_2024_or_later?
   end
 
   def first_let_questions
