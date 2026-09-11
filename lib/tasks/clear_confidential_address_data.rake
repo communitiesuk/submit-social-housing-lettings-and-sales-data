@@ -41,26 +41,7 @@ task clear_confidential_address_data: :environment do
   scope.find_each do |log|
     original_status = log.status
 
-    log.uprn = nil
-    log.uprn_known = nil
-    log.uprn_confirmed = nil
-    log.uprn_selection = nil
-    log.address_line1 = nil
-    log.address_line2 = nil
-    log.town_or_city = nil
-    log.county = nil
-    log.postcode_full = nil
-    log.postcode_known = nil
-    log.address_line1_input = nil
-    log.postcode_full_input = nil
-    log.address_line1_as_entered = nil
-    log.address_line2_as_entered = nil
-    log.town_or_city_as_entered = nil
-    log.county_as_entered = nil
-    log.postcode_full_as_entered = nil
-    log.la_as_entered = nil
-    log.address_search_value_check = nil
-    log.la = nil
+    fields_present_scope.each { |field| log[field] = nil }
     log.is_la_inferred = log.la.present?
 
     if log.save(validate: false)
