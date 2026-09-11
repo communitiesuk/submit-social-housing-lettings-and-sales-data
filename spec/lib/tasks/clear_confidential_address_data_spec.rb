@@ -16,6 +16,31 @@ RSpec.describe "clear_confidential_address_data" do
     let(:non_confidential_scheme) { create(:scheme, sensitive: "No", owning_organisation:) }
     let(:location) { create(:location, scheme:) }
 
+    let(:cleared_fields) do
+      %w[
+        uprn
+        uprn_known
+        uprn_confirmed
+        uprn_selection
+        address_line1
+        address_line2
+        town_or_city
+        county
+        postcode_full
+        postcode_known
+        address_line1_input
+        postcode_full_input
+        address_line1_as_entered
+        address_line2_as_entered
+        town_or_city_as_entered
+        county_as_entered
+        postcode_full_as_entered
+        la_as_entered
+        address_search_value_check
+        la
+      ]
+    end
+
     def create_log_with_address_data(scheme:, location:, startdate:)
       log = create(
         :lettings_log,
@@ -32,9 +57,24 @@ RSpec.describe "clear_confidential_address_data" do
       # address/UPRN data collected before the confidential address feature existed.
       log.update_columns(
         uprn: "123456789012",
+        uprn_known: 1,
+        uprn_confirmed: 1,
+        uprn_selection: "123456789012",
         address_line1: "1 Secret Street",
+        address_line2: "Flat 2",
         town_or_city: "Secretville",
+        county: "Secretshire",
+        postcode_full: "SW1A 1AA",
         postcode_known: 1,
+        address_line1_input: "1 Secret Street",
+        postcode_full_input: "SW1A1AA",
+        address_line1_as_entered: "1 Secret Street",
+        address_line2_as_entered: "Flat 2",
+        town_or_city_as_entered: "Secretville",
+        county_as_entered: "Secretshire",
+        postcode_full_as_entered: "SW1A 1AA",
+        la_as_entered: "E09000003",
+        address_search_value_check: 1,
         la: "E09000003",
       )
       log
@@ -51,6 +91,15 @@ RSpec.describe "clear_confidential_address_data" do
         expect(log.town_or_city).to be_nil
         expect(log.uprn).to be_nil
         expect(log.postcode_known).to be_nil
+      end
+
+      it "clears every field the task targets" do
+        task.invoke
+        log.reload
+
+        cleared_fields.each do |field|
+          expect(log[field]).to be_nil, "expected #{field} to be nil but was #{log[field].inspect}"
+        end
       end
 
       it "keeps the log's status unchanged when the location's LA can be inferred" do
