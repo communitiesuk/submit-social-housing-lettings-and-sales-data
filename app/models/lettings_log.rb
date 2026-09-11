@@ -31,7 +31,7 @@ class LettingsLog < Log
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
   before_validation :reset_invalidated_dependent_fields!
-  before_validation :reset_location_fields!, unless: :postcode_known?
+  before_validation :reset_location_fields!, unless: :postcode_known_or_la_derived_from_scheme_location?
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
   before_validation :set_derived_fields!
   before_validation :process_uprn_change!, if: :should_process_uprn_change?
@@ -373,6 +373,10 @@ class LettingsLog < Log
   def postcode_known?
     # 1: Yes
     postcode_known == 1
+  end
+
+  def postcode_known_or_la_derived_from_scheme_location?
+    postcode_known? || (form&.start_year_2026_or_later? && is_supported_housing? && location.present?)
   end
 
   def previous_postcode_known?

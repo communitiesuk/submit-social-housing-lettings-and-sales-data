@@ -176,9 +176,13 @@ module DerivedVariables::LettingsLogVariables
 
     if !form.start_year_2026_or_later? && is_supported_housing?
       reset_address_fields!
-    elsif form.start_year_2026_or_later? && location_changed?
-      reset_address_fields!
-      self.la = nil
+    elsif form.start_year_2026_or_later?
+      if location_changed?
+        reset_address_fields!
+        self.la = nil
+      end
+
+      self.is_la_inferred = la.present? if is_supported_housing? && location && self[:la].blank?
     end
 
     if scheme_has_confidential_information?
