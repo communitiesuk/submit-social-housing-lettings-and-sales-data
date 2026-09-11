@@ -66,6 +66,20 @@ RSpec.describe "clear_confidential_address_data" do
         expect(log[:la]).to be_nil
         expect(log.is_la_inferred).to be true
       end
+
+      it "does not affect the scheme or location associations" do
+        task.invoke
+        log.reload
+
+        expect(log.scheme_id).to eq(scheme.id)
+        expect(log.location_id).to eq(location.id)
+      end
+
+      it "is idempotent" do
+        task.invoke
+        task.reenable
+        expect { task.invoke }.not_to(change { log.reload.updated_at })
+      end
     end
 
     context "when the scheme's location has no resolvable local authority" do
@@ -88,7 +102,12 @@ RSpec.describe "clear_confidential_address_data" do
 
       it "does not clear the address fields" do
         task.invoke
-        expect(log.reload.address_line1).to eq("1 Secret Street")
+        log.reload
+
+        expect(log.address_line1).to eq("1 Secret Street")
+        expect(log.town_or_city).to eq("Secretville")
+        expect(log.uprn).to eq("123456789012")
+        expect(log.postcode_known).to eq(1)
       end
     end
 
@@ -97,7 +116,12 @@ RSpec.describe "clear_confidential_address_data" do
 
       it "does not clear the address fields" do
         task.invoke
-        expect(log.reload.address_line1).to eq("1 Secret Street")
+        log.reload
+
+        expect(log.address_line1).to eq("1 Secret Street")
+        expect(log.town_or_city).to eq("Secretville")
+        expect(log.uprn).to eq("123456789012")
+        expect(log.postcode_known).to eq(1)
       end
     end
 
@@ -118,24 +142,6 @@ RSpec.describe "clear_confidential_address_data" do
       it "is not touched" do
         expect { task.invoke }.not_to(change { log.reload.updated_at })
       end
-    end
-
-    it "does not affect the scheme or location associations" do
-      log = create_log_with_address_data(scheme:, location:, startdate: Time.zone.local(2026, 5, 1))
-
-      task.invoke
-      log.reload
-
-      expect(log.scheme_id).to eq(scheme.id)
-      expect(log.location_id).to eq(location.id)
-    end
-
-    it "is idempotent" do
-      log = create_log_with_address_data(scheme:, location:, startdate: Time.zone.local(2026, 5, 1))
-
-      task.invoke
-      task.reenable
-      expect { task.invoke }.not_to(change { log.reload.updated_at })
     end
   end
 end
