@@ -136,13 +136,13 @@ RSpec.describe "clear_confidential_address_data" do
 
       before { location.update_columns(location_code: nil, location_admin_district: nil, is_la_inferred: false) }
 
-      it "clears the address fields and forces the log to in_progress" do
+      it "clears the address fields but leaves the log's status unchanged" do
         task.invoke
         log.reload
 
         expect(log.address_line1).to be_nil
         expect(log.la).to be_nil
-        expect(log.status).to eq("in_progress")
+        expect(log.status).to eq("completed")
       end
     end
 
