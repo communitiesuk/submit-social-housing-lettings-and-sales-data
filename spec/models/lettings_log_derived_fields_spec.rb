@@ -1583,6 +1583,39 @@ RSpec.describe LettingsLog, type: :model do
         end
       end
     end
+
+    context "when it is 2026 and the log is new, with a location assigned for the first time (e.g. bulk upload)", metadata: { year: 26 } do
+      let(:startdate) { collection_start_date_for_year(2026) }
+      let(:location_a) { create(:location) }
+      let(:log) { build(:lettings_log, startdate:, assigned_to: user) }
+      let(:la) { "E09000003" }
+
+      around do |example|
+        Timecop.freeze(collection_start_date_for_year(2026)) do
+          Singleton.__init__(FormHandler)
+          example.run
+        end
+      end
+
+      before do
+        allow(location_a).to receive(:lookup_postcode!).and_return(nil)
+
+        log.assign_attributes(location: location_a, uprn:, uprn_known:, uprn_confirmed:, address_line1:, address_line2:, town_or_city:, county:, postcode_full:, la:, manual_address_entry_selected:)
+      end
+
+      it "does not reset the address fields" do
+        expect { log.set_derived_fields! }
+          .to not_change { log.read_attribute(:uprn) }
+          .and not_change { log.read_attribute(:uprn_known) }
+          .and not_change { log.read_attribute(:uprn_confirmed) }
+          .and not_change { log.read_attribute(:address_line1) }
+          .and not_change { log.read_attribute(:address_line2) }
+          .and not_change { log.read_attribute(:town_or_city) }
+          .and not_change { log.read_attribute(:county) }
+          .and(not_change { log.read_attribute(:postcode_full) })
+          .and(not_change { log.read_attribute(:la) })
+      end
+    end
   end
 
   describe "address field behaviour for confidential schemes", metadata: { year: 26 } do
