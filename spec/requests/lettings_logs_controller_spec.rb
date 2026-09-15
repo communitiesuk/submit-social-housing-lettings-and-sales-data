@@ -1252,7 +1252,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
             before do
               create_list(:lettings_log, further_unresolved_logs_count, unresolved: true, assigned_to: user)
-              lettings_log.update!(needstype: 2, scheme:, location:)
+              lettings_log.update!(needstype: 2, scheme:, location:, postcode_full: nil)
               get lettings_log_path(lettings_log)
             end
 
