@@ -1965,8 +1965,8 @@ RSpec.describe LettingsLog do
       context "when there is a duplicate supported housing log" do
         let(:scheme) { create(:scheme, owning_organisation: organisation) }
         let(:location) { create(:location, scheme:) }
-        let!(:supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation, postcode_full: nil) }
-        let!(:duplicate_supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation, postcode_full: nil) }
+        let!(:supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation, postcode_full: location.postcode) }
+        let!(:duplicate_supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation, postcode_full: location.postcode) }
 
         it "returns the log as a duplicate" do
           expect(duplicate_sets).to contain_exactly(
