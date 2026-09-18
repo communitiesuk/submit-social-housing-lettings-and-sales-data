@@ -359,7 +359,7 @@ RSpec.describe StartController, type: :request do
 
       context "and previous collection window is closed for editing" do
         before do
-          Timecop.freeze(current_collection_start_date + 6.months)
+          Timecop.freeze(previous_collection_edit_end_date + 1.day)
         end
 
         after do
