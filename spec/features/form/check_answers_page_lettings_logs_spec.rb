@@ -18,7 +18,7 @@ RSpec.describe "Lettings Log Check Answers Page" do
       needstype: 2,
       scheme:,
       location:,
-      postcode_full: nil,
+      postcode_full: location.postcode,
     )
   end
   let(:empty_lettings_log) do
