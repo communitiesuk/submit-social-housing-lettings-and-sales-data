@@ -1,16 +1,17 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Questions::IsCarehome, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date) }
 
   before do
-    allow(form).to receive(:start_year_2024_or_later?).and_return(false)
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
   end
@@ -31,26 +32,11 @@ RSpec.describe Form::Lettings::Questions::IsCarehome, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
-  context "with 2023/24 form" do
-    it "has the correct answer_options in the correct order" do
-      expect(question.answer_options.map { |k, v| [k, v["value"]] }).to eq([
-        %w[0 No],
-        %w[1 Yes],
-      ])
-    end
-  end
-
-  context "with 2024/25 form" do
-    before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-    end
-
-    it "has the correct answer_options in the correct order" do
-      expect(question.answer_options.map { |k, v| [k, v["value"]] }).to eq([
-        %w[1 Yes],
-        %w[0 No],
-      ])
-    end
+  it "has the correct answer_options in the correct order" do
+    expect(question.answer_options.map { |k, v| [k, v["value"]] }).to eq([
+      %w[1 Yes],
+      %w[0 No],
+    ])
   end
 
   it "has the correct check_answers_card_number" do

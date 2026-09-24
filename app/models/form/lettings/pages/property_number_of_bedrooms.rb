@@ -2,7 +2,7 @@ class Form::Lettings::Pages::PropertyNumberOfBedrooms < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "property_number_of_bedrooms"
-    @depends_on = [{ "is_general_needs?" => true, "is_beds_inferred?" => false }]
+    @depends_on = [{ "is_general_needs?" => true, "is_bedsit?" => false }]
   end
 
   def questions

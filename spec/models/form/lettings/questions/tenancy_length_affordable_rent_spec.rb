@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Questions::TenancyLengthAffordableRent, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(nil, nil, page) }
 
   let(:question_id) { nil }
@@ -8,10 +10,9 @@ RSpec.describe Form::Lettings::Questions::TenancyLengthAffordableRent, type: :mo
   let(:page) { instance_double(Form::Page, id: "affordable_tenancy_length") }
   let(:subsection) { instance_double(Form::Subsection) }
   let(:form) { instance_double(Form, start_date:) }
-  let(:start_date) { Time.utc(2023, 4, 1) }
+  let(:start_date) { current_collection_start_date }
 
   before do
-    allow(form).to receive(:start_year_2024_or_later?).and_return(false)
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
   end
@@ -31,10 +32,6 @@ RSpec.describe Form::Lettings::Questions::TenancyLengthAffordableRent, type: :mo
   context "with 2024/25 form" do
     let(:start_date) { Time.utc(2024, 4, 1) }
 
-    before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-    end
-
     it "has the correct question number" do
       expect(question.question_number).to eq(28)
     end
@@ -42,10 +39,6 @@ RSpec.describe Form::Lettings::Questions::TenancyLengthAffordableRent, type: :mo
 
   context "with 2025/26 form" do
     let(:start_date) { Time.utc(2025, 4, 1) }
-
-    before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-    end
 
     it "has the correct question number" do
       expect(question.question_number).to eq(29)

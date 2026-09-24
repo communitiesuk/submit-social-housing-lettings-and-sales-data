@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::NumberJointBuyers, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -10,7 +12,7 @@ RSpec.describe Form::Sales::Questions::NumberJointBuyers, type: :model do
 
   before do
     allow(page).to receive(:subsection).and_return(subsection)
-    allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_2024_or_later?: false, start_date: Time.zone.local(2023, 4, 1)))
+    allow(subsection).to receive(:form).and_return(instance_double(Form, start_date: current_collection_start_date))
   end
 
   it "has correct page" do

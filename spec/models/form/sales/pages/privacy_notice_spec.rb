@@ -1,12 +1,14 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::PrivacyNotice, type: :model do
+  include CollectionTimeHelper
+
   subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase: false) }
 
   let(:page_id) { "privacy_notice" }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection, id: "setup", copy_key: "setup") }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2024_or_later?: false) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date) }
 
   before do
     allow(subsection).to receive(:form).and_return(form)

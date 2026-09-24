@@ -9,22 +9,13 @@ class Form::Sales::Questions::Buyer1EthnicBackgroundWhite < ::Form::Question
   end
 
   def answer_options
-    if form.start_year_2024_or_later?
-      {
-        "1" => { "value" => "English, Welsh, Northern Irish, Scottish or British" },
-        "2" => { "value" => "Irish" },
-        "18" => { "value" => "Gypsy or Irish Traveller" },
-        "20" => { "value" => "Roma" },
-        "3" => { "value" => "Any other White background" },
-      }.freeze
-    else
-      {
-        "1" => { "value" => "English, Welsh, Northern Irish, Scottish or British" },
-        "2" => { "value" => "Irish" },
-        "18" => { "value" => "Gypsy or Irish Traveller" },
-        "3" => { "value" => "Any other White background" },
-      }.freeze
-    end
+    {
+      "1" => { "value" => "English, Welsh, Northern Irish, Scottish or British" },
+      "2" => { "value" => "Irish" },
+      "18" => { "value" => "Gypsy or Irish Traveller" },
+      "20" => { "value" => "Roma" },
+      "3" => { "value" => "Any other White background" },
+    }.freeze
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 23, 2024 => 25, 2025 => 23, 2026 => 25 }.freeze

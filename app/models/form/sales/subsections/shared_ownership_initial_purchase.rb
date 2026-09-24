@@ -14,8 +14,6 @@ class Form::Sales::Subsections::SharedOwnershipInitialPurchase < ::Form::Subsect
       Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_shared_ownership", nil, self, ownershipsch: 1, joint_purchase: false),
       Form::Sales::Pages::HandoverDate.new(nil, nil, self),
       Form::Sales::Pages::HandoverDateCheck.new(nil, nil, self),
-      Form::Sales::Pages::BuyerPrevious.new("buyer_previous_joint_purchase", nil, self, joint_purchase: true),
-      Form::Sales::Pages::BuyerPrevious.new("buyer_previous_not_joint_purchase", nil, self, joint_purchase: false),
       Form::Sales::Pages::PreviousBedrooms.new(nil, nil, self),
       Form::Sales::Pages::PreviousPropertyType.new(nil, nil, self),
       Form::Sales::Pages::PreviousTenure.new(nil, nil, self),

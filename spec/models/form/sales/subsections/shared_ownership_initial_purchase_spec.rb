@@ -7,11 +7,10 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
 
   let(:subsection_id) { nil }
   let(:subsection_definition) { nil }
-  let(:start_year_2024_or_later?) { true }
   let(:start_year_2025_or_later?) { true }
   let(:start_year_2026_or_later?) { true }
   let(:start_date) { current_collection_start_date }
-  let(:form) { instance_double(Form, start_date:, start_year_2024_or_later?: start_year_2024_or_later?, start_year_2025_or_later?: start_year_2025_or_later?, start_year_2026_or_later?: start_year_2026_or_later?) }
+  let(:form) { instance_double(Form, start_date:, start_year_2025_or_later?: start_year_2025_or_later?, start_year_2026_or_later?: start_year_2026_or_later?) }
   let(:section) { instance_double(Form::Sales::Sections::SaleInformation) }
 
   before do
@@ -35,8 +34,6 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
           living_before_purchase_shared_ownership
           handover_date
           handover_date_check
-          buyer_previous_joint_purchase
-          buyer_previous_not_joint_purchase
           previous_bedrooms
           previous_property_type
           shared_ownership_previous_tenure
@@ -75,8 +72,6 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
           living_before_purchase_shared_ownership
           handover_date
           handover_date_check
-          buyer_previous_joint_purchase
-          buyer_previous_not_joint_purchase
           previous_bedrooms
           previous_property_type
           shared_ownership_previous_tenure
@@ -114,8 +109,6 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
           living_before_purchase_shared_ownership
           handover_date
           handover_date_check
-          buyer_previous_joint_purchase
-          buyer_previous_not_joint_purchase
           previous_bedrooms
           previous_property_type
           shared_ownership_previous_tenure

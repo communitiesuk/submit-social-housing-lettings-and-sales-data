@@ -13,20 +13,12 @@ class Form::Sales::Pages::Uprn < ::Form::Page
   end
 
   def skip_text
-    if form.start_year_2024_or_later?
-      "Search for address instead"
-    else
-      "Enter address instead"
-    end
+    "Search for address instead"
   end
 
   def skip_href(log = nil)
     return unless log
 
-    if form.start_year_2024_or_later?
-      "address-matcher"
-    else
-      "address"
-    end
+    "address-matcher"
   end
 end

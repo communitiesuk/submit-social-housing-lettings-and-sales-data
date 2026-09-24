@@ -12,7 +12,7 @@ class Form::Sales::Pages::LaNominations < ::Form::Page
   end
 
   def routed_to?(log, _current_user)
-    return false if log.staircase == 1 && form.start_year_2024_or_later?
+    return false if log.staircase == 1
 
     super
   end
