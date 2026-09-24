@@ -11,13 +11,14 @@ class Form::Lettings::Questions::AgeKnown < ::Form::Question
       "depends_on" => [
         { "age#{person_index}_known" => 0 },
         { "age#{person_index}_known" => 1 },
+        { "age#{person_index}_known" => 2 },
       ],
     }
     @person_index = person_index
     @question_number = question_number
   end
 
-  ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
+  ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" }, "2" => { "value" => "Person prefers not to say" } }.freeze
 
   def question_number
     base_question_number = case form.start_date.year
@@ -34,5 +35,13 @@ class Form::Lettings::Questions::AgeKnown < ::Form::Question
                            end
 
     base_question_number + (form.person_question_count * @person_index)
+  end
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value.to_i == 2
+
+    super
   end
 end
