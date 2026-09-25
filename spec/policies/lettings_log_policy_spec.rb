@@ -8,7 +8,7 @@ RSpec.describe LettingsLogPolicy do
 
     context "when log nil" do
       before do
-        allow(log).to receive(:collection_period_open?).and_return(false)
+        allow(log).to receive(:collection_period_open_for_editing?).and_return(false)
       end
 
       it "does not allow deletion of log" do
@@ -18,7 +18,7 @@ RSpec.describe LettingsLogPolicy do
 
     context "when user nil" do
       before do
-        allow(log).to receive(:collection_period_open?).and_return(false)
+        allow(log).to receive(:collection_period_open_for_editing?).and_return(false)
       end
 
       it "does not allow deletion of log" do
@@ -26,21 +26,31 @@ RSpec.describe LettingsLogPolicy do
       end
     end
 
-    context "when collection period closed" do
+    context "when collection period closed for editing" do
       before do
-        allow(log).to receive(:collection_period_open?).and_return(false)
+        allow(log).to receive(:collection_period_open_for_editing?).and_return(false)
       end
 
       it "does not allow deletion of log" do
-        expect(log).to receive(:collection_period_open?)
+        expect(log).to receive(:collection_period_open_for_editing?)
 
         expect(policy).not_to permit(build(:user, :support), log)
       end
     end
 
-    context "when collection period open" do
+    context "when new logs can no longer be created but the log is still editable" do
       before do
-        allow(log).to receive(:collection_period_open?).and_return(true)
+        allow(log).to receive_messages(collection_period_open?: false, collection_period_open_for_editing?: true)
+      end
+
+      it "allows deletion of log" do
+        expect(policy).to permit(build(:user, :support), log)
+      end
+    end
+
+    context "when collection period open for editing" do
+      before do
+        allow(log).to receive(:collection_period_open_for_editing?).and_return(true)
       end
 
       context "when not started" do
@@ -60,13 +70,13 @@ RSpec.describe LettingsLogPolicy do
             let(:user_of_managing_org) { create(:user, :data_coordinator, organisation: log.managing_organisation) }
 
             it "does not allow deletion of log" do
-              expect(log).to receive(:collection_period_open?)
+              expect(log).to receive(:collection_period_open_for_editing?)
 
               expect(policy).not_to permit(user, log)
             end
 
             it "allows deletion of log" do
-              expect(log).to receive(:collection_period_open?)
+              expect(log).to receive(:collection_period_open_for_editing?)
 
               expect(policy).to permit(user_of_managing_org, log)
             end
@@ -84,7 +94,7 @@ RSpec.describe LettingsLogPolicy do
             let(:user) { create(:user) }
 
             it "does not allow deletion of log" do
-              expect(log).to receive(:collection_period_open?)
+              expect(log).to receive(:collection_period_open_for_editing?)
 
               expect(policy).not_to permit(user, log)
             end
