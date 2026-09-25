@@ -31,6 +31,11 @@ RSpec.describe ContentController, type: :request do
       it "returns the page" do
         expect(page).to have_title("Accessibility statement")
       end
+
+      it "links to the helpdesk" do
+        expect(page).to have_link("contact us through the helpdesk", href: "https://mhclgdigital.atlassian.net/servicedesk/customer/portal/54")
+        expect(page).to have_link("contact the helpdesk", href: "https://mhclgdigital.atlassian.net/servicedesk/customer/portal/54")
+      end
     end
 
     describe "render data sharing agreement" do

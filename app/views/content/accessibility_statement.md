@@ -32,11 +32,11 @@ If you need information on this website in a different format like accessible PD
 
 We’ll consider your request and get back to you in 2 working days.
 
-You can also [contact us through the helpdesk](https://mhclgdigital.atlassian.net/servicedesk/customer/portal/54).
+You can also [contact us through the helpdesk](<%= GlobalConstants::HELPDESK_URL %>).
 
 ### Reporting accessibility problems with this website
 
-We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, [contact the helpdesk](https://mhclgdigital.atlassian.net/servicedesk/customer/portal/54).
+We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, [contact the helpdesk](<%= GlobalConstants::HELPDESK_URL %>).
 
 ### Enforcement procedure
 
