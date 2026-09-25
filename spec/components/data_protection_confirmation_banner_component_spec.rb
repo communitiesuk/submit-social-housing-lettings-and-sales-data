@@ -31,7 +31,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
         expect(component.display_banner?).to be(true)
         expect(render).to have_link(
           "Contact helpdesk to assign a data protection officer",
-          href: "https://mhclgdigital.atlassian.net/servicedesk/customer/portal/6/group/11",
+          href: "https://mhclgdigital.atlassian.net/servicedesk/customer/portal/54",
         )
         expect(render).to have_selector("p", text: "To create logs your organisation must state a data protection officer. They must sign the Data Sharing Agreement.")
       end
