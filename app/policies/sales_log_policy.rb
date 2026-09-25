@@ -10,7 +10,7 @@ class SalesLogPolicy
     return false unless log && user
 
     # Can only delete editable logs
-    return false unless log.collection_period_open?
+    return false unless log.collection_period_open_for_editing?
 
     # Support users can delete any log
     return true if user.support?
