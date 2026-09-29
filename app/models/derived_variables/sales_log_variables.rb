@@ -56,6 +56,8 @@ module DerivedVariables::SalesLogVariables
       self.uprn = nil
       if uprn_known_was == 1
         reset_address_fields!
+        self.la = nil
+        self.is_la_inferred = false
       end
     end
 
@@ -63,6 +65,8 @@ module DerivedVariables::SalesLogVariables
       reset_address_fields!
       self.uprn_known = 0
       self.uprn_confirmed = nil
+      self.la = nil
+      self.is_la_inferred = false
     end
 
     if form.start_year_2024_or_later?
@@ -275,7 +279,5 @@ private
     self.pcode1 = nil
     self.pcode2 = nil
     self.pcodenk = nil
-    self.is_la_inferred = nil
-    self.la = nil
   end
 end
