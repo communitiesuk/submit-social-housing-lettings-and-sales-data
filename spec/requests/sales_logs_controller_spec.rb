@@ -915,6 +915,16 @@ RSpec.describe SalesLogsController, type: :request do
       end
 
       context "with sales logs from a closed previous collection period" do
+        # These examples need logs in the archived collection year,
+        # so we have to enforce we are in the crossover period
+        around do |example|
+          Timecop.freeze(current_collection_start_date) do
+            Singleton.__init__(FormHandler)
+            example.run
+          end
+          Singleton.__init__(FormHandler)
+        end
+
         let(:completed_sales_log) do
           FactoryBot.create(
             :sales_log,
