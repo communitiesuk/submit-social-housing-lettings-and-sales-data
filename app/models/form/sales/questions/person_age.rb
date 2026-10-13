@@ -4,10 +4,16 @@ class Form::Sales::Questions::PersonAge < ::Form::Question
     @type = "numeric"
     @copy_key = person_index == 2 ? "sales.household_characteristics.age2.person.age2" : "sales.household_characteristics.age#{person_index}.age#{person_index}"
     @width = 3
-    @inferred_check_answers_value = [{
-      "condition" => { "age#{person_index}_known" => 1 },
-      "value" => "Not known",
-    }]
+    @inferred_check_answers_value = [
+      {
+        "condition" => { "age#{person_index}_known" => 1 },
+        "value" => "Not known",
+      },
+      {
+        "condition" => { "age#{person_index}_known" => 2 },
+        "value" => "Prefers not to say",
+      },
+    ]
     @check_answers_card_number = person_index
     @min = 0
     @max = 110
