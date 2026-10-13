@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::Discount, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -10,7 +12,7 @@ RSpec.describe Form::Sales::Questions::Discount, type: :model do
 
   before do
     allow(page).to receive(:subsection).and_return(subsection)
-    allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_2024_or_later?: false, start_date: Time.zone.local(2023, 4, 1)))
+    allow(subsection).to receive(:form).and_return(instance_double(Form, start_date: current_collection_start_date))
   end
 
   it "has correct page" do
@@ -42,16 +44,6 @@ RSpec.describe Form::Sales::Questions::Discount, type: :model do
   end
 
   it "has correct max" do
-    expect(question.max).to eq(100)
-  end
-
-  context "with form start year after 2024" do
-    before do
-      allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_2024_or_later?: true, start_date: Time.zone.local(2024, 4, 1)))
-    end
-
-    it "has correct max" do
-      expect(question.max).to eq(70)
-    end
+    expect(question.max).to eq(70)
   end
 end

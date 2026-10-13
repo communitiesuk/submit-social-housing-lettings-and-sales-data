@@ -1,11 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::Buyer2RelationshipToBuyer1, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2024_or_later?: false))) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: current_collection_start_date))) }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -26,7 +28,7 @@ RSpec.describe Form::Sales::Questions::Buyer2RelationshipToBuyer1, type: :model 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
       "P" => { "value" => "Partner" },
-      "C" => { "value" => "Child", "hint" => "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education." },
+      "C" => { "value" => "Child" },
       "X" => { "value" => "Other" },
       "R" => { "value" => "Buyer prefers not to say" },
     })

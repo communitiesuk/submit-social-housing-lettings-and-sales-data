@@ -10,17 +10,10 @@ class Form::Lettings::Questions::IsCarehome < ::Form::Question
   end
 
   def answer_options
-    if form.start_year_2024_or_later?
-      {
-        "1" => { "value" => "Yes" },
-        "0" => { "value" => "No" },
-      }.freeze
-    else
-      {
-        "0" => { "value" => "No" },
-        "1" => { "value" => "Yes" },
-      }.freeze
-    end
+    {
+      "1" => { "value" => "Yes" },
+      "0" => { "value" => "No" },
+    }.freeze
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 93, 2024 => 92, 2025 => 92, 2026 => 100 }.freeze

@@ -1,11 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::NationalityAllGroup, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new("some_id", nil, page, buyer_index) }
 
   let(:buyer_index) { 1 }
-
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2024_or_later?: false))) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:)) }
 
   it "has correct page" do
     expect(question.page).to be page
@@ -38,12 +40,32 @@ RSpec.describe Form::Sales::Questions::NationalityAllGroup, type: :model do
       expect(question.conditional_for).to eq({ "nationality_all" => [12] })
     end
 
-    it "has correct question_number" do
-      expect(question.question_number).to eq(24)
-    end
-
     it "has correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(1)
+    end
+
+    context "with 2024/25 form" do
+      let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+
+      it "has correct question_number" do
+        expect(question.question_number).to eq(26)
+      end
+    end
+
+    context "with 2025/26 form" do
+      let(:form) { instance_double(Form, start_date: Time.zone.local(2025, 4, 1)) }
+
+      it "has correct question_number" do
+        expect(question.question_number).to eq(24)
+      end
+    end
+
+    context "with 2026/27 form" do
+      let(:form) { instance_double(Form, start_date: Time.zone.local(2026, 4, 1)) }
+
+      it "has correct question_number" do
+        expect(question.question_number).to eq(26)
+      end
     end
   end
 
@@ -54,12 +76,32 @@ RSpec.describe Form::Sales::Questions::NationalityAllGroup, type: :model do
       expect(question.conditional_for).to eq({ "nationality_all_buyer2" => [12] })
     end
 
-    it "has correct question_number" do
-      expect(question.question_number).to eq(32)
-    end
-
     it "has correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(2)
+    end
+
+    context "with 2024/25 form" do
+      let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+
+      it "has correct question_number" do
+        expect(question.question_number).to eq(34)
+      end
+    end
+
+    context "with 2025/26 form" do
+      let(:form) { instance_double(Form, start_date: Time.zone.local(2025, 4, 1)) }
+
+      it "has correct question_number" do
+        expect(question.question_number).to eq(32)
+      end
+    end
+
+    context "with 2026/27 form" do
+      let(:form) { instance_double(Form, start_date: Time.zone.local(2026, 4, 1)) }
+
+      it "has correct question_number" do
+        expect(question.question_number).to eq(35)
+      end
     end
   end
 end
