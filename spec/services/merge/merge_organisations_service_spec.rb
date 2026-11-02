@@ -1,9 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Merge::MergeOrganisationsService do
+  include CollectionTimeHelper
+
   describe "#call" do
     before do
-      Timecop.freeze(Time.zone.local(2024, 3, 1))
+      Timecop.freeze(current_collection_start_date + 11.months)
       Singleton.__init__(FormHandler)
       mail_double = instance_double(ActionMailer::MessageDelivery, deliver_later: nil)
       allow(MergeCompletionMailer).to receive_messages(send_merged_organisation_success_mail: mail_double, send_absorbing_organisation_success_mail: mail_double)
