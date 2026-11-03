@@ -1013,7 +1013,6 @@ private
   def should_process_address_change?
     return unless uprn_selection || select_best_address_match
     return unless startdate
-    return unless form.start_year_2024_or_later?
     return if skip_address_lookup
 
     if select_best_address_match
