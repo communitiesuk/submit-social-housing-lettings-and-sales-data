@@ -23,27 +23,14 @@ class Form::Lettings::Questions::Waityear < ::Form::Question
       }.freeze
     end
 
-    if form.start_year_2024_or_later?
-      return {
-        "2" => { "value" => "Less than 1 year" },
-        "7" => { "value" => "1 year but under 2 years" },
-        "8" => { "value" => "2 years but under 3 years" },
-        "9" => { "value" => "3 years but under 4 years" },
-        "10" => { "value" => "4 years but under 5 years" },
-        "11" => { "value" => "5 years but under 10 years" },
-        "12" => { "value" => "10 years or more" },
-        "divider" => { "value" => true },
-        "6" => { "value" => "Don’t know" },
-      }.freeze
-    end
-
     {
       "2" => { "value" => "Less than 1 year" },
       "7" => { "value" => "1 year but under 2 years" },
       "8" => { "value" => "2 years but under 3 years" },
       "9" => { "value" => "3 years but under 4 years" },
       "10" => { "value" => "4 years but under 5 years" },
-      "5" => { "value" => "5 years or more" },
+      "11" => { "value" => "5 years but under 10 years" },
+      "12" => { "value" => "10 years or more" },
       "divider" => { "value" => true },
       "6" => { "value" => "Don’t know" },
     }.freeze

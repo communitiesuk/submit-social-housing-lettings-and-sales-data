@@ -242,8 +242,10 @@ RSpec.describe "Lettings Log Features" do
     end
 
     context "when completing the setup lettings log section", :aggregate_failure do
+      include CollectionTimeHelper
+
       before do
-        Timecop.freeze(Time.zone.local(2023, 4, 3))
+        Timecop.freeze(current_collection_start_date + 3.days)
         Singleton.__init__(FormHandler)
       end
 
@@ -263,7 +265,7 @@ RSpec.describe "Lettings Log Features" do
         log_id = page.current_path.scan(/\d/).join
         visit("lettings-logs/#{log_id}/setup/check-answers")
         expect(page).to have_content("Stock owner User org", normalize_ws: true)
-        expect(page).to have_content("You have answered 2 of 8 questions")
+        expect(page).to have_content("You have answered 2 of 9 questions")
       end
     end
 

@@ -23,16 +23,5 @@ RSpec.shared_examples "shared examples for derived fields" do |log_type|
                                         .and change(log, :uprn).from("1").to(nil)
                                         .and change(log, :uprn_confirmed).from(0).to(nil)
     end
-
-    it "does not affect older logs with uprn_confirmed == 0" do
-      Timecop.freeze(Time.zone.local(2023, 4, 1)) do
-        log = FactoryBot.build(log_type, uprn_known: 0, uprn: nil, uprn_confirmed: 0)
-        allow(log.form).to receive(:start_year_2024_or_later?).and_return(false)
-        expect { log.set_derived_fields! }.to not_change(log, :uprn_known)
-                                          .and not_change(log, :uprn)
-                                          .and not_change(log, :uprn_confirmed)
-      end
-      Timecop.return
-    end
   end
 end

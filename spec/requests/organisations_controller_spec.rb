@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe OrganisationsController, type: :request do
+  include CollectionTimeHelper
+
   let(:organisation) { user.organisation }
   let!(:unauthorised_organisation) { create(:organisation) }
   let(:headers) { { "Accept" => "text/html" } }
@@ -11,7 +13,7 @@ RSpec.describe OrganisationsController, type: :request do
   let(:params) { { id: organisation.id, organisation: { name: new_value, active:, rent_periods: [], all_rent_periods: [] } } }
 
   before do
-    Timecop.freeze(Time.zone.local(2024, 3, 1))
+    Timecop.freeze(current_collection_start_date + 11.months)
     Singleton.__init__(FormHandler)
   end
 
@@ -542,8 +544,8 @@ RSpec.describe OrganisationsController, type: :request do
 
           context "when the organisation has absorbed other organisations during a collection period before archived" do
             before do
-              create(:organisation, name: "First Absorbed Organisation", with_dsa: false, merge_date: Time.zone.today - 3.years, absorbing_organisation: organisation)
-              create(:organisation, name: "Other Absorbed Organisation", with_dsa: false, merge_date: Time.zone.today - 3.years, absorbing_organisation: organisation)
+              create(:organisation, name: "First Absorbed Organisation", with_dsa: false, merge_date: FormHandler.instance.start_date_of_earliest_lettings_form - 1.month, absorbing_organisation: organisation)
+              create(:organisation, name: "Other Absorbed Organisation", with_dsa: false, merge_date: FormHandler.instance.start_date_of_earliest_lettings_form - 1.month, absorbing_organisation: organisation)
               get "/organisations/#{organisation.id}/details", headers:, params: {}
             end
 

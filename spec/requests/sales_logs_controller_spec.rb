@@ -933,6 +933,7 @@ RSpec.describe SalesLogsController, type: :request do
             owning_organisation: user.organisation,
             assigned_to: user,
             saledate: archived_collection_start_date,
+            relat3: "X",
           )
         end
         let(:closed_previous_sales_form) { FormHandler.instance.sales_form_for_start_year(archived_collection_start_year) }

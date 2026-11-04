@@ -3,7 +3,6 @@ class Form::Sales::Pages::BuyerPrevious < ::Form::Page
     super(id, hsh, subsection)
     @joint_purchase = joint_purchase
     @copy_key = "sales.sale_information.soctenant.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}"
-    @depends_on = [{ "joint_purchase?" => joint_purchase, "soctenant_is_inferred?" => false }]
   end
 
   def questions
@@ -12,9 +11,7 @@ class Form::Sales::Pages::BuyerPrevious < ::Form::Page
     ]
   end
 
-  def routed_to?(log, _current_user)
-    return false if log.is_staircase? && form.start_year_2024_or_later?
-
-    super
+  def routed_to?(_log, _current_user)
+    false
   end
 end

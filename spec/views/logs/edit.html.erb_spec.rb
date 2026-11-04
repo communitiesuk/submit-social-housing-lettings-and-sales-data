@@ -1,10 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "logs/edit.html.erb" do
+  include CollectionTimeHelper
+
   let(:current_user) { create(:user, :support) }
 
   before do
-    Timecop.freeze(Time.zone.local(2024, 3, 1))
+    Timecop.freeze(current_collection_start_date + 11.months)
     Singleton.__init__(FormHandler)
     assign(:log, log)
     sign_in current_user

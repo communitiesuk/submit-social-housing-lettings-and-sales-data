@@ -409,7 +409,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
         context "when filtering" do
           before do
-            Timecop.freeze(Time.utc(2024, 3, 3))
+            Timecop.freeze(current_collection_start_date + 11.months)
             Singleton.__init__(FormHandler)
           end
 
@@ -564,7 +564,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
           context "with bulk_upload_id filter" do
             before do
-              Timecop.freeze(2023, 4, 1)
+              Timecop.freeze(current_collection_start_date)
               Singleton.__init__(FormHandler)
             end
 
@@ -738,7 +738,7 @@ RSpec.describe LettingsLogsController, type: :request do
           let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
           before do
-            Timecop.freeze(Time.utc(2024, 3, 3))
+            Timecop.freeze(current_collection_start_date + 11.months)
             Singleton.__init__(FormHandler)
           end
 
@@ -1709,7 +1709,7 @@ RSpec.describe LettingsLogsController, type: :request do
     let(:delete_request) { delete "/lettings-logs/#{id}", headers: }
 
     before do
-      Timecop.freeze(2024, 3, 1)
+      Timecop.freeze(current_collection_start_date + 11.months)
       Singleton.__init__(FormHandler)
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
       sign_in user

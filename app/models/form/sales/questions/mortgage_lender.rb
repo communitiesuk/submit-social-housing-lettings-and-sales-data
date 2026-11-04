@@ -55,15 +55,10 @@ class Form::Sales::Questions::MortgageLender < ::Form::Question
     "0" =>	"Don’t know",
   }.freeze
 
-  OPTIONS_INTRODUCED_2024 = %w[41].freeze
   OPTIONS_NOT_DISPLAYED = %w[0].freeze
 
   def answer_options
-    if form.start_year_2024_or_later?
-      ANSWER_OPTIONS
-    else
-      ANSWER_OPTIONS.dup.reject { |k, _v| OPTIONS_INTRODUCED_2024.include?(k) }
-    end
+    ANSWER_OPTIONS
   end
 
   def displayed_answer_options(_log, _user = nil)

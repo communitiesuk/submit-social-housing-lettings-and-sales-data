@@ -2,6 +2,8 @@ require "rails_helper"
 require "rake"
 
 RSpec.describe "bulk_update" do
+  include CollectionTimeHelper
+
   def replace_entity_ids(scheme_1, scheme_2, scheme_3, export_template)
     export_template.sub!(/\{id1\}/, "S#{scheme_1.id}")
     export_template.sub!(/\{id2\}/, "S#{scheme_2.id}")
@@ -18,7 +20,7 @@ RSpec.describe "bulk_update" do
   end
 
   before do
-    Timecop.freeze(Time.zone.local(2024, 3, 1))
+    Timecop.freeze(current_collection_start_date + 11.months)
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
     allow(Configuration::EnvConfigurationService).to receive(:new).and_return(env_config_service)
     allow(ENV).to receive(:[])
@@ -162,9 +164,9 @@ RSpec.describe "bulk_update" do
 
       it "does not update the owning organisation if there are logs from closed collection periods" do
         create(:organisation_relationship, parent_organisation: schemes[0].owning_organisation, child_organisation: different_organisation)
-        lettings_log_4.startdate = Time.zone.local(2022, 4, 1)
+        lettings_log_4.startdate = previous_collection_start_date
         lettings_log_4.save!(validate: false)
-        lettings_log_5.startdate = Time.zone.local(2021, 4, 1)
+        lettings_log_5.startdate = archived_collection_start_date
         lettings_log_5.save!(validate: false)
         task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
 
@@ -181,9 +183,9 @@ RSpec.describe "bulk_update" do
       end
 
       it "only re-exports the logs for the schemes that have been updated" do
-        lettings_log_4.startdate = Time.zone.local(2022, 4, 1)
+        lettings_log_4.startdate = previous_collection_start_date
         lettings_log_4.save!(validate: false)
-        lettings_log_5.startdate = Time.zone.local(2021, 4, 1)
+        lettings_log_5.startdate = archived_collection_start_date
         lettings_log_5.save!(validate: false)
         task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
 
@@ -257,9 +259,9 @@ RSpec.describe "bulk_update" do
 
       it "logs an error if a validation fails and processes the rest of the rows" do
         create(:organisation_relationship, parent_organisation: schemes[0].owning_organisation, child_organisation: different_organisation)
-        lettings_log_4.startdate = Time.zone.local(2022, 4, 1)
+        lettings_log_4.startdate = previous_collection_start_date
         lettings_log_4.save!(validate: false)
-        lettings_log_5.startdate = Time.zone.local(2021, 4, 1)
+        lettings_log_5.startdate = archived_collection_start_date
         lettings_log_5.save!(validate: false)
 
         schemes[1].support_type = nil
@@ -318,7 +320,7 @@ RSpec.describe "bulk_update" do
       let(:original_locations_csv_path) { "original_locations.csv" }
       let(:updated_locations_csv_path) { "updated_locations.csv" }
       let(:wrong_file_path) { "/test/no_csv_here.csv" }
-      let!(:scheme) { FactoryBot.create(:scheme, service_name: "Scheme 1") }
+      let!(:scheme) { FactoryBot.create(:scheme, service_name: "Scheme 1", sensitive: 1) }
       let!(:different_scheme) { FactoryBot.create(:scheme, service_name: "Different scheme", owning_organisation: scheme.owning_organisation) }
 
       let(:locations) do
@@ -336,11 +338,11 @@ RSpec.describe "bulk_update" do
                     updated_at: Time.zone.local(2022, 3, 1),
                     scheme:)
       end
-      let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location: locations[0], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
-      let!(:lettings_log_2) { FactoryBot.create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location: locations[1], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
-      let!(:lettings_log_3) { FactoryBot.create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location: locations[2], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
-      let!(:lettings_log_4) { FactoryBot.create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location: locations[0], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
-      let!(:lettings_log_5) { FactoryBot.create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location: locations[0], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location: locations[0], scheme:, values_updated_at: nil, startdate: current_collection_start_date + 3.days) }
+      let!(:lettings_log_2) { FactoryBot.create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location: locations[1], scheme:, values_updated_at: nil, startdate: current_collection_start_date + 3.days) }
+      let!(:lettings_log_3) { FactoryBot.create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location: locations[2], scheme:, values_updated_at: nil, startdate: current_collection_start_date + 3.days) }
+      let!(:lettings_log_4) { FactoryBot.create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location: locations[0], scheme:, values_updated_at: nil, startdate: current_collection_start_date + 3.days) }
+      let!(:lettings_log_5) { FactoryBot.create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location: locations[0], scheme:, values_updated_at: nil, startdate: current_collection_start_date + 3.days) }
 
       before do
         allow(storage_service).to receive(:get_file_io)
@@ -399,9 +401,9 @@ RSpec.describe "bulk_update" do
       end
 
       it "only re-exports the logs for the locations that have been updated" do
-        lettings_log_4.startdate = Time.zone.local(2022, 4, 1)
+        lettings_log_4.startdate = previous_collection_start_date
         lettings_log_4.save!(validate: false)
-        lettings_log_5.startdate = Time.zone.local(2021, 4, 1)
+        lettings_log_5.startdate = archived_collection_start_date
         lettings_log_5.save!(validate: false)
 
         task.invoke(original_locations_csv_path, updated_locations_csv_path)
@@ -423,9 +425,9 @@ RSpec.describe "bulk_update" do
       end
 
       it "logs the progress of the update" do
-        lettings_log_4.startdate = Time.zone.local(2022, 4, 1)
+        lettings_log_4.startdate = previous_collection_start_date
         lettings_log_4.save!(validate: false)
-        lettings_log_5.startdate = Time.zone.local(2021, 4, 1)
+        lettings_log_5.startdate = archived_collection_start_date
         lettings_log_5.save!(validate: false)
 
         expect(Rails.logger).to receive(:info).with("Updating location #{locations[0].id} with scheme: S#{different_scheme.id}")
@@ -483,7 +485,7 @@ RSpec.describe "bulk_update" do
             soft_max: 89.54,
             hard_min: 9.87,
             hard_max: 100.99,
-            start_year: 2023,
+            start_year: current_collection_start_year,
           )
         end
 
@@ -502,7 +504,8 @@ RSpec.describe "bulk_update" do
                               supcharg: 50,
                               beds: 4,
                               lettype: 1,
-                              period: 1)
+                              period: 1,
+                              la: nil)
           end
 
           before do
@@ -511,7 +514,7 @@ RSpec.describe "bulk_update" do
             .and_return(StringIO.new(replace_entity_ids_for_locations(locations[0], locations[1], locations[2], scheme, scheme, { id: "non existent scheme id" }, File.open("./spec/fixtures/files/updated_locations.csv").read)))
           end
 
-          it "does not clear the charges values" do
+          it "does not clear the charges values when the log has no LA of its own" do
             expect(lettings_log.status).to eq("completed")
             task.invoke(original_locations_csv_path, updated_locations_csv_path)
             lettings_log.reload
@@ -538,7 +541,8 @@ RSpec.describe "bulk_update" do
                               supcharg: 50,
                               beds: 4,
                               lettype: 1,
-                              period: 1)
+                              period: 1,
+                              la: nil)
           end
 
           before do
@@ -547,7 +551,7 @@ RSpec.describe "bulk_update" do
             .and_return(StringIO.new(replace_entity_ids_for_locations(locations[0], locations[1], locations[2], scheme, scheme, { id: "non existent scheme id" }, File.open("./spec/fixtures/files/updated_locations.csv").read)))
           end
 
-          it "clears the charges values" do
+          it "clears the charges values when the log has no LA of its own" do
             expect(lettings_log.status).to eq("completed")
             task.invoke(original_locations_csv_path, updated_locations_csv_path)
             lettings_log.reload
@@ -574,7 +578,8 @@ RSpec.describe "bulk_update" do
                               supcharg: 50,
                               beds: 4,
                               lettype: 1,
-                              period: 1)
+                              period: 1,
+                              la: nil)
           end
 
           before do
@@ -583,7 +588,7 @@ RSpec.describe "bulk_update" do
             .and_return(StringIO.new(replace_entity_ids_for_locations(locations[0], locations[1], locations[2], scheme, scheme, { id: "non existent scheme id" }, File.open("./spec/fixtures/files/updated_locations.csv").read)))
           end
 
-          it "does not clear the charges values and marks the log in progress" do
+          it "does not clear the charges values and marks the log in progress when the log has no LA of its own" do
             expect(lettings_log.status).to eq("completed")
             task.invoke(original_locations_csv_path, updated_locations_csv_path)
             lettings_log.reload
@@ -624,14 +629,14 @@ RSpec.describe "bulk_update" do
               soft_max: 89.54,
               hard_min: 9.87,
               hard_max: 100.99,
-              start_year: 2022,
+              start_year: previous_collection_start_year,
             )
 
             allow(storage_service).to receive(:get_file_io)
             .with("updated_locations.csv")
             .and_return(StringIO.new(replace_entity_ids_for_locations(locations[0], locations[1], locations[2], scheme, scheme, { id: "non existent scheme id" }, File.open("./spec/fixtures/files/updated_locations.csv").read)))
 
-            lettings_log.startdate = Time.zone.local(2022, 4, 1)
+            lettings_log.startdate = previous_collection_start_date
             lettings_log.owning_organisation = scheme.owning_organisation
             lettings_log.save!(validate: false)
           end
@@ -646,6 +651,52 @@ RSpec.describe "bulk_update" do
             expect(lettings_log.scharge).to eq(50)
             expect(lettings_log.pscharge).to eq(50)
             expect(lettings_log.supcharg).to eq(50)
+          end
+        end
+
+        # A log on a 2026+ form keeps any LA it is created with (e.g. from its address or a bulk upload),
+        # and that LA takes precedence over its location's LA (see LettingsLog#la). So, unlike the logs above
+        # which have no LA of their own, a log with its own LA is not re-checked against a corrected location LA.
+        { "confidential" => 1, "not confidential" => 0 }.each do |scheme_description, sensitive|
+          context "when the scheme is #{scheme_description} and the log has its own LA that is not the corrected one" do
+            let!(:lettings_log) do
+              scheme.update!(sensitive:)
+              FactoryBot.create(:lettings_log,
+                                :completed,
+                                :sh,
+                                location: locations[0],
+                                scheme:,
+                                values_updated_at: nil,
+                                owning_organisation: scheme.owning_organisation,
+                                postcode_full: "SW1A 2AA",
+                                la: "E09000003",
+                                brent: 200,
+                                scharge: 50,
+                                pscharge: 50,
+                                supcharg: 50,
+                                beds: 4,
+                                lettype: 1,
+                                period: 1)
+            end
+
+            before do
+              allow(storage_service).to receive(:get_file_io)
+              .with("updated_locations.csv")
+              .and_return(StringIO.new(replace_entity_ids_for_locations(locations[0], locations[1], locations[2], scheme, scheme, { id: "non existent scheme id" }, File.open("./spec/fixtures/files/updated_locations.csv").read)))
+            end
+
+            it "does not check the rent against the corrected location LA" do
+              expect(lettings_log.status).to eq("completed")
+              task.invoke(original_locations_csv_path, updated_locations_csv_path)
+              lettings_log.reload
+              expect(lettings_log.la).to eq("E09000003")
+              # status is not asserted here: the fixture also moves the location's postcode, so a log that keeps
+              # its own address stops matching its location for an unrelated reason
+              expect(lettings_log.brent).to eq(200)
+              expect(lettings_log.scharge).to eq(50)
+              expect(lettings_log.pscharge).to eq(50)
+              expect(lettings_log.supcharg).to eq(50)
+            end
           end
         end
       end

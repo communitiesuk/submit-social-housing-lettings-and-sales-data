@@ -1,10 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Questions::PersonRelationship, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(nil, question_definition, page, person_index:) }
 
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 4), start_year_2024_or_later?: false))) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: current_collection_start_date))) }
   let(:person_index) { 2 }
 
   it "has correct page" do
@@ -20,7 +22,7 @@ RSpec.describe Form::Lettings::Questions::PersonRelationship, type: :model do
   end
 
   it "has the correct answer_options" do
-    expect(question.answer_options).to eq("C" => { "hint" => "Must be eligible for child benefit: under age 16 or under 20 if still in full-time education.", "value" => "Child" },
+    expect(question.answer_options).to eq("C" => { "value" => "Child" },
                                           "P" => { "value" => "Partner" },
                                           "R" => { "value" => "Person prefers not to say" },
                                           "X" => { "value" => "Other" },
