@@ -9,7 +9,8 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
   def pages
     @pages ||= [
       (first_let_questions if form.start_year_2025_or_later?),
-      uprn_questions,
+      Form::Lettings::Pages::AddressSearch.new(nil, nil, self),
+      Form::Lettings::Pages::AddressFallback.new(nil, nil, self),
       Form::Lettings::Pages::PropertyLocalAuthority.new(nil, nil, self),
       Form::Lettings::Pages::RentValueCheck.new("local_authority_rent_value_check", nil, self),
       (first_let_questions unless form.start_year_2025_or_later?),
@@ -24,21 +25,6 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
       Form::Lettings::Pages::PropertyMajorRepairsValueCheck.new(nil, nil, self),
       (Form::Lettings::Pages::ShelteredAccommodation.new(nil, nil, self) if form.start_year_2025_or_later?),
     ].flatten.compact
-  end
-
-  def uprn_questions
-    if form.start_year_2024_or_later?
-      [
-        Form::Lettings::Pages::AddressSearch.new(nil, nil, self),
-        Form::Lettings::Pages::AddressFallback.new(nil, nil, self),
-      ]
-    else
-      [
-        Form::Lettings::Pages::Uprn.new(nil, nil, self),
-        Form::Lettings::Pages::UprnConfirmation.new(nil, nil, self),
-        Form::Lettings::Pages::Address.new(nil, nil, self),
-      ]
-    end
   end
 
   def first_let_questions
