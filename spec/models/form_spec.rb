@@ -327,7 +327,10 @@ RSpec.describe Form, type: :model do
 
     context "when there are multiple free user input questions for attribute X" do
       context "and attribute Y is changed such that a different question for X is routed to" do
-        let(:log) { FactoryBot.create(:sales_log, :saledate_today, :shared_ownership, :privacy_notice_seen, jointpur: 1, jointmore: 2, hholdcount: expected_hholdcount) }
+        include CollectionTimeHelper
+
+        let(:now) { current_collection_start_date + 3.days }
+        let(:log) { FactoryBot.create(:sales_log, :shared_ownership_setup_complete, jointpur: 1, jointmore: 2, hholdcount: expected_hholdcount) }
         let(:expected_hholdcount) { 2 }
 
         it "the value of this attribute is not cleared" do
