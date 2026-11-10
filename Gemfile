@@ -51,7 +51,7 @@ gem "paper_trail-globalid"
 gem "pundit"
 
 # Request rate limiting
-gem "rack", "~> 3.1.20"
+gem "rack", "~> 3.1.23"
 gem "rack-attack"
 gem "redis", "~> 4.8"
 # Receive exceptions and configure alerts
