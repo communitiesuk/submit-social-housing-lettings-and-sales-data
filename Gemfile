@@ -72,7 +72,7 @@ gem "sidekiq-cron"
 gem "unread"
 
 # Pinning versions to address vulnerabilities
-gem "nokogiri", "~> 1.19.1"
+gem "nokogiri", "~> 1.19.5"
 gem "thor", "~> 1.4.0"
 
 group :development, :test do
