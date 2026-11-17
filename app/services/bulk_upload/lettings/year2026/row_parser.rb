@@ -1135,8 +1135,8 @@ private
     {
       lettype: [:field_11],
       tenancycode: [:field_13],
-      postcode_known: %i[field_25 field_23 field_24],
-      postcode_full: %i[field_25 field_23 field_24],
+      postcode_known: %i[field_23 field_24 field_25],
+      postcode_full: %i[field_23 field_24 field_25],
       la: %i[field_25],
       owning_organisation: [:field_1],
       managing_organisation: [:field_2],
