@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_13_105230) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_17_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -385,6 +385,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_13_105230) do
     t.integer "tenancylength"
     t.string "tenancyother"
     t.integer "tenancyother_value_check"
+    t.integer "location_postcode_value_check"
     t.integer "totadult"
     t.integer "totchild"
     t.integer "totelder"
