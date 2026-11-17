@@ -10,6 +10,7 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
     @pages ||= [
       (first_let_questions if form.start_year_2025_or_later?),
       uprn_questions,
+      (Form::Lettings::Pages::LocationPostcodeValueCheck.new(nil, nil, self) if form.start_year_2026_or_later?),
       Form::Lettings::Pages::PropertyLocalAuthority.new(nil, nil, self),
       Form::Lettings::Pages::RentValueCheck.new("local_authority_rent_value_check", nil, self),
       (first_let_questions unless form.start_year_2025_or_later?),

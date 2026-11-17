@@ -51,7 +51,7 @@ RSpec.describe BulkUpload, type: :model do
         let(:log) { build(:lettings_log, startdate:, bulk_upload:) }
 
         it "has the correct number of value checks to be set as confirmed" do
-          expect(bulk_upload.fields_to_confirm(log)).to match_array %w[rent_value_check void_date_value_check major_repairs_date_value_check pregnancy_value_check retirement_value_check net_income_value_check scharge_value_check pscharge_value_check supcharg_value_check reasonother_value_check tenancyother_value_check working_situation_illness_check]
+          expect(bulk_upload.fields_to_confirm(log)).to match_array %w[rent_value_check void_date_value_check major_repairs_date_value_check pregnancy_value_check retirement_value_check net_income_value_check scharge_value_check pscharge_value_check supcharg_value_check reasonother_value_check tenancyother_value_check working_situation_illness_check location_postcode_value_check]
         end
       end
 

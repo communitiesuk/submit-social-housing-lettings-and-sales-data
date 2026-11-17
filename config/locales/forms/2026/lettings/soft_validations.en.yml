@@ -155,6 +155,15 @@ en:
             title_text: "No address found"
             informative_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
 
+          location_postcode_value_check:
+            page_header: ""
+            check_answer_label: "Property and location postcode confirmation"
+            check_answer_prompt: "Confirm property postcode"
+            hint_text: ""
+            question_text: "Are you sure this is correct?"
+            title_text: "The postcode for the location you selected is %{location_postcode}, but the postcode we found for this property is %{postcode_full}."
+            informative_text: "Check the property location and address are correct. If the postcode we found for the property is wrong, change it and select 'Enter the address manually instead'."
+
           working_situation_illness_check:
             page_header: ""
             check_answer_label: "Working situation illness confirmation"
