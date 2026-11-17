@@ -52,22 +52,6 @@ module Validations::PropertyValidations
     end
   end
 
-  def validate_property_and_location_postcodes_match(record)
-    return unless record.form.start_year_2026_or_later?
-
-    postcode = record.postcode_full
-    return unless postcode
-
-    location_postcode = record.location&.postcode
-    return unless location_postcode
-
-    if postcode != location_postcode
-      record.errors.add :location_id, I18n.t("validations.lettings.property.location_id.postcode_does_not_match_scheme_location_postcode")
-      record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.postcode_does_not_match_scheme_location_postcode")
-      record.errors.add :postcode_full, I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")
-    end
-  end
-
   # see also: this validation in sales/property_validations.rb
   def validate_la_in_england(record)
     return unless record.la

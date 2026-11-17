@@ -26,3 +26,4 @@ gender_description8,If 'No', enter person 8's gender identity
 referral_register,What was the source of referral for this letting?
 referral_noms,What was the source of referral for this letting?
 referral_org,What was the source of referral for this letting?
+location_postcode_value_check,The following soft validation was confirmed: The property's postcode does not match the postcode for the location selected in the scheme.

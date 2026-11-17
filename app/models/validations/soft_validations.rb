@@ -215,6 +215,17 @@ module Validations::SoftValidations
     at_least_one_person_working_situation_is_illness? && no_one_in_household_with_illness?
   end
 
+  def postcode_does_not_match_location_postcode?
+    return false unless form.start_year_2026_or_later?
+    return false if postcode_full.blank? || location_postcode.blank?
+
+    postcode_full != location_postcode
+  end
+
+  def location_postcode
+    location&.postcode
+  end
+
 private
 
   def all_tenants_age_and_gender_information_completed?
