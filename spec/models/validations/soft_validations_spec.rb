@@ -1686,47 +1686,32 @@ RSpec.describe Validations::SoftValidations do
   describe "postcode_does_not_match_location_postcode?" do
     let(:location) { build(:location, postcode: "AA1 1AA") }
 
-    context "when 2026" do
-      let(:start_year) { 2026 }
+    it "returns true if the property postcode does not match the location postcode" do
+      record.location = location
+      record.postcode_full = "BB2 2BB"
 
-      it "returns true if the property postcode does not match the location postcode" do
-        record.location = location
-        record.postcode_full = "BB2 2BB"
-
-        expect(record.postcode_does_not_match_location_postcode?).to be true
-      end
-
-      it "returns false if the property postcode matches the location postcode" do
-        record.location = location
-        record.postcode_full = "AA1 1AA"
-
-        expect(record.postcode_does_not_match_location_postcode?).to be false
-      end
-
-      it "returns false if no property postcode has been given" do
-        record.location = location
-        record.postcode_full = nil
-
-        expect(record.postcode_does_not_match_location_postcode?).to be false
-      end
-
-      it "returns false if there is no location" do
-        record.location = nil
-        record.postcode_full = "BB2 2BB"
-
-        expect(record.postcode_does_not_match_location_postcode?).to be false
-      end
+      expect(record.postcode_does_not_match_location_postcode?).to be true
     end
 
-    context "when 2025" do
-      let(:start_year) { 2025 }
+    it "returns false if the property postcode matches the location postcode" do
+      record.location = location
+      record.postcode_full = "AA1 1AA"
 
-      it "returns false even if the property postcode does not match the location postcode" do
-        record.location = location
-        record.postcode_full = "BB2 2BB"
+      expect(record.postcode_does_not_match_location_postcode?).to be false
+    end
 
-        expect(record.postcode_does_not_match_location_postcode?).to be false
-      end
+    it "returns false if no property postcode has been given" do
+      record.location = location
+      record.postcode_full = nil
+
+      expect(record.postcode_does_not_match_location_postcode?).to be false
+    end
+
+    it "returns false if there is no location" do
+      record.location = nil
+      record.postcode_full = "BB2 2BB"
+
+      expect(record.postcode_does_not_match_location_postcode?).to be false
     end
   end
 end
