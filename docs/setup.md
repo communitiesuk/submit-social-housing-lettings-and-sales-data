@@ -78,8 +78,8 @@ Some windows IDEs, such as [VSCode](https://code.visualstudio.com/docs/remote/ws
 4. Install Ruby and Bundler
 
    ```bash
-   rbenv install 3.4.9
-   rbenv global 3.4.9
+   rbenv install 3.4.13
+   rbenv global 3.4.13
    source ~/.bashrc
    gem install bundler
    ```
