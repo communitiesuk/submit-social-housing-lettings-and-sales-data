@@ -16,9 +16,9 @@ RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
     expect(setup.section).to eq(section)
   end
 
-  context "with start year before 2024" do
+  context "when the form has no start date (legacy JSON forms during construction)" do
     before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(false)
+      allow(form).to receive(:start_date).and_return(nil)
     end
 
     it "has correct pages" do
@@ -41,9 +41,9 @@ RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
     end
   end
 
-  context "with start year >= 2024" do
+  context "when the form has a start date" do
     before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
+      allow(form).to receive(:start_date).and_return(Time.zone.local(2024, 4, 1))
     end
 
     it "has correct pages" do

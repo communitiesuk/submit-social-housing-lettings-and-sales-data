@@ -1,11 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::Buyer2EthnicGroup, type: :model do
+  include CollectionTimeHelper
+
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:form) { Form.new(nil, 2023, [], "sales") }
+  let(:form) { Form.new(nil, current_collection_start_year, [], "sales") }
   let(:subsection) { instance_double(Form::Subsection, form:, depends_on: nil) }
 
   it "has correct subsection" do
