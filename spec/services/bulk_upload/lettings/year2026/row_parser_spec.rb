@@ -512,11 +512,14 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
         context "when a disabled access needs type is an invalid value and other access needs is blank" do
           let(:attributes) { valid_attributes.merge({ field_94: "2", field_97: nil }) }
 
-          it "adds errors so the incomplete log is reported" do
+          it "adds an invalid option error to the invalid field and not answered errors to the other fields" do
             parser.valid?
-            expect(parser.log.housingneeds_other).to be_nil
+            not_answered = I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "disabled access needs type.")
             expect(parser.errors[:field_94]).to eql([I18n.t("validations.lettings.2026.bulk_upload.invalid_option", question: "disabled access needs — a) Fully wheelchair-accessible housing.")])
-            expect(parser.errors[:field_97]).to eql([parser.log.form.get_question("housingneeds_other", parser.log).unanswered_error_message])
+            %i[field_95 field_96].each do |field|
+              expect(parser.errors[field]).to eql([not_answered])
+            end
+            expect(parser.errors[:field_97]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "other access needs.")])
           end
         end
       end
@@ -964,13 +967,16 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
         end
       end
 
-      context "when no disabled access needs type is selected and field_97 is blank" do
+      context "when no disabled access option is selected but some fields are 0" do
         let(:attributes) { setup_section_params.merge({ field_94: "0", field_98: "0", field_97: nil }) }
 
-        it "adds a not answered error to field_97" do
+        it "adds the same not answered errors as when all fields are blank" do
           parser.valid?
-          expect(parser.errors[:field_97]).to eql([parser.log.form.get_question("housingneeds_other", parser.log).unanswered_error_message])
-          expect(parser.errors[:field_94]).to be_blank
+          expect(parser.errors[:field_98]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "anybody with disabled access needs.")])
+          expect(parser.errors[:field_97]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "other access needs.")])
+          %i[field_94 field_95 field_96].each do |field|
+            expect(parser.errors[field]).to eql([I18n.t("validations.lettings.2026.bulk_upload.not_answered", question: "disabled access needs type.")])
+          end
         end
       end
 
