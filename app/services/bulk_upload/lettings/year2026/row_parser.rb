@@ -470,6 +470,7 @@ class BulkUpload::Lettings::Year2026::RowParser
   validate :validate_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_and_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_housing_needs_questions_answered, on: :after_log
+  validate :validate_disabled_access_needs_values, on: :after_log
   validate :validate_reasonable_preference_homeless, on: :after_log
   validate :validate_reasonable_preference_dont_know, on: :after_log
   validate :validate_condition_effects, on: :after_log
@@ -824,6 +825,15 @@ private
       %i[field_94 field_95 field_96].each do |field|
         errors.add(field, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "disabled access needs type."))
       end
+    end
+  end
+
+  def validate_disabled_access_needs_values
+    %i[field_94 field_95 field_96 field_97 field_98 field_99].each do |field|
+      value = send(field)
+      next if value.blank? || [0, 1].include?(value)
+
+      errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: format_ending(QUESTIONS[field])))
     end
   end
 
@@ -1214,6 +1224,8 @@ private
       reservist: %i[field_92],
       preg_occ: %i[field_93],
       housingneeds: %i[field_93],
+      housingneeds_type: %i[field_94 field_95 field_96],
+      housingneeds_other: %i[field_97],
 
       illness: %i[field_100],
 
