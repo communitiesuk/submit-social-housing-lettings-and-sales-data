@@ -119,7 +119,7 @@ RSpec.describe Validations::SoftValidations do
     end
 
     context "when the tenant is over the expected retirement age" do
-      let(:age1) { 70 }
+      let(:age1) { 76 }
 
       context "and the tenant's economic status is nil" do
         let(:ecstat1) { nil }
