@@ -34,4 +34,12 @@ class Form::Sales::Questions::Buyer2RelationshipToBuyer1 < ::Form::Question
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 27, 2024 => 29, 2025 => 27, 2026 => 29 }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value == "R"
+
+    super
+  end
 end

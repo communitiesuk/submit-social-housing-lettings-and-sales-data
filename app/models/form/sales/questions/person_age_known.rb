@@ -15,6 +15,9 @@ class Form::Sales::Questions::PersonAgeKnown < ::Form::Question
         {
           "age#{person_index}_known" => 1,
         },
+        {
+          "age#{person_index}_known" => 2,
+        },
       ],
     }
     @check_answers_card_number = person_index
@@ -25,6 +28,7 @@ class Form::Sales::Questions::PersonAgeKnown < ::Form::Question
   ANSWER_OPTIONS = {
     "0" => { "value" => "Yes" },
     "1" => { "value" => "No" },
+    "2" => { "value" => "Person prefers not to say" },
   }.freeze
 
   BASE_QUESTION_NUMBERS = { 2023 => 29, 2024 => 31, 2025 => 29, 2026 => 30 }.freeze
@@ -32,5 +36,13 @@ class Form::Sales::Questions::PersonAgeKnown < ::Form::Question
     base_question_number = BASE_QUESTION_NUMBERS[form.start_date.year] || BASE_QUESTION_NUMBERS[BASE_QUESTION_NUMBERS.keys.max]
 
     base_question_number + (form.person_question_count * @person_index)
+  end
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value.to_i == 2
+
+    super
   end
 end

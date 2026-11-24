@@ -7,11 +7,19 @@ class Form::Lettings::Questions::Age1Known < ::Form::Question
     @check_answers_card_number = 1
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "age1" => [0] }
-    @hidden_in_check_answers = { "depends_on" => [{ "age1_known" => 0 }, { "age1_known" => 1 }] }
+    @hidden_in_check_answers = { "depends_on" => [{ "age1_known" => 0 }, { "age1_known" => 1 }, { "age1_known" => 2 }] }
     @question_number = get_question_number_from_hash(QUESTION_NUMBER_FROM_YEAR)
   end
 
-  ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
+  ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" }, "2" => { "value" => "Tenant prefers not to say" } }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 32, 2024 => 31, 2025 => 31, 2026 => 30 }.freeze
+
+  def label_from_value(value, _log = nil, _user = nil)
+    return unless value
+
+    return "Prefers not to say" if value.to_i == 2
+
+    super
+  end
 end
