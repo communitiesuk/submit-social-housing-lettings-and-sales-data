@@ -17,7 +17,7 @@ class Form::Sales::Questions::PrivacyNotice < ::Form::Question
 
   def unanswered_error_message(_log = nil)
     buyer_or_buyers = @joint_purchase ? "buyers" : "buyer"
-    I18n.t("validations.privacynotice.missing.post_2024", buyer_or_buyers:)
+    I18n.t("validations.privacynotice.missing", buyer_or_buyers:)
   end
 
   def guidance

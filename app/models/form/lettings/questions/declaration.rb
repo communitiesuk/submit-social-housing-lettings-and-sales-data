@@ -12,7 +12,7 @@ class Form::Lettings::Questions::Declaration < ::Form::Question
   end
 
   def unanswered_error_message(_log = nil)
-    I18n.t("validations.declaration.missing.post_2024")
+    I18n.t("validations.declaration.missing")
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 30, 2024 => 11, 2025 => 11, 2026 => 11 }.freeze
