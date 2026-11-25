@@ -169,14 +169,11 @@ RSpec.describe Csv::SalesLogCsvService do
   end
 
   context "when exporting with human readable labels" do
-    let(:year) { 2023 }
-    let(:fixed_time) { Time.zone.local(2023, 12, 8) }
+    let(:year) { 2024 }
+    let(:fixed_time) { collection_start_date_for_year(2024) }
     let(:now) { fixed_time }
 
     it "gives answers to radio questions as their labels" do
-      national_column_index = attribute_line.index("NATIONAL")
-      national_value = content_line[national_column_index]
-      expect(national_value).to eq "United Kingdom"
       relat2_column_index = attribute_line.index("RELAT2")
       relat2_value = content_line[relat2_column_index]
       expect(relat2_value).to eq "Partner"
@@ -186,13 +183,9 @@ RSpec.describe Csv::SalesLogCsvService do
       age1_column_index = attribute_line.index("AGE1")
       age1_value = content_line[age1_column_index]
       expect(age1_value).to eq 30.to_s
-      postcode_part1, postcode_part2 = log.postcode_full.split
-      postcode_part1_column_index = attribute_line.index("PCODE1")
-      postcode_part1_value = content_line[postcode_part1_column_index]
-      expect(postcode_part1_value).to eq postcode_part1
-      postcode_part2_column_index = attribute_line.index("PCODE2")
-      postcode_part2_value = content_line[postcode_part2_column_index]
-      expect(postcode_part2_value).to eq postcode_part2
+      postcode_column_index = attribute_line.index("POSTCODE")
+      postcode_value = content_line[postcode_column_index]
+      expect(postcode_value).to eq log.postcode_full
     end
 
     it "exports the code for the local authority under the heading 'la'" do
@@ -296,14 +289,11 @@ RSpec.describe Csv::SalesLogCsvService do
 
   context "when exporting values as codes" do
     let(:service) { described_class.new(user:, export_type: "codes", year:) }
-    let(:year) { 2023 }
-    let(:fixed_time) { Time.zone.local(2023, 12, 8) }
+    let(:year) { 2024 }
+    let(:fixed_time) { collection_start_date_for_year(2024) }
     let(:now) { fixed_time }
 
     it "gives answers to radio questions as their codes" do
-      national_column_index = attribute_line.index("NATIONAL")
-      national_value = content_line[national_column_index]
-      expect(national_value).to eq 18.to_s
       relat2_column_index = attribute_line.index("RELAT2")
       relat2_value = content_line[relat2_column_index]
       expect(relat2_value).to eq "P"
@@ -313,13 +303,9 @@ RSpec.describe Csv::SalesLogCsvService do
       age1_column_index = attribute_line.index("AGE1")
       age1_value = content_line[age1_column_index]
       expect(age1_value).to eq 30.to_s
-      postcode_part1, postcode_part2 = log.postcode_full.split
-      postcode_part1_column_index = attribute_line.index("PCODE1")
-      postcode_part1_value = content_line[postcode_part1_column_index]
-      expect(postcode_part1_value).to eq postcode_part1
-      postcode_part2_column_index = attribute_line.index("PCODE2")
-      postcode_part2_value = content_line[postcode_part2_column_index]
-      expect(postcode_part2_value).to eq postcode_part2
+      postcode_column_index = attribute_line.index("POSTCODE")
+      postcode_value = content_line[postcode_column_index]
+      expect(postcode_value).to eq log.postcode_full
     end
 
     it "exports the code for the local authority under the heading 'la'" do

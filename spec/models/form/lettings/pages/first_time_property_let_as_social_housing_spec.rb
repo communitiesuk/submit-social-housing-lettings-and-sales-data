@@ -1,15 +1,16 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Pages::FirstTimePropertyLetAsSocialHousing, type: :model do
+  include CollectionTimeHelper
+
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date) }
 
   before do
-    allow(form).to receive(:start_year_2024_or_later?).and_return(false)
     allow(subsection).to receive(:form).and_return(form)
   end
 

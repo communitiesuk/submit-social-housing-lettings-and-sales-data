@@ -20,35 +20,9 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
     expect(setup.label).to eq("Set up this sales log")
   end
 
-  context "when start year is before 2024" do
-    before do
-      allow(section.form).to receive_messages(start_year_2024_or_later?: false, start_year_2025_or_later?: false)
-    end
-
-    it "has correct pages" do
-      expect(setup.pages.map(&:id)).to eq(
-        %w[
-          owning_organisation
-          managing_organisation
-          completion_date
-          assigned_to
-          purchaser_code
-          ownership_scheme
-          shared_ownership_type
-          discounted_ownership_type
-          outright_ownership_type
-          buyer_company
-          buyer_live
-          joint_purchase
-          number_joint_buyers
-        ],
-      )
-    end
-  end
-
   context "when start year is 2024" do
     before do
-      allow(section.form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: false)
+      allow(section.form).to receive_messages(start_year_2025_or_later?: false)
     end
 
     it "has correct pages" do
@@ -78,7 +52,7 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
 
   context "when start year is >= 2025" do
     before do
-      allow(section.form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true)
+      allow(section.form).to receive_messages(start_year_2025_or_later?: true)
     end
 
     it "has correct pages" do
