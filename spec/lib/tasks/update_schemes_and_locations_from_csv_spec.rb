@@ -654,29 +654,58 @@ RSpec.describe "bulk_update" do
           end
         end
 
-        # A log on a 2026+ form keeps any LA it is created with (e.g. from its address or a bulk upload),
-        # and that LA takes precedence over its location's LA (see LettingsLog#la). So, unlike the logs above
-        # which have no LA of their own, a log with its own LA is not re-checked against a corrected location LA.
-        { "confidential" => 1, "not confidential" => 0 }.each do |scheme_description, sensitive|
-          context "when the scheme is #{scheme_description} and the log has its own LA that is not the corrected one" do
+        context "when the log has its own address and LA" do
+          let(:lettings_log_with_own_address_and_la) do
+            FactoryBot.create(:lettings_log,
+                              :completed,
+                              :sh,
+                              location: locations[0],
+                              scheme:,
+                              values_updated_at: nil,
+                              owning_organisation: scheme.owning_organisation,
+                              postcode_full: "SW1A 2AA",
+                              la: "E09000003",
+                              brent: 200,
+                              scharge: 50,
+                              pscharge: 50,
+                              supcharg: 50,
+                              beds: 4,
+                              lettype: 1,
+                              period: 1)
+          end
+
+          { "confidential" => 1, "not confidential" => 0 }.each do |scheme_description, sensitive|
+            context "when the scheme is #{scheme_description} and only the location's LA is corrected" do
+              let!(:lettings_log) do
+                scheme.update!(sensitive:)
+                lettings_log_with_own_address_and_la
+              end
+
+              before do
+                allow(storage_service).to receive(:get_file_io)
+                .with("updated_locations.csv")
+                .and_return(StringIO.new(replace_entity_ids_for_locations(locations[0], locations[1], locations[2], scheme, scheme, { id: "non existent scheme id" }, File.open("./spec/fixtures/files/updated_locations_la_only.csv").read)))
+              end
+
+              it "does not check the rent against the corrected location LA" do
+                expect(lettings_log.status).to eq("completed")
+                task.invoke(original_locations_csv_path, updated_locations_csv_path)
+                lettings_log.reload
+                expect(locations[0].reload.location_code).to eq("E09000033")
+                expect(lettings_log.la).to eq("E09000003")
+                expect(lettings_log.status).to eq("completed")
+                expect(lettings_log.brent).to eq(200)
+                expect(lettings_log.scharge).to eq(50)
+                expect(lettings_log.pscharge).to eq(50)
+                expect(lettings_log.supcharg).to eq(50)
+              end
+            end
+          end
+
+          context "when the scheme is not confidential and the location's postcode is also corrected" do
             let!(:lettings_log) do
-              scheme.update!(sensitive:)
-              FactoryBot.create(:lettings_log,
-                                :completed,
-                                :sh,
-                                location: locations[0],
-                                scheme:,
-                                values_updated_at: nil,
-                                owning_organisation: scheme.owning_organisation,
-                                postcode_full: "SW1A 2AA",
-                                la: "E09000003",
-                                brent: 200,
-                                scharge: 50,
-                                pscharge: 50,
-                                supcharg: 50,
-                                beds: 4,
-                                lettype: 1,
-                                period: 1)
+              scheme.update!(sensitive: 0)
+              lettings_log_with_own_address_and_la
             end
 
             before do
@@ -685,13 +714,13 @@ RSpec.describe "bulk_update" do
               .and_return(StringIO.new(replace_entity_ids_for_locations(locations[0], locations[1], locations[2], scheme, scheme, { id: "non existent scheme id" }, File.open("./spec/fixtures/files/updated_locations.csv").read)))
             end
 
-            it "does not check the rent against the corrected location LA" do
+            it "marks the log in progress as its address no longer matches the location, without changing its rent" do
               expect(lettings_log.status).to eq("completed")
               task.invoke(original_locations_csv_path, updated_locations_csv_path)
               lettings_log.reload
+              expect(lettings_log.status).to eq("in_progress")
+              expect(lettings_log.postcode_full).to eq("SW1A 2AA")
               expect(lettings_log.la).to eq("E09000003")
-              # status is not asserted here: the fixture also moves the location's postcode, so a log that keeps
-              # its own address stops matching its location for an unrelated reason
               expect(lettings_log.brent).to eq(200)
               expect(lettings_log.scharge).to eq(50)
               expect(lettings_log.pscharge).to eq(50)
