@@ -17,6 +17,6 @@ class Form::Lettings::Pages::LeadTenantOverRetirementValueCheck < ::Form::Page
   end
 
   def interruption_screen_question_ids
-    %w[ecstat1 age1]
+    %w[age1 ecstat1]
   end
 end

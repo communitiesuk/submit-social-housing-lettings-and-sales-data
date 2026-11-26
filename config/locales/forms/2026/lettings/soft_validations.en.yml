@@ -36,7 +36,7 @@ en:
             check_answer_prompt: "Confirm retirement status"
             hint_text: ""
             question_text: "Are you sure this person isn’t retired?"
-            title_text: "You told us this person is over 66 and not retired."
+            title_text: "You told us this person is over 75 and not retired."
             informative_text: "Are you sure this person isn’t retired?"
 
           multiple_partners_value_check:

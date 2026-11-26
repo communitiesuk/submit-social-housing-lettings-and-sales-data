@@ -18,6 +18,6 @@ class Form::Lettings::Pages::PersonOverRetirementValueCheck < ::Form::Page
   end
 
   def interruption_screen_question_ids
-    ["ecstat#{@person_index}", "age#{@person_index}"]
+    %W[age#{@person_index} ecstat#{@person_index}]
   end
 end
