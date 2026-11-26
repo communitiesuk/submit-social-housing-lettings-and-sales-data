@@ -1,16 +1,17 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::OwnershipScheme, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
+  let(:form) { instance_double(Form, start_date: current_collection_start_date) }
 
   before do
-    allow(form).to receive_messages(start_year_2024_or_later?: false, start_year_2025_or_later?: false)
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
   end
@@ -31,17 +32,9 @@ RSpec.describe Form::Sales::Questions::OwnershipScheme, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
-  it "has the correct answer_options" do
-    expect(question.answer_options).to eq({
-      "1" => { "value" => "Yes - a shared ownership scheme" },
-      "2" => { "value" => "Yes - a discounted ownership scheme" },
-      "3" => { "value" => "No - this is an outright or other sale" },
-    })
-  end
-
-  context "with collection year in 2024" do
+  context "with collection year before 2025" do
     before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
+      allow(form).to receive_messages(start_year_2025_or_later?: false)
     end
 
     it "has the correct answer_options" do
@@ -55,7 +48,7 @@ RSpec.describe Form::Sales::Questions::OwnershipScheme, type: :model do
 
   context "with collection year on or after 2025" do
     before do
-      allow(form).to receive_messages(start_year_2024_or_later?: true, start_year_2025_or_later?: true)
+      allow(form).to receive_messages(start_year_2025_or_later?: true)
     end
 
     it "has the correct answer_options" do

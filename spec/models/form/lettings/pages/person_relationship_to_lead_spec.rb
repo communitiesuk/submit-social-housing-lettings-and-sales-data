@@ -1,10 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Pages::PersonRelationshipToLead, type: :model do
+  include CollectionTimeHelper
+
   subject(:page) { described_class.new(nil, page_definition, subsection, person_index:) }
 
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2024_or_later?: false)) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: current_collection_start_date)) }
   let(:person_index) { 2 }
 
   it "has correct subsection" do
