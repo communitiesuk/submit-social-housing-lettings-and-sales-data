@@ -469,6 +469,7 @@ class BulkUpload::Lettings::Year2026::RowParser
   validate :validate_no_disabled_needs_conjunction, on: :after_log
   validate :validate_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_and_dont_know_disabled_needs_conjunction, on: :after_log
+  validate :validate_disabled_access_needs_values, on: :after_log
   validate :validate_no_housing_needs_questions_answered, on: :after_log
   validate :validate_reasonable_preference_homeless, on: :after_log
   validate :validate_reasonable_preference_dont_know, on: :after_log
@@ -818,12 +819,25 @@ private
   end
 
   def validate_no_housing_needs_questions_answered
-    if [field_94, field_95, field_96, field_97, field_98, field_99].all?(&:blank?)
-      errors.add(:field_98, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "anybody with disabled access needs."))
-      errors.add(:field_97, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "other access needs."))
-      %i[field_94 field_95 field_96].each do |field|
-        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "disabled access needs type."))
-      end
+    return if [field_94, field_95, field_96, field_97, field_98, field_99].include?(1)
+
+    {
+      field_98: "anybody with disabled access needs.",
+      field_97: "other access needs.",
+      field_96: "disabled access needs type.",
+      field_95: "disabled access needs type.",
+      field_94: "disabled access needs type.",
+    }.each do |field, question|
+      errors.add(field, I18n.t("#{ERROR_BASE_KEY}.not_answered", question:)) unless errors.include?(field)
+    end
+  end
+
+  def validate_disabled_access_needs_values
+    %i[field_94 field_95 field_96 field_97 field_98 field_99].each do |field|
+      value = send(field)
+      next if value.blank? || [0, 1].include?(value)
+
+      errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: format_ending(QUESTIONS[field])))
     end
   end
 
