@@ -1665,6 +1665,13 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
     end
 
     describe "UPRN and address fields" do
+      let(:location_postcode_soft_validation_message) do
+        [
+          I18n.t("forms.2026.lettings.soft_validations.location_postcode_value_check.title_text", postcode_full: "BB2 2BB", location_postcode: postcode),
+          I18n.t("forms.2026.lettings.soft_validations.location_postcode_value_check.informative_text"),
+        ].join(" ")
+      end
+
       %i[
         general_needs
         supported_housing
@@ -1707,10 +1714,15 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                        }}]}', headers: {})
                   end
 
-                  it "adds an appropriate error to the UPRN and location fields" do
+                  it "adds a soft validation error to the UPRN field" do
                     parser.valid?
-                    expect(parser.errors[:field_18]).to eql([I18n.t("validations.lettings.property.uprn.postcode_does_not_match_scheme_location_postcode")])
-                    expect(parser.errors[:field_6]).to eql([I18n.t("validations.lettings.property.location_id.postcode_does_not_match_scheme_location_postcode")])
+                    expect(parser.errors.where(:field_18, category: :soft_validation).map(&:message)).to eql([location_postcode_soft_validation_message])
+                  end
+
+                  it "does not add a hard error to the UPRN or location fields" do
+                    parser.valid?
+                    expect(parser.errors.where(:field_18).reject { |e| e.options[:category] == :soft_validation }).to be_empty
+                    expect(parser.errors.where(:field_6)).to be_empty
                   end
                 end
               end
@@ -1836,12 +1848,18 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                   context "and the postcode entered manually does not match the postcode associated with the location" do
                     let(:attributes) { base_attributes.merge({ field_18: nil, field_19: "address line 1", field_21: "town or city", field_23: "BB2", field_24: "2BB" }) }
 
-                    it "adds appropriate errors to the postcode, LA and location fields" do
+                    it "adds a soft validation error to the postcode fields" do
                       parser.valid?
-                      expect(parser.errors[:field_23]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
-                      expect(parser.errors[:field_24]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
-                      expect(parser.errors[:field_25]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
-                      expect(parser.errors[:field_6]).to eql([I18n.t("validations.lettings.property.location_id.postcode_does_not_match_scheme_location_postcode")])
+                      soft_validation_messages = %i[field_23 field_24 field_25].flat_map { |field| parser.errors.where(field, category: :soft_validation).map(&:message) }
+                      expect(soft_validation_messages).to eql([location_postcode_soft_validation_message])
+                    end
+
+                    it "does not add hard errors to the postcode, LA or location fields" do
+                      parser.valid?
+                      %i[field_23 field_24 field_25].each do |field|
+                        expect(parser.errors.where(field).reject { |e| e.options[:category] == :soft_validation }).to be_empty
+                      end
+                      expect(parser.errors.where(:field_6)).to be_empty
                     end
                   end
                 end
@@ -1872,12 +1890,18 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                   context "and the postcode entered manually does not match the postcode associated with the location" do
                     let(:attributes) { base_attributes.merge({ field_18: nil, field_19: "address line 1", field_21: "town or city", field_23: "BB2", field_24: "2BB" }) }
 
-                    it "adds appropriate errors to the postcode, LA and location fields" do
+                    it "adds a soft validation error to the postcode fields" do
                       parser.valid?
-                      expect(parser.errors[:field_23]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
-                      expect(parser.errors[:field_24]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
-                      expect(parser.errors[:field_25]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
-                      expect(parser.errors[:field_6]).to eql([I18n.t("validations.lettings.property.location_id.postcode_does_not_match_scheme_location_postcode")])
+                      soft_validation_messages = %i[field_23 field_24 field_25].flat_map { |field| parser.errors.where(field, category: :soft_validation).map(&:message) }
+                      expect(soft_validation_messages).to eql([location_postcode_soft_validation_message])
+                    end
+
+                    it "does not add hard errors to the postcode, LA or location fields" do
+                      parser.valid?
+                      %i[field_23 field_24 field_25].each do |field|
+                        expect(parser.errors.where(field).reject { |e| e.options[:category] == :soft_validation }).to be_empty
+                      end
+                      expect(parser.errors.where(:field_6)).to be_empty
                     end
                   end
                 end
@@ -1909,12 +1933,18 @@ RSpec.describe BulkUpload::Lettings::Year2026::RowParser do
                   context "and the postcode entered manually does not match the postcode associated with the location" do
                     let(:attributes) { base_attributes.merge({ field_18: nil, field_19: "address line 1", field_21: "town or city", field_23: "BB2", field_24: "2BB" }) }
 
-                    it "adds appropriate errors to the postcode, LA and location fields" do
+                    it "adds a soft validation error to the postcode fields" do
                       parser.valid?
-                      expect(parser.errors[:field_23]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
-                      expect(parser.errors[:field_24]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
-                      expect(parser.errors[:field_25]).to eql([I18n.t("validations.lettings.property.postcode_full.does_not_match_scheme_location_postcode")])
-                      expect(parser.errors[:field_6]).to eql([I18n.t("validations.lettings.property.location_id.postcode_does_not_match_scheme_location_postcode")])
+                      soft_validation_messages = %i[field_23 field_24 field_25].flat_map { |field| parser.errors.where(field, category: :soft_validation).map(&:message) }
+                      expect(soft_validation_messages).to eql([location_postcode_soft_validation_message])
+                    end
+
+                    it "does not add hard errors to the postcode, LA or location fields" do
+                      parser.valid?
+                      %i[field_23 field_24 field_25].each do |field|
+                        expect(parser.errors.where(field).reject { |e| e.options[:category] == :soft_validation }).to be_empty
+                      end
+                      expect(parser.errors.where(:field_6)).to be_empty
                     end
                   end
                 end

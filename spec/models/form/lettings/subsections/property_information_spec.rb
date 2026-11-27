@@ -114,6 +114,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
             property_vacancy_reason_first_let
             address_search
             address
+            location_postcode_value_check
             property_local_authority
             local_authority_rent_value_check
             property_unit_type

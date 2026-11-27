@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_13_105230) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_17_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -284,6 +284,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_13_105230) do
     t.integer "letting_allocation_unknown"
     t.integer "lettype"
     t.bigint "location_id"
+    t.integer "location_postcode_value_check"
     t.integer "major_repairs_date_value_check"
     t.integer "majorrepairs"
     t.bigint "managing_organisation_id"
