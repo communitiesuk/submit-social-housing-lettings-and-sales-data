@@ -1713,5 +1713,16 @@ RSpec.describe Validations::SoftValidations do
 
       expect(record.postcode_does_not_match_location_postcode?).to be false
     end
+
+    context "with a 2025 log" do
+      let(:start_year) { 2025 }
+
+      it "returns false even if the property postcode does not match the location postcode" do
+        record.location = location
+        record.postcode_full = "BB2 2BB"
+
+        expect(record.postcode_does_not_match_location_postcode?).to be false
+      end
+    end
   end
 end
