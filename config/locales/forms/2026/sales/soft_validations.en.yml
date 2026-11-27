@@ -10,8 +10,8 @@ en:
               check_answer_prompt: "Confirm person isn’t retired"
               hint_text: ""
               question_text: "Are you sure this person isn’t retired?"
-              title_text: "You told us this person is over 66 and not retired."
-              informative_text: "The minimum expected retirement age in England is 66."
+              title_text: "You told us this person is over 75 and not retired."
+              informative_text: "Are you sure this person isn’t retired?"
             min:
               page_header: ""
               check_answer_label: "Retirement confirmation"

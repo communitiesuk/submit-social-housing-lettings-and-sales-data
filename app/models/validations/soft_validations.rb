@@ -332,7 +332,7 @@ private
 
     return false if tenant_prefers_not_to_say?(economic_status)
 
-    !tenant_is_retired?(economic_status) && age > 66
+    !tenant_is_retired?(economic_status) && age > 75
   end
 
   def partner_under_16?(person_num)

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 CORE — a Ruby on Rails app (the "Submit social housing lettings and sales data" service) that collects lettings and sales of social housing data in England for MHCLG. Data providers (Local Authorities and Private Registered Providers) submit logs; the data is exported nightly to CDS (Consolidated Data Store) via XML to S3.
 
-Stack: Ruby 3.4.9, Rails 7.2, PostgreSQL, Sidekiq + Redis, Webpack/Propshaft, Stimulus, ViewComponent, GOV.UK Design System (govuk-frontend, govuk-components, govuk_design_system_formbuilder), Devise + 2FA, Pundit, PaperTrail.
+Stack: Ruby 3.4.13, Rails 7.2, PostgreSQL, Sidekiq + Redis, Webpack/Propshaft, Stimulus, ViewComponent, GOV.UK Design System (govuk-frontend, govuk-components, govuk_design_system_formbuilder), Devise + 2FA, Pundit, PaperTrail.
 
 Full domain/architecture docs live in `docs/` (rendered at https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data) and are the authoritative reference — especially `docs/index.md` (domain overview), `docs/form/*` (form architecture), `docs/bulk_upload.md`, `docs/exports.md`, `docs/csv_downloads.md`, and the ADRs in `docs/adr/`.
 

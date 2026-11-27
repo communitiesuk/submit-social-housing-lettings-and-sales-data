@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.4.9"
+ruby "3.4.13"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem "rails", "~> 8.1.4"
@@ -69,6 +69,8 @@ gem "rails_admin", "~> 3.1"
 gem "ruby-openai"
 gem "sidekiq", "~> 7.2.4"
 gem "sidekiq-cron"
+# Sidekiq 7.2.x is not compatible with connection_pool 3.x
+gem "connection_pool", "~> 2.5"
 gem "unread"
 
 # Pinning versions to address vulnerabilities
